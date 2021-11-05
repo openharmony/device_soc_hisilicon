@@ -1,0 +1,10 @@
+{
+    "subsystem": "hisilicon_products",
+    "parts": {
+        "hisilicon_products": {
+            "module_list": [
+                "//device/hisilicon/build:products_group"
+            ]
+        }
+    }
+}
