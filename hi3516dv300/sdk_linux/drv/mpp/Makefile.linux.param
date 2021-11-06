@@ -53,6 +53,10 @@ endif
 
 ##############################################################################
 # Allocated the kernel position
+ifeq ($(KERNEL_VERSION), )
+KERNEL_VERSION=linux-5.10
+endif
+
 ifeq ($(MPP_BUILD), y)
     ifeq ($(HIARCH),$(filter $(HIARCH), hi3559av100))
         export KERNEL_ROOT?=$(HIWORK_PATH)/osdrv$(HI_SUBARCH)$(CVER)/open_source/linux/$(KERNEL_NAME)
@@ -100,7 +104,7 @@ endif
 
 export REL_INC := $(REL_DIR)/include
 export REL_LIB := $(REL_DIR)/lib
-export REL_KO  := $(REL_DIR)/../../ko
+export REL_KO  := $(REL_DIR)/../../out/ko
 export REL_OBJ := $(REL_DIR)/obj
 export REL_INI := $(REL_DIR)/init
 export ADAPT_INC := $(REL_DIR)/include/adapt
