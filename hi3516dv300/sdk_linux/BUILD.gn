@@ -8,8 +8,8 @@ if (defined(ohos_lite)) {
 }
 import("//build/ohos/kernel/kernel.gni")
 
-SDK_LINUX_PATH = "//device/hisilicon/hispark_taurus/sdk_linux"
-SDK_LINUX_LIB_LITE_PATH = "$SDK_LINUX_PATH/soc/lib_lite"
+SDK_LINUX_PATH = "//device/soc/hisilicon/hi3516dv300/sdk_linux"
+SDK_LINUX_LIB_LITE_PATH = "$SDK_LINUX_PATH/out/lib"
 
 group("hispark_taurus_sdk") {
   if (defined(ohos_lite)) {
@@ -19,6 +19,7 @@ group("hispark_taurus_sdk") {
     ]
   } else {
     deps = [
+      "out/lib:sdk_linux_mpp_group",
       ":sdk_linux_modules",
       ":sdk_make",
       "//kernel/linux/build:linux_kernel",
