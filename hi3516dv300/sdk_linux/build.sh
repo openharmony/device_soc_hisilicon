@@ -20,13 +20,15 @@ if [ ${COMPILER_DIR} != "" ];then
     export COMPILER_PATH_DIR=${COMPILER_DIR}/bin
 fi
 
-SDK_LINUX_SRC_PATH=${OHOS_ROOT_PATH}/device/hisilicon/hispark_taurus/sdk_linux
+SDK_LINUX_SRC_PATH=${OHOS_ROOT_PATH}/device/soc/hisilicon/hi3516dv300/sdk_linux
 SDK_LINUX_TMP_PATH=${OUTDIR}/sdk_linux/src_tmp
-SDK_LINUX_MPP_PATH=${SDK_LINUX_TMP_PATH}/src/mpp
+SDK_LINUX_MPP_PATH=${SDK_LINUX_TMP_PATH}/drv/mpp
 
 rm -rdf ${SDK_LINUX_TMP_PATH}; mkdir -p ${SDK_LINUX_TMP_PATH}
-cp -rf ${SDK_LINUX_SRC_PATH}/soc/src ${SDK_LINUX_TMP_PATH}
-cp -rf ${SDK_LINUX_SRC_PATH}/soc/ko ${SDK_LINUX_TMP_PATH}
+cp -rf ${SDK_LINUX_SRC_PATH}/drv ${SDK_LINUX_TMP_PATH}
+
+mkdir -p ${SDK_LINUX_TMP_PATH}/out
+cp -rf ${SDK_LINUX_SRC_PATH}/out/ko ${SDK_LINUX_TMP_PATH}/out
 
 if [ "${OHOS_LITE}" = "y" ];then
     pushd ${SDK_LINUX_MPP_PATH} && make clean OHOS_LITE=y && make -j OHOS_LITE=y && popd
