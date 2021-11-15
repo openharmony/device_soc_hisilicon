@@ -62,7 +62,7 @@ if (defined(ohos_lite)) {
 } else {
   sdk_tmp_root_path = root_out_dir
   sdk_tmp_dir = "$sdk_tmp_root_path/sdk_linux/src_tmp"
-  sdk_tmp_mods_dir = "$sdk_tmp_dir/ko"
+  sdk_tmp_mods_dir = "$sdk_tmp_dir/out/ko"
 
   action("sdk_make") {
     script = "build.sh"
