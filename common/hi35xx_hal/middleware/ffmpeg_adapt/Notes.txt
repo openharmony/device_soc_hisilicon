@@ -1,0 +1,9 @@
+ffmpeg-adapt is a collection of makefile and configure that have been changed based on the ffmpeg4.3.1
+The users should follow the license of the original file.
+
+##Changed file
+configure_llvm
+configure
+library.mak
+Makefile_llvm
+

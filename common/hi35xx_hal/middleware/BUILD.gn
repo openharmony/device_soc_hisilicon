@@ -1,0 +1,95 @@
+# Copyright (c) Hisilicon Technologies Co., Ltd. 2021-2021. All rights reserved.
+
+if (defined(ohos_lite)) {
+    import("//build/lite/config/component/lite_component.gni")
+} else {
+    import("//build/ohos.gni")
+}
+
+if (defined(ohos_lite)) {
+    board=board_name
+    if (board_name == "hi3516dv300" || board_name == "aegis_hi3516dv300") {
+      board = "hispark_taurus"
+    } else if (board_name == "hi3518ev300") {
+      board = "hispark_aries"
+    }
+
+    build_ext_component("middleware_source_sdk") {
+      exec_path = rebase_path(".", root_build_dir)
+      outdir = rebase_path("$root_out_dir")
+      clang_dir = ""
+      if (ohos_build_compiler_dir != "") {
+        clang_dir = rebase_path("${ohos_build_compiler_dir}/bin")
+      }
+      sysroot_path = rebase_path(ohos_current_sysroot)
+      arch_cflags = string_join(" ", target_arch_cflags)
+      arch_cflags += " --target=$target_triple -fuse-ld=lld --rtlib=compiler-rt"
+      command = "./build.sh ${outdir} ${board} ${ohos_kernel_type} ${clang_dir} ${sysroot_path} \"${arch_cflags}\""
+    }
+} else {
+    group("middleware_group") {
+      deps = [
+        ":hitimer",
+        ":mbuf",
+        ":messagehandler",
+        ":mwlog",
+        ":dtcf",
+        ":recorder_pro",
+        ":exif",
+        ":fileformat",
+        ":mp4",
+        ":ts",
+      ]
+    }
+    
+    ohos_prebuilt_shared_library("hitimer") {
+      source = "common/hitimer/lib/linux_standard/libhitimer.so"
+      subsystem_name = "hisilicon_products"
+    }
+
+    ohos_prebuilt_shared_library("mbuf") {
+      source = "common/mbuffer/lib/linux_standard/libmbuf.so"
+      subsystem_name = "hisilicon_products"
+    }
+
+    ohos_prebuilt_shared_library("messagehandler") {
+      source = "common/msghandler/lib/linux_standard/libmessagehandler.so"
+      subsystem_name = "hisilicon_products"
+    }
+
+    ohos_prebuilt_shared_library("mwlog") {
+      source = "common/log/lib/linux_standard/libmwlog.so"
+      subsystem_name = "hisilicon_products"
+    }
+
+    ohos_prebuilt_shared_library("dtcf") {
+      source = "component/dtcf/lib/linux_standard/libdtcf.so"
+      subsystem_name = "hisilicon_products"
+    }
+
+    ohos_prebuilt_shared_library("recorder_pro") {
+      source = "component/recorder_pro/lib/linux_standard/librecorder_pro.so"
+      subsystem_name = "hisilicon_products"
+    }
+
+    ohos_prebuilt_shared_library("exif") {
+      source = "component/fileformat/exif/lib/linux_standard/libexif.so"
+      subsystem_name = "hisilicon_products"
+    }
+
+    ohos_prebuilt_shared_library("fileformat") {
+      source = "component/fileformat/common/lib/linux_standard/libfileformat.so"
+      subsystem_name = "hisilicon_products"
+    }
+
+    ohos_prebuilt_shared_library("mp4") {
+      source = "component/fileformat/mp4/lib/linux_standard/libmp4.so"
+      subsystem_name = "hisilicon_products"
+    }
+
+    ohos_prebuilt_shared_library("ts") {
+      source = "component/fileformat/ts/lib/linux_standard/libts.so"
+      subsystem_name = "hisilicon_products"
+    }
+
+}

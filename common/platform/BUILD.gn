@@ -1,0 +1,71 @@
+# Copyright (c) 2021 HiSilicon (Shanghai) Technologies CO., LIMITED.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//drivers/adapter/khdf/liteos/hdf.gni")
+
+group("drivers") {
+  deps = [
+    "adc",
+    "dmac",
+    "gpio",
+    "hieth-sf",
+    "hisi_sdk",
+    "i2c",
+    "i2s",
+    "mipi_dsi",
+    "mmc",
+    "mtd",
+    "pwm",
+    "rtc",
+    "spi",
+    "uart",
+    "watchdog",
+  ]
+}
+
+config("public") {
+  include_dirs = []
+  lib_dirs = [ "libs/ohos/llvm/$LOSCFG_PLATFORM" ]
+  ldflags = [ "-Wl,--push-state,--whole-archive" ]
+  if (defined(LOSCFG_DRIVERS_HIEDMAC)) {
+    ldflags += [ "-lhiedmac" ]
+  }
+
+  if (!defined(LOSCFG_DRIVERS_HDF_STORAGE_MTD)) {
+    if (defined(LOSCFG_DRIVERS_MTD)) {
+      include_dirs += [ "include/mtd/common/include" ]
+      ldflags += [ "-lmtd_common" ]
+    }
+    if (defined(LOSCFG_DRIVERS_MTD_SPI_NOR)) {
+      if (!defined(LOSCFG_SHELL)) {
+        ldflags += [ "-lspinor_flash_noshell" ]
+      } else {
+        ldflags += [ "-lspinor_flash" ]
+      }
+    }
+    if (defined(LOSCFG_DRIVERS_MTD_NAND)) {
+      ldflags += [ "-lnand_flash" ]
+    }
+  }
+
+  if (defined(LOSCFG_DRIVERS_MMC)) {
+    ldflags += [ "-lmmc" ]
+  }
+  if (defined(LOSCFG_DRIVERS_HDF_WIFI)) {
+    ldflags += [ "-lhdf_vendor_wifi" ]
+  }
+  if (defined(LOSCFG_DRIVERS_HDF_WIFI) && defined(LOSCFG_DRIVERS_HI3881)) {
+    ldflags += [ "-lhi3881" ]
+  }
+  ldflags += [ "-Wl,--pop-state" ]
+}
