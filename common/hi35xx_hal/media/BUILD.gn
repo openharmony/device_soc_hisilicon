@@ -1,0 +1,101 @@
+# Copyright (c) Hisilicon Technologies Co., Ltd. 2021-2021. All rights reserved.
+
+if (defined(ohos_lite)) {
+  import("//build/lite/config/component/lite_component.gni")
+} else {
+  import("//build/ohos.gni")
+}
+
+if (defined(ohos_lite)) {
+  board=board_name
+  if (board_name == "hi3516dv300" || board_name == "aegis_hi3516dv300") {
+    board = "hispark_taurus"
+  } else if (board_name == "hi3518ev300") {
+    board = "hispark_aries"
+  }
+
+  build_ext_component("hardware_media_sdk") {
+    exec_path = rebase_path(".", root_build_dir)
+    outdir = rebase_path("$root_out_dir")
+    command = "./build.sh ${outdir} ${board} ${ohos_kernel_type} ${ohos_build_compiler} ${storage_type}"
+  }
+} else {
+  group("hardware_group") {
+    deps = [
+      ":adec",
+      ":aenc",
+      ":audio_hw",
+      ":codec",
+      ":format_hw",
+      ":hiaacdec",
+      ":input",
+      ":media_hal_common",
+      ":output",
+      ":plugin_muxer_recorder",
+      ":vdec",
+      ":venc",
+    ]
+  }
+
+  ohos_prebuilt_shared_library("audio_hw") {
+    source = "audio/hispark_taurus/linux_standard/libs/libaudio_hw.so"
+    subsystem_name = "hisilicon_products"
+  }
+
+  ohos_prebuilt_shared_library("input") {
+    source = "audio/hispark_taurus/linux_standard/libs/libaudio_input_port.so"
+    subsystem_name = "hisilicon_products"
+  }
+
+  ohos_prebuilt_shared_library("output") {
+    source = "audio/hispark_taurus/linux_standard/libs/libaudio_output_port.so"
+    subsystem_name = "hisilicon_products"
+  }
+
+  ohos_prebuilt_shared_library("codec") {
+    source = "codec/hispark_taurus/linux_standard/libs/libcodec.so"
+    subsystem_name = "hisilicon_products"
+  }
+
+  ohos_prebuilt_shared_library("hiaacdec") {
+    source = "codec/hispark_taurus/linux_standard/libs/libhiaacdec.so"
+    subsystem_name = "hisilicon_products"
+  }
+
+  ohos_prebuilt_shared_library("adec") {
+    source = "codec/hispark_taurus/linux_standard/libs/libplugin_adec_35xx.so"
+    subsystem_name = "hisilicon_products"
+  }
+
+  ohos_prebuilt_shared_library("aenc") {
+    source = "codec/hispark_taurus/linux_standard/libs/libplugin_aenc_35xx.so"
+    subsystem_name = "hisilicon_products"
+  }
+
+  ohos_prebuilt_shared_library("vdec") {
+    source = "codec/hispark_taurus/linux_standard/libs/libplugin_vdec_3516D.so"
+    subsystem_name = "hisilicon_products"
+  }
+
+  ohos_prebuilt_shared_library("venc") {
+    source = "codec/hispark_taurus/linux_standard/libs/libplugin_venc_35xx.so"
+    subsystem_name = "hisilicon_products"
+  }
+
+  ohos_prebuilt_shared_library("media_hal_common") {
+    source =
+        "common/hispark_taurus/linux_standard/libmedia_hal_common.so"
+    subsystem_name = "hisilicon_products"
+  }
+
+  ohos_prebuilt_shared_library("format_hw") {
+    source = "format/hispark_taurus/linux_standard/libs/libformat_hw.so"
+    subsystem_name = "hisilicon_products"
+  }
+
+  ohos_prebuilt_shared_library("plugin_muxer_recorder") {
+    source =
+        "format/hispark_taurus/linux_standard/libs/libplugin_muxer_recorder.so"
+    subsystem_name = "hisilicon_products"
+  }
+}
