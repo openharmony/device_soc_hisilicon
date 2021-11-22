@@ -77,9 +77,9 @@ if (defined(ohos_lite)) {
 
   ohos_prebuilt_shared_library("display_device") {
     if (target_cpu == "arm") {
-      source = "hispark_taurus/linux_standard/lib/libdisplay_device.z.so"
+      source = "hi3516dv300/linux_standard/lib/libdisplay_device.z.so"
     } else {
-      source = "hispark_taurus/linux_standard/lib64/libdisplay_device.z.so"
+      source = "hi3516dv300/linux_standard/lib64/libdisplay_device.z.so"
     }
     subsystem_name = "hdf"
   }
@@ -87,29 +87,29 @@ if (defined(ohos_lite)) {
   ohos_prebuilt_shared_library("display_gralloc") {
     if (target_cpu == "arm") {
       source =
-          "hispark_taurus/linux_standard/lib/libdisplay_gralloc.z.so"
+          "hi3516dv300/linux_standard/lib/libdisplay_gralloc.z.so"
     } else {
       source =
-          "hispark_taurus/linux_standard/lib64/libdisplay_gralloc.z.so"
+          "hi3516dv300/linux_standard/lib64/libdisplay_gralloc.z.so"
     }
     subsystem_name = "hdf"
   }
 
   ohos_prebuilt_shared_library("display_gfx") {
     if (target_cpu == "arm") {
-      source = "hispark_taurus/linux_standard/lib/libdisplay_gfx.z.so"
+      source = "hi3516dv300/linux_standard/lib/libdisplay_gfx.z.so"
     } else {
-      source = "hispark_taurus/linux_standard/lib64/libdisplay_gfx.z.so"
+      source = "hi3516dv300/linux_standard/lib64/libdisplay_gfx.z.so"
     }
     subsystem_name = "hdf"
   }
 
   ohos_prebuilt_shared_library("display_layer") {
     if (target_cpu == "arm") {
-      source = "hispark_taurus/linux_standard/lib/libdisplay_layer.z.so"
+      source = "hi3516dv300/linux_standard/lib/libdisplay_layer.z.so"
     } else {
       source =
-          "hispark_taurus/linux_standard/lib64/libdisplay_layer.z.so"
+          "hi3516dv300/linux_standard/lib64/libdisplay_layer.z.so"
     }
     subsystem_name = "hdf"
   }
@@ -117,9 +117,9 @@ if (defined(ohos_lite)) {
   ohos_prebuilt_shared_library("display_device_drm") {
     if (target_cpu == "arm") {
       source =
-          "hispark_taurus/linux_standard/lib/libdisplay_device_drm.z.so"
+          "hi3516dv300/linux_standard/lib/libdisplay_device_drm.z.so"
     } else {
-      source = "hispark_taurus/linux_standard/lib64/libdisplay_device_drm.z.so"
+      source = "hi3516dv300/linux_standard/lib64/libdisplay_device_drm.z.so"
     }
     subsystem_name = "hdf"
   }
