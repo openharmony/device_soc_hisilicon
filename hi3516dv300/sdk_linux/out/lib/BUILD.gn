@@ -1,0 +1,474 @@
+# Copyright (C) 2021 Hisilicon (Shanghai) Technologies Co., Ltd. All rights reserved.
+
+import("//build/ohos.gni")
+
+group("sdk_linux_mpp_group") {
+  deps = [
+    ":libVoiceEngine",
+    ":lib_hiacs",
+    ":lib_hiae",
+    ":lib_hiawb",
+    ":lib_hiawb_natura",
+    ":lib_hicalcflicker",
+    ":lib_hidehaze",
+    ":lib_hidrc",
+    ":lib_hiir_auto",
+    ":lib_hildci",
+    ":libaaccomm",
+    ":libaacdec",
+    ":libaacenc",
+    ":libaacsbrdec",
+    ":libaacsbrenc",
+    ":libdnvqe",
+    ":libhdmi",
+    ":libhi3516cv500_acodec",
+    ":libhi3516cv500_adec",
+    ":libhi3516cv500_aenc",
+    ":libhi3516cv500_ai",
+    ":libhi3516cv500_aio",
+    ":libhi3516cv500_ao",
+    ":libhi3516cv500_base",
+    ":libhi3516cv500_chnl",
+    ":libhi3516cv500_dis",
+    ":libhi3516cv500_gdc",
+    ":libhi3516cv500_h264e",
+    ":libhi3516cv500_h265e",
+    ":libhi3516cv500_isp",
+    ":libhi3516cv500_ive",
+    ":libhi3516cv500_jpegd",
+    ":libhi3516cv500_jpege",
+    ":libhi3516cv500_nnie",
+    ":libhi3516cv500_rc",
+    ":libhi3516cv500_rgn",
+    ":libhi3516cv500_sys",
+    ":libhi3516cv500_vdec",
+    ":libhi3516cv500_vedu",
+    ":libhi3516cv500_venc",
+    ":libhi3516cv500_vfmw",
+    ":libhi3516cv500_vgs",
+    ":libhi3516cv500_vi",
+    ":libhi3516cv500_vo",
+    ":libhi3516cv500_vpss",
+    ":libhi_irq",
+    ":libhi_osal",
+    ":libhi_sensor_i2c",
+    ":libhifisheyecalibrate",
+    ":libhive_AEC",
+    ":libhive_AGC",
+    ":libhive_ANR",
+    ":libhive_EQ",
+    ":libhive_HPF",
+    ":libhive_RES",
+    ":libhive_RES_ext",
+    ":libhive_common",
+    ":libhive_record",
+    ":libhive_talkv2",
+    ":libhive_wnr",
+    ":libisp",
+    ":libive",
+    ":libmd",
+    ":libmpi",
+    ":libmpp_vbs",
+    ":libnnie",
+    ":libsdk",
+    ":libsecurec",
+    ":libsns_imx335",
+    ":libtde",
+    ":libupvqe",
+    ":libvb_server",
+  ]
+}
+
+ohos_prebuilt_shared_library("libhive_HPF") {
+  source = "./libhive_HPF.so"
+  subsystem_name = "hisilicon_products"
+}
+
+ohos_prebuilt_shared_library("lib_hiawb") {
+  source = "./lib_hiawb.so"
+  subsystem_name = "hisilicon_products"
+}
+
+ohos_prebuilt_shared_library("libhive_AGC") {
+  source = "./libhive_AGC.so"
+  subsystem_name = "hisilicon_products"
+}
+
+ohos_prebuilt_shared_library("libhive_ANR") {
+  source = "./libhive_ANR.so"
+  subsystem_name = "hisilicon_products"
+}
+
+ohos_prebuilt_shared_library("libaacdec") {
+  source = "./libaacdec.so"
+  subsystem_name = "hisilicon_products"
+}
+
+ohos_prebuilt_shared_library("libhdmi") {
+  source = "./libhdmi.so"
+  subsystem_name = "hisilicon_products"
+}
+
+ohos_prebuilt_shared_library("libive") {
+  source = "./libive.so"
+  subsystem_name = "hisilicon_products"
+}
+
+ohos_prebuilt_shared_library("libaacenc") {
+  source = "./libaacenc.so"
+  subsystem_name = "hisilicon_products"
+}
+
+ohos_prebuilt_shared_library("lib_hildci") {
+  source = "./lib_hildci.so"
+  subsystem_name = "hisilicon_products"
+}
+
+ohos_prebuilt_shared_library("lib_hidrc") {
+  source = "./lib_hidrc.so"
+  subsystem_name = "hisilicon_products"
+}
+
+ohos_prebuilt_shared_library("libhive_RES_ext") {
+  source = "./libhive_RES_ext.so"
+  subsystem_name = "hisilicon_products"
+}
+
+ohos_prebuilt_shared_library("libmd") {
+  source = "./libmd.so"
+  subsystem_name = "hisilicon_products"
+}
+
+ohos_prebuilt_shared_library("lib_hiacs") {
+  source = "./lib_hiacs.so"
+  subsystem_name = "hisilicon_products"
+}
+
+ohos_prebuilt_shared_library("libhive_wnr") {
+  source = "./libhive_wnr.so"
+  subsystem_name = "hisilicon_products"
+}
+
+ohos_prebuilt_shared_library("libupvqe") {
+  source = "./libupvqe.so"
+  subsystem_name = "hisilicon_products"
+}
+
+ohos_prebuilt_shared_library("lib_hiawb_natura") {
+  source = "./lib_hiawb_natura.so"
+  subsystem_name = "hisilicon_products"
+}
+
+ohos_prebuilt_shared_library("libhive_record") {
+  source = "./libhive_record.so"
+  subsystem_name = "hisilicon_products"
+}
+
+ohos_prebuilt_shared_library("libhive_common") {
+  source = "./libhive_common.so"
+  subsystem_name = "hisilicon_products"
+}
+
+ohos_prebuilt_shared_library("libaacsbrenc") {
+  source = "./libaacsbrenc.so"
+  subsystem_name = "hisilicon_products"
+}
+
+ohos_prebuilt_shared_library("libnnie") {
+  source = "./libnnie.so"
+  subsystem_name = "hisilicon_products"
+}
+
+ohos_prebuilt_shared_library("libaaccomm") {
+  source = "./libaaccomm.so"
+  subsystem_name = "hisilicon_products"
+}
+
+ohos_prebuilt_shared_library("libhive_EQ") {
+  source = "./libhive_EQ.so"
+  subsystem_name = "hisilicon_products"
+}
+
+ohos_prebuilt_shared_library("lib_hiir_auto") {
+  source = "./lib_hiir_auto.so"
+  subsystem_name = "hisilicon_products"
+}
+
+ohos_prebuilt_shared_library("libisp") {
+  source = "./libisp.so"
+  subsystem_name = "hisilicon_products"
+}
+
+ohos_prebuilt_shared_library("libsecurec") {
+  source = "./libsecurec.so"
+  subsystem_name = "hisilicon_products"
+}
+
+ohos_prebuilt_shared_library("lib_hidehaze") {
+  source = "./lib_hidehaze.so"
+  subsystem_name = "hisilicon_products"
+}
+
+ohos_prebuilt_shared_library("libmpi") {
+  source = "./libmpi.so"
+  subsystem_name = "hisilicon_products"
+}
+
+ohos_prebuilt_shared_library("libhive_talkv2") {
+  source = "./libhive_talkv2.so"
+  subsystem_name = "hisilicon_products"
+}
+
+ohos_prebuilt_shared_library("libhive_RES") {
+  source = "./libhive_RES.so"
+  subsystem_name = "hisilicon_products"
+}
+
+ohos_prebuilt_shared_library("lib_hicalcflicker") {
+  source = "./lib_hicalcflicker.so"
+  subsystem_name = "hisilicon_products"
+}
+
+ohos_prebuilt_shared_library("libaacsbrdec") {
+  source = "./libaacsbrdec.so"
+  subsystem_name = "hisilicon_products"
+}
+
+ohos_prebuilt_shared_library("libsns_imx335") {
+  source = "./libsns_imx335.so"
+  subsystem_name = "hisilicon_products"
+}
+
+ohos_prebuilt_shared_library("lib_hiae") {
+  source = "./lib_hiae.so"
+  subsystem_name = "hisilicon_products"
+}
+
+ohos_prebuilt_shared_library("libhifisheyecalibrate") {
+  source = "./libhifisheyecalibrate.so"
+  subsystem_name = "hisilicon_products"
+}
+
+ohos_prebuilt_shared_library("libhive_AEC") {
+  source = "./libhive_AEC.so"
+  subsystem_name = "hisilicon_products"
+}
+
+ohos_prebuilt_shared_library("libdnvqe") {
+  source = "./libdnvqe.so"
+  subsystem_name = "hisilicon_products"
+}
+
+ohos_prebuilt_shared_library("libtde") {
+  source = "./libtde.so"
+  subsystem_name = "hisilicon_products"
+}
+
+ohos_prebuilt_shared_library("libVoiceEngine") {
+  source = "./libVoiceEngine.so"
+  subsystem_name = "hisilicon_products"
+}
+
+ohos_prebuilt_shared_library("libhi3516cv500_acodec") {
+  source = "./libhi3516cv500_acodec.so"
+  subsystem_name = "hisilicon_products"
+  part_name = "hisilicon_products"
+}
+
+ohos_prebuilt_shared_library("libhi3516cv500_adec") {
+  source = "./libhi3516cv500_adec.so"
+  subsystem_name = "hisilicon_products"
+  part_name = "hisilicon_products"
+}
+
+ohos_prebuilt_shared_library("libhi3516cv500_aenc") {
+  source = "./libhi3516cv500_aenc.so"
+  subsystem_name = "hisilicon_products"
+  part_name = "hisilicon_products"
+}
+
+ohos_prebuilt_shared_library("libhi3516cv500_aio") {
+  source = "./libhi3516cv500_aio.so"
+  subsystem_name = "hisilicon_products"
+  part_name = "hisilicon_products"
+}
+
+ohos_prebuilt_shared_library("libhi3516cv500_ai") {
+  source = "./libhi3516cv500_ai.so"
+  subsystem_name = "hisilicon_products"
+  part_name = "hisilicon_products"
+}
+
+ohos_prebuilt_shared_library("libhi3516cv500_ao") {
+  source = "./libhi3516cv500_ao.so"
+  subsystem_name = "hisilicon_products"
+  part_name = "hisilicon_products"
+}
+
+ohos_prebuilt_shared_library("libhi3516cv500_base") {
+  source = "./libhi3516cv500_base.so"
+  subsystem_name = "hisilicon_products"
+  part_name = "hisilicon_products"
+}
+
+ohos_prebuilt_shared_library("libhi3516cv500_chnl") {
+  source = "./libhi3516cv500_chnl.so"
+  subsystem_name = "hisilicon_products"
+  part_name = "hisilicon_products"
+}
+
+ohos_prebuilt_shared_library("libhi3516cv500_dis") {
+  source = "./libhi3516cv500_dis.so"
+  subsystem_name = "hisilicon_products"
+  part_name = "hisilicon_products"
+}
+
+ohos_prebuilt_shared_library("libhi3516cv500_gdc") {
+  source = "./libhi3516cv500_gdc.so"
+  subsystem_name = "hisilicon_products"
+  part_name = "hisilicon_products"
+}
+
+ohos_prebuilt_shared_library("libhi3516cv500_h264e") {
+  source = "./libhi3516cv500_h264e.so"
+  subsystem_name = "hisilicon_products"
+  part_name = "hisilicon_products"
+}
+
+ohos_prebuilt_shared_library("libhi3516cv500_h265e") {
+  source = "./libhi3516cv500_h265e.so"
+  subsystem_name = "hisilicon_products"
+  part_name = "hisilicon_products"
+}
+
+ohos_prebuilt_shared_library("libhi3516cv500_isp") {
+  source = "./libhi3516cv500_isp.so"
+  subsystem_name = "hisilicon_products"
+  part_name = "hisilicon_products"
+}
+
+ohos_prebuilt_shared_library("libhi3516cv500_ive") {
+  source = "./libhi3516cv500_ive.so"
+  subsystem_name = "hisilicon_products"
+  part_name = "hisilicon_products"
+}
+
+ohos_prebuilt_shared_library("libhi3516cv500_jpegd") {
+  source = "./libhi3516cv500_jpegd.so"
+  subsystem_name = "hisilicon_products"
+  part_name = "hisilicon_products"
+}
+
+ohos_prebuilt_shared_library("libhi3516cv500_jpege") {
+  source = "./libhi3516cv500_jpege.so"
+  subsystem_name = "hisilicon_products"
+  part_name = "hisilicon_products"
+}
+
+ohos_prebuilt_shared_library("libhi3516cv500_nnie") {
+  source = "./libhi3516cv500_nnie.so"
+  subsystem_name = "hisilicon_products"
+  part_name = "hisilicon_products"
+}
+
+ohos_prebuilt_shared_library("libhi3516cv500_rc") {
+  source = "./libhi3516cv500_rc.so"
+  subsystem_name = "hisilicon_products"
+  part_name = "hisilicon_products"
+}
+
+ohos_prebuilt_shared_library("libhi3516cv500_rgn") {
+  source = "./libhi3516cv500_rgn.so"
+  subsystem_name = "hisilicon_products"
+  part_name = "hisilicon_products"
+}
+
+ohos_prebuilt_shared_library("libhi3516cv500_sys") {
+  source = "./libhi3516cv500_sys.so"
+  subsystem_name = "hisilicon_products"
+  part_name = "hisilicon_products"
+}
+
+ohos_prebuilt_shared_library("libhi3516cv500_vdec") {
+  source = "./libhi3516cv500_vdec.so"
+  subsystem_name = "hisilicon_products"
+  part_name = "hisilicon_products"
+}
+
+ohos_prebuilt_shared_library("libhi3516cv500_vedu") {
+  source = "./libhi3516cv500_vedu.so"
+  subsystem_name = "hisilicon_products"
+  part_name = "hisilicon_products"
+}
+
+ohos_prebuilt_shared_library("libhi3516cv500_venc") {
+  source = "./libhi3516cv500_venc.so"
+  subsystem_name = "hisilicon_products"
+  part_name = "hisilicon_products"
+}
+
+ohos_prebuilt_shared_library("libhi3516cv500_vfmw") {
+  source = "./libhi3516cv500_vfmw.so"
+  subsystem_name = "hisilicon_products"
+  part_name = "hisilicon_products"
+}
+
+ohos_prebuilt_shared_library("libhi3516cv500_vgs") {
+  source = "./libhi3516cv500_vgs.so"
+  subsystem_name = "hisilicon_products"
+  part_name = "hisilicon_products"
+}
+
+ohos_prebuilt_shared_library("libhi3516cv500_vi") {
+  source = "./libhi3516cv500_vi.so"
+  subsystem_name = "hisilicon_products"
+  part_name = "hisilicon_products"
+}
+
+ohos_prebuilt_shared_library("libhi3516cv500_vo") {
+  source = "./libhi3516cv500_vo.so"
+  subsystem_name = "hisilicon_products"
+  part_name = "hisilicon_products"
+}
+
+ohos_prebuilt_shared_library("libhi3516cv500_vpss") {
+  source = "./libhi3516cv500_vpss.so"
+  subsystem_name = "hisilicon_products"
+  part_name = "hisilicon_products"
+}
+
+ohos_prebuilt_shared_library("libhi_irq") {
+  source = "./libhi_irq.so"
+  subsystem_name = "hisilicon_products"
+  part_name = "hisilicon_products"
+}
+
+ohos_prebuilt_shared_library("libhi_osal") {
+  source = "./libhi_osal.so"
+  subsystem_name = "hisilicon_products"
+  part_name = "hisilicon_products"
+}
+
+ohos_prebuilt_shared_library("libhi_sensor_i2c") {
+  source = "./libhi_sensor_i2c.so"
+  subsystem_name = "hisilicon_products"
+  part_name = "hisilicon_products"
+}
+
+ohos_prebuilt_shared_library("libsdk") {
+  source = "./libsdk.so"
+  subsystem_name = "hisilicon_products"
+  part_name = "hisilicon_products"
+}
+
+ohos_prebuilt_shared_library("libmpp_vbs") {
+  source = "./libmpp_vbs.so"
+  subsystem_name = "hisilicon_products"
+  part_name = "hisilicon_products"
+}
+
+ohos_prebuilt_shared_library("libvb_server") {
+  source = "./libvb_server.so"
+  subsystem_name = "hisilicon_products"
+  part_name = "hisilicon_products"
+}

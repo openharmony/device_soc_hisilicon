@@ -1,0 +1,13 @@
+# Copyright (c) Hisilicon Technologies Co., Ltd. 2021-2021. All rights reserved.
+
+if (defined(ohos_lite)) {
+  import("//build/lite/config/component/lite_component.gni")
+} else {
+  import("//build/ohos.gni")
+}
+
+if (defined(ohos_lite)) {
+# do something
+} else {
+# do something
+}
