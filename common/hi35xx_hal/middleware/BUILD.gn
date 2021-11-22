@@ -8,10 +8,10 @@ if (defined(ohos_lite)) {
 
 if (defined(ohos_lite)) {
     board=board_name
-    if (board_name == "hi3516dv300" || board_name == "aegis_hi3516dv300") {
-      board = "hispark_taurus"
-    } else if (board_name == "hi3518ev300") {
-      board = "hispark_aries"
+    if (board_name == "hispark_taurus" || board_name == "aegis_hi3516dv300") {
+      board = "hi3516dv300"
+    } else if (board_name == "hispark_aries") {
+      board = "hi3518ev300"
     }
 
     build_ext_component("middleware_source_sdk") {
