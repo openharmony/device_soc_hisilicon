@@ -53,6 +53,11 @@ ifeq ($(LOSCFG_DRIVERS_HDF_PLATFORM_GPIO), y)
     LIB_SUBDIRS    += $(HISILICON_DRIVERS_ROOT)/gpio
 endif
 
+ifeq ($(LOSCFG_DRIVERS_HDF_PLATFORM_PIN), y)
+    LITEOS_BASELIB += -lhdf_pin
+    LIB_SUBDIRS    += $(HISILICON_DRIVERS_ROOT)/pin
+endif
+
 ifeq ($(LOSCFG_DRIVERS_HDF_PLATFORM_WATCHDOG), y)
     LITEOS_BASELIB += -lhdf_watchdog
     LIB_SUBDIRS    += $(HISILICON_DRIVERS_ROOT)/watchdog
@@ -96,6 +101,11 @@ endif
 ifeq ($(LOSCFG_DRIVERS_HDF_PLATFORM_MIPI_DSI), y)
     LITEOS_BASELIB += -lhdf_mipi_dsi
     LIB_SUBDIRS    += $(HISILICON_DRIVERS_ROOT)/mipi_dsi
+endif
+
+ifeq ($(LOSCFG_DRIVERS_HDF_PLATFORM_MIPI_CSI), y)
+    LITEOS_BASELIB += -lhdf_mipi_csi
+    LIB_SUBDIRS    += $(HISILICON_DRIVERS_ROOT)/mipi_csi
 endif
 
 ifeq ($(LOSCFG_DRIVERS_HDF_PLATFORM_DMAC), y)

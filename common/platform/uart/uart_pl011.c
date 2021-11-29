@@ -20,7 +20,6 @@
 #include "osal_io.h"
 #include "osal_irq.h"
 #include "osal_time.h"
-#include "uart_if.h"
 #include "uart_pl011.h"
 
 #define HDF_LOG_TAG       uart_pl011
@@ -54,7 +53,7 @@ static uint32_t Pl011Irq(uint32_t irq, void *data)
             if (udd->num != CONSOLE_UART) {
                 continue;
             }
-            if (CheckMagicKey(buf[count - 1])) {
+            if (CheckMagicKey(buf[count - 1], CONSOLE_SERIAL)) {
                 goto end;
             }
         } while (count < FIFO_SIZE);
