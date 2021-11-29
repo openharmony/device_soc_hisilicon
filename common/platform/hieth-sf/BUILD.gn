@@ -16,20 +16,22 @@ import("//drivers/adapter/khdf/liteos/hdf.gni")
 module_switch = defined(LOSCFG_DRIVERS_HIETH_SF)
 module_name = "hieth-sf"
 hdf_driver(module_name) {
-  sources = [ "src/ctrl.c",
-              "src/eth_mac.c",
-              "src/eth_phy.c",
-              "src/interface.c",
-              "src/mdio.c",
-              "adapter/hdf_driver_register.c",
-              "adapter/hieth_mac.c",
-              "adapter/hieth_phy.c",
-              "adapter/net_adapter.c",
+  sources = [
+    "adapter/hdf_driver_register.c",
+    "adapter/hieth_mac.c",
+    "adapter/hieth_phy.c",
+    "adapter/net_adapter.c",
+    "src/ctrl.c",
+    "src/eth_mac.c",
+    "src/eth_phy.c",
+    "src/interface.c",
+    "src/mdio.c",
   ]
-  include_dirs = [ "include",
-                   "include/internal",
-                   "adapter",
-                   "../../../../drivers/framework/model/network/ethernet/include",
-                   "../../../../drivers/framework/include/ethernet"
+  include_dirs = [
+    "include",
+    "include/internal",
+    "adapter",
+    "../../../../drivers/framework/model/network/ethernet/include",
+    "../../../../drivers/framework/include/ethernet",
   ]
 }

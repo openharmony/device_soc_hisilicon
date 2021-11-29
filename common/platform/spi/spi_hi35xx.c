@@ -205,7 +205,6 @@ static int32_t Pl022Config(struct Pl022 *pl022)
     uint32_t scr;
     uint32_t cpsdvsr;
 
-    Pl022Disable(pl022);
     /* Check if we can provide the requested rate */
     if (pl022->speed > pl022->maxSpeedHz) {
         HDF_LOGW("%s: invalid speed:%d, use max:%d instead", __func__, pl022->speed, pl022->maxSpeedHz);
@@ -350,7 +349,7 @@ static int32_t Pl022TxRx(const struct Pl022 *pl022, const struct SpiMsg *msg)
             OSAL_WRITEL(SPI_ALL_IRQ_ENABLE, (uintptr_t)(pl022->regBase) + REG_SPI_IMSC);
         }
         Pl022WriteFifo(pl022, tx, tmpLen);
-        tx = (tx == NULL) ? NULL : tx + tmpLen;
+        tx = (tx == NULL) ? NULL : (tx + tmpLen);
         if (pl022->transferMode == SPI_INTERRUPT_TRANSFER && tmpLen == burstSize) {
             ret = OsalSemWait((struct OsalSem *)(&pl022->sem), RX_INT_WAIT_TIMEOUT);
         } else {
@@ -458,7 +457,7 @@ static void Pl022DmaCallBack(void *data, int status)
 
     if (xEvent != NULL) {
 #ifdef SPI_HI35XX_DEBUG
-        HDF_LOGD("%s: dmamsg transfer %s!", __func__, status == DMAC_CHN_SUCCESS ? "Success!" : "Error!");
+        HDF_LOGD("%s: dmamsg transfer %s!", __func__, (status == DMAC_CHN_SUCCESS) ? "Success!" : "Error!");
 #endif
         if (status != DMAC_CHN_SUCCESS) {
             xEvent->retValue = HDF_FAILURE;
@@ -486,7 +485,7 @@ static struct DmaCntlr *GetDmaCntlr(void)
 static inline uintptr_t Pl022AllocBufPhy(size_t len)
 {
     void *tmpBuf = OsalMemCalloc(len);
-    return tmpBuf == NULL ? 0 : (uintptr_t)LOS_PaddrQuery(tmpBuf);
+    return (tmpBuf == NULL) ? 0 : (uintptr_t)LOS_PaddrQuery(tmpBuf);
 }
 
 static inline void Pl022RleaseBufPhy(uintptr_t buf)
@@ -606,6 +605,7 @@ static int32_t Pl022Transfer(struct SpiCntlr *cntlr, struct SpiMsg *msg, uint32_
     if (dev == NULL) {
         goto __ERR;
     }
+    Pl022Disable(pl022);
     pl022->mode = dev->cfg.mode;
     pl022->transferMode = dev->cfg.transferMode;
     pl022->bitsPerWord = dev->cfg.bitsPerWord;

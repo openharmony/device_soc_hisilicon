@@ -14,7 +14,7 @@
  */
 
 #include "device_resource_if.h"
-#include "gpio_core.h"
+#include "gpio/gpio_core.h"
 #ifdef PL061_GPIO_USER_SUPPORT
 #include "gpio_dev.h"
 #endif
@@ -24,7 +24,6 @@
 #include "osal_irq.h"
 #include "osal_mem.h"
 #include "osal_spinlock.h"
-#include "plat_log.h"
 
 #define HDF_LOG_TAG gpio_hi35xx
 #define PL061_GROUP_MAX 32
@@ -629,7 +628,6 @@ static int32_t Pl061GpioInit(struct HdfDeviceObject *device)
     pl061->cntlr.count = pl061->groupNum * pl061->bitNum;
     pl061->cntlr.priv = (void *)device->property;
     pl061->cntlr.ops = &g_method;
-    pl061->cntlr.device = device;
     ret = GpioCntlrAdd(&pl061->cntlr);
     if (ret != HDF_SUCCESS) {
         HDF_LOGE("%s: err add controller:%d", __func__, ret);
