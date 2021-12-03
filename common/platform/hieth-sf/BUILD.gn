@@ -31,7 +31,7 @@ hdf_driver(module_name) {
     "include",
     "include/internal",
     "adapter",
-    "../../../../drivers/framework/model/network/ethernet/include",
-    "../../../../drivers/framework/include/ethernet",
+    "//drivers/framework/model/network/ethernet/include",
+    "//drivers/framework/include/ethernet",
   ]
 }

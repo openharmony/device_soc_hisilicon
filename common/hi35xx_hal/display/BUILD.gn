@@ -14,53 +14,41 @@
 if (defined(ohos_lite)) {
   import("//build/lite/config/component/lite_component.gni")
   import("//build/lite/ndk/ndk.gni")
-
+  board=board_name
+  if (board_name == "hispark_taurus" || board_name == "aegis_hi3516dv300") {
+    board = "hi3516dv300"
+  } else if (board_name == "hispark_aries") {
+    board = "hi3518ev300"
+  }
+  
   if (ohos_build_compiler == "clang" && ohos_kernel_type == "liteos_a") {
     copy("display_layer") {
-      sources = [ "${board_name}/ohos/libdisplay_layer.so" ]
+      sources = [ "${board}/liteos_a/lib/libdisplay_layer.so" ]
       outputs = [ "$root_out_dir/libdisplay_layer.so" ]
     }
 
     copy("display_gfx") {
-      sources = [ "${board_name}/ohos/libdisplay_gfx.so" ]
+      sources = [ "${board}/liteos_a/lib/libdisplay_gfx.so" ]
       outputs = [ "$root_out_dir/libdisplay_gfx.so" ]
     }
 
     copy("display_gralloc") {
-      sources = [ "${board_name}/ohos/libdisplay_gralloc.so" ]
+      sources = [ "${board}/liteos_a/lib/libdisplay_gralloc.so" ]
       outputs = [ "$root_out_dir/libdisplay_gralloc.so" ]
     }
   } else if (ohos_build_compiler == "clang" && ohos_kernel_type == "linux") {
     copy("display_layer") {
-      sources = [ "${board_name}/linux/libdisplay_layer.so" ]
+      sources = [ "${board}/linux_small/lib/libdisplay_layer.so" ]
       outputs = [ "$root_out_dir/libdisplay_layer.so" ]
     }
 
     copy("display_gfx") {
-      sources = [ "${board_name}/linux/libdisplay_gfx.so" ]
+      sources = [ "${board}/linux_small/lib/libdisplay_gfx.so" ]
       outputs = [ "$root_out_dir/libdisplay_gfx.so" ]
     }
 
     copy("display_gralloc") {
-      sources = [ "${board_name}/linux/libdisplay_gralloc.so" ]
-      outputs = [ "$root_out_dir/libdisplay_gralloc.so" ]
-    }
-  }
-
-  if (ohos_build_ndk_target_host == "linux-x86_64" &&
-      ohos_build_compiler == "gcc") {
-    copy("display_layer") {
-      sources = [ "${board_name}/gcc/libdisplay_layer.so" ]
-      outputs = [ "$root_out_dir/libdisplay_layer.so" ]
-    }
-
-    copy("display_gfx") {
-      sources = [ "${board_name}/gcc/libdisplay_gfx.so" ]
-      outputs = [ "$root_out_dir/libdisplay_gfx.so" ]
-    }
-
-    copy("display_gralloc") {
-      sources = [ "${board_name}/gcc/libdisplay_gralloc.so" ]
+      sources = [ "${board}/linux_small/lib/libdisplay_gralloc.so" ]
       outputs = [ "$root_out_dir/libdisplay_gralloc.so" ]
     }
   }
