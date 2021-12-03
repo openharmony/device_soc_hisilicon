@@ -19,7 +19,7 @@ if (defined(ohos_lite)) {
 
 if (defined(ohos_lite)) {
   copy("wifi_firmware") {
-    sources = [ "./" ]
+    sources = [ "../firmware" ]
     outputs = [ "$root_out_dir/vendor/firmware/hi3881" ]
   }
 } else {

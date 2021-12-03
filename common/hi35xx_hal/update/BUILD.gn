@@ -14,13 +14,20 @@
 import("//build/lite/config/component/lite_component.gni")
 
 if (ohos_kernel_type == "liteos_a") {
+  board=board_name
+  if (board_name == "hispark_taurus" || board_name == "aegis_hi3516dv300") {
+    board = "hi3516dv300"
+  } else if (board_name == "hispark_aries") {
+    board = "hi3518ev300"
+  }
+
   copy("hal_update") {
-    sources = [ "./${board_name}/liteos_a/libs/libhal_update.so" ]
+    sources = [ "./${board}/liteos_a/libs/libhal_update.so" ]
     outputs = [ "$root_out_dir/libhal_update.so" ]
   }
 } else if (ohos_kernel_type == "linux") {
   copy("hal_update") {
-    sources = [ "./${board_name}/linux_small/libs/libhal_update.so" ]
+    sources = [ "./${board}/linux_small/libs/libhal_update.so" ]
     outputs = [ "$root_out_dir/libhal_update.so" ]
   }
 }
