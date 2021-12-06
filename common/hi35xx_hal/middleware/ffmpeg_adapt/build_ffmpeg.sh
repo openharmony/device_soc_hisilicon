@@ -10,7 +10,7 @@ CC_PATH="$4"
 
 function main(){
     CUR_DIR=$(cd $(dirname "$0");pwd)
-    ROOT_DIR=$CUR_DIR/../../../../../..
+    ROOT_DIR=$CUR_DIR/../../../../../../..
     COMPILER_TYPE="clang"
     export LLVM_COMPILER=y
     CONFIGURE_FILE=configure_llvm

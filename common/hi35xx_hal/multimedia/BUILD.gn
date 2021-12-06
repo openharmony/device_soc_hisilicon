@@ -15,21 +15,21 @@ import("//build/lite/config/component/lite_component.gni")
 import("//build/lite/config/subsystem/aafwk/path.gni")
 import("//build/lite/ndk/ndk.gni")
 
+board=board_name
+if (board_name == "hispark_taurus" || board_name == "aegis_hi3516dv300") {
+  board = "hi3516dv300"
+} else if (board_name == "hispark_aries") {
+  board = "hi3518ev300"
+}
+
 if (ohos_build_compiler == "clang" && ohos_kernel_type == "liteos_a") {
   copy("hdi_media") {
-    sources = [ "hal/hdi_media/${board_name}/llvm/ohos/libs/libhdi_media.so" ]
+    sources = [ "${board}/liteos_a/libs/libhdi_media.so" ]
     outputs = [ "$root_out_dir/libhdi_media.so" ]
   }
 } else if (ohos_build_compiler == "clang" && ohos_kernel_type == "linux") {
   copy("hdi_media") {
-    sources = [ "hal/hdi_media/${board_name}/llvm/linux/libs/libhdi_media.so" ]
-    outputs = [ "$root_out_dir/libhdi_media.so" ]
-  }
-}
-
-if (ohos_build_compiler == "gcc") {
-  copy("hdi_media") {
-    sources = [ "hal/hdi_media/${board_name}/gcc/ohos/libs/libhdi_media.so" ]
+    sources = [ "${board}/linux_small/libs/libhdi_media.so" ]
     outputs = [ "$root_out_dir/libhdi_media.so" ]
   }
 }

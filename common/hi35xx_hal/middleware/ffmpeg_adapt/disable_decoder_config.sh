@@ -4,7 +4,7 @@ echo `pwd`
 CUR_DIR=$(pwd)
 CC_PATH=$1
 
-echo CC_PATH=${CC_PATH}"
+echo "CC_PATH=${CC_PATH}"
 CFG_SDK_TOOLCHAIN=$CC_PATH/
 
 configure_attr=" --prefix=./install \
