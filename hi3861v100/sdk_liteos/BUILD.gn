@@ -1,0 +1,40 @@
+# Copyright (c) Huawei Technologies Co., Ltd. 2020. All rights reserved.
+
+import("//build/lite/config/component/lite_component.gni")
+
+declare_args() {
+  enable_hos_vendor_wifiiot_xts = false
+}
+
+group("wifiiot_sdk") {
+  deps = [ ":sdk" ]
+}
+
+build_ext_component("run_wifiiot_scons") {
+  exec_path = rebase_path(".", root_build_dir)
+  outdir = rebase_path(root_out_dir)
+
+  if (host_os == "win") {
+    command = "sh hm_build.sh $outdir win"
+  } else {
+    command = "sh hm_build.sh $outdir linux"
+  }
+  deps = [
+    ":sdk",
+    "//base/security/deviceauth/frameworks/deviceauth_lite:hichainsdk",
+    "//build/lite:ohos",
+  ]
+  if (enable_hos_vendor_wifiiot_xts) {
+    deps += [ "//build/lite/config/subsystem/xts:xts" ]
+  }
+}
+
+lite_component("sdk") {
+  features = []
+
+  deps = [
+    "//build/lite/config/component/cJSON:cjson_static",
+    "//device/soc/hisilicon/hi3861v100/hi3861_adapter/hals/communication/wifi_lite/wifiservice",
+    "//device/soc/hisilicon/hi3861v100/hi3861_adapter/kal",
+  ]
+}
