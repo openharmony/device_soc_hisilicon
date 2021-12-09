@@ -1,0 +1,126 @@
+root {
+    platform {
+        mtd_config {
+            template mtd_controller {
+                match_attr = "";
+                regBase = 0x10000000;
+                regSize = 0xe0;
+                memBase = 0x14000000;
+                memSize = 0x1000000;
+            }
+            controller_0x00 :: mtd_controller {
+                match_attr = "hifmc100_config";
+                regBase = 0x10000000;
+                regSize = 0xe0;
+                memBase = 0x14000000;
+                memSize = 0x1000000;
+                spi_nand_dev_table {
+                    template spinand_device {
+                        template spinand_op {
+                            if_type = 0x0;
+                            cmd = 0x0;
+                            dummy = 0x0;
+                            size = 0x0;
+                            clock = 0x0;
+                        }
+                        name = "unkown";
+                        id = [0x0, 0x0];
+                        chip_size = 0x1000000; // 16M
+                        block_size = 0x10000;  // 64K
+                        page_size = 2048;      // 2K
+                        oob_size = 64;
+                        qe_support = 0;
+                        erase_op :: spinand_op {
+                        }
+                        write_op :: spinand_op {
+                        }
+                        read_op :: spinand_op {
+                        }
+                    }
+                    DS35Q2GAXXX:: spinand_device {
+                        name = "DS35Q2GAXXX";
+                        id = [0xe5, 0x72];
+                        chip_size = 0x10000000; // 256M
+                        block_size = 0x20000;   // 128K
+                        page_size = 2048;       // 2K
+                        oob_size = 64;
+                        qe_support = 1;
+                        read_op {
+                            if_type = 0x3;     // spi if read quad
+                            cmd = 0x6b;        // spi cmd read quad
+                            dummy = 1;
+                            size = 0xffffffff; // infinite
+                            clock = 104;
+                        }
+                        write_op {
+                            if_type = 0x3;  // spi if write quad
+                            cmd = 0x32;     // spi cmd write quad
+                            dummy = 0x0;
+                            size = 256;
+                            clock = 104;
+                        }
+                        erase_op {
+                            if_type = 0x0;  // spi if std erase 
+                            cmd = 0xd8;     // spi cmd se 64k
+                            dummy = 0x0;
+                            size = 0x20000; // 128k
+                            clock = 104;
+                        }
+                    }
+                }
+                spi_nor_dev_table {
+                    template spinor_device {
+                        template spinor_op {
+                            if_type = 0x0;
+                            cmd = 0x0;
+                            dummy = 0x0;
+                            size = 0x0;
+                            clock = 0x0;
+                        }
+                        name = "unkown";
+                        id = [0x0, 0x0, 0x0];
+                        chip_size = 0x1000000; // 16M
+                        block_size = 0x10000;  // 64K
+                        addr_cycle = 3;
+                        qe_support = 0;
+                        erase_op :: spinor_op {
+                        }
+                        write_op :: spinor_op {
+                        }
+                        read_op :: spinor_op {
+                        }
+                    }
+                    xm25qh128a :: spinor_device {
+                        name = "xm25qh128a";
+                        id = [0x20, 0x70, 0x18];
+                        chip_size = 0x1000000; // 16M
+                        block_size = 0x10000;  // 64K
+                        addr_cycle = 3;
+                        qe_support = 1;
+                        erase_op {
+                            if_type = 0x0; // spi if std erase 
+                            cmd = 0xd8;     // spi cmd se 64k
+                            dummy = 0x0;
+                            size = 0x10000; // 64k
+                            clock = 104;
+                        }
+                        write_op {
+                            if_type = 0x0;  // spi if write std
+                            cmd = 0x2;      // spi cmd write std
+                            dummy = 0x0;
+                            size = 256;
+                            clock = 104;
+                        }
+                        read_op {
+                            if_type = 0x2; // spi if read dual addr
+                            cmd = 0xbb;     // spi cmd read dual addr
+                            dummy = 0x1;
+                            size = 0xffffffff;
+                            clock = 104;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
