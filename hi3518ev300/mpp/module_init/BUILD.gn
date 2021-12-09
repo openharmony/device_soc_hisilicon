@@ -1,0 +1,48 @@
+# Copyright (C) 2021 Hisilicon (Shanghai) Technologies Co., Ltd. All rights reserved.
+
+import("//kernel/liteos_a/liteos.gni")
+
+module_name = "module_init"
+kernel_module(module_name) {
+  sources = [
+    "src/sdk_init.c",
+    "src/system_init.c",
+  ]
+
+  lib_dirs = [ "lib" ]
+  libs = [
+    "sys_config",
+    "hi_osal",
+    "hi3516ev200_base",
+    "hi3516ev200_sys",
+    "hi3516ev200_isp",
+    "hi3516ev200_vi",
+    "hi3516ev200_vo",
+    "hifb",
+    "hi3516ev200_vpss",
+    "hi3516ev200_vgs",
+    "hi3516ev200_tde",
+    "hi_mipi_rx",
+    "hi3516ev200_chnl",
+    "hi3516ev200_rc",
+    "hi3516ev200_rgn",
+    "hi3516ev200_vedu",
+    "hi3516ev200_venc",
+    "hi3516ev200_h265e",
+    "hi3516ev200_jpege",
+    "hi3516ev200_h264e",
+    "hi_sensor_i2c",
+    "hi_sensor_spi",
+    "hi3516ev200_ai",
+    "hi3516ev200_ao",
+    "hi3516ev200_aio",
+    "hi3516ev200_aenc",
+    "hi3516ev200_adec",
+    "hi3516ev200_acodec",
+    "hi_sensor_spi",
+    "hi_pwm",
+    "hi_piris",
+    "hi3516ev200_ive",
+    "hi3516ev200_cipher",
+  ]
+}
