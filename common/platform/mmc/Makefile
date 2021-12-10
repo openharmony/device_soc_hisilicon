@@ -17,7 +17,7 @@ include $(LITEOSTOPDIR)/config.mk
 include $(LITEOSTOPDIR)/../../drivers/adapter/khdf/liteos/lite.mk
 
 MODULE_NAME := hdf_mmc
-HDF_MMC_INC = $(LITEOSTOPDIR)/../../device/hisilicon/drivers/mmc
+HDF_MMC_INC = $(LITEOSTOPDIR)/../../device/soc/hisilicon/common/platform/mmc
 
 LOCAL_CFLAGS += $(HDF_INCLUDE)
 
