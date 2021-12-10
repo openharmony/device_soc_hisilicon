@@ -25,13 +25,13 @@ ifeq ($(SOC_BOARD), ipcamera_hi3518ev300_liteos)
     SOC_BOARD := hi3518ev300
 endif
 
-HISILICON_DRIVERS_ROOT := $(LITEOSTOPDIR)/../../device/$(SOC_COMPANY)/drivers/
-HISILICON_DRIVERS_SOURCE_ROOT := $(LITEOSTOPDIR)/../../device/$(SOC_COMPANY)/drivers/source/
+HISILICON_DRIVERS_ROOT := $(LITEOSTOPDIR)/../../device/soc/$(SOC_COMPANY)/common/platform/
+HISILICON_DRIVERS_SOURCE_ROOT := $(LITEOSTOPDIR)/../../device/soc/$(SOC_COMPANY)/common/platform/source/
 
 BUILD_FROM_SOURCE := $(shell if [ -d $(HISILICON_DRIVERS_SOURCE_ROOT) ]; then echo y; else echo n; fi)
 
-HDF_INCLUDE += -I $(LITEOSTOPDIR)/../../device/$(SOC_COMPANY)/$(SOC_BOARD)/sdk_liteos/config/board/include/
-HDF_INCLUDE += -I $(LITEOSTOPDIR)/../../device/$(SOC_COMPANY)/$(SOC_BOARD)/sdk_liteos/config/board/include/hisoc
+HDF_INCLUDE += -I $(LITEOSTOPDIR)/../../device/board/$(SOC_COMPANY)/$(SOC_BOARD)/liteos_a/board/include/
+HDF_INCLUDE += -I $(LITEOSTOPDIR)/../../device/board/$(SOC_COMPANY)/$(SOC_BOARD)/liteos_a/board/include/hisoc
 
 ifeq ($(LOSCFG_DRIVERS_HDF_PLATFORM_I2C), y)
     LITEOS_BASELIB += -lhdf_i2c

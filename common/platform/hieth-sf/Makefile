@@ -22,7 +22,7 @@ LOCAL_SRCS +=  $(wildcard adapter/*.c)
 LOCAL_FLAGS := -I include/internal
 LOCAL_FLAGS += -I $(LITEOSTOPDIR)/../../drivers/framework/model/network/ethernet/include
 LOCAL_FLAGS += -I $(LITEOSTOPDIR)/../../drivers/framework/include/ethernet
-LOCAL_FLAGS += -I $(LITEOSTOPDIR)/../../device/hisilicon/drivers/hieth-sf/adapter
+LOCAL_FLAGS += -I $(LITEOSTOPDIR)/../../device/soc/hisilicon/common/platform/hieth-sf/adapter
 
 include $(HDF_DRIVER)
 
