@@ -54,4 +54,7 @@ kernel_module(module_name) {
     "hi3516cv500_cipher",
     "hi3516cv500_wdt",
   ]
+  visibility += [
+  "//device/board/hisilicon/hispark_taurus/liteos_a:*"
+  ]
 }
