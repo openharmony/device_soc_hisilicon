@@ -45,4 +45,7 @@ kernel_module(module_name) {
     "hi3516ev200_ive",
     "hi3516ev200_cipher",
   ]
+  visibility += [
+  "//device/board/hisilicon/hispark_aries/liteos_a:*"
+  ]
 }
