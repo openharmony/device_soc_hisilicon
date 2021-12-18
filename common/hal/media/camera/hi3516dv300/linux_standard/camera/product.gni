@@ -14,7 +14,7 @@ if (!defined(defines)) {
   defines = []
 }
 camera_product_name_path = "//vendor/hisilicon/Hi3516DV300"
-camera_device_name_path = "//device/soc/hisilicon/common/hi35xx_hal/media/camera/hi3516dv300/linux_standard"
+camera_device_name_path = "//device/soc/hisilicon/common/hal/media/camera/hi3516dv300/linux_standard"
 is_support_mpi = true
 if (is_support_mpi) {
   is_support_v4l2 = false
