@@ -1,0 +1,142 @@
+# Copyright (c) Huawei Technologies Co., Ltd. 2021. All rights reserved.
+
+import("//drivers/framework/tools/hc-gen/hc_gen.gni")
+import("//drivers/peripheral/camera/hal/camera.gni")
+
+if (defined(ohos_lite)) {
+  import("//build/lite/config/component/lite_component.gni")
+  import("//drivers/adapter/uhdf2/uhdf.gni")
+
+  hc_gen("build_config") {
+    hcs_file_prefix = "$camera_product_name_path/hdf_config/uhdf/camera"
+    sources = [
+      "$hcs_file_prefix/driver/mpp_config.hcs",
+      "$hcs_file_prefix/hdi_impl/camera_host_config.hcs",
+      "$hcs_file_prefix/pipeline_core/ipp_algo_config.hcs",
+    ]
+    outputs = [ "$root_out_dir/etc/camera/{{source_name_part}}.hcb" ]
+  }
+
+  group("hispark_taurus_build") {
+    exec_script(
+        "//build/lite/run_shell_cmd.py",
+        [
+          "touch",
+          rebase_path(
+              "$camera_path/pipeline_core/pipeline_impl/src/strategy/config/config.c"),
+          rebase_path(
+              "$camera_path/pipeline_core/pipeline_impl/src/strategy/config/params.c"),
+        ])
+
+    deps = [
+      ":build_config",
+      "src/driver_adapter:driver_adapter",
+    ]
+  }
+} else {
+  import("//build/ohos.gni")
+  import("//drivers/adapter/uhdf2/uhdf.gni")
+
+  hc_gen("build_camera_host_config") {
+    sources = [ rebase_path(
+            "$camera_product_name_path/hdf_config/uhdf/camera/hdi_impl/camera_host_config.hcs") ]
+    outputs = [ "$target_gen_dir/hdi_impl/{{source_name_part}}.hcb" ]
+  }
+
+  ohos_prebuilt_etc("camera_host_config.hcb") {
+    deps = [ ":build_camera_host_config" ]
+    hcs_outputs = get_target_outputs(":build_camera_host_config")
+    source = hcs_outputs[0]
+    relative_install_dir = "hdfconfig"
+    subsystem_name = "hdf"
+    part_name = "hdf"
+  }
+
+  hc_gen_c("generate_source") {
+    sources = [
+      "$camera_product_name_path/hdf_config/uhdf/camera/pipeline_core/config.hcs",
+      "$camera_product_name_path/hdf_config/uhdf/camera/pipeline_core/params.hcs",
+    ]
+  }
+
+  action("copy_source") {
+    script = "/usr/bin/env"
+    outputs = [ "$target_out_dir/tmp.c" ]  # no use, just for gn complains
+    args = [
+      "cp",
+      "-f",
+    ]
+    args += rebase_path(get_target_outputs(":generate_source"))
+    args += [ rebase_path(
+            "$camera_path/pipeline_core/pipeline_impl/src/strategy/config/") ]
+    deps = [ ":generate_source" ]
+  }
+
+  ohos_prebuilt_etc("config.c") {
+    deps = [ ":copy_source" ]
+    source =
+        "$camera_path/pipeline_core/pipeline_impl/src/strategy/config/config.c"
+    exec_script(
+        "/usr/bin/env",
+        [
+          "touch",
+          rebase_path(
+              "$camera_path/pipeline_core/pipeline_impl/src/strategy/config/config.c"),
+        ])
+  }
+
+  ohos_prebuilt_etc("params.c") {
+    deps = [ ":copy_source" ]
+    source =
+        "$camera_path/pipeline_core/pipeline_impl/src/strategy/config/params.c"
+    exec_script(
+        "/usr/bin/env",
+        [
+          "touch",
+          rebase_path(
+              "$camera_path/pipeline_core/pipeline_impl/src/strategy/config/params.c"),
+        ])
+  }
+
+  hc_gen("build_ipp_algo_config") {
+    sources = [ rebase_path(
+            "$camera_product_name_path/hdf_config/uhdf/camera/pipeline_core/ipp_algo_config.hcs") ]
+    outputs = [ "$target_gen_dir/pipeline_core/{{source_name_part}}.hcb" ]
+  }
+
+  ohos_prebuilt_etc("ipp_algo_config.hcb") {
+    deps = [ ":build_ipp_algo_config" ]
+    hcs_outputs = get_target_outputs(":build_ipp_algo_config")
+    source = hcs_outputs[0]
+    relative_install_dir = "hdfconfig"
+    subsystem_name = "hdf"
+    part_name = "hdf"
+  }
+
+  hc_gen("build_mpp_config_hcs") {
+    sources = [ rebase_path(
+            "$camera_product_name_path/hdf_config/uhdf/camera/driver/mpp_config.hcs") ]
+    outputs = [ "$target_gen_dir/driver/{{source_name_part}}.hcb" ]
+  }
+
+  ohos_prebuilt_etc("mpp_config.hcb") {
+    deps = [ ":build_mpp_config_hcs" ]
+    hcs_outputs = get_target_outputs(":build_mpp_config_hcs")
+    source = hcs_outputs[0]
+    relative_install_dir = "hdfconfig"
+    subsystem_name = "hdf"
+    part_name = "hdf"
+  }
+
+  group("hispark_taurus_build") {
+    public_deps = [
+      ":camera_host_config.hcb",
+      ":config.c",
+      ":ipp_algo_config.hcb",
+      ":mpp_config.hcb",
+      ":params.c",
+      "src/driver_adapter:driver_adapter",
+      "src/pipeline_core:camera_ipp_algo_example",
+    ]
+  }
+}

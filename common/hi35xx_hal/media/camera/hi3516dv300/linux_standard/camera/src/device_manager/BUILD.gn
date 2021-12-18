@@ -1,0 +1,140 @@
+# Copyright (c) Huawei Technologies Co., Ltd. 2021. All rights reserved.
+import("//drivers/peripheral/camera/hal/camera.gni")
+
+config("device_manager_config") {
+  visibility = [ ":*" ]
+
+  cflags_cc = [
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "-Wno-error",
+    "-DGST_DISABLE_DEPRECATED",
+    "-DHAVE_CONFIG_H",
+    "-DCOLORSPACE=\"videoconvert\"",
+    "-fno-strict-aliasing",
+    "-Wno-sign-compare",
+    "-Wno-builtin-requires-header",
+    "-Wno-unused-variable",
+    "-Wno-unused-label",
+    "-Wno-implicit-function-declaration",
+    "-Wno-format",
+    "-Wno-int-conversion",
+    "-Wno-unused-function",
+    "-Wno-thread-safety-attributes",
+    "-Wno-inconsistent-missing-override",
+    "-fno-rtti",
+    "-fno-exceptions",
+    "-ffunction-sections",
+    "-fdata-sections",
+  ]
+}
+
+if (defined(ohos_lite)) {
+  import("//build/lite/config/component/lite_component.gni")
+  import("//drivers/adapter/uhdf/uhdf.gni")
+
+  shared_library("camera_device_manager") {
+    sources = [
+      "$camera_device_name_path/camera/src/device_manager/imx335.cpp",
+      "$camera_device_name_path/camera/src/device_manager/imx600.cpp",
+      "$camera_path/adapter/platform/mpp/src/device_manager/idevice_manager.cpp",
+      "$camera_path/adapter/platform/mpp/src/device_manager/mpi_device_manager.cpp",
+      "$camera_path/adapter/platform/mpp/src/device_manager/venc_controller.cpp",
+      "$camera_path/adapter/platform/mpp/src/device_manager/venc_manager.cpp",
+      "$camera_path/adapter/platform/mpp/src/device_manager/vi_controller.cpp",
+      "$camera_path/adapter/platform/mpp/src/device_manager/vi_manager.cpp",
+      "$camera_path/adapter/platform/mpp/src/device_manager/vo_controller.cpp",
+      "$camera_path/adapter/platform/mpp/src/device_manager/vo_manager.cpp",
+      "$camera_path/adapter/platform/mpp/src/device_manager/vpss_controller.cpp",
+      "$camera_path/adapter/platform/mpp/src/device_manager/vpss_manager.cpp",
+      "$camera_path/device_manager/src/icontroller.cpp",
+      "$camera_path/device_manager/src/imanager.cpp",
+      "$camera_path/device_manager/src/isensor.cpp",
+    ]
+
+    include_dirs = [
+      "//base/hiviewdfx/interfaces/innerkits/libhilog/include",
+      "$camera_path/include",
+      "$camera_path/lite_os/metadata/include",
+      "$camera_path/utils/event",
+      "$camera_path/utils/metadata/include",
+      "$camera_path/device_manager/include",
+      "//utils/native/base/include",
+      "$camera_device_name_path/camera/include/device_manager",
+      "$camera_path/adapter/platform/mpp/src/device_manager/include",
+      "//drivers/framework/include/utils",
+      "//drivers/adapter/uhdf2/osal/include",
+      "$camera_device_name_path/camera/include/driver_adapter",
+      "//base/hiviewdfx/hilog_lite/interfaces/native/innerkits",
+    ]
+
+    deps = [ "$camera_path/utils/metadata:metadata_lite" ]
+    hispark_taurus_lib_path = "//device/soc/hisilicon/common/hi35xx_hal/media/camera/hi3516dv300/liteos_a/libs/"
+
+    outdir = rebase_path("$hispark_taurus_lib_path")
+
+    ldflags = [ "-L$outdir" ]
+    ldflags += [ "-ldriver_adapter" ]
+
+    public_configs = [ ":device_manager_config" ]
+  }
+} else {
+  import("//build/ohos.gni")
+  import("//drivers/adapter/uhdf2/uhdf.gni")
+
+  ohos_shared_library("camera_device_manager") {
+    sources = [
+      "$camera_device_name_path/camera/src/device_manager/imx335.cpp",
+      "$camera_device_name_path/camera/src/device_manager/imx600.cpp",
+      "$camera_path/adapter/platform/mpp/src/device_manager/idevice_manager.cpp",
+      "$camera_path/adapter/platform/mpp/src/device_manager/mpi_device_manager.cpp",
+      "$camera_path/adapter/platform/mpp/src/device_manager/venc_controller.cpp",
+      "$camera_path/adapter/platform/mpp/src/device_manager/venc_manager.cpp",
+      "$camera_path/adapter/platform/mpp/src/device_manager/vi_controller.cpp",
+      "$camera_path/adapter/platform/mpp/src/device_manager/vi_manager.cpp",
+      "$camera_path/adapter/platform/mpp/src/device_manager/vo_controller.cpp",
+      "$camera_path/adapter/platform/mpp/src/device_manager/vo_manager.cpp",
+      "$camera_path/adapter/platform/mpp/src/device_manager/vpss_controller.cpp",
+      "$camera_path/adapter/platform/mpp/src/device_manager/vpss_manager.cpp",
+      "$camera_path/device_manager/src/icontroller.cpp",
+      "$camera_path/device_manager/src/imanager.cpp",
+      "$camera_path/device_manager/src/isensor.cpp",
+    ]
+
+    include_dirs = [
+      "//base/hiviewdfx/interfaces/innerkits/libhilog/include",
+      "$camera_path/include",
+      "$camera_path/utils/event",
+      "$camera_path/device_manager/include",
+      "//utils/native/base/include",
+      "$camera_device_name_path/camera/include/device_manager",
+      "$camera_path/adapter/platform/mpp/src/device_manager/include",
+      "//drivers/framework/include/utils",
+      "//drivers/adapter/uhdf2/osal/include",
+      "$camera_device_name_path/camera/include/driver_adapter",
+      "//foundation/multimedia/camera_standard/frameworks/innerkitsimpl/metadata/include",
+    ]
+
+    deps = [
+      "//foundation/multimedia/camera_standard/frameworks/innerkitsimpl/metadata:metadata",
+      "//utils/native/base:utils",
+    ]
+
+    hispark_taurus_lib_path = "//device/soc/hisilicon/common/hi35xx_hal/media/camera/hi3516dv300/linux_standard/libs/"
+
+    outdir = rebase_path("$hispark_taurus_lib_path")
+    ldflags = [ "-L$outdir" ]
+    ldflags += [ "-ldriver_adapter.z" ]
+
+    if (is_standard_system) {
+      external_deps = [ "hiviewdfx_hilog_native:libhilog" ]
+    } else {
+      external_deps = [ "hilog:libhilog" ]
+    }
+
+    public_configs = [ ":device_manager_config" ]
+    subsystem_name = "hdf"
+    part_name = "hdf"
+  }
+}
