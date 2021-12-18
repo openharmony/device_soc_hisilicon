@@ -1,0 +1,24 @@
+# Copyright (c) Huawei Technologies Co., Ltd. 2021. All rights reserved.
+
+import("//drivers/peripheral/camera/hal/camera.gni")
+
+if (defined(ohos_lite)) {
+  copy("driver_adapter") {
+    sources = [ "//device/soc/hisilicon/common/hi35xx_hal/media/camera/hi3516dv300/liteos_a/libs/libdriver_adapter.so" ]
+    outputs = [ "$root_out_dir/{{source_file_part}}" ]
+  }
+} else {
+  import("//build/ohos.gni")
+  import("//drivers/adapter/uhdf2/uhdf.gni")
+
+  ohos_prebuilt_etc("driver_adapter") {
+    if (use_musl) {
+      source = "//device/soc/hisilicon/common/hi35xx_hal/media/camera/hi3516dv300/linux_standard/libs/libdriver_adapter.z.so"
+    } else {
+      source = "//device/soc/hisilicon/common/hi35xx_hal/media/camera/hi3516dv300/linux_standard/libs/libdriver_adapter.z.so"
+    }
+    module_install_dir = "lib/"
+    part_name = "hdf"
+    subsystem_name = "hdf"
+  }
+}
