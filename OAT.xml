@@ -56,7 +56,7 @@ Note:If the text contains special characters, please escape them according to th
 -->
 <configuration>
     <oatconfig>
-		<licensefile>hi3516dv300/sdk_linux/drv/LICENSE|hisilicon/common/hal|common/platform|mpp/lib/LICENSE|hi3516dv300/sdk_linux/out/lib/LICENSE|hi3516dv300/uboot/LICENSE|hi3861v100/sdk_liteos/license/LICENSE</licensefile>
+		<licensefile>hi3518ev300/mpp/lib/LICENSE|common/platform/LICENSE|hi3516dv300/sdk_linux/drv/LICENSE|hi3861v100/sdk_liteos/license/LICENSE</licensefile>
         <policylist>
             <policy name="projectPolicy" desc="">
 				<policyitem type="license" name="EndUserLicenseAgreement" path=".*" desc="HiSilicon copyright"/>
