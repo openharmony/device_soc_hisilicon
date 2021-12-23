@@ -609,6 +609,27 @@ hi_void wal_lwip_status_callback(oal_net_device_stru *netDev, NetIfStatus status
 }
 #endif /* #if (_PRE_OS_VERSION_LITEOS == _PRE_OS_VERSION) */
 
+#ifdef _PRE_WLAN_FEATURE_MESH_LWIP_RIPPLE
+hi_void wal_report_sta_assoc(oal_net_device_stru *netdev)
+{    
+    if (netdev->lwip_netif->linklayer_event != HI_NULL) {
+        oam_warning_log0(0, OAM_SF_ANY, "{wal_report_sta_assoc_info::LL_EVENT_AP_CONN}");
+        netdev->lwip_netif->linklayer_event(netdev->lwip_netif, LL_EVENT_AP_CONN, (hi_u8 *)&ap_conn_info);
+    } else {
+        oam_warning_log0(0, OAM_SF_ANY, "{wal_report_sta_assoc_info::linklayer_event callback isn't registed}");
+    }
+
+    (hi_void)netifapi_netif_set_link_up(netdev->lwip_netif);
+#ifdef _PRE_WLAN_FEATURE_LWIP_IPV6_AUTOCONFIG
+    (hi_void)netifapi_set_ipv6_forwarding(netdev->lwip_netif, HI_FALSE);
+    (hi_void)netifapi_set_ra_enable(netdev->lwip_netif, HI_FALSE);
+    (hi_void)netifapi_set_ip6_autoconfig_enabled(netdev->lwip_netif);
+    (hi_void)netifapi_set_accept_ra(netdev->lwip_netif, HI_TRUE);
+#endif
+    (hi_void)netifapi_netif_add_ip6_linklocal_address(netdev->lwip_netif, HI_TRUE);
+
+}
+#endif
 /* ****************************************************************************
  功能描述  : 驱动上报sta关联/去关联AP
  输入参数  : frw_event_mem_stru *pst_event_mem
@@ -650,20 +671,8 @@ hi_u32 wal_report_sta_assoc_info(frw_event_mem_stru *event_mem)
         ap_conn_info.addr.addrlen = WLAN_MAC_ADDR_LEN;
         ap_conn_info.rssi = -(sta_asoc_param->rssi);
         ap_conn_info.is_mesh_ap = sta_asoc_param->conn_to_mesh;
-
-        if (netdev->lwip_netif->linklayer_event != HI_NULL) {
-            oam_warning_log0(0, OAM_SF_ANY, "{wal_report_sta_assoc_info::LL_EVENT_AP_CONN}");
-            netdev->lwip_netif->linklayer_event(netdev->lwip_netif, LL_EVENT_AP_CONN, (hi_u8 *)&ap_conn_info);
-        } else {
-            oam_warning_log0(0, OAM_SF_ANY, "{wal_report_sta_assoc_info::linklayer_event callback isn't registed}");
-        }
-
-        (hi_void)netifapi_netif_set_link_up(netdev->lwip_netif);
-#ifdef _PRE_WLAN_FEATURE_LWIP_IPV6_AUTOCONFIG
-        (hi_void)netifapi_set_ipv6_forwarding(netdev->lwip_netif, HI_FALSE);
-        (hi_void)netifapi_set_ra_enable(netdev->lwip_netif, HI_FALSE);
-        (hi_void)netifapi_set_ip6_autoconfig_enabled(netdev->lwip_netif);
-        (hi_void)netifapi_set_accept_ra(netdev->lwip_netif, HI_TRUE);
+#ifdef _PRE_WLAN_FEATURE_MESH_LWIP_RIPPLE
+        wal_report_sta_assoc(netdev);
 #endif
         (hi_void)netifapi_netif_add_ip6_linklocal_address(netdev->lwip_netif, HI_TRUE);
 #endif
@@ -893,7 +902,9 @@ hi_u32 wal_netdev_open_send_event(oal_net_device_stru *netdev)
     wal_msg_write_stru write_msg;
     wal_msg_stru *rsp_msg = HI_NULL;
     hi_u32 ret;
+#ifdef _PRE_WLAN_FEATURE_P2P
     wlan_p2p_mode_enum_uint8 p2p_mode;
+#endif
     wal_write_msg_hdr_init(&write_msg, WLAN_CFGID_START_VAP, sizeof(mac_cfg_start_vap_param_stru));
     ((mac_cfg_start_vap_param_stru *)write_msg.auc_value)->net_dev = netdev;
 
@@ -1013,7 +1024,9 @@ hi_s32 wal_netdev_open(oal_net_device_stru *netdev)
 
 hi_u32 wal_netdev_stop_del_vap(const oal_net_device_stru *netdev)
 {
+#ifdef _PRE_WLAN_FEATURE_P2P
     mac_device_stru *mac_dev = HI_NULL;
+#endif
     /* wlan0/p2p0 down时 删除VAP */
     if (GET_NET_DEV_CFG80211_WIRELESS(netdev)->iftype == NL80211_IFTYPE_AP ||
         GET_NET_DEV_CFG80211_WIRELESS(netdev)->iftype == NL80211_IFTYPE_STATION ||
@@ -1059,7 +1072,9 @@ hi_s32 wal_netdev_stop(oal_net_device_stru *netdev)
 {
     wal_msg_write_stru write_msg;
     wal_msg_stru *rsp_msg = HI_NULL;
+#ifdef _PRE_WLAN_FEATURE_P2P
     wlan_p2p_mode_enum_uint8 p2p_mode;
+#endif
     hi_u32 ret;
 
     if (oal_unlikely((netdev == HI_NULL) || (GET_NET_DEV_CFG80211_WIRELESS(netdev) == NULL))) {
@@ -1214,7 +1229,9 @@ static hi_s32 wal_netdev_set_mac_addr(oal_net_device_stru *netdev, void *addr)
     oal_sockaddr_stru *mac_addr = HI_NULL;
     wal_msg_write_stru write_msg;
     mac_cfg_staion_id_param_stru *param = HI_NULL;
+#ifdef _PRE_WLAN_FEATURE_P2P
     oal_wireless_dev *wdev = HI_NULL;
+#endif
     hi_u32 ret;
 
     mac_addr = OsalMemAlloc(sizeof(oal_sockaddr_stru));

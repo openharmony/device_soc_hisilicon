@@ -1,4 +1,5 @@
 # Copyright (C) 2020 Hisilicon (Shanghai) Technologies Co., Ltd. All rights reserved.
 
 group("hispark_pegasus") {
+  deps = [ "sdk_liteos:run_wifiiot_scons" ]
 }
