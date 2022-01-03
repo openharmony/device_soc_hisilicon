@@ -1,4 +1,4 @@
-# HiSpark\_taurus介绍<a name="ZH-CN_TOPIC_0000001142448981"></a>
+# Hi3516dv300介绍<a name="ZH-CN_TOPIC_0000001142448981"></a>
 
 -   [简介](#section11660541593)
 -   [目录](#section161941989596)
@@ -75,7 +75,7 @@ hb set
 ipcamera_hispark_taurus_linux/ipcamera_hispark_taurus
 hb build -f
 
-## hispark\_taurus协议说明<a name="section1312121216216"></a>
+## hi3516dv300协议说明<a name="section1312121216216"></a>
 
 -   hi3516dv300\\sdk\_linux\\out\\lib里面为上海海思的自研库，遵循上海海思的LICENSE，这个目录下有LICENSE文件，LICENSE文件中可以看到版权信息：
 
