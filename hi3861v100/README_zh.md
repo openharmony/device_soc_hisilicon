@@ -1,4 +1,4 @@
-# HiSpark\_pegasus<a name="ZH-CN_TOPIC_0000001130176841"></a>
+# hi3861v100<a name="ZH-CN_TOPIC_0000001130176841"></a>
 
 -   [简介](#section11660541593)
 -   [特点](#section12212842173518)
@@ -8,7 +8,7 @@
 
 ## 简介<a name="section11660541593"></a>
 
-HiSpark\_pegasus（Hi3861V100）是一款高度集成的2.4GHz WiFi SoC芯片，集成IEEE 802.11b/g/n基带和RF电路，RF电路包括功率放大器PA、低 噪声放大器LNA、RF balun、天线开关以及电源管理等模块；支持20MHz标准带宽和5MHz/10MHz窄带宽，提供最大72.2Mbit/s 物理层速率。 Hi3861V100 WiFi基带支持正交频分复用（OFDM）技术，并向下兼容直接序列扩频（DSSS）和补码键控（CCK）技术，支 持IEEE 802.11 b/g/n协议的各种数据速率。 Hi3861V100芯片集成高性能32bit微处理器、硬件安全引擎以及丰富的外设接口，外设接口包括SPI、UART、I2C、PWM、 GPIO和多路ADC，同时支持高速SDIO2.0 Device接口，最高时钟可达50MHz；芯片内置SRAM和Flash，可独立运行，并支持 在Flash上运行程序。 Hi3861V100芯片适应于智能家电等物联网智能终端领域。
+Hi3861V100（HiSpark\_pegasus）是一款高度集成的2.4GHz WiFi SoC芯片，集成IEEE 802.11b/g/n基带和RF电路，RF电路包括功率放大器PA、低 噪声放大器LNA、RF balun、天线开关以及电源管理等模块；支持20MHz标准带宽和5MHz/10MHz窄带宽，提供最大72.2Mbit/s 物理层速率。 Hi3861V100 WiFi基带支持正交频分复用（OFDM）技术，并向下兼容直接序列扩频（DSSS）和补码键控（CCK）技术，支 持IEEE 802.11 b/g/n协议的各种数据速率。 Hi3861V100芯片集成高性能32bit微处理器、硬件安全引擎以及丰富的外设接口，外设接口包括SPI、UART、I2C、PWM、 GPIO和多路ADC，同时支持高速SDIO2.0 Device接口，最高时钟可达50MHz；芯片内置SRAM和Flash，可独立运行，并支持 在Flash上运行程序。 Hi3861V100芯片适应于智能家电等物联网智能终端领域。
 
 上海海思Hi3861系列的平台软件对应用层实现了底层屏蔽，并对应用软件直接提供API\(Application Programming Interface\)接口完成相应功能。典型的系统应用架构如下：
 
@@ -67,10 +67,10 @@ HiSpark\_pegasus（Hi3861V100）是一款高度集成的2.4GHz WiFi SoC芯片，
 
 ## 目录<a name="section1464106163817"></a>
 
-Hi3861的SDK软件包根目录结构所在位置device\\hisilicon\\hispark\_pegasus\\sdk\_liteos，如下图所示：
+Hi3861的SDK软件包根目录结构所在位置device\\soc\\hisilicon\\hi3861v100\\sdk\_liteos，如下图所示：
 
 ```
-device/hisilicon/hispark_pegasus/sdk_liteos
+device/soc/hisilicon/hi3861v100/sdk_liteos
 ├── app                 # 应用层代码（其中包含demo程序为参考示例）。
 ├── boot                # Flash bootloader代码。
 ├── build               # SDK构建所需的库文件、链接文件、配置文件。
@@ -105,8 +105,6 @@ device/hisilicon/hispark_pegasus/sdk_liteos
 -   Hi3861V100可能会使用一些开源软件组件。如果这些开源软件组件所适用的许可与本协议内容冲突，则以该开源软件组件的许可为准。
 
 ## 相关仓<a name="section1371113476307"></a>
-
-**device/hisilicon/hispark\_pegasus**
 
 vendor/hisilicon
 
