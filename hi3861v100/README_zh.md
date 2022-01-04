@@ -106,5 +106,6 @@ device/soc/hisilicon/hi3861v100/sdk_liteos
 
 ## 相关仓<a name="section1371113476307"></a>
 
-vendor/hisilicon
+[vendor_hisilicon](https://gitee.com/openharmony/vendor_hisilicon) 
+[device_board_hisilicon](https://gitee.com/openharmony/device_board_hisilicon)
 
