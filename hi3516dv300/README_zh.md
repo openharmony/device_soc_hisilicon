@@ -114,6 +114,7 @@ third\_party\\uboot\\u-boot-2020.01为U-Boot开源代码，遵循软件版本自
 
 ## 相关仓<a name="section1371113476307"></a>
 
-[vendor_hisilicon](https://gitee.com/openharmony/vendor_hisilicon) 
+[vendor_hisilicon](https://gitee.com/openharmony/vendor_hisilicon)
+
 [device_board_hisilicon](https://gitee.com/openharmony/device_board_hisilicon)
 
