@@ -42,7 +42,7 @@ include $(SRC_PATH)/ffbuild/common.mak
 
 ifeq ($(LLVM_COMPILER), y)
 SYSROOT_PATH ?= ../../../../../prebuilts/lite/sysroot
-ARCH_CFLAGS ?= --target=arm-liteos
+ARCH_CFLAGS ?= --target=arm-liteos-ohos
 CFLAGS += --sysroot=$(SYSROOT_PATH) $(ARCH_CFLAGS)
 LDFLAGS += --sysroot=$(SYSROOT_PATH) $(ARCH_CFLAGS)
 endif

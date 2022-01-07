@@ -18,10 +18,10 @@ endif
 
 SYSROOT_PATH := $(OHOS_ROOT_PATH)/out/ohos-arm-release/obj/third_party/musl
 LLVM_SYSROOT_CFLAGS := --sysroot=$(SYSROOT_PATH)
-LLVM_TARGET_CFLAGS := -target arm-linux-ohosmusl
+LLVM_TARGET_CFLAGS := -target arm-linux-ohos
 LIBS_CFLAGS += $(LLVM_SYSROOT_CFLAGS) -fuse-ld=lld $(LLVM_TARGET_CFLAGS)
 LIBS_LD_CFLAGS +=$(LLVM_SYSROOT_CFLAGS) -fuse-ld=lld $(LLVM_TARGET_CFLAGS)
-LIBS_LD_CFLAGS += -L$(SYSROOT_PATH)/usr/lib/arm-linux-ohosmusl
+LIBS_LD_CFLAGS += -L$(SYSROOT_PATH)/usr/lib/arm-linux-ohos
 
 csrcs = $(wildcard *.c)
 OBJS = $(patsubst %.c,%.o,$(csrcs))
