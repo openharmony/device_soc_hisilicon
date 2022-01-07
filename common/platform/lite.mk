@@ -113,6 +113,11 @@ ifeq ($(LOSCFG_DRIVERS_HDF_PLATFORM_DMAC), y)
     LIB_SUBDIRS    += $(HISILICON_DRIVERS_ROOT)/dmac
 endif
 
+ifeq ($(LOSCFG_DRIVERS_HDF_PLATFORM_TIMER), y)
+    LITEOS_BASELIB += -lhdf_timer
+    LIB_SUBDIRS    += $(HISILICON_DRIVERS_ROOT)/timer
+endif
+
 ifeq ($(BUILD_FROM_SOURCE), y)
 ifeq ($(LOSCFG_DRIVERS_HIEDMAC), y)
     LITEOS_BASELIB    += -lhiedmac

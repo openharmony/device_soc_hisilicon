@@ -1,0 +1,63 @@
+root {
+    platform {
+        timer_config {
+            match_attr = "hisilicon_hi35xx_timer";
+            template timer_controller {
+                number = 1;
+                reg_base = 0x113B0000;
+                bus_clock = 30;        /* bus clock ,HZ */
+                mode = 1;             /* once time or period */
+                init_count_val = 0;     /* timer count value */
+                irq = 33;             /* timer interrupt number */
+            }
+            device_timer_0 :: timer_controller {
+                number = 0;
+                reg_base = 0x12000000;
+                bus_clock = 30;
+                irq = 33;
+            }
+            device_timer_1 :: timer_controller {
+                number = 1;
+                reg_base = 0x12000020;
+                bus_clock = 30;
+                irq = 33;
+            }
+            device_timer_2 :: timer_controller {
+                number = 2;
+                reg_base = 0x12001000;
+                bus_clock = 30;
+                irq = 34;
+            }
+            device_timer_3 :: timer_controller {
+                number = 3;
+                reg_base = 0x12001020;
+                bus_clock = 30;
+                irq = 34;
+            }
+            device_timer_4 :: timer_controller {
+                number = 4;
+                reg_base = 0x12002000;
+                bus_clock = 30;
+                irq = 35;
+            }
+            device_timer_5 :: timer_controller {
+                number = 5;
+                reg_base = 0x12002020;
+                bus_clock = 30;
+                irq = 35;
+            }
+            device_timer_6 :: timer_controller {
+                number = 6;
+                reg_base = 0x12003000;
+                bus_clock = 30;
+                irq = 36;
+            }
+            device_timer_7 :: timer_controller {
+                number = 7;
+                reg_base = 0x12003020;
+                bus_clock = 30;
+                irq = 36;
+            }
+        }
+    }
+}
