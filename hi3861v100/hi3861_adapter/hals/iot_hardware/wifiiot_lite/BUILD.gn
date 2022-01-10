@@ -12,7 +12,6 @@
 # limitations under the License.
 
 static_library("hal_iothardware") {
-  if (board_name == "hispark_pegasus") {
     sources = [
       "hal_iot_flash.c",
       "hal_iot_gpio.c",
@@ -28,5 +27,4 @@ static_library("hal_iothardware") {
       "//base/iot_hardware/peripheral/interfaces/kits",
       "//device/soc/hisilicon/hi3861v100/sdk_liteos/include",
     ]
-  }
 }
