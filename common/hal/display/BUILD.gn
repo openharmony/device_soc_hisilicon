@@ -82,6 +82,7 @@ if (defined(ohos_lite)) {
       source = "hi3516dv300/linux_standard/lib64/libdisplay_gfx.z.so"
     }
     subsystem_name = "hdf"
+    part_name = "display_device_driver"
   }
 
   ohos_prebuilt_shared_library("display_layer") {
@@ -91,5 +92,6 @@ if (defined(ohos_lite)) {
       source = "hi3516dv300/linux_standard/lib64/libdisplay_layer.z.so"
     }
     subsystem_name = "hdf"
+    part_name = "display_device_driver"
   }
 }
