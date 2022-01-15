@@ -135,6 +135,6 @@ if (defined(ohos_lite)) {
 
     public_configs = [ ":device_manager_config" ]
     subsystem_name = "hdf"
-    part_name = "hdf"
+    part_name = "camera_device_driver"
   }
 }

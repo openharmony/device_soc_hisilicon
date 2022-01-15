@@ -294,7 +294,7 @@ if (defined(ohos_lite)) {
 
     public_configs = [ ":pipe_config" ]
     subsystem_name = "hdf"
-    part_name = "hdf"
+    part_name = "camera_device_driver"
   }
 
   config("example_config") {
@@ -318,6 +318,6 @@ if (defined(ohos_lite)) {
     deps = [ "//utils/native/base:utils" ]
     public_configs = [ ":example_config" ]
     subsystem_name = "hdf"
-    part_name = "hdf"
+    part_name = "camera_device_driver"
   }
 }

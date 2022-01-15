@@ -49,7 +49,7 @@ if (defined(ohos_lite)) {
     source = hcs_outputs[0]
     relative_install_dir = "hdfconfig"
     subsystem_name = "hdf"
-    part_name = "hdf"
+    part_name = "camera_device_driver"
   }
 
   hc_gen_c("generate_source") {
@@ -110,7 +110,7 @@ if (defined(ohos_lite)) {
     source = hcs_outputs[0]
     relative_install_dir = "hdfconfig"
     subsystem_name = "hdf"
-    part_name = "hdf"
+    part_name = "camera_device_driver"
   }
 
   hc_gen("build_mpp_config_hcs") {
@@ -125,7 +125,7 @@ if (defined(ohos_lite)) {
     source = hcs_outputs[0]
     relative_install_dir = "hdfconfig"
     subsystem_name = "hdf"
-    part_name = "hdf"
+    part_name = "camera_device_driver"
   }
 
   group("hispark_taurus_build") {
