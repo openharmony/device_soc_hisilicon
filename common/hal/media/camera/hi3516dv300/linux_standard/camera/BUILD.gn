@@ -48,6 +48,7 @@ if (defined(ohos_lite)) {
     hcs_outputs = get_target_outputs(":build_camera_host_config")
     source = hcs_outputs[0]
     relative_install_dir = "hdfconfig"
+    install_images = [ chipset_base_dir ]
     subsystem_name = "hdf"
     part_name = "camera_device_driver"
   }
@@ -109,6 +110,7 @@ if (defined(ohos_lite)) {
     hcs_outputs = get_target_outputs(":build_ipp_algo_config")
     source = hcs_outputs[0]
     relative_install_dir = "hdfconfig"
+    install_images = [ chipset_base_dir ]
     subsystem_name = "hdf"
     part_name = "camera_device_driver"
   }
@@ -124,6 +126,7 @@ if (defined(ohos_lite)) {
     hcs_outputs = get_target_outputs(":build_mpp_config_hcs")
     source = hcs_outputs[0]
     relative_install_dir = "hdfconfig"
+    install_images = [ chipset_base_dir ]
     subsystem_name = "hdf"
     part_name = "camera_device_driver"
   }

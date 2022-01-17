@@ -81,6 +81,7 @@ if (defined(ohos_lite)) {
     } else {
       source = "hi3516dv300/linux_standard/lib64/libdisplay_gfx.z.so"
     }
+    install_images = [ chipset_base_dir ]
     subsystem_name = "hdf"
     part_name = "display_device_driver"
   }
@@ -91,6 +92,7 @@ if (defined(ohos_lite)) {
     } else {
       source = "hi3516dv300/linux_standard/lib64/libdisplay_layer.z.so"
     }
+    install_images = [ chipset_base_dir ]
     subsystem_name = "hdf"
     part_name = "display_device_driver"
   }

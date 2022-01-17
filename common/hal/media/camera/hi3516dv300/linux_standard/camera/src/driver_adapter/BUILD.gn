@@ -18,6 +18,7 @@ if (defined(ohos_lite)) {
       source = "//device/soc/hisilicon/common/hal/media/camera/hi3516dv300/linux_standard/libs/libdriver_adapter.z.so"
     }
     module_install_dir = "lib/"
+    install_images = [ chipset_base_dir ]
     part_name = "camera_device_driver"
     subsystem_name = "hdf"
   }

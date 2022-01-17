@@ -20,9 +20,9 @@ group("hispark_taurus_sdk") {
     ]
   } else {
     deps = [
-      "out/lib:sdk_linux_mpp_group",
       ":sdk_linux_modules",
       ":sdk_make",
+      "out/lib:sdk_linux_mpp_group",
       "//kernel/linux/build:linux_kernel",
     ]
   }
@@ -91,7 +91,7 @@ if (defined(ohos_lite)) {
       source = km
       module_install_dir = "modules"
       install_images = [
-        "vendor",
+        vendor_base_dir,
         "updater",
       ]
       part_name = "hisilicon_products"

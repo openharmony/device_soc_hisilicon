@@ -7,7 +7,7 @@ if (defined(ohos_lite)) {
 }
 
 if (defined(ohos_lite)) {
-  board=board_name
+  board = board_name
   if (board_name == "hispark_taurus" || board_name == "aegis_hi3516dv300") {
     board = "hi3516dv300"
   } else if (board_name == "hispark_aries") {
@@ -39,63 +39,74 @@ if (defined(ohos_lite)) {
 
   ohos_prebuilt_shared_library("audio_hw") {
     source = "audio/hi3516dv300/linux_standard/libs/libaudio_hw.so"
+    install_images = [ chipset_base_dir ]
     subsystem_name = "hisilicon_products"
   }
 
   ohos_prebuilt_shared_library("input") {
     source = "audio/hi3516dv300/linux_standard/libs/libaudio_input_port.so"
+    install_images = [ chipset_base_dir ]
     subsystem_name = "hisilicon_products"
   }
 
   ohos_prebuilt_shared_library("output") {
     source = "audio/hi3516dv300/linux_standard/libs/libaudio_output_port.so"
+    install_images = [ chipset_base_dir ]
     subsystem_name = "hisilicon_products"
   }
 
   ohos_prebuilt_shared_library("codec") {
     source = "codec/hi3516dv300/linux_standard/libs/libcodec.so"
+    install_images = [ chipset_base_dir ]
     subsystem_name = "hisilicon_products"
   }
 
   ohos_prebuilt_shared_library("hiaacdec") {
     source = "codec/hi3516dv300/linux_standard/libs/libhiaacdec.so"
+    install_images = [ chipset_base_dir ]
     subsystem_name = "hisilicon_products"
   }
 
   ohos_prebuilt_shared_library("adec") {
     source = "codec/hi3516dv300/linux_standard/libs/libplugin_adec_35xx.so"
+    install_images = [ chipset_base_dir ]
     subsystem_name = "hisilicon_products"
   }
 
   ohos_prebuilt_shared_library("aenc") {
     source = "codec/hi3516dv300/linux_standard/libs/libplugin_aenc_35xx.so"
+    install_images = [ chipset_base_dir ]
     subsystem_name = "hisilicon_products"
   }
 
   ohos_prebuilt_shared_library("vdec") {
     source = "codec/hi3516dv300/linux_standard/libs/libplugin_vdec_3516D.so"
+    install_images = [ chipset_base_dir ]
     subsystem_name = "hisilicon_products"
   }
 
   ohos_prebuilt_shared_library("venc") {
     source = "codec/hi3516dv300/linux_standard/libs/libplugin_venc_35xx.so"
+    install_images = [ chipset_base_dir ]
     subsystem_name = "hisilicon_products"
   }
 
   ohos_prebuilt_shared_library("media_hal_common") {
-    source =
-        "common/hi3516dv300/linux_standard/libmedia_hal_common.so"
+    source = "common/hi3516dv300/linux_standard/libmedia_hal_common.so"
+    install_images = [ chipset_base_dir ]
     subsystem_name = "hisilicon_products"
   }
 
   ohos_prebuilt_shared_library("format_hw") {
     source = "format/hi3516dv300/linux_standard/libs/libformat_hw.so"
+    install_images = [ chipset_base_dir ]
     subsystem_name = "hisilicon_products"
   }
 
   ohos_prebuilt_shared_library("plugin_muxer_recorder") {
     source =
         "format/hi3516dv300/linux_standard/libs/libplugin_muxer_recorder.so"
+    install_images = [ chipset_base_dir ]
     subsystem_name = "hisilicon_products"
   }
 }
