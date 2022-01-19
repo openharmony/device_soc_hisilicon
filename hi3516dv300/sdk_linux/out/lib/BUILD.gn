@@ -81,394 +81,466 @@ group("sdk_linux_mpp_group") {
 
 ohos_prebuilt_shared_library("libhive_HPF") {
   source = "./libhive_HPF.so"
+  install_images = [ chipset_base_dir ]
   subsystem_name = "hisilicon_products"
 }
 
 ohos_prebuilt_shared_library("lib_hiawb") {
   source = "./lib_hiawb.so"
+  install_images = [ chipset_base_dir ]
   subsystem_name = "hisilicon_products"
 }
 
 ohos_prebuilt_shared_library("libhive_AGC") {
   source = "./libhive_AGC.so"
+  install_images = [ chipset_base_dir ]
   subsystem_name = "hisilicon_products"
 }
 
 ohos_prebuilt_shared_library("libhive_ANR") {
   source = "./libhive_ANR.so"
+  install_images = [ chipset_base_dir ]
   subsystem_name = "hisilicon_products"
 }
 
 ohos_prebuilt_shared_library("libaacdec") {
   source = "./libaacdec.so"
+  install_images = [ chipset_base_dir ]
   subsystem_name = "hisilicon_products"
 }
 
 ohos_prebuilt_shared_library("libhdmi") {
   source = "./libhdmi.so"
+  install_images = [ chipset_base_dir ]
   subsystem_name = "hisilicon_products"
 }
 
 ohos_prebuilt_shared_library("libive") {
   source = "./libive.so"
+  install_images = [ chipset_base_dir ]
   subsystem_name = "hisilicon_products"
 }
 
 ohos_prebuilt_shared_library("libaacenc") {
   source = "./libaacenc.so"
+  install_images = [ chipset_base_dir ]
   subsystem_name = "hisilicon_products"
 }
 
 ohos_prebuilt_shared_library("lib_hildci") {
   source = "./lib_hildci.so"
+  install_images = [ chipset_base_dir ]
   subsystem_name = "hisilicon_products"
 }
 
 ohos_prebuilt_shared_library("lib_hidrc") {
   source = "./lib_hidrc.so"
+  install_images = [ chipset_base_dir ]
   subsystem_name = "hisilicon_products"
 }
 
 ohos_prebuilt_shared_library("libhive_RES_ext") {
   source = "./libhive_RES_ext.so"
+  install_images = [ chipset_base_dir ]
   subsystem_name = "hisilicon_products"
 }
 
 ohos_prebuilt_shared_library("libmd") {
   source = "./libmd.so"
+  install_images = [ chipset_base_dir ]
   subsystem_name = "hisilicon_products"
 }
 
 ohos_prebuilt_shared_library("lib_hiacs") {
   source = "./lib_hiacs.so"
+  install_images = [ chipset_base_dir ]
   subsystem_name = "hisilicon_products"
 }
 
 ohos_prebuilt_shared_library("libhive_wnr") {
   source = "./libhive_wnr.so"
+  install_images = [ chipset_base_dir ]
   subsystem_name = "hisilicon_products"
 }
 
 ohos_prebuilt_shared_library("libupvqe") {
   source = "./libupvqe.so"
+  install_images = [ chipset_base_dir ]
   subsystem_name = "hisilicon_products"
 }
 
 ohos_prebuilt_shared_library("lib_hiawb_natura") {
   source = "./lib_hiawb_natura.so"
+  install_images = [ chipset_base_dir ]
   subsystem_name = "hisilicon_products"
 }
 
 ohos_prebuilt_shared_library("libhive_record") {
   source = "./libhive_record.so"
+  install_images = [ chipset_base_dir ]
   subsystem_name = "hisilicon_products"
 }
 
 ohos_prebuilt_shared_library("libhive_common") {
   source = "./libhive_common.so"
+  install_images = [ chipset_base_dir ]
   subsystem_name = "hisilicon_products"
 }
 
 ohos_prebuilt_shared_library("libaacsbrenc") {
   source = "./libaacsbrenc.so"
+  install_images = [ chipset_base_dir ]
   subsystem_name = "hisilicon_products"
 }
 
 ohos_prebuilt_shared_library("libnnie") {
   source = "./libnnie.so"
+  install_images = [ chipset_base_dir ]
   subsystem_name = "hisilicon_products"
 }
 
 ohos_prebuilt_shared_library("libaaccomm") {
   source = "./libaaccomm.so"
+  install_images = [ chipset_base_dir ]
   subsystem_name = "hisilicon_products"
 }
 
 ohos_prebuilt_shared_library("libhive_EQ") {
   source = "./libhive_EQ.so"
+  install_images = [ chipset_base_dir ]
   subsystem_name = "hisilicon_products"
 }
 
 ohos_prebuilt_shared_library("lib_hiir_auto") {
   source = "./lib_hiir_auto.so"
+  install_images = [ chipset_base_dir ]
   subsystem_name = "hisilicon_products"
 }
 
 ohos_prebuilt_shared_library("libisp") {
   source = "./libisp.so"
+  install_images = [ chipset_base_dir ]
   subsystem_name = "hisilicon_products"
 }
 
 ohos_prebuilt_shared_library("libsecurec") {
   source = "./libsecurec.so"
+  install_images = [ chipset_base_dir ]
   subsystem_name = "hisilicon_products"
 }
 
 ohos_prebuilt_shared_library("lib_hidehaze") {
   source = "./lib_hidehaze.so"
+  install_images = [ chipset_base_dir ]
   subsystem_name = "hisilicon_products"
 }
 
 ohos_prebuilt_shared_library("libmpi") {
   source = "./libmpi.so"
+  install_images = [ chipset_base_dir ]
   subsystem_name = "hisilicon_products"
 }
 
 ohos_prebuilt_shared_library("libhive_talkv2") {
   source = "./libhive_talkv2.so"
+  install_images = [ chipset_base_dir ]
   subsystem_name = "hisilicon_products"
 }
 
 ohos_prebuilt_shared_library("libhive_RES") {
   source = "./libhive_RES.so"
+  install_images = [ chipset_base_dir ]
   subsystem_name = "hisilicon_products"
 }
 
 ohos_prebuilt_shared_library("lib_hicalcflicker") {
   source = "./lib_hicalcflicker.so"
+  install_images = [ chipset_base_dir ]
   subsystem_name = "hisilicon_products"
 }
 
 ohos_prebuilt_shared_library("libaacsbrdec") {
   source = "./libaacsbrdec.so"
+  install_images = [ chipset_base_dir ]
   subsystem_name = "hisilicon_products"
 }
 
 ohos_prebuilt_shared_library("libsns_imx335") {
   source = "./libsns_imx335.so"
+  install_images = [ chipset_base_dir ]
   subsystem_name = "hisilicon_products"
 }
 
 ohos_prebuilt_shared_library("lib_hiae") {
   source = "./lib_hiae.so"
+  install_images = [ chipset_base_dir ]
   subsystem_name = "hisilicon_products"
 }
 
 ohos_prebuilt_shared_library("libhifisheyecalibrate") {
   source = "./libhifisheyecalibrate.so"
+  install_images = [ chipset_base_dir ]
   subsystem_name = "hisilicon_products"
 }
 
 ohos_prebuilt_shared_library("libhive_AEC") {
   source = "./libhive_AEC.so"
+  install_images = [ chipset_base_dir ]
   subsystem_name = "hisilicon_products"
 }
 
 ohos_prebuilt_shared_library("libdnvqe") {
   source = "./libdnvqe.so"
+  install_images = [ chipset_base_dir ]
   subsystem_name = "hisilicon_products"
 }
 
 ohos_prebuilt_shared_library("libtde") {
   source = "./libtde.so"
+  install_images = [ chipset_base_dir ]
   subsystem_name = "hisilicon_products"
 }
 
 ohos_prebuilt_shared_library("libVoiceEngine") {
   source = "./libVoiceEngine.so"
+  install_images = [ chipset_base_dir ]
   subsystem_name = "hisilicon_products"
 }
 
 ohos_prebuilt_shared_library("libhi3516cv500_acodec") {
   source = "./libhi3516cv500_acodec.so"
+  install_images = [ chipset_base_dir ]
   subsystem_name = "hisilicon_products"
   part_name = "hisilicon_products"
 }
 
 ohos_prebuilt_shared_library("libhi3516cv500_adec") {
   source = "./libhi3516cv500_adec.so"
+  install_images = [ chipset_base_dir ]
   subsystem_name = "hisilicon_products"
   part_name = "hisilicon_products"
 }
 
 ohos_prebuilt_shared_library("libhi3516cv500_aenc") {
   source = "./libhi3516cv500_aenc.so"
+  install_images = [ chipset_base_dir ]
   subsystem_name = "hisilicon_products"
   part_name = "hisilicon_products"
 }
 
 ohos_prebuilt_shared_library("libhi3516cv500_aio") {
   source = "./libhi3516cv500_aio.so"
+  install_images = [ chipset_base_dir ]
   subsystem_name = "hisilicon_products"
   part_name = "hisilicon_products"
 }
 
 ohos_prebuilt_shared_library("libhi3516cv500_ai") {
   source = "./libhi3516cv500_ai.so"
+  install_images = [ chipset_base_dir ]
   subsystem_name = "hisilicon_products"
   part_name = "hisilicon_products"
 }
 
 ohos_prebuilt_shared_library("libhi3516cv500_ao") {
   source = "./libhi3516cv500_ao.so"
+  install_images = [ chipset_base_dir ]
   subsystem_name = "hisilicon_products"
   part_name = "hisilicon_products"
 }
 
 ohos_prebuilt_shared_library("libhi3516cv500_base") {
   source = "./libhi3516cv500_base.so"
+  install_images = [ chipset_base_dir ]
   subsystem_name = "hisilicon_products"
   part_name = "hisilicon_products"
 }
 
 ohos_prebuilt_shared_library("libhi3516cv500_chnl") {
   source = "./libhi3516cv500_chnl.so"
+  install_images = [ chipset_base_dir ]
   subsystem_name = "hisilicon_products"
   part_name = "hisilicon_products"
 }
 
 ohos_prebuilt_shared_library("libhi3516cv500_dis") {
   source = "./libhi3516cv500_dis.so"
+  install_images = [ chipset_base_dir ]
   subsystem_name = "hisilicon_products"
   part_name = "hisilicon_products"
 }
 
 ohos_prebuilt_shared_library("libhi3516cv500_gdc") {
   source = "./libhi3516cv500_gdc.so"
+  install_images = [ chipset_base_dir ]
   subsystem_name = "hisilicon_products"
   part_name = "hisilicon_products"
 }
 
 ohos_prebuilt_shared_library("libhi3516cv500_h264e") {
   source = "./libhi3516cv500_h264e.so"
+  install_images = [ chipset_base_dir ]
   subsystem_name = "hisilicon_products"
   part_name = "hisilicon_products"
 }
 
 ohos_prebuilt_shared_library("libhi3516cv500_h265e") {
   source = "./libhi3516cv500_h265e.so"
+  install_images = [ chipset_base_dir ]
   subsystem_name = "hisilicon_products"
   part_name = "hisilicon_products"
 }
 
 ohos_prebuilt_shared_library("libhi3516cv500_isp") {
   source = "./libhi3516cv500_isp.so"
+  install_images = [ chipset_base_dir ]
   subsystem_name = "hisilicon_products"
   part_name = "hisilicon_products"
 }
 
 ohos_prebuilt_shared_library("libhi3516cv500_ive") {
   source = "./libhi3516cv500_ive.so"
+  install_images = [ chipset_base_dir ]
   subsystem_name = "hisilicon_products"
   part_name = "hisilicon_products"
 }
 
 ohos_prebuilt_shared_library("libhi3516cv500_jpegd") {
   source = "./libhi3516cv500_jpegd.so"
+  install_images = [ chipset_base_dir ]
   subsystem_name = "hisilicon_products"
   part_name = "hisilicon_products"
 }
 
 ohos_prebuilt_shared_library("libhi3516cv500_jpege") {
   source = "./libhi3516cv500_jpege.so"
+  install_images = [ chipset_base_dir ]
   subsystem_name = "hisilicon_products"
   part_name = "hisilicon_products"
 }
 
 ohos_prebuilt_shared_library("libhi3516cv500_nnie") {
   source = "./libhi3516cv500_nnie.so"
+  install_images = [ chipset_base_dir ]
   subsystem_name = "hisilicon_products"
   part_name = "hisilicon_products"
 }
 
 ohos_prebuilt_shared_library("libhi3516cv500_rc") {
   source = "./libhi3516cv500_rc.so"
+  install_images = [ chipset_base_dir ]
   subsystem_name = "hisilicon_products"
   part_name = "hisilicon_products"
 }
 
 ohos_prebuilt_shared_library("libhi3516cv500_rgn") {
   source = "./libhi3516cv500_rgn.so"
+  install_images = [ chipset_base_dir ]
   subsystem_name = "hisilicon_products"
   part_name = "hisilicon_products"
 }
 
 ohos_prebuilt_shared_library("libhi3516cv500_sys") {
   source = "./libhi3516cv500_sys.so"
+  install_images = [ chipset_base_dir ]
   subsystem_name = "hisilicon_products"
   part_name = "hisilicon_products"
 }
 
 ohos_prebuilt_shared_library("libhi3516cv500_vdec") {
   source = "./libhi3516cv500_vdec.so"
+  install_images = [ chipset_base_dir ]
   subsystem_name = "hisilicon_products"
   part_name = "hisilicon_products"
 }
 
 ohos_prebuilt_shared_library("libhi3516cv500_vedu") {
   source = "./libhi3516cv500_vedu.so"
+  install_images = [ chipset_base_dir ]
   subsystem_name = "hisilicon_products"
   part_name = "hisilicon_products"
 }
 
 ohos_prebuilt_shared_library("libhi3516cv500_venc") {
   source = "./libhi3516cv500_venc.so"
+  install_images = [ chipset_base_dir ]
   subsystem_name = "hisilicon_products"
   part_name = "hisilicon_products"
 }
 
 ohos_prebuilt_shared_library("libhi3516cv500_vfmw") {
   source = "./libhi3516cv500_vfmw.so"
+  install_images = [ chipset_base_dir ]
   subsystem_name = "hisilicon_products"
   part_name = "hisilicon_products"
 }
 
 ohos_prebuilt_shared_library("libhi3516cv500_vgs") {
   source = "./libhi3516cv500_vgs.so"
+  install_images = [ chipset_base_dir ]
   subsystem_name = "hisilicon_products"
   part_name = "hisilicon_products"
 }
 
 ohos_prebuilt_shared_library("libhi3516cv500_vi") {
   source = "./libhi3516cv500_vi.so"
+  install_images = [ chipset_base_dir ]
   subsystem_name = "hisilicon_products"
   part_name = "hisilicon_products"
 }
 
 ohos_prebuilt_shared_library("libhi3516cv500_vo") {
   source = "./libhi3516cv500_vo.so"
+  install_images = [ chipset_base_dir ]
   subsystem_name = "hisilicon_products"
   part_name = "hisilicon_products"
 }
 
 ohos_prebuilt_shared_library("libhi3516cv500_vpss") {
   source = "./libhi3516cv500_vpss.so"
+  install_images = [ chipset_base_dir ]
   subsystem_name = "hisilicon_products"
   part_name = "hisilicon_products"
 }
 
 ohos_prebuilt_shared_library("libhi_irq") {
   source = "./libhi_irq.so"
+  install_images = [ chipset_base_dir ]
   subsystem_name = "hisilicon_products"
   part_name = "hisilicon_products"
 }
 
 ohos_prebuilt_shared_library("libhi_osal") {
   source = "./libhi_osal.so"
+  install_images = [ chipset_base_dir ]
   subsystem_name = "hisilicon_products"
   part_name = "hisilicon_products"
 }
 
 ohos_prebuilt_shared_library("libhi_sensor_i2c") {
   source = "./libhi_sensor_i2c.so"
+  install_images = [ chipset_base_dir ]
   subsystem_name = "hisilicon_products"
   part_name = "hisilicon_products"
 }
 
 ohos_prebuilt_shared_library("libsdk") {
   source = "./libsdk.so"
+  install_images = [ chipset_base_dir ]
   subsystem_name = "hisilicon_products"
   part_name = "hisilicon_products"
 }
 
 ohos_prebuilt_shared_library("libmpp_vbs") {
   source = "./libmpp_vbs.so"
+  install_images = [ chipset_base_dir ]
   subsystem_name = "hisilicon_products"
   part_name = "hisilicon_products"
 }
 
 ohos_prebuilt_shared_library("libvb_server") {
   source = "./libvb_server.so"
+  install_images = [ chipset_base_dir ]
   subsystem_name = "hisilicon_products"
   part_name = "hisilicon_products"
 }

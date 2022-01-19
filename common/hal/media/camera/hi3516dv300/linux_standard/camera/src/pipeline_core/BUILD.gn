@@ -293,6 +293,7 @@ if (defined(ohos_lite)) {
     }
 
     public_configs = [ ":pipe_config" ]
+    install_images = [ chipset_base_dir ]
     subsystem_name = "hdf"
     part_name = "camera_device_driver"
   }
@@ -317,6 +318,7 @@ if (defined(ohos_lite)) {
     ]
     deps = [ "//utils/native/base:utils" ]
     public_configs = [ ":example_config" ]
+    install_images = [ chipset_base_dir ]
     subsystem_name = "hdf"
     part_name = "camera_device_driver"
   }
