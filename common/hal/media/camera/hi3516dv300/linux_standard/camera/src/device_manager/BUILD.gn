@@ -31,10 +31,10 @@ config("device_manager_config") {
 }
 
 if (defined(ohos_lite)) {
-  import("//build/lite/config/component/lite_component.gni")
+  import("//build/ohos.gni")
   import("//drivers/adapter/uhdf/uhdf.gni")
 
-  shared_library("camera_device_manager") {
+  ohos_shared_library("camera_device_manager") {
     sources = [
       "$camera_device_name_path/camera/src/device_manager/imx335.cpp",
       "$camera_device_name_path/camera/src/device_manager/imx600.cpp",
@@ -78,6 +78,8 @@ if (defined(ohos_lite)) {
     ldflags += [ "-ldriver_adapter" ]
 
     public_configs = [ ":device_manager_config" ]
+    subsystem_name = "hdf"
+    part_name = "camera_device_driver"
   }
 } else {
   import("//build/ohos.gni")

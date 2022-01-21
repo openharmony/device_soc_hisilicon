@@ -1,7 +1,7 @@
 import("//drivers/peripheral/camera/hal/camera.gni")
 
 if (defined(ohos_lite)) {
-  import("//build/lite/config/component/lite_component.gni")
+  import("//build/ohos.gni")
   import("//drivers/adapter/uhdf/uhdf.gni")
   import("//drivers/framework/tools/hc-gen/hc_gen.gni")
 
@@ -54,7 +54,7 @@ if (defined(ohos_lite)) {
     ]
   }
 
-  shared_library("camera_pipeline_core") {
+  ohos_shared_library("camera_pipeline_core") {
     sources = [
       "$camera_path/adapter/platform/mpp/src/pipeline_core/nodes/mpi_node/mpi_node.cpp",
       "$camera_path/adapter/platform/mpp/src/pipeline_core/nodes/venc_node/venc_node.cpp",
@@ -135,12 +135,7 @@ if (defined(ohos_lite)) {
       "//foundation/graphic/utils/interfaces/kits",
 
       # hcs parser
-      "//drivers/framework/include/osal",
-      "//drivers/framework/include/utils",
-      "//drivers/adapter/uhdf2/osal/include",
       "//system/core/include/cutils",
-      "//drivers/framework/utils/include",
-      "//drivers/adapter/uhdf2/osal/include",
     ]
 
     deps = [
@@ -149,12 +144,11 @@ if (defined(ohos_lite)) {
       "$camera_path/device_manager:camera_device_manager",
       "$camera_path/utils/metadata:metadata_lite",
       "//base/hiviewdfx/hilog_lite/frameworks/featured:hilog_shared",
-
-      # hcs parser
-      "$hdf_uhdf_path/utils:libhdf_utils",
     ]
-
+    external_deps = [ "device_driver_framework:libhdf_utils" ]
     public_configs = [ ":pipe_config" ]
+    subsystem_name = "hdf"
+    part_name = "camera_device_driver"
   }
 } else {
   import("//build/ohos.gni")
