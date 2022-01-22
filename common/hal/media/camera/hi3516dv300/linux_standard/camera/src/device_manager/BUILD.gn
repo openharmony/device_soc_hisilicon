@@ -105,23 +105,16 @@ if (defined(ohos_lite)) {
     ]
 
     include_dirs = [
-      "//base/hiviewdfx/interfaces/innerkits/libhilog/include",
       "$camera_path/include",
       "$camera_path/utils/event",
       "$camera_path/device_manager/include",
-      "//utils/native/base/include",
       "$camera_device_name_path/camera/include/device_manager",
       "$camera_path/adapter/platform/mpp/src/device_manager/include",
-      "//drivers/framework/include/utils",
-      "//drivers/adapter/uhdf2/osal/include",
       "$camera_device_name_path/camera/include/driver_adapter",
       "//foundation/multimedia/camera_standard/frameworks/innerkitsimpl/metadata/include",
     ]
 
-    deps = [
-      "//foundation/multimedia/camera_standard/frameworks/innerkitsimpl/metadata:metadata",
-      "//utils/native/base:utils",
-    ]
+    deps = [ "//foundation/multimedia/camera_standard/frameworks/innerkitsimpl/metadata:metadata" ]
 
     hispark_taurus_lib_path = "//device/soc/hisilicon/common/hal/media/camera/hi3516dv300/linux_standard/libs/"
 
@@ -130,7 +123,11 @@ if (defined(ohos_lite)) {
     ldflags += [ "-ldriver_adapter.z" ]
 
     if (is_standard_system) {
-      external_deps = [ "hiviewdfx_hilog_native:libhilog" ]
+      external_deps = [
+        "device_driver_framework:libhdf_utils",
+        "hiviewdfx_hilog_native:libhilog",
+        "utils_base:utils",
+      ]
     } else {
       external_deps = [ "hilog:libhilog" ]
     }
