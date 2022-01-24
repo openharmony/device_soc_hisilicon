@@ -16,7 +16,8 @@
 #ifndef HOS_CAMERA_PROJET_HARDWARE_H
 #define HOS_CAMERA_PROJET_HARDWARE_H
 
-namespace OHOS::Camera {
+namespace OHOS {
+namespace Camera {
 std::vector<HardwareConfiguration> hardware = {
     {CAMERA_FIRST, DM_M_VI, DM_C_VI, (std::string) "vi"},
     {CAMERA_FIRST, DM_M_VO, DM_C_VO, (std::string) "vo"},
@@ -26,5 +27,6 @@ std::vector<HardwareConfiguration> hardware = {
     {CAMERA_SECOND, DM_M_VO, DM_C_VO, (std::string) "vo"},
     {CAMERA_SECOND, DM_M_VI, DM_C_VI, (std::string) "vi"}
 };
-} // namespace OHOS::Camera
+} // namespace Camera
+} // namespace OHOS
 #endif

@@ -18,7 +18,8 @@
 
 #include "mpi_adapter.h"
 
-namespace OHOS::Camera {
+namespace OHOS {
+namespace Camera {
 class IVpssObject {
 public:
     static std::shared_ptr<IVpssObject> CreateVpssObject();
@@ -27,5 +28,6 @@ public:
     virtual RetCode StartVpss() = 0;
     virtual RetCode StopVpss() = 0;
 };
-}
-#endif // namespace OHOS::Camera
+} // namespace Camera
+} // namespace OHOS
+#endif

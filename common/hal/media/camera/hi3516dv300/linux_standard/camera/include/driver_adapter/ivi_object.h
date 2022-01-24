@@ -19,7 +19,8 @@
 #include "mpi_adapter.h"
 #include "camera_metadata_info.h"
 
-namespace OHOS::Camera {
+namespace OHOS {
+namespace Camera {
 class IViObject {
 public:
     static std::shared_ptr<IViObject> CreateViObject();
@@ -31,6 +32,7 @@ public:
     virtual RetCode UpdateSetting(const camera_device_metadata_tag_t command, const void* args) = 0;
     virtual RetCode QuerySetting(const camera_device_metadata_tag_t command, void* args) = 0;
 };
-}
-#endif // namespace OHOS::Camera
+} // namespace Camera
+} // namespace OHOS
+#endif
 

@@ -18,7 +18,8 @@
 
 #include "mpi_adapter.h"
 
-namespace OHOS::Camera {
+namespace OHOS {
+namespace Camera {
 class IVoObject {
 public:
     static std::shared_ptr<IVoObject> CreateVoObject();
@@ -27,7 +28,8 @@ public:
     virtual void StartVo() = 0;
     virtual void StopVo() = 0;
 };
-}
+} // namespace Camera
+} // namespace OHOS
 
 #endif // OHOS::Camera
 
