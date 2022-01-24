@@ -1,0 +1,11 @@
+# Copyright (C) 2020 Hisilicon (Shanghai) Technologies Co., Ltd. All rights reserved.
+
+import("//build/lite/config/component/lite_component.gni")
+
+config("mbedtls_config") {
+  include_dirs = [ "include" ]
+}
+
+group("mbedtls") {
+  public_configs = [ ":mbedtls_config" ]
+}
