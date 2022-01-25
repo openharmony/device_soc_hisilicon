@@ -19,7 +19,8 @@
 #include <string>
 #include "mpi_adapter.h"
 
-namespace OHOS::Camera {
+namespace OHOS {
+namespace Camera {
 class IVencObject {
 public:
     static std::shared_ptr<IVencObject> CreateVencObject();
@@ -32,5 +33,6 @@ public:
     virtual void StopEncoder() = 0;
     virtual void dump() = 0;
 };
-}
-#endif // OHOS::Camera
+} // namespace Camera
+} // namespace OHOS
+#endif

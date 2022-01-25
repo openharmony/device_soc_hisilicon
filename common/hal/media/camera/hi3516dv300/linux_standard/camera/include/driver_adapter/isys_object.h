@@ -20,7 +20,8 @@
 #include "mpi_adapter.h"
 #include "camera_metadata_info.h"
 
-namespace OHOS::Camera {
+namespace OHOS {
+namespace Camera {
 class ISysObject {
 public:
     static std::shared_ptr<ISysObject> CreateSysObject();
@@ -45,5 +46,6 @@ public:
     virtual RetCode StartRecvFrame(int32_t streamId) = 0;
     virtual RetCode StopRecvFrame(int32_t streamId) = 0;
 };
-}
-#endif // OHOS::Camera
+} // namespace Camera
+} // namespace OHOS
+#endif

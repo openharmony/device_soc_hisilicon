@@ -26,7 +26,8 @@
 #include "ibuffer.h"
 #include "stream.h"
 
-namespace OHOS::Camera {
+namespace OHOS {
+namespace Camera {
 #define INIT_PARAM_KEY_MAX_LEN 128
 
 using DeviceFormat = struct _DeviceFormat {
@@ -80,5 +81,6 @@ constexpr int32_t MPI_SUCCESS = 0;
 
 using BufCallback = std::function<void(std::shared_ptr<FrameSpec>)>;
 using DeviceStatusCb = std::function<void()>;
-}
+} // namespace Camera
+} // namespace OHOS
 #endif // HOS_CAMERA_MPI_ADAPTER_H
