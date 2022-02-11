@@ -88,6 +88,23 @@ extern "C" {
 /* To destroy the layer */
 #define FBIO_DESTROY_LAYER _IO(IOC_TYPE_HIFB, 150)
 
+#ifdef CONFIG_DRIVERS_HDF_DISP
+#define FBIO_PANEL_SET_POWERSTATUS         _IOW(IOC_TYPE_HIFB, 151, HI_U32)
+#define FBIO_PANEL_SET_BACKLIGHT           _IOW(IOC_TYPE_HIFB, 152, HI_U32)
+
+enum PowerStatus {
+    POWER_STATUS_ON,              /* The power status is on */
+    POWER_STATUS_STANDBY,         /* The power status is standby */
+    POWER_STATUS_SUSPEND,         /* The power status is suspend */
+    POWER_STATUS_OFF,             /* The power status is off */
+    POWER_STATUS_BUTT
+};
+
+extern int32_t DispOn(uint32_t devId);
+extern int32_t DispOff(uint32_t devId);
+extern int32_t SetDispBacklight(uint32_t devId, uint32_t level);
+#endif
+
 typedef struct {
     HI_U32 u32Width;
     HI_U32 u32Height;
