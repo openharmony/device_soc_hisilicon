@@ -107,6 +107,13 @@ static hi_bool g_hifb_irq_register = HI_FALSE;
 #define DRV_HIFB_IOCTL_CMD_NUM_MAX 151
 #define DRV_HIFB_IOCTL_FUNC_ITEM_NUM_MAX 45
 
+#ifdef CONFIG_DRIVERS_HDF_DISP
+#undef DRV_HIFB_IOCTL_CMD_NUM_MAX
+#undef DRV_HIFB_IOCTL_FUNC_ITEM_NUM_MAX
+#define DRV_HIFB_IOCTL_CMD_NUM_MAX           153
+#define DRV_HIFB_IOCTL_FUNC_ITEM_NUM_MAX     47
+#endif
+
 #define DEV_NAME "hifb"
 #if HICHIP == HI3519A_V100
 unsigned int g_fifb_irq = VOU1_IRQ_NR;
@@ -243,6 +250,11 @@ static hi_s32 hifb_set_dynamic_range(struct fb_info *info, unsigned long arg);
 static hi_s32 hifb_get_dynamic_range(struct fb_info *info, unsigned long arg);
 static hi_s32 drv_hifb_create(struct fb_info *info, unsigned long arg);
 static hi_s32 drv_hifb_release(struct fb_info *info, unsigned long arg);
+#ifdef CONFIG_DRIVERS_HDF_DISP
+static hi_s32 hdf_panel_set_powerstatus(struct fb_info *info, unsigned long arg);
+static hi_s32 hdf_panel_set_backlight(struct fb_info *info, unsigned long arg);
+#endif
+
 
 #if HICHIP == HI3516E_V200
 hi_void set_hifb_irq(unsigned int temp_hifb_irq)
@@ -283,7 +295,10 @@ static hi_s32 g_drv_hifb_ctl_num[DRV_HIFB_IOCTL_CMD_NUM_MAX] = {
     0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1,  2,  3,  4,  5,  6,  0,  0,  7,  8,
     9,  10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 0,  0,  0,  0,
     25, 26, 0,  27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 0,  0,  41,
-    42, 0,  0,  0,  0,  0,  0,  0,  0,  43,  44
+    42, 0,  0,  0,  0,  0,  0,  0,  0,  43, 44,
+#ifdef CONFIG_DRIVERS_HDF_DISP
+    45, 46,
+#endif
 };
 
 static drv_hifb_ioctl_func_item g_drv_hifb_ioctl_func[DRV_HIFB_IOCTL_FUNC_ITEM_NUM_MAX] = {
@@ -317,6 +332,10 @@ static drv_hifb_ioctl_func_item g_drv_hifb_ioctl_func[DRV_HIFB_IOCTL_FUNC_ITEM_N
     {FBIOGET_DYNAMIC_RANGE_HIFB, hifb_get_dynamic_range},
     {FBIO_CREATE_LAYER, drv_hifb_create},
     {FBIO_DESTROY_LAYER, drv_hifb_release},
+#ifdef CONFIG_DRIVERS_HDF_DISP
+    {FBIO_PANEL_SET_POWERSTATUS, hdf_panel_set_powerstatus},
+    {FBIO_PANEL_SET_BACKLIGHT, hdf_panel_set_backlight},
+#endif
 };
 
 #ifndef __HuaweiLite__
@@ -2014,7 +2033,11 @@ static hi_s32 hifb_ioctl_check_param(struct fb_info *info, hi_u32 cmd, hi_void *
     }
 
     if ((argp == HI_NULL) && (cmd != FBIOGET_VBLANK_HIFB) &&
-        (cmd != FBIO_WAITFOR_FREFRESH_DONE) && (cmd != FBIO_CREATE_LAYER) && (cmd != FBIO_DESTROY_LAYER)) {
+        (cmd != FBIO_WAITFOR_FREFRESH_DONE) && (cmd != FBIO_CREATE_LAYER) && (cmd != FBIO_DESTROY_LAYER)
+#ifdef CONFIG_DRIVERS_HDF_DISP
+        && (cmd != FBIO_PANEL_SET_POWERSTATUS) && (cmd != FBIO_PANEL_SET_BACKLIGHT)
+#endif
+        ) {
         hifb_error("HI_NULL arg!\n");
         return HI_FAILURE;
     }
@@ -3385,6 +3408,39 @@ static hi_s32 drv_hifb_create(struct fb_info *info, unsigned long arg)
     hifb_spin_unlock_irqrestore(&par->lock, lock_flag);
     return HI_SUCCESS;
 }
+
+#ifdef CONFIG_DRIVERS_HDF_DISP
+static hi_s32 hdf_panel_set_powerstatus(struct fb_info *info, unsigned long arg)
+{
+    int32_t ret = HI_FAILURE;
+
+    hifb_dbg_info("%s cmd = %d enter\n", __func__, arg);
+    switch (arg) {
+        case POWER_STATUS_ON:
+            ret = DispOn(info->node);
+            hifb_dbg_info("%s cmd = %d\n", __func__, arg);
+            break;
+        case POWER_STATUS_STANDBY:
+        case POWER_STATUS_SUSPEND:
+        case POWER_STATUS_OFF:
+            ret = DispOff(info->node);
+            hifb_dbg_info("%s cmd = %d\n", __func__, arg);
+            break;
+        default:
+            hifb_error("%s cmd not support\n", __func__);
+            break;
+    }
+    return ret;
+}
+
+static hi_s32 hdf_panel_set_backlight(struct fb_info *info, unsigned long arg)
+{
+    int32_t ret = HI_FAILURE;
+
+    ret = SetDispBacklight(info->node, arg);
+    return ret;
+}
+#endif
 
 static hi_s32 drv_hifb_release(struct fb_info *info, unsigned long arg)
 {
