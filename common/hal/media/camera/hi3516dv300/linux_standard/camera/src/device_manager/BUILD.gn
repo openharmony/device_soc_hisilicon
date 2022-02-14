@@ -111,10 +111,10 @@ if (defined(ohos_lite)) {
       "$camera_device_name_path/camera/include/device_manager",
       "$camera_path/adapter/platform/mpp/src/device_manager/include",
       "$camera_device_name_path/camera/include/driver_adapter",
-      "//foundation/multimedia/camera_standard/frameworks/innerkitsimpl/metadata/include",
+      "//foundation/multimedia/camera_standard/frameworks/native/metadata/include",
     ]
 
-    deps = [ "//foundation/multimedia/camera_standard/frameworks/innerkitsimpl/metadata:metadata" ]
+    deps = [ "//foundation/multimedia/camera_standard/frameworks/native/metadata:metadata" ]
 
     hispark_taurus_lib_path = "//device/soc/hisilicon/common/hal/media/camera/hi3516dv300/linux_standard/libs/"
 

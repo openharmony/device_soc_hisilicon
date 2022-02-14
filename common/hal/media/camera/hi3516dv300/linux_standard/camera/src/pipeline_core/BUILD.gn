@@ -253,7 +253,7 @@ if (defined(ohos_lite)) {
       "$camera_path/adapter/platform/mpp/src/pipeline_core/nodes/vpss_node",
       "$camera_path/adapter/platform/mpp/src/device_manager/include",
       "$camera_device_name_path/camera/config/pipeline_core",
-      "//foundation/multimedia/camera_standard/frameworks/innerkitsimpl/metadata/include",
+      "//foundation/multimedia/camera_standard/frameworks/native/metadata/include",
 
       # hcs parser
       "//system/core/include/cutils",
@@ -262,7 +262,7 @@ if (defined(ohos_lite)) {
     deps = [
       "$camera_path/buffer_manager:camera_buffer_manager",
       "$camera_path/device_manager:camera_device_manager",
-      "//foundation/multimedia/camera_standard/frameworks/innerkitsimpl/metadata:metadata",
+      "//foundation/multimedia/camera_standard/frameworks/native/metadata:metadata",
     ]
 
     if (is_standard_system) {
