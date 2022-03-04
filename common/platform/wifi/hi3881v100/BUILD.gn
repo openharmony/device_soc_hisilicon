@@ -26,8 +26,8 @@ hdf_driver(module_name) {
   include_dirs = [
     "$HDM_WIFI_ROOT/include",
     "$HDM_WIFI_ROOT/platform/include",
-    "$HDM_WIFI_ROOT/adapter",
+    "$HDM_WIFI_ROOT/core",
     "//drivers/peripheral/wlan/client/include",
-    "drv/linuxkpi/include",
+    "driver/linuxkpi/include",
   ]
 }
