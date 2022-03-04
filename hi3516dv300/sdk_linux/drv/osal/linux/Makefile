@@ -53,7 +53,7 @@ all:
 	@make -C $(KERNEL_ROOT) M=$(PWD) $(COMPILER_TRIPLE) modules
 	@mkdir -p $(REL_KO) && cp hi_osal.ko $(REL_KO)
 clean:
-	@rm hi_osal.ko -f
+	@rm -f hi_osal.ko *.mod
 	@rm hi_osal.mod.c hi_osal.mod.o hi_osal.o modules.order Module.symvers -f
 	@rm $(hi_osal-y) -f
 	@rm ./mmz/*.o -f
