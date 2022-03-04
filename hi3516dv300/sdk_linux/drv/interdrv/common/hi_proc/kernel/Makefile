@@ -62,7 +62,7 @@ linux_build:
 #	@$(MAKE) -C test
 
 linux_clean:
-	@rm -f *.o *.ko *.mod.c
+	@rm -f *.o *.ko *.mod.c .*.cmd *.mod
 	@rm -f *.symvers *.order
 	@rm -rf .*.ko.cmd .*.o.cmd .tmp_versions
 	@rm -f $(REL_KO)/$(TARGET).ko

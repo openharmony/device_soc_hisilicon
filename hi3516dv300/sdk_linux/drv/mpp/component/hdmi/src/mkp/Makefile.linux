@@ -30,6 +30,7 @@ clean:
 	@for x in `find . -name "*.o.cmd"`;do rm -rf $$x;done
 	@for x in `find . -name "*.mod.c"`;do rm -rf $$x;done
 	@for x in `find . -name "*.ko.cmd"`;do rm -rf $$x;done
+	@rm -f *.mod .*.cmd
 	@rm .tmp_versions -rf
 	@rm Module.symvers -rf
 	@rm modules.order -rf
