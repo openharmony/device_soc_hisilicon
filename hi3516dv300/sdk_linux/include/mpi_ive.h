@@ -41,15 +41,6 @@ extern "C" {
 *   Return Value : HI_SUCCESS: Success;Error codes: Failure.
 *   Spec         : The size of the input data ranges from 32x1 pixels to 1920x1080 pixels.
 *                  The stride must be 16-byte-aligned.
-*   History:
-*
-*       1.  Date         : 2011-05-16
-*           Author       :
-*           Modification : Created function
-*       2.  Data         : 2013-07-19
-*           Author       :
-*           Modification : Modify parameters
-*
 *****************************************************************************/
 HI_S32 HI_MPI_IVE_DMA(IVE_HANDLE *pIveHandle, IVE_DATA_S *pstSrc, IVE_DST_DATA_S *pstDst,
     IVE_DMA_CTRL_S *pstDmaCtrl, HI_BOOL bInstant);
@@ -67,15 +58,6 @@ HI_S32 HI_MPI_IVE_DMA(IVE_HANDLE *pIveHandle, IVE_DATA_S *pstSrc, IVE_DST_DATA_S
 *   Spec         : The size of the input data ranges from 64x64 pixels to 1920x1024 pixels.
 *                  The physical addresses of the input data and output data must be 16-byte-aligned.
 *                  The stride must be 16-pixel-aligned.
-*   History:
-*
-*       1.  Date         : 2011-05-16
-*           Author       :
-*           Modification : Created function
-*       2.  Date         : 2013-07-23
-*           Author       :
-*           Modification : Modified function parameters
-*
 *****************************************************************************/
 HI_S32 HI_MPI_IVE_Filter(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S *pstSrc, IVE_DST_IMAGE_S *pstDst,
     IVE_FILTER_CTRL_S *pstFltCtrl, HI_BOOL bInstant);
@@ -97,15 +79,6 @@ HI_S32 HI_MPI_IVE_Filter(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S *pstSrc, IVE_DS
 *   Spec         : The size of the input data ranges from 64x64 pixels to 1920x1080 pixels.
 *                  The physical addresses of the input data and output data must be 16-byte-aligned.
 *                  The stride must be 16-pixel-aligned.
-*   History:
-*
-*       1.  Date         : 2011-05-16
-*           Author       :
-*           Modification : Created function
-*       2.  Date         : 2013-08-09
-*           Author       :
-*           Modification : Modified function
-*
 *****************************************************************************/
 HI_S32 HI_MPI_IVE_CSC(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S *pstSrc, IVE_DST_IMAGE_S *pstDst,
     IVE_CSC_CTRL_S *pstCscCtrl, HI_BOOL bInstant);
@@ -124,15 +97,6 @@ HI_S32 HI_MPI_IVE_CSC(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S *pstSrc, IVE_DST_I
 *   Spec         : The size of the input data ranges from 64x64 pixels to 1920x1024 pixels.
 *                  The physical addresses of the input data and output data must be 16-byte-aligned.
 *                  The stride must be 16-pixel-aligned.
-*   History:
-*
-*       1.  Date         : 2011-05-16
-*           Author       :
-*           Modification : Created function
-*       2.  Date         : 2013-08-09
-*           Author       :
-*           Modification : Modified function
-*
 *****************************************************************************/
 HI_S32 HI_MPI_IVE_FilterAndCSC(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S *pstSrc, IVE_DST_IMAGE_S *pstDst,
     IVE_FILTER_AND_CSC_CTRL_S *pstFltCscCtrl, HI_BOOL bInstant);
@@ -153,15 +117,6 @@ HI_S32 HI_MPI_IVE_FilterAndCSC(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S *pstSrc, 
 *   Spec         : The size of the input data ranges from 64x64 pixels to 1920x1024 pixels.
 *                  The physical addresses of the input data and output data must be 16-byte-aligned.
 *                  The stride must be 16-pixel-aligned.
-*   History:
-*
-*       1.  Date         : 2011-05-16
-*           Author       :
-*           Modification : Created function
-*       2.  Date         : 2013-07-23
-*           Author       :
-*           Modification : Modified function parameters
-*
 *****************************************************************************/
 HI_S32 HI_MPI_IVE_Sobel(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S *pstSrc, IVE_DST_IMAGE_S *pstDstH,
     IVE_DST_IMAGE_S *pstDstV, IVE_SOBEL_CTRL_S *pstSobelCtrl, HI_BOOL bInstant);
@@ -182,18 +137,6 @@ HI_S32 HI_MPI_IVE_Sobel(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S *pstSrc, IVE_DST
 *   Spec         : The size of the input data ranges from 64x64 pixels to 1920x1024 pixels.
 *                  The physical addresses of the input data and output data must be 16-byte-aligned.
 *                  The stride must be 16-pixel-aligned.
-*   History:
-*
-*       1.  Date         : 2011-05-16
-*           Author       :
-*           Modification : Created function
-*       2.  Date         : 2013-07-17
-*           Author       :
-*           Modification : Modified function and control parameter name
-*       3.  Date         : 2013-07-23
-*           Author       :
-*           Modification : Modified function parameters
-*
 *****************************************************************************/
 HI_S32 HI_MPI_IVE_MagAndAng(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S *pstSrc, IVE_DST_IMAGE_S *pstDstMag,
     IVE_DST_IMAGE_S *pstDstAng, IVE_MAG_AND_ANG_CTRL_S *pstMagAndAngCtrl, HI_BOOL bInstant);
@@ -212,15 +155,6 @@ HI_S32 HI_MPI_IVE_MagAndAng(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S *pstSrc, IVE
 *                  The physical addresses of the input data and output data must be 16-byte-aligned.
 *                  The stride must be 16-pixel-aligned.
 *                  The input value, output value, and mask value must be 0 or 255.
-*   History:
-*
-*       1.  Date         : 2011-05-16
-*           Author       :
-*           Modification : Created function
-*       2.  Date         : 2013-07-23
-*           Author       :
-*           Modification : Modified parameters
-*
 *****************************************************************************/
 HI_S32 HI_MPI_IVE_Dilate(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S *pstSrc, IVE_DST_IMAGE_S *pstDst,
     IVE_DILATE_CTRL_S *pstDilateCtrl, HI_BOOL bInstant);
@@ -239,15 +173,6 @@ HI_S32 HI_MPI_IVE_Dilate(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S *pstSrc, IVE_DS
 *                  The physical addresses of the input data and output data must be 16-byte-aligned.
 *                  The stride must be 16-pixel-aligned.
 *                  The input value, output value, and mask value must be 0 or 255.
-*   History:
-*
-*       1.  Date         : 2011-05-16
-*           Author       :
-*           Modification : Created function
-*       2.  Date         : 2013-07-23
-*           Author       :
-*           Modification : Modified parameters
-*
 *****************************************************************************/
 HI_S32 HI_MPI_IVE_Erode(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S *pstSrc, IVE_DST_IMAGE_S *pstDst,
     IVE_ERODE_CTRL_S *pstErodeCtrl, HI_BOOL bInstant);
@@ -263,15 +188,6 @@ HI_S32 HI_MPI_IVE_Erode(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S *pstSrc, IVE_DST
 *   Return Value : HI_SUCCESS: Success;Error codes: Failure.
 *   Spec         : The size of the input data ranges from 64x64 pixels to 1920x1080 pixels.
 *                  The stride must be 16-pixel-aligned.
-*   History:
-*
-*       1.  Date         : 2011-05-16
-*           Author       :
-*           Modification : Created function
-*       2.  Date         : 2013-07-23
-*           Author       :
-*           Modification : Modification
-*
 *****************************************************************************/
 HI_S32 HI_MPI_IVE_Thresh(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S *pstSrc, IVE_DST_IMAGE_S *pstDst,
     IVE_THRESH_CTRL_S *pstThrCtrl, HI_BOOL bInstant);
@@ -288,12 +204,6 @@ HI_S32 HI_MPI_IVE_Thresh(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S *pstSrc, IVE_DS
 *   Spec         : The size of the input data ranges from 64x64 pixels to 1920x1080 pixels.
 *                  The stride must be 16-pixel-aligned.
 *                  The types, widths, heights of two input sources must be the same.
-*   History:
-*
-*       1.  Date         : 2011-05-16
-*           Author       :
-*           Modification : Created function
-*
 *****************************************************************************/
 HI_S32 HI_MPI_IVE_And(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S *pstSrc1, IVE_SRC_IMAGE_S *pstSrc2,
     IVE_DST_IMAGE_S *pstDst, HI_BOOL bInstant);
@@ -313,15 +223,6 @@ HI_S32 HI_MPI_IVE_And(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S *pstSrc1, IVE_SRC_
 *   Spec         : The size of the input data ranges from 64x64 pixels to 1920x1080 pixels.
 *                  The stride must be 16-pixel-aligned.
 *                  The types, widths, heights of two input sources must be the same.
-*   History:
-*
-*       1.  Date         : 2011-05-16
-*           Author       :
-*           Modification : Created function
-*       2.  Date         : 2013-08-09
-*           Author       :
-*           Modification : Modified function parameter
-*
 *****************************************************************************/
 HI_S32 HI_MPI_IVE_Sub(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S *pstSrc1, IVE_SRC_IMAGE_S *pstSrc2,
     IVE_DST_IMAGE_S *pstDst, IVE_SUB_CTRL_S *pstSubCtrl, HI_BOOL bInstant);
@@ -338,15 +239,6 @@ HI_S32 HI_MPI_IVE_Sub(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S *pstSrc1, IVE_SRC_
 *   Spec         : The size of the input data ranges from 64x64 pixels to 1920x1080 pixels.
 *                  The stride must be 16-pixel-aligned.
 *                  The types, widths, heights of two input sources must be the same.
-*   History:
-*
-*       1.  Date         : 2011-05-16
-*           Author       :
-*           Modification : Created function
-*       2.  Date         : 2013-08-09
-*           Author       :
-*           Modification : Modified function parameter
-*
 *****************************************************************************/
 HI_S32 HI_MPI_IVE_Or(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S *pstSrc1, IVE_SRC_IMAGE_S *pstSrc2,
     IVE_DST_IMAGE_S *pstDst, HI_BOOL bInstant);
@@ -366,22 +258,6 @@ HI_S32 HI_MPI_IVE_Or(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S *pstSrc1, IVE_SRC_I
 *                  The physical addresses of the input data and output data must be 16-byte-aligned.
 *                  The stride must be 16-pixel-aligned.
 *                  The pixel can be 32bit or 64 bit relied on the control parameter.
-*   History:
-*
-*       1.  Date         : 2011-05-16
-*           Author       :
-*           Modification : Created function
-*       2.  Date         : 2013-03-18
-*           Author       :
-*           Modification : Modified function
-*       3.  Date         : 2013-07-15
-*           Author       :
-*           Modification : Modified function
-*           Spec         : Modify IVE_INTEG_OUT_FMT_E to  IVE_INTEG_CTRL_S
-*       4.  Date         : 2013-07-23
-*           Author       :
-*           Modification : Modified parameters
-*
 *****************************************************************************/
 HI_S32 HI_MPI_IVE_Integ(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S *pstSrc, IVE_DST_IMAGE_S *pstDst,
     IVE_INTEG_CTRL_S *pstIntegCtrl, HI_BOOL bInstant);
@@ -398,12 +274,6 @@ HI_S32 HI_MPI_IVE_Integ(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S *pstSrc, IVE_DST
 *   Spec         : The size of the input data ranges from 64x64 pixels to 1920x1080 pixels.
 *                  The physical addresses of the input data and output data must be 16-byte-aligned.
 *                  The stride must be 16-pixel-aligned.
-*   History:
-*
-*       1.  Date         : 2011-05-16
-*           Author       :
-*           Modification : Created function
-*
 *****************************************************************************/
 HI_S32 HI_MPI_IVE_Hist(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S *pstSrc, IVE_DST_MEM_INFO_S *pstDst,
     HI_BOOL bInstant);
@@ -421,12 +291,6 @@ HI_S32 HI_MPI_IVE_Hist(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S *pstSrc, IVE_DST_
 *   Spec         : The size of the input data ranges from 64x64 pixels to 1920x1080 pixels.
 *                  The physical addresses of the input data must be 2-byte-aligned.
 *                  The stride must be 16-pixel-aligned.
-*   History:
-*
-*       1.  Date         : 2013-05-16
-*           Author       :
-*           Modification : Created function
-*
 *****************************************************************************/
 HI_S32 HI_MPI_IVE_Thresh_S16(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S *pstSrc, IVE_DST_IMAGE_S *pstDst,
     IVE_THRESH_S16_CTRL_S *pstThrS16Ctrl, HI_BOOL bInstant);
@@ -444,15 +308,6 @@ HI_S32 HI_MPI_IVE_Thresh_S16(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S *pstSrc, IV
 *   Spec         : The size of the input data ranges from 64x64 pixels to 1920x1080 pixels.
 *                  The physical addresses of the input data must be 2-byte-aligned.
 *                  The stride must be 16-pixel-aligned.
-*   History:
-*
-*       1.  Date         : 2013-05-16
-*           Author       :
-*           Modification : Created function
-*       2.  Date         : 2013-08-07
-*           Author       :
-*           Modification : Implement function
-*
 *****************************************************************************/
 HI_S32 HI_MPI_IVE_Thresh_U16(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S *pstSrc, IVE_DST_IMAGE_S *pstDst,
     IVE_THRESH_U16_CTRL_S *pstThrU16Ctrl, HI_BOOL bInstant);
@@ -470,12 +325,6 @@ HI_S32 HI_MPI_IVE_Thresh_U16(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S *pstSrc, IV
 *   Spec         : The size of the input data ranges from 64x64 pixels to 1920x1080 pixels.
 *                  The physical addresses of the input data must be 2-byte-aligned.
 *                  The stride must be 16-pixel-aligned.
-*   History:
-*
-*       1.  Date         : 2013-08-12
-*           Author       :
-*           Modification : Created function
-*
 *****************************************************************************/
 HI_S32 HI_MPI_IVE_16BitTo8Bit(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S *pstSrc, IVE_DST_IMAGE_S *pstDst,
     IVE_16BIT_TO_8BIT_CTRL_S *pst16BitTo8BitCtrl, HI_BOOL bInstant);
@@ -493,12 +342,6 @@ HI_S32 HI_MPI_IVE_16BitTo8Bit(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S *pstSrc, I
 *   Spec         : The size of the input data ranges from 64x64 pixels to 1920x1024 pixels.
 *                  The physical addresses of the input data and output data must be 16-byte-aligned.
 *                  The stride must be 16-pixel-aligned.
-*   History:
-*
-*       1.  Date         : 2013-08-12
-*           Author       :
-*           Modification : Created function
-*
 *****************************************************************************/
 HI_S32 HI_MPI_IVE_OrdStatFilter(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S *pstSrc, IVE_DST_IMAGE_S *pstDst,
     IVE_ORD_STAT_FILTER_CTRL_S *pstOrdStatFltCtrl, HI_BOOL bInstant);
@@ -516,15 +359,6 @@ HI_S32 HI_MPI_IVE_OrdStatFilter(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S *pstSrc,
 *   Spec         : The size of the input data ranges from 64x64 pixels to 1920x1080 pixels.
 *                  The physical addresses of the input data and output data must be 16-byte-aligned.
 *                  The stride must be 16-pixel-aligned.
-*   History:
-*
-*       1.  Date         : 2013-08-17
-*           Author       :
-*           Modification : Created function
-*       2.  Date         : 2015-03-02
-*           Author       :
-*           Modification : Add s16/u16 map
-*
 *****************************************************************************/
 HI_S32 HI_MPI_IVE_Map(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S *pstSrc, IVE_SRC_MEM_INFO_S *pstMap,
     IVE_DST_IMAGE_S *pstDst, IVE_MAP_CTRL_S *pstMapCtrl, HI_BOOL bInstant);
@@ -542,12 +376,6 @@ HI_S32 HI_MPI_IVE_Map(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S *pstSrc, IVE_SRC_M
 *   Spec         : The size of the input data ranges from 64x64 pixels to 1920x1080 pixels.
 *                  The physical addresses of map data must be 16-byte-aligned.
 *                  The stride must be 16-pixel-aligned.
-*   History:
-*
-*       1.  Date         : 2013-07-17
-*           Author       :
-*           Modification : Created function
-*
 *****************************************************************************/
 HI_S32 HI_MPI_IVE_EqualizeHist(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S *pstSrc, IVE_DST_IMAGE_S *pstDst,
     IVE_EQUALIZE_HIST_CTRL_S *pstEqualizeHistCtrl, HI_BOOL bInstant);
@@ -567,12 +395,6 @@ HI_S32 HI_MPI_IVE_EqualizeHist(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S *pstSrc, 
 *   Spec         : The size of the input data ranges from 64x64 pixels to 1920x1080 pixels.
 *                  The stride must be 16-pixel-aligned.
 *                  The types, widths, heights of two input sources must be the same.
-*   History:
-*
-*       1.  Date         : 2013-07-17
-*           Author       :
-*           Modification : Created function
-*
 *****************************************************************************/
 HI_S32 HI_MPI_IVE_Add(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S *pstSrc1, IVE_SRC_IMAGE_S *pstSrc2,
     IVE_DST_IMAGE_S *pstDst, IVE_ADD_CTRL_S *pstAddCtrl, HI_BOOL bInstant);
@@ -589,12 +411,6 @@ HI_S32 HI_MPI_IVE_Add(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S *pstSrc1, IVE_SRC_
 *   Spec         : The size of the input data ranges from 64x64 pixels to 1920x1080 pixels.
 *                  The stride must be 16-pixel-aligned.
 *                  The types, widths, heights of two input sources must be the same.
-*   History:
-*
-*       1.  Date         : 2013-07-17
-*           Author       :
-*           Modification : Created function
-*
 *****************************************************************************/
 HI_S32 HI_MPI_IVE_Xor(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S *pstSrc1, IVE_SRC_IMAGE_S *pstSrc2,
     IVE_DST_IMAGE_S *pstDst, HI_BOOL bInstant);
@@ -611,12 +427,6 @@ HI_S32 HI_MPI_IVE_Xor(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S *pstSrc1, IVE_SRC_
 *   Spec         : The size of the input data ranges from 64x64 pixels to 1920x1024 pixels.
 *                  The physical addresses of output data must be 16-byte-aligned.
 *                  The stride must be 16-pixel-aligned.
-*   History:
-*
-*       1.  Date         : 2013-08-16
-*           Author       :
-*           Modification : Created function
-*
 *****************************************************************************/
 HI_S32 HI_MPI_IVE_NCC(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S *pstSrc1, IVE_SRC_IMAGE_S *pstSrc2,
     IVE_DST_MEM_INFO_S *pstDst, HI_BOOL bInstant);
@@ -633,11 +443,6 @@ HI_S32 HI_MPI_IVE_NCC(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S *pstSrc1, IVE_SRC_
 *   Spec         : The size of the input data ranges from 64x64 pixels to 720x640 pixels.
 *                  The physical addresses of the input data and output data must be 16-byte-aligned.
 *                  The stride must be 16-pixel-aligned.
-*   History:
-*
-*       1.  Date         : 2013-08-1
-*           Author       :
-*           Modification : Created function
 *****************************************************************************/
 HI_S32 HI_MPI_IVE_CCL(IVE_HANDLE *pIveHandle, IVE_IMAGE_S *pstSrcDst, IVE_DST_MEM_INFO_S *pstBlob,
     IVE_CCL_CTRL_S *pstCclCtrl, HI_BOOL bInstant);
@@ -657,11 +462,6 @@ HI_S32 HI_MPI_IVE_CCL(IVE_HANDLE *pIveHandle, IVE_IMAGE_S *pstSrcDst, IVE_DST_ME
 *   Spec         : The size of the input data ranges from 64x64 pixels to 720x576 pixels.
 *                  The physical addresses of the input data and output data must be 16-byte-aligned.
 *                  The stride must be 16-pixel-aligned.
-*   History:
-*
-*       1.  Date         : 2013-08-07
-*           Author       :
-*           Modification : Created function
 *****************************************************************************/
 HI_S32 HI_MPI_IVE_GMM(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S *pstSrc, IVE_DST_IMAGE_S *pstFg,
     IVE_DST_IMAGE_S *pstBg, IVE_MEM_INFO_S *pstModel, IVE_GMM_CTRL_S *pstGmmCtrl, HI_BOOL bInstant);
@@ -686,11 +486,6 @@ HI_S32 HI_MPI_IVE_GMM(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S *pstSrc, IVE_DST_I
 *   Spec         : The size of the input data ranges from 64x64 pixels to 1280x720 pixels.
 *                  The physical addresses of the input data and output data must be 16-byte-aligned.
 *                  The stride must be 16-pixel-aligned.
-*   History:
-*
-*       1.  Date         : 2015-04-16
-*           Author       :
-*           Modification : Created function
 *****************************************************************************/
 HI_S32 HI_MPI_IVE_GMM2(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S *pstSrc, IVE_SRC_IMAGE_S *pstFactor,
     IVE_DST_IMAGE_S *pstFg, IVE_DST_IMAGE_S *pstBg, IVE_DST_IMAGE_S *pstMatchModelInfo, IVE_MEM_INFO_S *pstModel,
@@ -711,12 +506,6 @@ HI_S32 HI_MPI_IVE_GMM2(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S *pstSrc, IVE_SRC_
 *   Spec         : The size of the input data ranges from 64x64 pixels to 1920x1024 pixels.
 *                  The physical addresses of the input data and output data must be 16-byte-aligned. .
 *                  The stride must be 16-pixel-aligned.
-*   History:
-*
-*       1.  Date         : 2013-08-12
-*           Author       :
-*           Modification : Created function
-*
 *****************************************************************************/
 HI_S32 HI_MPI_IVE_CannyHysEdge(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S *pstSrc, IVE_DST_IMAGE_S *pstEdge,
     IVE_DST_MEM_INFO_S *pstStack, IVE_CANNY_HYS_EDGE_CTRL_S *pstCannyHysEdgeCtrl, HI_BOOL bInstant);
@@ -730,12 +519,6 @@ HI_S32 HI_MPI_IVE_CannyHysEdge(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S *pstSrc, 
 *   Spec         : The size of the input data ranges from 64x64 pixels to 1920x1024 pixels.
 *                  The physical addresses of the input data and output data must be 16-byte-aligned.
 *                  The stride must be 16-pixel-aligned.
-*   History:
-*
-*       1.  Date         : 2013-08-12
-*           Author       :
-*           Modification : Created function
-*
 *****************************************************************************/
 HI_S32 HI_MPI_IVE_CannyEdge(IVE_IMAGE_S *pstEdge, IVE_MEM_INFO_S *pstStack);
 
@@ -751,12 +534,6 @@ HI_S32 HI_MPI_IVE_CannyEdge(IVE_IMAGE_S *pstEdge, IVE_MEM_INFO_S *pstStack);
 *   Spec         : The size of the input data ranges from 64x64 pixels to 1920x1024 pixels.
 *                  The physical addresses of the input data and output data must be 16-byte-aligned.
 *                  The stride must be 16-pixel-aligned.
-*   History:
-*
-*       1.  Date         : 2013-09-22
-*           Author       :
-*           Modification : Created function
-*
 *****************************************************************************/
 HI_S32 HI_MPI_IVE_LBP(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S *pstSrc, IVE_DST_IMAGE_S *pstDst,
     IVE_LBP_CTRL_S *pstLbpCtrl, HI_BOOL bInstant);
@@ -778,12 +555,6 @@ HI_S32 HI_MPI_IVE_LBP(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S *pstSrc, IVE_DST_I
 *   Spec         : The size of the input data ranges from 64x64 pixels to 1920x1024 pixels.
 *                  The physical addresses of the input data and output data must be 16-byte-aligned.
 *                  The stride must be 16-pixel-aligned.
-*   History:
-*
-*       1.  Date         : 2013-08-12
-*           Author       :
-*           Modification : Created function
-*
 *****************************************************************************/
 HI_S32 HI_MPI_IVE_NormGrad(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S *pstSrc, IVE_DST_IMAGE_S *pstDstH,
     IVE_DST_IMAGE_S *pstDstV, IVE_DST_IMAGE_S *pstDstHV, IVE_NORM_GRAD_CTRL_S *pstNormGradCtrl, HI_BOOL bInstant);
@@ -806,11 +577,6 @@ HI_S32 HI_MPI_IVE_NormGrad(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S *pstSrc, IVE_
 *   Spec         : The size of the input data ranges from 64x64 pixels to 1280x720 pixels.
 *                  The physical addresses of the input data and output data must be 16-byte-aligned.
 *                  The stride must be 16-pixel-aligned.
-*   History:
-*
-*       1.  Date         : 2015-03-20
-*           Author       :
-*           Modification : Created function
 ****************************************************************************/
 HI_S32 HI_MPI_IVE_LKOpticalFlowPyr(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S astSrcPrevPyr[],
     IVE_SRC_IMAGE_S astSrcNextPyr[], IVE_SRC_MEM_INFO_S *pstPrevPts, IVE_MEM_INFO_S *pstNextPts,
@@ -830,12 +596,6 @@ HI_S32 HI_MPI_IVE_LKOpticalFlowPyr(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S astSr
 *   Spec         : The size of the input data ranges from 64x64 pixels to 720x576 pixels.
 *                  The physical addresses of the input data and output data must be 16-byte-aligned.
 *                  The stride must be 16-pixel-aligned.
-*   History:
-*
-*       1.  Date         : 2013-09-16
-*           Author       :
-*           Modification : Created function
-*
 *****************************************************************************/
 HI_S32 HI_MPI_IVE_STCandiCorner(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S *pstSrc,
     IVE_DST_IMAGE_S *pstCandiCorner, IVE_ST_CANDI_CORNER_CTRL_S *pstStCandiCornerCtrl, HI_BOOL bInstant);
@@ -851,12 +611,6 @@ HI_S32 HI_MPI_IVE_STCandiCorner(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S *pstSrc,
 *   Spec         : The size of the input data ranges from 64x64 pixels to 720x576 pixels.
 *                  The physical addresses of the input data and output data must be 16-byte-aligned.
 *                  The stride must be 16-pixel-aligned.
-*   History:
-*
-*       1.  Date         : 2013-09-16
-*           Author       :
-*           Modification : Created function
-*
 *****************************************************************************/
 HI_S32 HI_MPI_IVE_STCorner(IVE_SRC_IMAGE_S *pstCandiCorner, IVE_DST_MEM_INFO_S *pstCorner,
     IVE_ST_CORNER_CTRL_S *pstStCornerCtrl);
@@ -874,12 +628,6 @@ HI_S32 HI_MPI_IVE_STCorner(IVE_SRC_IMAGE_S *pstCandiCorner, IVE_DST_MEM_INFO_S *
 *                  HI_BOOL            bInstant      For details, see HI_MPI_IVE_DMA.
 *   Return Value : HI_SUCCESS: Success;Error codes: Failure.
 *   Spec         : None
-*   History:
-*
-*       1.  Date         : 2013-10-29
-*           Author       :
-*           Modification : Created function
-*
 *****************************************************************************/
 HI_S32 HI_MPI_IVE_GradFg(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S *pstBgDiffFg, IVE_SRC_IMAGE_S *pstCurGrad,
     IVE_SRC_IMAGE_S *pstBgGrad, IVE_DST_IMAGE_S *pstGradFg, IVE_GRAD_FG_CTRL_S *pstGradFgCtrl, HI_BOOL bInstant);
@@ -902,15 +650,8 @@ HI_S32 HI_MPI_IVE_GradFg(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S *pstBgDiffFg, I
 *                  IVE_DST_MEM_INFO_S         *pstStatData         Result status data
 *                  IVE_MATCH_BG_MODEL_CTRL_S  *pstMatchBgModelCtrl Background matching parameters
 *                  HI_BOOL                    bInstant             For details, see HI_MPI_IVE_DMA.
-
 *   Return Value : HI_SUCCESS: Success;Error codes: Failure.
 *   Spec         : None
-*   History:
-*
-*       1.  Date         : 2013-10-29
-*           Author       :
-*           Modification : Created function
-*
 *****************************************************************************/
 HI_S32 HI_MPI_IVE_MatchBgModel(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S *pstCurImg, IVE_DATA_S *pstBgModel,
     IVE_IMAGE_S *pstFgFlag, IVE_DST_IMAGE_S *pstBgDiffFg, IVE_DST_IMAGE_S *pstFrmDiffFg,
@@ -934,12 +675,6 @@ HI_S32 HI_MPI_IVE_MatchBgModel(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S *pstCurIm
 *                  HI_BOOL                      bInstant                For details, see HI_MPI_IVE_DMA.
 *   Return Value : HI_SUCCESS: Success;Error codes: Failure.
 *   Spec         : None
-*   History:
-*
-*       1.  Date         : 2013-10-29
-*           Author       :
-*           Modification : Created function
-*
 *****************************************************************************/
 HI_S32 HI_MPI_IVE_UpdateBgModel(IVE_HANDLE *pIveHandle, IVE_DATA_S *pstBgModel, IVE_IMAGE_S *pstFgFlag,
     IVE_DST_IMAGE_S *pstBgImg, IVE_DST_IMAGE_S *pstChgStaImg, IVE_DST_IMAGE_S *pstChgStaFg,
@@ -953,12 +688,6 @@ HI_S32 HI_MPI_IVE_UpdateBgModel(IVE_HANDLE *pIveHandle, IVE_DATA_S *pstBgModel, 
 *                  IVE_ANN_MLP_MODEL_S   *pstAnnMlpModel     ANN_MLP model data.
 *   Return Value : HI_SUCCESS: Success;Error codes: Failure.
 *   Spec         : None
-*   History:
-*
-*       1.  Date         : 2014-05-13
-*           Author       :
-*           Modification : Created function
-*
 *****************************************************************************/
 HI_S32 HI_MPI_IVE_ANN_MLP_LoadModel(const HI_CHAR *pchFileName, IVE_ANN_MLP_MODEL_S *pstAnnMlpModel);
 
@@ -968,12 +697,6 @@ HI_S32 HI_MPI_IVE_ANN_MLP_LoadModel(const HI_CHAR *pchFileName, IVE_ANN_MLP_MODE
 *   Parameters   : IVE_ANN_MLP_MODEL_S      *pstAnnMlpModel    ANN_MLP model data.
 *   Return Value : HI_SUCCESS: Success;Error codes: Failure.
 *   Spec         :  None
-*   History:
-*
-*       1.  Date         : 2014-05-13
-*           Author       :
-*           Modification : Created function
-*
 *****************************************************************************/
 HI_VOID HI_MPI_IVE_ANN_MLP_UnloadModel(IVE_ANN_MLP_MODEL_S *pstAnnMlpModel);
 
@@ -988,15 +711,6 @@ HI_VOID HI_MPI_IVE_ANN_MLP_UnloadModel(IVE_ANN_MLP_MODEL_S *pstAnnMlpModel);
 *                  HI_BOOL              bInstant             For details, see HI_MPI_IVE_DMA.
 *   Return Value : HI_SUCCESS: Success;Error codes: Failure.
 *   Spec         :  None
-*   History:
-*
-*       1.  Date         : 2013-11-28
-*           Author       :
-*           Modification : Created function
-*       2.  Date         : 2015-05-21
-*           Author       :
-*           Modification : support 1024d feature vector and array of vectors input
-*
 *****************************************************************************/
 HI_S32 HI_MPI_IVE_ANN_MLP_Predict(IVE_HANDLE *pIveHandle, IVE_SRC_DATA_S *pstSrc,
     IVE_LOOK_UP_TABLE_S *pstActivFuncTab, IVE_ANN_MLP_MODEL_S *pstAnnMlpModel, IVE_DST_DATA_S *pstDst,
@@ -1009,12 +723,6 @@ HI_S32 HI_MPI_IVE_ANN_MLP_Predict(IVE_HANDLE *pIveHandle, IVE_SRC_DATA_S *pstSrc
 *                  IVE_SVM_MODEL_S      *pstSvmModel        SVM model data.
 *   Return Value : HI_SUCCESS: Success;Error codes: Failure.
 *   Spec         :  None
-*   History:
-*
-*       1.  Date         : 2014-05-13
-*           Author       :
-*           Modification : Created function
-*
 *****************************************************************************/
 HI_S32 HI_MPI_IVE_SVM_LoadModel(const HI_CHAR *pchFileName, IVE_SVM_MODEL_S *pstSvmModel);
 
@@ -1024,12 +732,6 @@ HI_S32 HI_MPI_IVE_SVM_LoadModel(const HI_CHAR *pchFileName, IVE_SVM_MODEL_S *pst
 *   Parameters   : IVE_SVM_MODEL_S      *pstSvmModel     SVM model data.
 *   Return Value : HI_SUCCESS: Success;Error codes: Failure.
 *   Spec         :  None
-*   History:
-*
-*       1.  Date         : 2014-05-13
-*           Author       :
-*           Modification : Created function
-*
 *****************************************************************************/
 HI_VOID HI_MPI_IVE_SVM_UnloadModel(IVE_SVM_MODEL_S *pstSvmModel);
 
@@ -1044,15 +746,6 @@ HI_VOID HI_MPI_IVE_SVM_UnloadModel(IVE_SVM_MODEL_S *pstSvmModel);
 *                  HI_BOOL               bInstant             For details, see HI_MPI_IVE_DMA.
 *   Return Value : HI_SUCCESS: Success;Error codes: Failure.
 *   Spec         :  None
-*   History:
-*
-*       1.  Date         : 2013-11-28
-*           Author       :
-*           Modification : Created function
-*       2.  Date         : 2015-04-21
-*           Author       :
-*           Modification : support 1024d feature vector and array of vectors input
-*
 *****************************************************************************/
 HI_S32 HI_MPI_IVE_SVM_Predict(IVE_HANDLE *pIveHandle, IVE_SRC_DATA_S *pstSrc, IVE_LOOK_UP_TABLE_S *pstKernelTab,
     IVE_SVM_MODEL_S *pstSvmModel, IVE_DST_DATA_S *pstDstVote, HI_BOOL bInstant);
@@ -1072,12 +765,6 @@ HI_S32 HI_MPI_IVE_SVM_Predict(IVE_HANDLE *pIveHandle, IVE_SRC_DATA_S *pstSrc, IV
 *   Spec         : The size of the input data ranges from 64x64 pixels to 1920x1080 pixels.
 *                  The stride must be 16-pixel-aligned.
 *                  The types, widths, heights of two input sources must be the same.
-*   History:
-*
-*       1.  Date         : 2014-08-28
-*           Author       :
-*           Modification : Created function
-*
 *****************************************************************************/
 HI_S32 HI_MPI_IVE_SAD(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S *pstSrc1, IVE_SRC_IMAGE_S *pstSrc2,
     IVE_DST_IMAGE_S *pstSad, IVE_DST_IMAGE_S *pstThr, IVE_SAD_CTRL_S *pstSadCtrl, HI_BOOL bInstant);
@@ -1095,12 +782,6 @@ HI_S32 HI_MPI_IVE_SAD(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S *pstSrc1, IVE_SRC_
 *   Return Value : HI_SUCCESS: Success;Error codes: Failure.
 *   Spec         : The size of the input data ranges from 32x16 pixels to 1920x1080 pixels.
 *                  The stride must be 16-pixel-aligned.
-*   History:
-*
-*       1.  Date         : 2015-03-26
-*           Author       :
-*           Modification : Created function
-*
 *****************************************************************************/
 HI_S32 HI_MPI_IVE_Resize(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S astSrc[], IVE_DST_IMAGE_S astDst[],
     IVE_RESIZE_CTRL_S *pstResizeCtrl, HI_BOOL bInstant);
@@ -1112,12 +793,6 @@ HI_S32 HI_MPI_IVE_Resize(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S astSrc[], IVE_D
 *                  IVE_CNN_MODEL_S   *pstCnnModel     CNN model data.
 *   Return Value : HI_SUCCESS: Success;Error codes: Failure.
 *   Spec         :  None
-*   History:
-*
-*       1.  Date         : 2015-04-19
-*           Author       :
-*           Modification : Created function
-*
 *****************************************************************************/
 HI_S32 HI_MPI_IVE_CNN_LoadModel(const HI_CHAR *pchFileName, IVE_CNN_MODEL_S *pstCnnModel);
 
@@ -1127,12 +802,6 @@ HI_S32 HI_MPI_IVE_CNN_LoadModel(const HI_CHAR *pchFileName, IVE_CNN_MODEL_S *pst
 *   Parameters   : IVE_CNN_MODEL_S *pstCnnModel    CNN model data.
 *   Return Value : HI_SUCCESS: Success;Error codes: Failure.
 *   Spec         :  None
-*   History:
-*
-*       1.  Date         : 2015-4-19
-*           Author       :
-*           Modification : Created function
-*
 *****************************************************************************/
 HI_VOID HI_MPI_IVE_CNN_UnloadModel(IVE_CNN_MODEL_S *pstCnnModel);
 
@@ -1150,12 +819,6 @@ HI_VOID HI_MPI_IVE_CNN_UnloadModel(IVE_CNN_MODEL_S *pstCnnModel);
 *   Return Value : HI_SUCCESS: Success; Error codes: Failure.
 *   Spec         : The stride must be 16-pixel-aligned.
 *                  The types, widths, heights and strides of input images must be the same.
-*   History:
-*
-*       1.  Date         : 2015-4-19
-*           Author       :
-*           Modification : Created function
-*
 *****************************************************************************/
 HI_S32 HI_MPI_IVE_CNN_Predict(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S astSrc[], IVE_CNN_MODEL_S *pstCnnModel,
     IVE_DST_DATA_S *pstDst, IVE_CNN_CTRL_S *pstCnnCtrl, HI_BOOL bInstant);
@@ -1170,12 +833,6 @@ HI_S32 HI_MPI_IVE_CNN_Predict(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S astSrc[], 
 *                  IVE_CNN_CTRL_S        *pstCnnCtrl      CNN control parameter
 *   Return Value : HI_SUCCESS: Success;Error codes: Failure.
 *   Spec         :  None
-*   History:
-*
-*       1.  Date         : 2015-4-19
-*           Author       :
-*           Modification : Created function
-*
 *****************************************************************************/
 HI_S32 HI_MPI_IVE_CNN_GetResult(IVE_SRC_DATA_S *pstSrc, IVE_DST_MEM_INFO_S *pstDst,
     IVE_CNN_MODEL_S *pstCnnModel, IVE_CNN_CTRL_S *pstCnnCtrl);
@@ -1194,12 +851,6 @@ HI_S32 HI_MPI_IVE_CNN_GetResult(IVE_SRC_DATA_S *pstSrc, IVE_DST_MEM_INFO_S *pstD
 *                  HI_BOOL                bInstant           For details, see HI_MPI_IVE_DMA.
 *   Return Value : HI_SUCCESS: Success;Error codes: Failure.
 *   Spec         : The stride must be 16-pixel-aligned.
-*   History:
-*
-*       1.  Date         : 2018-9-15
-*           Author       :
-*           Modification : Created function
-*
 *****************************************************************************/
 HI_S32 HI_MPI_IVE_PerspTrans(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S *pstSrc, IVE_RECT_U32_S astRoi[],
     IVE_SRC_MEM_INFO_S astPointPair[], IVE_DST_IMAGE_S astDst[], IVE_PERSP_TRANS_CTRL_S *pstPerspTransCtrl,
@@ -1212,12 +863,6 @@ HI_S32 HI_MPI_IVE_PerspTrans(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S *pstSrc, IV
 *                  HI_U32 *pu32Size       memmory size.
 *   Return Value : HI_SUCCESS: Success;Error codes: Failure.
 *   Spec         :  None
-*   History:
-*
-*       1.  Date         : 2018-10-15
-*           Author       :
-*           Modification : Created function
-*
 *****************************************************************************/
 HI_S32 HI_MPI_IVE_KCF_GetMemSize(HI_U32 u32MaxObjNum, HI_U32 *pu32Size);
 
@@ -1229,12 +874,6 @@ HI_S32 HI_MPI_IVE_KCF_GetMemSize(HI_U32 u32MaxObjNum, HI_U32 *pu32Size);
 *                  IVE_KCF_OBJ_LIST_S *pstObjList  The object list.
 *   Return Value : HI_SUCCESS: Success;Error codes: Failure.
 *   Spec         :  None
-*   History:
-*
-*       1.  Date         : 2018-10-15
-*           Author       :
-*           Modification : Created function
-*
 *****************************************************************************/
 HI_S32 HI_MPI_IVE_KCF_CreateObjList(IVE_MEM_INFO_S *pstMem, HI_U32 u32MaxObjNum,
     IVE_KCF_OBJ_LIST_S *pstObjList);
@@ -1246,12 +885,6 @@ HI_S32 HI_MPI_IVE_KCF_CreateObjList(IVE_MEM_INFO_S *pstMem, HI_U32 u32MaxObjNum,
 *
 *   Return Value : HI_SUCCESS: Success;Error codes: Failure.
 *   Spec         :  None
-*   History:
-*
-*       1.  Date         : 2018-10-15
-*           Author       :
-*           Modification : Created function
-*
 *****************************************************************************/
 HI_S32 HI_MPI_IVE_KCF_DestroyObjList(IVE_KCF_OBJ_LIST_S *pstObjList);
 
@@ -1262,12 +895,6 @@ HI_S32 HI_MPI_IVE_KCF_DestroyObjList(IVE_KCF_OBJ_LIST_S *pstObjList);
 *                  IVE_DST_MEM_INFO_S *pstGaussPeak The memory of gauss peak.
 *   Return Value : HI_SUCCESS: Success;Error codes: Failure.
 *   Spec         :  None
-*   History:
-*
-*       1.  Date         : 2018-10-15
-*           Author       :
-*           Modification : Created function
-*
 *****************************************************************************/
 HI_S32 HI_MPI_IVE_KCF_CreateGaussPeak(HI_U3Q5 u3q5Padding, IVE_DST_MEM_INFO_S *pstGaussPeak);
 
@@ -1278,12 +905,6 @@ HI_S32 HI_MPI_IVE_KCF_CreateGaussPeak(HI_U3Q5 u3q5Padding, IVE_DST_MEM_INFO_S *p
 *                  IVE_DST_MEM_INFO_S *pstCosWinY The memory of cos window y.
 *   Return Value : HI_SUCCESS: Success;Error codes: Failure.
 *   Spec         :  None
-*   History:
-*
-*       1.  Date         : 2018-10-15
-*           Author       :
-*           Modification : Created function
-*
 *****************************************************************************/
 HI_S32 HI_MPI_IVE_KCF_CreateCosWin(IVE_DST_MEM_INFO_S *pstCosWinX, IVE_DST_MEM_INFO_S *pstCosWinY);
 
@@ -1299,12 +920,6 @@ HI_S32 HI_MPI_IVE_KCF_CreateCosWin(IVE_DST_MEM_INFO_S *pstCosWinX, IVE_DST_MEM_I
 *                  IVE_KCF_OBJ_LIST_S *pstObjList The object list.
 *   Return Value : HI_SUCCESS: Success;Error codes: Failure.
 *   Spec         :  None
-*   History:
-*
-*       1.  Date         : 2018-10-15
-*           Author       :
-*           Modification : Created function
-*
 *****************************************************************************/
 HI_S32 HI_MPI_IVE_KCF_GetTrainObj(HI_U3Q5 u3q5Padding, IVE_ROI_INFO_S astRoiInfo[], HI_U32 u32ObjNum,
     IVE_MEM_INFO_S *pstCosWinX, IVE_MEM_INFO_S *pstCosWinY, IVE_MEM_INFO_S *pstGaussPeak,
@@ -1320,12 +935,6 @@ HI_S32 HI_MPI_IVE_KCF_GetTrainObj(HI_U3Q5 u3q5Padding, IVE_ROI_INFO_S astRoiInfo
 *                  HI_BOOL             bInstant      For details, see HI_MPI_IVE_DMA.
 *   Return Value : HI_SUCCESS: Success;Error codes: Failure.
 *   Spec         :  None
-*   History:
-*
-*       1.  Date         : 2018-10-15
-*           Author       :
-*           Modification : Created function
-*
 *****************************************************************************/
 HI_S32 HI_MPI_IVE_KCF_Process(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S *pstSrc, IVE_KCF_OBJ_LIST_S *pstObjList,
     IVE_KCF_PRO_CTRL_S *pstKcfProCtrl, HI_BOOL bInstant);
@@ -1339,12 +948,6 @@ HI_S32 HI_MPI_IVE_KCF_Process(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S *pstSrc, I
 *                  IVE_KCF_BBOX_CTRL_S *pstKcfBboxCtrl Control parameter.
 *   Return Value : HI_SUCCESS: Success;Error codes: Failure.
 *   Spec         :  None
-*   History:
-*
-*       1.  Date         : 2018-10-15
-*           Author       :
-*           Modification : Created function
-*
 *****************************************************************************/
 HI_S32 HI_MPI_IVE_KCF_GetObjBbox(IVE_KCF_OBJ_LIST_S *pstObjList, IVE_KCF_BBOX_S astBbox[],
     HI_U32 *pu32BboxObjNum, IVE_KCF_BBOX_CTRL_S *pstKcfBboxCtrl);
@@ -1357,12 +960,6 @@ HI_S32 HI_MPI_IVE_KCF_GetObjBbox(IVE_KCF_OBJ_LIST_S *pstObjList, IVE_KCF_BBOX_S 
 *                  HI_BOOL             *pbTrackOk  The tracking state of object.
 *   Return Value : HI_SUCCESS: Success;Error codes: Failure.
 *   Spec         :  None
-*   History:
-*
-*       1.  Date         : 2018-10-15
-*           Author       :
-*           Modification : Created function
-*
 *****************************************************************************/
 HI_S32 HI_MPI_IVE_KCF_JudgeObjBboxTrackState(IVE_ROI_INFO_S *pstRoiInfo, IVE_KCF_BBOX_S *pstBbox,
     HI_BOOL *pbTrackOk);
@@ -1375,12 +972,6 @@ HI_S32 HI_MPI_IVE_KCF_JudgeObjBboxTrackState(IVE_ROI_INFO_S *pstRoiInfo, IVE_KCF
 *                  HI_U32             u32BboxObjNum The update numbers of bbox.
 *   Return Value : HI_SUCCESS: Success;Error codes: Failure.
 *   Spec         :  None
-*   History:
-*
-*       1.  Date         : 2018-10-15
-*           Author       :
-*           Modification : Created function
-*
 *****************************************************************************/
 HI_S32 HI_MPI_IVE_KCF_ObjUpdate(IVE_KCF_OBJ_LIST_S *pstObjList, IVE_KCF_BBOX_S astBbox[],
     HI_U32 u32BboxObjNum);
@@ -1396,12 +987,6 @@ HI_S32 HI_MPI_IVE_KCF_ObjUpdate(IVE_KCF_OBJ_LIST_S *pstObjList, IVE_KCF_BBOX_S a
 *                  HI_BOOL             bInstant     For details, see HI_MPI_IVE_DMA.
 *   Return Value : HI_SUCCESS: Success;Error codes: Failure.
 *   Spec         :  None
-*   History:
-*
-*       1.  Date         : 2018-11-12
-*           Author       :
-*           Modification : Created function
-*
 *****************************************************************************/
 HI_S32 HI_MPI_IVE_Hog(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S *pstSrc, IVE_RECT_U32_S astRoi[],
     IVE_DST_BLOB_S astDst[], IVE_HOG_CTRL_S *pstHogCtrl, HI_BOOL bInstant);
@@ -1417,12 +1002,6 @@ HI_S32 HI_MPI_IVE_Hog(IVE_HANDLE *pIveHandle, IVE_SRC_IMAGE_S *pstSrc, IVE_RECT_
 *                  HI_BOOL        bBlock        Flag indicating the block mode or non-block mode
 *   Return Value : HI_SUCCESS: Success;Error codes: Failure.
 *   Spec         :  None
-*   History:
-*
-*       1.  Date         : 2011-05-16
-*           Author       :
-*           Modification : Created function
-*
 *****************************************************************************/
 HI_S32 HI_MPI_IVE_Query(IVE_HANDLE IveHandle, HI_BOOL *pbFinish, HI_BOOL bBlock);
 
@@ -1436,12 +1015,6 @@ HI_S32 HI_MPI_IVE_Query(IVE_HANDLE IveHandle, HI_BOOL *pbFinish, HI_BOOL bBlock)
 *                   HI_BOOL       *pbFinish      Returned status
 *   Return Value : HI_SUCCESS: Success;Error codes: Failure.
 *   Spec         :  None
-*   History:
-*
-*       1.  Date         : 2020-11-24
-*           Author       :
-*           Modification : Created function
-*
 *****************************************************************************/
 HI_S32 HI_MPI_IVE_Query_Timeout(IVE_HANDLE IveHandle, HI_S32 s32MilliSec, HI_BOOL *pbFinish);
 
