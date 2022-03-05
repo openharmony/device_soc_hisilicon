@@ -1,0 +1,13 @@
+#
+# v350 gt911 drivers configuration
+#
+
+menu "v350 gt911 drivers support"
+
+config HI_GT911
+	tristate "HI GT911" 
+	help
+	  This is the  GT911 driver for v350 touch.
+	  
+endmenu
+
