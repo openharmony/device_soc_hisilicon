@@ -155,7 +155,7 @@ static inline void osal_list_del_init(struct osal_list_head *entry)
 }
 
 /*
- * list_move - delete from one list and add as another's head
+ * list_move - delete from one list and add as another head
  * @list: the entry to move
  * @head: the head that will precede our entry
  */
@@ -166,7 +166,7 @@ static inline void osal_list_move(struct osal_list_head *list, struct osal_list_
 }
 
 /*
- * list_move_tail - delete from one list and add as another's tail
+ * list_move_tail - delete from one list and add as another tail
  * @list: the entry to move
  * @head: the head that will follow our entry
  */

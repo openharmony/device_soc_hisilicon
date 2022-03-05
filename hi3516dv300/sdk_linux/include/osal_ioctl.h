@@ -66,13 +66,13 @@
 #define _IOC_NRSHIFT    0
 #endif
 #ifndef _IOC_TYPESHIFT
-#define _IOC_TYPESHIFT    (_IOC_NRSHIFT+_IOC_NRBITS)
+#define _IOC_TYPESHIFT    (_IOC_NRSHIFT + _IOC_NRBITS)
 #endif
 #ifndef _IOC_SIZESHIFT
-#define _IOC_SIZESHIFT    (_IOC_TYPESHIFT+_IOC_TYPEBITS)
+#define _IOC_SIZESHIFT    (_IOC_TYPESHIFT + _IOC_TYPEBITS)
 #endif
 #ifndef _IOC_DIRSHIFT
-#define _IOC_DIRSHIFT    (_IOC_SIZESHIFT+_IOC_SIZEBITS)
+#define _IOC_DIRSHIFT    (_IOC_SIZESHIFT + _IOC_SIZEBITS)
 #endif
 
 /*
@@ -114,31 +114,31 @@ extern unsigned int __invalid_size_argument_for_IOC;
 
 /* used to create numbers */
 #ifndef _IO
-#define _IO(type,nr)        _IOC(_IOC_NONE,(type),(nr),0)
+#define _IO(type, nr)        _IOC(_IOC_NONE, (type), (nr), 0)
 #endif
 
 #ifndef _IOR
-#define _IOR(type,nr,size)    _IOC(_IOC_READ,(type),(nr),(_IOC_TYPECHECK(size)))
+#define _IOR(type, nr, size)    _IOC(_IOC_READ, (type), (nr), (_IOC_TYPECHECK(size)))
 #endif
 
 #ifndef _IOW
-#define _IOW(type,nr,size)    _IOC(_IOC_WRITE,(type),(nr),(_IOC_TYPECHECK(size)))
+#define _IOW(type, nr, size)    _IOC(_IOC_WRITE, (type), (nr), (_IOC_TYPECHECK(size)))
 #endif
 
 #ifndef _IOWR
-#define _IOWR(type,nr,size)    _IOC(_IOC_READ|_IOC_WRITE,(type),(nr),(_IOC_TYPECHECK(size)))
+#define _IOWR(type, nr, size)    _IOC(_IOC_READ | _IOC_WRITE, (type), (nr), (_IOC_TYPECHECK(size)))
 #endif
 
 #ifndef _IOR_BAD
-#define _IOR_BAD(type,nr,size)    _IOC(_IOC_READ,(type),(nr),sizeof(size))
+#define _IOR_BAD(type, nr, size)    _IOC(_IOC_READ, (type), (nr), sizeof(size))
 #endif
 
 #ifndef _IOW_BAD
-#define _IOW_BAD(type,nr,size)    _IOC(_IOC_WRITE,(type),(nr),sizeof(size))
+#define _IOW_BAD(type, nr, size)    _IOC(_IOC_WRITE, (type), (nr), sizeof(size))
 #endif
 
 #ifndef _IOWR_BAD
-#define _IOWR_BAD(type,nr,size)    _IOC(_IOC_READ|_IOC_WRITE,(type),(nr),sizeof(size))
+#define _IOWR_BAD(type, nr, size)    _IOC(_IOC_READ | _IOC_WRITE, (type), (nr), sizeof(size))
 #endif
 
 /* used to decode ioctl numbers.. */
@@ -170,7 +170,7 @@ extern unsigned int __invalid_size_argument_for_IOC;
 #endif
 
 #ifndef IOC_INOUT
-#define IOC_INOUT    ((_IOC_WRITE|_IOC_READ) << _IOC_DIRSHIFT)
+#define IOC_INOUT    ((_IOC_WRITE | _IOC_READ) << _IOC_DIRSHIFT)
 #endif
 
 #ifndef IOCSIZE_MASK

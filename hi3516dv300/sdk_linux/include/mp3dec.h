@@ -40,8 +40,7 @@ extern "C" {
 /** @{ */  /** <!-- [MP3DEC] */
 
 /**Defines MP3DEC Version*/
-typedef enum
-{
+typedef enum {
     MPEG1 =  0,
     MPEG2 =  1,
     MPEG25 = 2
@@ -50,8 +49,7 @@ typedef enum
 typedef void *HMP3Decoder;
 
 /**Defines MP3DEC error*/
-enum
-{
+enum {
     ERR_MP3_NONE =                 0,   /**<no decode error*/
     ERR_MP3_INDATA_UNDERFLOW =    -1,   /**<not enough input data*/
     ERR_MP3_MAINDATA_UNDERFLOW =  -2,   /**<not enough input main data*/
@@ -68,8 +66,7 @@ enum
 };
 
 /**Defines MP3DEC frame infomation*/
-typedef struct _MP3FrameInfo
-{
+typedef struct _MP3FrameInfo {
     int bitrate;              /**<output bitrate*/
     int nChans;               /**<output channels,range:1,2*/
     int samprate;             /**<output samplerate*/
@@ -155,5 +152,3 @@ HI_VOID MP3GetLastFrameInfo(HMP3Decoder hMP3Decoder, MP3FrameInfo *mp3FrameInfo)
 #endif  /* __cpluscplus */
 
 #endif  /* _MP3DEC_H */
-
-

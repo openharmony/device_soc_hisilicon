@@ -68,8 +68,7 @@ __inline static HI_VOID COMMON_GetPicBufferConfig(HI_U32 u32Width, HI_U32 u32Hei
             u32BitWidth = 16;
             break;
         }
-        default:
-        {
+        default: {
             u32BitWidth = 0;
             break;
         }
@@ -221,8 +220,7 @@ __inline static HI_U32 VI_GetRawBufferSizeEx(HI_U32 u32Width, HI_U32 u32Height,
             break;
         }
 
-        default:
-        {
+        default: {
             u32BitWidth = 0;
             break;
         }
