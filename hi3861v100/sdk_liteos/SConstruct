@@ -111,10 +111,7 @@ else:
 
 env.Append(LIBPATH=app_builder.get_app_lib_path())
 ## wifiiot_app is the only one app for ohos
-if app_name != "wifiiot_app":
-    env['LIBS'] = list(map(lambda x:'-l%s'%x, env_cfg.get_libs()))
-else:
-    env['LIBS'] = list(map(lambda x:'-l%s'%x, env_cfg.get_libs())) + ['--whole-archive'] + list(map(lambda x:'-l%s'%x, env_cfg.get_ohos_libs())) + ['--no-whole-archive']
+env['LIBS'] = list(map(lambda x:'-l%s'%x, env_cfg.get_libs()))
 env.Append(LIBS = app_builder.get_app_libs())
 env.Append(LIBS = '-lwifi_flash')
 env.Append(LIBS = '-lwifi')
@@ -124,6 +121,8 @@ if scons_utils.scons_usr_bool_option('CONFIG_MESH_SUPPORT') == 'y':
     if factory_mode != 'yes':
         env.Append(LIBS = '-lmeshautolink')
 env['LIBS'] = sorted(env["LIBS"])
+if app_name == "wifiiot_app":
+    env['LIBS'] += ['--whole-archive'] + list(map(lambda x:'-l%s'%x, env_cfg.get_ohos_libs())) + ['--no-whole-archive']
 env['LIBPATH'] = sorted(env["LIBPATH"])
 env['LINKFILE'] = env_cfg.link_file
 env['MAPFILE'] = env_cfg.map_file
