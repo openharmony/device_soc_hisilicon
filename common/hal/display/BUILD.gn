@@ -63,16 +63,38 @@ if (defined(ohos_lite)) {
 } else {
   import("//build/ohos.gni")
 
-  group("display_gralloc") {
-    deps = [
-      "//drivers/peripheral/display/hal/default_standard:def_display_gralloc",
-    ]
-  }
+  if(device_name == "hi3751v350") {
+    ohos_prebuilt_shared_library("display_device") {
+      if (target_cpu == "arm") {
+        source = "hi3751v350/linux_standard/lib/libdisplay_device.z.so"
+      }
 
-  group("display_device") {
-    deps = [
-      "//drivers/peripheral/display/hal/default_standard:def_display_device",
-    ]
+      install_images = [ "system" ]
+      subsystem_name = "hdf"
+      part_name = "display_device_driver"
+    }
+
+    ohos_prebuilt_shared_library("display_gralloc") {
+      if (target_cpu == "arm") {
+        source = "hi3751v350/linux_standard/lib/libdisplay_gralloc.z.so"
+      }
+
+      install_images = [ "system" ]
+      subsystem_name = "hdf"
+      part_name = "display_device_driver"
+    }
+  } else {
+    group("display_gralloc") {
+      deps = [
+        "//drivers/peripheral/display/hal/default_standard:def_display_gralloc",
+      ]
+    }
+
+    group("display_device") {
+      deps = [
+        "//drivers/peripheral/display/hal/default_standard:def_display_device",
+      ]
+    }
   }
 
   ohos_prebuilt_shared_library("display_gfx") {
