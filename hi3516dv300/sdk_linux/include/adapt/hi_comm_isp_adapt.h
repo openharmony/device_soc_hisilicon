@@ -1792,7 +1792,7 @@ typedef struct {
     hi_u32  sns_exp_addr[ISP_MAX_SNS_EXP_ADDR_NUM];   /* 3 addr high  mid  low */
     hi_u32  sns_readout_time;
     hi_isp_sns_mode sns_exp_mode;     /* 1: shr   0:exp */
-}hi_isp_mcf_data;
+} hi_isp_mcf_data;
 
 typedef struct {
     hi_isp_sns_type sns_type;

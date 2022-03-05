@@ -51,7 +51,7 @@ typedef struct {
 
 #ifdef CONFIG_HI_LOG_TRACE_SUPPORT
 
-    #define MPI_ASSERT(expr)              \
+#define MPI_ASSERT(expr)              \
     do {                                   \
         if (!(expr)) {                    \
             (hi_void)printf("\nASSERT at:\n"       \
@@ -64,7 +64,7 @@ typedef struct {
 
 #else
 
-    #define MPI_ASSERT(expr)
+#define MPI_ASSERT(expr)
 
 #endif
 
@@ -74,7 +74,7 @@ typedef struct {
 
 #ifdef CONFIG_HI_LOG_TRACE_SUPPORT
 
-    #define MPI_ASSERT(expr)              \
+#define MPI_ASSERT(expr)              \
     do {                                   \
         if (!(expr)) {                    \
             (hi_void)printf("\nASSERT at:\n"       \
@@ -87,7 +87,7 @@ typedef struct {
 
 #else
 
-    #define MPI_ASSERT(expr)
+#define MPI_ASSERT(expr)
 
 #endif
 

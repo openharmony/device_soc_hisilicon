@@ -36,14 +36,14 @@ typedef struct {
     volatile hi_u32 state_num;                    /* Number of interrupt states */
     volatile hi_u32 raw_state[HI_MAX_STATE_NUM];  /* raw interrupt states */
     volatile hi_u32 mask_state[HI_MAX_STATE_NUM]; /* interrupt states after mask */
-}hi_normal_int_state;
+} hi_normal_int_state;
 
 typedef struct {
     volatile unsigned int cap_state;
     volatile unsigned int pt_state[VI_MAX_DEV_NUM];
     volatile unsigned int ch_state[VI_MAX_PHY_PIPE_NUM];
     volatile unsigned int isp_fe_state[VI_MAX_ISP_FE_NUM];
-}hi_vicap_int_state;
+} hi_vicap_int_state;
 
 typedef struct {
     unsigned int aio_int_status_state;
@@ -61,12 +61,12 @@ typedef struct {
         hi_vicap_int_state  vicap;
         hi_aio_int_state    aio;
     };
-}hi_int_state_info;
+} hi_int_state_info;
 
 typedef struct {
     hi_void *dev;
     hi_int_state_info int_info;
-}hi_irq_arg;
+} hi_irq_arg;
 
 
 typedef struct {

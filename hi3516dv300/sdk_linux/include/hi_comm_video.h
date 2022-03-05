@@ -90,7 +90,7 @@ typedef struct hiRECT_S {
 
 typedef struct hiVIDEO_REGION_INFO_S {
     HI_U32           u32RegionNum;       /* W; count of the region */
-    RECT_S ATTRIBUTE* pstRegion;         /* W; region attribute */
+    RECT_S ATTRIBUTE *pstRegion;         /* W; region attribute */
 } VIDEO_REGION_INFO_S;
 
 typedef struct hiCROP_INFO_S {
@@ -375,11 +375,11 @@ typedef struct hiVIDEO_SUPPLEMENT_S {
     HI_U64   u64MotionDataPhyAddr;
     HI_U64   u64FrameDNGPhyAddr;
 
-    HI_VOID* ATTRIBUTE pJpegDCFVirAddr;        /* JPEG_DCF_S, used in JPEG DCF */
-    HI_VOID* ATTRIBUTE pIspInfoVirAddr;        /* ISP_FRAME_INFO_S, used in ISP debug, when get raw and send raw */
-    HI_VOID* ATTRIBUTE pLowDelayVirAddr;       /* used in low delay */
-    HI_VOID* ATTRIBUTE pMotionDataVirAddr;     /* vpss 3dnr use: gme motion data, Filter motion data, gyro data. */
-    HI_VOID* ATTRIBUTE pFrameDNGVirAddr;
+    HI_VOID *ATTRIBUTE pJpegDCFVirAddr;        /* JPEG_DCF_S, used in JPEG DCF */
+    HI_VOID *ATTRIBUTE pIspInfoVirAddr;        /* ISP_FRAME_INFO_S, used in ISP debug, when get raw and send raw */
+    HI_VOID *ATTRIBUTE pLowDelayVirAddr;       /* used in low delay */
+    HI_VOID *ATTRIBUTE pMotionDataVirAddr;     /* vpss 3dnr use: gme motion data, Filter motion data, gyro data. */
+    HI_VOID *ATTRIBUTE pFrameDNGVirAddr;
 } VIDEO_SUPPLEMENT_S;
 
 typedef enum hiCOLOR_GAMUT_E {
@@ -391,7 +391,7 @@ typedef enum hiCOLOR_GAMUT_E {
 } COLOR_GAMUT_E;
 
 typedef struct hiISP_COLORGAMMUT_INFO_S {
-        COLOR_GAMUT_E enColorGamut;
+    COLOR_GAMUT_E enColorGamut;
 } ISP_COLORGAMMUT_INFO_S;
 
 typedef enum hiDYNAMIC_RANGE_E {
@@ -474,7 +474,7 @@ typedef struct hiBITMAP_S {
     PIXEL_FORMAT_E enPixelFormat;  /* Bitmap's pixel format */
     HI_U32 u32Width;               /* Bitmap's width */
     HI_U32 u32Height;              /* Bitmap's height */
-    HI_VOID* ATTRIBUTE pData;      /* Address of Bitmap's data */
+    HI_VOID *ATTRIBUTE pData;      /* Address of Bitmap's data */
 } BITMAP_S;
 
 typedef struct hiLDC_ATTR_S {

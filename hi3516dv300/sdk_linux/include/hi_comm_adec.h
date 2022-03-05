@@ -62,7 +62,7 @@ typedef struct hiADEC_CH_ATTR_S {
     HI_U32         u32BufSize;  /* buf size[2~MAX_AUDIO_FRAME_NUM] */
     ADEC_MODE_E    enMode;      /* decode mode */
     HI_VOID ATTRIBUTE      *pValue;
-}ADEC_CHN_ATTR_S;
+} ADEC_CHN_ATTR_S;
 
 typedef struct hiADEC_CHN_STATE_S {
     HI_BOOL bEndOfStream;             /* EOS flag */

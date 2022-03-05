@@ -47,7 +47,7 @@ typedef enum
     MPEG25 = 2
 } MPEGVersion;
 
-typedef void* HMP3Decoder;
+typedef void *HMP3Decoder;
 
 /**Defines MP3DEC error*/
 enum
@@ -118,7 +118,7 @@ HI_VOID MP3FreeDecoder(HMP3Decoder hMP3Decoder);
 \see \n
 N/A
 */
-HI_S32 MP3DecodeFindSyncHeader(HMP3Decoder hMP3Decoder, HI_U8** ppInbufPtr, HI_S32* pBytesLeft);
+HI_S32 MP3DecodeFindSyncHeader(HMP3Decoder hMP3Decoder, HI_U8 **ppInbufPtr, HI_S32 *pBytesLeft);
 
 /**
 \brief decoding MPEG frame and output 1152(L2/L3) OR 384(L1) 16bit PCM samples per channel.
@@ -133,7 +133,7 @@ HI_S32 MP3DecodeFindSyncHeader(HMP3Decoder hMP3Decoder, HI_U8** ppInbufPtr, HI_S
 \see \n
 N/A
 */
-HI_S32  MP3Decode(HMP3Decoder hMP3Decoder, HI_U8** ppInbufPtr, HI_S32* pBytesLeft, HI_S16* pOutPcm, HI_S32 nReserved);
+HI_S32  MP3Decode(HMP3Decoder hMP3Decoder, HI_U8 **ppInbufPtr, HI_S32 *pBytesLeft, HI_S16 *pOutPcm, HI_S32 nReserved);
 
 /**
 \brief get the frame information.
@@ -144,7 +144,7 @@ HI_S32  MP3Decode(HMP3Decoder hMP3Decoder, HI_U8** ppInbufPtr, HI_S32* pBytesLef
 \see \n
 N/A
 */
-HI_VOID MP3GetLastFrameInfo(HMP3Decoder hMP3Decoder, MP3FrameInfo* mp3FrameInfo);
+HI_VOID MP3GetLastFrameInfo(HMP3Decoder hMP3Decoder, MP3FrameInfo *mp3FrameInfo);
 
 /** @} */  /** <!-- ==== API declaration end ==== */
 

@@ -55,9 +55,9 @@ typedef enum hiMP3_LAYER_E
 
 typedef enum hiMP3_VERSION_E
 {
-    MPEG_1          =1,
-    MPEG_2          =0,
-    MPEG_25         =2,
+    MPEG_1          = 1,
+    MPEG_2          = 0,
+    MPEG_25         = 2,
 } MP3_VERSION_E;
 
 typedef struct hiMP3_FRAME_INFO_S
@@ -91,7 +91,7 @@ typedef struct hiMP3_FRAME_INFO_S
 typedef struct hiADEC_ATTR_MP3_S
 {
     HI_U32 resv;
-}ADEC_ATTR_MP3_S;
+} ADEC_ATTR_MP3_S;
 
 typedef struct hiADEC_MP3_DECODER_S
 {

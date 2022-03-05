@@ -20,7 +20,7 @@
 
 #ifdef __cplusplus
 #if __cplusplus
-extern "C"{
+extern "C" {
 #endif
 #endif /* End of #ifdef __cplusplus */
 
@@ -42,9 +42,9 @@ HI_S32 HI_MPI_SVP_NNIE_UnloadModel(SVP_NNIE_MODEL_S *pstModel);
 HI_S32 HI_MPI_SVP_NNIE_Query(SVP_NNIE_ID_E enNnieId, SVP_NNIE_HANDLE svpNnieHandle,
     HI_BOOL *pbFinish, HI_BOOL bBlock);
 
-HI_S32 HI_MPI_SVP_NNIE_AddTskBuf(const SVP_MEM_INFO_S* pstTskBuf);
+HI_S32 HI_MPI_SVP_NNIE_AddTskBuf(const SVP_MEM_INFO_S *pstTskBuf);
 
-HI_S32 HI_MPI_SVP_NNIE_RemoveTskBuf(const SVP_MEM_INFO_S* pstTskBuf);
+HI_S32 HI_MPI_SVP_NNIE_RemoveTskBuf(const SVP_MEM_INFO_S *pstTskBuf);
 
 HI_S32 HI_MPI_SVP_NNIE_Query_Timeout(SVP_NNIE_ID_E enNnieId, SVP_NNIE_HANDLE svpNnieHandle,
     HI_S32 s32MilliSec, HI_BOOL *pbFinish);

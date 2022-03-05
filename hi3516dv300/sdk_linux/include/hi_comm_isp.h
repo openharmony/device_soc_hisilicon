@@ -2269,14 +2269,14 @@ typedef enum hiISP_SNS_MODE_E {
     SNS_EXP_MODE = 0,
     SNS_SHR_MODE = 1,
     SNS_MODE_BUTT
-}ISP_SNS_MODE_E;
+} ISP_SNS_MODE_E;
 
 typedef struct hiISP_MCF_DATA_S {
     HI_U32  u32SnsVmaxAddr[ISP_MAX_SNS_EXP_ADDR_NUM]; /* 3 addr high  mid  low */
     HI_U32  u32SnsExpAddr[ISP_MAX_SNS_EXP_ADDR_NUM];  /* 3 addr high  mid  low */
     HI_U32  u32SnsReadoutTime;
     ISP_SNS_MODE_E enSnsExpMode;     /* 1: shr   0:exp */
-}ISP_MCF_DATA_S;
+} ISP_MCF_DATA_S;
 
 typedef struct hiISP_SNS_REGS_INFO_S {
     ISP_SNS_TYPE_E enSnsType;

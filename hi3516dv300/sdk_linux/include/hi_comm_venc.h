@@ -140,7 +140,7 @@ typedef struct hiVENC_PACK_INFO_S {
 /* Defines a stream packet */
 typedef struct hiVENC_PACK_S {
     HI_U64               u64PhyAddr;                 /* R; the physics address of stream */
-    HI_U8                ATTRIBUTE* pu8Addr;         /* R; the virtual address of stream */
+    HI_U8                ATTRIBUTE *pu8Addr;         /* R; the virtual address of stream */
     HI_U32               ATTRIBUTE u32Len;           /* R; the length of stream */
 
     HI_U64               u64PTS;                     /* R; PTS */
@@ -270,7 +270,7 @@ typedef struct hiVENC_STREAM_INFO_JPEG_S {
 
 /* Defines the features of an stream */
 typedef struct hiVENC_STREAM_S {
-    VENC_PACK_S ATTRIBUTE* pstPack;            /* R; stream pack attribute */
+    VENC_PACK_S ATTRIBUTE *pstPack;            /* R; stream pack attribute */
     HI_U32      ATTRIBUTE u32PackCount;        /* R; the pack number of one frame stream */
     HI_U32      u32Seq;                        /* R; the list number of stream */
 
@@ -665,7 +665,7 @@ typedef struct hiVENC_ROI_ATTR_EX_S {
     HI_S32  s32Qp[HI_VENC_ROI_FOR_BUTT];                     /* RW; Range:[-51, 51]; QP value,
                                             only relative mode can QP value less than 0 */
     RECT_S  stRect[HI_VENC_ROI_FOR_BUTT];                    /* RW;Region of an ROI */
-}VENC_ROI_ATTR_EX_S;
+} VENC_ROI_ATTR_EX_S;
 
 /* the param of the roibg frame rate */
 typedef struct hiVENC_ROIBG_FRAME_RATE_S {
@@ -694,7 +694,7 @@ typedef enum hiVENC_JPEG_ENCODE_MODE_E {
 /* the information of the stream */
 typedef struct hiVENC_STREAM_BUF_INFO_S {
     HI_U64   u64PhyAddr[MAX_TILE_NUM];             /* R; Start physical address for a stream buffer */
-    HI_VOID ATTRIBUTE* pUserAddr[MAX_TILE_NUM];    /* R; Start virtual address for a stream buffer */
+    HI_VOID ATTRIBUTE *pUserAddr[MAX_TILE_NUM];    /* R; Start virtual address for a stream buffer */
     HI_U64  ATTRIBUTE u64BufSize[MAX_TILE_NUM];    /* R; Stream buffer size */
 } VENC_STREAM_BUF_INFO_S;
 

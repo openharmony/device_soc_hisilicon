@@ -60,7 +60,7 @@ typedef struct {
 
 typedef struct {
     hi_u32           region_num;       /* W; count of the region */
-    hi_rect ATTRIBUTE* region;         /* W; region attribute */
+    hi_rect ATTRIBUTE *region;         /* W; region attribute */
 } hi_video_region_info;
 
 typedef struct {
@@ -230,17 +230,17 @@ typedef struct {
     hi_u64   motion_data_phy_addr;
     hi_u64   frame_dng_phy_addr;
 
-    hi_void* ATTRIBUTE jpeg_dcf_vir_addr;        /* jpeg_dcf, used in JPEG DCF */
-    hi_void* ATTRIBUTE isp_info_vir_addr;        /* isp_frame_info, used in ISP debug, when get raw and send raw */
-    hi_void* ATTRIBUTE low_delay_vir_addr;       /* used in low delay */
-    hi_void* ATTRIBUTE motion_data_vir_addr;     /* vpss 3dnr use: gme motion data, filter motion data, gyro data. */
-    hi_void* ATTRIBUTE frame_dng_vir_addr;
+    hi_void *ATTRIBUTE jpeg_dcf_vir_addr;        /* jpeg_dcf, used in JPEG DCF */
+    hi_void *ATTRIBUTE isp_info_vir_addr;        /* isp_frame_info, used in ISP debug, when get raw and send raw */
+    hi_void *ATTRIBUTE low_delay_vir_addr;       /* used in low delay */
+    hi_void *ATTRIBUTE motion_data_vir_addr;     /* vpss 3dnr use: gme motion data, filter motion data, gyro data. */
+    hi_void *ATTRIBUTE frame_dng_vir_addr;
 } hi_video_supplement;
 
 typedef COLOR_GAMUT_E hi_color_gamut;
 
 typedef struct {
-        hi_color_gamut color_gamut;
+    hi_color_gamut color_gamut;
 } hi_isp_colorgammut_info;
 
 typedef DYNAMIC_RANGE_E hi_dynamic_range;
@@ -308,7 +308,7 @@ typedef struct {
     hi_pixel_format pixel_format;  /* bitmap's pixel format */
     hi_u32 width;               /* bitmap's width */
     hi_u32 height;              /* bitmap's height */
-    hi_void* ATTRIBUTE data;      /* address of bitmap's data */
+    hi_void *ATTRIBUTE data;      /* address of bitmap's data */
 } hi_bitmap;
 
 typedef struct {

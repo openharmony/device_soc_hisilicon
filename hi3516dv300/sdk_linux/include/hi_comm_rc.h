@@ -134,7 +134,7 @@ typedef struct hiVENC_H264_QVBR_S {
     HI_FR32     fr32DstFrameRate;        /* RW; Range:[0.015625, 240]; the target frame rate of the venc chnnel,
                                                 can not be larger than u32SrcFrameRate */
     HI_U32      u32TargetBitRate;         /* RW; Range:[2, 614400]; the target bitrate */
-}VENC_H264_QVBR_S;
+} VENC_H264_QVBR_S;
 
 /* the attribute of h265e qpmap */
 typedef struct hiVENC_H265_QPMAP_S {
@@ -177,7 +177,7 @@ typedef struct hiVENC_MJPEG_VBR_S {
     HI_FR32     fr32DstFrameRate;         /* RW; Range:[0.015625, 240]; the target frame rate of the venc chnnel,
                                                 can not be larger than u32SrcFrameRate */
     HI_U32      u32MaxBitRate;            /* RW; Range:[2, 614400]; the max bitrate */
-}VENC_MJPEG_VBR_S;
+} VENC_MJPEG_VBR_S;
 
 /* the attribute of rc */
 typedef struct hiVENC_RC_ATTR_S {

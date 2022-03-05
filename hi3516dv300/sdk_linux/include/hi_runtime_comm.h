@@ -26,7 +26,7 @@ extern "C" {
 #define MAX_NAME_LEN 64                 /* Model max name */
 #define FULL_NAME_LEN 130
 
-typedef HI_VOID* HI_MW_PTR;                /* Handle define for model and tasks */
+typedef HI_VOID *HI_MW_PTR;                /* Handle define for model and tasks */
 
 #ifndef IN
 #define IN
@@ -141,7 +141,7 @@ typedef struct hiRUNTIME_COP_ATTR_S {
     HI_CHAR acModelName[MAX_NAME_LEN + 1];
     HI_CHAR acCopName[MAX_NAME_LEN + 1];
     HI_U32 u32ConstParamSize;
-    HI_VOID* pConstParam;
+    HI_VOID *pConstParam;
 } HI_RUNTIME_COP_ATTR_S, *HI_RUNTIME_COP_ATTR_PTR;
 
 typedef struct hiRUNTIME_COP_ATTR_ARRAY_S {
@@ -178,18 +178,18 @@ typedef struct hiRUNTIME_GROUP_INFO_S {
 } HI_RUNTIME_GROUP_INFO_S, *HI_RUNTIME_GROUP_INFO_PTR;
 
 /* handle info after LoadModelGroup */
-typedef HI_VOID* HI_RUNTIME_GROUP_HANDLE;
+typedef HI_VOID *HI_RUNTIME_GROUP_HANDLE;
 
 /* the src blobs of group, all model inputs are inside */
 typedef struct hiRUNTIME_GROUP_BLOB_ARRAY_S {
     HI_U32 u32BlobNum;
-    HI_RUNTIME_GROUP_BLOB_S* pstBlobs;
+    HI_RUNTIME_GROUP_BLOB_S *pstBlobs;
 } HI_RUNTIME_GROUP_BLOB_ARRAY_S, *HI_RUNTIME_GROUP_BLOB_ARRAY_PTR;
 
 typedef HI_RUNTIME_GROUP_BLOB_ARRAY_S HI_RUNTIME_GROUP_SRC_BLOB_ARRAY_S;
 typedef HI_RUNTIME_GROUP_BLOB_ARRAY_S HI_RUNTIME_GROUP_DST_BLOB_ARRAY_S;
-typedef HI_RUNTIME_GROUP_BLOB_ARRAY_S* HI_RUNTIME_GROUP_SRC_BLOB_ARRAY_PTR;
-typedef HI_RUNTIME_GROUP_BLOB_ARRAY_S* HI_RUNTIME_GROUP_DST_BLOB_ARRAY_PTR;
+typedef HI_RUNTIME_GROUP_BLOB_ARRAY_S *HI_RUNTIME_GROUP_SRC_BLOB_ARRAY_PTR;
+typedef HI_RUNTIME_GROUP_BLOB_ARRAY_S *HI_RUNTIME_GROUP_DST_BLOB_ARRAY_PTR;
 
 /**
 \brief forward result calback function.

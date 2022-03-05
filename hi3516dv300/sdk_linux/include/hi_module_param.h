@@ -66,7 +66,7 @@ typedef struct hi_vfmw_module_params_s {
 
 typedef struct hi_acodec_module_params_s {
     HI_U32  u32_init_delay_timems;
-}acodec_module_params_s;
+} acodec_module_params_s;
 
 #endif
 

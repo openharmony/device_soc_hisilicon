@@ -204,7 +204,7 @@ typedef enum hiMOD_ID_E {
     HI_ID_PQ_AI        = 65,
     HI_ID_MCF_CALIBRATION = 66,
     HI_ID_IRQ          = 67,
-	HI_ID_VO_DEV = 68,
+    HI_ID_VO_DEV = 68,
     HI_ID_BUTT,
 } MOD_ID_E;
 

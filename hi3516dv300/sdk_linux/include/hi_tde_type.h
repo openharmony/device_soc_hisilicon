@@ -208,11 +208,11 @@ typedef struct hiTDE2_FILLCOLOR_S {
 /* Definition of colorkey modes */
 typedef enum hiTDE2_COLORKEY_MODE_E {
     TDE2_COLORKEY_MODE_NONE = 0,   /* <No colorkey */
-     /*
-      * <When performing the colorkey operation on the foreground bitmap,
-      * you need to perform this operation before the CLUT for color extension and perform this operation
-      * after the CLUT for color correction.
-      */
+    /*
+     * <When performing the colorkey operation on the foreground bitmap,
+     * you need to perform this operation before the CLUT for color extension and perform this operation
+     * after the CLUT for color correction.
+     */
     TDE2_COLORKEY_MODE_FOREGROUND,
     TDE2_COLORKEY_MODE_BACKGROUND, /* <Perform the colorkey operation on the background bitmap */
     TDE2_COLORKEY_MODE_BUTT
