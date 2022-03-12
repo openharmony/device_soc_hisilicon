@@ -615,7 +615,7 @@ hi_u32 wal_cfg80211_register_netdev(oal_net_device_stru *netdev)
 {
     hi_u8 rollback_lock = HI_FALSE;
 
-    /*  DTS2015022603795 nl80211 netlink pre diot 中会获取rntl_lock互斥锁，注册net_device 会获取rntl_lock互斥锁，造成了死锁 */
+    /* nl80211 netlink pre diot 中会获取rntl_lock互斥锁，注册net_device 会获取rntl_lock互斥锁，造成了死锁 */
     if (rtnl_is_locked()) {
         rtnl_unlock();
         rollback_lock = HI_TRUE;

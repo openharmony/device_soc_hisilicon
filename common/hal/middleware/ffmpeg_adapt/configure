@@ -4102,7 +4102,6 @@ fi
 for lib in $AUTODETECT_LIBS; do
     enabled $lib && request $lib
 done
-#TODO: switch to $AUTODETECT_LIBS when $THREADS_LIST is supported the same way
 enable_weak $EXTERNAL_AUTODETECT_LIBRARY_LIST
 enable_weak $HWACCEL_AUTODETECT_LIBRARY_LIST
 

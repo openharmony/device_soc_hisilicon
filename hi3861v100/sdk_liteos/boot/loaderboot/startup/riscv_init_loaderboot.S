@@ -218,7 +218,7 @@ trap_entry:
     csrw mepc, t0
     pop_reg
     mret
-#Other exception. //TODO: reg reset.
+#Other exception.
 2:
     pop_reg
     j trap_entry
