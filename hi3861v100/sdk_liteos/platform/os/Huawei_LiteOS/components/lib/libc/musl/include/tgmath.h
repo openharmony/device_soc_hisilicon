@@ -60,7 +60,6 @@ so they can be in null pointer constants
 		__typeof__((x)+(y)+(z)), \
 		__typeof__((x)+(y)+(z)+1.0)))
 /* drop complex from the type of x */
-/* TODO: wrong when sizeof(long double)==sizeof(double) */
 #define __RETCAST_REAL(x) (  \
 	__type2(__IS_FP(x) && sizeof((x)+I) == sizeof(float complex), float, \
 	__type2(sizeof((x)+1.0+I) == sizeof(double complex), double, \

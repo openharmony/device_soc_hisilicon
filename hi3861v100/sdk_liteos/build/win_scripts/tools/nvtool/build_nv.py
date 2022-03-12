@@ -203,7 +203,7 @@ def hi_nv_process_mk_hnv(element_root, src_bin_dic, nv_file_name, is_factory):
     else:
         nv_file_st.magic = HNV_MAGIC
     nv_file_st.ver = 0
-    nv_file_st.head_len = sizeof(NV_FILE_STRU)#TODO:头的定长部分暂时没有四字节对齐
+    nv_file_st.head_len = sizeof(NV_FILE_STRU)
     print('NV_FILE_STRU :'+str(nv_file_st.head_len))
     nv_file_st.total_num = nv_total_num
     nv_file_st.seq = 0
