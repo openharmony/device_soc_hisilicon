@@ -29,7 +29,7 @@ static int32_t HdfEthRegHisiDriverFactory(void)
     static struct HdfEthChipDriverFactory tmpFactory = { 0 };
     struct HdfEthChipDriverManager *driverMgr = HdfEthGetChipDriverMgr();
 
-    if (driverMgr == NULL && driverMgr->RegChipDriver == NULL) {
+    if (driverMgr == NULL || driverMgr->RegChipDriver == NULL) {
         HDF_LOGE("%s fail: driverMgr is NULL", __func__);
         return HDF_FAILURE;
     }
