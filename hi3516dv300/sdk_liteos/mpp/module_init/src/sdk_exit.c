@@ -262,12 +262,6 @@ static void AcodecMod_exit(void)
     acodec_mod_exit();
 }
 
-static int Watchdog_exit(void)
-{
-    extern int wtdg_mod_exit(void);
-    return wtdg_mod_exit();
-}
-
 static void remove_audio(void)
 {
     AcodecMod_exit();
@@ -322,7 +316,6 @@ void SDK_exit(void)
     BASE_exit();
     MMZ_exit();
     osal_proc_exit();
-    Watchdog_exit();
 
     printf("SDK exit ok...\n");
 }
