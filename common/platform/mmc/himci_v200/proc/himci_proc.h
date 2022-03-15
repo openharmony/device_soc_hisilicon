@@ -16,6 +16,8 @@
 #ifndef HIMCI_PROC_H
 #define HIMCI_PROC_H
 
+#include <stdint.h>
+
 int32_t ProcMciInit(void);
 
 #endif

@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 
+#include "himci_proc.h"
 #include "proc_fs.h"
 #include "mmc_corex.h"
 #include "mmc_sd.h"
@@ -62,7 +63,7 @@ static int32_t ProcStatsCardConnectedPrint(struct MmcDevice *card, struct SeqBuf
 {
     int32_t status;
 
-    if ((card == NULL) || card->state.bits.present == 0) {
+    if ((card == NULL) || (card->state.bits.present == 0)) {
         status = LosBufPrintf(s, "_disconnected\n");
         return HDF_FAILURE;
     }
