@@ -16,7 +16,7 @@
 #ifndef HIMCI_PROC_H
 #define HIMCI_PROC_H
 
-#include <stdint.h>
+#include "hdf_base.h"
 
 int32_t ProcMciInit(void);
 
