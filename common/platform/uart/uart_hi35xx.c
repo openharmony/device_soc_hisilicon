@@ -230,7 +230,7 @@ static int32_t Hi35xxInit(struct UartHost *host)
     return HDF_SUCCESS;
 
 FREE_TRANSFER:
-    (void)OsalMemFree(udd->rxTransfer);
+    OsalMemFree(udd->rxTransfer);
     udd->rxTransfer = NULL;
     return ret;
 }
@@ -265,7 +265,7 @@ static int32_t Hi35xxDeinit(struct UartHost *host)
         udd->ops->ShutDown(udd);
     }
     if (udd->rxTransfer != NULL) {
-        (void)OsalMemFree(udd->rxTransfer);
+        OsalMemFree(udd->rxTransfer);
         udd->rxTransfer = NULL;
     }
     udd->state = UART_STATE_NOT_OPENED;
@@ -371,7 +371,7 @@ static int32_t Hi35xxAttach(struct UartHost *host, struct HdfDeviceObject *devic
     port = (struct UartPl011Port *)OsalMemCalloc(sizeof(struct UartPl011Port));
     if (port == NULL) {
         HDF_LOGE("%s: OsalMemCalloc port error", __func__);
-        (void)OsalMemFree(udd);
+        OsalMemFree(udd);
         return HDF_ERR_MALLOC_FAIL;
     }
     udd->ops = Pl011GetOps();
@@ -380,8 +380,8 @@ static int32_t Hi35xxAttach(struct UartHost *host, struct HdfDeviceObject *devic
     port->udd = udd;
     ret = UartGetConfigFromHcs(port, device->property);
     if (ret != 0 || port->physBase == 0) {
-        (void)OsalMemFree(port);
-        (void)OsalMemFree(udd);
+        OsalMemFree(port);
+        OsalMemFree(udd);
         return HDF_FAILURE;
     }
     udd->private = port;
@@ -411,10 +411,10 @@ static void Hi35xxDetach(struct UartHost *host)
         if (port->physBase != 0) {
             OsalIoUnmap((void *)port->physBase);
         }
-        (void)OsalMemFree(port);
+        OsalMemFree(port);
         udd->private = NULL;
     }
-    (void)OsalMemFree(udd);
+    OsalMemFree(udd);
     host->priv = NULL;
 }
 
