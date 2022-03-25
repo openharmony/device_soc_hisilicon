@@ -36,6 +36,7 @@ executable("ohos_color_space_convert_demo") {
     "//device/soc/hisilicon/hi3516dv300/sdk_linux/mpp/include",
     "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/common",
     "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/svp/common",
+    "//third_party/bounds_checking_function/include",
     "smp",
   ]
 
