@@ -12,8 +12,8 @@
 # limitations under the License.
 
 import("//build/lite/config/component/lite_component.gni")
-lite_component("hi3516dv300_helloworld_sample") {
-  features = [ ":ohos_helloworld_demo" ]
+lite_component("hi3516dv300_ai_sample") {
+  features = [ ":ohos_camera_ai_demo" ]
 }
 
 need_link_mpp_lib = true
@@ -21,16 +21,34 @@ if (need_link_mpp_lib) {
   mpp_lib_path = "//device/soc/hisilicon/hi3516dv300/sdk_linux/out"
 }
 
-executable("ohos_helloworld_demo") {
-  output_name = "ohos_helloworld_demo"
+executable("ohos_camera_ai_demo") {
+  output_name = "ohos_camera_ai_demo"
   sources = [
+    "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/audio/adp/audio_aac_adp.c",
+    "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/audio/adp/audio_dl_adp.c",
+    "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/audio/sample_audio.c",
+    "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/common/sample_comm_audio.c",
     "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/common/sample_comm_isp.c",
     "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/common/sample_comm_sys.c",
     "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/common/sample_comm_vi.c",
     "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/common/sample_comm_vo.c",
     "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/common/sample_comm_vpss.c",
-    "sample_lcd_main.c",
-    "smp/sample_lcd.c",
+    "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/svp/common/sample_comm_nnie.c",
+    "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/svp/common/sample_comm_svp.c",
+    "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/svp/nnie/sample_nnie_software/sample_svp_nnie_software.c",
+    "ai_demo/cnn_trash_classify/cnn_trash_classify.c",
+    "ai_demo/hand_classify/hand_classify.c",
+    "ai_demo/hand_classify/yolov2_hand_detect.c",
+    "ai_infer_process/ai_infer_process.c",
+    "ext_util/base_interface.c",
+    "ext_util/misc_util.c",
+    "ext_util/posix_help.c",
+    "mpp_help/src/ive_img.c",
+    "mpp_help/src/vgs_img.c",
+    "smp/sample_ai_main.cpp",
+    "smp/sample_media_ai.c",
+    "third_party/src/iniparser/src/dictionary.c",
+    "third_party/src/iniparser/src/iniparser.c",
   ]
 
   include_dirs = [
@@ -38,10 +56,18 @@ executable("ohos_helloworld_demo") {
     "//device/soc/hisilicon/hi3516dv300/sdk_linux/drv/mpp/cbb/include",
     "//device/soc/hisilicon/hi3516dv300/sdk_linux/drv/mpp/cbb/init",
     "//device/soc/hisilicon/hi3516dv300/sdk_linux/mpp/include",
+    "ai_infer_process",
+    "smp",
     "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/common",
     "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/svp/common",
+    "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/svp/nnie/sample_nnie_software",
+    "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/audio/adp/",
+    "ai_demo/cnn_trash_classify",
+    "ai_demo/hand_classify",
+    "mpp_help/include",
+    "ext_util",
+    "third_party/src/iniparser/src",
     "//third_party/bounds_checking_function/include",
-    "smp",
   ]
 
   defines = [
