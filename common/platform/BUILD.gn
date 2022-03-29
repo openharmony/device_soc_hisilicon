@@ -33,6 +33,7 @@ group("drivers") {
     "timer",
     "uart",
     "watchdog",
+    "wifi/hi3881v100/firmware:wifi_firmware",
   ]
 }
 
