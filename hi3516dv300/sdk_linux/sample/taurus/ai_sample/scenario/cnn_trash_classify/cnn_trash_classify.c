@@ -75,7 +75,7 @@ static HI_VOID PlayAudio(const RecogNumInfo items)
     if ((score > AUDIO_SCORE) && (g_num != item->num)) {
         g_num = item->num;
         if (g_num != UNKOWN_WASTE) {
-            AudioTest(AUDIO_CASE_TWO, g_num, -1);
+            AudioTest(g_num, -1);
         }
     }
     g_count = 0;

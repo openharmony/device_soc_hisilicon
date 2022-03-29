@@ -26,7 +26,6 @@ executable("ohos_camera_ai_demo") {
   sources = [
     "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/audio/adp/audio_aac_adp.c",
     "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/audio/adp/audio_dl_adp.c",
-    "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/audio/sample_audio.c",
     "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/common/sample_comm_audio.c",
     "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/common/sample_comm_isp.c",
     "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/common/sample_comm_sys.c",
@@ -36,9 +35,9 @@ executable("ohos_camera_ai_demo") {
     "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/svp/common/sample_comm_nnie.c",
     "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/svp/common/sample_comm_svp.c",
     "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/svp/nnie/sample_nnie_software/sample_svp_nnie_software.c",
-    "ai_demo/cnn_trash_classify/cnn_trash_classify.c",
-    "ai_demo/hand_classify/hand_classify.c",
-    "ai_demo/hand_classify/yolov2_hand_detect.c",
+    "scenario/cnn_trash_classify/cnn_trash_classify.c",
+    "scenario/hand_classify/hand_classify.c",
+    "scenario/hand_classify/yolov2_hand_detect.c",
     "ai_infer_process/ai_infer_process.c",
     "ext_util/base_interface.c",
     "ext_util/misc_util.c",
@@ -49,6 +48,7 @@ executable("ohos_camera_ai_demo") {
     "smp/sample_media_ai.c",
     "third_party/src/iniparser/src/dictionary.c",
     "third_party/src/iniparser/src/iniparser.c",
+    "dependency/audio_test.c",
   ]
 
   include_dirs = [
@@ -62,10 +62,11 @@ executable("ohos_camera_ai_demo") {
     "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/svp/common",
     "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/svp/nnie/sample_nnie_software",
     "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/audio/adp/",
-    "ai_demo/cnn_trash_classify",
-    "ai_demo/hand_classify",
+    "scenario/cnn_trash_classify",
+    "scenario/hand_classify",
     "mpp_help/include",
     "ext_util",
+    "dependency",
     "third_party/src/iniparser/src",
     "//third_party/bounds_checking_function/include",
   ]

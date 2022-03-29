@@ -480,9 +480,9 @@ int CnnCalU8c1Img(SAMPLE_SVP_NNIE_CFG_S* self,
         "Error,SAMPLE_SVP_NNIE_Forward failed!\n");
 
     /* Software process */
-    /* if user has changed net struct, please make sure SampleSvpNnieCnnGetTopN
+    /* if user has changed net struct, please make sure SAMPLE_SVP_NNIE_Cnn_GetTopN
      function's input datas are correct */
-    s32Ret = SampleSvpNnieCnnGetTopN(&g_stCnnNnieParam, &g_stCnnSoftwareParam);
+    s32Ret = SAMPLE_SVP_NNIE_Cnn_GetTopN(&g_stCnnNnieParam, &g_stCnnSoftwareParam);
     SAMPLE_SVP_CHECK_EXPR_GOTO(HI_SUCCESS != s32Ret, CNN_FAIL_1, SAMPLE_SVP_ERR_LEVEL_ERROR,
         "Error,SAMPLE_SVP_NNIE_CnnGetTopN failed!\n");
 
@@ -533,7 +533,7 @@ static HI_S32 SampleSvpNnieYolov2SoftwareInit(SAMPLE_SVP_NNIE_CFG_S* pstCfg,
     u32ClassNum = pstSoftWareParam->u32ClassNum + 1;
     u32BboxNum = pstSoftWareParam->u32BboxNumEachGrid*pstSoftWareParam->u32GridNumHeight*
         pstSoftWareParam->u32GridNumWidth;
-    u32TmpBufTotalSize = SampleSvpNnieYolov2GetResultTmpBuf(pstNnieParam, pstSoftWareParam);
+    u32TmpBufTotalSize = SAMPLE_SVP_NNIE_Yolov2_GetResultTmpBuf(pstSoftWareParam);
     u32DstRoiSize = SAMPLE_SVP_NNIE_ALIGN16(u32ClassNum * u32BboxNum * sizeof(HI_U32) * SAMPLE_SVP_NNIE_COORDI_NUM);
     u32DstScoreSize = SAMPLE_SVP_NNIE_ALIGN16(u32ClassNum * u32BboxNum * sizeof(HI_U32));
     u32ClassRoiNumSize = SAMPLE_SVP_NNIE_ALIGN16(u32ClassNum * sizeof(HI_U32));
@@ -809,11 +809,11 @@ int Yolo2CalImg(SAMPLE_SVP_NNIE_CFG_S* self,
         "Error,SAMPLE_SVP_NNIE_Forward failed!\n");
 
     /* Software process */
-    /* if user has changed net struct, please make sure SampleSvpNnieYolov2GetResult
+    /* if user has changed net struct, please make sure SAMPLE_SVP_NNIE_Yolov2_GetResult
      function input datas are correct */
-    s32Ret = SampleSvpNnieYolov2GetResult(&g_stYolov2NnieParam, &g_stYolov2SoftwareParam);
+    s32Ret = SAMPLE_SVP_NNIE_Yolov2_GetResult(&g_stYolov2NnieParam, &g_stYolov2SoftwareParam);
     SAMPLE_SVP_CHECK_EXPR_GOTO(HI_SUCCESS != s32Ret, YOLOV2_FAIL_0, SAMPLE_SVP_ERR_LEVEL_ERROR,
-        "Error,SampleSvpNnieYolov2GetResult failed!\n");
+        "Error,SAMPLE_SVP_NNIE_Yolov2_GetResult failed!\n");
 
     Yolo2FetchRes(&g_stYolov2SoftwareParam.stDstScore,
         &g_stYolov2SoftwareParam.stDstRoi, &g_stYolov2SoftwareParam.stClassRoiNum, resBuf, resSize, resLen);
