@@ -28,6 +28,7 @@
 #include "sample_comm.h"
 #include "acodec.h"
 #include "audio_aac_adp.h"
+#include "hi_osal_user.h"
 
 #ifdef __cplusplus
 #if __cplusplus
@@ -39,6 +40,7 @@ extern "C" {
 
 #define AUDIO_ADPCM_TYPE ADPCM_TYPE_DVI4 /* ADPCM_TYPE_IMA, ADPCM_TYPE_DVI4 */
 #define G726_BPS MEDIA_G726_40K          /* MEDIA_G726_16K, MEDIA_G726_24K ... */
+#define HI_ACODEC_TYPE_INNER 1           /* ACODEC_TYPE_INNER */ 
 
 #define AUDIO_MICIN_GAIN_OPEN 0 /* should be 1 when micin */
 
@@ -147,12 +149,12 @@ static HI_S32 SAMPLE_INNER_CODEC_CfgAudio(AUDIO_SAMPLE_RATE_E enSample)
     ACODEC_FS_E i2s_fs_sel = 0;
     ACODEC_MIXER_E input_mode;
 
-    fdAcodec = open(ACODEC_FILE, O_RDWR);
+    fdAcodec = OSAL_OPEN(ACODEC_FILE, O_RDWR);
     if (fdAcodec < 0) {
         printf("%s: can't open Acodec,%s\n", __FUNCTION__, ACODEC_FILE);
         return HI_FAILURE;
     }
-    if (ioctl(fdAcodec, ACODEC_SOFT_RESET_CTRL)) {
+    if (OSAL_IOCTL(fdAcodec, ACODEC_SOFT_RESET_CTRL)) {
         printf("Reset audio codec error\n");
     }
 
@@ -161,20 +163,19 @@ static HI_S32 SAMPLE_INNER_CODEC_CfgAudio(AUDIO_SAMPLE_RATE_E enSample)
         goto exit;
     }
 
-    if (ioctl(fdAcodec, ACODEC_SET_I2S1_FS, &i2s_fs_sel)) {
+    if (OSAL_IOCTL(fdAcodec, ACODEC_SET_I2S1_FS, &i2s_fs_sel)) {
         printf("%s: set acodec sample rate failed\n", __FUNCTION__);
         ret = HI_FAILURE;
         goto exit;
     }
 
     input_mode = ACODEC_MIXER_IN1;
-    if (ioctl(fdAcodec, ACODEC_SET_MIXER_MIC, &input_mode)) {
+    if (OSAL_IOCTL(fdAcodec, ACODEC_SET_MIXER_MIC, &input_mode)) {
         printf("%s: select acodec input_mode failed\n", __FUNCTION__);
         ret = HI_FAILURE;
         goto exit;
     }
 
-#if AUDIO_MICIN_GAIN_OPEN
     /*
      * The input volume range is [-87, +86]. Both the analog gain and digital gain are adjusted.
      * A larger value indicates higher volume.
@@ -185,16 +186,22 @@ static HI_S32 SAMPLE_INNER_CODEC_CfgAudio(AUDIO_SAMPLE_RATE_E enSample)
      * Within this range, the noises are lowest because only the analog gain is adjusted,
      * and the voice quality can be guaranteed.
      */
-    int iAcodecInputVol = 30; /* 30: mic gain */
-    if (ioctl(fdAcodec, ACODEC_SET_INPUT_VOL, &iAcodecInputVol)) {
+    int iAcodecInputVol = 50; // 30; /* 30: mic gain */
+    if (OSAL_IOCTL(fdAcodec, ACODEC_SET_INPUT_VOL, &iAcodecInputVol)) {
         printf("%s: set acodec micin volume failed\n", __FUNCTION__);
         ret = HI_FAILURE;
         goto exit;
     }
-#endif
+	
+	int iAcodecOutputVol = 0;
+	if (OSAL_IOCTL(fdAcodec, ACODEC_SET_OUTPUT_VOL, &iAcodecOutputVol)) {
+		printf("%s: set acodec micin volume failed\n", __FUNCTION__);
+		ret = HI_FAILURE;
+        goto exit;
+	}
 
 exit:
-    close(fdAcodec);
+    OSAL_CLOSE(fdAcodec);
     return ret;
 }
 

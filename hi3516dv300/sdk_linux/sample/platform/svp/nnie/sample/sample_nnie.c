@@ -343,7 +343,7 @@ static HI_S32 SAMPLE_SVP_NNIE_FillSrcData(SAMPLE_SVP_NNIE_CFG_S *pstNnieCfg, SAM
         for (n = 0; n < pstNnieParam->astSegData[u32SegIdx].astSrc[u32NodeIdx].u32Num; n++) {
             for (i = 0; i < *(pu32StepAddr + n); i++) {
                 ulSize = fread(pu8PicAddr, u32Dim * u32VarSize, 1, fp);
-                SAMPLE_SVP_CHECK_EXPR_GOTO(1 != ulSize, FAIL, SAMPLE_SVP_ERR_LEVEL_ERROR,
+                SAMPLE_SVP_CHECK_EXPR_GOTO(ulSize != 1, FAIL, SAMPLE_SVP_ERR_LEVEL_ERROR,
                     "Error,Read image file failed!\n");
                 pu8PicAddr += u32Stride;
             }
@@ -364,7 +364,7 @@ static HI_S32 SAMPLE_SVP_NNIE_FillSrcData(SAMPLE_SVP_NNIE_CFG_S *pstNnieCfg, SAM
             for (n = 0; n < pstNnieParam->astSegData[u32SegIdx].astSrc[u32NodeIdx].u32Num; n++) {
                 for (i = 0; i < u32Chn * u32Height / 2; i++) { /* Brightness: 1 height, Chroma: 1/2 height */
                     ulSize = fread(pu8PicAddr, u32Width * u32VarSize, 1, fp);
-                    SAMPLE_SVP_CHECK_EXPR_GOTO(1 != ulSize, FAIL, SAMPLE_SVP_ERR_LEVEL_ERROR,
+                    SAMPLE_SVP_CHECK_EXPR_GOTO(ulSize != 1, FAIL, SAMPLE_SVP_ERR_LEVEL_ERROR,
                         "Error,Read image file failed!\n");
                     pu8PicAddr += u32Stride;
                 }
@@ -373,7 +373,7 @@ static HI_S32 SAMPLE_SVP_NNIE_FillSrcData(SAMPLE_SVP_NNIE_CFG_S *pstNnieCfg, SAM
             for (n = 0; n < pstNnieParam->astSegData[u32SegIdx].astSrc[u32NodeIdx].u32Num; n++) {
                 for (i = 0; i < u32Height * 2; i++) { /* Brightness: 1 height, Chroma: 1 height */
                     ulSize = fread(pu8PicAddr, u32Width * u32VarSize, 1, fp);
-                    SAMPLE_SVP_CHECK_EXPR_GOTO(1 != ulSize, FAIL, SAMPLE_SVP_ERR_LEVEL_ERROR,
+                    SAMPLE_SVP_CHECK_EXPR_GOTO(ulSize != 1, FAIL, SAMPLE_SVP_ERR_LEVEL_ERROR,
                         "Error,Read image file failed!\n");
                     pu8PicAddr += u32Stride;
                 }
@@ -383,7 +383,7 @@ static HI_S32 SAMPLE_SVP_NNIE_FillSrcData(SAMPLE_SVP_NNIE_CFG_S *pstNnieCfg, SAM
                 for (i = 0; i < u32Chn; i++) {
                     for (j = 0; j < u32Height; j++) {
                         ulSize = fread(pu8PicAddr, u32Width * u32VarSize, 1, fp);
-                        SAMPLE_SVP_CHECK_EXPR_GOTO(1 != ulSize, FAIL, SAMPLE_SVP_ERR_LEVEL_ERROR,
+                        SAMPLE_SVP_CHECK_EXPR_GOTO(ulSize != 1, FAIL, SAMPLE_SVP_ERR_LEVEL_ERROR,
                             "Error,Read image file failed!\n");
                         pu8PicAddr += u32Stride;
                     }

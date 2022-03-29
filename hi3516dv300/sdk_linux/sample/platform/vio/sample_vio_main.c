@@ -26,6 +26,7 @@
 #include "hi_common.h"
 #include "sample_vio.h"
 #include "mpi_sys.h"
+#include "sdk.h"
 
 #ifdef __cplusplus
 #if __cplusplus
@@ -94,7 +95,7 @@ int main(int argc, char *argv[])
     HI_S32 s32Index;
     HI_U32 u32VoIntfType = 0;
     HI_U32 u32ChipId = 0xffffffff;
-
+    sdk_init();
     if (argc != 2) { /* 2:arg num */
         SAMPLE_VIO_Usage(argv[0]);
         return HI_FAILURE;
@@ -171,7 +172,7 @@ int main(int argc, char *argv[])
     } else {
         SAMPLE_PRT("\033[0;31mprogram exit abnormally!\033[0;39m\n");
     }
-
+    sdk_exit();
     return s32Ret;
 }
 

@@ -404,7 +404,7 @@ HI_S32 SAMPLE_COMM_SVP_NNIE_LoadModel(const HI_CHAR *pszModelFile, SAMPLE_SVP_NN
     pstNnieModel->stModelBuf.u64VirAddr = (HI_U64)(HI_UINTPTR_T)pu8VirAddr;
 
     ulSize = fread(pu8VirAddr, slFileSize, 1, fp);
-    SAMPLE_SVP_CHECK_EXPR_GOTO(1 != ulSize, FAIL_1, SAMPLE_SVP_ERR_LEVEL_ERROR, "Error,read model file failed!\n");
+    SAMPLE_SVP_CHECK_EXPR_GOTO(ulSize != 1, FAIL_1, SAMPLE_SVP_ERR_LEVEL_ERROR, "Error,read model file failed!\n");
 
     /* load model */
     s32Ret = HI_MPI_SVP_NNIE_LoadModel(&pstNnieModel->stModelBuf, &pstNnieModel->stModel);

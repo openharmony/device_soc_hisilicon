@@ -22,7 +22,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <sys/ioctl.h>
-
+#include "sdk.h"
 #include "sample_comm_ive.h"
 #include "sample_ive_main.h"
 
@@ -99,9 +99,13 @@ int app_main(int argc, char *argv[])
 int main(int argc, char *argv[])
 #endif
 {
+    int ret = HI_SUCCESS;
+    sdk_init();
+
     if (argc < SAMPLE_IVE_ARG_MIN_NUM || argc > SAMPLE_IVE_ARG_MAX_NUM) { /* 2, 3: arg count */
         SAMPLE_IVE_Usage(argv[0]);
-        return HI_FAILURE;
+        ret = HI_FAILURE;
+        goto end;
     }
     s_ppChCmdArgv = argv;
 #if (!defined(__HuaweiLite__)) || defined(__OHOS__)
@@ -115,7 +119,8 @@ int main(int argc, char *argv[])
 
     if (strncmp(argv[1], "-h", SAMPLE_IVE_HELP_SIZE) == 0) { /* 2: maximum number of characters to compare */
         SAMPLE_IVE_Usage(argv[0]);
-        return HI_FAILURE;
+        ret = HI_FAILURE;
+        goto end;
     }
     switch (*argv[1]) {
         case '0':
@@ -128,7 +133,8 @@ int main(int argc, char *argv[])
             if ((argc < SAMPLE_IVE_CANNY_ARG_MAX_NUM) ||
                 ((*argv[SAMPLE_IVE_IDX_2] != '0') && (*argv[SAMPLE_IVE_IDX_2] != '1'))) {
                 SAMPLE_IVE_Usage(argv[0]);
-                return HI_FAILURE;
+                ret = HI_FAILURE;
+                goto end;
             }
             SAMPLE_IVE_Canny(*argv[SAMPLE_IVE_IDX_2]); /* 2: arg index */
             break;
@@ -155,5 +161,7 @@ int main(int argc, char *argv[])
             break;
     }
 
-    return 0;
+end:
+    sdk_exit();
+    return ret;
 }

@@ -32,6 +32,7 @@
 #if defined(HI_VQE_USE_STATIC_MODULE_REGISTER)
 #include "hi_vqe_register_api.h"
 #endif
+#include "sdk.h"
 
 static PAYLOAD_TYPE_E gs_enPayloadType = PT_AAC;
 static HI_BOOL gs_bAioReSample = HI_FALSE;
@@ -203,8 +204,8 @@ static hi_void sample_audio_adec_ao_init_param(AIO_ATTR_S *attr)
     attr->u32FrmNum = FPS_30;
     attr->enBitwidth = AUDIO_BIT_WIDTH_16;
     attr->enWorkmode = AIO_MODE_I2S_MASTER;
-    attr->enSoundmode = AUDIO_SOUND_MODE_STEREO;
-    attr->u32ChnCnt = 2; /* 2: chn num */
+    attr->enSoundmode = AUDIO_SOUND_MODE_MONO; // AUDIO_SOUND_MODE_STEREO;
+    attr->u32ChnCnt = 1; /* 2: chn num */
     attr->u32ClkSel = 1;
     attr->enI2sType = AIO_I2STYPE_INNERCODEC;
     attr->u32PtNumPerFrm = AACLC_SAMPLES_PER_FRAME;
@@ -240,6 +241,7 @@ static HI_VOID SAMPLE_AUDIO_AdecAoInner(AUDIO_DEV AoDev, AO_CHN AoChn, ADEC_CHN 
         goto ADECAO_ERR0;
     }
 
+	HI_MPI_AO_SetVolume(AoDev, 0);
     printf("bind adec:%d to ao(%d,%d) ok \n", AdChn, AoDev, AoChn);
     printf("\nplease press twice ENTER to exit this sample\n");
     SAMPLE_AUDIO_Getchar();
@@ -312,10 +314,10 @@ static hi_void sample_audio_ai_aenc_init_param(AIO_ATTR_S *attr)
     attr->enSamplerate = AUDIO_SAMPLE_RATE_48000;
     attr->enBitwidth = AUDIO_BIT_WIDTH_16;
     attr->enWorkmode = AIO_MODE_I2S_MASTER;
-    attr->enSoundmode = AUDIO_SOUND_MODE_STEREO;
+    attr->enSoundmode = AUDIO_SOUND_MODE_MONO; // AUDIO_SOUND_MODE_STEREO;
     attr->u32EXFlag = 0;
     attr->u32FrmNum = FPS_30;
-    attr->u32ChnCnt = 2; /* 2: chn num */
+    attr->u32ChnCnt = 1; // 2; /* 2: chn num */
     attr->u32ClkSel = 1;
     attr->enI2sType = AIO_I2STYPE_INNERCODEC;
     attr->u32PtNumPerFrm = AACLC_SAMPLES_PER_FRAME;
@@ -495,11 +497,11 @@ static hi_void sample_audio_ai_ao_init_param(AIO_ATTR_S *attr)
     attr->enSamplerate = AUDIO_SAMPLE_RATE_48000;
     attr->enBitwidth = AUDIO_BIT_WIDTH_16;
     attr->enWorkmode = AIO_MODE_I2S_MASTER;
-    attr->enSoundmode = AUDIO_SOUND_MODE_STEREO;
+    attr->enSoundmode = AUDIO_SOUND_MODE_MONO; // AUDIO_SOUND_MODE_STEREO;
     attr->u32EXFlag = 0;
     attr->u32FrmNum = FPS_30;
     attr->u32PtNumPerFrm = AACLC_SAMPLES_PER_FRAME;
-    attr->u32ChnCnt = 2; /* 2: chn num */
+    attr->u32ChnCnt = 1; // 2; /* 2: chn num */
     attr->u32ClkSel = 1;
     attr->enI2sType = AIO_I2STYPE_INNERCODEC;
 
@@ -1038,7 +1040,8 @@ HI_S32 main(int argc, char *argv[])
     HI_S32 s32Ret;
     VB_CONFIG_S stVbConf;
     HI_U32 u32Index;
-
+	sdk_init();
+	
     if (argc != 2) { /* 2: arg count */
         SAMPLE_AUDIO_Usage();
         return HI_FAILURE;
@@ -1089,6 +1092,7 @@ HI_S32 main(int argc, char *argv[])
     HI_MPI_ADEC_AacDeInit();
 
     SAMPLE_COMM_SYS_Exit();
-
+	
+	sdk_exit();
     return s32Ret;
 }

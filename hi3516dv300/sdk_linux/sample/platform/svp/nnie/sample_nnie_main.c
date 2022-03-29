@@ -23,6 +23,7 @@
 #include <fcntl.h>
 #include <sys/ioctl.h>
 
+#include "sdk.h"
 #include "securec.h"
 #include "sample_nnie_main.h"
 
@@ -104,7 +105,7 @@ int main(int argc, char *argv[])
 #endif
 {
     int s32Ret = HI_SUCCESS;
-
+    sdk_init();
     s_ppChCmdArgv = argv;
 #if (!defined(__HuaweiLite__)) || defined(__OHOS__)
     struct sigaction sa;
@@ -116,12 +117,14 @@ int main(int argc, char *argv[])
 #endif
     if (argc < 2 || argc > 2) { /* only support 2 parameters */
         SAMPLE_SVP_Usage(argv[0]);
-        return HI_FAILURE;
+        s32Ret = HI_FAILURE;
+        goto end;
     }
 
     if (strncmp(argv[1], "-h", 2) == 0) { /* 2: maximum number of characters to compare */
         SAMPLE_SVP_Usage(argv[0]);
-        return HI_SUCCESS;
+        s32Ret = HI_SUCCESS;
+        goto end;
     }
     switch (*argv[1]) {
         case '0':
@@ -165,5 +168,7 @@ int main(int argc, char *argv[])
             break;
     }
 
+end:
+    sdk_exit();
     return s32Ret;
 }
