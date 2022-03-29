@@ -19,12 +19,11 @@
 
 #ifdef __cplusplus
 #if __cplusplus
-extern "C"{
+extern "C" {
 #endif  /* __cplusplus */
 #endif  /* __cplusplus */
 
 /* Encoder attributes */
-/* */
 typedef struct {
     HIGO_IMGTYPE_E ExpectType; /*
                                 * Type of the encoded picture
@@ -36,7 +35,7 @@ typedef struct {
                                 * is valid for .jpeg pictures only.
                                 *
                                 */
-}HIGO_ENC_ATTR_S;
+} HIGO_ENC_ATTR_S;
 
 /*
  * \brief Initializes the encoder.

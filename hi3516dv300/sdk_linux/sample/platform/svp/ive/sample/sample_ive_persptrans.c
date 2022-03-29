@@ -136,11 +136,11 @@ static HI_S32 SAMPLE_IVE_PerspTrans_Init(SAMPLE_IVE_PERSP_TRANS_S *pstPerspTrans
 
     s32Ret = HI_FAILURE;
     pstPerspTrans->pFpSrc = fopen(pchSrcFileName, "rb");
-    SAMPLE_CHECK_EXPR_GOTO(NULL == pstPerspTrans->pFpSrc, PERSP_TRANS_INIT_FAIL, "Error,Open file %s failed!\n",
+    SAMPLE_CHECK_EXPR_GOTO(pstPerspTrans->pFpSrc == NULL, PERSP_TRANS_INIT_FAIL, "Error,Open file %s failed!\n",
         pchSrcFileName);
 
     pstPerspTrans->pFpDst = fopen(pchDstFileName, "wb");
-    SAMPLE_CHECK_EXPR_GOTO(NULL == pstPerspTrans->pFpDst, PERSP_TRANS_INIT_FAIL, "Error,Open file %s failed!\n",
+    SAMPLE_CHECK_EXPR_GOTO(pstPerspTrans->pFpDst == NULL, PERSP_TRANS_INIT_FAIL, "Error,Open file %s failed!\n",
         pchDstFileName);
     s32Ret = HI_SUCCESS;
 

@@ -23,7 +23,7 @@
 extern "C" {
 #endif
 
-/*  The structure of message   */
+/* The structure of message */
 typedef struct hiHIGV_MSGINFO_S {
     HI_U32 HighLevelMsgNum; /* High level message number , */
     HI_U32 MiddleLevelMsgNum; /* Middle level message number , */
@@ -33,7 +33,7 @@ typedef struct hiHIGV_MSGINFO_S {
     HI_U32 NoLoseMsgNum; /* The message number which can't lose, */
 } HIGV_MSGINFO_S;
 
-/* Key type ;  */
+/* Key type */
 typedef enum hiHIGV_KEYTYPE_E {
     HIGV_KEYTYPE_UNICODE = 0x0,
     /* Ascii code  */
@@ -43,7 +43,7 @@ typedef enum hiHIGV_KEYTYPE_E {
 
 #define HIGV_KEY_CAT(type, index) ((HIGV_KEYTYPE_##type) | (index))
 
-/* Virtual key defined(include keyboard, softkey board.   */
+/* Virtual key defined(include keyboard, softkey board. */
 typedef enum hiHIGV_KEYCODE_E {
     HIGV_KEY_0 = HIGV_KEY_CAT(UNICODE, 0x30),
     HIGV_KEY_1 = HIGV_KEY_CAT(UNICODE, 0x31),
@@ -55,7 +55,7 @@ typedef enum hiHIGV_KEYCODE_E {
     HIGV_KEY_7 = HIGV_KEY_CAT(UNICODE, 0x37),
     HIGV_KEY_8 = HIGV_KEY_CAT(UNICODE, 0x38),
     HIGV_KEY_9 = HIGV_KEY_CAT(UNICODE, 0x39),
-    /* The follow is digit key  ; */
+    /* The follow is digit key */
     HIGV_KEY_A = HIGV_KEY_CAT(UNICODE, 0x41),
     HIGV_KEY_B = HIGV_KEY_CAT(UNICODE, 0x42),
     HIGV_KEY_C = HIGV_KEY_CAT(UNICODE, 0x43),

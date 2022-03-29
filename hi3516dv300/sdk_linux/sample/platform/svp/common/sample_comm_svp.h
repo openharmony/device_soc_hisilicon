@@ -147,7 +147,7 @@ typedef enum hiSAMPLE_SVP_ERR_LEVEL_E {
 #define SAMPLE_SVP_CLOSE_FILE(fp) \
     do {                          \
         if ((fp) != NULL) {       \
-            fclose((fp));         \
+            (void)fclose((fp));         \
             (fp) = NULL;          \
         }                         \
     } while (0)

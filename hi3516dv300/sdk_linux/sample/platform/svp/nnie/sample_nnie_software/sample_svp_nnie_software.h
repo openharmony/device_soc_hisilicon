@@ -12,8 +12,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef _SAMPLE_SVP_USER_KERNEL_H_
-#define _SAMPLE_SVP_USER_KERNEL_H_
+#ifndef SAMPLE_SVP_NNIE_SOFTWARE_H
+#define SAMPLE_SVP_NNIE_SOFTWARE_H
 
 #include "hi_comm_svp.h"
 #include "hi_nnie.h"
@@ -144,4 +144,4 @@ HI_S32 SAMPLE_SVP_NNIE_Yolov3_GetResult(SAMPLE_SVP_NNIE_PARAM_S *pstNnieParam,
 #endif
 #endif /* __cplusplus */
 
-#endif /* _SAMPLE_SVP_USER_KERNEL_H_ */
+#endif /* SAMPLE_SVP_NNIE_SOFTWARE_H */

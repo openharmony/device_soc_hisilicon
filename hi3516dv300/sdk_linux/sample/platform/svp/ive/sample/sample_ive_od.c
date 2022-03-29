@@ -194,13 +194,13 @@ static HI_VOID *SAMPLE_IVE_OdProc(HI_VOID *pArgs)
 
         for (j = 0; j < IVE_CHAR_CALH; j++) {
             pu64TopRow =
-                (0 == j) ? (pu64VirData) : (pu64VirData + (j * pstOd->u32H - 1) * pstOd->stInteg.au32Stride[0]);
+                (j == 0) ? (pu64VirData) : (pu64VirData + (j * pstOd->u32H - 1) * pstOd->stInteg.au32Stride[0]);
             pu64BtmRow = pu64VirData + ((j + 1) * pstOd->u32H - 1) * pstOd->stInteg.au32Stride[0];
 
             for (i = 0; i < IVE_CHAR_CALW; i++) {
-                u64TopLeft = (0 == j) ? (0) : ((0 == i) ? (0) : (pu64TopRow[i * pstOd->u32W - 1]));
-                u64TopRight = (0 == j) ? (0) : (pu64TopRow[(i + 1) * pstOd->u32W - 1]);
-                u64BtmLeft = (0 == i) ? (0) : (pu64BtmRow[i * pstOd->u32W - 1]);
+                u64TopLeft = (j == 0) ? (0) : ((i == 0) ? (0) : (pu64TopRow[i * pstOd->u32W - 1]));
+                u64TopRight = (j == 0) ? (0) : (pu64TopRow[(i + 1) * pstOd->u32W - 1]);
+                u64BtmLeft = (i == 0) ? (0) : (pu64BtmRow[i * pstOd->u32W - 1]);
                 u64BtmRight = pu64BtmRow[(i + 1) * pstOd->u32W - 1];
 
                 u64BlockSum = (u64TopLeft & SAMPLE_IVE_OD_MASK) + (u64BtmRight & SAMPLE_IVE_OD_MASK) -

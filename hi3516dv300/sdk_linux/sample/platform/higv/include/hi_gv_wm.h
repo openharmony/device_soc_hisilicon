@@ -23,7 +23,7 @@
 extern "C" {
 #endif
 
-/* Stack capacity ; */
+/* Stack capacity */
 #define HIGV_MAX_WINNUM 50
 
 typedef enum {

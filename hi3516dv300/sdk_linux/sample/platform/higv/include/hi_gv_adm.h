@@ -27,7 +27,7 @@ extern "C" {
 #define HIGV_DB_MAX_FIELDNUM      64
 #define HIGV_DB_MAX_FIELD_STR_LEN 4096
 
-/* The type of data are supported.; */
+/* The type of data are supported */
 typedef enum {
     /* char */
     HIGV_DT_S8 = 0,
@@ -60,28 +60,28 @@ typedef enum {
 
 /* The type of data change. */
 typedef enum {
-    /* insert data ; */
+    /* insert data */
     HIGV_DC_INSERT = 0,
-    /* modify data ; */
+    /* modify data */
     HIGV_DC_MODIFY,
-    /*  delete data ; */
+    /*  delete data */
     HIGV_DC_DELETE,
-    /* updata data,sealed operations ; */
+    /* updata data,sealed operations */
     HIGV_DC_UPDATE,
-    /* clear all the data ; */
+    /* clear all the data */
     HIGV_DC_CLEAR,
-    /* destroy the data source ; */
+    /* destroy the data source */
     HIGV_DC_DESTROY,
     HIGV_DC_BUTT
 } HIGV_DC_E;
 
-/* The data change info. */
+/* The data change info */
 typedef struct {
-    /* the type of data change,  */
+    /* the type of data change  */
     HIGV_DC_E Action;
-    /* the start row of data change , */
+    /* the start row of data change */
     HI_U16 StartRow;
-    /* rows aggregate have data change , */
+    /* rows aggregate have data change */
     HI_U16 Rows;
 } HIGV_DCINFO_S;
 
@@ -107,22 +107,22 @@ typedef HI_S32 (*RegisterDataChangeFunc)(HIGV_HANDLE dbSource, HIGV_HANDLE adm);
 typedef HI_S32 (*UnregisterDataChangeFunc)(HIGV_HANDLE dbSource, HIGV_HANDLE adm);
 
 typedef struct hiADM_OPT_S {
-    /* data source ; */
+    /* data source */
     HI_U32 DBSource;
-    /* data source field count ; */
+    /* data source field count */
     HI_U32 FieldCount;
-    /* field attribute ; */
+    /* field attribute */
     HIGV_FIELDATTR_S *pFieldAttr;
-    /* rows at buffer ; */
+    /* rows at buffer */
     HI_U32 BufferRows;
-    /* get rows count function. ; */
+    /* get rows count function */
     GetCountFunc GetCount;
     GetRowValueFunc GetRowValue;
-    /* get rows value from  appoint rows function. ; */
+    /* get rows value from  appoint rows function */
     RegisterDataChangeFunc RegisterDataChange;
-    /* Register the function when data change ; */
+    /* Register the function when data change */
     UnregisterDataChangeFunc UnregisterDataChange;
-    /* Unregister the function when data change. ; */
+    /* Unregister the function when data change */
 } HIGV_ADMOPT_S;
 
 /*

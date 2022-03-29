@@ -126,7 +126,7 @@ int main(int argc, char *argv[])
             break;
         case '2':
             if ((argc < SAMPLE_IVE_CANNY_ARG_MAX_NUM) ||
-                (('0' != *argv[SAMPLE_IVE_IDX_2]) && ('1' != *argv[SAMPLE_IVE_IDX_2]))) {
+                ((*argv[SAMPLE_IVE_IDX_2] != '0') && (*argv[SAMPLE_IVE_IDX_2] != '1'))) {
                 SAMPLE_IVE_Usage(argv[0]);
                 return HI_FAILURE;
             }

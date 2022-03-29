@@ -322,7 +322,7 @@ static HI_S32 SAMPLE_SVP_NNIE_FillSrcData(SAMPLE_SVP_NNIE_CFG_S *pstNnieCfg, SAM
         (realpath(pstNnieCfg->pszPic, path) == HI_NULL),
         HI_ERR_SVP_NNIE_ILLEGAL_PARAM, SAMPLE_SVP_ERR_LEVEL_ERROR, "Error, file_name is invalid!\n");
     fp = fopen(path, "rb");
-    SAMPLE_SVP_CHECK_EXPR_RET(NULL == fp, HI_INVALID_VALUE, SAMPLE_SVP_ERR_LEVEL_ERROR, "Error, open file failed!\n");
+    SAMPLE_SVP_CHECK_EXPR_RET(fp == NULL, HI_INVALID_VALUE, SAMPLE_SVP_ERR_LEVEL_ERROR, "Error, open file failed!\n");
 
     /* get data size */
     if (SVP_BLOB_TYPE_U8 <= pstNnieParam->astSegData[u32SegIdx].astSrc[u32NodeIdx].enType &&
@@ -396,11 +396,11 @@ static HI_S32 SAMPLE_SVP_NNIE_FillSrcData(SAMPLE_SVP_NNIE_CFG_S *pstNnieCfg, SAM
             pstNnieParam->astSegData[u32SegIdx].astSrc[u32NodeIdx].u32Num * u32Chn * u32Height * u32Stride);
     }
 
-    fclose(fp);
+    (HI_VOID)fclose(fp);
     return HI_SUCCESS;
 FAIL:
 
-    fclose(fp);
+    (HI_VOID)fclose(fp);
     return HI_FAILURE;
 }
 
@@ -426,7 +426,7 @@ static HI_S32 SAMPLE_SVP_NNIE_PrintReportResult(SAMPLE_SVP_NNIE_PARAM_S *pstNnie
                 "Error,create file name failed!\n");
 
             fp = fopen(acReportFileName, "w");
-            SAMPLE_SVP_CHECK_EXPR_RET(NULL == fp, HI_INVALID_VALUE, SAMPLE_SVP_ERR_LEVEL_ERROR,
+            SAMPLE_SVP_CHECK_EXPR_RET(fp == NULL, HI_INVALID_VALUE, SAMPLE_SVP_ERR_LEVEL_ERROR,
                 "Error,open file failed!\n");
 
             if (SVP_BLOB_TYPE_SEQ_S32 == pstNnieParam->astSegData[u32SegIdx].astDst[u32NodeIdx].enType) {
@@ -467,13 +467,13 @@ static HI_S32 SAMPLE_SVP_NNIE_PrintReportResult(SAMPLE_SVP_NNIE_PARAM_S *pstNnie
                     }
                 }
             }
-            fclose(fp);
+            (HI_VOID)fclose(fp);
         }
     }
     return HI_SUCCESS;
 
 PRINT_FAIL:
-    fclose(fp);
+    (HI_VOID)fclose(fp);
     return HI_FAILURE;
 }
 
@@ -481,7 +481,7 @@ PRINT_FAIL:
 static HI_S32 SAMPLE_SVP_NNIE_Cnn_SoftwareDeinit(SAMPLE_SVP_NNIE_CNN_SOFTWARE_PARAM_S *pstCnnSoftWarePara)
 {
     HI_S32 s32Ret = HI_SUCCESS;
-    SAMPLE_SVP_CHECK_EXPR_RET(NULL == pstCnnSoftWarePara, HI_INVALID_VALUE, SAMPLE_SVP_ERR_LEVEL_ERROR,
+    SAMPLE_SVP_CHECK_EXPR_RET(pstCnnSoftWarePara == NULL, HI_INVALID_VALUE, SAMPLE_SVP_ERR_LEVEL_ERROR,
         "Error, pstCnnSoftWarePara can't be NULL!\n");
     if ((pstCnnSoftWarePara->stGetTopN.u64PhyAddr != 0) && (pstCnnSoftWarePara->stGetTopN.u64VirAddr != 0)) {
         SAMPLE_SVP_MMZ_FREE(pstCnnSoftWarePara->stGetTopN.u64PhyAddr, pstCnnSoftWarePara->stGetTopN.u64VirAddr);
@@ -608,7 +608,7 @@ static HI_S32 SAMPLE_SVP_NNIE_Cnn_PrintResult(SVP_BLOB_S *pstGetTopN, HI_U32 u32
     HI_U32 i, j;
     HI_U32 *pu32Tmp = NULL;
     HI_U32 u32Stride;
-    SAMPLE_SVP_CHECK_EXPR_RET(NULL == pstGetTopN, HI_INVALID_VALUE, SAMPLE_SVP_ERR_LEVEL_ERROR,
+    SAMPLE_SVP_CHECK_EXPR_RET(pstGetTopN == NULL, HI_INVALID_VALUE, SAMPLE_SVP_ERR_LEVEL_ERROR,
         "Error,pstGetTopN can't be NULL!\n");
 
     u32Stride = pstGetTopN->u32Stride;
@@ -874,7 +874,7 @@ static HI_S32 SAMPLE_SVP_NNIE_Detection_PrintResult(SVP_BLOB_S *pstDstScore, SVP
 static HI_S32 SAMPLE_SVP_NNIE_FasterRcnn_SoftwareDeinit(SAMPLE_SVP_NNIE_FASTERRCNN_SOFTWARE_PARAM_S *pstSoftWareParam)
 {
     HI_S32 s32Ret = HI_SUCCESS;
-    SAMPLE_SVP_CHECK_EXPR_RET(NULL == pstSoftWareParam, HI_INVALID_VALUE, SAMPLE_SVP_ERR_LEVEL_ERROR,
+    SAMPLE_SVP_CHECK_EXPR_RET(pstSoftWareParam == NULL, HI_INVALID_VALUE, SAMPLE_SVP_ERR_LEVEL_ERROR,
         "Error, pstSoftWareParam can't be NULL!\n");
     if ((pstSoftWareParam->stRpnTmpBuf.u64PhyAddr != 0) && (pstSoftWareParam->stRpnTmpBuf.u64VirAddr != 0)) {
         SAMPLE_SVP_MMZ_FREE(pstSoftWareParam->stRpnTmpBuf.u64PhyAddr, pstSoftWareParam->stRpnTmpBuf.u64VirAddr);
@@ -1362,7 +1362,7 @@ hi_void SAMPLE_SVP_NNIE_FasterRcnn_HandleSig(hi_void)
 static HI_S32 SAMPLE_SVP_NNIE_Rfcn_SoftwareDeinit(SAMPLE_SVP_NNIE_RFCN_SOFTWARE_PARAM_S *pstSoftWareParam)
 {
     HI_S32 s32Ret = HI_SUCCESS;
-    SAMPLE_SVP_CHECK_EXPR_RET(NULL == pstSoftWareParam, HI_INVALID_VALUE, SAMPLE_SVP_ERR_LEVEL_ERROR,
+    SAMPLE_SVP_CHECK_EXPR_RET(pstSoftWareParam == NULL, HI_INVALID_VALUE, SAMPLE_SVP_ERR_LEVEL_ERROR,
         "Error, pstSoftWareParam can't be NULL!\n");
     if (pstSoftWareParam->stRpnTmpBuf.u64PhyAddr != 0 && pstSoftWareParam->stRpnTmpBuf.u64VirAddr != 0) {
         SAMPLE_SVP_MMZ_FREE(pstSoftWareParam->stRpnTmpBuf.u64PhyAddr, pstSoftWareParam->stRpnTmpBuf.u64VirAddr);
@@ -2027,7 +2027,7 @@ END_RFCN_0:
 static HI_S32 SAMPLE_SVP_NNIE_Ssd_SoftwareDeinit(SAMPLE_SVP_NNIE_SSD_SOFTWARE_PARAM_S *pstSoftWareParam)
 {
     HI_S32 s32Ret = HI_SUCCESS;
-    SAMPLE_SVP_CHECK_EXPR_RET(NULL == pstSoftWareParam, HI_INVALID_VALUE, SAMPLE_SVP_ERR_LEVEL_ERROR,
+    SAMPLE_SVP_CHECK_EXPR_RET(pstSoftWareParam == NULL, HI_INVALID_VALUE, SAMPLE_SVP_ERR_LEVEL_ERROR,
         "Error, pstSoftWareParam can't be NULL!\n");
     if ((pstSoftWareParam->stPriorBoxTmpBuf.u64PhyAddr != 0) && (pstSoftWareParam->stPriorBoxTmpBuf.u64VirAddr != 0)) {
         SAMPLE_SVP_MMZ_FREE(pstSoftWareParam->stPriorBoxTmpBuf.u64PhyAddr,
@@ -2416,7 +2416,7 @@ void SAMPLE_SVP_NNIE_Ssd_HandleSig(void)
 static HI_S32 SAMPLE_SVP_NNIE_Yolov1_SoftwareDeinit(SAMPLE_SVP_NNIE_YOLOV1_SOFTWARE_PARAM_S *pstSoftWareParam)
 {
     HI_S32 s32Ret = HI_SUCCESS;
-    SAMPLE_SVP_CHECK_EXPR_RET(NULL == pstSoftWareParam, HI_INVALID_VALUE, SAMPLE_SVP_ERR_LEVEL_ERROR,
+    SAMPLE_SVP_CHECK_EXPR_RET(pstSoftWareParam == NULL, HI_INVALID_VALUE, SAMPLE_SVP_ERR_LEVEL_ERROR,
         "Error, pstSoftWareParam can't be NULL!\n");
     if ((pstSoftWareParam->stGetResultTmpBuf.u64PhyAddr != 0) &&
         (pstSoftWareParam->stGetResultTmpBuf.u64VirAddr != 0)) {
@@ -2687,7 +2687,7 @@ void SAMPLE_SVP_NNIE_Yolov1_HandleSig(void)
 static HI_S32 SAMPLE_SVP_NNIE_Yolov2_SoftwareDeinit(SAMPLE_SVP_NNIE_YOLOV2_SOFTWARE_PARAM_S *pstSoftWareParam)
 {
     HI_S32 s32Ret = HI_SUCCESS;
-    SAMPLE_SVP_CHECK_EXPR_RET(NULL == pstSoftWareParam, HI_INVALID_VALUE, SAMPLE_SVP_ERR_LEVEL_ERROR,
+    SAMPLE_SVP_CHECK_EXPR_RET(pstSoftWareParam == NULL, HI_INVALID_VALUE, SAMPLE_SVP_ERR_LEVEL_ERROR,
         "Error, pstSoftWareParam can't be NULL!\n");
     if ((pstSoftWareParam->stGetResultTmpBuf.u64PhyAddr != 0) &&
         (pstSoftWareParam->stGetResultTmpBuf.u64VirAddr != 0)) {
@@ -2967,7 +2967,7 @@ void SAMPLE_SVP_NNIE_Yolov2_HandleSig(void)
 static HI_S32 SAMPLE_SVP_NNIE_Yolov3_SoftwareDeinit(SAMPLE_SVP_NNIE_YOLOV3_SOFTWARE_PARAM_S *pstSoftWareParam)
 {
     HI_S32 s32Ret = HI_SUCCESS;
-    SAMPLE_SVP_CHECK_EXPR_RET(NULL == pstSoftWareParam, HI_INVALID_VALUE, SAMPLE_SVP_ERR_LEVEL_ERROR,
+    SAMPLE_SVP_CHECK_EXPR_RET(pstSoftWareParam == NULL, HI_INVALID_VALUE, SAMPLE_SVP_ERR_LEVEL_ERROR,
         "Error, pstSoftWareParam can't be NULL!\n");
     if ((pstSoftWareParam->stGetResultTmpBuf.u64PhyAddr != 0) &&
         (pstSoftWareParam->stGetResultTmpBuf.u64VirAddr != 0)) {
@@ -3442,7 +3442,7 @@ void SAMPLE_SVP_NNIE_Lstm_HandleSig(void)
 static HI_S32 SAMPLE_SVP_NNIE_Pvanet_SoftwareDeinit(SAMPLE_SVP_NNIE_FASTERRCNN_SOFTWARE_PARAM_S *pstSoftWareParam)
 {
     HI_S32 s32Ret = HI_SUCCESS;
-    SAMPLE_SVP_CHECK_EXPR_RET(NULL == pstSoftWareParam, HI_INVALID_VALUE, SAMPLE_SVP_ERR_LEVEL_ERROR,
+    SAMPLE_SVP_CHECK_EXPR_RET(pstSoftWareParam == NULL, HI_INVALID_VALUE, SAMPLE_SVP_ERR_LEVEL_ERROR,
         "Error, pstSoftWareParam can't be NULL!\n");
     if ((pstSoftWareParam->stRpnTmpBuf.u64PhyAddr != 0) && (pstSoftWareParam->stRpnTmpBuf.u64VirAddr != 0)) {
         SAMPLE_SVP_MMZ_FREE(pstSoftWareParam->stRpnTmpBuf.u64PhyAddr, pstSoftWareParam->stRpnTmpBuf.u64VirAddr);

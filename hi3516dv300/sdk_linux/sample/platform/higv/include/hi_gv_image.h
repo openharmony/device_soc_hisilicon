@@ -26,8 +26,8 @@ extern "C" {
 #endif
 
 typedef struct {
-    HI_CHAR *pAddr; /*  Memory pointer address ; */
-    HI_U32 Length; /*  Length ; */
+    HI_CHAR *pAddr; /*  Memory pointer address */
+    HI_U32 Length; /*  Length */
 } HI_GV_MemInfo;
 
 /*

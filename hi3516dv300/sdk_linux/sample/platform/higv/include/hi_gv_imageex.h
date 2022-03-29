@@ -25,13 +25,13 @@
 extern "C" {
 #endif
 
-/*  Alignment of image , */
+/*  Alignment of image */
 typedef enum {
-    /* Center ; */
+    /* Center */
     HIGV_IMGPOS_CENTER,
-    /* Stretch ; */
+    /* Stretch */
     HIGV_IMGPOS_STRETCH,
-    /* Autostrech ; */
+    /* Autostrech */
     HIGV_IMGPOS_AUTOSTRETCH,
 
     HIGV_IMGPOS_BUTT

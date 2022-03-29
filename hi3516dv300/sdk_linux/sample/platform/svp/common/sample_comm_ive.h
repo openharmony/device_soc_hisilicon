@@ -89,7 +89,7 @@ typedef struct hiSAMPLE_IVE_DRAW_RECT_MSG_S {
 #define IVE_CLOSE_FILE(fp)  \
     do {                    \
         if ((fp) != NULL) { \
-            fclose((fp));   \
+            (void)fclose((fp));   \
             (fp) = NULL;    \
         }                   \
     } while (0)

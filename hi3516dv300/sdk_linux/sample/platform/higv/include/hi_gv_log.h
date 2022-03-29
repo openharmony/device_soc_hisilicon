@@ -69,7 +69,7 @@ typedef enum {
     HIGV_LOG_WARNING, /*  Print warring and error log info */
     HIGV_LOG_ERROR,   /*  Only print error log info */
     HIGV_LOG_FATAL,   /*  Only print fatal log info */
-    HIGV_LOG_SILENT,  /* only for SetMinPriority(); must be last */
+    HIGV_LOG_SILENT,  /* only for SetMinPriority() must be last */
     HIGV_LOG_BUTT
 } HIGV_LOG_LEVEL_E;
 

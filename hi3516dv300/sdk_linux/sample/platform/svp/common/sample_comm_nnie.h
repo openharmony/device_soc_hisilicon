@@ -15,11 +15,11 @@
 #ifndef SAMPLE_COMM_NNIE_H
 #define SAMPLE_COMM_NNIE_H
 
+#include <sys/time.h>
 #include "hi_comm_svp.h"
 #include "hi_nnie.h"
 #include "mpi_nnie.h"
 #include "sample_comm_ive.h"
-#include <sys/time.h>
 
 #ifdef __cplusplus
 #if __cplusplus

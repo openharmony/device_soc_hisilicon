@@ -26,16 +26,16 @@ extern "C" {
 #endif
 
 typedef enum {
-    /* Vertical style ; */
+    /* Vertical style */
     SCROLLBAR_STYLE_VERTICAL,
-    /* Horizontal style ; */
+    /* Horizontal style */
     SCROLLBAR_STYLE_HORIZONTAL,
     SCROLLBAR_BUTT
 } HIGV_SCROLLBAR_SYLE_E;
 
-/*  Vertical  scrollbar ; */
+/*  Vertical  scrollbar */
 #define HIGV_SCROLLBAR_STYLE_VERTICAL HIGV_STYLE_DEFINE(HIGV_WIDGET_SCROLLBAR, SCROLLBAR_STYLE_VERTICAL)
-/*  Horizontal ScrollBar ; */
+/*  Horizontal ScrollBar */
 #define HIGV_SCROLLBAR_STYLE_HORIZONTAL HIGV_STYLE_DEFINE(HIGV_WIDGET_SCROLLBAR, SCROLLBAR_STYLE_HORIZONTAL)
 
 /*

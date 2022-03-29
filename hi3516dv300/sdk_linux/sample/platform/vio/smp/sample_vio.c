@@ -196,7 +196,7 @@ HI_S32 SAMPLE_VIO_ViOnlineVpssOfflineRoute(HI_U32 u32VoIntfType)
         goto EXIT5;
     }
     stVoConfig.enDstDynamicRange = enDynamicRange;
-    if (1 == u32VoIntfType) {
+    if (u32VoIntfType == 1) {
         stVoConfig.enVoIntfType = VO_INTF_BT1120;
         stVoConfig.enIntfSync = VO_OUTPUT_1080P25;
     } else {
@@ -420,7 +420,7 @@ HI_S32 SAMPLE_VIO_WDR_LDC_DIS_SPREAD(HI_U32 u32VoIntfType)
         goto EXIT5;
     }
     stVoConfig.enDstDynamicRange = enDynamicRange;
-    if (1 == u32VoIntfType) {
+    if (u32VoIntfType == 1) {
         stVoConfig.enVoIntfType = VO_INTF_BT1120;
         stVoConfig.enIntfSync = VO_OUTPUT_1080P25;
     } else {
@@ -700,7 +700,7 @@ HI_S32 SAMPLE_VIO_ViDoublePipeRoute(HI_U32 u32VoIntfType)
         goto EXIT5;
     }
     stVoConfig.enDstDynamicRange = enDynamicRange;
-    if (1 == u32VoIntfType) {
+    if (u32VoIntfType == 1) {
         stVoConfig.enVoIntfType = VO_INTF_BT1120;
         stVoConfig.enIntfSync = VO_OUTPUT_1080P25;
     } else {
@@ -930,7 +930,7 @@ HI_S32 SAMPLE_VIO_ViWdrSwitch(HI_U32 u32VoIntfType)
         goto EXIT5;
     }
     stVoConfig.enDstDynamicRange = enDynamicRange;
-    if (1 == u32VoIntfType) {
+    if (u32VoIntfType == 1) {
         stVoConfig.enVoIntfType = VO_INTF_BT1120;
         stVoConfig.enIntfSync = VO_OUTPUT_1080P25;
     } else {
@@ -1281,7 +1281,7 @@ HI_S32 SAMPLE_VIO_ViVpssLowDelay(HI_U32 u32VoIntfType)
         goto EXIT5;
     }
     stVoConfig.enDstDynamicRange = enDynamicRange;
-    if (1 == u32VoIntfType) {
+    if (u32VoIntfType == 1) {
         stVoConfig.enVoIntfType = VO_INTF_BT1120;
         stVoConfig.enIntfSync = VO_OUTPUT_1080P25;
     } else {
@@ -1637,7 +1637,7 @@ HI_S32 SAMPLE_VIO_FPN(HI_U32 u32VoIntfType)
         goto EXIT1;
     }
     stVoConfig.enDstDynamicRange = enDynamicRange;
-    if (1 == u32VoIntfType) {
+    if (u32VoIntfType == 1) {
         stVoConfig.enVoIntfType = VO_INTF_BT1120;
         stVoConfig.enIntfSync = VO_OUTPUT_1080P25;
     } else {
@@ -1875,7 +1875,7 @@ HI_S32 SAMPLE_VIO_ViDoubleWdrPipe(HI_U32 u32VoIntfType)
         goto EXIT5;
     }
     stVoConfig.enDstDynamicRange = enDynamicRange;
-    if (1 == u32VoIntfType) {
+    if (u32VoIntfType == 1) {
         stVoConfig.enVoIntfType = VO_INTF_BT1120;
     } else {
         stVoConfig.enVoIntfType = VO_INTF_HDMI;

@@ -385,13 +385,13 @@ HI_S32 SAMPLE_COMM_SVP_NNIE_LoadModel(const HI_CHAR *pszModelFile, SAMPLE_SVP_NN
     SAMPLE_SVP_CHECK_EXPR_RET((strlen(pszModelFile) > PATH_MAX) || (realpath(pszModelFile, path) == HI_NULL),
         HI_ERR_SVP_NNIE_ILLEGAL_PARAM, SAMPLE_SVP_ERR_LEVEL_ERROR, "Error, file_name is invalid!\n");
     FILE *fp = fopen(path, "rb");
-    SAMPLE_SVP_CHECK_EXPR_RET(NULL == fp, s32Ret, SAMPLE_SVP_ERR_LEVEL_ERROR, "Error, open model file failed!\n");
+    SAMPLE_SVP_CHECK_EXPR_RET(fp == NULL, s32Ret, SAMPLE_SVP_ERR_LEVEL_ERROR, "Error, open model file failed!\n");
     s32Ret = fseek(fp, 0L, SEEK_END);
-    SAMPLE_SVP_CHECK_EXPR_GOTO(-1 == s32Ret, FAIL_0, SAMPLE_SVP_ERR_LEVEL_ERROR, "Error, fseek failed!\n");
+    SAMPLE_SVP_CHECK_EXPR_GOTO(s32Ret == -1, FAIL_0, SAMPLE_SVP_ERR_LEVEL_ERROR, "Error, fseek failed!\n");
     slFileSize = ftell(fp);
     SAMPLE_SVP_CHECK_EXPR_GOTO(slFileSize <= 0, FAIL_0, SAMPLE_SVP_ERR_LEVEL_ERROR, "Error, ftell failed!\n");
     s32Ret = fseek(fp, 0L, SEEK_SET);
-    SAMPLE_SVP_CHECK_EXPR_GOTO(-1 == s32Ret, FAIL_0, SAMPLE_SVP_ERR_LEVEL_ERROR, "Error, fseek failed!\n");
+    SAMPLE_SVP_CHECK_EXPR_GOTO(s32Ret == -1, FAIL_0, SAMPLE_SVP_ERR_LEVEL_ERROR, "Error, fseek failed!\n");
 
     /* malloc model file mem */
     s32Ret =

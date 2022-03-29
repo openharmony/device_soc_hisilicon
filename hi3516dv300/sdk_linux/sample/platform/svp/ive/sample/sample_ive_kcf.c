@@ -692,7 +692,7 @@ static HI_S32 IVE_Rpn(HI_S32 **pps32Src, HI_U32 u32NumRatioAnchors, HI_U32 u32Nu
         *(ps32Ptr2 + SAMPLE_IVE_X_MAX_OFFSET) = (HI_S32)(s32PredCenterX + SAMPLE_IVE_HALF * s32PredW);
         *(ps32Ptr2 + SAMPLE_IVE_Y_MAX_OFFSET) = (HI_S32)(s32PredCenterY + SAMPLE_IVE_HALF * s32PredH);
         *(ps32Ptr2 + SAMPLE_IVE_SCORE_OFFSET) = (HI_S32)(*(pf32Ptr + 1) * SAMPLE_IVE_QUANT_BASE);
-        *(ps32Ptr2 + SAMPLE_IVE_SUPPRESS_FLAG_OFFSET ) = 0;
+        *(ps32Ptr2 + SAMPLE_IVE_SUPPRESS_FLAG_OFFSET) = 0;
     }
 
     /* clip bbox */
@@ -715,7 +715,7 @@ static HI_S32 IVE_Rpn(HI_S32 **pps32Src, HI_U32 u32NumRatioAnchors, HI_U32 u32Nu
         s32ProposalWidth = *(ps32Ptr + SAMPLE_IVE_X_MAX_OFFSET) - *(ps32Ptr) + 1;
         s32ProposalHeight = *(ps32Ptr + SAMPLE_IVE_Y_MAX_OFFSET) - *(ps32Ptr + SAMPLE_IVE_Y_MIN_OFFSET) + 1;
         if (s32ProposalWidth < (HI_S32)u32MinSize || s32ProposalHeight < (HI_S32)u32MinSize) {
-            *(ps32Ptr + SAMPLE_IVE_SUPPRESS_FLAG_OFFSET ) = 1;
+            *(ps32Ptr + SAMPLE_IVE_SUPPRESS_FLAG_OFFSET) = 1;
         }
     }
 
@@ -992,7 +992,7 @@ static HI_S32 SAMPLE_IVE_Rfcn_GetResult(SAMPLE_SVP_NNIE_PARAM_S *pstNnieParam,
     HI_U32 i = 0;
     HI_S32 *ps32Proposal = SAMPLE_SVP_NNIE_CONVERT_64BIT_ADDR(HI_S32, pstSoftwareParam->stRpnBbox.u64VirAddr);
 
-    SAMPLE_SVP_CHECK_EXPR_RET(0 == pstSoftwareParam->stRpnBbox.u64VirAddr, HI_INVALID_VALUE, SAMPLE_SVP_ERR_LEVEL_ERROR,
+    SAMPLE_SVP_CHECK_EXPR_RET(pstSoftwareParam->stRpnBbox.u64VirAddr == 0, HI_INVALID_VALUE, SAMPLE_SVP_ERR_LEVEL_ERROR,
         "Error,pstSoftwareParam->stRpnBbox.u64VirAddr can't be 0!\n");
     for (i = 0; i < pstSoftwareParam->stRpnBbox.unShape.stWhc.u32Height; i++) {
         *(ps32Proposal + SAMPLE_IVE_COORDI_NUM * i) /= SAMPLE_IVE_QUANT_BASE;
@@ -1023,7 +1023,7 @@ static HI_S32 SAMPLE_IVE_Rfcn_GetResult(SAMPLE_SVP_NNIE_PARAM_S *pstNnieParam,
 static HI_S32 SAMPLE_IVE_Rfcn_SoftwareDeinit(SAMPLE_SVP_NNIE_RFCN_SOFTWARE_PARAM_S *pstSoftWareParam)
 {
     HI_S32 s32Ret = HI_SUCCESS;
-    SAMPLE_SVP_CHECK_EXPR_RET(NULL == pstSoftWareParam, HI_INVALID_VALUE, SAMPLE_SVP_ERR_LEVEL_ERROR,
+    SAMPLE_SVP_CHECK_EXPR_RET(pstSoftWareParam == NULL, HI_INVALID_VALUE, SAMPLE_SVP_ERR_LEVEL_ERROR,
         "Error, pstSoftWareParam can't be NULL!\n");
     if ((pstSoftWareParam->stRpnTmpBuf.u64PhyAddr != 0) && (pstSoftWareParam->stRpnTmpBuf.u64VirAddr != 0)) {
         SAMPLE_SVP_MMZ_FREE(pstSoftWareParam->stRpnTmpBuf.u64PhyAddr, pstSoftWareParam->stRpnTmpBuf.u64VirAddr);
@@ -2135,7 +2135,7 @@ static HI_S32 SAMPLE_IVE_KcfInit(SAMPLE_IVE_KCF_S *pstIveKcfInfo)
 
     s32Len = SAMPLE_IVE_QUEUE_LEN;
     pstIveKcfInfo->pstQueueHead = SAMPLE_IVE_QueueCreate(s32Len);
-    SAMPLE_CHECK_EXPR_GOTO(NULL == pstIveKcfInfo->pstQueueHead, FAIL_1, "Error,SAMPLE_IVE_QueueCreate failed!\n");
+    SAMPLE_CHECK_EXPR_GOTO(pstIveKcfInfo->pstQueueHead == NULL, FAIL_1, "Error,SAMPLE_IVE_QueueCreate failed!\n");
 
     s32Ret =
         HI_MPI_IVE_KCF_CreateObjList(&pstIveKcfInfo->stListMem, SAMPLE_IVE_KCF_NODE_MAX_NUM, &pstIveKcfInfo->stObjList);

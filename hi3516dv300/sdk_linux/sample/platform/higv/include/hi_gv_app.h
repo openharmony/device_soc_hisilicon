@@ -24,12 +24,12 @@
 extern "C" {
 #endif
 
-/* Key hook go on ; */
+/* Key hook go on */
 #define HI_GV_KEYHOOK_GOON 0x1000
-/* Key hook stop ; */
+/* Key hook stop */
 #define HI_GV_KEYHOOK_STOP 0x1001
 
-/* The max static handle number for app ; */
+/* The max static handle number for app */
 #define HIGV_RESERVE_STATIC_HANDLE_NUM 1000
 
 typedef enum {

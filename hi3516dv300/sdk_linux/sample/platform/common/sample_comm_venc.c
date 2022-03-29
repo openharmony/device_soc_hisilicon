@@ -249,7 +249,7 @@ static HI_S32 SAMPLE_COMM_VENC_Getdcfinfo(const char *SrcJpgPath, const char *Ds
     }
 
     s32RtnVal = FileTrans_GetThmFromJpg(JPGSrcPath, &DstSize);
-    if ((HI_SUCCESS != s32RtnVal) || (0 == DstSize)) {
+    if ((HI_SUCCESS != s32RtnVal) || (DstSize == 0)) {
         printf("fail to get thm\n");
         return HI_FAILURE;
     }

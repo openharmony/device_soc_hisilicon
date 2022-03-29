@@ -23,15 +23,15 @@ extern "C" {
 #endif
 
 typedef enum {
-    /* unknown error ; */
+    /* unknown error */
     HI_ERR_COMM_UNKNOWN = 1,
-    /* other error ; */
+    /* other error */
     HI_ERR_COMM_OTHER,
     /* inner error */
     /*
     CPUԲI/Oѧ */
     HI_ERR_COMM_INTER,
-    /* version error ; */
+    /* version error */
     HI_ERR_COMM_VERSION,
     /* unsupported function, operation, feature */
     /*
@@ -48,126 +48,126 @@ typedef enum {
     /*
      ȱԴ */
     HI_ERR_COMM_NOTREADY,
-    /* no resource ; */
+    /* no resource */
     HI_ERR_COMM_NORES,
-    /* resource is  exist ; */
+    /* resource is  exist */
     HI_ERR_COMM_EXIST = 10,
-    /* resource is not exist ; */
+    /* resource is not exist */
     HI_ERR_COMM_LOST,
-    /* no operation ; */
+    /* no operation */
     HI_ERR_COMM_NOOP,
-    /* busy ; */
+    /* busy */
     HI_ERR_COMM_BUSY,
-    /* idle ; */
+    /* idle */
     HI_ERR_COMM_IDLE,
-    /* full ; */
+    /* full */
     HI_ERR_COMM_FULL = 15,
-    /* empty ; */
+    /* empty */
     HI_ERR_COMM_EMPTY,
-    /* underflow ; */
+    /* underflow */
     HI_ERR_COMM_UNDERFLOW,
-    /* Overflow ; */
+    /* Overflow */
     HI_ERR_COMM_OVERFLOW,
-    /* Couldn't access ; */
+    /* Couldn't access */
     HI_ERR_COMM_ACCES,
-    /* operation is not finish when get interrupt ; */
+    /* operation is not finish when get interrupt */
     HI_ERR_COMM_INTR = 20,
-    /* Operation is not finish, it will continue ; */
+    /* Operation is not finish, it will continue */
     HI_ERR_COMM_CONTINUE,
-    /* Operation is over, there is no any object to opreate ; */
+    /* Operation is over, there is no any object to opreate */
     HI_ERR_COMM_OVER,
-    /* Operation is not support ; */
+    /* Operation is not support */
     HI_ERR_COMM_UNSUPPORT,
-    /* out of bound ; */
+    /* out of bound */
     HI_ERR_COMM_OUTOFBOUND,
-    /* File operation error ; */
+    /* File operation error */
     HI_ERR_COMM_FILEOP,
-    /* Secure function error ; */
+    /* Secure function error */
     HI_ERR_COMM_SECURE,
-    /* No effect error ; */
+    /* No effect error */
     HI_ERR_COMM_NOEFFECT,
 
     HI_ERR_COMM_END = 28,
 
     /* Message module */
-    /* Send message failure; */
+    /* Send message failure */
     HI_ERR_MSGM_VTOPMSGSEND = 500,
-    /* Create message queue failure ; */
+    /* Create message queue failure */
     HI_ERR_MSGM_VTOPMSGCREATE,
-    /* Create message server failure ; */
+    /* Create message server failure */
     HI_ERR_MSGM_VTOPMSGSERVER,
 
     /* APP */
-    /* The base of task manager ; */
-    /* Tase not stop ; */
+    /* The base of task manager */
+    /* Tase not stop */
     HI_ERR_TASK_TASKNOTSTOP,
 
     /* resource manager */
-    /* no memory ; */
+    /* no memory */
     HI_ERR_RES_NOMEN,
-    /* unknown resource type ; */
+    /* unknown resource type */
     HI_ERR_RES_UNKNOWRES = 505,
-    /* resource is using ; */
+    /* resource is using */
     HI_ERR_RES_USED,
-    /* invalid resource type ; */
+    /* invalid resource type */
     HI_ERR_RES_INVRESTYPE,
-    /* The pointer is null when save resource infoamtion ; */
+    /* The pointer is null when save resource infoamtion */
     HI_ERR_RES_NULL,
-    /* Load resource is failure ; */
+    /* Load resource is failure */
     HI_ERR_RES_LOAD,
-    /* The rource is not loaded ; */
+    /* The rource is not loaded */
     HI_ERR_RES_NOLOAD = 510,
-    /* Create resource failure ; */
+    /* Create resource failure */
     HI_ERR_RES_CREATE,
 
-    /* Window manager ; */
-    /* The base of window manager ; */
+    /* Window manager */
+    /* The base of window manager */
     HI_ERR_WM_CREATE,
 
-    /* widget framework ; */
-    /* Widget type is no exist ; */
+    /* widget framework */
+    /* Widget type is no exist */
     HI_ERR_TYPE_NOEXISIT,
-    /* Unsupported multi thread to call ; */
+    /* Unsupported multi thread to call */
     HI_ERR_MULTIPLE_THREAD_CALL,
-    /* binded db is not used ; */
+    /* binded db is not used */
     HI_ERR_WIDGET_INVALDB = 515,
-    /* The widget is shown ; */
+    /* The widget is shown */
     HI_ERR_WIDGET_SHOW,
-    /* the widget is hidden ; */
+    /* the widget is hidden */
     HI_ERR_WIDGET_HIDE,
-    /* the rect is null ; */
+    /* the rect is null */
     HI_ERR_INVSIBLE,
 
     /* DDB */
-    /* no field ; */
+    /* no field */
     HI_ERR_DDB_ZEROFIELD,
-    /* out of range ; */
+    /* out of range */
     HI_ERR_DDB_OUTOFRANGE = 520,
-    /* null pointer ; */
+    /* null pointer */
     HI_ERR_DDB_NULLPTR,
-    /* invalid parameter ; */
+    /* invalid parameter */
     HI_ERR_DDB_INVAIDPARA,
-    /* Buffer is too small ; */
+    /* Buffer is too small */
     HI_ERR_DDB_BUFFSMALL,
 
     /* ADM */
-    /* no filed ; */
+    /* no filed */
     HI_ERR_ADM_ZEROFIELD,
-    /* Out of range ; */
+    /* Out of range */
     HI_ERR_ADM_OUTOFRANGE = 525,
-    /* Null pointer ; */
+    /* Null pointer */
     HI_ERR_ADM_NULLPTR,
-    /* Invalid parameter ; */
+    /* Invalid parameter */
     HI_ERR_ADM_INVAIDPARA,
-    /* The ADM buffer is too small ; */
+    /* The ADM buffer is too small */
     HI_ERR_ADM_BUFFSMALL,
-    /* Get data failure ; */
+    /* Get data failure */
     HI_ERR_ADM_GETDATA,
-    /* Unknown operation ; */
+    /* Unknown operation */
     HI_ERR_ADM_UNKNOWNOPT = 530,
 
     /* LANGUAGE */
-    /* *Not set locale ; */
+    /* *Not set locale */
     HI_ERR_LANG_INVALID_LOCALE,
 
     /* 豸 */
@@ -184,27 +184,27 @@ typedef enum {
     HI_ERR_CHARSET_CONVERT,
 
     /* */
-    /* Not init ; */
+    /* Not init */
     HI_ERR_PARSER_NOINIT,
-    /* it is inited ; */
+    /* it is inited */
     HI_ERR_PARSER_INITED,
-    /* Check code is error ; */
+    /* Check code is error */
     HI_ERR_PARSER_VERIFY = 540,
-    /* The identifier is error ; */
+    /* The identifier is error */
     HI_ERR_PARSER_MARK,
-    /* The file type is error ; */
+    /* The file type is error */
     HI_ERR_PARSER_TYPE,
-    /* The length is error ; */
+    /* The length is error */
     HI_ERR_PARSER_DATALEN,
-    /* Unsupported ;  */
+    /* Unsupported  */
     HI_ERR_PARSER_UNSUPPORT,
-    /* The data of higv bin is error ;  */
+    /* The data of higv bin is error  */
     HI_ERR_PARSER_DATAERR = 545,
-    /* The view is not loaded fully ;  */
+    /* The view is not loaded fully  */
     HI_ERR_PARSER_VIEWNOLOAD,
-    /* File is loaded ;  */
+    /* File is loaded  */
     HI_ERR_PARSER_FILELOADED,
-    /* File is not loaded ; */
+    /* File is not loaded */
     HI_ERR_PARSER_FILENOTLOAD,
 } VResult;
 

@@ -26,7 +26,7 @@ extern "C" {
 #endif
 
 #define UNLIMITED_REPEATE_COUNT (-1)
-/* Invalid resource ID ; */
+/* Invalid resource ID */
 #define INVALID_RESID 0
 /* The max length of resource file name */
 #define HIGV_RESM_MAX_FILENAME_LEN 256
@@ -57,8 +57,8 @@ typedef enum hiHIGV_STYLE_TYPE_E {
 
 /*  Style union */
 typedef union hiHIGV_STYLE_MEMBER_U {
-    HI_COLOR Color; /* Color value  ; */
-    HI_RESID ResId; /* Resource ID ; */
+    HI_COLOR Color; /* Color value  */
+    HI_RESID ResId; /* Resource ID */
 } HIGV_STYLE_MEMBER_U;
 
 /*  The style structure */

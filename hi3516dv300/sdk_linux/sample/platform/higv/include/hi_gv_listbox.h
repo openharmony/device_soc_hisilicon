@@ -29,13 +29,13 @@ extern "C" {
 
 typedef enum {
     LIST_COLTYPE_TXT = 0,
-    /* Text ; */
+    /* Text */
     LIST_COLTYPE_IMG,
-    /* Picture ; */
+    /* Picture */
     LIST_COLTYPE_TXTICONLEFT,
-    /* Text and icon,icon on left ; */
+    /* Text and icon,icon on left */
     LIST_COLTYPE_TXTICONRIGHT,
-    /* Text and icon,icon on right ; */
+    /* Text and icon,icon on right */
     LIST_COLTYPE_BUTT
 } HIGV_LIST_COLTYPE_E;
 
@@ -47,33 +47,31 @@ typedef HI_S32 (*HIGV_LIST_CONV_CB)(HIGV_HANDLE listHandle, HI_U32 col, HI_U32 i
 typedef HI_S32 (*HIGV_GET_WIDTH_CB)(HIGV_HANDLE listHandle, HI_U32 item, HI_U32 col);
 
 typedef struct {
-    HIGV_LIST_COLTYPE_E Type; /*  Column type ; */
-    HI_U32 Width; /*  Column width ; */
-    HI_U32 Align; /*  Alignment text ; */
-    HI_COLOR Fgidx; /*  Font color of column text; */
+    HIGV_LIST_COLTYPE_E Type; /*  Column type */
+    HI_U32 Width; /*  Column width */
+    HI_U32 Align; /*  Alignment text */
+    HI_COLOR Fgidx; /*  Font color of column text */
     HIGV_HANDLE hImage;  /* Picture surface handle (only support type is LIST_COLTYPE_IMG)
                             */
-    HI_U32 FieldColIdxInDb; /* Column index in db ; */
+    HI_U32 FieldColIdxInDb; /* Column index in db */
     HIGV_LIST_CONV_CB ConvString;  /* function which convert string (only support type is LIST_COLTYPE_TXT)
                                     */
 } HIGV_LIST_COLATTR_S;
 
 typedef struct {
-    HI_U32 RowNum; /* Row number ; */
-    HI_U32 ColNum; /* Column number ; */
-    HI_BOOL NoFrame; /* Is no frame Draw ; */
-    HI_BOOL Cyc; /* Is cycle ; */
-    HI_BOOL IsCellActive; /* Is cell active ; */
-    HI_BOOL AutoSwitchCell; /* If cell active auto suwich active cell ; */
-    HI_BOOL Scroll; /* Is scroll ; */
-    HI_BOOL Fromleft; /* Is Scroll from left ; */
-    HI_U32 Timeinterval; /* Time interval ; */
-    HI_U32 Step; /* Scroll step ; */
-    HI_U32 ScrollCol; /* If item active,scroll col of item ; */
-    HIGV_GET_WIDTH_CB GetWidthCb;  /*  Function get cell width from call back ;
-                                    */
-    HIGV_LIST_COLATTR_S *pColAttr;  /* List column attributes array ;
-                                        */
+    HI_U32 RowNum; /* Row number */
+    HI_U32 ColNum; /* Column number */
+    HI_BOOL NoFrame; /* Is no frame Draw */
+    HI_BOOL Cyc; /* Is cycle */
+    HI_BOOL IsCellActive; /* Is cell active */
+    HI_BOOL AutoSwitchCell; /* If cell active auto suwich active cell */
+    HI_BOOL Scroll; /* Is scroll */
+    HI_BOOL Fromleft; /* Is Scroll from left */
+    HI_U32 Timeinterval; /* Time interval */
+    HI_U32 Step; /* Scroll step */
+    HI_U32 ScrollCol; /* If item active,scroll col of item */
+    HIGV_GET_WIDTH_CB GetWidthCb;  /*  Function get cell width from call back */
+    HIGV_LIST_COLATTR_S *pColAttr;  /* List column attributes array */
 } HIGV_LIST_ATTRIBUTE_S;
 
 /*

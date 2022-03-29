@@ -40,7 +40,7 @@ typedef struct {
                        */
 } HIGO_CURSOR_INFO_S;
 
-/* Status of the cursor layer, */
+/* Status of the cursor layer */
 typedef struct {
     HI_BOOL bShow; /* Whether to display the cursor layer. */
 } HIGO_CURSOR_STATUS_S;

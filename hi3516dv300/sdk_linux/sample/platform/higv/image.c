@@ -18,7 +18,7 @@
 
 #ifdef __cplusplus
 #if __cplusplus
-extern "C"{
+extern "C" {
 #endif
 #endif /*  __cplusplus  */
 

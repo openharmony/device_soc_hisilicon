@@ -33,7 +33,7 @@ typedef enum HI_TRACKBAR_STYLE {
     TRACKBAR_BUT
 } TRACKBAR_STYLE;
 
-typedef enum hiHIGV_TRACKBAR_E {    /* Trackbar type ; */
+typedef enum hiHIGV_TRACKBAR_E {    /* Trackbar type */
     HIGV_TRACKBAR_NORMAL = 0,
     HIGV_TRACKBAR_ACTIVE,
     HIGV_TRACKBAR_MOUSEDOWN,

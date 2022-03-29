@@ -2333,7 +2333,7 @@ static HI_S32 SVP_NNIE_Yolov3_GetResult(HI_U64 au64InputBlobAddr[], HI_U32 au32G
     for (i = 1; i < u32ClassNum + 1; i++) {
         u32ClassRoiNum = 0;
         for (j = 0; j < u32BboxNum; j++) {
-            if ((0 == pstBbox[j].u32Mask) && (i == pstBbox[j].u32ClassIdx) && (u32ClassRoiNum < u32MaxRoiNum)) {
+            if ((pstBbox[j].u32Mask == 0) && (i == pstBbox[j].u32ClassIdx) && (u32ClassRoiNum < u32MaxRoiNum)) {
                 *(ps32DstRoi++) = SAMPLE_SVP_NNIE_MAX((HI_S32)(pstBbox[j].f32Xmin * u32SrcWidth), 0);
                 *(ps32DstRoi++) = SAMPLE_SVP_NNIE_MAX((HI_S32)(pstBbox[j].f32Ymin * u32SrcHeight), 0);
                 *(ps32DstRoi++) = SAMPLE_SVP_NNIE_MIN((HI_S32)(pstBbox[j].f32Xmax * u32SrcWidth), (HI_S32)u32SrcWidth);

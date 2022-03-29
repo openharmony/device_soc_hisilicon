@@ -118,18 +118,18 @@ typedef struct {
 
 /* The sequence of user defined widget */
 #define HIGV_EXTWIDGET_START HIGV_WIDGET_BUTT
-/* The callback of user defined widget; */
+/* The callback of user defined widget */
 typedef HI_VOID *(*HIGV_WIDGET_INIT_FUNC)(const WidgetBasicParam *widgetBasicParam);
 
 typedef HI_S32 (*HIGV_WIDGET_HDL2ADDR_PFN)(HI_U32 u32Idx, HI_U8 u8MemType, HI_PARAM *pAddr);
 
 typedef struct hiHIGV_WIDGET_TYPEINFO_S {
-    /* Widget name; */
+    /* Widget name */
     HI_CHAR Name[33];  // 33 represents this array can save 33 HI_CHAR type data
-    /* The sequence of user defined widget; */
+    /* The sequence of user defined widget */
     HI_U32 TypeID;
     HIGV_WIDGET_INIT_FUNC WidgetInitFunc;
-    /* The callback of user defined widget; */
+    /* The callback of user defined widget */
     /* The size of widget that pasered by parser mode, it is should seted
     if the widget is defined in xml, otherwise it can be set 0 */
 
@@ -139,7 +139,7 @@ typedef struct hiHIGV_WIDGET_TYPEINFO_S {
 /* coordinate type  */
 typedef HI_S32 HIGV_CORD;
 
-/* The button of mouse which pressed; */
+/* The button of mouse which pressed */
 typedef enum {
     HIGV_MOUSEBUTTON_NONE = 0x00,
     HIGV_MOUSEBUTTON_L = 0x01,

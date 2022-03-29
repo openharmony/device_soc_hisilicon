@@ -180,11 +180,11 @@ static HI_S32 SAMPLE_IVE_Gmm2_Init(SAMPLE_IVE_GMM2_S *pstGmm2, HI_U32 u32Width, 
     SAMPLE_CHECK_EXPR_GOTO(s32Ret != HI_SUCCESS, GMM2_INIT_FAIL, "Error(%#x),Create blob mem info failed!\n", s32Ret);
     s32Ret = HI_FAILURE;
     pstGmm2->pFpSrc = fopen(pchSrcFileName, "rb");
-    SAMPLE_CHECK_EXPR_GOTO(NULL == pstGmm2->pFpSrc, GMM2_INIT_FAIL, "Error,Open file %s failed!\n", pchSrcFileName);
+    SAMPLE_CHECK_EXPR_GOTO(pstGmm2->pFpSrc == NULL, GMM2_INIT_FAIL, "Error,Open file %s failed!\n", pchSrcFileName);
     pstGmm2->pFpFg = fopen(pchFgFileName, "wb");
-    SAMPLE_CHECK_EXPR_GOTO(NULL == pstGmm2->pFpFg, GMM2_INIT_FAIL, "Error,Open file %s failed!\n", pchFgFileName);
+    SAMPLE_CHECK_EXPR_GOTO(pstGmm2->pFpFg == NULL, GMM2_INIT_FAIL, "Error,Open file %s failed!\n", pchFgFileName);
     pstGmm2->pFpBg = fopen(pchBgFileName, "wb");
-    SAMPLE_CHECK_EXPR_GOTO(NULL == pstGmm2->pFpBg, GMM2_INIT_FAIL, "Error,Open file %s failed!\n", pchBgFileName);
+    SAMPLE_CHECK_EXPR_GOTO(pstGmm2->pFpBg == NULL, GMM2_INIT_FAIL, "Error,Open file %s failed!\n", pchBgFileName);
     s32Ret = HI_SUCCESS;
 
 GMM2_INIT_FAIL:
@@ -457,7 +457,7 @@ static HI_S32 SAMPLE_IVE_Gmm2Proc(SAMPLE_IVE_GMM2_S *pstGmm2)
         SAMPLE_CHECK_EXPR_RET(s32Ret != HI_SUCCESS, s32Ret, "Error(%#x),Read src file failed!\n", s32Ret);
 
         // To building a stable background model quickly at the begin, some parameters are set specially.
-        if (1 == pstGmm2->stGmm2Ctrl.u8ModelNum) {
+        if (pstGmm2->stGmm2Ctrl.u8ModelNum == 1) {
             // If the parameter u8ModelNum is set to 1, the parameter u16FreqReduFactor
             // is usually set to a small value at the first N frames. Here, N = 500.
             pstGmm2->stGmm2Ctrl.u16FreqReduFactor = (u32FrmNum >= SAMPLE_IVE_GMM2_FRM_500) ?

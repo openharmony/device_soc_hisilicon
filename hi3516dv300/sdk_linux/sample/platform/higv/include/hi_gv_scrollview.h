@@ -25,8 +25,8 @@ extern "C" {
 
 /* NOTE: It is only valid for touch operation or mouse wheel operation */
 typedef enum {
-    SCROLLVIEW_DIRECTION_HORI = 0,  /* Horizal direction ; */
-    SCROLLVIEW_DIRECTION_VERT,  /* Vertical direction ; */
+    SCROLLVIEW_DIRECTION_HORI = 0,  /* Horizal direction */
+    SCROLLVIEW_DIRECTION_VERT,  /* Vertical direction */
     SCROLLVIEW_DIRECTION_BUTT
 } HIGV_SCROLLVIEW_DIRECTION_E;
 
@@ -37,18 +37,18 @@ typedef enum {
 } HIGV_SCROLLVIEW_STYLE_E;
 
 typedef struct hiHIGV_SCROLLVIEW_Init_S {
-    HIGV_HANDLE hVerticalScrollBar; /* Bind vertical scrollbar handle; */
-    HIGV_HANDLE hHorizontalScrollbar; /* Bind horizontal scrollbar handle ; */
-    HI_U32 LeftMargin; /* Invalid value ; */
-    HI_U32 RightMargin; /* Child widget right margin of background ; */
-    HI_U32 TopMargin; /* Invalid value ; */
-    HI_U32 BottomMargin; /* Child widget bottom margin of background ; */
-    HI_U32 Step; /* Scroll step ; */
-    HI_U32 Interval; /* Scroll interval ; */
-    HI_U32 ScrollContentWidth; /* The scroll content invariable width ; */
-    HI_U32 ScrollContentHeight; /* The scroll content invariable height ; */
-    HI_U32 ScrollViewStyle; /* Scroll view private style ; */
-    HIGV_SCROLLVIEW_DIRECTION_E Direction; /* Scroll direction ; */
+    HIGV_HANDLE hVerticalScrollBar; /* Bind vertical scrollbar handle */
+    HIGV_HANDLE hHorizontalScrollbar; /* Bind horizontal scrollbar handle */
+    HI_U32 LeftMargin; /* Invalid value */
+    HI_U32 RightMargin; /* Child widget right margin of background */
+    HI_U32 TopMargin; /* Invalid value */
+    HI_U32 BottomMargin; /* Child widget bottom margin of background */
+    HI_U32 Step; /* Scroll step */
+    HI_U32 Interval; /* Scroll interval */
+    HI_U32 ScrollContentWidth; /* The scroll content invariable width */
+    HI_U32 ScrollContentHeight; /* The scroll content invariable height */
+    HI_U32 ScrollViewStyle; /* Scroll view private style */
+    HIGV_SCROLLVIEW_DIRECTION_E Direction; /* Scroll direction */
 } HIGV_SCROLLVIEW_Init_S;
 
 typedef struct {

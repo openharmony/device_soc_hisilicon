@@ -32,11 +32,11 @@ extern "C" {
 
 #define HIGV_ST_STYLE_ALWAYSSCROLL HIGV_STYLE_DEFINE(HIGV_WIDGET_SCROLLTEXT, ST_STYLE_ALWAYSSCROLL)
 
-/* scroll direction ; */
+/* scroll direction */
 typedef enum {
-    /* left scroll ; */
+    /* left scroll */
     HIGV_DIRECTION_LEFT = 0,
-    /* right scroll ; */
+    /* right scroll */
     HIGV_DIRECTION_RIGHT,
     HIGV_DIRECTION_BUTT
 } HIGV_DIRECTION_E;

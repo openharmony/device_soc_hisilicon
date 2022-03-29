@@ -101,7 +101,7 @@ static HI_S32 SAMPLE_IVE_Sobel_Init(SAMPLE_IVE_SOBEL_S *pstSobel, HI_CHAR *pchSr
     (HI_VOID)memcpy_s(pstSobel->stSobelCtrl.as8Mask, sizeof(as8Mask), as8Mask, sizeof(as8Mask));
     s32Ret = HI_FAILURE;
     pstSobel->pFpSrc = fopen(pchSrcFileName, "rb");
-    SAMPLE_CHECK_EXPR_GOTO(HI_NULL == pstSobel->pFpSrc, SOBEL_INIT_FAIL, "Error,Open file %s failed!\n",
+    SAMPLE_CHECK_EXPR_GOTO(pstSobel->pFpSrc == HI_NULL, SOBEL_INIT_FAIL, "Error,Open file %s failed!\n",
         pchSrcFileName);
 
     SAMPLE_CHECK_EXPR_GOTO(realpath(file, path) == NULL, SOBEL_INIT_FAIL, "invalid path!\n");
@@ -109,26 +109,26 @@ static HI_S32 SAMPLE_IVE_Sobel_Init(SAMPLE_IVE_SOBEL_S *pstSobel, HI_CHAR *pchSr
     SAMPLE_CHECK_EXPR_GOTO(s32Ret != EOK, SOBEL_INIT_FAIL, "stract_s failed!\n");
     s32Ret = HI_FAILURE;
     pstSobel->pFpDstH1 = fopen(path, "wb");
-    SAMPLE_CHECK_EXPR_GOTO(HI_NULL == pstSobel->pFpDstH1, SOBEL_INIT_FAIL, "Error,Open file %s failed!\n", path);
+    SAMPLE_CHECK_EXPR_GOTO(pstSobel->pFpDstH1 == HI_NULL, SOBEL_INIT_FAIL, "Error,Open file %s failed!\n", path);
 
     SAMPLE_CHECK_EXPR_GOTO(realpath(file, path) == NULL, SOBEL_INIT_FAIL, "invalid path!\n");
     s32Ret = strcat_s(path, PATH_MAX, "/sobelh2.dat");
     SAMPLE_CHECK_EXPR_GOTO(s32Ret != EOK, SOBEL_INIT_FAIL, "stract_s failed!\n");
     s32Ret = HI_FAILURE;
     pstSobel->pFpDstH2 = fopen(path, "wb");
-    SAMPLE_CHECK_EXPR_GOTO(HI_NULL == pstSobel->pFpDstH2, SOBEL_INIT_FAIL, "Error,Open file %s failed!\n", path);
+    SAMPLE_CHECK_EXPR_GOTO(pstSobel->pFpDstH2 == HI_NULL, SOBEL_INIT_FAIL, "Error,Open file %s failed!\n", path);
     SAMPLE_CHECK_EXPR_GOTO(realpath(file, path) == NULL, SOBEL_INIT_FAIL, "invalid path!\n");
     s32Ret = strcat_s(path, PATH_MAX, "/sobelv1.dat");
     SAMPLE_CHECK_EXPR_GOTO(s32Ret != EOK, SOBEL_INIT_FAIL, "stract_s failed!\n");
     s32Ret = HI_FAILURE;
     pstSobel->pFpDstV1 = fopen(path, "wb");
-    SAMPLE_CHECK_EXPR_GOTO(HI_NULL == pstSobel->pFpDstV1, SOBEL_INIT_FAIL, "Error,Open file %s failed!\n", path);
+    SAMPLE_CHECK_EXPR_GOTO(pstSobel->pFpDstV1 == HI_NULL, SOBEL_INIT_FAIL, "Error,Open file %s failed!\n", path);
     SAMPLE_CHECK_EXPR_GOTO(realpath(file, path) == NULL, SOBEL_INIT_FAIL, "invalid path!\n");
     s32Ret = strcat_s(path, PATH_MAX, "/sobelv2.dat");
     SAMPLE_CHECK_EXPR_GOTO(s32Ret != EOK, SOBEL_INIT_FAIL, "stract_s failed!\n");
     s32Ret = HI_FAILURE;
     pstSobel->pFpDstV2 = fopen(path, "wb");
-    SAMPLE_CHECK_EXPR_GOTO(HI_NULL == pstSobel->pFpDstV2, SOBEL_INIT_FAIL, "Error,Open file %s failed!\n", path);
+    SAMPLE_CHECK_EXPR_GOTO(pstSobel->pFpDstV2 == HI_NULL, SOBEL_INIT_FAIL, "Error,Open file %s failed!\n", path);
     s32Ret = HI_SUCCESS;
 
 SOBEL_INIT_FAIL:

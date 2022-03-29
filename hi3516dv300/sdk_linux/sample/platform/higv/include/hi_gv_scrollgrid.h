@@ -40,43 +40,41 @@ typedef HI_S32 (*HIGV_SCROLLGRID_CONV_CB)(HIGV_HANDLE scrollGridPara, HI_U32 cel
 
 typedef struct _HIGV_SCROLLGRID_COLATTR_S { /* the column attribute structure; */
     HIGV_SCROLLGRID_COLTYPE_E Type; /* The type of column ; */
-    HI_U32 Top; /* The top position of cell; */
-    HI_U32 Left; /* The top position of cell ; */
-    HI_U32 Width; /* The width of cell ; */
-    HI_U32 Height; /* The height of cell ; */
-    HI_U32 Align; /* The alignment of text ; */
+    HI_U32 Top; /* The top position of cell */
+    HI_U32 Left; /* The top position of cell */
+    HI_U32 Width; /* The width of cell */
+    HI_U32 Height; /* The height of cell */
+    HI_U32 Align; /* The alignment of text */
     HIGV_HANDLE hImage;  /*  The picture handle(only support the cloumn type is LIST_COLTYPE_IMG)
                             */
-    HI_U32 FieldColIdxInDb;  /* The index in database corresponding column in scrollgrid ;
-                                */
-    HIGV_SCROLLGRID_CONV_CB ConvString;  /* The convert string callback ;
-                                        */
+    HI_U32 FieldColIdxInDb;  /* The index in database corresponding column in scrollgrid */
+    HIGV_SCROLLGRID_CONV_CB ConvString;  /* The convert string callback */
 } HIGV_SCROLLGRID_COLATTR_S;
 
-typedef enum _SCROLLGRID_DIRECTION_E {  /* Scroll direction ; */
-    SCROLLGRID_DIRECTION_HORI,      /* <Horizal direction ; */
-    SCROLLGRID_DIRECTION_VERT,  /* Vertical direction ; */
+typedef enum _SCROLLGRID_DIRECTION_E {  /* Scroll direction */
+    SCROLLGRID_DIRECTION_HORI,      /* <Horizal direction */
+    SCROLLGRID_DIRECTION_VERT,  /* Vertical direction */
     SCROLLGRID_DIRECTION_BUTT
 } HIGV_SCROLLGRID_DIRECTION_E;
 
-typedef struct _HIGV_SCROLLGRID_STYLE_S {   /*  Layout structure ; */
-    HI_U32 RowNum; /* Row number in a page ; */
-    HI_U32 ColNum; /*  Column number in a page ; */
-    HI_U32 LeftMargin; /* left margin of the page ; */
-    HI_U32 RightMargin; /* Right margin of the page ; */
-    HI_U32 TopMargin; /* Up margin of the page ; */
-    HI_U32 BtmMargin; /* Bottom margin of the page ; */
-    HI_U32 RowSpace; /* The space of row ; */
-    HI_U32 ColSpace; /* The space of column ; */
-    HI_U32 HLHeight; /* The height of horizontal line ; */
-    HI_COLOR HLColor; /* The color of horizontal line ;  */
-    HI_U32 VLWidth; /* The width of vertical line ; */
-    HI_COLOR VLColor; /* The color of vertical line ;  */
-    HI_U32 FocusRectAnchor; /* The anchor position of focus item ; */
-    HI_U32 IsFocusAtBg; /* The focus is drawn at the background ; */
-    HI_U32 ImgDecIndex; /* The index of decode picture ; */
-    HI_U32 IsDynamicDecImg; /* Is Dynamic decode image ; */
-    HIGV_SCROLLGRID_DIRECTION_E Direction; /* Scroll direction ; */
+typedef struct _HIGV_SCROLLGRID_STYLE_S {   /*  Layout structure */
+    HI_U32 RowNum; /* Row number in a page */
+    HI_U32 ColNum; /*  Column number in a page */
+    HI_U32 LeftMargin; /* left margin of the page */
+    HI_U32 RightMargin; /* Right margin of the page */
+    HI_U32 TopMargin; /* Up margin of the page */
+    HI_U32 BtmMargin; /* Bottom margin of the page */
+    HI_U32 RowSpace; /* The space of row */
+    HI_U32 ColSpace; /* The space of column */
+    HI_U32 HLHeight; /* The height of horizontal line */
+    HI_COLOR HLColor; /* The color of horizontal line  */
+    HI_U32 VLWidth; /* The width of vertical line */
+    HI_COLOR VLColor; /* The color of vertical line  */
+    HI_U32 FocusRectAnchor; /* The anchor position of focus item */
+    HI_U32 IsFocusAtBg; /* The focus is drawn at the background */
+    HI_U32 ImgDecIndex; /* The index of decode picture */
+    HI_U32 IsDynamicDecImg; /* Is Dynamic decode image */
+    HIGV_SCROLLGRID_DIRECTION_E Direction; /* Scroll direction */
     HI_RESID FocusRectSkin;
     HI_RESID FocusRectNormSkin;
     HI_RESID replaceImage;

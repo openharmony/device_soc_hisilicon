@@ -25,17 +25,17 @@
 extern "C" {
 #endif
 
-/* the macro of horizontal style ; */
+/* the macro of horizontal style */
 #define PROGRESSBAR_STYLE_HORIZON 0x1
 
-/* the macro of vertical style ; */
+/* the macro of vertical style */
 #define PROGRESSBAR_STYLE_VERTICAL 0x2
 
 
-/* Horizontal style ; */
+/* Horizontal style */
 #define HIGV_PROGRESSBAR_STYLE_HORIZON HIGV_STYLE_DEFINE(HIGV_WIDGET_PROGRESS, PROGRESSBAR_STYLE_HORIZON)
 
-/* Vertical style ; */
+/* Vertical style */
 #define HIGV_PROGRESSBAR_STYLE_VERTICAL HIGV_STYLE_DEFINE(HIGV_WIDGET_PROGRESS, PROGRESSBAR_STYLE_VERTICAL)
 
 /*

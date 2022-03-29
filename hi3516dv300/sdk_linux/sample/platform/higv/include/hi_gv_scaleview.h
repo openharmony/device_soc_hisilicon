@@ -28,20 +28,20 @@ extern "C" {
 #endif
 
 typedef struct HIGV_SCALEVIEW_STYLE_S {
-    HIGV_HANDLE dataModel; /* Data Model Handle ; */
-    HI_U32 rowNum; /* The count of display item ; */
-    HI_U32 leftMargin; /* Left margin ; */
-    HI_U32 rightMargin; /* Right margin ; */
-    HI_U32 topMargin; /* Up margin ; */
-    HI_U32 bottomMargin; /* Bottom margin ; */
-    HI_U32 imgDecIndex; /* imgDecIndex ; */
+    HIGV_HANDLE dataModel; /* Data Model Handle */
+    HI_U32 rowNum; /* The count of display item */
+    HI_U32 leftMargin; /* Left margin */
+    HI_U32 rightMargin; /* Right margin */
+    HI_U32 topMargin; /* Up margin */
+    HI_U32 bottomMargin; /* Bottom margin */
+    HI_U32 imgDecIndex; /* imgDecIndex */
     HI_U32 lineHeight;                 /*  ˮƽ߸߶ */
     HI_U32 lineWidth;                 /*  ˮƽ߿ */
     HI_U32 lineDistance;                 /* ˮƽߵĿݵľ */
-    HI_U32 hlineColor; /* hlineColor ; */
-    HI_U32 type;	    /* type ; */
-    HIGV_HANDLE scaleFont;	 /* scaleFont ; */
-    HI_COLOR tapTxtColor; /* tapTxtColor ; */
+    HI_U32 hlineColor; /* hlineColor */
+    HI_U32 type;	    /* type */
+    HIGV_HANDLE scaleFont;	 /* scaleFont */
+    HI_COLOR tapTxtColor; /* tapTxtColor */
     HI_DOUBLE sizeGrain; /* С仯 */
     HI_BOOL isNeedTransform;  /* ĿǷҪת */
     HI_BOOL tapAutoMove;  /* ĿǷҪԶ */

@@ -29,7 +29,6 @@
 
 HI_S32 HI_MW_DISP_Open(HI_VOID);
 
-
 HI_S32 HI_MW_DISP_Close(HI_VOID);
 
 HI_S32 HI_MW_DISP_SetDisplayGraphicCSC();

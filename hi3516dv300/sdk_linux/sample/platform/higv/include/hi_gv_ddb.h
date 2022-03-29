@@ -23,7 +23,7 @@
 extern "C" {
 #endif
 
-/* Insert position ; */
+/* Insert position */
 typedef enum {
     DDB_INSERT_PRE = 0,
     /*  Insert before,   */

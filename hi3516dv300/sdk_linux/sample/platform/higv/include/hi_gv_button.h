@@ -25,46 +25,45 @@
 extern "C" {
 #endif
 
-/* ť˽Խṹ */
 typedef struct {
-    HI_U32 buttonStyle;                 /*   */
-    HIGV_HANDLE checkedNormal;            /* ѡ״̬Ƥ */
-    HIGV_HANDLE checkedDisable;           /* ѡн״̬Ƥ */
-    HIGV_HANDLE checkedHighlight;         /*  ѡи״̬Ƥ */
-    HIGV_HANDLE checkedActive;            /* ѡл״̬Ƥ */
-    HIGV_HANDLE checkedMouseDown;         /* ѡа״̬Ƥ */
-    HI_U32 textOn;                   /* switch/toggle״̬ID */
-    HI_U32 textOff;                  /* switch/toggleر״̬ID */
-    HI_U32 switchLayout;             /* switch񿪹ֲ */
-    HI_COLOR toggleOnColor;  /* ״̬ʱtoggleʾɫ */
-    HI_COLOR toggleOffColor; /* ر״̬ʱtoggleʾɫ */
+    HI_U32 buttonStyle;
+    HIGV_HANDLE checkedNormal;
+    HIGV_HANDLE checkedDisable;
+    HIGV_HANDLE checkedHighlight;
+    HIGV_HANDLE checkedActive;
+    HIGV_HANDLE checkedMouseDown;
+    HI_U32 textOn;
+    HI_U32 textOff;
+    HI_U32 switchLayout;
+    HI_COLOR toggleOnColor;
+    HI_COLOR toggleOffColor;
 } HIGV_BUTTON_PRIVATE;
 
-/* Normal button ; */
+/* Normal button */
 #define HIGV_BS_PUSH HIGV_STYLE_DEFINE(HIGV_WIDGET_BUTTON, BUTTON_STYLE_PUSH)
 
-/*  Radio button ; */
+/*  Radio button */
 #define HIGV_BS_RADIO HIGV_STYLE_DEFINE(HIGV_WIDGET_BUTTON, BUTTON_STYLE_RADIO)
 
-/*  Check button ; */
+/*  Check button */
 #define HIGV_BS_CHECK HIGV_STYLE_DEFINE(HIGV_WIDGET_BUTTON, BUTTON_STYLE_CHECK)
 
-/*  Softkey button ; */
+/*  Softkey button */
 #define HIGV_BS_SOFTKEY HIGV_STYLE_DEFINE(HIGV_WIDGET_BUTTON, BUTTON_STYLE_SOFTKEY)
 
-/*  Switch button ; */
+/*  Switch button */
 #define HIGV_BS_SWITCH HIGV_STYLE_DEFINE(HIGV_WIDGET_BUTTON, BUTTON_STYLE_SWITCH)
 
-/*  Toggle button ; */
+/*  Toggle button */
 #define HIGV_BS_TOGGLE HIGV_STYLE_DEFINE(HIGV_WIDGET_BUTTON, BUTTON_STYLE_TOGGLE)
 
-/*  Paint toggle min height ; */
+/*  Paint toggle min height */
 #define HIGV_BUTTON_TOGGLE_MIN_HEIGHT 5
 
-/*  Paint toggle min width ; */
+/*  Paint toggle min width */
 #define HIGV_BUTTON_TOGGLE_MIN_WIDTH 19
 
-/* Button type ; */
+/* Button type */
 typedef enum {
     BUTTON_STYLE_PUSH = 0,
     /* Push button , */

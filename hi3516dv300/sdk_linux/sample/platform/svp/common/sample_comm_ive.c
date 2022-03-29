@@ -462,7 +462,8 @@ HI_S32 SAMPLE_COMM_IVE_CreateImage(IVE_IMAGE_S *pstImg, IVE_IMAGE_TYPE_E enType,
                 SAMPLE_PRT("Mmz Alloc fail,Error(%#x)\n", s32Ret);
                 return s32Ret;
             }
-        } break;
+            break;
+        }
         case IVE_IMAGE_TYPE_YUV420SP: {
             u32Size = pstImg->au32Stride[0] * pstImg->u32Height * 3 / 2; /* YUV420SP size: stride * height * 3 / 2 */
             s32Ret = HI_MPI_SYS_MmzAlloc(&pstImg->au64PhyAddr[0], (HI_VOID **)&pstImg->au64VirAddr[0], NULL, HI_NULL,
@@ -474,7 +475,8 @@ HI_S32 SAMPLE_COMM_IVE_CreateImage(IVE_IMAGE_S *pstImg, IVE_IMAGE_TYPE_E enType,
             pstImg->au32Stride[1] = pstImg->au32Stride[0];
             pstImg->au64PhyAddr[1] = pstImg->au64PhyAddr[0] + pstImg->au32Stride[0] * pstImg->u32Height;
             pstImg->au64VirAddr[1] = pstImg->au64VirAddr[0] + pstImg->au32Stride[0] * pstImg->u32Height;
-        } break;
+            break;
+        }
         case IVE_IMAGE_TYPE_YUV422SP: {
             u32Size = pstImg->au32Stride[0] * pstImg->u32Height * 2; /* YUV422SP size: stride * height * 2 */
             s32Ret = HI_MPI_SYS_MmzAlloc(&pstImg->au64PhyAddr[0], (HI_VOID **)&pstImg->au64VirAddr[0], NULL, HI_NULL,
@@ -486,7 +488,8 @@ HI_S32 SAMPLE_COMM_IVE_CreateImage(IVE_IMAGE_S *pstImg, IVE_IMAGE_TYPE_E enType,
             pstImg->au32Stride[1] = pstImg->au32Stride[0];
             pstImg->au64PhyAddr[1] = pstImg->au64PhyAddr[0] + pstImg->au32Stride[0] * pstImg->u32Height;
             pstImg->au64VirAddr[1] = pstImg->au64VirAddr[0] + pstImg->au32Stride[0] * pstImg->u32Height;
-        } break;
+            break;
+        }
         case IVE_IMAGE_TYPE_YUV420P:
             break;
         case IVE_IMAGE_TYPE_YUV422P:
@@ -504,7 +507,8 @@ HI_S32 SAMPLE_COMM_IVE_CreateImage(IVE_IMAGE_S *pstImg, IVE_IMAGE_TYPE_E enType,
                 SAMPLE_PRT("Mmz Alloc fail,Error(%#x)\n", s32Ret);
                 return s32Ret;
             }
-        } break;
+            break;
+        }
         case IVE_IMAGE_TYPE_U8C3_PACKAGE: {
             u32Size = pstImg->au32Stride[0] * pstImg->u32Height * 3; /* YUV422SP size: stride * height * 3 */
             s32Ret = HI_MPI_SYS_MmzAlloc(&pstImg->au64PhyAddr[0], (HI_VOID **)&pstImg->au64VirAddr[0], NULL, HI_NULL,
@@ -519,7 +523,8 @@ HI_S32 SAMPLE_COMM_IVE_CreateImage(IVE_IMAGE_S *pstImg, IVE_IMAGE_TYPE_E enType,
             pstImg->au64PhyAddr[2] = pstImg->au64PhyAddr[1] + 1; /* phyAddr index : 2 */
             pstImg->au32Stride[1] = pstImg->au32Stride[0]; /* stride index : 1 */
             pstImg->au32Stride[2] = pstImg->au32Stride[0]; /* stride index : 2 */
-        } break;
+            break;
+        }
         case IVE_IMAGE_TYPE_U8C3_PLANAR:
             break;
         case IVE_IMAGE_TYPE_S32C1:
@@ -531,7 +536,8 @@ HI_S32 SAMPLE_COMM_IVE_CreateImage(IVE_IMAGE_S *pstImg, IVE_IMAGE_TYPE_E enType,
                 SAMPLE_PRT("Mmz Alloc fail,Error(%#x)\n", s32Ret);
                 return s32Ret;
             }
-        } break;
+            break;
+        }
         case IVE_IMAGE_TYPE_S64C1:
         case IVE_IMAGE_TYPE_U64C1: {
             u32Size = pstImg->au32Stride[0] * pstImg->u32Height * sizeof(HI_U64);
@@ -541,7 +547,8 @@ HI_S32 SAMPLE_COMM_IVE_CreateImage(IVE_IMAGE_S *pstImg, IVE_IMAGE_TYPE_E enType,
                 SAMPLE_PRT("Mmz Alloc fail,Error(%#x)\n", s32Ret);
                 return s32Ret;
             }
-        } break;
+            break;
+        }
         default:
             break;
     }
@@ -593,7 +600,8 @@ HI_S32 SAMPLE_COMM_IVE_CreateImageByCached(IVE_IMAGE_S *pstImg, IVE_IMAGE_TYPE_E
                 SAMPLE_PRT("Mmz Alloc fail,Error(%#x)\n", s32Ret);
                 return s32Ret;
             }
-        } break;
+            break;
+        }
         case IVE_IMAGE_TYPE_YUV420SP:
             break;
         case IVE_IMAGE_TYPE_YUV422SP:
@@ -615,7 +623,8 @@ HI_S32 SAMPLE_COMM_IVE_CreateImageByCached(IVE_IMAGE_S *pstImg, IVE_IMAGE_TYPE_E
                 SAMPLE_PRT("Mmz Alloc fail,Error(%#x)\n", s32Ret);
                 return s32Ret;
             }
-        } break;
+            break;
+        }
         case IVE_IMAGE_TYPE_U8C3_PACKAGE:
             break;
         case IVE_IMAGE_TYPE_U8C3_PLANAR:
@@ -629,7 +638,8 @@ HI_S32 SAMPLE_COMM_IVE_CreateImageByCached(IVE_IMAGE_S *pstImg, IVE_IMAGE_TYPE_E
                 SAMPLE_PRT("Mmz Alloc fail,Error(%#x)\n", s32Ret);
                 return s32Ret;
             }
-        } break;
+            break;
+        }
         case IVE_IMAGE_TYPE_S64C1:
         case IVE_IMAGE_TYPE_U64C1: {
             u32Size = pstImg->au32Stride[0] * pstImg->u32Height * sizeof(HI_U64);
@@ -639,7 +649,8 @@ HI_S32 SAMPLE_COMM_IVE_CreateImageByCached(IVE_IMAGE_S *pstImg, IVE_IMAGE_TYPE_E
                 SAMPLE_PRT("Mmz Alloc fail,Error(%#x)\n", s32Ret);
                 return s32Ret;
             }
-        } break;
+            break;
+        }
         default:
             break;
     }

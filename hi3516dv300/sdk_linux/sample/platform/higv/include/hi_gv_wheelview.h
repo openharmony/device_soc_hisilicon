@@ -28,17 +28,17 @@ extern "C" {
 #endif
 
 typedef struct {
-    HI_U32 rowNum; /* The count of display item ; */
-    HIGV_HANDLE dataModel; /* Data Model Handle ; */
-    HIGV_HANDLE upCoverSkin; /* Up Cover Skin ; */
-    HIGV_HANDLE downCoverSkin; /* Down Cover Skin; */
-    HI_BOOL isCircleScroll; /* Circle tag ; */
-    HI_FLOAT scrollParam; /* Scroll Param ; */
-    HI_FLOAT flingParam; /* Fling Param ; */
-    HI_U32 leftMargin; /* Left margin ; */
-    HI_U32 rightMargin; /* Right margin ; */
-    HI_U32 topMargin; /* Up margin ; */
-    HI_U32 btmMargin; /* Bottom margin ; */
+    HI_U32 rowNum; /* The count of display item */
+    HIGV_HANDLE dataModel; /* Data Model Handle */
+    HIGV_HANDLE upCoverSkin; /* Up Cover Skin */
+    HIGV_HANDLE downCoverSkin; /* Down Cover Skin */
+    HI_BOOL isCircleScroll; /* Circle tag */
+    HI_FLOAT scrollParam; /* Scroll Param */
+    HI_FLOAT flingParam; /* Fling Param */
+    HI_U32 leftMargin; /* Left margin */
+    HI_U32 rightMargin; /* Right margin */
+    HI_U32 topMargin; /* Up margin */
+    HI_U32 btmMargin; /* Bottom margin */
 } HigvWheelViewStyle;
 
 /*

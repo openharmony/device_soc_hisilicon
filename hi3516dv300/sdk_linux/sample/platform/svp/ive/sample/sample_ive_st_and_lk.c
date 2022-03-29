@@ -213,7 +213,7 @@ static HI_S32 SAMPLE_IVE_St_Lk_Init(SAMPLE_IVE_ST_LK_S *pstStLk, HI_CHAR *pchSrc
 
     s32Ret = HI_FAILURE;
     pstStLk->pFpSrc = fopen(pchSrcFileName, "rb");
-    SAMPLE_CHECK_EXPR_GOTO(HI_NULL == pstStLk->pFpSrc, ST_LK_INIT_FAIL, "Error,Open file %s failed!\n", pchSrcFileName);
+    SAMPLE_CHECK_EXPR_GOTO(pstStLk->pFpSrc == HI_NULL, ST_LK_INIT_FAIL, "Error,Open file %s failed!\n", pchSrcFileName);
 
     s32Ret = HI_SUCCESS;
 

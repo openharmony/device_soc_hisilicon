@@ -234,7 +234,7 @@ static HI_VOID SAMPLE_AUDIO_AdecAoInner(AUDIO_DEV AoDev, AO_CHN AoChn, ADEC_CHN 
 
     s32Ret = SAMPLE_COMM_AUDIO_CreateTrdFileAdec(AdChn, pfd);
     if (s32Ret != HI_SUCCESS) {
-        fclose(pfd);
+        (HI_VOID)fclose(pfd);
         pfd = HI_NULL;
         SAMPLE_DBG(s32Ret);
         goto ADECAO_ERR0;
@@ -351,7 +351,7 @@ static HI_VOID SAMPLE_AUDIO_StartAdecAo(HI_BOOL bSendAdec, AUDIO_DEV AoDev, AENC
         }
         s32Ret = SAMPLE_COMM_AUDIO_CreateTrdAencAdec(AeChn, AdChn, pfd);
         if (s32Ret != HI_SUCCESS) {
-            fclose(pfd);
+            (HI_VOID)fclose(pfd);
             pfd = HI_NULL;
             SAMPLE_DBG(s32Ret);
             goto STOP_AO;
