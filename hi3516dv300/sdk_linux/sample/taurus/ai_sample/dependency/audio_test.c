@@ -4,7 +4,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -109,19 +109,28 @@ static FILE* SAMPLE_AUDIO_OpenAdecFile_AAC(int num, ADEC_CHN AdChn, PAYLOAD_TYPE
 
     /* create file for save stream */
 #ifdef __HuaweiLite__
-    snprintf(aszFileName, FILE_NAME_LEN, "/sharefs/audio_chn%d.%s", AdChn, SAMPLE_AUDIO_Pt2Str(enType));
+    if (snprintf_s(aszFileName, FILE_NAME_LEN, FILE_NAME_LEN - 1, "/sharefs/audio_chn%d.%s",
+        AdChn, SAMPLE_AUDIO_Pt2Str(enType)) < 0) {
+        HI_ASSERT(0);
+    }
 #else
     if (num == -1) {
-        snprintf(aszFileName, FILE_NAME_LEN, "audio_chn%d.%s", AdChn, SAMPLE_AUDIO_Pt2Str(enType));
+        if (snprintf_s(aszFileName, FILE_NAME_LEN, FILE_NAME_LEN - 1,
+            "audio_chn%d.%s", AdChn, SAMPLE_AUDIO_Pt2Str(enType)) < 0) {
+            HI_ASSERT(0);
+        }
     } else {
         SAMPLE_PRT("SAMPLE_AUDIO_OpenAdecFile_AAC\n");
         SAMPLE_PRT("filename:%d.%s\n", num, SAMPLE_AUDIO_Pt2Str(enType));
-        snprintf(aszFileName, FILE_NAME_LEN, "/userdata/aac_file/%d.%s", num, SAMPLE_AUDIO_Pt2Str(enType));
+        if (snprintf_s(aszFileName, FILE_NAME_LEN, FILE_NAME_LEN - 1,
+            "/userdata/aac_file/%d.%s", num, SAMPLE_AUDIO_Pt2Str(enType)) < 0) {
+            HI_ASSERT(0);
+        }
     }
 #endif
 
     pfd = fopen(aszFileName, "rb");
-    if (NULL == pfd) {
+    if (pfd == NULL) {
         SAMPLE_PRT("%s: open file %s failed\n", __FUNCTION__, aszFileName);
         return NULL;
     }
@@ -161,7 +170,8 @@ static HI_VOID SAMPLE_AUDIO_AdecAoInner(HI_S32 num, HI_S32 fd, AUDIO_DEV AoDev, 
     pfd = SAMPLE_AUDIO_OpenAdecFile_AAC(num, AdChn, gs_enPayloadType);
     if (pfd == NULL) {
         SAMPLE_PRT(HI_FAILURE);
-        goto ADECAO_ERR0;
+        SAMPLE_CHECK_EXPR_GOTO(pfd == NULL, ADECAO_ERR0,
+            "SAMPLE_AUDIO_OpenAdecFile_AAC FAIL, ret=%#x\n", s32Ret);
     }
 
     s32Ret = SAMPLE_COMM_AUDIO_CreateTrdFileAdec(AdChn, pfd);
@@ -169,7 +179,8 @@ static HI_VOID SAMPLE_AUDIO_AdecAoInner(HI_S32 num, HI_S32 fd, AUDIO_DEV AoDev, 
         fclose(pfd);
         pfd = HI_NULL;
         SAMPLE_PRT(s32Ret);
-        goto ADECAO_ERR0;
+        SAMPLE_CHECK_EXPR_GOTO(s32Ret != HI_SUCCESS, ADECAO_ERR0,
+            "SAMPLE_COMM_AUDIO_CreateTrdFileAdec FAIL, ret=%#x\n", s32Ret);
     }
 
     printf("bind adec:%d to ao(%d,%d) ok \n", AdChn, AoDev, AoChn);
@@ -177,7 +188,7 @@ static HI_VOID SAMPLE_AUDIO_AdecAoInner(HI_S32 num, HI_S32 fd, AUDIO_DEV AoDev, 
     if (num == -1) {
         audio_wait_quit(fd);
     } else {
-        sleep(3);
+        sleep(3); // 3: sleep time
     }
 
     s32Ret = SAMPLE_COMM_AUDIO_DestroyTrdFileAdec(AdChn);
@@ -319,7 +330,6 @@ static hi_void sample_audio_ai_ao_init_param(AIO_ATTR_S *attr)
         g_out_sample_rate = AUDIO_SAMPLE_RATE_BUTT;
     }
 
-    /* resample and anr should be user get mode */
     gs_bUserGetMode = (gs_bAioReSample == HI_TRUE) ? HI_TRUE : HI_FALSE;
 }
 

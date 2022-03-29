@@ -13,10 +13,10 @@
  * limitations under the License.
  */
 
-#include "sample_comm.h"
-
 #ifndef AUDIO_TEST_H
 #define AUDIO_TEST_H
+
+#include "sample_comm.h"
 
 #ifdef __cplusplus
 extern "C" {
