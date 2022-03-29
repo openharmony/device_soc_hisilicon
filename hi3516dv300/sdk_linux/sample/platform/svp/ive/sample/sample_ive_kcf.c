@@ -734,7 +734,7 @@ static HI_S32 IVE_Rpn(HI_S32 **pps32Src, HI_U32 u32NumRatioAnchors, HI_U32 u32Nu
     for (i = 0; i < u32NumAfterFilter; i++) {
         ps32Ptr = ps32Proposals;
         ps32Ptr = ps32Ptr + SAMPLE_IVE_PROPOSAL_WIDTH * i;
-        if (*(ps32Ptr + SAMPLE_IVE_SUPPRESS_FLAG_OFFSET ) == 0) {
+        if (*(ps32Ptr + SAMPLE_IVE_SUPPRESS_FLAG_OFFSET) == 0) {
             /* In this sample,the output Roi coordinates will be input in hardware,
             so the type coordinates are convert to HI_S20Q12 */
             ps32ProposalResult[SAMPLE_IVE_COORDI_NUM * u32RoiCount] = *ps32Ptr * SAMPLE_IVE_QUANT_BASE;

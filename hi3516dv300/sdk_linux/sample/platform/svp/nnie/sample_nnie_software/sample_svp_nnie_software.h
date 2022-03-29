@@ -15,14 +15,14 @@
 #ifndef SAMPLE_SVP_NNIE_SOFTWARE_H
 #define SAMPLE_SVP_NNIE_SOFTWARE_H
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
 #include "hi_comm_svp.h"
 #include "hi_nnie.h"
 #include "mpi_nnie.h"
 #include "sample_comm_svp.h"
 #include "sample_comm_nnie.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
 
 #ifdef __cplusplus
 #if __cplusplus

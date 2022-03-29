@@ -2245,7 +2245,7 @@ static HI_VOID SAMPLE_COMM_VI_SaveFpnFile(ISP_FPN_FRAME_INFO_S *pVBuf, FILE *pfd
 
     /* save offset */
     for (i = 0; i < VI_MAX_SPLIT_NODE_NUM; i++) {
-        fwrite(&pVBuf->u32Offset[i], 4, 1, pfd); /* write 4 bytes data(offset[i]) to pfd. */
+        (HI_VOID)fwrite(&pVBuf->u32Offset[i], 4, 1, pfd); /* write 4 bytes data(offset[i]) to pfd. */
     }
 
     /* save compress mode */

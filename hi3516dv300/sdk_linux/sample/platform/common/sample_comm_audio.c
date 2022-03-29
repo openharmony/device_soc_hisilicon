@@ -186,19 +186,19 @@ static HI_S32 SAMPLE_INNER_CODEC_CfgAudio(AUDIO_SAMPLE_RATE_E enSample)
      * Within this range, the noises are lowest because only the analog gain is adjusted,
      * and the voice quality can be guaranteed.
      */
-    int iAcodecInputVol = 50; // 30; /* 30: mic gain */
+    int iAcodecInputVol = 50; /* 50: mic gain */
     if (OSAL_IOCTL(fdAcodec, ACODEC_SET_INPUT_VOL, &iAcodecInputVol)) {
         printf("%s: set acodec micin volume failed\n", __FUNCTION__);
         ret = HI_FAILURE;
         goto exit;
     }
-	
-	int iAcodecOutputVol = 0;
-	if (OSAL_IOCTL(fdAcodec, ACODEC_SET_OUTPUT_VOL, &iAcodecOutputVol)) {
-		printf("%s: set acodec micin volume failed\n", __FUNCTION__);
-		ret = HI_FAILURE;
+
+    int iAcodecOutputVol = 0;
+    if (OSAL_IOCTL(fdAcodec, ACODEC_SET_OUTPUT_VOL, &iAcodecOutputVol)) {
+        printf("%s: set acodec micin volume failed\n", __FUNCTION__);
+        ret = HI_FAILURE;
         goto exit;
-	}
+    }
 
 exit:
     OSAL_CLOSE(fdAcodec);
@@ -1075,7 +1075,6 @@ HI_S32 SAMPLE_COMM_AUDIO_StopAo(AUDIO_DEV AoDevId, HI_S32 s32AoChnCnt, HI_BOOL b
             printf("%s: SAMPLE_COMM_AUDIO_StopHdmi failed with %#x!\n", __FUNCTION__, s32Ret);
             return s32Ret;
         }
-
 #endif
     }
 

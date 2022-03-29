@@ -241,7 +241,7 @@ static HI_VOID SAMPLE_AUDIO_AdecAoInner(AUDIO_DEV AoDev, AO_CHN AoChn, ADEC_CHN 
         goto ADECAO_ERR0;
     }
 
-	HI_MPI_AO_SetVolume(AoDev, 0);
+    HI_MPI_AO_SetVolume(AoDev, 0);
     printf("bind adec:%d to ao(%d,%d) ok \n", AdChn, AoDev, AoChn);
     printf("\nplease press twice ENTER to exit this sample\n");
     SAMPLE_AUDIO_Getchar();
@@ -1040,8 +1040,8 @@ HI_S32 main(int argc, char *argv[])
     HI_S32 s32Ret;
     VB_CONFIG_S stVbConf;
     HI_U32 u32Index;
-	sdk_init();
-	
+    sdk_init();
+
     if (argc != 2) { /* 2: arg count */
         SAMPLE_AUDIO_Usage();
         return HI_FAILURE;
@@ -1092,7 +1092,7 @@ HI_S32 main(int argc, char *argv[])
     HI_MPI_ADEC_AacDeInit();
 
     SAMPLE_COMM_SYS_Exit();
-	
-	sdk_exit();
+
+    sdk_exit();
     return s32Ret;
 }
