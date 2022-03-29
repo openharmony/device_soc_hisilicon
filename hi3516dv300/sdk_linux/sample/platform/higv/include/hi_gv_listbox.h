@@ -79,7 +79,7 @@ typedef struct {
 /*
 * brief Init the listbox.
 * param[in] listHandle
-* param[in] rowNum  Row number of dispaly.
+* param[in] rowNum  Row number of display.
 * param[in] colNum   Column number.
 * param[in] colAttr Column attribute array.
 * retval ::HI_SUCCESS

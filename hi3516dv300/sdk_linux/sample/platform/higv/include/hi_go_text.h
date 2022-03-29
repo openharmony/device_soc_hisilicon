@@ -124,7 +124,7 @@ typedef enum {
     HIGO_LAYOUT_MOVECURSOR_PREV,   /* move cursor to previous position */
     HIGO_LAYOUT_MOVECURSOR_NEXT,   /* move cursor to next position */
     HIGO_LAYOUT_MOVECURSOR_LEFT,   /* move cursor to left position */
-    HIGO_LAYOUT_MOVECURSOR_RIGHT,  /* move cursor to right positon */
+    HIGO_LAYOUT_MOVECURSOR_RIGHT,  /* move cursor to right position */
     HIGO_LAYOUT_MOVECURSOR_SOT,    /* move cursor to start position of text */
     HIGO_LAYOUT_MOVECURSOR_EOT,    /* move curosr to end position of text */
     HIGO_LAYOUT_MOVECURSOR_SOL,    /* move cursor to start of current line */

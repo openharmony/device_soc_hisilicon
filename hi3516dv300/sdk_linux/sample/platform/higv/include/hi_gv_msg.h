@@ -285,7 +285,7 @@ HI_S32 HI_GV_Msg_SendAsync(HIGV_HANDLE widgetHandle, HI_U32 msgId, HI_PARAM para
 * param[in] msgId  Message ID. The msg id is defined in "hi_gv_widget.h"
 * .
 * decided by message type.
-* param[in] param2  Paramater 2,the meaning of message is decided by message
+* param[in] param2  Parameter 2,the meaning of message is decided by message
 * type.
 * retval ::HI_SUCCESS
 * retval ::HI_ERR_COMM_LOST

@@ -37,7 +37,7 @@ HI_S32 HI_GV_Win_SetOpacity(HIGV_HANDLE windowHandle, HI_U8 opacity);
 * attention :This api is uded to get the highlight widget for softkeyboard.
 *
 * param[in] windowHandle Window handle.
-* param[out] handleHilghtChild Hightlight child.
+* param[out] handleHilghtChild Highlight child.
 * retval ::HI_SUCCESS
 * retval ::HI_ERR_COMM_LOST
 */

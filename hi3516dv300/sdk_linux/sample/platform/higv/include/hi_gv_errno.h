@@ -33,7 +33,7 @@ typedef enum {
     HI_ERR_COMM_INTER,
     /* version error ; */
     HI_ERR_COMM_VERSION,
-    /* unsupport function, operation, feature */
+    /* unsupported function, operation, feature */
     /*
     δİ汾Ʒ֧ */
     HI_ERR_COMM_PAERM = 5,

@@ -236,7 +236,7 @@ and lost the focus, the child will not be highlight */
 /* Disable state */
 
 #define HIGV_SKIN_DISABLE 0x02
-/* Hightlight state */
+/* Highlight state */
 
 #define HIGV_SKIN_HIGHLIGHT 0x03
 /* Active state */
@@ -251,7 +251,7 @@ and lost the focus, the child will not be highlight */
 /* Disable at check state */
 
 #define HIGV_SKIN_BUTTON_CHECKED_DISABLE 0x07
-/* Hightlight at check state */
+/* Highlight at check state */
 
 #define HIGV_SKIN_BUTTON_CHECKED_HIGHLIGHT 0x08
 /* Focus at check state */
@@ -996,7 +996,7 @@ HI_S32 HI_GV_Widget_Move(HIGV_HANDLE widgetHandle, HIGV_CORD x, HIGV_CORD y);
 HI_S32 HI_GV_Widget_MoveToTop(HIGV_HANDLE widgetHandle);
 
 /*
-* brief Hightlight widget.
+* brief Highlight widget.
 * param[in] widgetHandle   Widget handle.
 * param[in] highlight
 * retval ::HI_SUCCESS
@@ -1006,7 +1006,7 @@ HI_S32 HI_GV_Widget_MoveToTop(HIGV_HANDLE widgetHandle);
 HI_S32 HI_GV_Widget_Highlight(HIGV_HANDLE widgetHandle, HI_BOOL highlight);
 
 /*
-* brief Whether highligt the widget.
+* brief Whether highlight the widget.
 * param[in] widgetHandle   Widget handle.
 * retval ::HI_TRUE Highlight.
 * retval ::HI_FALSE it is not highlight.

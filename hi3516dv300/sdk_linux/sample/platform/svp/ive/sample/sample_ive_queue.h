@@ -15,8 +15,6 @@
 #ifndef SAMPLE_IVE_QUEUE_H
 #define SAMPLE_IVE_QUEUE_H
 
-
-
 #include "hi_type.h"
 
 #ifdef __cplusplus
@@ -25,16 +23,14 @@ extern "C"{
 #endif
 #endif /* __cplusplus */
 
-typedef struct hiSAMPLE_IVE_NODE_S
-{
+typedef struct hiSAMPLE_IVE_NODE_S {
     VIDEO_FRAME_INFO_S stFrameInfo;
     struct hiSAMPLE_IVE_NODE_S *next;
-}SAMPLE_IVE_NODE_S;
+} SAMPLE_IVE_NODE_S;
 
-typedef struct hiSAMPLE_IVE_QUEUE_S
-{
+typedef struct hiSAMPLE_IVE_QUEUE_S {
     SAMPLE_IVE_NODE_S *front, *rear;
-}SAMPLE_IVE_QUEUE_S;
+} SAMPLE_IVE_QUEUE_S;
 
 
 #define QUEUE_CORE_ERROR_BASE     (1)
@@ -43,7 +39,6 @@ typedef struct hiSAMPLE_IVE_QUEUE_S
 #define QUEUE_NULL_POINTER        (QUEUE_CORE_FRAMEWORK_ERROR_BASE + 1)
 #define QUEUE_ILLEGAL_STATE       (QUEUE_CORE_FRAMEWORK_ERROR_BASE + 2)
 #define QUEUE_OUT_OF_MEMORY       (QUEUE_CORE_FRAMEWORK_ERROR_BASE + 3)
-
 
 SAMPLE_IVE_QUEUE_S* SAMPLE_IVE_QueueCreate(HI_S32 s32Len);
 HI_VOID SAMPLE_IVE_QueueDestory(SAMPLE_IVE_QUEUE_S* pstQueueHead);
