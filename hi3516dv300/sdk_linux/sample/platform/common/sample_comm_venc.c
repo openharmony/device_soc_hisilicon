@@ -30,6 +30,7 @@
 #include <sys/prctl.h>
 #include <limits.h>
 #include "sample_comm.h"
+#include "autoconf.h"
 
 #ifdef __cplusplus
 #if __cplusplus
@@ -1580,6 +1581,7 @@ static HI_VOID *SAMPLE_COMM_VENC_GetVencStreamProc(HI_VOID *p)
     }
 
     while (HI_TRUE == pstPara->bThreadStart) {
+#ifndef CONFIG_USER_SPACE
         FD_ZERO(&read_fds);
         for (i = 0; i < s32ChnTotal; i++) {
             FD_SET(VencFd[i], &read_fds);
@@ -1597,6 +1599,9 @@ static HI_VOID *SAMPLE_COMM_VENC_GetVencStreamProc(HI_VOID *p)
         } else {
             for (i = 0; i < s32ChnTotal; i++) {
                 if (FD_ISSET(VencFd[i], &read_fds)) {
+#else
+                for (i = 0; i < s32ChnTotal; i++) {
+#endif
                     (HI_VOID)memset_s(&stStream, sizeof(stStream), 0, sizeof(stStream));
 
                     VencChn = pstPara->VeChn[i];
@@ -1607,7 +1612,9 @@ static HI_VOID *SAMPLE_COMM_VENC_GetVencStreamProc(HI_VOID *p)
                         break;
                     }
                     if (stStat.u32CurPacks == 0) {
-                        SAMPLE_PRT("NOTE: Current  frame is NULL!\n");
+#ifdef CONFIG_USER_SPACE
+                        usleep(10 * 1000);
+#endif
                         continue;
                     }
                     stStream.pstPack = (VENC_PACK_S *)malloc(sizeof(VENC_PACK_S) * stStat.u32CurPacks);
@@ -1701,8 +1708,10 @@ static HI_VOID *SAMPLE_COMM_VENC_GetVencStreamProc(HI_VOID *p)
                         (HI_VOID)fclose(pFile[i]);
                     }
                 }
+#ifndef CONFIG_USER_SPACE
             }
         }
+#endif
     }
 
 #ifndef OHOS_CONFIG_WITHOUT_SAVE_STREAM

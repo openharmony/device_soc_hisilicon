@@ -163,6 +163,7 @@ typedef enum hiPIC_SIZE_E {
     PIC_VGA,     /* 640 * 480 */
     PIC_D1_PAL,  /* 720 * 576 */
     PIC_D1_NTSC, /* 720 * 480 */
+    PIC_D1_MIPI, /* 800 * 480 */
     PIC_720P,    /* 1280 * 720 */
     PIC_1080P,   /* 1920 * 1080 */
     PIC_480P,

@@ -143,9 +143,14 @@ HI_S32 SAMPLE_COMM_SYS_GetPicSize(PIC_SIZE_E enPicSize, SIZE_S *pstSize)
         return HI_FAILURE;
     }
     switch (enPicSize) {
+        case PIC_D1_MIPI:
+            pstSize->u32Width  = 800; /* PIC_D1_MIPI width is 800 */
+            pstSize->u32Height = 480; /* PIC_D1_MIPI width is 480 */
+            break;
+
         case PIC_CIF:
-            pstSize->u32Width  = 352; /* PIC_360P width is 352 */
-            pstSize->u32Height = 288; /* PIC_360P height is 288 */
+            pstSize->u32Width  = 352; /* PIC_CIF width is 352 */
+            pstSize->u32Height = 288; /* PIC_CIF height is 288 */
             break;
 
         case PIC_360P:
