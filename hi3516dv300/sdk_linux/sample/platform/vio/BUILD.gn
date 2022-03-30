@@ -26,10 +26,10 @@ executable("ohos_vio_demo") {
   sources = [
     "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/common/sample_comm_isp.c",
     "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/common/sample_comm_sys.c",
+    "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/common/sample_comm_venc.c",
     "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/common/sample_comm_vi.c",
     "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/common/sample_comm_vo.c",
     "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/common/sample_comm_vpss.c",
-    "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/common/sample_comm_venc.c",
     "sample_vio_main.c",
     "smp/sample_vio.c",
   ]
@@ -41,7 +41,7 @@ executable("ohos_vio_demo") {
     "//device/soc/hisilicon/hi3516dv300/sdk_linux/mpp/include",
     "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/common",
     "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/svp/common",
-     "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/vio/",
+    "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/vio/",
     "//third_party/bounds_checking_function/include",
     "smp",
   ]

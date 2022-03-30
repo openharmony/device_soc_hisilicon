@@ -26,19 +26,19 @@ executable("ohos_nnie_demo") {
   sources = [
     "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/common/loadbmp.c",
     "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/common/sample_comm_audio.c",
-    "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/common/sample_comm_region.c",
     "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/common/sample_comm_isp.c",
+    "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/common/sample_comm_region.c",
     "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/common/sample_comm_sys.c",
+    "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/common/sample_comm_venc.c",
     "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/common/sample_comm_vi.c",
     "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/common/sample_comm_vo.c",
     "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/common/sample_comm_vpss.c",
-    "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/common/sample_comm_venc.c",
-    "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/svp/common/sample_comm_nnie.c",
     "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/svp/common/sample_comm_ive.c",
+    "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/svp/common/sample_comm_nnie.c",
     "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/svp/common/sample_comm_svp.c",
     "sample/sample_nnie.c",
-    "sample_nnie_software/sample_svp_nnie_software.c",
     "sample_nnie_main.c",
+    "sample_nnie_software/sample_svp_nnie_software.c",
   ]
 
   include_dirs = [
@@ -50,8 +50,8 @@ executable("ohos_nnie_demo") {
     "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/svp/common",
     "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/svp/nnie/sample",
     "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/svp/nnie/sample_nnie_software",
-     "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/vio/",
-     "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/audio/adp",
+    "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/vio/",
+    "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/audio/adp",
     "//third_party/bounds_checking_function/include",
   ]
 
