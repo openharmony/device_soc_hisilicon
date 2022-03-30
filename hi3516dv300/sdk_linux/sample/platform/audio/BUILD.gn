@@ -43,7 +43,7 @@ executable("ohos_audio_demo") {
 
   defines = [
     "HI_SUPPORT_MP3 := NO",
-    "CONFIG_USER_SPACE := YES"
+    "CONFIG_USER_SPACE := YES",
   ]
 
   if (need_link_mpp_lib) {
