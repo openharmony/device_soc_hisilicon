@@ -83,6 +83,8 @@ Note:If the text contains special characters, please escape them according to th
 				<filteritem type="filepath" name="hi3516dv300/sdk_linux/build.sh" desc="Compilation scripts do not declare license"/>
 				<filteritem type="filepath" name="hi3516dv300/sdk_linux/config.gni" desc="Compilation scripts do not declare license"/>
 				<filteritem type="filepath" name="hi3516dv300/sdk_linux/out/ko/load3516dv300_user" desc="load script"/>
+				<filteritem type="filepath" name="hi3516dv300/sdk_linux/sample/platform/svp/nnie/data/.*" desc="load nnie data"/>
+				<filteritem type="filepath" name="hi3516dv300/sdk_linux/sample/platform/svp/ive/data/.*" desc="load ive data"/>
 				<filteritem type="filepath" name="hi3861v100/sdk_liteos/platform/os/.*" desc="liteos"/>
 				<filteritem type="filepath" name="hi3861v100/sdk_liteos/third_party/.*" desc="Describe the reason for filtering scan results"/>
 				<filteritem type="filepath" name="hi3861v100/hi3861_adapter/.*" desc="Describe the reason for filtering scan results"/>
