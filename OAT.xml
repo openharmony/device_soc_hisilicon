@@ -98,6 +98,8 @@ Note:If the text contains special characters, please escape them according to th
 				<filteritem type="filename" name="*.S|*.gn" desc="Describe the reason for filtering scan results"/>
 				<filteritem type="filename" name="*.bgr" desc="rgb source files"/>
 				<filteritem type="filename" name="*.yuv" desc="yuv source files"/>
+				<filteritem type="filename" name="*.jpg" desc="jpg source files"/>
+				<filteritem type="filename" name="*.bmp" desc="bmp source files"/>
 				<filteritem type="filename" name="*.JPEG" desc="jpeg source files"/>
 				<filteritem type="filename" name="*.VEC_S32" desc="nnie source files"/>
 				<filteritem type="filename" name="*.y" desc="nnie image source files"/>
@@ -125,6 +127,8 @@ Note:If the text contains special characters, please escape them according to th
 				<filteritem type="filename" name="*.S|*.gn" desc="Describe the reason for filtering scan results"/>
 				<filteritem type="filename" name="*.bgr" desc="rgb source files"/>
 				<filteritem type="filename" name="*.yuv" desc="yuv source files"/>
+				<filteritem type="filename" name="*.jpg" desc="jpg source files"/>
+				<filteritem type="filename" name="*.bmp" desc="bmp source files"/>
 				<filteritem type="filename" name="*.JPEG" desc="jpeg source files"/>
 				<filteritem type="filename" name="*.VEC_S32" desc="nnie source files"/>
 				<filteritem type="filename" name="*.y" desc="nnie image source files"/>
