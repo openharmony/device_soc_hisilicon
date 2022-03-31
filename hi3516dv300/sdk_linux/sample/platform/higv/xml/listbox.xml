@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view
+id="LISTBOX_WIN"
+isusecommonskin="yes">
+    <window
+    id="LISTBOX_WIN"
+    top="0"
+    left="0"
+    width="320"
+    height="240"
+    isrelease="yes"
+    islanchange="no"
+    normalskin="GROUP_SKIN"
+    focusmode="auto"
+    isnofocus="no"
+    opacity="255"
+    winlevel="0"
+    onshow="LISTBOX_WIN_Onshow"
+    onrefresh="LISTBOX_WIN_Onrefresh"
+    ontimer="LISTBOX_WIN_Ontimer"
+    onhide="LISTBOX_WIN_Onhide"
+    onkeydown=""
+    iswinmodel="no"
+    transparent="no"
+    isskinforcedraw="no"
+    isnotclone="no">
+
+	    <listbox
+		id="LISTBOX_WIN_LISTBOX1"
+		top="20"
+		left="20"
+		width="280"
+		height="200"
+		isrelease="yes"
+		islanchange="no"
+		scrollbar=""
+		normalskin="LIST_NORMAL_SKIN"
+		activeskin="LIST_ACTIVE_SKIN"
+		font="SIMHEI_FONT_TEXT_20"
+		widgetposmirror="no"
+		widgetinteriormirror="no"
+		leftmargin="0"
+		topmargin="0"
+		rightmargin="0"
+		bottommargin="0"
+		transparent="no"
+		isskinforcedraw="no"
+		alignment="hcenter|vcenter"
+		isnofocus="no"
+		rownum="4"
+		colnum="1"
+		datamodel="ADM_SET_STRINGID"
+		hlineheight="1"
+		vlinewidth="0"
+		hlinecolor="0xFF000000"
+		ismousehighlight="no"
+		iscellactive="no"
+		scroll="yes"
+		timeinterval="0"
+		fromleft="no"
+		noframe="no"
+		rowselectskin="LISTBOX_SELECT_SKIN"
+		rownormalskin="LISTBOX_ROW_NORMAL"
+		onselect=""
+		oncellselect="">
+		        <listcol
+		        id="MAIN_WIN_LISTBOX1_LISTCOL1"
+		        coltype="text"
+		        colwidth="280"
+		        colbinddb="yes"
+		        coldbindex="0"
+		        colalignment="hcenter|vcenter"
+		        fgidx="0"
+		        />
+		</listbox>
+
+    </window>
+</view>
+
+<!--
+ * Copyright (c) 2022 HiSilicon (Shanghai) Technologies CO., LIMITED.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+-->

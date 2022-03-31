@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view
+id="BUTTON_WIN"
+isusecommonskin="yes">
+    <window
+    id="BUTTON_WIN"
+    top="0"
+    left="0"
+    width="320"
+    height="240"
+    isrelease="yes"
+    islanchange="no"
+    normalskin="GROUP_SKIN"
+    focusmode="auto"
+    isnofocus="no"
+    opacity="255"
+    winlevel="0"
+    onshow=""
+    onrefresh="BUTTON_WIN_Onrefresh"
+    ontimer="BUTTON_WIN_Ontimer"
+    onhide="BUTTON_WIN_Onhide"
+    onkeydown=""
+    iswinmodel="no"
+    transparent="no"
+    isskinforcedraw="no"
+    isnotclone="no">
+
+    <button
+        id="BUTTON_WIN_BUTTON1"
+        top="50"
+        left="50"
+        width="120"
+        height="60"
+        isrelease="yes"
+        islanchange="no"
+        normalskin="LIST_NORMAL_SKIN"
+        activeskin="LIST_NORMAL_SKIN"
+        checkednormal=""
+        font="SIMHEI_FONT_TEXT_30"
+        focusmode="auto"
+        widgetposmirror="no"
+        widgetinteriormirror="no"
+        leftmargin="0"
+        topmargin="0"
+        rightmargin="0"
+        bottommargin="0"
+        transparent="no"
+        isskinforcedraw="no"
+        alignment="hcenter|vcenter"
+        isnofocus="no"
+        style="normal"
+        checkedmousedown=""
+        text="STR_BUTTON1"
+        ontouchaction=""/>
+
+    </window>
+</view>
+
+<!--
+ * Copyright (c) 2022 HiSilicon (Shanghai) Technologies CO., LIMITED.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+-->

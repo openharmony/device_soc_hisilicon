@@ -1,0 +1,52 @@
+<language
+    id="language"
+    languageinfo="en;zh"
+    locale="en">
+	<lanstr
+		id="STR_LABEL1"
+		en="hiberry"
+        zh="黑莓"/>
+	<lanstr
+		id="STR_BUTTON1"
+		en="button1"
+        zh="按钮1"/>
+    <lanstr
+		id="STR_NUM1"
+		en="1"
+        zh="1"/>
+    <lanstr
+		id="STR_NUM2"
+		en="2"
+        zh="2"/>
+    <lanstr
+		id="STR_NUM3"
+		en="3"
+        zh="3"/>
+    <lanstr
+		id="STR_NUM4"
+		en="4"
+        zh="4"/>
+	<lanstr
+		id="STR_NUM5"
+		en="5"
+        zh="5"/>
+	<lanstr
+		id="STR_NUM6"
+		en="6"
+        zh="6"/>
+</language>
+
+<!--
+ * Copyright (c) 2022 HiSilicon (Shanghai) Technologies CO., LIMITED.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+-->

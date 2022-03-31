@@ -70,7 +70,7 @@ static void SAMPLE_VIO_Usage(const char *sPrgNm)
 {
     printf("Usage : %s <index>\n", sPrgNm);
     printf("index:\n");
-    printf("\t 0)VI (Online) - VPSS(Online) - VO.\n");
+    printf("\t 0)VI (Online) - VPSS(Offline) - VO.\n");
     printf("\t 1)WDR(Offline)- VPSS(Offline) - VO. LDC+DIS+SPREAD.\n");
     printf("\t 2)GDC - VPSS LowDelay.\n");
     printf("\t 3)Double WDR Pipe.\n");
@@ -84,6 +84,7 @@ static void SAMPLE_VIO_Usage(const char *sPrgNm)
     printf("\t If you have any questions, please look at readme.txt!\n");
     return;
 }
+
 
 #if defined(__HuaweiLite__) && (!defined(__OHOS__))
 int app_main(int argc, char *argv[])

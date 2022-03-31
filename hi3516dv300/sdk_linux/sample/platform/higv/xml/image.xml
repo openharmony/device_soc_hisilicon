@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view
+id="IMAGE_WIN"
+isusecommonskin="yes">
+    <window
+    id="IMAGE_WIN"
+    top="0"
+    left="0"
+    width="320"
+    height="240"
+    isrelease="yes"
+    onshow="IMAGE_WIN_Onshow"
+    onhide="IMAGE_WIN_Onhide"
+    ontimer="IMAGE_WIN_Ontimer"
+    normalskin="GROUP_SKIN"
+    opacity="255"
+    winlevel="0"
+    >
+
+        <image
+        id="PNG_IMAGE"
+        top="40"
+        left="10"
+        width="140"
+        height="95"
+        isrelease="yes"
+        normalskin="GROUP_SKIN"
+        transparent="yes"
+        image="./res/pic/IMG_PNG.png"
+        alignment="hcenter|vcenter"
+        />
+
+        <image
+        id="JPG_IMAGE"
+        top="40"
+        left="170"
+        width="140"
+        height="95"
+        isrelease="yes"
+        normalskin="GROUP_SKIN"
+        transparent="yes"
+        image="./res/pic/IMG_JPG.jpg"
+        alignment="hcenter|vcenter"
+        />
+
+        <image
+        id="BMP_IMAGE"
+        top="145"
+        left="10"
+        width="140"
+        height="95"
+        isrelease="yes"
+        normalskin="GROUP_SKIN"
+        transparent="yes"
+        image="./res/pic/IMG_BMP.bmp"
+        alignment="hcenter|vcenter"
+        />
+
+        <imageex
+        id="SHOW_IMAGE"
+        top="145"
+        left="170"
+        width="140"
+        height="95"
+        isrelease="yes"
+        normalskin="GROUP_SKIN"
+        widgetposmirror="yes"
+        widgetinteriormirror="yes"
+        transparent="yes"
+        image="./res/pic/IMG_GIF.gif"
+        alignment="hcenter|vcenter"
+        postype="center"/>
+
+    </window>
+</view>
+
+<!--
+ * Copyright (c) 2022 HiSilicon (Shanghai) Technologies CO., LIMITED.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+-->
