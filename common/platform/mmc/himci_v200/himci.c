@@ -1921,7 +1921,7 @@ static int32_t HimciMmcBind(struct HdfDeviceObject *obj)
     if (ret != HDF_SUCCESS) {
         goto _ERR;
     }
-    ret = MmcCntlrAdd(cntlr);
+    ret = MmcCntlrAdd(cntlr, true);
     if (ret != HDF_SUCCESS) {
         goto _ERR;
     }
