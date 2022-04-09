@@ -89,7 +89,7 @@ int osal_wait_uninterruptible(osal_wait *wait, osal_wait_condition_func func, co
 
     if (func == NULL) {
         wait_event((*wq), OSAL_WAIT_CONDITION_TRUE);
-    }else {
+    } else {
         wait_event((*wq), func(param));
     }
 
@@ -140,7 +140,7 @@ int osal_wait_timeout_uninterruptible(osal_wait *wait, osal_wait_condition_func 
 
     if (func == NULL) {
         timeout =  wait_event_timeout((*wq), OSAL_WAIT_CONDITION_TRUE, msecs_to_jiffies(ms));
-    }else {
+    } else {
         timeout = wait_event_timeout((*wq), func(param), msecs_to_jiffies(ms));
     }
 

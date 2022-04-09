@@ -46,7 +46,6 @@ irq_info *osal_irq_find_node(int irq, struct osal_list_head *list)
     return NULL;
 }
 
-extern int hi_get_irq_byname(char *name);
 int osal_irq_request(unsigned int irq, osal_irq_handler handler, osal_irq_handler thread_fn, const char *name,
                      void *dev)
 {

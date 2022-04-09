@@ -26,31 +26,31 @@ typedef union {
         // Comment of field: reserved_0
         /*
         reserved
-        MCUÇøÓò×ÜÏßÊ±ÖÓÑ¡Ôñ
-        00£º24M
-        01£º100M
-        10£º100K
-        11£º±£Áô
+        MCU????????Ê±??Ñ¡??
+        00??24M
+        01??100M
+        10??100K
+        11??????
  */
         unsigned int reserved_0 : 2; /* [1..0] */
         // Comment of field: reserved_1
         /*
         reserved
-        MCUÇøÓò×ÜÏßÊ±ÖÓ×´Ì¬
-        00£º24M
-        01£º100M
-        10£º100K
-        11£º±£Áô
+        MCU????????Ê±??×´Ì¬
+        00??24M
+        01??100M
+        10??100K
+        11??????
  */
         unsigned int reserved_1 : 2; /* [3..2] */
         // Comment of field: reserved_2
         /*
         reserved
-        MCUÇøÓò×ÜÏßÊ±ÖÓ·ÖÆµÑ¡Ôñ
-        00£ºmcu_bus_clk 1·ÖÆµ£»
-        01£ºmcu_bus_clk 2·ÖÆµ£»
-        10£ºmcu_bus_clk 3·ÖÆµ£»
-        11£ºmcu_bus_clk 4·ÖÆµ£»
+        MCU????????Ê±?Ó·?ÆµÑ¡??
+        00??mcu_bus_clk 1??Æµ??
+        01??mcu_bus_clk 2??Æµ??
+        10??mcu_bus_clk 3??Æµ??
+        11??mcu_bus_clk 4??Æµ??
  */
         unsigned int reserved_2 : 2; /* [5..4] */
         // Comment of field: reserved_3
@@ -61,14 +61,14 @@ typedef union {
         // Comment of field: reserved_4
         /*
         reserved
-        POR ¸´Î»Ô´Í·Ñ¡ÔñÖ¸Ê¾ÐÅºÅ£º
-        0£ºÑ¡ÔñÆ¬Íâ¸´Î»Ô´£»
-        1£ºÑ¡ÔñÆ¬ÄÚPOR¸´Î»Ô´£»
+        POR ??Î»Ô´Í·Ñ¡??Ö¸Ê¾?ÅºÅ£?
+        0??Ñ¡??Æ¬?â¸´Î»Ô´??
+        1??Ñ¡??Æ¬??POR??Î»Ô´??
  */
         unsigned int reserved_4 : 1; /* [10] */
         // Comment of field: reserved_5
         /*
-        ±£Áô¡£¶ÁÊ±·µ»Ø0£¬Ð´Ê±ÎÞÓ°Ïì¡£
+        ???ô¡£¶?Ê±????0??Ð´Ê±??Ó°?ì¡£
  */
         unsigned int reserved_5 : 21; /* [31..11] */
     } bits;
@@ -83,58 +83,58 @@ typedef union {
     struct {
         // Comment of field: reserved_0
         /*
-        TVD or HDDEC¸øequatorÄ£ÄâµÄclampÑ¡Ôñ£º
-        0£ºTVD£»
-        1£ºHDDEC¡£
+        TVD or HDDEC??equatorÄ£????clampÑ¡????
+        0??TVD??
+        1??HDDEC??
  */
         unsigned int reserved_0 : 1; /* [0] */
         // Comment of field: reserved_1
         /*
-        EQUATOR DAC0Ê±ÖÓºÍÊý¾ÝÑ¡ÔñÐÅºÅ
-        2'b00:aifÊ±ÖÓºÍÊý¾ÝÑ¡ÔñÐÅºÅ
-        2'b01:cvbsµÄÊ±ÖÓºÍÊý¾ÝÑ¡ÔñÐÅºÅ£»
-        2'b10:±£Áô£»
-        2'b11:afeµÄÊ±ÖÓºÍÊý¾ÝÑ¡ÔñÐÅºÅ¡£
+        EQUATOR DAC0Ê±?Óº?????Ñ¡???Åº?
+        2'b00:aifÊ±?Óº?????Ñ¡???Åº?
+        2'b01:cvbs??Ê±?Óº?????Ñ¡???ÅºÅ£?
+        2'b10:??????
+        2'b11:afe??Ê±?Óº?????Ñ¡???ÅºÅ¡?
  */
         unsigned int reserved_1 : 2; /* [2..1] */
         // Comment of field: equator_agc_sel
         /*
-        TVD or equatorÊý×Ö²¿·Ö¸øequatorÄ£ÄâµÄAGC
-        0£ºTVD£»
-        1£ºEQUATORÊý×Ö²¿·Ö¡£
+        TVD or equator???Ö²??Ö¸?equatorÄ£????AGC
+        0??TVD??
+        1??EQUATOR???Ö²??Ö¡?
  */
         unsigned int equator_agc_sel : 1; /* [3] */
         // Comment of field: reserved_2
         /*
-        equator_digitalµÄclk_cvbs_dffµÄÊ±ÖÓÑ¡Ôñ
-        0: Ñ¡ÔñÄ£ÄâIPÊä³öµÄclk_cvbsÊ±ÖÓ
-        1£ºÑ¡Ôñclk_150m_occÊ±ÖÓ
+        equator_digital??clk_cvbs_dff??Ê±??Ñ¡??
+        0: Ñ¡??Ä£??IP??????clk_cvbsÊ±??
+        1??Ñ¡??clk_150m_occÊ±??
  */
         unsigned int reserved_2 : 1; /* [4] */
         // Comment of field: reserved_3
         /*
-        equator_digitalµÄclk_cvbs_outµÄÊ±ÖÓÑ¡Ôñ
-        0: Ñ¡ÔñÄ£ÄâIPÊä³öµÄclk_cvbs½øÐÐ2·ÖÆµºóµÄÊ±ÖÓ
-        1£ºÑ¡Ôñclk_75m_occÊ±ÖÓ
+        equator_digital??clk_cvbs_out??Ê±??Ñ¡??
+        0: Ñ¡??Ä£??IP??????clk_cvbs????2??Æµ????Ê±??
+        1??Ñ¡??clk_75m_occÊ±??
  */
         unsigned int reserved_3 : 1; /* [5] */
         // Comment of field: reserved_4
         /*
-        0: Ñ¡ÔñÄ£ÄâIPÊä³öµÄclk_rgbÊ±ÖÓ
-        1£ºÑ¡Ôñclk_150m_occÊ±ÖÓ
+        0: Ñ¡??Ä£??IP??????clk_rgbÊ±??
+        1??Ñ¡??clk_150m_occÊ±??
  */
         unsigned int reserved_4 : 1; /* [6] */
         unsigned int reserved_5 : 2; /* [8..7] */
         // Comment of field: reserved_6
         /*
-        Equator_digitalµÄÈí¸´Î»ÇëÇóÐÅºÅ
-        0£º²»¸´Î»£»
-        1£º¸´Î»¡£
+        Equator_digital???í¸´Î»?????Åº?
+        0??????Î»??
+        1????Î»??
  */
         unsigned int reserved_6 : 1; /* [9] */
         // Comment of field: reserved_7
         /*
-        ±£Áô¡£
+        ??????
  */
         unsigned int reserved_7 : 22; /* [31..10] */
     } bits;
@@ -149,35 +149,35 @@ typedef union {
     struct {
         // Comment of field: reserved_0
         /*
-        ±£Áô qamadcÊ±ÖÓÑ¡Ôñ£º2Ñ¡Ò»£¬Ä¬ÈÏÑ¡ 54Mhz
-        0£ºcore_aif µÄÊ±ÖÓ 108/2=54MHz£»
-        1£º41.5MHz£»
+        ???? qamadcÊ±??Ñ¡????2Ñ¡Ò»??Ä¬??Ñ¡ 54Mhz
+        0??core_aif ??Ê±?? 108/2=54MHz??
+        1??41.5MHz??
  */
         unsigned int reserved_0 : 1; /* [0] */
         // Comment of field: reserved_1
         /*
-        ±£Áô qamctrl Ê±ÖÓÑ¡Ôñ£º 2Ñ¡Ò»£¬Ä¬ÈÏÑ¡crg2·ÖÆµ
-        0£º41.5MHz£»
-        1£ºqam_adc phyµÄËæÂ·Ê±ÖÓ£»
+        ???? qamctrl Ê±??Ñ¡???? 2Ñ¡Ò»??Ä¬??Ñ¡crg2??Æµ
+        0??41.5MHz??
+        1??qam_adc phy????Â·Ê±?Ó£?
  */
         unsigned int reserved_1 : 1; /* [1] */
         // Comment of field: reserved_2
         /*
-        ±£Áô qamadcÕý·´ÏòÊ±ÖÓÑ¡Ôñ£º
-        0£ºQAMADCÊ±ÖÓÍ¬Ïà£»
-        1£ºQAMADCÊ±ÖÓ·´Ïà¡£
+        ???? qamadc??????Ê±??Ñ¡????
+        0??QAMADCÊ±??Í¬?à£»
+        1??QAMADCÊ±?Ó·??à¡£
  */
         unsigned int reserved_2 : 1; /* [2] */
         // Comment of field: reserved_3
         /*
-        ±£Áô qamadc phy µÄËæÂ·Ê±ÖÓÕý·´ÏòÊ±ÖÓÑ¡Ôñ£º
-        0£ºQAMADCÊ±ÖÓÍ¬Ïà£»
-        1£ºQAMADCÊ±ÖÓ·´Ïà¡£
+        ???? qamadc phy ????Â·Ê±????????Ê±??Ñ¡????
+        0??QAMADCÊ±??Í¬?à£»
+        1??QAMADCÊ±?Ó·??à¡£
  */
         unsigned int reserved_3 : 1; /* [3] */
         // Comment of field: reserved_4
         /*
-        ±£Áô¡£
+        ??????
  */
         unsigned int reserved_4 : 28; /* [31..4] */
     } bits;
@@ -192,19 +192,19 @@ typedef union {
     struct {
         // Comment of field: reserved_0
         /*
-        pll_postdiv2 [30:28] 
-        PLLµÚ¶þ¼¶Êä³ö·ÖÆµÏµÊý¡£
+        pll_postdiv2 [30:28]
+        PLL?Ú¶?????????ÆµÏµ????
         
-        pll_postdiv1 [26:24] 
-        PLLµÚÒ»¼¶Êä³ö·ÖÆµÏµÊý¡£
+        pll_postdiv1 [26:24]
+        PLL??Ò»????????ÆµÏµ????
         
         pll_frac [23:0]:
-        PLLÐ¡Êý·ÖÆµÏµÊý¡£
+        PLLÐ¡????ÆµÏµ????
  */
         unsigned int reserved_0 : 31; /* [30..0] */
         // Comment of field: reserved_1
         /*
-        ±£Áô
+        ????
  */
         unsigned int reserved_1 : 1; /* [31] */
     } bits;
@@ -220,57 +220,57 @@ typedef union {
         // Comment of field: reserved_0
         /*
         bit[27] pll_foutvco2xpd
-        PLL FOUTVCO2XÊä³öPower Down¿ØÖÆ¡£
-        0£ºÕý³£Ê±ÖÓÊä³ö£»
-        1£º²»Êä³öÊ±ÖÓ¡£
+        PLL FOUTVCO2X????Power Down???Æ¡?
+        0??????Ê±????????
+        1????????Ê±?Ó¡?
         
         bit[26] pll_bypass
-        PLLÊ±ÖÓ·ÖÆµÅÔÂ·£¨bypass£©¿ØÖÆ¡£
-        0£º·ÇÅÔÂ·£»
-        1£ºÅÔÂ·¡£
+        PLLÊ±?Ó·?Æµ??Â·??bypass?????Æ¡?
+        0??????Â·??
+        1????Â·??
         
         bit[25] pll_dsmpd
-        PLL Ð¡Êý·ÖÆµ¿ØÖÆ¡£
-        0£ºÐ¡ÊýÄ£Ê½£»
-        1£ºÕûÊýÄ£Ê½¡£
+        PLL Ð¡????Æµ???Æ¡?
+        0??Ð¡??Ä£Ê½??
+        1??????Ä£Ê½??
         
         bit[24] pll_dacpd
-        PLL ²âÊÔÐÅºÅ¿ØÖÆ¡£
-        0£ºÕý³£¹¤×÷×´Ì¬£»
-        1£ºpower down¹¤×÷×´Ì¬¡£
+        PLL ?????ÅºÅ¿??Æ¡?
+        0??????????×´Ì¬??
+        1??power down????×´Ì¬??
         
         bit[23] pll_foutpostdivpd
-        PLL FOUTPOSTDIVÊä³öPower Down¿ØÖÆ¡£
-        0£ºÕý³£Ê±ÖÓÊä³ö£»
-        1£º²»Êä³öÊ±ÖÓ¡£
+        PLL FOUTPOSTDIV????Power Down???Æ¡?
+        0??????Ê±????????
+        1????????Ê±?Ó¡?
         
         bit[22] pll_fout4phasepd
-        PLL FOUT0~4Êä³öPower Down¿ØÖÆ¡£
-        0£ºÕý³£Ê±ÖÓÊä³ö£»
-        1£º²»Êä³öÊ±ÖÓ¡£
+        PLL FOUT0~4????Power Down???Æ¡?
+        0??????Ê±????????
+        1????????Ê±?Ó¡?
         
         bit[21] pll_foutvcopd
-        PLL FOUTVCOÊä³öPower Down¿ØÖÆ¡£
-        0£ºÕý³£Ê±ÖÓÊä³ö£»
-        1£º²»Êä³öÊ±ÖÓ¡£
+        PLL FOUTVCO????Power Down???Æ¡?
+        0??????Ê±????????
+        1????????Ê±?Ó¡?
         
         bit[20] pll_pd
-        PLL Power Down¿ØÖÆ¡£
-        0£ºÕý³£¹¤×÷×´Ì¬£»
-        1£ºpower down¹¤×÷×´Ì¬¡£
+        PLL Power Down???Æ¡?
+        0??????????×´Ì¬??
+        1??power down????×´Ì¬??
         
-        bit[19:18] ±£Áô¡£
+        bit[19:18] ??????
         
         bit[17:12] pll_refdiv
-        PLL²Î¿¼Ê±ÖÓ·ÖÆµÏµÊý¡£
+        PLL?Î¿?Ê±?Ó·?ÆµÏµ????
         
         bit[11:0] pll_fbdiv
-        PLLÕûÊý±¶ÆµÏµÊý¡£
+        PLL??????ÆµÏµ????
  */
         unsigned int reserved_0 : 28; /* [27..0] */
         // Comment of field: reserved_1
         /*
-        ±£Áô
+        ????
  */
         unsigned int reserved_1 : 4; /* [31..28] */
     } bits;
@@ -285,46 +285,46 @@ typedef union {
     struct {
         // Comment of field: reserved_0
         /*
-        ssmod divval[12£º9]
-        SSMOD divval¿ØÖÆ¡£
+        ssmod divval[12??9]
+        SSMOD divval???Æ¡?
         
-        ssmod spread[8£º4]
-        SSMOD spread¿ØÖÆ¡£
-        0£º0£»
-        1£º0.1%£»
-        2£º0.2%
-        3£º0.3%£»
-        4£º0.4%£»
-        5£º0.5%£»
-        6£º0.6%£»
-        7£º0.7%¡£
+        ssmod spread[8??4]
+        SSMOD spread???Æ¡?
+        0??0??
+        1??0.1%??
+        2??0.2%
+        3??0.3%??
+        4??0.4%??
+        5??0.5%??
+        6??0.6%??
+        7??0.7%??
         ...
-        31£º3.1%
+        31??3.1%
         
         ssmod downspread[3]
-        SSMOD downspread¿ØÖÆ¡£
-        0£ºÖÐ¼äÕ¹Æµ£»
-        1£ºÏòÏÂÕ¹Æµ¡£
+        SSMOD downspread???Æ¡?
+        0???Ð¼?Õ¹Æµ??
+        1??????Õ¹Æµ??
         
         ssmod_disable[2]
-        SSMOD disable¿ØÖÆ¡£
-        0£ºenable£»
-        1£ºdisable¡£
+        SSMOD disable???Æ¡?
+        0??enable??
+        1??disable??
         
         ssmod_rst_req [1]
-        SSMOD¸´Î»¿ØÖÆ¡£
-        0£º²»¸´Î»£»
-        1£º¸´Î»¡£
+        SSMOD??Î»???Æ¡?
+        0??????Î»??
+        1????Î»??
         
         ssmod_cken [0]
-        SSMODÊ±ÖÓÃÅ¿ØÅäÖÃ,Ä¬ÈÏ¹Ø±Õ¡£
-        0£º¹Ø±Õ£»
-        1£º´ò¿ª¡£
+        SSMODÊ±???Å¿?????,Ä¬?Ï¹Ø±Õ¡?
+        0???Ø±Õ£?
+        1???ò¿ª¡?
  */
         unsigned int reserved_0 : 13; /* [12..0] */
         // Comment of field: reserved_1
         /*
-        ±£Áô
+        ????
  */
         unsigned int reserved_1 : 19; /* [31..13] */
     } bits;
@@ -344,7 +344,7 @@ typedef union {
         unsigned int reserved_0 : 1; /* [0] */
         // Comment of field: reserved_1
         /*
-        ±£Áô
+        ????
  */
         unsigned int reserved_1 : 31; /* [31..1] */
     } bits;
@@ -369,7 +369,7 @@ typedef union {
         unsigned int reserved_1 : 3; /* [3..1] */
         // Comment of field: reserved_2
         /*
-        ±£Áô
+        ????
  */
         unsigned int reserved_2 : 28; /* [31..4] */
     } bits;
@@ -384,14 +384,14 @@ typedef union {
     struct {
         // Comment of field: reserved_0
         /*
-        Ä£Ê½×´Ì¬Ö¸Ê¾ÐÅºÅ
-        0£º·Çdebug I2CÄ£Ê½
-        1£ºdebug I2CÄ£Ê½
+        Ä£Ê½×´Ì¬Ö¸Ê¾?Åº?
+        0????debug I2CÄ£Ê½
+        1??debug I2CÄ£Ê½
  */
         unsigned int reserved_0 : 1; /* [0] */
         // Comment of field: reserved_1
         /*
-        ±£Áô
+        ????
  */
         unsigned int reserved_1 : 31; /* [31..1] */
     } bits;
@@ -409,61 +409,61 @@ typedef union {
         // Comment of field: fephy_en_ldo
         /*
         RSTN_LDO  ENZ_LDO   EN_LDO   VOUT
-           0         X         X     VOUT=0.9V£¨Ä¬ÈÏ¿ªÆô£¬LDOÊä³öµçÑ¹²»¿Éµ÷½Ú£©
-           1          1        X      ¸ß×è
-           1          0        0      ¸ß×è
-           1          0        1     VOUT=0.9V£¨LDOÊä³öµçÑ¹¿Éµ÷½Ú£¬Ä¬ÈÏÊä³öµçÑ¹Îª0.9V£©
+           0         X         X     VOUT=0.9V??Ä¬?Ï¿?????LDO??????Ñ¹???Éµ??Ú£?
+           1          1        X      ????
+           1          0        0      ????
+           1          0        1     VOUT=0.9V??LDO??????Ñ¹?Éµ??Ú£?Ä¬????????Ñ¹Îª0.9V??
  */
         unsigned int fephy_en_ldo : 1; /* [2] */
         // Comment of field: fephy_patch_enable
         /*
-        FEPHYµÄPATCHµÄÊ¹ÄÜÐÅºÅ
-        0£ºÍ¨ÓÃÊäÈë¶Ë¿ÚÎª¹Ì¶¨Öµ0x0300
-        1£ºÍ¨ÓÃÊäÈë¶Ë¿ÚÎªÈí¼þÅäÖÃµÄ²ÎÊý
+        FEPHY??PATCH??Ê¹???Åº?
+        0??Í¨???????Ë¿?Îª?Ì¶?Öµ0x0300
+        1??Í¨???????Ë¿?Îª???????ÃµÄ²???
  */
         unsigned int fephy_patch_enable : 1; /* [3] */
         // Comment of field: fephy_tclk_enable
         /*
-        FEPHYµÄTCLKµÄÊ¹ÄÜÐÅºÅ
+        FEPHY??TCLK??Ê¹???Åº?
  */
         unsigned int fephy_tclk_enable : 1; /* [4] */
         // Comment of field: soft_fephy_gp_i
         /*
-        FEPHYµÄMDIOµÄÊäÈëÐÅºÅ
+        FEPHY??MDIO???????Åº?
  */
         unsigned int soft_fephy_gp_i : 16; /* [20..5] */
         // Comment of field: soft_fephy_mdio_i
         /*
-        fephy mdioÊý¾ÝÏß
+        fephy mdio??????
  */
         unsigned int soft_fephy_mdio_i : 1; /* [21] */
         // Comment of field: soft_fephy_mdio_mdc
         /*
-        fephy mdio¶ÁÐ´Ê±ÖÓ
+        fephy mdio??Ð´Ê±??
  */
         unsigned int soft_fephy_mdio_mdc : 1; /* [22] */
         // Comment of field: fephy_phy_addr
         /*
-        FEPHYµÄµØÖ·ÐÅºÅ
+        FEPHY?Äµ?Ö·?Åº?
  */
         unsigned int fephy_phy_addr : 5; /* [27..23] */
         // Comment of field: afe_tclk_0_sel
         /*
-        afe_tclk_0ºÍÆä4·ÖÆµÑ¡ÔñÐÅºÅ
-        0£º Ñ¡Ôñafe_tclk_0
-        1£º Ñ¡Ôñafe_tclk_0µÄ4·ÖÆµ
+        afe_tclk_0????4??ÆµÑ¡???Åº?
+        0?? Ñ¡??afe_tclk_0
+        1?? Ñ¡??afe_tclk_0??4??Æµ
  */
         unsigned int afe_tclk_0_sel : 1; /* [28] */
         // Comment of field: sc_fephy_iddq_mode
         /*
-        MBISTÏà¹ØÐÅºÅ
-        0:  ´ò¿ªbandgapºÍPLLµçÂ·
-        1:  ¹Ø±ÕbandgapºÍPLLµçÂ·
+        MBIST?????Åº?
+        0:  ????bandgap??PLL??Â·
+        1:  ?Ø±?bandgap??PLL??Â·
  */
         unsigned int sc_fephy_iddq_mode : 1; /* [29] */
         // Comment of field: reserved_0
         /*
-        ±£Áô
+        ????
  */
         unsigned int reserved_0 : 2; /* [31..30] */
     } bits;
@@ -483,16 +483,16 @@ typedef union {
         unsigned int reserved_0 : 1; /* [0] */
         // Comment of field: stb_poweroff
         /*
-        ¹Ü½ÅSTANDBY_PWROFF¿ØÖÆ¡£
-        0£º¹Ü½ÅSTANDBY_PWROFFÊä³öÎªµÍµçÆ½£¬¿ØÖÆµôµçÇøÏÂµç£»
-        1£º¹Ü½ÅSTANDBY_PWROFFÊä³öÎª¸ßµçÆ½£¬¿ØÖÆµôµçÇø²»ÏÂµç¡£
+        ?Ü½?STANDBY_PWROFF???Æ¡?
+        0???Ü½?STANDBY_PWROFF????Îª?Íµ?Æ½?????Æµ??????Âµç£»
+        1???Ü½?STANDBY_PWROFF????Îª?ßµ?Æ½?????Æµ????????Âµç¡£
  */
         unsigned int stb_poweroff : 1; /* [1] */
         // Comment of field: mcu_lp_subsys_iso
         /*
-        ¸ôÀëÇø¿ØÖÆ¡£
-        4'b1011£ºÊ¹ÄÜ£¬¼´¶ÔÐÅºÅ½øÐÐ¸ôÀë¡£
-        ÆäËû£º½ûÖ¹£¬¼´²»¶ÔÐÅºÅ½øÐÐ¸ôÀë£»
+        ?????????Æ¡?
+        4'b1011??Ê¹?Ü£??????ÅºÅ½??Ð¸??ë¡£
+        ????????Ö¹?????????ÅºÅ½??Ð¸??ë£»
  */
         unsigned int mcu_lp_subsys_iso : 4; /* [5..2] */
         // Comment of field: reserved_1
@@ -512,39 +512,39 @@ typedef union {
         unsigned int reserved_3 : 1; /* [8] */
         // Comment of field: pwd_signals_in_mcu_iso
         /*
-        ¸ôÀëÇø¿ØÖÆ¡£
-        4'b1011£ºÊ¹ÄÜ£¬¼´¶ÔÐÅºÅ½øÐÐ¸ôÀë¡£
-        ÆäËû£º½ûÖ¹£¬¼´²»¶ÔÐÅºÅ½øÐÐ¸ôÀë£»
+        ?????????Æ¡?
+        4'b1011??Ê¹?Ü£??????ÅºÅ½??Ð¸??ë¡£
+        ????????Ö¹?????????ÅºÅ½??Ð¸??ë£»
  */
         unsigned int pwd_signals_in_mcu_iso : 4; /* [12..9] */
         // Comment of field: reserved_4
         /*
-        ±£Áô¡£
+        ??????
  */
         unsigned int reserved_4 : 15; /* [27..13] */
         // Comment of field: core0p9v_stable_iso
         /*
-        ±¸·Ý£º
-        ¸ôÀëÊ¹ÄÜ¿ØÖÆÐÅºÅ¡££¬¸ßÓÐÐ§¡£
-        ´ý»ú»½ÐÑ0.9VµçÔ´ÎÈ¶¨ºó£¬²úÉúµÄ¼Ä´æÆ÷×´Ì¬ÐÅºÅ£¬ÊÜ¸Ã¸ôÀëÊ¹ÄÜ¿ØÖÆ¡£
-        1£ºÊ¹ÄÜ£¬¼´¶ÔÐÅºÅ½øÐÐ¸ôÀë¡£
-        0£º½ûÖ¹£¬¼´²»¶ÔÐÅºÅ½øÐÐ¸ôÀë£»
+        ???Ý£?
+        ????Ê¹?Ü¿????ÅºÅ¡???????Ð§??
+        ????????0.9V??Ô´?È¶??ó£¬²????Ä¼Ä´???×´Ì¬?ÅºÅ£??Ü¸Ã¸???Ê¹?Ü¿??Æ¡?
+        1??Ê¹?Ü£??????ÅºÅ½??Ð¸??ë¡£
+        0????Ö¹?????????ÅºÅ½??Ð¸??ë£»
  */
         unsigned int core0p9v_stable_iso : 1; /* [28] */
         // Comment of field: por_0p9v_rst_iso_status
         /*
-        debug¼Ä´æÆ÷¡£por0p9vÐÅºÅµÄ¸ôÀë×´Ì¬£¬¸ßÓÐÐ§¡£
+        debug?Ä´?????por0p9v?ÅºÅµÄ¸???×´Ì¬??????Ð§??
  */
         unsigned int por_0p9v_rst_iso_status : 1; /* [29] */
         // Comment of field: pwd_signals_in_mcu_iso_status
         /*
-        ÏÂµçÇø´©³£µçÇøÐÅºÅµÄ¸ôÀë×´Ì¬£¬¸ßÓÐÐ§¡£
+        ?Âµ??ø´©³£?????ÅºÅµÄ¸???×´Ì¬??????Ð§??
  */
         unsigned int pwd_signals_in_mcu_iso_status : 1; /* [30] */
         // Comment of field: mcu_lp_subsys_iso_status
         /*
-        ÏÂµçÇøËÍ¸ø³£µçÇøµÄÐÅºÅµÄ¸ôÀë×´Ì¬£¬¸ßÓÐÐ§¡£
-        ÊÜsc_locken¿ØÖÆ¡£
+        ?Âµ????Í¸??????????ÅºÅµÄ¸???×´Ì¬??????Ð§??
+        ??sc_locken???Æ¡?
  */
         unsigned int mcu_lp_subsys_iso_status : 1; /* [31] */
     } bits;
@@ -559,26 +559,26 @@ typedef union {
     struct {
         // Comment of field: hdmi_rx_pwr_pctrl
         /*
-        HDMI RX PWR5V[2:0]ÊäÈë¹Ü½ÅÕý·´¿É¿Ø£º
-        Bit0:±íÊ¾Ñ¡ÔñHDMIRX 2P0 PORT0£»
-        Bit1:±íÊ¾Ñ¡ÔñHDMIRX 2P0 PORT1£»
-        Bit2:±íÊ¾Ñ¡ÔñHDMIRX 2P0 PORT2£»
+        HDMI RX PWR5V[2:0]?????Ü½??????É¿Ø£?
+        Bit0:??Ê¾Ñ¡??HDMIRX 2P0 PORT0??
+        Bit1:??Ê¾Ñ¡??HDMIRX 2P0 PORT1??
+        Bit2:??Ê¾Ñ¡??HDMIRX 2P0 PORT2??
         Bit3:reserved
-        ÆäÖÐ¶ÔÓ¦bit±íÊ¾ÈçÏÂ:
-        0£ºÕýÏò£»
-        1£º·´Ïò¡£
+        ???Ð¶?Ó¦bit??Ê¾????:
+        0????????
+        1????????
  */
         unsigned int hdmi_rx_pwr_pctrl : 4; /* [3..0] */
         // Comment of field: hdmi_rx_hpd_pctrl
         /*
-        HDMI RX HPD[2:0]Êä³ö¹Ü½ÅÕý·´¿É¿Ø£º
-        Bit4:±íÊ¾Ñ¡ÔñHDMIRX 2P0 PORT0£»
-        Bit5:±íÊ¾Ñ¡ÔñHDMIRX 2P0 PORT1£»
-        Bit6:±íÊ¾Ñ¡ÔñHDMIRX 2P0 PORT2£»
+        HDMI RX HPD[2:0]?????Ü½??????É¿Ø£?
+        Bit4:??Ê¾Ñ¡??HDMIRX 2P0 PORT0??
+        Bit5:??Ê¾Ñ¡??HDMIRX 2P0 PORT1??
+        Bit6:??Ê¾Ñ¡??HDMIRX 2P0 PORT2??
         Bit7:reserved
-        ÆäÖÐ¶ÔÓ¦bit±íÊ¾ÈçÏÂ:
-        0£ºÕýÏò£»
-        1£º·´Ïò¡£
+        ???Ð¶?Ó¦bit??Ê¾????:
+        0????????
+        1????????
  */
         unsigned int hdmi_rx_hpd_pctrl : 4; /* [7..4] */
         // Comment of field: reserved_0
@@ -588,19 +588,19 @@ typedef union {
         unsigned int reserved_0 : 4; /* [11..8] */
         // Comment of field: hdmi_rx_5v_det_mux
         /*
-        ±íÊ¾Ñ¡Ôñ¿ØÖÆdetect Ñ¡Ôñ¿ØÖÆÐÅºÅ
-        Bit12:±íÊ¾Ñ¡ÔñHDMIRX 2P0 PORT0£»
-        Bit13:±íÊ¾Ñ¡ÔñHDMIRX 2P0 PORT1£»
-        Bit14:±íÊ¾Ñ¡ÔñHDMIRX 2P0 PORT2£»
+        ??Ê¾Ñ¡??????detect Ñ¡???????Åº?
+        Bit12:??Ê¾Ñ¡??HDMIRX 2P0 PORT0??
+        Bit13:??Ê¾Ñ¡??HDMIRX 2P0 PORT1??
+        Bit14:??Ê¾Ñ¡??HDMIRX 2P0 PORT2??
         Bit15:reserved
  */
         unsigned int hdmi_rx_5v_det_mux : 4; /* [15..12] */
         // Comment of field: hdmi_rx_5v_det_reg
         /*
-        ±íÊ¾ÏµÍ³¿ØÖÆÊäÈë½øÀ´µÄ´ý»ú»½ÐÑ¼Ä´æÆ÷µÄÌ½²âÐÅºÅ¡£
-        Bit16:±íÊ¾Ñ¡ÔñHDMIRX 2P0 PORT0£»
-        Bit17:±íÊ¾Ñ¡ÔñHDMIRX 2P0 PORT1£»
-        Bit18:±íÊ¾Ñ¡ÔñHDMIRX 2P0 PORT2£»
+        ??Ê¾ÏµÍ³??????????À´?Ä´??????Ñ¼Ä´?????Ì½???ÅºÅ¡?
+        Bit16:??Ê¾Ñ¡??HDMIRX 2P0 PORT0??
+        Bit17:??Ê¾Ñ¡??HDMIRX 2P0 PORT1??
+        Bit18:??Ê¾Ñ¡??HDMIRX 2P0 PORT2??
         Bit19:reserved
  */
         unsigned int hdmi_rx_5v_det_reg : 4; /* [19..16] */
@@ -617,222 +617,222 @@ typedef union {
     struct {
         // Comment of field: reserved_0
         /*
-        MCEÊ±ÖÓÃÅ¿Ø¡£
-        0£º¹Ø¶Ï£»
-        1£º´ò¿ª¡£
+        MCEÊ±???Å¿Ø¡?
+        0???Ø¶Ï£?
+        1???ò¿ª¡?
  */
         unsigned int reserved_0 : 1; /* [0] */
         // Comment of field: reserved_1
         /*
-        MCEÈí¸´Î»ÇëÇó¡£
-        0£º²»¸´Î»£»
-        1£º¸´Î»¡£
+        MCE?í¸´Î»??????
+        0??????Î»??
+        1????Î»??
  */
         unsigned int reserved_1 : 1; /* [1] */
         // Comment of field: reserved_2
         /*
-        pwmÊ±ÖÓÃÅ¿Ø¡£
-        0£º¹Ø¶Ï£»
-        1£º´ò¿ª¡£
+        pwmÊ±???Å¿Ø¡?
+        0???Ø¶Ï£?
+        1???ò¿ª¡?
  */
         unsigned int reserved_2 : 1; /* [2] */
         // Comment of field: reserved_3
         /*
-        pwmÈí¸´Î»ÇëÇó¡£
-        0£º²»¸´Î»£»
-        1£º¸´Î»¡£
+        pwm?í¸´Î»??????
+        0??????Î»??
+        1????Î»??
  */
         unsigned int reserved_3 : 1; /* [3] */
         // Comment of field: reserved_4
         /*
-        IRÊ±ÖÓÃÅ¿Ø¡£
-        0£º¹Ø¶Ï£»
-        1£º´ò¿ª¡£
+        IRÊ±???Å¿Ø¡?
+        0???Ø¶Ï£?
+        1???ò¿ª¡?
  */
         unsigned int reserved_4 : 1; /* [4] */
         // Comment of field: reserved_5
         /*
-        IRÄ£¿éÈí¸´Î»ÇëÇó¡£
-        0£º²»¸´Î»£»
-        1£º¸´Î»¡£
+        IRÄ£???í¸´Î»??????
+        0??????Î»??
+        1????Î»??
  */
         unsigned int reserved_5 : 1; /* [5] */
         // Comment of field: reserved_6
         /*
-        lsadcÊ±ÖÓÃÅ¿Ø¡£
-        0£º¹Ø¶Ï£»
-        1£º´ò¿ª¡£
+        lsadcÊ±???Å¿Ø¡?
+        0???Ø¶Ï£?
+        1???ò¿ª¡?
  */
         unsigned int reserved_6 : 1; /* [6] */
         // Comment of field: reserved_7
         /*
-        lsadcÄ£¿éÈí¸´Î»ÇëÇó¡£
-        0£º²»¸´Î»£»
-        1£º¸´Î»¡£
+        lsadcÄ£???í¸´Î»??????
+        0??????Î»??
+        1????Î»??
  */
         unsigned int reserved_7 : 1; /* [7] */
         // Comment of field: reserved_8
         /*
-        ±£Áô¡£
+        ??????
  */
         unsigned int reserved_8 : 1; /* [8] */
         // Comment of field: reserved_9
         /*
-        ±£Áô¡£
+        ??????
  */
         unsigned int reserved_9 : 1; /* [9] */
         // Comment of field: reserved_10
         /*
-        timer01Ê±ÖÓÃÅ¿Ø¡£
-        0£º¹Ø¶Ï£»
-        1£º´ò¿ª¡£
+        timer01Ê±???Å¿Ø¡?
+        0???Ø¶Ï£?
+        1???ò¿ª¡?
  */
         unsigned int reserved_10 : 1; /* [10] */
         // Comment of field: reserved_11
         /*
-        timer01Ä£¿éÈí¸´Î»ÇëÇó¡£
-        0£º²»¸´Î»£»
-        1£º¸´Î»¡£
+        timer01Ä£???í¸´Î»??????
+        0??????Î»??
+        1????Î»??
  */
         unsigned int reserved_11 : 1; /* [11] */
         // Comment of field: reserved_12
         /*
-        UART1Ê±ÖÓÃÅ¿Ø¡£
-        0£º¹Ø¶Ï£»
-        1£º´ò¿ª¡£
+        UART1Ê±???Å¿Ø¡?
+        0???Ø¶Ï£?
+        1???ò¿ª¡?
  */
         unsigned int reserved_12 : 1; /* [12] */
         // Comment of field: reserved_13
         /*
-        UART1Èí¸´Î»ÇëÇó¡£
-        0£º²»¸´Î»£»
-        1£º¸´Î»¡£
+        UART1?í¸´Î»??????
+        0??????Î»??
+        1????Î»??
  */
         unsigned int reserved_13 : 1; /* [13] */
         // Comment of field: reserved_14
         /*
-        hdmirx_oscÈí¸´Î»ÇëÇó¡£
-        0£º²»¸´Î»£»
-        1£º¸´Î»¡£
+        hdmirx_osc?í¸´Î»??????
+        0??????Î»??
+        1????Î»??
  */
         unsigned int reserved_14 : 1; /* [14] */
         // Comment of field: reserved_15
         /*
-        hdmirx_apbÈí¸´Î»ÇëÇó¡£
-        0£º²»¸´Î»£»
-        1£º¸´Î»¡£
+        hdmirx_apb?í¸´Î»??????
+        0??????Î»??
+        1????Î»??
  */
         unsigned int reserved_15 : 1; /* [15] */
         // Comment of field: reserved_16
         /*
-        hdmirx_cecÈí¸´Î»ÇëÇó¡£
-        0£º²»¸´Î»£»
-        1£º¸´Î»¡£
+        hdmirx_cec?í¸´Î»??????
+        0??????Î»??
+        1????Î»??
  */
         unsigned int reserved_16 : 1; /* [16] */
         // Comment of field: reserved_17
         /*
-        hdmirxÈí¸´Î»ÇëÇó¡£
-        0£º²»¸´Î»£»
-        1£º¸´Î»¡£
+        hdmirx?í¸´Î»??????
+        0??????Î»??
+        1????Î»??
  */
         unsigned int reserved_17 : 1; /* [17] */
         // Comment of field: reserved_18
         /*
-        mosdc_clkÊ±ÖÓÔ´Í·Ñ¡Ôñ£º
-        0:24MHz¾§ÕñÊ±ÖÓ£»
+        mosdc_clkÊ±??Ô´Í·Ñ¡????
+        0:24MHz????Ê±?Ó£?
         1:20MHz
  */
         unsigned int reserved_18 : 1; /* [18] */
         // Comment of field: reserved_19
         /*
-        cec_clkÊ±ÖÓÔ´Í·Ñ¡Ôñ£º
-        0:2MHz£¨¾§ÕñÊ±ÖÓ12·ÖÆµ£©£»
+        cec_clkÊ±??Ô´Í·Ñ¡????
+        0:2MHz??????Ê±??12??Æµ????
         1:2.02MHz
  */
         unsigned int reserved_19 : 1; /* [19] */
         // Comment of field: reserved_20
         /*
-        HDMI1.4 RX coreÊ±ÖÓÔ´Í·Ñ¡Ôñ£º
-        0:24MHz¾§ÕñÊ±ÖÓ£»
+        HDMI1.4 RX coreÊ±??Ô´Í·Ñ¡????
+        0:24MHz????Ê±?Ó£?
         1:27MHz
  */
         unsigned int reserved_20 : 1; /* [20] */
         // Comment of field: reserved_21
         /*
-        cbus_clkÊ±ÖÓÔ´Í·Ñ¡Ôñ£º
-        0:24MHz¾§ÕñÊ±ÖÓ£»
+        cbus_clkÊ±??Ô´Í·Ñ¡????
+        0:24MHz????Ê±?Ó£?
         1:20MHz
  */
         unsigned int reserved_21 : 1; /* [21] */
         // Comment of field: reserved_22
         /*
-        hdmirx_moscÊ±ÖÓÃÅ¿Ø¡£
-        0£º¹Ø¶Ï£»
-        1£º´ò¿ª¡£
+        hdmirx_moscÊ±???Å¿Ø¡?
+        0???Ø¶Ï£?
+        1???ò¿ª¡?
  */
         unsigned int reserved_22 : 1; /* [22] */
         // Comment of field: reserved_23
         /*
-        hdmirx_oscÊ±ÖÓÃÅ¿Ø¡£
-        0£º¹Ø¶Ï£»
-        1£º´ò¿ª¡£
+        hdmirx_oscÊ±???Å¿Ø¡?
+        0???Ø¶Ï£?
+        1???ò¿ª¡?
  */
         unsigned int reserved_23 : 1; /* [23] */
         // Comment of field: reserved_24
         /*
-        hdmirx_apbÊ±ÖÓÃÅ¿Ø¡£
-        0£º¹Ø¶Ï£»
-        1£º´ò¿ª¡£
+        hdmirx_apbÊ±???Å¿Ø¡?
+        0???Ø¶Ï£?
+        1???ò¿ª¡?
  */
         unsigned int reserved_24 : 1; /* [24] */
         // Comment of field: reserved_25
         /*
-        hdmirx_cecÊ±ÖÓÃÅ¿Ø¡£
-        0£º¹Ø¶Ï£»
-        1£º´ò¿ª¡£
+        hdmirx_cecÊ±???Å¿Ø¡?
+        0???Ø¶Ï£?
+        1???ò¿ª¡?
  */
         unsigned int reserved_25 : 1; /* [25] */
         // Comment of field: reserved_26
         /*
-        hdmirx_mpllrefÊ±ÖÓÃÅ¿Ø¡£
-        0£º¹Ø¶Ï£»
-        1£º´ò¿ª¡£
+        hdmirx_mpllrefÊ±???Å¿Ø¡?
+        0???Ø¶Ï£?
+        1???ò¿ª¡?
  */
         unsigned int reserved_26 : 1; /* [26] */
         // Comment of field: reserved_27
         /*
-        hdmirx_mpllref_pllÊ±ÖÓÃÅ¿Ø¡£
-        0£º¹Ø¶Ï£»
-        1£º´ò¿ª¡£
+        hdmirx_mpllref_pllÊ±???Å¿Ø¡?
+        0???Ø¶Ï£?
+        1???ò¿ª¡?
  */
         unsigned int reserved_27 : 1; /* [27] */
         // Comment of field: pd_rst_req
         /*
-        ÏµÍ³ÏÂµç¸´Î»ÇëÇó¡£
-        0£º²»¸´Î»£»
-        1£º¸´Î»¡£
+        ÏµÍ³?Âµç¸´Î»??????
+        0??????Î»??
+        1????Î»??
  */
         unsigned int pd_rst_req : 1; /* [28] */
         // Comment of field: reserved_28
         /*
-        hdmirx_edidÊ±ÖÓÃÅ¿Ø¡£
-        0£º¹Ø¶Ï£»
-        1£º´ò¿ª¡£
+        hdmirx_edidÊ±???Å¿Ø¡?
+        0???Ø¶Ï£?
+        1???ò¿ª¡?
  */
         unsigned int reserved_28 : 1; /* [29] */
         // Comment of field: reserved_29
         /*
-        hdmirx_cbusÊ±ÖÓÃÅ¿Ø¡£
-        0£º¹Ø¶Ï£»
-        1£º´ò¿ª¡£
+        hdmirx_cbusÊ±???Å¿Ø¡?
+        0???Ø¶Ï£?
+        1???ò¿ª¡?
  */
         unsigned int reserved_29 : 1; /* [30] */
         // Comment of field: reserved_30
         /*
-        hdmirx edidµÄÑ¡ÔñÐÅºÅ£»
-        0£º2MÊ±ÖÓÑ¡Ôñ
-        1£º±íÊ¾2.02MÊ±ÖÓÑ¡Ôñ¡£
+        hdmirx edid??Ñ¡???ÅºÅ£?
+        0??2MÊ±??Ñ¡??
+        1????Ê¾2.02MÊ±??Ñ¡????
  */
         unsigned int reserved_30 : 1; /* [31] */
     } bits;
@@ -852,7 +852,7 @@ typedef union {
         unsigned int reserved_0 : 1; /* [0] */
         // Comment of field: reserved_1
         /*
-        ±£Áô¡£
+        ??????
  */
         unsigned int reserved_1 : 31; /* [31..1] */
     } bits;
@@ -867,10 +867,10 @@ typedef union {
     struct {
         // Comment of field: wdg_rst_ctrl
         /*
-        Èí¼þ¿ØÖÆWDG_RSTÐÅºÅÔ´Í·¡£
-        0£ºWDG0_RST£»£»
-        1£ºTIMER01ÖÐ¶Ï£»
-        ²»ÊÜÈ«¾ÖÈí¸´Î»¿ØÖÆ¡£
+        ????????WDG_RST?Åº?Ô´Í·??
+        0??WDG0_RST????
+        1??TIMER01?Ð¶Ï£?
+        ????È«???í¸´Î»???Æ¡?
  */
         unsigned int wdg_rst_ctrl : 1; /* [0] */
         // Comment of field: reserved_0
@@ -880,7 +880,7 @@ typedef union {
         unsigned int reserved_0 : 1; /* [1] */
         // Comment of field: reserved_1
         /*
-        ±£Áô¡£
+        ??????
  */
         unsigned int reserved_1 : 30; /* [31..2] */
     } bits;
@@ -905,7 +905,7 @@ typedef union {
         unsigned int reserved_1 : 1; /* [7] */
         // Comment of field: reserved_2
         /*
-        ±£Áô¡£
+        ??????
  */
         unsigned int reserved_2 : 24; /* [31..8] */
     } bits;
@@ -920,8 +920,8 @@ typedef union {
     struct {
         // Comment of field: ddrphy_lp_en
         /*
-        ddrphy0 retention ¹¦ÄÜ¿ØÖÆ¼Ä´æÆ÷¡£
-        ²»ÊÜÈ«¾ÖÈí¸´Î»¿ØÖÆ¡£
+        ddrphy0 retention ???Ü¿??Æ¼Ä´?????
+        ????È«???í¸´Î»???Æ¡?
  */
         unsigned int ddrphy_lp_en : 2; /* [1..0] */
         // Comment of field: ddrphy_lp_en1
@@ -931,7 +931,7 @@ typedef union {
         unsigned int ddrphy_lp_en1 : 2; /* [3..2] */
         // Comment of field: reserved_0
         /*
-        ±£Áô¡£
+        ??????
  */
         unsigned int reserved_0 : 28; /* [31..4] */
     } bits;
@@ -951,22 +951,22 @@ typedef union {
         unsigned int reserved_0 : 1; /* [0] */
         // Comment of field: reserved_1
         /*
-        ±£Áô¡£
+        ??????
  */
         unsigned int reserved_1 : 5; /* [5..1] */
         // Comment of field: reserved_2
         /*
-        ±£Áô¡£
+        ??????
  */
         unsigned int reserved_2 : 1; /* [6] */
         // Comment of field: reserved_3
         /*
-        ±£Áô¡£
+        ??????
  */
         unsigned int reserved_3 : 1; /* [7] */
         // Comment of field: reserved_4
         /*
-        ±£Áô
+        ????
  */
         unsigned int reserved_4 : 24; /* [31..8] */
     } bits;
@@ -981,17 +981,17 @@ typedef union {
     struct {
         // Comment of field: reserved_0
         /*
-        ±£Áô¡£
+        ??????
  */
         unsigned int reserved_0 : 10; /* [9..0] */
         // Comment of field: reserved_1
         /*
-        ±£Áô¡£
+        ??????
  */
         unsigned int reserved_1 : 1; /* [10] */
         // Comment of field: reserved_2
         /*
-        ±£Áô
+        ????
  */
         unsigned int reserved_2 : 21; /* [31..11] */
     } bits;
@@ -1006,29 +1006,29 @@ typedef union {
     struct {
         // Comment of field: mcu_ldo_vset
         /*
-        mcu_ldo_vsetÅäÖÃÖµ¡£
-        0000£ºÊä³ö0.74V
-        0001£ºÊä³ö0.76V
-        0010£ºÊä³ö0.78V
-        0011£ºÊä³ö0.80V
-        0100£ºÊä³ö0.82V
-        0101£ºÊä³ö0.84V
-        0110£ºÊä³ö0.86V
-        0111£ºÊä³ö0.88V
-        1000£ºÊä³ö0.90V£¨Ä¬ÈÏ£©
-        1001£ºÊä³ö0.92V
-        1010£ºÊä³ö0.94V
-        1011£ºÊä³ö0.96V
-        1100£ºÊä³ö0.98V
-        1101£ºÊä³ö1.00V
-        1110£ºÊä³ö1.02V
-        1111£ºÊä³ö1.04V
-        ²»ÊÜÈ«¾ÖÈí¸´Î»¿ØÖÆ¡£
+        mcu_ldo_vset????Öµ??
+        0000??????0.74V
+        0001??????0.76V
+        0010??????0.78V
+        0011??????0.80V
+        0100??????0.82V
+        0101??????0.84V
+        0110??????0.86V
+        0111??????0.88V
+        1000??????0.90V??Ä¬?Ï£?
+        1001??????0.92V
+        1010??????0.94V
+        1011??????0.96V
+        1100??????0.98V
+        1101??????1.00V
+        1110??????1.02V
+        1111??????1.04V
+        ????È«???í¸´Î»???Æ¡?
  */
         unsigned int mcu_ldo_vset : 4; /* [3..0] */
         // Comment of field: mcu_ldo_fuse
         /*
-        µ÷½ÚÄÚ²¿¾«È·µçÑ¹»ù×¼:
+        ?????Ú²???È·??Ñ¹??×¼:
         0000: +/- 0mV
         0001: - 8.5mV
         0010: - 17mV
@@ -1044,13 +1044,13 @@ typedef union {
         1100: + 42.5mV
         1101: + 51mV
         1110: + 59.5mV
-        1111£º+ 68mV
-        ²»ÊÜÈ«¾ÖÈí¸´Î»¿ØÖÆ¡£
+        1111??+ 68mV
+        ????È«???í¸´Î»???Æ¡?
  */
         unsigned int mcu_ldo_fuse : 4; /* [7..4] */
         // Comment of field: reserved_0
         /*
-        ±£Áô
+        ????
  */
         unsigned int reserved_0 : 24; /* [31..8] */
     } bits;
@@ -1075,7 +1075,7 @@ typedef union {
         unsigned int reserved_1 : 4; /* [7..4] */
         // Comment of field: reserved_2
         /*
-        ±£Áô
+        ????
  */
         unsigned int reserved_2 : 24; /* [31..8] */
     } bits;
@@ -1110,7 +1110,7 @@ typedef union {
         unsigned int reserved_3 : 1; /* [9] */
         // Comment of field: reserved_4
         /*
-        ±£Áô
+        ????
  */
         unsigned int reserved_4 : 22; /* [31..10] */
     } bits;
@@ -1125,16 +1125,16 @@ typedef union {
     struct {
         // Comment of field: amp_mute_out
         /*
-        °å¼¶ÒôÆµAMP MUTE¹¦ÄÜ¿ØÖÆÐÅºÅ£º
-        0£º¹Ø±ÕMUTE¹¦ÄÜ
-        1£º¿ªÆôMUTE¹¦ÄÜ
+        ?å¼¶??ÆµAMP MUTE???Ü¿????ÅºÅ£?
+        0???Ø±?MUTE????
+        1??????MUTE????
  */
         unsigned int amp_mute_out : 1; /* [0] */
         // Comment of field: amp_mute_oen
         /*
-        °å¼¶ÒôÆµAMP MUTEÊä³öÊ¹ÄÜ£º
-        0£ºÊä³öÊ¹ÄÜ£¬Ð¾Æ¬Êä³ömute¿ØÖÆ£»
-        1£º°å¼¶muteµçÂ·¿ØÖÆ
+        ?å¼¶??ÆµAMP MUTE????Ê¹?Ü£?
+        0??????Ê¹?Ü£?Ð¾Æ¬????mute???Æ£?
+        1???å¼¶mute??Â·????
  */
         unsigned int amp_mute_oen : 1; /* [1] */
         unsigned int reserved_0 : 30;  /* [31..2] */
@@ -1150,217 +1150,217 @@ typedef union {
     struct {
         // Comment of field: reserved_0
         /*
-        cbusÊ±ÖÓÐÅºÅÃÅ¿Ø£º
-        0£º¹Ø¶Ï£»
-        1£º´ò¿ª¡£
+        cbusÊ±???Åº??Å¿Ø£?
+        0???Ø¶Ï£?
+        1???ò¿ª¡?
  */
         unsigned int reserved_0 : 1; /* [0] */
         // Comment of field: reserved_1
         /*
-        cecÊ±ÖÓÐÅºÅÃÅ¿Ø£º
-        0£º¹Ø¶Ï£»
-        1£º´ò¿ª¡£
+        cecÊ±???Åº??Å¿Ø£?
+        0???Ø¶Ï£?
+        1???ò¿ª¡?
  */
         unsigned int reserved_1 : 1; /* [1] */
         // Comment of field: reserved_2
         /*
-        edidÊ±ÖÓÐÅºÅÃÅ¿Ø£º
-        0£º¹Ø¶Ï£»
-        1£º´ò¿ª¡£
+        edidÊ±???Åº??Å¿Ø£?
+        0???Ø¶Ï£?
+        1???ò¿ª¡?
  */
         unsigned int reserved_2 : 1; /* [2] */
         // Comment of field: reserved_3
         /*
-        oscÊ±ÖÓÐÅºÅÃÅ¿Ø£º
-        0£º¹Ø¶Ï£»
-        1£º´ò¿ª¡£
+        oscÊ±???Åº??Å¿Ø£?
+        0???Ø¶Ï£?
+        1???ò¿ª¡?
  */
         unsigned int reserved_3 : 1; /* [3] */
         // Comment of field: reserved_4
         /*
-        prifÊ±ÖÓÐÅºÅÃÅ¿Ø£º
-        0£º¹Ø¶Ï£»
-        1£º´ò¿ª¡£
+        prifÊ±???Åº??Å¿Ø£?
+        0???Ø¶Ï£?
+        1???ò¿ª¡?
  */
         unsigned int reserved_4 : 1; /* [4] */
         // Comment of field: reserved_5
         /*
-        shemanÊ±ÖÓÐÅºÅÃÅ¿Ø£º
-        0£º¹Ø¶Ï£»
-        1£º´ò¿ª¡£
+        shemanÊ±???Åº??Å¿Ø£?
+        0???Ø¶Ï£?
+        1???ò¿ª¡?
  */
         unsigned int reserved_5 : 1; /* [5] */
         // Comment of field: reserved_6
         /*
-        aphy_p0Ê±ÖÓÐÅºÅÃÅ¿Ø£º
-        0£º¹Ø¶Ï£»
-        1£º´ò¿ª¡£
+        aphy_p0Ê±???Åº??Å¿Ø£?
+        0???Ø¶Ï£?
+        1???ò¿ª¡?
  */
         unsigned int reserved_6 : 1; /* [6] */
         // Comment of field: reserved_7
         /*
-        aphy_p1Ê±ÖÓÐÅºÅÃÅ¿Ø£º
-        0£º¹Ø¶Ï£»
-        1£º´ò¿ª¡£
+        aphy_p1Ê±???Åº??Å¿Ø£?
+        0???Ø¶Ï£?
+        1???ò¿ª¡?
  */
         unsigned int reserved_7 : 1; /* [7] */
         // Comment of field: reserved_8
         /*
-        aphy_p2Ê±ÖÓÐÅºÅÃÅ¿Ø£º
-        0£º¹Ø¶Ï£»
-        1£º´ò¿ª¡£
+        aphy_p2Ê±???Åº??Å¿Ø£?
+        0???Ø¶Ï£?
+        1???ò¿ª¡?
  */
         unsigned int reserved_8 : 1; /* [8] */
         // Comment of field: reserved_9
         /*
-        fephyÊ±ÖÓÐÅºÅÃÅ¿Ø£º
-        0£º¹Ø¶Ï£»
-        1£º´ò¿ª¡£
+        fephyÊ±???Åº??Å¿Ø£?
+        0???Ø¶Ï£?
+        1???ò¿ª¡?
  */
         unsigned int reserved_9 : 1; /* [9] */
         // Comment of field: reserved_10
         /*
-        usb2 phyµÄ²Î¿¼Ê±ÖÓÐÅºÅÃÅ¿Ø£º
-        0£º¹Ø¶Ï£»
-        1£º´ò¿ª¡£
+        usb2 phy?Ä²Î¿?Ê±???Åº??Å¿Ø£?
+        0???Ø¶Ï£?
+        1???ò¿ª¡?
  */
         unsigned int reserved_10 : 1; /* [10] */
         // Comment of field: reserved_11
         /*
-        cec Ê±ÖÓÑ¡Ôñ£º
-        0£º2M£»
-        1£º2.02M¡£
+        cec Ê±??Ñ¡????
+        0??2M??
+        1??2.02M??
  */
         unsigned int reserved_11 : 1; /* [11] */
         // Comment of field: reserved_12
         /*
-        cbusÊ±ÖÓÑ¡Ôñ£º
-        0£º24M£»
-        1£º20M¡£
+        cbusÊ±??Ñ¡????
+        0??24M??
+        1??20M??
  */
         unsigned int reserved_12 : 1; /* [12] */
         // Comment of field: reserved_13
         /*
-        edid Ê±ÖÓÑ¡Ôñ£º
-        0£º2M£»
-        1£º2.02M¡£
+        edid Ê±??Ñ¡????
+        0??2M??
+        1??2.02M??
  */
         unsigned int reserved_13 : 1; /* [13] */
         // Comment of field: reserved_14
         /*
-        shemanÊ±ÖÓÑ¡Ôñ£º
-        0£º24M£»
-        1£º27M¡£
+        shemanÊ±??Ñ¡????
+        0??24M??
+        1??27M??
  */
         unsigned int reserved_14 : 1; /* [14] */
         // Comment of field: reserved_15
         /*
-        aphy_p0Ê±ÖÓÑ¡Ôñ£º
-        0£ºÑ¡Ôñhdmi_phy_p0Êä³öµÄÊ±ÖÓ(AD_CLKO_DVI_DVI32_P0)
-        1£ºÑ¡ÔñDFTÊ±ÖÓ
+        aphy_p0Ê±??Ñ¡????
+        0??Ñ¡??hdmi_phy_p0??????Ê±??(AD_CLKO_DVI_DVI32_P0)
+        1??Ñ¡??DFTÊ±??
  */
         unsigned int reserved_15 : 1; /* [15] */
         // Comment of field: reserved_16
         /*
-        aphy_p1Ê±ÖÓÑ¡Ôñ£º
-        0£ºÑ¡Ôñhdmi_phy_p1Êä³öµÄÊ±ÖÓ(AD_CLKO_DVI_DVI32_P1)
-        1£ºÑ¡ÔñDFTÊ±ÖÓ
+        aphy_p1Ê±??Ñ¡????
+        0??Ñ¡??hdmi_phy_p1??????Ê±??(AD_CLKO_DVI_DVI32_P1)
+        1??Ñ¡??DFTÊ±??
  */
         unsigned int reserved_16 : 1; /* [16] */
         // Comment of field: reserved_17
         /*
-        aphy_p2Ê±ÖÓÑ¡Ôñ£º
-        0£ºÑ¡Ôñhdmi_phy_p2Êä³öµÄÊ±ÖÓ(AD_CLKO_DVI_DVI32_P2)
-        1£ºÑ¡ÔñDFTÊ±ÖÓ
+        aphy_p2Ê±??Ñ¡????
+        0??Ñ¡??hdmi_phy_p2??????Ê±??(AD_CLKO_DVI_DVI32_P2)
+        1??Ñ¡??DFTÊ±??
  */
         unsigned int reserved_17 : 1; /* [17] */
         // Comment of field: reserved_18
         /*
-        cecÈí¸´Î»ÇëÇó£º
-        0£º²»¸´Î»£»
-        1£º¸´Î»¡£
+        cec?í¸´Î»??????
+        0??????Î»??
+        1????Î»??
  */
         unsigned int reserved_18 : 1; /* [18] */
         // Comment of field: reserved_19
         /*
-        oscÈí¸´Î»ÇëÇó£º
-        0£º²»¸´Î»£»
-        1£º¸´Î»¡£
+        osc?í¸´Î»??????
+        0??????Î»??
+        1????Î»??
  */
         unsigned int reserved_19 : 1; /* [19] */
         // Comment of field: reserved_20
         /*
-        prifÈí¸´Î»ÇëÇó£º
-        0£º²»¸´Î»£»
-        1£º¸´Î»¡£
+        prif?í¸´Î»??????
+        0??????Î»??
+        1????Î»??
  */
         unsigned int reserved_20 : 1; /* [20] */
         // Comment of field: reserved_21
         /*
-        shemanÈí¸´Î»ÇëÇó£º
-        0£º²»¸´Î»£»
-        1£º¸´Î»¡£
+        sheman?í¸´Î»??????
+        0??????Î»??
+        1????Î»??
  */
         unsigned int reserved_21 : 1; /* [21] */
         // Comment of field: reserved_22
         /*
-        aphy_p0Èí¸´Î»ÇëÇóÐÅºÅ£º
-        0£º²»¸´Î»£»
-        1£º¸´Î»¡£
+        aphy_p0?í¸´Î»?????ÅºÅ£?
+        0??????Î»??
+        1????Î»??
  */
         unsigned int reserved_22 : 1; /* [22] */
         // Comment of field: reserved_23
         /*
-        aphy_p1Èí¸´Î»ÇëÇóÐÅºÅ£º
-        0£º²»¸´Î»£»
-        1£º¸´Î»¡£
+        aphy_p1?í¸´Î»?????ÅºÅ£?
+        0??????Î»??
+        1????Î»??
  */
         unsigned int reserved_23 : 1; /* [23] */
         // Comment of field: reserved_24
         /*
-        aphy_p2Èí¸´Î»ÇëÇóÐÅºÅ£º
-        0£º²»¸´Î»£»
-        1£º¸´Î»¡£
+        aphy_p2?í¸´Î»?????ÅºÅ£?
+        0??????Î»??
+        1????Î»??
  */
         unsigned int reserved_24 : 1; /* [24] */
         // Comment of field: reserved_25
         /*
-        fephyµÄÈí¸´Î»ÇëÇóÐÅºÅ£º
-        0£º²»¸´Î»£»
-        1£º¸´Î»¡£
+        fephy???í¸´Î»?????ÅºÅ£?
+        0??????Î»??
+        1????Î»??
  */
         unsigned int reserved_25 : 1; /* [25] */
         // Comment of field: reserved_26
         /*
-        usb2 phy0_p1µÄÈí¸´Î»ÇëÇóÐÅºÅ£¬ÓÃÓÚ¸´Î»UTM×´Ì¬»ú
-        0£º²»¸´Î»£»
-        1£º¸´Î»¡£
+        usb2 phy0_p1???í¸´Î»?????ÅºÅ£????Ú¸?Î»UTM×´Ì¬??
+        0??????Î»??
+        1????Î»??
  */
         unsigned int reserved_26 : 1; /* [26] */
         // Comment of field: reserved_27
         /*
-        usb2 phy0_p1µÄÈí¸´Î»ÇëÇóÐÅºÅ£¬ÓÃÓÚusb2_phy0_p1µÄÉÏµç¸´Î»
-        0£º²»¸´Î»£»
-        1£º¸´Î»¡£
+        usb2 phy0_p1???í¸´Î»?????ÅºÅ£?????usb2_phy0_p1???Ïµç¸´Î»
+        0??????Î»??
+        1????Î»??
  */
         unsigned int reserved_27 : 1; /* [27] */
         // Comment of field: reserved_28
         /*
-        ÓÃÓÚ²âÊÔusb2_phy0_p1µÄÈí¸´Î»ÇëÇóÐÅºÅ
-        0£º²»¸´Î»£»
-        1£º¸´Î»¡£
+        ???Ú²???usb2_phy0_p1???í¸´Î»?????Åº?
+        0??????Î»??
+        1????Î»??
  */
         unsigned int reserved_28 : 1; /* [28] */
         // Comment of field: reserved_29
         /*
-        usb2_phy0_p1µÄapb_clkµÄÊ±ÖÓÃÅ¿ØÊ¹ÄÜ
-        0£º¹Ø¶Ï£»
-        1£º´ò¿ª¡£
+        usb2_phy0_p1??apb_clk??Ê±???Å¿?Ê¹??
+        0???Ø¶Ï£?
+        1???ò¿ª¡?
  */
         unsigned int reserved_29 : 1; /* [29] */
         // Comment of field: reserved_30
         /*
-        ±£Áô¡£
+        ??????
  */
         unsigned int reserved_30 : 2; /* [31..30] */
     } bits;
@@ -1375,33 +1375,33 @@ typedef union {
     struct {
         // Comment of field: vga_ddc_timeout
         /*
-        VGAµÄdebug¼Ä´æÆ÷¡£
+        VGA??debug?Ä´?????
  */
         unsigned int vga_ddc_timeout : 1; /* [0] */
         // Comment of field: reserved_0
         /*
-        ±£Áô¡£
+        ??????
  */
         unsigned int reserved_0 : 3; /* [3..1] */
         // Comment of field: vga_ddc_sda_del_en
         /*
-        VGAµÄsdaÂ·¾¶ÑÓÊ±Ê¹ÄÜ¡£
-        0£º²»Ê¹ÄÜ;
-        1£ºÊ¹ÄÜ¡£
+        VGA??sdaÂ·????Ê±Ê¹?Ü¡?
+        0????Ê¹??;
+        1??Ê¹?Ü¡?
  */
         unsigned int vga_ddc_sda_del_en : 1; /* [4] */
         // Comment of field: vga_reg_ddc_del_en
         /*
-        VGAµÄsclÂ·¾¶ÑÓÊ±Ê¹ÄÜ¡£
-        0£º²»Ê¹ÄÜ;
-        1£ºÊ¹ÄÜ¡£
+        VGA??sclÂ·????Ê±Ê¹?Ü¡?
+        0????Ê¹??;
+        1??Ê¹?Ü¡?
  */
         unsigned int vga_reg_ddc_del_en : 1; /* [5] */
         // Comment of field: vga_reg_ddc_en
         /*
-        VGAµÄddc_edidÊ¹ÄÜ¡£
-        0£º²»Ê¹ÄÜ;
-        1£ºÊ¹ÄÜ¡£
+        VGA??ddc_edidÊ¹?Ü¡?
+        0????Ê¹??;
+        1??Ê¹?Ü¡?
  */
         unsigned int vga_reg_ddc_en : 1; /* [6] */
         // Comment of field: reserved_1
@@ -1436,7 +1436,7 @@ typedef union {
         unsigned int reserved_5 : 1; /* [13] */
         // Comment of field: reserved_6
         /*
-        ±£Áô¡£
+        ??????
  */
         unsigned int reserved_6 : 18; /* [31..14] */
     } bits;
@@ -1471,37 +1471,37 @@ typedef union {
     struct {
         // Comment of field: reserved_0
         /*
-        vgaµÄscl_inºÍsda_inÊäÈë¹Ü½ÅÑ¡ÔñÐÅºÅ£º
-        0£ºÀ´×Ô³£µçÇø¹Ü½Å£»
-        1£ºreserved¡£
+        vga??scl_in??sda_in?????Ü½?Ñ¡???ÅºÅ£?
+        0??À´?Ô³??????Ü½Å£?
+        1??reserved??
  */
         unsigned int reserved_0 : 1; /* [0] */
         // Comment of field: uart1_use_lbe_txd_en
         /*
-        uart txuartÓÐÊý¾Ý¾Í·¢ËÍÊý¾Ýµ½txdÊ¹ÄÜ£¬
-        1£º²»Ê¹ÄÜ£»
-        0£ºÊ¹ÄÜ£»
+        uart txuart?????Ý¾Í·??????Ýµ?txdÊ¹?Ü£?
+        1????Ê¹?Ü£?
+        0??Ê¹?Ü£?
  */
         unsigned int uart1_use_lbe_txd_en : 1; /* [1] */
         // Comment of field: sc_uart0_sel
         /*
-        uart0 IOÑ¡Ôñ£º
-        0£ºuart  rxd
-        1£ºuart rxd cp
+        uart0 IOÑ¡????
+        0??uart  rxd
+        1??uart rxd cp
  */
         unsigned int sc_uart0_sel : 1; /* [2] */
         // Comment of field: sc_uart1_sel
         /*
-        uart1 IOÑ¡Ôñ£º
-        0£ºuart rxd
-        1£ºuart rxd cp
+        uart1 IOÑ¡????
+        0??uart rxd
+        1??uart rxd cp
  */
         unsigned int sc_uart1_sel : 1; /* [3] */
         // Comment of field: sc_jtag_dbg_release
         /*
-        ÍË³ö2ÏßJTAGµ÷ÊÔ¡£
-        ÅäÖÃÎª1ÔÙÅäÖÃÎª0£ºÍË³ö2ÏßJTAGµ÷ÊÔ¡£
-        ÆäËû£ºÖ§³Ö2ÏßJTAGµ÷ÊÔ¡£
+        ?Ë³?2??JTAG???Ô¡?
+        ????Îª1??????Îª0???Ë³?2??JTAG???Ô¡?
+        ??????Ö§??2??JTAG???Ô¡?
  */
         unsigned int sc_jtag_dbg_release : 1; /* [4] */
         // Comment of field: reserved_1
@@ -1516,23 +1516,23 @@ typedef union {
         unsigned int reserved_2 : 1; /* [6] */
         // Comment of field: peri_uart1_od_sel
         /*
-        uart1Êä³öÊý¾ÝµÄodÑ¡ÔñÐÅºÅ¡£
-        0:CMOSÊä³ö£»
-        1:ODÊä³ö¡£
+        uart1???????Ýµ?odÑ¡???ÅºÅ¡?
+        0:CMOS??????
+        1:OD??????
  */
         unsigned int peri_uart1_od_sel : 1; /* [7] */
         // Comment of field: hdmirx_det_io_sel
         /*
-        hdmirx detect ioÑ¡Ôñ¡£
-        0:HDMIRX DETÑ¡ÔñÐÂ5V IO£»
-        1:HDMIRX DETÑ¡ÔñÆÕÍ¨Êý×ÖIO¡£
+        hdmirx detect ioÑ¡????
+        0:HDMIRX DETÑ¡????5V IO??
+        1:HDMIRX DETÑ¡????Í¨????IO??
  */
         unsigned int hdmirx_det_io_sel : 1; /* [8] */
         // Comment of field: backup_edid_sel
         /*
-        UARTºÍVGA EDID IO×Ô¶¯ÇÐ»»Ê¹ÄÜ¿ØÖÆ¡£
-        0:UARTºÍVGA_EDID IO×Ô¶¯ÇÐ»»£»
-        1:UARTºÍVGA_EDID IO²»×Ô¶¯ÇÐ»»£¬Ê¹ÓÃÆÕÍ¨µÄ¹Ü½Å¸´ÓÃ¡£
+        UART??VGA EDID IO?Ô¶??Ð»?Ê¹?Ü¿??Æ¡?
+        0:UART??VGA_EDID IO?Ô¶??Ð»???
+        1:UART??VGA_EDID IO???Ô¶??Ð»???Ê¹????Í¨?Ä¹Ü½Å¸??Ã¡?
  */
         unsigned int backup_edid_sel : 1; /* [9] */
         // Comment of field: reserved_3
@@ -1557,77 +1557,77 @@ typedef union {
     struct {
         // Comment of field: ir_rft_emasa
         /*
-        memoryµ÷ËÙÐÅºÅ£¬Ïê¼ûBES memoryµ÷ËÙËµÃ÷
+        memory?????ÅºÅ£?????BES memory????Ëµ??
  */
         unsigned int ir_rft_emasa : 1; /* [0] */
         // Comment of field: ir_rft_emab
         /*
-        memoryµ÷ËÙÐÅºÅ£¬Ïê¼ûBES memoryµ÷ËÙËµÃ÷
+        memory?????ÅºÅ£?????BES memory????Ëµ??
  */
         unsigned int ir_rft_emab : 3; /* [3..1] */
         // Comment of field: ir_rft_emaa
         /*
-        memoryµ÷ËÙÐÅºÅ£¬Ïê¼ûBES memoryµ÷ËÙËµÃ÷
+        memory?????ÅºÅ£?????BES memory????Ëµ??
  */
         unsigned int ir_rft_emaa : 3; /* [6..4] */
         // Comment of field: ir_rft_colldisn
         /*
-        memoryµ÷ËÙÐÅºÅ£¬Ïê¼ûBES memoryµ÷ËÙËµÃ÷
+        memory?????ÅºÅ£?????BES memory????Ëµ??
  */
         unsigned int ir_rft_colldisn : 1; /* [7] */
         // Comment of field: mce_rfs_emaw
         /*
-        ¿ØÖÆÁËmceºÍfephy memoryµ÷ËÙÐÅºÅ£¬Ïê¼ûBES memoryµ÷ËÙËµÃ÷
+        ??????mce??fephy memory?????ÅºÅ£?????BES memory????Ëµ??
  */
         unsigned int mce_rfs_emaw : 2; /* [9..8] */
         // Comment of field: mce_rfs_ema
         /*
-        ¿ØÖÆÁËmceºÍfephy memoryµ÷ËÙÐÅºÅ£¬Ïê¼ûBES memoryµ÷ËÙËµÃ÷
+        ??????mce??fephy memory?????ÅºÅ£?????BES memory????Ëµ??
  */
         unsigned int mce_rfs_ema : 3; /* [12..10] */
         // Comment of field: mce_ras_emaw
         /*
-        ¿ØÖÆÁËmceºÍfephy memoryµ÷ËÙÐÅºÅ£¬Ïê¼ûBES memoryµ÷ËÙËµÃ÷
+        ??????mce??fephy memory?????ÅºÅ£?????BES memory????Ëµ??
  */
         unsigned int mce_ras_emaw : 2; /* [14..13] */
         // Comment of field: mce_ras_ema
         /*
-        ¿ØÖÆÁËmceºÍfephy memoryµ÷ËÙÐÅºÅ£¬Ïê¼ûBES memoryµ÷ËÙËµÃ÷
+        ??????mce??fephy memory?????ÅºÅ£?????BES memory????Ëµ??
  */
         unsigned int mce_ras_ema : 3; /* [17..15] */
         // Comment of field: mce_ras_wabl
         /*
-        ¿ØÖÆÁËmceºÍfephy memoryµ÷ËÙÐÅºÅ£¬Ïê¼ûBES memoryµ÷ËÙËµÃ÷
+        ??????mce??fephy memory?????ÅºÅ£?????BES memory????Ëµ??
  */
         unsigned int mce_ras_wabl : 1; /* [18] */
         // Comment of field: mce_ras_stov
         /*
-        ¿ØÖÆÁËmceºÍfephy memoryµ÷ËÙÐÅºÅ£¬Ïê¼ûBES memoryµ÷ËÙËµÃ÷
+        ??????mce??fephy memory?????ÅºÅ£?????BES memory????Ëµ??
  */
         unsigned int mce_ras_stov : 1; /* [19] */
         // Comment of field: mce_ras_emas
         /*
-        ¿ØÖÆÁËmceºÍfephy memoryµ÷ËÙÐÅºÅ£¬Ïê¼ûBES memoryµ÷ËÙËµÃ÷
+        ??????mce??fephy memory?????ÅºÅ£?????BES memory????Ëµ??
  */
         unsigned int mce_ras_emas : 1; /* [20] */
         // Comment of field: mce_ras_wablm
         /*
-        ¿ØÖÆÁËmceºÍfephy memoryµ÷ËÙÐÅºÅ£¬Ïê¼ûBES memoryµ÷ËÙËµÃ÷
+        ??????mce??fephy memory?????ÅºÅ£?????BES memory????Ëµ??
  */
         unsigned int mce_ras_wablm : 2; /* [22..21] */
         // Comment of field: mce_rfs_wabl
         /*
-        ¿ØÖÆÁËmceºÍfephy memoryµ÷ËÙÐÅºÅ£¬Ïê¼ûBES memoryµ÷ËÙËµÃ÷
+        ??????mce??fephy memory?????ÅºÅ£?????BES memory????Ëµ??
  */
         unsigned int mce_rfs_wabl : 1; /* [23] */
         // Comment of field: mce_rfs_wablm
         /*
-        ¿ØÖÆÁËmceºÍfephy memoryµ÷ËÙÐÅºÅ£¬Ïê¼ûBES memoryµ÷ËÙËµÃ÷
+        ??????mce??fephy memory?????ÅºÅ£?????BES memory????Ëµ??
  */
         unsigned int mce_rfs_wablm : 2; /* [25..24] */
         // Comment of field: fephy_ros_ema
         /*
-        memoryµ÷ËÙÐÅºÅ£¬Ïê¼ûBES memoryµ÷ËÙËµÃ÷
+        memory?????ÅºÅ£?????BES memory????Ëµ??
  */
         unsigned int fephy_ros_ema : 3; /* [28..26] */
         // Comment of field: reserved_0
@@ -1647,17 +1647,17 @@ typedef union {
     struct {
         // Comment of field: hpd5v_io_0_test
         /*
-        hdmirx 5v new io²âÊÔ¼Ä´æÆ÷
+        hdmirx 5v new io???Ô¼Ä´???
  */
         unsigned int hpd5v_io_0_test : 8; /* [7..0] */
         // Comment of field: hpd5v_io_1_test
         /*
-        hdmirx 5v new io²âÊÔ¼Ä´æÆ÷
+        hdmirx 5v new io???Ô¼Ä´???
  */
         unsigned int hpd5v_io_1_test : 8; /* [15..8] */
         // Comment of field: hpd5v_io_2_test
         /*
-        hdmirx 5v new io²âÊÔ¼Ä´æÆ÷
+        hdmirx 5v new io???Ô¼Ä´???
  */
         unsigned int hpd5v_io_2_test : 8; /* [23..16] */
         // Comment of field: reserved_0

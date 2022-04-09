@@ -360,9 +360,9 @@ static inline void osal_list_splice_tail_init(struct osal_list_head *list,
 #define osal_offsetof(TYPE, MEMBER) ((int)(unsigned long)&((TYPE *)0)->MEMBER)
 #endif
 
-#define osal_container_of(ptr, type, member) ({          \
+#define osal_container_of(ptr, type, member) ({ \
     const __typeof__( ((type *)0)->member) *__mptr = (ptr);    \
-    (type *)( (char *)__mptr - osal_offsetof(type, member)); })
+    (type *)((char *)__mptr - osal_offsetof(type, member)); })
 
 /**
  * list_entry - get the struct for this entry
@@ -699,7 +699,7 @@ static inline void osal_hlist_move_list(struct osal_hlist_head *old,
     for ((pos) = (head)->first; (pos); (pos) = (pos)->next)
 
 #define osal_hlist_for_each_safe(pos, n, head) \
-    for ((pos) = (head)->first; (pos) && ({ n = (pos)->next; 1; });    \
+    for ((pos) = (head)->first; (pos) && ({ n = (pos)->next; 1; }); \
          pos = n)
 
 /**
@@ -712,7 +712,7 @@ static inline void osal_hlist_move_list(struct osal_hlist_head *old,
 #define osal_hlist_for_each_entry(tpos, pos, head, member) \
     for ((pos) = (head)->first;                              \
          (pos) &&                                            \
-         ({ (tpos) = osal_hlist_entry(pos, __typeof__(*tpos), member); 1; });                                            \
+         ({ (tpos) = osal_hlist_entry(pos, __typeof__(*tpos), member); 1; }); \
          (pos) = (pos)->next)
 
 /**
@@ -735,7 +735,7 @@ static inline void osal_hlist_move_list(struct osal_hlist_head *old,
  */
 #define osal_hlist_for_each_entry_from(tpos, pos, member) \
     for (; (pos) &&                                         \
-           ({ (tpos) = osal_hlist_entry(pos, __typeof__(*tpos), member); 1; });                                         \
+           ({ (tpos) = osal_hlist_entry(pos, __typeof__(*tpos), member); 1; }); \
          (pos) = (pos)->next)
 
 /**
@@ -746,11 +746,11 @@ static inline void osal_hlist_move_list(struct osal_hlist_head *old,
  * @head:    the head for your list.
  * @member:    the name of the hlist_node within the struct.
  */
-#define osal_hlist_for_each_entry_safe(tpos, pos, n, head, member) do{\
+#define osal_hlist_for_each_entry_safe(tpos, pos, n, head, member) do { \
     for ((pos) = (head)->first;                                      \
-         (pos) && ({ n = (pos)->next; 1; }) &&                                           \
+         (pos) && ({ n = (pos)->next; 1; }) && \
          ({ (tpos) = osal_hlist_entry(pos, __typeof__(*tpos), member); 1; });      \
          pos = n); \
-}while (0)
+} while (0)
 
 #endif

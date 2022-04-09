@@ -46,7 +46,7 @@ enum smmu_cmd_t {
 
 struct smmu_ctrl_t {
     enum smmu_cmd_t cmd;
-    int memtype; //0:cma mem; 1: system mem
+    int memtype; // 0:cma mem; 1: system mem
     char name[HIL_MAX_NAME_LEN];
     unsigned int size;
     unsigned long long phys_addr;
@@ -189,28 +189,23 @@ static int smmu_agent_work(struct tee_agent_kernel_ops* agent_instance)
     }
 
     switch (smmu_ctrl->cmd) {
-        case HISI_MEM_ALLOC:
-        {
+        case HISI_MEM_ALLOC: {
             ret = smmu_agent_mem_alloc(smmu_ctrl);
             break;
         }
-        case HISI_MEM_FREE:
-        {
+        case HISI_MEM_FREE: {
             ret = smmu_agent_mem_free(smmu_ctrl);
             break;
         }
-        case HISI_MEM_GET_MEMINFO:
-        {
+        case HISI_MEM_GET_MEMINFO: {
             ret = smmu_agent_get_meminfo(smmu_ctrl);
             break;
         }
-        case HISI_MEM_PUT_MEMINFO:
-        {
+        case HISI_MEM_PUT_MEMINFO: {
             ret = smmu_agent_put_meminfo(smmu_ctrl);
             break;
         }
-        case HISI_AGENT_CLOSE:
-        {
+        case HISI_AGENT_CLOSE: {
             /* kernel thread should not be stopped    */
             ret = CLOSE_AGENT;
             break;
@@ -243,7 +238,7 @@ static int smmu_tee_agent_work(void *data)
         }
 
         if (agent_station == CLOSE_AGENT) {
-            /* agent will be closed.*/
+            /* agent will be closed. */
             break;
         }
     }

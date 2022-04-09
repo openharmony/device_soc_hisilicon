@@ -94,8 +94,7 @@ static hi_void gpio_proc_write_cmd_process(hi_u32 cmd, hi_u32 group, hi_u32 bit,
             HI_PRINT("Value [%d][%d] = %s\n", group, bit, bit_value ? "high" : "low");
             break;
         }
-        default:
-        {
+        default: {
             return;
         }
     }

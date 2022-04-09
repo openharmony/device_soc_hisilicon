@@ -35,7 +35,7 @@
     {                                                                        \
         osal_unregister(&(osal_driver));                                     \
     }                                                                        \
-    module_exit(osal_driver##_exit);
+    module_exit(osal_driver##_exit)
 
 #define osal_module_platform_driver(platform_driver)                   \
     osal_module_driver(platform_driver, osal_platform_driver_register, \

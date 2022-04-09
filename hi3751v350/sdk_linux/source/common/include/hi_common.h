@@ -96,10 +96,10 @@ typedef struct hiSYS_VERSION_S {
     enChipVersion;
     /* <Version string of the SDK */
     /* <CNcomment:  SDKÃˆÃ­Â¼Ã¾Â°Ã¦Â±Â¾ÂºÃ…Ã—Ã–Â·Ã»Â´Â® */
-    hi_char aVersion[80]; /* 80 ±íÊ¾SDK Version×î´ó³¤¶È */
+    hi_char aVersion[80]; /* 80 ??Ê¾SDK Version???ó³¤¶? */
     /* <Version string of the Boot */
     /* <CNcomment:  BootÂ°Ã¦Â±Â¾ÂºÃ…Ã—Ã–Â·Ã»Â´Â® */
-    hi_char BootVersion[80]; /* 80 ±íÊ¾Boot Version×î´ó³¤¶È */
+    hi_char BootVersion[80]; /* 80 ??Ê¾Boot Version???ó³¤¶? */
 } HI_SYS_VERSION_S;
 
 /* Define the chip attributes */
@@ -389,12 +389,12 @@ N/A CNcomment: ÃŽÃž CNend
 hi_s32 HI_SYS_SetLogLevel(HI_MOD_ID_E enModId, HI_LOG_LEVEL_E enLogLevel);
 
 /**
-@brief The interface of enable or disable log store. CNcomment: Ê¹ÄÜ»òÈ¥Ê¹ÄÜ SDKÄÚºË´òÓ¡ÐÅÏ¢±£´æµ½ÎÄ¼þµÄ²Ù×÷ CNend
+@brief The interface of enable or disable log store. CNcomment: Ê¹?Ü»?È¥Ê¹?? SDK?ÚºË´?Ó¡??Ï¢???æµ½?Ä¼??Ä²??? CNend
 @attention \n
-N/A CNcomment: ÎÞ CNend
-@param[in]  enable_store .enable log store or disable it. CNcomment: Ê¹ÄÜ»òÈ¥Ê¹ÄÜ CNend
-@retval ::HI_SUCCESS Success CNcomment: ³É¹¦ CNend
-@retval ::HI_FAILURE Calling this API fails. CNcomment: APIµ÷ÓÃÊ§°Ü CNend
+N/A CNcomment: ?? CNend
+@param[in]  enable_store .enable log store or disable it. CNcomment: Ê¹?Ü»?È¥Ê¹?? CNend
+@retval ::HI_SUCCESS Success CNcomment: ?É¹? CNend
+@retval ::HI_FAILURE Calling this API fails. CNcomment: API????Ê§?? CNend
 @see \n
 */
 hi_s32 HI_SYS_LogStore(hi_bool bEnable);

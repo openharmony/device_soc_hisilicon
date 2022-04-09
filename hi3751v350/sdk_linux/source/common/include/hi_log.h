@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2022 HiSilicon (Shanghai) Technologies CO., LIMITED.
- *
+ *set fileencoding
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
@@ -68,34 +68,34 @@ extern "C" {
 /* @{ */ /* <!-- [HI_DEBUG] */
 
 /* Default level of the output debugging information */
-/* CNcomment: Ä¬ÈÏµÄµ÷ÊÔÐÅÏ¢Êä³ö¼¶±ð */
+/* CNcomment: Ä¬?ÏµÄµ?????Ï¢???ö¼¶±? */
 #define HI_LOG_LEVEL_DEFAULT HI_LOG_LEVEL_NOTICE
 
 /* Level of the output debugging information */
-/* CNcomment: µ÷ÊÔÐÅÏ¢Êä³ö¼¶±ð */
+/* CNcomment: ??????Ï¢???ö¼¶±? */
 typedef enum HI_LOG_LEVEL_E {
     /* <fatal error. it indicates that a critical problem occurs in the system. */
     /* therefore, you must pay attention to it. */
     HI_LOG_LEVEL_FATAL = 0,
-    /* <CNcomment: ÖÂÃü´íÎó, ´ËÀà´íÎóÐèÒªÌØ±ð¹Ø×¢£¬Ò»°ã³öÏÖ´ËÀà´íÎó´ú±íÏµÍ³³öÏÖÁËÖØ´óÎÊÌâ */
+    /* <CNcomment: ????????, ??????????Òª?Ø±???×¢??Ò»?????Ö´???????????ÏµÍ³???????Ø´????? */
     /* <Major error. It indicates that a major problem occurs in the system and the system cannot run. */
     HI_LOG_LEVEL_ERROR = 1,
-    /* <CNcomment: Ò»°ã´íÎó, Ò»°ã³öÏÖ´ËÀà´íÎó´ú±íÏµÍ³³öÏÖÁË±È½Ï´óµÄÎÊÌâ£¬²»ÄÜÔÙÕý³£ÔËÐÐ */
+    /* <CNcomment: Ò»??????, Ò»?????Ö´???????????ÏµÍ³?????Ë±È½Ï´??????â£¬?????????????? */
     /* <Warning. It indicates that a minor problem occurs in the system, but the system still can run properly. */
     HI_LOG_LEVEL_WARNING = 2,
-    /* <CNcomment: ¸æ¾¯ÐÅÏ¢, Ò»°ã³öÏÖ´ËÀàÐÅÏ¢´ú±íÏµÍ³¿ÉÄÜ³öÏÖÎÊÌâ£¬µ«ÊÇ»¹ÄÜ¼ÌÐøÔËÐÐ */
+    /* <CNcomment: ?æ¾¯??Ï¢, Ò»?????Ö´?????Ï¢????ÏµÍ³???Ü³??????â£¬???Ç»??Ü¼??????? */
     /* <Notice. It indicates that a normal but significant condition in the system, */
     /* but the system still can run properly. */
     HI_LOG_LEVEL_NOTICE = 3,
-    /* <CNcomment: Õý³£µ«ÖØÒªµÄÐÅÏ¢, Ò»°ã³öÏÖÔÚÏµÍ³µÄ¹Ø¼üÂ·¾¶µ÷ÓÃÉÏ */
+    /* <CNcomment: ????????Òª????Ï¢, Ò»????????ÏµÍ³?Ä¹Ø¼?Â·???????? */
     /* <Message. It is used to prompt users. Users can open the message when locating problems. */
     /* It is recommended to disable this message in general. */
     HI_LOG_LEVEL_INFO = 4,
-    /* <CNcomment: ÌáÊ¾ÐÅÏ¢, Ò»°ãÊÇÎªÌáÐÑÓÃ»§¶øÊä³ö£¬ÔÚ¶¨Î»ÎÊÌâµÄÊ±ºò¿ÉÒÔ´ò¿ª£¬Ò»°ãÇé¿öÏÂ½¨Òé¹Ø±Õ */
+    /* <CNcomment: ??Ê¾??Ï¢, Ò»????Îª?????Ã»??????????Ú¶?Î»??????Ê±?????Ô´ò¿ª£?Ò»???????Â½????Ø±? */
     /* <Debug. It is used to prompt developers. Developers can open the message when locating problems. */
     /* It is recommended to disable this message in general. */
     HI_LOG_LEVEL_DBG = 5,
-    /* <CNcomment: ÌáÊ¾ÐÅÏ¢, Ò»°ãÊÇÎª¿ª·¢ÈËÔ±µ÷ÊÔÎÊÌâ¶øÉè¶¨µÄ´òÓ¡¼¶±ð£¬Ò»°ãÇé¿öÏÂ½¨Òé¹Ø±Õ */
+    /* <CNcomment: ??Ê¾??Ï¢, Ò»????Îª??????Ô±???????????è¶¨?Ä´?Ó¡??????Ò»???????Â½????Ø±? */
     /* <Verbose. It is used to prompt developers. Developers can open the message when locating problems. */
     /* It is recommended to disable this message in general. */
     HI_LOG_LEVEL_VERBOSE = 6,
@@ -103,27 +103,27 @@ typedef enum HI_LOG_LEVEL_E {
     HI_LOG_LEVEL_BUTT
 } HI_LOG_LEVEL_E;
 
-/* Just only for fatal level print.   */ /* CNcomment: ÎªÁË´òÓ¡ÖÂÃüÐÅÏ¢¶øÖÆ¶¨µÄºê´òÓ¡¼¶±ð */
+/* Just only for fatal level print.   */ /* CNcomment: Îª?Ë´?Ó¡??????Ï¢???Æ¶??Äº???Ó¡???? */
 #define HI_TRACE_LEVEL_FATAL (0)
-/* Just only for error level print.   */ /* CNcomment: ÎªÁË´òÓ¡´íÎóÐÅÏ¢¶øÖÆ¶¨µÄºê´òÓ¡¼¶±ð */
+/* Just only for error level print.   */ /* CNcomment: Îª?Ë´?Ó¡??????Ï¢???Æ¶??Äº???Ó¡???? */
 #define HI_TRACE_LEVEL_ERROR (1)
-/* Just only for warning level print. */ /* CNcomment: ÎªÁË´òÓ¡¾¯¸æÐÅÏ¢¶øÖÆ¶¨µÄºê´òÓ¡¼¶±ð */
+/* Just only for warning level print. */ /* CNcomment: Îª?Ë´?Ó¡??????Ï¢???Æ¶??Äº???Ó¡???? */
 #define HI_TRACE_LEVEL_WARN (2)
-/* Just only for notice level print.  */ /* CNcomment: ÎªÁË´òÓ¡×¢ÒâÐÅÏ¢¶øÖÆ¶¨µÄºê´òÓ¡¼¶±ð */
+/* Just only for notice level print.  */ /* CNcomment: Îª?Ë´?Ó¡×¢????Ï¢???Æ¶??Äº???Ó¡???? */
 #define HI_TRACE_LEVEL_NOTICE (3)
-/* Just only for info level print.    */ /* CNcomment: ÎªÁË´òÓ¡ÐÅÏ¢¼¶±ð¶øÖÆ¶¨µÄºê´òÓ¡¼¶±ð */
+/* Just only for info level print.    */ /* CNcomment: Îª?Ë´?Ó¡??Ï¢???????Æ¶??Äº???Ó¡???? */
 #define HI_TRACE_LEVEL_INFO (4)
-/* Just only for debug level print.   */ /* CNcomment: ÎªÁË´òÓ¡µ÷ÊÔÐÅÏ¢¶øÖÆ¶¨µÄºê´òÓ¡¼¶±ð */
+/* Just only for debug level print.   */ /* CNcomment: Îª?Ë´?Ó¡??????Ï¢???Æ¶??Äº???Ó¡???? */
 #define HI_TRACE_LEVEL_DBG (5)
-/* Just only for verbose level print. */ /* CNcomment: ÎªÁË´òÓ¡Èß³¤µÄµ÷ÊÔÐÅÏ¢¶øÖÆ¶¨µÄºê´òÓ¡¼¶±ð */
+/* Just only for verbose level print. */ /* CNcomment: Îª?Ë´?Ó¡?ß³??Äµ?????Ï¢???Æ¶??Äº???Ó¡???? */
 #define HI_TRACE_LEVEL_VERBOSE (6)
 
 /* Just only debug output,MUST BE NOT calling it. */
-/* CNcomment: µ÷ÊÔÊä³öÐÅÏ¢½Ó¿Ú£¬²»ÍÆ¼öÖ±½Óµ÷ÓÃ´Ë½Ó¿Ú */
+/* CNcomment: ??????????Ï¢?Ó¿Ú£????Æ¼?Ö±?Óµ??Ã´Ë½Ó¿? */
 extern hi_void hi_log_out(hi_u32 level, HI_MOD_ID_E enModId,
-                         hi_u8 *p_func_name, hi_u32 line_num, const char *format, ...);
+                          hi_u8 *p_func_name, hi_u32 line_num, const char *format, ...);
 extern hi_void hi_log_out(hi_u32 level, HI_MOD_ID_E enModId,
-		                         hi_u8 *p_func_name, hi_u32 line_num, const char *format, ...);
+		          hi_u8 *p_func_name, hi_u32 line_num, const char *format, ...);
 extern hi_u32 log_get_time_ms(void);
 
 #ifdef HI_DEBUG
@@ -169,9 +169,9 @@ extern hi_u32 log_get_time_ms(void);
     } while (0)
 
 /* Supported for debug output to serial/network/u-disk. */
-/* CNcomment: ¸÷¸öÄ£¿éÐèÒªµ÷ÓÃÒÔÏÂºê½øÐÐÊä³öµ÷ÊÔÐÅÏ¢¡¢¿ÉÊä³öµ½´®¿Ú¡¢Íø¿Ú¡¢UÅÌ´æ´¢µÈ */
+/* CNcomment: ????Ä£????Òª???????Âº???????????????Ï¢???????öµ½´??Ú¡????Ú¡?U?Ì´æ´¢?? */
 /* Just only reserve the fatal level output. */
-/* CNcomment: ½ö½ö±£ÁôÖÂÃüµÄµ÷ÊÔÐÅÏ¢ */
+/* CNcomment: ?????????????Äµ?????Ï¢ */
 #if (HI_LOG_LEVEL == HI_TRACE_LEVEL_FATAL)
 #define HI_LOG_FATAL(fmt...)  HI_TRACE(HI_TRACE_LEVEL_FATAL, LOG_D_MODULE_ID, fmt)
 #define HI_LOG_ERR(fmt...)
@@ -181,7 +181,7 @@ extern hi_u32 log_get_time_ms(void);
 #define HI_LOG_DBG(fmt...)
 #define HI_LOG_VERBOSE(fmt...)
 /* Just only reserve the fatal/error level output. */
-/* CNcomment: ½ö½ö±£ÁôÖÂÃüµÄºÍ´íÎó¼¶±ðµÄµ÷ÊÔÐÅÏ¢ */
+/* CNcomment: ?????????????ÄºÍ´??ó¼¶±??Äµ?????Ï¢ */
 #elif (HI_LOG_LEVEL == HI_TRACE_LEVEL_ERROR)
 #define HI_LOG_FATAL(fmt...)  HI_TRACE(HI_TRACE_LEVEL_FATAL, LOG_D_MODULE_ID, fmt)
 #define HI_LOG_ERR(fmt...)   HI_TRACE(HI_TRACE_LEVEL_ERROR, LOG_D_MODULE_ID, fmt)
@@ -191,7 +191,7 @@ extern hi_u32 log_get_time_ms(void);
 #define HI_LOG_DBG(fmt...)
 #define HI_LOG_VERBOSE(fmt...)
 /* Just only reserve the fatal/error/warning level output. */
-/* CNcomment: ½ö½ö±£ÁôÖÂÃüµÄ¡¢´íÎóµÄ¡¢¾¯¸æ¼¶±ðµÄµ÷ÊÔÐÅÏ¢ */
+/* CNcomment: ?????????????Ä¡??????Ä¡????æ¼¶???Äµ?????Ï¢ */
 #elif (HI_LOG_LEVEL == HI_TRACE_LEVEL_WARN)
 #define HI_LOG_FATAL(fmt...)  HI_TRACE(HI_TRACE_LEVEL_FATAL, LOG_D_MODULE_ID, fmt)
 #define HI_LOG_ERR(fmt...)   HI_TRACE(HI_TRACE_LEVEL_ERROR, LOG_D_MODULE_ID, fmt)
@@ -201,7 +201,7 @@ extern hi_u32 log_get_time_ms(void);
 #define HI_LOG_DBG(fmt...)
 #define HI_LOG_VERBOSE(fmt...)
 /* Just only reserve the fatal/error/warning/note level output. */
-/* CNcomment: ½ö½ö±£ÁôÖÂÃüµÄ¡¢´íÎóµÄ¡¢¾¯¸æºÍ×¢Òâ¼¶±ðµÄµ÷ÊÔÐÅÏ¢ */
+/* CNcomment: ?????????????Ä¡??????Ä¡???????×¢?â¼¶???Äµ?????Ï¢ */
 #elif (HI_LOG_LEVEL == HI_TRACE_LEVEL_NOTICE)
 #define HI_LOG_FATAL(fmt...)  HI_TRACE(HI_TRACE_LEVEL_FATAL, LOG_D_MODULE_ID, fmt)
 #define HI_LOG_ERR(fmt...)   HI_TRACE(HI_TRACE_LEVEL_ERROR, LOG_D_MODULE_ID, fmt)
@@ -211,7 +211,7 @@ extern hi_u32 log_get_time_ms(void);
 #define HI_LOG_DBG(fmt...)
 #define HI_LOG_VERBOSE(fmt...)
 /* Just only reserve the fatal/error/warning/info level output. */
-/* CNcomment: ½ö½ö±£ÁôÖÂÃüµÄ¡¢´íÎóµÄ¡¢¾¯¸æºÍÐÅÏ¢¼¶±ðµÄµ÷ÊÔÐÅÏ¢ */
+/* CNcomment: ?????????????Ä¡??????Ä¡?????????Ï¢?????Äµ?????Ï¢ */
 #elif (HI_LOG_LEVEL == HI_TRACE_LEVEL_INFO)
 #define HI_LOG_FATAL(fmt...)  HI_TRACE(HI_TRACE_LEVEL_FATAL, LOG_D_MODULE_ID, fmt)
 #define HI_LOG_ERR(fmt...)   HI_TRACE(HI_TRACE_LEVEL_ERROR, LOG_D_MODULE_ID, fmt)
@@ -222,7 +222,7 @@ extern hi_u32 log_get_time_ms(void);
 #define HI_LOG_VERBOSE(fmt...)
 #elif (HI_LOG_LEVEL == HI_TRACE_LEVEL_DBG)
 /* Reserve all the levels output. */
-/* CNcomment: ±£ÁôËùÓÐ¼¶±ðµ÷ÊÔÐÅÏ¢ */
+/* CNcomment: ???????Ð¼?????????Ï¢ */
 #define HI_LOG_FATAL(fmt...)  HI_TRACE(HI_TRACE_LEVEL_FATAL, LOG_D_MODULE_ID, fmt)
 #define HI_LOG_ERR(fmt...)   HI_TRACE(HI_TRACE_LEVEL_ERROR, LOG_D_MODULE_ID, fmt)
 #define HI_LOG_WARN(fmt...)  HI_TRACE(HI_TRACE_LEVEL_WARN, LOG_D_MODULE_ID, fmt)
@@ -232,7 +232,7 @@ extern hi_u32 log_get_time_ms(void);
 #define HI_LOG_VERBOSE(fmt...)
 #elif (HI_LOG_LEVEL == HI_TRACE_LEVEL_VERBOSE)
 /* Reserve all the levels output. */
-/* CNcomment: ±£ÁôËùÓÐ¼¶±ðµ÷ÊÔÐÅÏ¢ */
+/* CNcomment: ???????Ð¼?????????Ï¢ */
 #define HI_LOG_FATAL(fmt...)  HI_TRACE(HI_TRACE_LEVEL_FATAL, LOG_D_MODULE_ID, fmt)
 #define HI_LOG_ERR(fmt...)   HI_TRACE(HI_TRACE_LEVEL_ERROR, LOG_D_MODULE_ID, fmt)
 #define HI_LOG_WARN(fmt...)  HI_TRACE(HI_TRACE_LEVEL_WARN, LOG_D_MODULE_ID, fmt)
@@ -244,7 +244,7 @@ extern hi_u32 log_get_time_ms(void);
 #endif
 
 /* Only for debug, forbidden to modify and upload */
-/* CNcomment: ½ö¹©µ÷ÊÔÊ¹ÓÃ£¬½ûÖ¹´ò¿ªÉÏ´« */
+/* CNcomment: ?ö¹©µ???Ê¹?Ã£???Ö¹?????Ï´? */
 #ifdef HI_KEY_PRINT_OUT
 #define HI_KEY_PRINT(module_id, fmt...)
 #define HI_KEY_PRINT_HEX(module_id, str, addr, len) \
@@ -291,7 +291,7 @@ extern hi_u32 log_get_time_ms(void);
 #define hi_dbg_func_trace() HI_LOG_DBG(" =TRACE=\n")
 
 /* Function trace log for user input low frequency counts */
-/* CNcomment: ÓÃÓÚÊäÈë½µÆµ´òÓ¡µÄ´ÎÊý */
+/* CNcomment: ???????ë½µÆµ??Ó¡?Ä´??? */
 #define hi_dbg_func_trace_low_freq_cnt(freq)                                    \
     do {                                                                    \
         static unsigned int freqtimes = 0;                                  \
@@ -302,9 +302,9 @@ extern hi_u32 log_get_time_ms(void);
     } while (0)
 
 /* function trace log for user add extra print log as need */
-/* CNcomment: ÓÃ»§¸ù¾ÝÐèÇóÔö¼Ó¶îÍâµÄ´òÓ¡ */
+/* CNcomment: ?Ã»????????????Ó¶????Ä´?Ó¡ */
 /* need use hi_func_trace_low_freq_cnt_end at the same time, to repesent the addtional prints is the end */
-/* CNcomment: ÐèÒªÍ¬Ê±Ê¹ÓÃhi_func_trace_low_freq_cnt_end£¬±íÃ÷¶îÍâÔö¼ÓµÄ´òÓ¡½ØÖ¹ */
+/* CNcomment: ??ÒªÍ¬Ê±Ê¹??hi_func_trace_low_freq_cnt_end?????????????ÓµÄ´?Ó¡??Ö¹ */
 #define hi_func_trace_low_freq_cnt_begin(freq)            \
     do {                                             \
         static unsigned int freqtimes = 0;           \
@@ -319,7 +319,7 @@ extern hi_u32 log_get_time_ms(void);
     while (0)
 
 /* Function trace log for user input low frequency time */
-/* CNcomment: ÓÃÓÚÊäÈë½µÆµ´òÓ¡µÄÊ±¼ä */
+/* CNcomment: ???????ë½µÆµ??Ó¡??Ê±?? */
 #define hi_dbg_func_trace_low_freq_time(time)                                     \
     do {                                                                      \
         static hi_u32 last_time = 0;                                        \
@@ -332,9 +332,9 @@ extern hi_u32 log_get_time_ms(void);
     } while (0)
 
 /* function trace log for user add extra print log as need */
-/* CNcomment: ÓÃ»§¸ù¾ÝÐèÇóÔö¼Ó¶îÍâµÄ´òÓ¡ */
+/* CNcomment: ?Ã»????????????Ó¶????Ä´?Ó¡ */
 /* need use hi_func_trace_low_freq_time_end at the same time, to repesent the addtional prints is the end */
-/* CNcomment: ÐèÒªÍ¬Ê±Ê¹ÓÃhi_func_trace_low_freq_time_end£¬±íÃ÷¶îÍâÔö¼ÓµÄ´òÓ¡½ØÖ¹ */
+/* CNcomment: ??ÒªÍ¬Ê±Ê¹??hi_func_trace_low_freq_time_end?????????????ÓµÄ´?Ó¡??Ö¹ */
 #define hi_func_trace_low_freq_time_begin(time)         \
     do {                                           \
         static hi_u32 last_time = 0;             \
@@ -511,7 +511,7 @@ extern hi_u32 log_get_time_ms(void);
             _sec_errno = memset_s(aci_out_str, sizeof(aci_out_str), 0x00, sizeof(aci_out_str)); \
             if (_sec_errno != EOK) { \
                 HI_LOG_ERR("hi_log_print_block memset_s failed!\n"); \
-            }\
+            } \
         } \
     } while (0)
 

@@ -541,7 +541,6 @@ void osal_proc_print_vargs(char *buf, unsigned int size, const char *fmt, va_lis
 
 int osal_proc_print(void *seqfile, const char *fmt, ...)
 {
-
     va_list args;
     int r = 0;
     if (osal_get_buildvariant() == OSAL_BUILDVARIANT_USER) {

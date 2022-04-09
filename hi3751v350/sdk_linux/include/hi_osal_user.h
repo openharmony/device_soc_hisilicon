@@ -13,8 +13,8 @@
 * limitations under the License.
 */
 
-#ifndef __HI_OSAL_USER__
-#define __HI_OSAL_USER__
+#ifndef __HI_OSAL_USER_H__
+#define __HI_OSAL_USER_H__
 
 #ifdef __cplusplus
 extern "C" {
