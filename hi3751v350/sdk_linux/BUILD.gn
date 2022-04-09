@@ -5,10 +5,10 @@ import("//build/ohos/kernel/kernel.gni")
 
 group("hispark_phoenix_sdk") {
   if (!defined(ohos_lite)) {
-      deps = [
-          ":sdk_linux_libs",
-          ":ohos_drv_mgr",
-      ]
+    deps = [
+      ":ohos_drv_mgr",
+      ":sdk_linux_libs",
+    ]
   }
 }
 
@@ -54,17 +54,17 @@ foreach(libname, sdk_libs_name_set) {
   _lib = "./lib/$libname"
 
   ohos_prebuilt_shared_library(libname) {
-      source = _lib
-      install_images = [ "system" ]
-      subsystem_name = "hisilicon_products"
-      install_enable = true
+    source = _lib
+    install_images = [ "system" ]
+    subsystem_name = "hisilicon_products"
+    install_enable = true
   }
 
   sdk_linux_libs_targets += [ ":$libname" ]
 }
 
 group("sdk_linux_libs") {
-    deps = sdk_linux_libs_targets
+  deps = sdk_linux_libs_targets
 }
 
 ohos_prebuilt_executable("ohos_drv_mgr") {
