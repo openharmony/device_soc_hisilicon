@@ -26,10 +26,7 @@
 #include "himedia_base.h"
 
 
-/*********************************************************************/
 /* himedia bus */
-/*********************************************************************/
-
 static void himedia_bus_release(struct device *dev)
 {
     return;
@@ -481,9 +478,7 @@ void himedia_bus_exit(void)
     return;
 }
 
-/*********************************************************************/
 /* himedia  base  device */
-/*********************************************************************/
 int himedia_device_add(pm_basedev *pdev)
 {
     // 0
@@ -566,9 +561,7 @@ void himedia_device_unregister(pm_basedev *pdev)
     return;
 }
 
-/*********************************************************************/
 /* himedia  base  driver */
-/*********************************************************************/
 static int himedia_drv_probe(struct device *dev)
 {
     pm_basedrv *pdrv = to_himedia_basedrv(dev->driver);

@@ -162,8 +162,7 @@ static hi_s32 i2c_proc_wr_read(unsigned int arg_count,
     hi_u32 i = 0;
     hi_u8 p_data[32] = {0}; // 数据发送缓冲区长度32
 #if defined(LINUX_VERSION_CODE) && (LINUX_VERSION_CODE < KERNEL_VERSION(5,10,0))
-    hi_bool b_used = HI_FALSE;
-    hi_bool b_temp = HI_FALSE;
+    hi_bool b_used = HI_FALSE, b_temp = HI_FALSE;
 #endif
     ret = i2c_proc_wr_read_get_dev_msg(arg_count, argv, &i2c_dev_msg);
     if (ret != HI_SUCCESS) {

@@ -142,7 +142,7 @@ typedef enum hiMOD_ID_E {
     HI_ID_VBI,
     HI_ID_ATV_BUTT,
 
-    /**< voip, bluetooth,alsa. */ /**<  CNcomment: VOIP¡¢Bluetooth part constant area */
+    /**< voip, bluetooth,alsa. */ /**<  CNcomment: VOIPÂ¡Â¢Bluetooth part constant area */
     HI_ID_VOIP_HME = HI_ID_ATV_BUTT + 1,
     HI_ID_NDPT,
     HI_ID_AUDADP,
@@ -191,7 +191,7 @@ typedef enum hiMOD_ID_E {
 
     /*************************** Structure Definition ****************************/
     /** \addtogroup      H_2_1_2 */
-    /** @{ */ /** <!-- ¡¾Common data structure. CNcomment: General data structure */
+    /** @{ */ /** <!-- Â¡Â¾Common data structure. CNcomment: General data structure */
 
 #define UMAP_NAME "hi_"
 

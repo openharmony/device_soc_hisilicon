@@ -37,7 +37,7 @@ extern "C" {
 
 /* --------------------------------------------------------------------------------------------------------------*
  * Defintion of basic data types. The data types are applicable to both the application layer and kernel codes. *
- * CNcomment: Basic data type definitions, both application layer and kernel codes use CNend                                                   *
+ * CNcomment: Basic data type definitions, both application layer and kernel codes use CNend *
  * -------------------------------------------------------------------------------------------------------------- */
 /*************************** Structure Definition ****************************/
 /** \addtogroup      Common_TYPE */
@@ -76,7 +76,6 @@ typedef char *HI_PCHAR;
 
 typedef float HI_FLOAT;
 typedef double HI_DOUBLE;
-/* typedef void                    HI_VOID; */
 #define HI_VOID void
 
 typedef unsigned long HI_SIZE_T;
@@ -88,7 +87,7 @@ typedef unsigned int HI_PHYS_ADDR_T;
 typedef unsigned int HI_VIRT_ADDR_T;
 
 /** Constant Definition */
-/** CNcomment: 常量定义  */
+/** CNcomment: ??量????  */
 typedef enum {
     HI_FALSE = 0,
     HI_TRUE = 1,
@@ -140,7 +139,7 @@ bit31                                                           bit0
 mod defined data: private data define by each module(for example: sub-mod id), usually, set to 0.
 */
 
-#define HI_HANDLE_MAKEHANDLE(mod, privatedata, chnid) (HI_HANDLE)((((mod)&0xffff) << 16) |\
+#define HI_HANDLE_MAKEHANDLE(mod, privatedata, chnid) (HI_HANDLE)((((mod)&0xffff) << 16) | \
 ((((privatedata)&0xff) << 8)) | (((chnid)&0xff)))
 
 #define HI_HANDLE_GET_MODID(handle)   (((handle) >> 16) & 0xffff)

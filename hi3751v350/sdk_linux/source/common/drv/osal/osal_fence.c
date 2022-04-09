@@ -281,5 +281,3 @@ int osal_fence_trywait(int fd)
 }
 EXPORT_SYMBOL(osal_fence_trywait);
 
-
-

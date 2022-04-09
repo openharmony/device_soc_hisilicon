@@ -48,7 +48,7 @@ static osal_spinlock g_irq_spin_lock = { 0 };
     ({                                                                         \
         int __ret = 0;                                                         \
                                                                                \
-        for (;;) {                                                             \
+        for (; ;) {                                                             \
             if (func(param) != 0) {                                            \
                 __ret = 0;                                                     \
                 break;                                                         \
@@ -632,14 +632,14 @@ hi_s32 hiirq_request_or_free_irq(unsigned int cmd, hi_void *arg, hi_void *privat
             return ret;
         }
         irq_node->irq_cnt = 0;
-	irq_node->irq_attr.enable_flag = 1;
+        irq_node->irq_attr.enable_flag = 1;
     }
     if (!p->request_flag) { // free irq
         hiirq_trace("hiirq:free irq_num:%d\n", p->irq_num);
         irq_node->irq_cnt = -1;
         osal_wait_wakeup(&(irq_node->irq_wait));
         free_irq(irq_node->irq_attr.__irq, p->dev);
-	irq_node->irq_attr.enable_flag = 0;
+        irq_node->irq_attr.enable_flag = 0;
     }
     irq_node->irq_attr.request_flag = p->request_flag;
     irq_node->irq_attr.irq_mod     = p->irq_mod;

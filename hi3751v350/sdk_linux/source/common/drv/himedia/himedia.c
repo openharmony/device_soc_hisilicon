@@ -284,7 +284,7 @@ hi_s32 hi_drv_pm_register(pm_device *himedia)
         goto out;
     }
 
-    // 2 base device, then class = NULL;
+    // 2 base device
     ret = pm_register_add_media_device(himedia, &bdev);
     if (ret != HI_SUCCESS) {
         goto err0;

@@ -97,8 +97,7 @@ volatile unsigned long gpio_base;
 
 #define DEFAULT_MD_LEN (128)
 
-static const struct i2c_device_id ft_id[] =
-{
+static const struct i2c_device_id ft_id[] = {
     { "ft", },
     { }
 };

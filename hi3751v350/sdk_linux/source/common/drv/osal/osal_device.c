@@ -247,7 +247,7 @@ static int osal_ioctl_copy_to_user(unsigned int cmd, unsigned long arg, const vo
             {
                 return copy_to_user((void __user *)(uintptr_t)arg, ioctl_arg, arg_size);
             }
-        break;
+            break;
     }
 
     return 0;

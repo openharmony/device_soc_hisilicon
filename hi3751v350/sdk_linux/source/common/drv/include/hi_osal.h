@@ -31,6 +31,7 @@ void *osal_kmalloc(unsigned int module_id, unsigned long size, unsigned int osal
 void osal_kfree(unsigned int module_id, const void *addr);
 void *osal_vmalloc(unsigned int module_id, unsigned long size);
 void osal_vfree(unsigned int module_id, const void *addr);
+extern int hi_get_irq_byname(char *name);
 
 // atomic api
 typedef struct osal_atomic_ {
@@ -280,7 +281,7 @@ unsigned long long osal_div_u64_rem(unsigned long long dividend, unsigned int di
 long long osal_div_s64_rem(long long dividend, int divisor);
 unsigned long long osal_div64_u64_rem(unsigned long long dividend, unsigned long long divisor);
 
-#define osal_max(x, y) ({                            \
+#define osal_max(x, y) ({ \
     __typeof__(x) _max1 = (x);                  \
     __typeof__(y) _max2 = (y);                  \
     (void) (&_max1 == &_max2);              \
@@ -292,7 +293,7 @@ unsigned long long osal_div64_u64_rem(unsigned long long dividend, unsigned long
     (void) (&_min1 == &_min2);      \
     _min1 < _min2 ? _min1 : _min2; })
 
-#define osal_abs(x) ({                \
+#define osal_abs(x) ({ \
     long ret;                         \
     if (sizeof(x) == sizeof(long)) {  \
         long __x = (x);               \
