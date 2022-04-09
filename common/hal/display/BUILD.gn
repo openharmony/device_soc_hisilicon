@@ -63,7 +63,7 @@ if (defined(ohos_lite)) {
 } else {
   import("//build/ohos.gni")
 
-  if(device_name == "hi3751v350") {
+  if (device_name == "hi3751v350") {
     ohos_prebuilt_shared_library("display_device") {
       if (target_cpu == "arm") {
         source = "hi3751v350/linux_standard/lib/libdisplay_device.z.so"
