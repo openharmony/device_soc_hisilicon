@@ -1,0 +1,75 @@
+# Copyright (C) 2022 Hisilicon (Shanghai) Technologies Co., Ltd. All rights reserved.
+
+import("//build/ohos.gni")
+import("//build/ohos/kernel/kernel.gni")
+
+group("hispark_phoenix_sdk") {
+  if (!defined(ohos_lite)) {
+    deps = [
+      ":ohos_drv_mgr",
+      ":sdk_linux_libs",
+    ]
+  }
+}
+
+sdk_linux_libs_targets = []
+
+sdk_libs_name_set = [
+  "libdriver_invocation.z.so",
+  "libdrv_custom.z.so",
+  "libdrv_gpio.z.so",
+  "libdrvlog.z.so",
+  "libdrvmem.z.so",
+  "libdrvmodule.z.so",
+  "libdrv_otp.z.so",
+  "libdrv_pdm.z.so",
+  "libdrvstat.z.so",
+  "libdrvsys.z.so",
+  "libdrv_tde.z.so",
+  "libfb_mpdi_adapter.z.so",
+  "libhal.so",
+  "libhidrv_adec.z.so",
+  "libhidrv_adsp.z.so",
+  "libhidrv_aiao.z.so",
+  "libhidrv_amp.z.so",
+  "libhidrv_avplay.z.so",
+  "libhidrv_jpeg.z.so",
+  "libhidrv_omxvdec.z.so",
+  "libhidrv_sync.z.so",
+  "libhidrv_vdec.z.so",
+  "libhidrv_vfmw.z.so",
+  "libhifb.z.so",
+  "libhi_msp.so",
+  "libhi_soc.z.so",
+  "libomxvdec_mpdi_adapter.z.so",
+  "libpanel.z.so",
+  "libpq.z.so",
+  "librm.z.so",
+  "libvo_win_mpdi_adapter.z.so",
+  "libvo.z.so",
+  "libvpss.z.so",
+]
+
+foreach(libname, sdk_libs_name_set) {
+  _lib = "./lib/$libname"
+
+  ohos_prebuilt_shared_library(libname) {
+    source = _lib
+    install_images = [ "system" ]
+    subsystem_name = "hisilicon_products"
+    install_enable = true
+  }
+
+  sdk_linux_libs_targets += [ ":$libname" ]
+}
+
+group("sdk_linux_libs") {
+  deps = sdk_linux_libs_targets
+}
+
+ohos_prebuilt_executable("ohos_drv_mgr") {
+  source = "bin/ohos_drv_mgr"
+  install_images = [ "system" ]
+  part_name = "hisilicon_products"
+  install_enable = true
+}
