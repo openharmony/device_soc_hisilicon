@@ -26,7 +26,7 @@
 * [5.1、ai_sample环境搭建](ai_sample/README.md)
 * [5.2、手部检测+手势识别实验](ai_sample/scenario/hand_classify/README.md)
 * [5.3、垃圾分类实验](ai_sample/scenario/cnn_trash_classify/README.md)
-
+* [5.4、串口互联（手势检测+手势识别为例）](ai_sample\interconnection_server/README.md)
 ## 附录<a name="section11660541593"></a>
 -    [yolov2 resnet18.cfg网络](doc/6.1.yolov2%20resnet18.cfg%E7%BD%91%E7%BB%9C.md)
 -    [修改后的darknet2caffe 中prototxt.py代码](doc/6.3.%E4%BF%AE%E6%94%B9%E5%90%8E%E7%9A%84darknet2caffe%20%E4%B8%ADprototxt.py%E4%BB%A3%E7%A0%81.md)

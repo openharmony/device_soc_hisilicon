@@ -25,6 +25,7 @@
 #include "vgs_img.h"
 #include "ive_img.h"
 #include "misc_util.h"
+#include "hisignalling.h"
 
 #ifdef __cplusplus
 #if __cplusplus
@@ -55,7 +56,7 @@ static IVE_IMAGE_S imgIn;
 static IVE_IMAGE_S imgDst;
 static VIDEO_FRAME_INFO_S frmIn;
 static VIDEO_FRAME_INFO_S frmDst;
-
+int uartFd = 0;
 HI_S32 Yolo2HandDetectResnetClassifyLoad(uintptr_t* model)
 {
     SAMPLE_SVP_NNIE_CFG_S *self = NULL;
@@ -65,7 +66,13 @@ HI_S32 Yolo2HandDetectResnetClassifyLoad(uintptr_t* model)
     *model = ret < 0 ? 0 : (uintptr_t)self;
     HandDetectInit(); // Initialize the hand detection model
     SAMPLE_PRT("Load hand detect claasify model success\n");
-
+    /*uart open init*/
+    uartFd = UartOpenInit();
+    if (uartFd < 0) {
+       printf("uart1 open failed\r\n");
+    } else {
+       printf("uart1 open successed\r\n");
+    }
     return ret;
 }
 
@@ -113,34 +120,42 @@ static void HandDetectFlag(const RecogNumInfo resBuf)
     switch (resBuf.num) {
         case 0u:
             gestureName = "gesture fist";
+            UartSendRead(uartFd, FistGesture); // 拳头手势
             SAMPLE_PRT("----gesture name----:%s\n", gestureName);
             break;
         case 1u:
             gestureName = "gesture indexUp";
+            UartSendRead(uartFd, ForefingerGesture); // 食指手势
             SAMPLE_PRT("----gesture name----:%s\n", gestureName);
             break;
         case 2u:
             gestureName = "gesture OK";
+            UartSendRead(uartFd, OkGesture); // OK手势
             SAMPLE_PRT("----gesture name----:%s\n", gestureName);
             break;
         case 3u:
             gestureName = "gesture palm";
+            UartSendRead(uartFd, PalmGesture); // 手掌手势
             SAMPLE_PRT("----gesture name----:%s\n", gestureName);
             break;
         case 4u:
             gestureName = "gesture yes";
+            UartSendRead(uartFd, YesGesture); // yes手势
             SAMPLE_PRT("----gesture name----:%s\n", gestureName);
             break;
         case 5u:
             gestureName = "gesture pinchOpen";
+            UartSendRead(uartFd, ForefingerAndThumbGesture); // 食指 + 大拇指
             SAMPLE_PRT("----gesture name----:%s\n", gestureName);
             break;
         case 6u:
             gestureName = "gesture phoneCall";
+            UartSendRead(uartFd, LittleFingerAndThumbGesture); // 大拇指 + 小拇指
             SAMPLE_PRT("----gesture name----:%s\n", gestureName);
             break;
         default:
             gestureName = "gesture others";
+            UartSendRead(uartFd, InvalidGesture); // 无效值
             SAMPLE_PRT("----gesture name----:%s\n", gestureName);
             break;
     }
