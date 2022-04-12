@@ -16,16 +16,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include <pthread.h>
-#include <limits.h>
-#include <math.h>
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/time.h>
 #include <unistd.h>
-#include <sys/stat.h>
 #include <fcntl.h>
 #include <termios.h>
-#include <errno.h>
 #include <poll.h>
 #include "hisignalling.h"
 
@@ -666,14 +662,14 @@ unsigned int UartOpenInit(void)
 void UartSendRead(int fd, refuseClassification refuseType)
 {
     /* test buffer */
-    unsigned char writeBuffer2[4] = {0,2,0,1};
-    unsigned char writeBuffer3[4] = {0,2,0,2};
-    unsigned char writeBuffer4[4] = {0,2,0,3};
-    unsigned char writeBuffer5[4] = {0,2,0,4};
-    unsigned char writeBuffer6[4] = {0,2,0,5};
-    unsigned char writeBuffer7[4] = {0,2,0,6};
-    unsigned char writeBuffer8[4] = {0,2,0,7};
-    unsigned char writeBuffer9[4] = {0,2,0,8};
+    unsigned char writeBuffer2[4] = {0, 2, 0, 1};
+    unsigned char writeBuffer3[4] = {0, 2, 0, 2};
+    unsigned char writeBuffer4[4] = {0, 2, 0, 3};
+    unsigned char writeBuffer5[4] = {0, 2, 0, 4};
+    unsigned char writeBuffer6[4] = {0, 2, 0, 5};
+    unsigned char writeBuffer7[4] = {0, 2, 0, 6};
+    unsigned char writeBuffer8[4] = {0, 2, 0, 7};
+    unsigned char writeBuffer9[4] = {0, 2, 0, 8};
     unsigned char readBuff[16] = {0};
 
 #ifdef  EXPANSION_BOARD
@@ -712,7 +708,7 @@ void UartSendRead(int fd, refuseClassification refuseType)
             break;
     }
 #endif
-    /*串口读操作*/
+    /* 串口读操作 */
     if (readBuff[0] == HISIGNALLING_HEAD_1 && readBuff[1] == HISIGNALLING_HEAD_2) {
         HisignallingMsgReceive(fd, readBuff, HISIGNALLING_MSG_MOTOR_ENGINE_LEN);
     }
