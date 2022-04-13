@@ -40,6 +40,7 @@ executable("ohos_camera_ai_demo") {
     "ext_util/base_interface.c",
     "ext_util/misc_util.c",
     "ext_util/posix_help.c",
+    "interconnection_server/hisignalling.c",
     "mpp_help/src/ive_img.c",
     "mpp_help/src/vgs_img.c",
     "scenario/cnn_trash_classify/cnn_trash_classify.c",
@@ -69,6 +70,7 @@ executable("ohos_camera_ai_demo") {
     "dependency",
     "third_party/src/iniparser/src",
     "//third_party/bounds_checking_function/include",
+    "interconnection_server",
   ]
 
   defines = [
