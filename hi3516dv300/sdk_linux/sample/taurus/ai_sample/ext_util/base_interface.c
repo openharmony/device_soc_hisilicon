@@ -162,6 +162,19 @@ const char* SectGetCfgStr(const char* section, const char* field, const char* de
     return GetCfgStr(key, defVal);
 }
 
+/* strxfrm */
+int HiStrxfrm(char *s1, const char *s2, int n)
+{
+    int i;
+
+    n--;
+    for (i = 0; i < n && s2[i]; i++) {
+        s1[i] = s2[i];
+    }
+    s1[i] = 0;
+    return i;
+}
+
 #ifdef __cplusplus
 #if __cplusplus
 }

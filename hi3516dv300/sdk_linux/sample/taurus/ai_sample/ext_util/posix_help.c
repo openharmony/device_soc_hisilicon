@@ -122,6 +122,24 @@ void SkPairDestroy(SkPair* chn)
     }
 }
 
+/* init recursive pmutex replaced PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP */
+void RecurMutexInit(pthread_mutex_t* mutex)
+{
+    HI_ASSERT(mutex);
+    pthread_mutexattr_t attr;
+    int res;
+
+    res = pthread_mutexattr_init(&attr);
+    HI_ASSERT(!res);
+
+    res = pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
+    HI_ASSERT(!res);
+    res = pthread_mutex_init(mutex, &attr);
+    HI_ASSERT(!res);
+
+    pthread_mutexattr_destroy(&attr);
+}
+
 #ifdef __cplusplus
 #if __cplusplus
 }

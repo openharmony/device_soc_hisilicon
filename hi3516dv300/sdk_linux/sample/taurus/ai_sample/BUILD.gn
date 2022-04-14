@@ -42,6 +42,7 @@ executable("ohos_camera_ai_demo") {
     "ext_util/posix_help.c",
     "mpp_help/src/ive_img.c",
     "mpp_help/src/vgs_img.c",
+    "mpp_help/src/osd_img.c",
     "scenario/cnn_trash_classify/cnn_trash_classify.c",
     "scenario/hand_classify/hand_classify.c",
     "scenario/hand_classify/yolov2_hand_detect.c",

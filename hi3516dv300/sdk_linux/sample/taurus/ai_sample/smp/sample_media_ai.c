@@ -34,6 +34,9 @@
 #include "vgs_img.h"
 #include "base_interface.h"
 #include "sample_media_ai.h"
+#include "osd_img.h"
+#include "base_interface.h"
+#include "posix_help.h"
 
 #ifdef __cplusplus
 #if __cplusplus
@@ -1603,7 +1606,10 @@ static void CnnTrashClassifyAiProcess(VIDEO_FRAME_INFO_S frm)
     int ret;
     if (GetCfgBool("trash_classify_switch:support_trash_classify", true)) {
         if (g_workPlug.model == 0) {
-            ret = CnnTrashClassifyLoadModel(&g_workPlug.model);
+            HI_ASSERT(!g_aicMediaInfo.osds);
+            g_aicMediaInfo.osds = OsdsCreate(HI_OSD_BINDMOD_VPSS, g_aicMediaInfo.vpssGrp, g_aicMediaInfo.vpssChn0);
+            HI_ASSERT(g_aicMediaInfo.osds);
+            ret = CnnTrashClassifyLoadModel(&g_workPlug.model, g_aicMediaInfo.osds);
             if (ret < 0) {
                 g_workPlug.model = 0;
                 SAMPLE_CHECK_EXPR_GOTO(ret < 0, TRASH_RELEASE,
@@ -1807,6 +1813,8 @@ static HI_S32 PauseDoUnloadCnnModel(HI_VOID)
         SAMPLE_CHECK_EXPR_RET(s32Ret != HI_SUCCESS, s32Ret, "unload cnn trash classify model err:%x\n", s32Ret);
         ConfBaseExt();
         g_num = 0;
+        OsdsClear(g_aicMediaInfo.osds);
+        OsdsDestroy(g_aicMediaInfo.osds);
     }
 
     return s32Ret;

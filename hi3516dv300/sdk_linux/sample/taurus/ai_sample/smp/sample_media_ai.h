@@ -18,6 +18,7 @@
 
 #include "sample_comm.h"
 #include "list.h"
+#include "osd_img.h"
 
 #ifdef __cplusplus
 #if __cplusplus
@@ -143,6 +144,8 @@ typedef struct AicMediaInfo {
     SIZE_S stSize;
     PIC_SIZE_E enPicSize;
     HI_U32  u32BlkSize;
+	
+	OsdSet *osds; // OSD set for Plug to output OSD in resFrm
 } AicMediaInfo;
 
 HI_S32 SAMPLE_MEDIA_CNN_TRASH_CLASSIFY(HI_VOID);
