@@ -145,7 +145,7 @@ typedef struct AicMediaInfo {
     PIC_SIZE_E enPicSize;
     HI_U32  u32BlkSize;
 	
-	OsdSet *osds; // OSD set for Plug to output OSD in resFrm
+    OsdSet *osds; // OSD set for Plug to output OSD in resFrm
 } AicMediaInfo;
 
 HI_S32 SAMPLE_MEDIA_CNN_TRASH_CLASSIFY(HI_VOID);

@@ -177,14 +177,12 @@ static HI_S32 CnnTrashClassifyFlag(const RecogNumInfo items[], HI_S32 itemNum, H
             case 4u:
             case 5u:
                 trashName = "Kitchen Waste";
-                SAMPLE_PRT("----trash name----:%s\n", trashName);
                 break;
             case 6u:
             case 7u:
             case 8u:
             case 9u:
                 trashName = "Harmful Waste";
-                SAMPLE_PRT("----trash name----:%s\n", trashName);
                 break;
             case 10u:
             case 11u:
@@ -193,18 +191,15 @@ static HI_S32 CnnTrashClassifyFlag(const RecogNumInfo items[], HI_S32 itemNum, H
             case 14u:
             case 15u:
                 trashName = "Recyle Waste";
-                SAMPLE_PRT("----trash name----:%s\n", trashName);
                 break;
             case 16u:
             case 17u:
             case 18u:
             case 19u:
                 trashName = "Other Waste";
-                SAMPLE_PRT("----trash name----:%s\n", trashName);
                 break;
             default:
                 trashName = "Unkown Waste";
-                SAMPLE_PRT("----trash name----:%s\n", trashName);
                 break;
         }
         offset += snprintf_s(buf + offset, size - offset, size - offset - 1,
@@ -212,7 +207,6 @@ static HI_S32 CnnTrashClassifyFlag(const RecogNumInfo items[], HI_S32 itemNum, H
         HI_ASSERT(offset < size);
     }
     offset += snprintf_s(buf + offset, size - offset, size - offset - 1, " }");
-    SAMPLE_PRT("osd info:%s\n", buf);
     HI_ASSERT(offset < size);
     return HI_SUCCESS;
 }

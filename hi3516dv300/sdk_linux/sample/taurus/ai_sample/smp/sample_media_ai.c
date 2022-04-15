@@ -33,10 +33,10 @@
 #include "hand_classify.h"
 #include "vgs_img.h"
 #include "base_interface.h"
-#include "sample_media_ai.h"
 #include "osd_img.h"
 #include "base_interface.h"
 #include "posix_help.h"
+#include "sample_media_ai.h"
 
 #ifdef __cplusplus
 #if __cplusplus

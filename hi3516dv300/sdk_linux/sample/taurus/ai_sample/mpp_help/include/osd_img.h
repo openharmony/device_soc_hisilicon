@@ -101,8 +101,7 @@ static inline void MutexUnlock(pthread_mutex_t* mutex)
 typedef HI_S32 (*HI_OSD_GETFONTMOD_CALLBACK_FN_PTR)(HI_CHAR* Character, HI_U8** FontMod, HI_S32* FontModLen);
 
 /* OSD Fonts Lib */
-typedef struct hiOSD_FONTS_S
-{
+typedef struct hiOSD_FONTS_S {
     /* OSD Lib Font Size, in pixel */
     HI_U32 u32FontWidth;
     HI_U32 u32FontHeight;
@@ -110,15 +109,13 @@ typedef struct hiOSD_FONTS_S
 } HI_OSD_FONTS_S;
 
 /* osd pixel format enum */
-typedef enum hiOSD_PIXEL_FMT_E
-{
+typedef enum hiOSD_PIXEL_FMT_E {
     HI_OSD_PIXEL_FMT_RGB1555 = 0,
     HI_OSD_PIXEL_FMT_BUTT
 } HI_OSD_PIXEL_FMT_E;
 
 /* OSD Bitmap Attribute */
-typedef struct hiOSD_BITMAP_ATTR_S
-{
+typedef struct hiOSD_BITMAP_ATTR_S {
     HI_OSD_PIXEL_FMT_E enPixelFormat;
     HI_U32             u32Width;
     HI_U32             u32Height;
@@ -127,8 +124,7 @@ typedef struct hiOSD_BITMAP_ATTR_S
 } HI_OSD_BITMAP_ATTR_S;
 
 /* OSD Type Enum */
-typedef enum hiOSD_TYPE_E
-{
+typedef enum hiOSD_TYPE_E {
     HI_OSD_TYPE_TIME = 0,
     HI_OSD_TYPE_STRING,
     HI_OSD_TYPE_BITMAP,
@@ -136,15 +132,13 @@ typedef enum hiOSD_TYPE_E
 } HI_OSD_TYPE_E;
 
 /* OSD Time Format Enum */
-typedef enum hiOSD_TIMEFMT_E
-{
+typedef enum hiOSD_TIMEFMT_E {
     HI_OSD_TIMEFMT_YMD24H = 0, // eg. 2017-03-10 23:00:59
     HI_OSD_TIMEFMT_BUTT
 } HI_OSD_TIMEFMT_E;
 
 /* OSD Binded Module enum */
-typedef enum hiOSD_BIND_MOD_E
-{
+typedef enum hiOSD_BIND_MOD_E {
     HI_OSD_BINDMOD_VI = 0,
     HI_OSD_BINDMOD_VPSS,
     HI_OSD_BINDMOD_AVS,
@@ -153,15 +147,13 @@ typedef enum hiOSD_BIND_MOD_E
     HI_OSD_BINDMOD_BUTT
 } HI_OSD_BIND_MOD_E;
 
-typedef enum hiOSD_COORDINATE_E
-{
+typedef enum hiOSD_COORDINATE_E {
     HI_OSD_COORDINATE_RATIO_COOR = 0,
     HI_OSD_COORDINATE_ABS_COOR
 } HI_OSD_COORDINATE_E;
 
 /** OSD Display Attribute */
-typedef struct hiOSD_DISP_ATTR_S
-{
+typedef struct hiOSD_DISP_ATTR_S {
     HI_BOOL bShow;
     HI_OSD_BIND_MOD_E enBindedMod;
     HI_HANDLE ModHdl;
@@ -175,11 +167,10 @@ typedef struct hiOSD_DISP_ATTR_S
 } HI_OSD_DISP_ATTR_S;
 
 /* OSD Content */
-typedef struct hiOSD_CONTENT_S
-{
+typedef struct hiOSD_CONTENT_S {
     HI_OSD_TYPE_E enType;
     HI_OSD_TIMEFMT_E enTimeFmt;
-    HI_U32  u32Color; //string color
+    HI_U32  u32Color; // string color
     HI_U32  u32BgColor;
     HI_CHAR szStr[HI_OSD_MAX_STR_LEN];
     SIZE_S  stFontSize;
@@ -187,16 +178,14 @@ typedef struct hiOSD_CONTENT_S
 } HI_OSD_CONTENT_S;
 
 /* OSD Parameter */
-typedef struct hiOSD_ATTR_S
-{
+typedef struct hiOSD_ATTR_S {
     HI_U32 u32DispNum; /* 1Binded Display Number for this OSD */
     HI_OSD_DISP_ATTR_S astDispAttr[HI_OSD_MAX_DISP_CNT];
     HI_OSD_CONTENT_S stContent;
 } HI_OSD_ATTR_S;
 
 /* OSD Parameter */
-typedef struct tagOSD_PARAM_S
-{
+typedef struct tagOSD_PARAM_S {
     HI_OSD_ATTR_S stAttr;
     SIZE_S stMaxSize;
     pthread_mutex_t  mutexLock;
