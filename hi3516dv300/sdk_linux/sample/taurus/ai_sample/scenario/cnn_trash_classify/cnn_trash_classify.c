@@ -209,10 +209,10 @@ static HI_S32 CnnTrashClassifyFlag(const RecogNumInfo items[], HI_S32 itemNum, H
         }
         offset += snprintf_s(buf + offset, size - offset, size - offset - 1,
             "%s%s %u:%u%%", (i == 0 ? " " : ", "), trashName, (int)item->num, (int)score);
-        SAMPLE_PRT("osd info:%s\n", buf);
         HI_ASSERT(offset < size);
     }
     offset += snprintf_s(buf + offset, size - offset, size - offset - 1, " }");
+    SAMPLE_PRT("osd info:%s\n", buf);
     HI_ASSERT(offset < size);
     return HI_SUCCESS;
 }
