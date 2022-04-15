@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2021 Huawei Device Co., Ltd.
+ * Copyright (c) 2022 HiSilicon (Shanghai) Technologies CO., LIMITED.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -69,10 +69,7 @@ typedef HI_S32 HI_ERRNO;
 #define HI_EOVER               (HI_ERRNO)(HI_ERRNO_COMMON_BASE + 22)
 #define HI_ERRNO_COMMON_BOTTOM (HI_ERRNO)(HI_ERRNO_COMMON_BASE + 23)
 
-/*************************************************************************
-  custom error code
-*************************************************************************/
-
+/* custom error code */
 #define HI_ERRNO_BASE          (HI_ERRNO)(HI_ERRNO_COMMON_BASE + HI_ERRNO_COMMON_COUNT)
 #define HI_EINITIALIZED        (HI_ERRNO)(HI_ERRNO_BASE + 1) // Repeated initialization
 #define HI_ERRNO_CUSTOM_BOTTOM (HI_ERRNO)(HI_ERRNO_BASE + 2) // Number of error numbers that have been defined
@@ -138,14 +135,14 @@ typedef enum hiOSD_TYPE_E
     HI_OSD_TYPE_BUTT
 } HI_OSD_TYPE_E;
 
-/** OSD Time Format Enum */
+/* OSD Time Format Enum */
 typedef enum hiOSD_TIMEFMT_E
 {
     HI_OSD_TIMEFMT_YMD24H = 0, // eg. 2017-03-10 23:00:59
     HI_OSD_TIMEFMT_BUTT
 } HI_OSD_TIMEFMT_E;
 
-/** OSD Binded Module enum */
+/* OSD Binded Module enum */
 typedef enum hiOSD_BIND_MOD_E
 {
     HI_OSD_BINDMOD_VI = 0,

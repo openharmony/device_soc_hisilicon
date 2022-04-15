@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2021 Huawei Device Co., Ltd.
+ * Copyright (c) 2022 HiSilicon (Shanghai) Technologies CO., LIMITED.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -12,6 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 #include <string.h>
 #include <sys/prctl.h>
 #include <pthread.h>
@@ -72,13 +73,12 @@ static HI_BOOL s_bOSDTimeRun = HI_FALSE;
 /* Time OSD Update Task Thread ID, created by HI_PDT_OSD_Init, destroyed by HI_OSD_DeInit */
 static pthread_t s_OSDTimeTskId = 0;
 
-
 /* OSD Font Step In Lib, in bytes */
 #define OSD_LIB_FONT_W (s_stOSDFonts.u32FontWidth)
 #define OSD_LIB_FONT_H (s_stOSDFonts.u32FontHeight)
 #define OSD_LIB_FONT_STEP (OSD_LIB_FONT_W * OSD_LIB_FONT_H / BYTE_BITS)
 
-static HI_S32 OSD_GetNonASCNum(HI_CHAR* string,HI_S32 len)
+static HI_S32 OSD_GetNonASCNum(HI_CHAR* string, HI_S32 len)
 {
     HI_S32 i;
     HI_S32 n=0;
@@ -156,24 +156,19 @@ static HI_S32 OSD_RGNDetach(RGN_HANDLE RgnHdl, const HI_OSD_DISP_ATTR_S* pstDisp
         case HI_OSD_BINDMOD_VI:
             stChn.enModId = HI_ID_VI;
             break;
-
         case HI_OSD_BINDMOD_VPSS:
             stChn.enModId = HI_ID_VPSS;
             break;
-
         case HI_OSD_BINDMOD_AVS:
             stChn.enModId = HI_ID_AVS;
             break;
-
         case HI_OSD_BINDMOD_VENC:
             stChn.s32DevId = 0;
             stChn.enModId = HI_ID_VENC;
             break;
-
         case HI_OSD_BINDMOD_VO:
             stChn.enModId = HI_ID_VO;
             break;
-
         default:
             SAMPLE_PRT("RgnHdl[%d] invalide bind mode [%d]\n", RgnHdl, pstDispAttr->enBindedMod);
             return HI_EINVAL;
@@ -543,8 +538,7 @@ static HI_S32 OSD_UpdateTextBitmap(RGN_HANDLE RgnHdl, HI_OSD_CONTENT_S* pstConte
     RGN_CANVAS_INFO_S stCanvasInfo;
     s32Ret = HI_MPI_RGN_GetCanvasInfo(RgnHdl, &stCanvasInfo);
 
-    if (s32Ret != HI_SUCCESS)
-    {
+    if (s32Ret != HI_SUCCESS) {
         SAMPLE_PRT("HI_MPI_RGN_GetCanvasInfo fail,RgnHdl[%d] Error Code: [0x%08X]\n", RgnHdl, s32Ret);
         return s32Ret;
     }
@@ -555,20 +549,17 @@ static HI_S32 OSD_UpdateTextBitmap(RGN_HANDLE RgnHdl, HI_OSD_CONTENT_S* pstConte
     HI_U16* puBmData = (HI_U16*)(HI_UL)stCanvasInfo.u64VirtAddr;
     HI_S32 s32BmRow, s32BmCol; /* Bitmap Row/Col Index */
 
-    for (s32BmRow = 0; s32BmRow < pstContent->stBitmap.u32Height; ++s32BmRow)
-    {
+    for (s32BmRow = 0; s32BmRow < pstContent->stBitmap.u32Height; ++s32BmRow) {
         HI_S32 NonASCShow = 0;
-        for (s32BmCol = 0; s32BmCol < pstContent->stBitmap.u32Width; ++s32BmCol)
-        {
+        for (s32BmCol = 0; s32BmCol < pstContent->stBitmap.u32Width; ++s32BmCol) {
             /* Bitmap Data Offset for the point */
             HI_S32 s32BmDataIdx = s32BmRow * stCanvasInfo.u32Stride / 2 + s32BmCol;
             /* Character Index in Text String */
             HI_S32 s32CharIdx = s32BmCol / pstContent->stFontSize.u32Width;
-            HI_S32 s32StringIdx = s32CharIdx+NonASCShow*(NOASCII_CHARACTER_BYTES-1);
-            if(NonASCNum>0&&s32CharIdx>0)
-            {
+            HI_S32 s32StringIdx = s32CharIdx+NonASCShow * (NOASCII_CHARACTER_BYTES - 1);
+            if (NonASCNum > 0 && s32CharIdx > 0) {
                 NonASCShow = OSD_GetNonASCNum(pstContent->szStr, s32StringIdx);
-                s32StringIdx = s32CharIdx+NonASCShow*(NOASCII_CHARACTER_BYTES-1);
+                s32StringIdx = s32CharIdx+NonASCShow * (NOASCII_CHARACTER_BYTES - 1);
             }
             /* Point Row/Col Index in Character */
             HI_S32 s32CharCol = (s32BmCol - (pstContent->stFontSize.u32Width * s32CharIdx)) * OSD_LIB_FONT_W / pstContent->stFontSize.u32Width;
@@ -577,17 +568,12 @@ static HI_S32 OSD_UpdateTextBitmap(RGN_HANDLE RgnHdl, HI_OSD_CONTENT_S* pstConte
             HI_S32 s32BitOffset = s32CharCol % BYTE_BITS;
             HI_U8* FontMod = NULL;
             HI_S32 FontModLen = 0;
-            if (HI_SUCCESS==s_stOSDFonts.pfnGetFontMod(&pstContent->szStr[s32StringIdx],&FontMod,&FontModLen))
-            {
-                if(FontMod!=NULL&&s32HexOffset<FontModLen)
-                {
-                    HI_U8 temp=FontMod[s32HexOffset];
-                    if (temp >> ((BYTE_BITS - 1) - s32BitOffset) & 0x1)
-                    {
+            if (HI_SUCCESS == s_stOSDFonts.pfnGetFontMod(&pstContent->szStr[s32StringIdx], &FontMod, &FontModLen)) {
+                if(FontMod != NULL && s32HexOffset<FontModLen) {
+                    HI_U8 temp = FontMod[s32HexOffset];
+                    if (temp >> ((BYTE_BITS - 1) - s32BitOffset) & 0x1) {
                         puBmData[s32BmDataIdx] = (HI_U16)pstContent->u32Color;
-                    }
-                    else
-                    {
+                    } else {
                         puBmData[s32BmDataIdx] = (HI_U16)pstContent->u32BgColor;
                     }
                     continue;
@@ -597,17 +583,14 @@ static HI_S32 OSD_UpdateTextBitmap(RGN_HANDLE RgnHdl, HI_OSD_CONTENT_S* pstConte
             return HI_FAILURE;
         }
 
-        for (s32BmCol = pstContent->stBitmap.u32Width; s32BmCol < s_stOSDParam[RgnHdl].stMaxSize.u32Width; ++s32BmCol)
-        {
+        for (s32BmCol = pstContent->stBitmap.u32Width; s32BmCol < s_stOSDParam[RgnHdl].stMaxSize.u32Width; ++s32BmCol) {
             HI_S32 s32BmDataIdx = s32BmRow * stCanvasInfo.u32Stride / 2 + s32BmCol;
             puBmData[s32BmDataIdx] = 0;
         }
     }
 
-    for (s32BmRow = pstContent->stBitmap.u32Height; s32BmRow < s_stOSDParam[RgnHdl].stMaxSize.u32Height; ++s32BmRow)
-    {
-        for (s32BmCol = 0; s32BmCol < s_stOSDParam[RgnHdl].stMaxSize.u32Width; ++s32BmCol)
-        {
+    for (s32BmRow = pstContent->stBitmap.u32Height; s32BmRow < s_stOSDParam[RgnHdl].stMaxSize.u32Height; ++s32BmRow) {
+        for (s32BmCol = 0; s32BmCol < s_stOSDParam[RgnHdl].stMaxSize.u32Width; ++s32BmCol) {
             HI_S32 s32BmDataIdx = s32BmRow * stCanvasInfo.u32Stride / 2 + s32BmCol;
             puBmData[s32BmDataIdx] = 0;
         }
@@ -619,8 +602,7 @@ static HI_S32 OSD_UpdateTextBitmap(RGN_HANDLE RgnHdl, HI_OSD_CONTENT_S* pstConte
 
     s32Ret = HI_MPI_RGN_UpdateCanvas(RgnHdl);
 
-    if (s32Ret != HI_SUCCESS)
-    {
+    if (s32Ret != HI_SUCCESS) {
         SAMPLE_PRT("HI_MPI_RGN_UpdateCanvas fail,RgnHdl[%d] Error Code: [0x%08X]\n", RgnHdl, s32Ret);
         return s32Ret;
     }
@@ -790,33 +772,26 @@ static HI_VOID* OSD_TimeUpdate(HI_VOID* pvParam)
     struct tm stTime = {0,};
     prctl(PR_SET_NAME, __FUNCTION__, 0, 0, 0);
 
-    while (s_bOSDTimeRun)
-    {
+    while (s_bOSDTimeRun) {
         time(&nowTime);
 
-        if (nowTime == lastTime)
-        {
+        if (nowTime == lastTime) {
             usleep(10 * 1000);
             continue;
-        }
-        else
-        {
+        } else {
             localtime_r(&nowTime, &stTime);
 
-            for (s32OsdIdx = 0; s32OsdIdx < HI_OSD_MAX_CNT; ++s32OsdIdx)
-            {
+            for (s32OsdIdx = 0; s32OsdIdx < HI_OSD_MAX_CNT; ++s32OsdIdx) {
                 pthread_mutex_lock(&s_stOSDParam[s32OsdIdx].mutexLock);
 
-                if (s_stOSDParam[s32OsdIdx].stAttr.stContent.enType == HI_OSD_TYPE_TIME && s_stOSDParam[s32OsdIdx].bOn)
-                {
+                if (s_stOSDParam[s32OsdIdx].stAttr.stContent.enType == HI_OSD_TYPE_TIME && s_stOSDParam[s32OsdIdx].bOn) {
                     /* Update OSD Time String */
                     OSD_GetTimeStr(&stTime, s_stOSDParam[s32OsdIdx].stAttr.stContent.enTimeFmt, s_stOSDParam[s32OsdIdx].stAttr.stContent.szStr, HI_OSD_MAX_STR_LEN);
 
                     /* Update OSD Text Bitmap */
                     s32Ret = OSD_UpdateTextBitmap(s32OsdIdx, &s_stOSDParam[s32OsdIdx].stAttr.stContent);
 
-                    if (HI_SUCCESS != s32Ret)
-                    {
+                    if (HI_SUCCESS != s32Ret) {
                         pthread_mutex_unlock(&s_stOSDParam[s32OsdIdx].mutexLock);
                         SAMPLE_PRT("Update Text Bitmap failed\n");
                         continue;
@@ -825,8 +800,7 @@ static HI_VOID* OSD_TimeUpdate(HI_VOID* pvParam)
                     /* Update OSD Attribute */
                     s32Ret = OSD_Update(s32OsdIdx, &s_stOSDParam[s32OsdIdx].stAttr);
 
-                    if (HI_SUCCESS != s32Ret)
-                    {
+                    if (HI_SUCCESS != s32Ret) {
                         SAMPLE_PRT("Update Attribute failed\n");
                     }
                 }
@@ -856,50 +830,40 @@ HI_S32 HI_OSD_Init(const HI_OSD_FONTS_S* pstFonts)
     if (!(HI_TRUE != s_bOSDInitFlg)) {
         return HI_EINITIALIZED;
     }
-    if (pstFonts != NULL)
-    {
+    if (pstFonts != NULL) {
         if (!pstFonts->pfnGetFontMod) {
             return HI_EINVAL;
         }
-        if (pstFonts->u32FontWidth % BYTE_BITS)
-        {
+        if (pstFonts->u32FontWidth % BYTE_BITS) {
             SAMPLE_PRT("FontWidth must be a multiple of %d.", BYTE_BITS);
             return HI_EINVAL;
         }
         memcpy(&s_stOSDFonts, pstFonts, sizeof(HI_OSD_FONTS_S));
-    }
-    else
-    {
+    } else {
         memset(&s_stOSDFonts, 0, sizeof(HI_OSD_FONTS_S));
     }
     HI_S32 s32Idx = 0;
     HI_S32 s32Ret = HI_SUCCESS;
 
     /* Init OSD Param */
-    for (s32Idx = 0; s32Idx < HI_OSD_MAX_CNT; ++s32Idx)
-    {
+    for (s32Idx = 0; s32Idx < HI_OSD_MAX_CNT; ++s32Idx) {
         pthread_mutex_init(&s_stOSDParam[s32Idx].mutexLock, NULL);
         pthread_mutex_lock(&s_stOSDParam[s32Idx].mutexLock);
         memset(&s_stOSDParam[s32Idx], 0, sizeof(OSD_PARAM_S));
         pthread_mutex_unlock(&s_stOSDParam[s32Idx].mutexLock);
     }
 
-    if (pstFonts != NULL)
-    {
+    if (pstFonts != NULL) {
         /* Create Time OSD Update Thread */
         s_bOSDTimeRun = HI_TRUE;
         s32Ret = pthread_create(&s_OSDTimeTskId, NULL, OSD_TimeUpdate, NULL);
 
-        if (HI_SUCCESS != s32Ret)
-        {
+        if (HI_SUCCESS != s32Ret) {
             SAMPLE_PRT("create OSD_TimeUpdate failed:%s\n", strerror(errno));
             return HI_ENORES;
         }
     }
-// #if defined(AMP_LINUX_HUAWEILITE)
-//     extern HI_S32 OSD_MSG_Register(HI_VOID);
-//     OSD_MSG_Register();
-// #endif
+
     s_bOSDInitFlg = HI_TRUE;
     return HI_SUCCESS;
 }
@@ -913,10 +877,8 @@ static int OsdInitFont(HI_CHAR *character, HI_U8 **fontMod, HI_S32 *fontModLen)
     if (!character || !fontMod || !fontModLen) {
         return HI_FAILURE;
     }
-    // HI_APPCOMM_CHECK_POINTER(character, HI_FAILURE);
-    // HI_APPCOMM_CHECK_POINTER(fontMod, HI_FAILURE);
-    // HI_APPCOMM_CHECK_POINTER(fontModLen, HI_FAILURE);
-    if (!isascii(character[0])) { // Return true if the parameter is an ASCII character, otherwise NULL (0)
+    // Return true if the parameter is an ASCII character, otherwise NULL (0)
+    if (!isascii(character[0])) {
         return HI_FAILURE;
     }
     HI_U32 offset = (character[0] - baseChar) * (OSD_FONT_MOD_H * OSD_FONT_MOD_W / HI_BYTE_BITS);
@@ -1126,16 +1088,14 @@ HI_S32 HI_OSD_Start(HI_S32 s32OsdIdx)
     pthread_mutex_lock(&pstOsdParam->mutexLock);
 
     /* Check OSD Attrbute init or not */
-    if (!pstOsdParam->bInit)
-    {
+    if (!pstOsdParam->bInit) {
         pthread_mutex_unlock(&pstOsdParam->mutexLock);
         SAMPLE_PRT("OSD[%d] not init yet!\n", s32OsdIdx);
         return HI_EINVAL;
     }
 
     /* Check OSD stop or not */
-    if (pstOsdParam->bOn)
-    {
+    if (pstOsdParam->bOn) {
         pthread_mutex_unlock(&pstOsdParam->mutexLock);
         SAMPLE_PRT("OSD[%d] has already started!\n", s32OsdIdx);
         return HI_SUCCESS;
