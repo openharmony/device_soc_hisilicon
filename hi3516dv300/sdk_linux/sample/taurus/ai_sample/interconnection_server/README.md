@@ -14,7 +14,7 @@
 | 帧头（2Byte）  | Payload Len (2Byte)  | payload  | 帧尾（1Byte）  | CRC32(4Byte)  |
 |---|---|---|---|---|
 | 0xAA,0x55  |   |   | 0xFF  | CRC32 |
-			
+
 例如一组数据帧为：AA5500020003FF8ED2BEDF (十六进制不区分大小写)
 -    0AA55:       帧头
 -    0002：       Payload Len
@@ -34,7 +34,7 @@
      return ret;
      ```
 -    2.在HandDetectFlag调用UartSendRead()函数实现数据的发送，Pegasus接收到数据后实现对应外设的响应。
--    3.实验结果如下图所示。
+-    3.当Taurus的摄像头检测到特定的手势之后，Taurus会将对应的检测结果通过串口发送给Pegasus端，此时Pegasus主板上的灯会亮起，具体实验结果及打印信息如下图所示。
 
      ![输入图片说明](https://gitee.com/asd1122/tupian/raw/master/%E5%9B%BE%E7%89%87/%E4%BA%92%E8%81%94/6.png)
 

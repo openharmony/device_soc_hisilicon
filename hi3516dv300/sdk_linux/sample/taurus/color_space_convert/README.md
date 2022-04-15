@@ -22,24 +22,7 @@ color_space_convert  sample基于ohos L1 linux平台开发，以Taurus套件为�
 
 ![](https://gitee.com/wgm2022/mypic/raw/master/hispark_taurus_color_space_convert_sample/061.%E4%BF%AE%E6%94%B9buildgn.png)
 
-* 编译color_space_convert  sample有两种方式：
-
-方式一：整编，进入代码根目录下，输入命令：
-
-````
-hb build -f
-````
-
-方式二：单编，进入代码根目录下，输入命令：
-
-````shell
-hb build -T device/soc/hisilicon/hi3516dv300/sdk_linux/sample/taurus/color_space_convert:hi3516dv300_color_space_convert_sample
-# 注：
-# 其中 device/soc/hisilicon/hi3516dv300/sdk_linux/sample/taurus/color_space_convert  为color_space_convert sample路的径
-# hi3516dv300_color_space_convert_sample为编译的target
-````
-
-* 编译成功后，如下图所示：
+* 点击Deveco Device Tool工具的Build按键进行编译，具体的编译过程这里不再赘述，编译成功后，如下图所示：
 
 ![](https://gitee.com/wgm2022/mypic/raw/master/hispark_taurus_helloworld_sample/0002-build%20success.png)
 
@@ -55,8 +38,8 @@ hb build -T device/soc/hisilicon/hi3516dv300/sdk_linux/sample/taurus/color_space
 
 * 步骤1：将编译后生成的可执行文件拷贝到SD卡中。
 
-* 步骤2：将code\device\soc\hisilicon\hi3516dv300\sdk_linux\out\lib\目录下的**libvb_server.so和 libmpp_vbs.so**拷贝至SD卡中
-* 步骤3：将device/soc/hisilicon/hi3516dv300/sdk_linux/sample/taurus/data/目录下的 UsePic_1920_1080_420.yuv文件拷贝至SD卡中。（前提是按照《[6.2.获取sample依赖的资源文件到本地.md](../doc/6.2.%E8%8E%B7%E5%8F%96sample%E4%BE%9D%E8%B5%96%E7%9A%84%E8%B5%84%E6%BA%90%E6%96%87%E4%BB%B6%E5%88%B0%E6%9C%AC%E5%9C%B0.md)》文档获取了资源文件）
+* 步骤2：将device\soc\hisilicon\hi3516dv300\sdk_linux\out\lib\目录下的**libvb_server.so和 libmpp_vbs.so**拷贝至SD卡中
+* 步骤3：将device/soc/hisilicon/hi3516dv300/sdk_linux/sample/taurus/data/目录下的 UsePic_1920_1080_420.yuv文件拷贝至SD卡中。（前提是按照《[获取sample依赖的资源文件到本地](../doc/6.2.%E8%8E%B7%E5%8F%96sample%E4%BE%9D%E8%B5%96%E7%9A%84%E8%B5%84%E6%BA%90%E6%96%87%E4%BB%B6%E5%88%B0%E6%9C%AC%E5%9C%B0.md)》文档获取了资源文件）
 
 ![](https://gitee.com/wgm2022/mypic/raw/master/hispark_taurus_color_space_convert_sample/062%E5%A4%8D%E5%88%B6%E5%8F%AF%E6%89%A7%E8%A1%8C%E7%A8%8B%E5%BA%8F%E5%92%8C%E4%BE%9D%E8%B5%96%E6%96%87%E4%BB%B6%E8%87%B3SD%E5%8D%A1.png)
 
@@ -78,9 +61,9 @@ mount -t vfat /dev/mmcblk1p1 /mnt
 
 * 步骤2：将编译后生成的可执行文件拷贝到Windows的nfs共享路径下
 
-* 步骤3：将code\device\soc\hisilicon\hi3516dv300\sdk_linux\out\lib\目录下的**libvb_server.so和 libmpp_vbs.so**拷贝至Windows的nfs共享路径下
+* 步骤3：将device\soc\hisilicon\hi3516dv300\sdk_linux\out\lib\目录下的**libvb_server.so和 libmpp_vbs.so**拷贝至Windows的nfs共享路径下
 
-* 步骤4：将device/soc/hisilicon/hi3516dv300/sdk_linux/sample/taurus/data/目录下的 UsePic_1920_1080_420.yuv文件拷贝至Windows的nfs共享路径下。（前提是按照《[6.2.获取sample依赖的资源文件到本地.md](../doc/6.2.%E8%8E%B7%E5%8F%96sample%E4%BE%9D%E8%B5%96%E7%9A%84%E8%B5%84%E6%BA%90%E6%96%87%E4%BB%B6%E5%88%B0%E6%9C%AC%E5%9C%B0.md)》文档获取了资源文件）
+* 步骤4：将device/soc/hisilicon/hi3516dv300/sdk_linux/sample/taurus/data/目录下的 UsePic_1920_1080_420.yuv文件拷贝至Windows的nfs共享路径下。（前提是按照《[获取sample依赖的资源文件到本地](../doc/6.2.%E8%8E%B7%E5%8F%96sample%E4%BE%9D%E8%B5%96%E7%9A%84%E8%B5%84%E6%BA%90%E6%96%87%E4%BB%B6%E5%88%B0%E6%9C%AC%E5%9C%B0.md)》文档获取了资源文件）
 
 ![](https://gitee.com/wgm2022/mypic/raw/master/hispark_taurus_color_space_convert_sample/066%E6%8A%8A%E5%8F%AF%E6%89%A7%E8%A1%8C%E6%96%87%E4%BB%B6%E5%92%8C%E4%BE%9D%E8%B5%96%E6%96%87%E4%BB%B6%E6%8B%B7%E8%B4%9D%E8%87%B3nfs.png)
 
@@ -111,10 +94,6 @@ chmod 777 ohos_color_space_convert_demo
 ```
 
 ## 6. 功能验证
-
-接下来./ohos_color_space_convert_demo<index>操作即可。
-
-![](https://gitee.com/wgm2022/mypic/raw/master/hispark_taurus_color_space_convert_sample/041index%E6%93%8D%E4%BD%9C.png)
 
 ### 6.1、ive image to video frame
 

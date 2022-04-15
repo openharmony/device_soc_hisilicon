@@ -22,6 +22,7 @@
 #include "hi_gv_parser.h"
 #include "higv_mw_media.h"
 #include "sample_utils.h"
+#include "sdk.h"
 
 #ifdef __cplusplus
 #if __cplusplus
@@ -230,6 +231,7 @@ HI_S32 app_main(HI_S32 argc, HI_CHAR* argv[])
 HI_S32 main(HI_S32 argc, HI_CHAR* argv[])
 #endif
 {
+    sdk_init();
     HIGV_UNUSED(argc);
     HIGV_UNUSED(argv);
     HI_CHAR cmd[64]; // 64 is the length of buffer
@@ -255,6 +257,8 @@ HI_S32 main(HI_S32 argc, HI_CHAR* argv[])
     if (ret != HI_SUCCESS) {
         printf("pthread_create exec failed \n");
     }
+
+    sdk_exit();
     return HI_SUCCESS;
 }
 

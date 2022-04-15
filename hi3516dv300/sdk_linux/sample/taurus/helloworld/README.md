@@ -21,24 +21,7 @@ helloworld  sample基于ohos L1 linux平台开发，以Taurus套件为例，hell
 
 ![](https://gitee.com/wgm2022/mypic/raw/master/hispark_taurus_helloworld_sample/0001-sdk%20gn.png)
 
-* 编译helloworld sample有两种方式：
-
-1、整编，进入根目录下，输入命令：
-
-````
-hb build -f
-````
-
-2、单编，进入根目录下，输入命令：
-
-````shell
-hb build -T device/soc/hisilicon/hi3516dv300/sdk_linux/sample/taurus/helloworld:hi3516dv300_helloworld_sample
-# 注：
-# 其中 device/soc/hisilicon/hi3516dv300/sdk_linux/sample/taurus/helloworld为helloworld sample路的径
-# hi3516dv300_helloworld_sample为编译的target
-````
-
-* 编译成功后，如下图所示：
+* 点击Deveco Device Tool工具的Build按键进行编译，具体的编译过程这里不再赘述，编译成功后，如下图所示：
 
 ![](https://gitee.com/wgm2022/mypic/raw/master/hispark_taurus_helloworld_sample/0002-build%20success.png)
 
@@ -53,7 +36,7 @@ hb build -T device/soc/hisilicon/hi3516dv300/sdk_linux/sample/taurus/helloworld:
 * 首先需要自己准备一张SD卡
 * 步骤1：将编译后生成的可执行文件拷贝到SD卡中。
 
-* 步骤2：将code\device\soc\hisilicon\hi3516dv300\sdk_linux\out\lib\目录下的**libvb_server.so和 libmpp_vbs.so**拷贝至SD卡中
+* 步骤2：将device\soc\hisilicon\hi3516dv300\sdk_linux\out\lib\目录下的**libvb_server.so和 libmpp_vbs.so**拷贝至SD卡中
 
 ![](https://gitee.com/wgm2022/mypic/raw/master/hispark_taurus_helloworld_sample/190%E5%B0%86%E5%8F%AF%E6%89%A7%E8%A1%8C%E7%A8%8B%E5%BA%8F%E6%94%BE%E5%88%B0SD%E5%8D%A1%E4%B8%AD.png)
 
@@ -77,7 +60,7 @@ mount -t vfat /dev/mmcblk1p1 /mnt
 
 * 步骤2：将编译后生成的可执行文件拷贝到Windows的nfs共享路径下
 
-* 步骤3：将code\device\soc\hisilicon\hi3516dv300\sdk_linux\out\lib\目录下的**libvb_server.so和 libmpp_vbs.so**拷贝至Windows的nfs共享路径下
+* 步骤3：将device\soc\hisilicon\hi3516dv300\sdk_linux\out\lib\目录下的**libvb_server.so和 libmpp_vbs.so**拷贝至Windows的nfs共享路径下
 
 ![](https://gitee.com/wgm2022/mypic/raw/master/readme/011%E9%80%9A%E8%BF%87nfs%E6%8C%82%E8%BD%BD%E7%9A%84%E6%96%B9%E5%BC%8F%E6%8B%B7%E8%B4%9D%E4%BE%9D%E8%B5%96%E6%96%87%E4%BB%B6.png)
 
@@ -86,8 +69,6 @@ mount -t vfat /dev/mmcblk1p1 /mnt
 ```
 mount -o nolock,addr=192.168.200.1 -t nfs 192.168.200.1:/d/nfs /mnt
 ```
-
-
 
 ## 5.拷贝mnt目录下的文件至正确的目录下
 
