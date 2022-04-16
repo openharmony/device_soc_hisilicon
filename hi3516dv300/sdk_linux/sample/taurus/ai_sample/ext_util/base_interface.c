@@ -163,7 +163,7 @@ const char* SectGetCfgStr(const char* section, const char* field, const char* de
 }
 
 /* strxfrm */
-int HiStrxfrm(char *s1, const char *s2, int n)
+int HiStrxfrm(char *s1, char *s2, int n)
 {
     int i;
 

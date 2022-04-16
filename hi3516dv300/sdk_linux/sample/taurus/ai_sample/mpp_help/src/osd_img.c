@@ -134,9 +134,11 @@ static HI_VOID OSD_GetTimeStr(struct tm* pstTime, HI_CHAR* pazStr, HI_S32 s32Len
     }
 
     /* Generate Time String */
-    snprintf(pazStr, s32Len, "%04d-%02d-%02d %02d:%02d:%02d",
+    if (snprintf_s(pazStr, s32Len, s32Len - 1, "%04d-%02d-%02d %02d:%02d:%02d",
             pstTime->tm_year + 1900, pstTime->tm_mon + 1, pstTime->tm_mday, // 1900: base year
-            pstTime->tm_hour, pstTime->tm_min, pstTime->tm_sec);
+                pstTime->tm_hour, pstTime->tm_min, pstTime->tm_sec) < 0) {
+        HI_ASSERT(0);
+    }
 
     return;
 }
@@ -208,7 +210,7 @@ int OsdsCreateRgn(OsdSet* self)
     int ret = -1;
 
     MutexLock(&g_osdMutex);
-    for (int i = 0; i < (sizeof(g_osdHndPool) / sizeof(g_osdHndPool[0])); i++) {
+    for (int i = 0; i < HI_OSD_MAX_CNT; i++) {
         if (!g_osdHndPool[i]) {
             g_osdHndPool[i] = self;
             ret = i;
@@ -294,7 +296,7 @@ void OsdsDestroyRgn(OsdSet* self, int rgnHnd)
 void OsdsClear(OsdSet* self)
 {
     MutexLock(&g_osdMutex);
-    for (int i = 0; i < (sizeof(g_osdHndPool) / sizeof(g_osdHndPool[0])); i++) {
+    for (int i = 0; i < HI_OSD_MAX_CNT; i++) {
         if (g_osdHndPool[i] && g_osdHndPool[i] == (void*)self) {
             OsdsDestroyRgn(self, i);
         }
@@ -620,7 +622,7 @@ static HI_S32 OSD_RGNAttach(RGN_HANDLE RgnHdl, const HI_OSD_DISP_ATTR_S* pstDisp
 
     stChn.s32DevId = pstDispAttr->ModHdl;
     stChn.s32ChnId = pstDispAttr->ChnHdl;
-    memset(&stRgnChnAttr, 0x0, sizeof(RGN_CHN_ATTR_S));
+    memset_s(&stRgnChnAttr, sizeof(RGN_CHN_ATTR_S), 0x0, sizeof(RGN_CHN_ATTR_S));
     stRgnChnAttr.bShow = pstDispAttr->bShow;
     stRgnChnAttr.enType = OVERLAYEX_RGN;
 
@@ -828,9 +830,9 @@ HI_S32 HI_OSD_Init(const HI_OSD_FONTS_S* pstFonts)
             SAMPLE_PRT("FontWidth must be a multiple of %d.", BYTE_BITS);
             return HI_EINVAL;
         }
-        memcpy(&s_stOSDFonts, pstFonts, sizeof(HI_OSD_FONTS_S));
+        memcpy_s(&s_stOSDFonts, sizeof(HI_OSD_FONTS_S), pstFonts, sizeof(HI_OSD_FONTS_S));
     } else {
-        memset(&s_stOSDFonts, 0, sizeof(HI_OSD_FONTS_S));
+        memset_s(&s_stOSDFonts, sizeof(HI_OSD_FONTS_S), 0, sizeof(HI_OSD_FONTS_S));
     }
     HI_S32 s32Idx = 0;
     HI_S32 s32Ret = HI_SUCCESS;
@@ -839,7 +841,7 @@ HI_S32 HI_OSD_Init(const HI_OSD_FONTS_S* pstFonts)
     for (s32Idx = 0; s32Idx < HI_OSD_MAX_CNT; ++s32Idx) {
         pthread_mutex_init(&s_stOSDParam[s32Idx].mutexLock, NULL);
         pthread_mutex_lock(&s_stOSDParam[s32Idx].mutexLock);
-        memset(&s_stOSDParam[s32Idx], 0, sizeof(OSD_PARAM_S));
+        memset_s(&s_stOSDParam[s32Idx], sizeof(OSD_PARAM_S), 0, sizeof(OSD_PARAM_S));
         pthread_mutex_unlock(&s_stOSDParam[s32Idx].mutexLock);
     }
 
@@ -941,7 +943,11 @@ HI_S32 HI_OSD_SetAttr(HI_S32 s32OsdIdx, const HI_OSD_ATTR_S* pstAttr)
         }
 
         /* Update string */
-        snprintf(pstOsdParam->stAttr.stContent.szStr, HI_OSD_MAX_STR_LEN, "%s", pstAttr->stContent.szStr);
+        if (snprintf_s(pstOsdParam->stAttr.stContent.szStr, HI_OSD_MAX_STR_LEN,
+            HI_OSD_MAX_STR_LEN - 1, "%s", pstAttr->stContent.szStr) < 0) {
+            HI_ASSERT(0);
+        }
+        
         pstOsdParam->stAttr.stContent.stBitmap.enPixelFormat = PIXEL_FORMAT_ARGB_1555;
         ((HI_OSD_ATTR_S*)pstAttr)->stContent.stBitmap.u32Width =
             pstAttr->stContent.stFontSize.u32Width * strnlen(pstOsdParam->stAttr.stContent.szStr, HI_OSD_MAX_STR_LEN);
@@ -1019,8 +1025,8 @@ HI_S32 HI_OSD_SetAttr(HI_S32 s32OsdIdx, const HI_OSD_ATTR_S* pstAttr)
         }
     }
 
-    memcpy(pstOsdParam->stAttr.astDispAttr, pstAttr->astDispAttr,
-        sizeof(HI_OSD_DISP_ATTR_S) * HI_OSD_MAX_DISP_CNT);
+    memcpy_s(pstOsdParam->stAttr.astDispAttr, sizeof(HI_OSD_DISP_ATTR_S) * HI_OSD_MAX_DISP_CNT,
+        pstAttr->astDispAttr, sizeof(HI_OSD_DISP_ATTR_S) * HI_OSD_MAX_DISP_CNT);
     pstOsdParam->stAttr.u32DispNum = pstAttr->u32DispNum;
     pstOsdParam->stMaxSize.u32Width =
         MAX(pstOsdParam->stMaxSize.u32Width, pstOsdParam->stAttr.stContent.stBitmap.u32Width);
