@@ -11,7 +11,7 @@
 ```shell
 //device/soc/hisilicon/hi3516dv300/sdk_linux/sample/taurus/ai_sample
 │  BUILD.gn                    # 编译ohos ai_sample需要的gn文件
-├─ai_infer_process             # AI前处理、推理、后处理相关接口 
+├─ai_infer_process             # AI前处理、推理、后处理相关接口
 │  ├─ai_infer_process.c
 │  └─ai_infer_process.h
 ├─dependency                  # ai sample依赖的一些功能，如语音播报
@@ -31,7 +31,7 @@
 │  └─src
 │    ├─ive_img.c
 │    └─vgs_img.c
-├─scenario  
+├─scenario
 │  ├─cnn_trash_classify        # 垃圾分类sample
 │  │   ├─cnn_trash_classify.c
 │  │   └─cnn_trash_classify.h
@@ -68,7 +68,7 @@ cp third_party/iniparser device/soc/hisilicon/hi3516dv300/sdk_linux/sample/tauru
 
 ## 4. 编译
 
-在编译ai_sample之前，需确保ohos L1的主干代码已经整编通过，**且已经按照《[修改源码及配置文件适配Taurus开发板](../doc/2.2.1.%E4%BF%AE%E6%94%B9%E6%BA%90%E7%A0%81%E5%8F%8A%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E9%80%82%E9%85%8DTaurus%E5%BC%80%E5%8F%91%E6%9D%BF.md)》的内容进行修改**。在单编ai_sample之前，需修改目录下的一处依赖，进入//device/soc/hisilicon/hi3516dv300/sdk_linux目录下，通过修改BUILD.gn，在deps下面新增target，``"sample/taurus/ai_sample:hi3516dv300_ai_sample"``，如下图所示：
+在编译ai_sample之前，需确保OpenHarmony 小型系统的主干代码已经整编通过，**且已经按照《[修改源码及配置文件适配Taurus开发板](../doc/2.2.1.%E4%BF%AE%E6%94%B9%E6%BA%90%E7%A0%81%E5%8F%8A%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E9%80%82%E9%85%8DTaurus%E5%BC%80%E5%8F%91%E6%9D%BF.md)》的内容进行修改**。在单编ai_sample之前，需修改目录下的一处依赖，进入//device/soc/hisilicon/hi3516dv300/sdk_linux目录下，通过修改BUILD.gn，在deps下面新增target，``"sample/taurus/ai_sample:hi3516dv300_ai_sample"``，如下图所示：
 
 ![](https://gitee.com/wgm2022/mypic/raw/master/hispark_taurus_ai_sample/033%E4%BF%AE%E6%94%B9BUILDgn.png)
 
@@ -97,7 +97,7 @@ cp third_party/iniparser device/soc/hisilicon/hi3516dv300/sdk_linux/sample/tauru
 
 ```shell
 mount -t vfat /dev/mmcblk1p1 /mnt
-# 其中/dev/mmcblk1p1需要根据实际块设备号修改 
+# 其中/dev/mmcblk1p1需要根据实际块设备号修改
 ```
 
 * 挂载成功后，如下图所示：
