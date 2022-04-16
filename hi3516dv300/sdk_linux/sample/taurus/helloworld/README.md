@@ -2,7 +2,7 @@
 
 ## 1. 概述
 
-helloworld  sample基于ohos L1 linux平台开发，以Taurus套件为例，helloworld sample详细介绍Sensor至MIPI屏的整个视频通路实现方式（VI-VPSS-VO-MIPI），从编码的角度引导开发者跑通Hi3516DV300的媒体通路，并将视频流显示到MIPI屏上。
+helloworld  sample基于OpenHarmony 小型系统开发，以Taurus套件为例，helloworld sample详细介绍Sensor至MIPI屏的整个视频通路实现方式（VI-VPSS-VO-MIPI），从编码的角度引导开发者跑通Hi3516DV300的媒体通路，并将视频流显示到MIPI屏上。
 
 ## 2. 目录
 
@@ -17,28 +17,11 @@ helloworld  sample基于ohos L1 linux平台开发，以Taurus套件为例，hell
 
 ## 3. 编译
 
-在编译helloworld sample之前，需确保ohos L1的主干代码已经整编通过，**且已经按照《[修改源码及配置文件适配Taurus开发板](../doc/2.2.1.%E4%BF%AE%E6%94%B9%E6%BA%90%E7%A0%81%E5%8F%8A%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E9%80%82%E9%85%8DTaurus%E5%BC%80%E5%8F%91%E6%9D%BF.md)》的内容进行修改**。在单编helloworld sample之前，需修改目录下的一处依赖，进入//device/soc/hisilicon/hi3516dv300/sdk_linux目录下，通过修改BUILD.gn，在deps下面新增target，``"sample/taurus/helloworld:hi3516dv300_helloworld_sample"``，如下图所示：
+在编译helloworld sample之前，需确保OpenHarmony 小型系统的主干代码已经整编通过，**且已经按照《[修改源码及配置文件适配Taurus开发板](../doc/2.2.1.%E4%BF%AE%E6%94%B9%E6%BA%90%E7%A0%81%E5%8F%8A%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E9%80%82%E9%85%8DTaurus%E5%BC%80%E5%8F%91%E6%9D%BF.md)》的内容进行修改**。在单编helloworld sample之前，需修改目录下的一处依赖，进入//device/soc/hisilicon/hi3516dv300/sdk_linux目录下，通过修改BUILD.gn，在deps下面新增target，``"sample/taurus/helloworld:hi3516dv300_helloworld_sample"``，如下图所示：
 
 ![](https://gitee.com/wgm2022/mypic/raw/master/hispark_taurus_helloworld_sample/0001-sdk%20gn.png)
 
-* 编译helloworld sample有两种方式：
-
-1、整编，进入根目录下，输入命令：
-
-````
-hb build -f
-````
-
-2、单编，进入根目录下，输入命令：
-
-````shell
-hb build -T device/soc/hisilicon/hi3516dv300/sdk_linux/sample/taurus/helloworld:hi3516dv300_helloworld_sample
-# 注：
-# 其中 device/soc/hisilicon/hi3516dv300/sdk_linux/sample/taurus/helloworld为helloworld sample路的径
-# hi3516dv300_helloworld_sample为编译的target
-````
-
-* 编译成功后，如下图所示：
+* 点击Deveco Device Tool工具的Build按键进行编译，具体的编译过程这里不再赘述，编译成功后，如下图所示：
 
 ![](https://gitee.com/wgm2022/mypic/raw/master/hispark_taurus_helloworld_sample/0002-build%20success.png)
 
@@ -53,7 +36,7 @@ hb build -T device/soc/hisilicon/hi3516dv300/sdk_linux/sample/taurus/helloworld:
 * 首先需要自己准备一张SD卡
 * 步骤1：将编译后生成的可执行文件拷贝到SD卡中。
 
-* 步骤2：将code\device\soc\hisilicon\hi3516dv300\sdk_linux\out\lib\目录下的**libvb_server.so和 libmpp_vbs.so**拷贝至SD卡中
+* 步骤2：将device\soc\hisilicon\hi3516dv300\sdk_linux\out\lib\目录下的**libvb_server.so和 libmpp_vbs.so**拷贝至SD卡中
 
 ![](https://gitee.com/wgm2022/mypic/raw/master/hispark_taurus_helloworld_sample/190%E5%B0%86%E5%8F%AF%E6%89%A7%E8%A1%8C%E7%A8%8B%E5%BA%8F%E6%94%BE%E5%88%B0SD%E5%8D%A1%E4%B8%AD.png)
 
@@ -77,7 +60,7 @@ mount -t vfat /dev/mmcblk1p1 /mnt
 
 * 步骤2：将编译后生成的可执行文件拷贝到Windows的nfs共享路径下
 
-* 步骤3：将code\device\soc\hisilicon\hi3516dv300\sdk_linux\out\lib\目录下的**libvb_server.so和 libmpp_vbs.so**拷贝至Windows的nfs共享路径下
+* 步骤3：将device\soc\hisilicon\hi3516dv300\sdk_linux\out\lib\目录下的**libvb_server.so和 libmpp_vbs.so**拷贝至Windows的nfs共享路径下
 
 ![](https://gitee.com/wgm2022/mypic/raw/master/readme/011%E9%80%9A%E8%BF%87nfs%E6%8C%82%E8%BD%BD%E7%9A%84%E6%96%B9%E5%BC%8F%E6%8B%B7%E8%B4%9D%E4%BE%9D%E8%B5%96%E6%96%87%E4%BB%B6.png)
 
@@ -86,8 +69,6 @@ mount -t vfat /dev/mmcblk1p1 /mnt
 ```
 mount -o nolock,addr=192.168.200.1 -t nfs 192.168.200.1:/d/nfs /mnt
 ```
-
-
 
 ## 5.拷贝mnt目录下的文件至正确的目录下
 

@@ -2,7 +2,7 @@
 
 ## 1. 概述
 
-resize_crop  sample基于ohos L1 linux平台开发，以Taurus套件为例，resize_crop sample 介绍了对图片的预处理，resize实现了对一帧图片的缩放，crop实现了对一帧图片的裁剪，其缩放比例或裁剪参数，需要根据客户的网络模型输入参数进行确定。
+resize_crop  sample基于OpenHarmony 小型系统开发，以Taurus套件为例，resize_crop sample 介绍了对图片的预处理，resize实现了对一帧图片的缩放，crop实现了对一帧图片的裁剪，其缩放比例或裁剪参数，需要根据客户的网络模型输入参数进行确定。
 
 ## 2. 目录
 
@@ -17,30 +17,11 @@ resize_crop  sample基于ohos L1 linux平台开发，以Taurus套件为例，res
 
 ## 3. 编译
 
-在编译resize_crop  sample之前，需确保ohos L1的主干代码已经整编通过，**且已经按照《[修改源码及配置文件适配Taurus开发板](../doc/2.2.1.%E4%BF%AE%E6%94%B9%E6%BA%90%E7%A0%81%E5%8F%8A%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E9%80%82%E9%85%8DTaurus%E5%BC%80%E5%8F%91%E6%9D%BF.md)》的内容进行修改**。在单编resize_crop  sample之前，需修改目录下的一处依赖，进入//device/soc/hisilicon/hi3516dv300/sdk_linux目录下，通过修改 BUILD.gn，在deps下面新增target，``"sample/taurus/resize_crop:hi3516dv300_resize_crop_sample"``，如下图所示：
+在编译resize_crop  sample之前，需确保OpenHarmony 小型系统的主干代码已经整编通过，**且已经按照《[修改源码及配置文件适配Taurus开发板](../doc/2.2.1.%E4%BF%AE%E6%94%B9%E6%BA%90%E7%A0%81%E5%8F%8A%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E9%80%82%E9%85%8DTaurus%E5%BC%80%E5%8F%91%E6%9D%BF.md)》的内容进行修改**。在单编resize_crop  sample之前，需修改目录下的一处依赖，进入//device/soc/hisilicon/hi3516dv300/sdk_linux目录下，通过修改 BUILD.gn，在deps下面新增target，``"sample/taurus/resize_crop:hi3516dv300_resize_crop_sample"``，如下图所示：
 
 ![](https://gitee.com/wgm2022/mypic/raw/master/hispark_taurus_resize_crop_sample/054%E4%BF%AE%E6%94%B9buildgn.png)
 
-* 编译color_resize_crop sample有两种方式：
-
-方式一：整编，进入代码根目录下，输入命令：
-
-````
-hb build -f
-````
-
-方式二：单编，进入代码根目录下，输入命令：
-
-````shell
-hb build -T device/soc/hisilicon/hi3516dv300/sdk_linux/sample/taurus/resize_crop:hi3516dv300_resize_crop_sample
-# 注：
-# 其中 device/soc/hisilicon/hi3516dv300/sdk_linux/sample/taurus/resize_crop  为resize_crop sample路的径
-# hi3516dv300_resize_crop_sample为编译的target
-````
-
-![](https://gitee.com/wgm2022/mypic/raw/master/hispark_taurus_resize_crop_sample/055%E5%8D%95%E7%BC%96.png)
-
-* 编译成功后，如下图所示：
+* 点击Deveco Device Tool工具的Build按键进行编译，具体的编译过程这里不再赘述，编译成功后，如下图所示：
 
 ![](https://gitee.com/wgm2022/mypic/raw/master/hispark_taurus_helloworld_sample/0002-build%20success.png)
 
@@ -55,8 +36,8 @@ hb build -T device/soc/hisilicon/hi3516dv300/sdk_linux/sample/taurus/resize_crop
 * 首先需要自己准备一张SD卡
 
 * 步骤1：将编译后生成的可执行文件拷贝到SD卡中。
-* 步骤2：将code\device\soc\hisilicon\hi3516dv300\sdk_linux\out\lib\目录下的**libvb_server.so和 libmpp_vbs.so**拷贝至SD卡中
-* 步骤3：将device/soc/hisilicon/hi3516dv300/sdk_linux/sample/taurus/data/目录下的 UsePic_1920_1080_420.yuv文件拷贝至SD卡中。（前提是按照《[6.2.获取sample依赖的资源文件到本地.md](../doc/6.2.%E8%8E%B7%E5%8F%96sample%E4%BE%9D%E8%B5%96%E7%9A%84%E8%B5%84%E6%BA%90%E6%96%87%E4%BB%B6%E5%88%B0%E6%9C%AC%E5%9C%B0.md)》文档获取了资源文件）
+* 步骤2：将device\soc\hisilicon\hi3516dv300\sdk_linux\out\lib\目录下的**libvb_server.so和 libmpp_vbs.so**拷贝至SD卡中
+* 步骤3：将device/soc/hisilicon/hi3516dv300/sdk_linux/sample/taurus/data/目录下的 UsePic_1920_1080_420.yuv文件拷贝至SD卡中。（前提是按照《[获取sample依赖的资源文件到本地](../doc/6.2.%E8%8E%B7%E5%8F%96sample%E4%BE%9D%E8%B5%96%E7%9A%84%E8%B5%84%E6%BA%90%E6%96%87%E4%BB%B6%E5%88%B0%E6%9C%AC%E5%9C%B0.md)》文档获取了资源文件）
 
 ![](https://gitee.com/wgm2022/mypic/raw/master/hispark_taurus_resize_crop_sample/057%E5%A4%8D%E5%88%B6%E5%8F%AF%E6%89%A7%E8%A1%8C%E6%96%87%E4%BB%B6%E5%92%8C%E4%BE%9D%E8%B5%96%E6%96%87%E4%BB%B6%E8%87%B3SD%E5%8D%A1.png)
 
@@ -78,9 +59,9 @@ mount -t vfat /dev/mmcblk1p1 /mnt
 
 * 步骤2：将编译后生成的可执行文件拷贝到Windows的nfs共享路径下
 
-* 步骤3：将code\device\soc\hisilicon\hi3516dv300\sdk_linux\out\lib\目录下的**libvb_server.so和 libmpp_vbs.so**拷贝至Windows的nfs共享路径下
+* 步骤3：device\soc\hisilicon\hi3516dv300\sdk_linux\out\lib\目录下的**libvb_server.so和 libmpp_vbs.so**拷贝至Windows的nfs共享路径下
 
-* 步骤4：将device/soc/hisilicon/hi3516dv300/sdk_linux/sample/taurus/data/目录下的 UsePic_1920_1080_420.yuv文件拷贝至Windows的nfs共享路径下。（前提是按照《[6.2.获取sample依赖的资源文件到本地.md](../doc/6.2.%E8%8E%B7%E5%8F%96sample%E4%BE%9D%E8%B5%96%E7%9A%84%E8%B5%84%E6%BA%90%E6%96%87%E4%BB%B6%E5%88%B0%E6%9C%AC%E5%9C%B0.md)》文档获取了资源文件）
+* 步骤4：将device/soc/hisilicon/hi3516dv300/sdk_linux/sample/taurus/data/目录下的 UsePic_1920_1080_420.yuv文件拷贝至Windows的nfs共享路径下。（前提是按照《[获取sample依赖的资源文件到本地](../doc/6.2.%E8%8E%B7%E5%8F%96sample%E4%BE%9D%E8%B5%96%E7%9A%84%E8%B5%84%E6%BA%90%E6%96%87%E4%BB%B6%E5%88%B0%E6%9C%AC%E5%9C%B0.md)》文档获取了资源文件）
 
 ![](https://gitee.com/wgm2022/mypic/raw/master/hispark_taurus_resize_crop_sample/064%E6%8B%B7%E8%B4%9Dresizeandcrop%E4%BE%9D%E8%B5%96%E6%96%87%E4%BB%B6%E8%87%B3nfs%E7%9B%AE%E5%BD%95.png)
 
@@ -100,7 +81,7 @@ mount -o nolock,addr=192.168.200.1 -t nfs 192.168.200.1:/d/nfs /mnt
 mkdir -p /userdata/data/input/resize_img/
 mkdir -p /userdata/data/output/resize_res/
 mkdir -p /userdata/data/input/crop_img/
-mkdir -p /userdata/data/output/crop_res/ 
+mkdir -p /userdata/data/output/crop_res/
 cp /mnt/ohos_resize_crop_demo  /userdata/
 cp /mnt/*.so /usr/lib/
 cp /mnt/UsePic_1920_1080_420.yuv /userdata/data/input/resize_img/
