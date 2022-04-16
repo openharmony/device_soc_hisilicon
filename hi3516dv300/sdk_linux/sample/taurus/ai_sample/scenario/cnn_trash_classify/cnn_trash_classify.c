@@ -46,8 +46,6 @@ extern "C" {
 #define FRM_HEIGHT          256
 #define TXT_BEGX            20
 #define TXT_BEGY            20
-#define FONT_WIDTH          32
-#define FONT_HEIGHT         40
 
 static int g_num = 108;
 static int g_count = 0;
@@ -271,7 +269,7 @@ HI_S32 CnnTrashClassifyCal(uintptr_t model, VIDEO_FRAME_INFO_S *srcFrm, VIDEO_FR
 
         // Superimpose graphics into resFrm
         HI_OSD_ATTR_S rgn;
-        TxtRgnInit(&rgn, osdBuf, TXT_BEGX, TXT_BEGY, ARGB1555_YELLOW2, FONT_WIDTH, FONT_HEIGHT);
+        TxtRgnInit(&rgn, osdBuf, TXT_BEGX, TXT_BEGY, ARGB1555_YELLOW2); // font width and heigt use default 40
         OsdsSetRgn(g_osdsTrash, g_osd0Trash, &rgn);
         ret = HI_MPI_VPSS_SendFrame(0, 0, srcFrm, 0);
         if (ret != HI_SUCCESS) {

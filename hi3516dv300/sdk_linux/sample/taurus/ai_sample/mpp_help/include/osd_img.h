@@ -201,8 +201,7 @@ typedef struct OsdSet OsdSet;
 int OsdsCreateRgn(OsdSet* self);
 
 /* Set the attribute value of the text region */
-int TxtRgnInit(HI_OSD_ATTR_S* rgnAttr, const char* str, uint32_t begX, uint32_t begY,
-    uint32_t color, int fontWidth, int fontHeight);
+int TxtRgnInit(HI_OSD_ATTR_S* rgnAttr, const char* str, uint32_t begX, uint32_t begY, uint32_t color);
 
 /* Destroy all regions in OsdSet */
 void OsdsClear(OsdSet* self);

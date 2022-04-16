@@ -327,8 +327,7 @@ void OsdsDestroy(OsdSet* self)
 }
 
 /* Set the attribute value of the text region */
-int TxtRgnInit(HI_OSD_ATTR_S* rgnAttr, const char* str, uint32_t begX, uint32_t begY,
-    uint32_t color, int fontWidth, int fontHeight)
+int TxtRgnInit(HI_OSD_ATTR_S* rgnAttr, const char* str, uint32_t begX, uint32_t begY, uint32_t color)
 {
     HI_ASSERT(rgnAttr);
     if (!str) {
@@ -356,8 +355,8 @@ int TxtRgnInit(HI_OSD_ATTR_S* rgnAttr, const char* str, uint32_t begX, uint32_t 
     rgnAttr->stContent.enType = HI_OSD_TYPE_STRING;
     rgnAttr->stContent.u32Color = color; // ARGB #FFFF0000 Red
     HiStrxfrm(rgnAttr->stContent.szStr, str, sizeof(rgnAttr->stContent.szStr));
-    rgnAttr->stContent.stFontSize.u32Width = fontWidth <= 0 ? OSD_FONT_WIDTH_DEF : fontWidth;
-    rgnAttr->stContent.stFontSize.u32Height = fontHeight <= 0 ? OSD_FONT_HEIGHT_DEF : fontHeight;
+    rgnAttr->stContent.stFontSize.u32Width = OSD_FONT_WIDTH_DEF;
+    rgnAttr->stContent.stFontSize.u32Height = OSD_FONT_HEIGHT_DEF;
     return 0;
 }
 
