@@ -50,6 +50,7 @@ extern "C" {
 #define X_COORDINATE            100
 #define Y_COORDINATE            100
 #define BASE_YAER               1900
+#define MULTIPLE_NUM            100
 #define IsASCII(a) (((a)>=0x00&&(a)<=0x7F)?1:0)
 
 /*
@@ -80,6 +81,22 @@ static pthread_t s_OSDTimeTskId = 0;
 #define OSD_LIB_FONT_W (s_stOSDFonts.u32FontWidth)
 #define OSD_LIB_FONT_H (s_stOSDFonts.u32FontHeight)
 #define OSD_LIB_FONT_STEP (OSD_LIB_FONT_W * OSD_LIB_FONT_H / BYTE_BITS)
+
+/* Value Align */
+HI_S32 HiAppcommAlign(HI_S32 value, HI_S32 base)
+{
+    return (((value) + (base)-1) / (base) * (base));
+}
+
+HI_U32 max(HI_U32 a, HI_U32 b)
+{
+    return (((a) < (b)) ? (b) : (a));
+}
+
+HI_U32 min(HI_U32 a, HI_U32 b)
+{
+    return (((a) > (b)) ? (b) : (a));
+}
 
 static HI_S32 OSD_GetNonASCNum(HI_CHAR* string, HI_S32 len)
 {
@@ -126,12 +143,10 @@ static HI_VOID OSD_GetTimeStr(struct tm* pstTime, HI_CHAR* pazStr, HI_S32 s32Len
 {
     /* Get Time */
     time_t nowTime;
-    struct tm stTime = {0};
 
     if (!pstTime) {
         time(&nowTime);
-        localtime_r(&nowTime, &stTime);
-        pstTime = &stTime;
+        localtime_r(&nowTime, pstTime);
     }
 
     /* Generate Time String */
@@ -433,8 +448,10 @@ static HI_S32 OSD_Ratio2Absolute(MPP_CHN_S stChn, const POINT_S* pstRatioCoor, P
             return HI_EINVAL;
     }
 
-    pstAbsCoor->s32X = HI_APPCOMM_ALIGN(stImageSize.u32Width * pstRatioCoor->s32X / 100, 2);
-    pstAbsCoor->s32Y = HI_APPCOMM_ALIGN(stImageSize.u32Height * pstRatioCoor->s32Y / 100, 2);
+    // 2: HiAppcommAlign api base param
+    pstAbsCoor->s32X = HiAppcommAlign(stImageSize.u32Width * pstRatioCoor->s32X / MULTIPLE_NUM, 2);
+    // 2: HiAppcommAlign api base param
+    pstAbsCoor->s32Y = HiAppcommAlign(stImageSize.u32Height * pstRatioCoor->s32Y / MULTIPLE_NUM, 2);
     return HI_SUCCESS;
 }
 
@@ -1018,9 +1035,9 @@ HI_S32 HI_OSD_SetAttr(HI_S32 s32OsdIdx, const HI_OSD_ATTR_S* pstAttr)
         pstAttr->astDispAttr, sizeof(HI_OSD_DISP_ATTR_S) * HI_OSD_MAX_DISP_CNT);
     pstOsdParam->stAttr.u32DispNum = pstAttr->u32DispNum;
     pstOsdParam->stMaxSize.u32Width =
-        MAX(pstOsdParam->stMaxSize.u32Width, pstOsdParam->stAttr.stContent.stBitmap.u32Width);
+        max(pstOsdParam->stMaxSize.u32Width, pstOsdParam->stAttr.stContent.stBitmap.u32Width);
     pstOsdParam->stMaxSize.u32Height=
-        MAX(pstOsdParam->stMaxSize.u32Height, pstOsdParam->stAttr.stContent.stBitmap.u32Height);
+        max(pstOsdParam->stMaxSize.u32Height, pstOsdParam->stAttr.stContent.stBitmap.u32Height);
     pstOsdParam->bInit = HI_TRUE;
     pthread_mutex_unlock(&pstOsdParam->mutexLock);
 

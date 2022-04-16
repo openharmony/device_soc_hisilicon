@@ -74,14 +74,6 @@ typedef HI_S32 HI_ERRNO;
 #define HI_EINITIALIZED        (HI_ERRNO)(HI_ERRNO_BASE + 1) // Repeated initialization
 #define HI_ERRNO_CUSTOM_BOTTOM (HI_ERRNO)(HI_ERRNO_BASE + 2) // Number of error numbers that have been defined
 
-#ifndef MAX
-#define MAX(a, b) (((a) < (b)) ? (b) : (a))
-#endif
-
-#ifndef MIN
-#define MIN(a, b) (((a) > (b)) ? (b) : (a))
-#endif
-
 /* pthread mutex lock */
 static inline void MutexLock(pthread_mutex_t* mutex)
 {
