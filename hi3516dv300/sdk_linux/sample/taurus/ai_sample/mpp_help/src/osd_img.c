@@ -79,6 +79,13 @@ static pthread_t s_OSDTimeTskId = 0;
 
 static HI_OSD_TEXTBITMAP_S s_stOSDTextBitMap;
 
+static HI_U8* FontMod = NULL;
+static HI_S32 FontModLen = 0;
+
+/* Bitmap Row/Col Index */
+static HI_S32 s32BmRow;
+static HI_S32 s32BmCol;
+
 /* OSD Font Step In Lib, in bytes */
 #define OSD_LIB_FONT_W (s_stOSDFonts.u32FontWidth)
 #define OSD_LIB_FONT_H (s_stOSDFonts.u32FontHeight)
@@ -486,6 +493,19 @@ static HI_S32 OSD_Update(RGN_HANDLE RgnHdl, const HI_OSD_ATTR_S* pstAttr)
     return HI_SUCCESS;
 }
 
+HI_VOID OSD_PuBmData_Cal(HI_OSD_CONTENT_S* pstContent, HI_U16* puBmData, HI_S32 s32HexOffset,
+    HI_S32 s32BmDataIdx, HI_S32 s32BitOffset)
+{
+    HI_U8 temp = FontMod[s32HexOffset];
+    if ((temp >> ((BYTE_BITS - 1) - s32BitOffset)) & 0x1) {
+        puBmData[s32BmDataIdx] = (HI_U16)pstContent->u32Color;
+    } else {
+        puBmData[s32BmDataIdx] = (HI_U16)pstContent->u32BgColor;
+    }
+
+    return;
+}
+
 HI_S32 OSD_Generate_Bitmap(RGN_HANDLE RgnHdl, HI_OSD_CONTENT_S* pstContent)
 {
     HI_S32 s32Ret;
@@ -500,7 +520,6 @@ HI_S32 OSD_Generate_Bitmap(RGN_HANDLE RgnHdl, HI_OSD_CONTENT_S* pstContent)
         (s32StrLen - NonASCNum * (NOASCII_CHARACTER_BYTES - 1));
     pstContent->stBitmap.u32Height = pstContent->stFontSize.u32Height;
     HI_U16* puBmData = (HI_U16*)(HI_UL)s_stOSDTextBitMap.stCanvasInfo.u64VirtAddr;
-    HI_S32 s32BmRow, s32BmCol; /* Bitmap Row/Col Index */
 
     for (s32BmRow = 0; s32BmRow < pstContent->stBitmap.u32Height; ++s32BmRow) {
         HI_S32 NonASCShow = 0;
@@ -520,17 +539,11 @@ HI_S32 OSD_Generate_Bitmap(RGN_HANDLE RgnHdl, HI_OSD_CONTENT_S* pstContent)
             HI_S32 s32CharRow = s32BmRow * OSD_LIB_FONT_H / pstContent->stFontSize.u32Height;
             HI_S32 s32HexOffset = s32CharRow * OSD_LIB_FONT_W / BYTE_BITS + s32CharCol / BYTE_BITS;
             HI_S32 s32BitOffset = s32CharCol % BYTE_BITS;
-            HI_U8* FontMod = NULL;
-            HI_S32 FontModLen = 0;
+
             if (s_stOSDFonts.pfnGetFontMod(&pstContent->szStr[s32StringIdx], &FontMod, &FontModLen)
                 == HI_SUCCESS) {
                 if (FontMod != NULL && s32HexOffset < FontModLen) {
-                    HI_U8 temp = FontMod[s32HexOffset];
-                    if ((temp >> ((BYTE_BITS - 1) - s32BitOffset)) & 0x1) {
-                        puBmData[s32BmDataIdx] = (HI_U16)pstContent->u32Color;
-                    } else {
-                        puBmData[s32BmDataIdx] = (HI_U16)pstContent->u32BgColor;
-                    }
+                    OSD_PuBmData_Cal(pstContent, puBmData, s32HexOffset, s32BmDataIdx, s32BitOffset);
                     continue;
                 }
             }
