@@ -182,6 +182,12 @@ typedef struct tagOSD_PARAM_S {
     HI_BOOL bOn; /* OSD On/Off Flag, Canbe modified only by HI_OSD_Start/HI_OSD_Stop */
 } OSD_PARAM_S;
 
+typedef struct hiOSD_TEXTBITMAP_S {
+    RGN_HANDLE rgnHdl;
+    HI_OSD_CONTENT_S pstContent;
+    RGN_CANVAS_INFO_S stCanvasInfo;
+} HI_OSD_TEXTBITMAP_S;
+
 /* OSD region set */
 struct OsdSet {
     // OSD Binded Module: Static

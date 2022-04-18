@@ -77,6 +77,8 @@ static HI_BOOL s_bOSDTimeRun = HI_FALSE;
 /* Time OSD Update Task Thread ID, created by HI_PDT_OSD_Init, destroyed by HI_OSD_DeInit */
 static pthread_t s_OSDTimeTskId = 0;
 
+static HI_OSD_TEXTBITMAP_S s_stOSDTextBitMap;
+
 /* OSD Font Step In Lib, in bytes */
 #define OSD_LIB_FONT_W (s_stOSDFonts.u32FontWidth)
 #define OSD_LIB_FONT_H (s_stOSDFonts.u32FontHeight)
@@ -484,28 +486,27 @@ static HI_S32 OSD_Update(RGN_HANDLE RgnHdl, const HI_OSD_ATTR_S* pstAttr)
     return HI_SUCCESS;
 }
 
-static HI_S32 OSD_UpdateTextBitmap(RGN_HANDLE RgnHdl, HI_OSD_CONTENT_S* pstContent)
+HI_S32 OSD_Generate_Bitmap(RGN_HANDLE RgnHdl, HI_OSD_CONTENT_S* pstContent)
 {
-    HI_S32 s32Ret = HI_SUCCESS;
+    HI_S32 s32Ret;
     HI_S32 s32StrLen = strnlen(pstContent->szStr, HI_OSD_MAX_STR_LEN);
     HI_S32 NonASCNum = OSD_GetNonASCNum(pstContent->szStr, s32StrLen);
 
-    RGN_CANVAS_INFO_S stCanvasInfo;
-    s32Ret = HI_MPI_RGN_GetCanvasInfo(RgnHdl, &stCanvasInfo);
+    s32Ret = HI_MPI_RGN_GetCanvasInfo(RgnHdl, &s_stOSDTextBitMap.stCanvasInfo);
     SAMPLE_CHECK_EXPR_RET(s32Ret != HI_SUCCESS, s32Ret, "RGN_GetCanvasInfo FAIL, s32Ret=%x\n", s32Ret);
 
     /* Generate Bitmap */
     pstContent->stBitmap.u32Width = pstContent->stFontSize.u32Width *
         (s32StrLen - NonASCNum * (NOASCII_CHARACTER_BYTES - 1));
     pstContent->stBitmap.u32Height = pstContent->stFontSize.u32Height;
-    HI_U16* puBmData = (HI_U16*)(HI_UL)stCanvasInfo.u64VirtAddr;
+    HI_U16* puBmData = (HI_U16*)(HI_UL)s_stOSDTextBitMap.stCanvasInfo.u64VirtAddr;
     HI_S32 s32BmRow, s32BmCol; /* Bitmap Row/Col Index */
 
     for (s32BmRow = 0; s32BmRow < pstContent->stBitmap.u32Height; ++s32BmRow) {
         HI_S32 NonASCShow = 0;
         for (s32BmCol = 0; s32BmCol < pstContent->stBitmap.u32Width; ++s32BmCol) {
             /* Bitmap Data Offset for the point */
-            HI_S32 s32BmDataIdx = s32BmRow * stCanvasInfo.u32Stride / 2 + s32BmCol;
+            HI_S32 s32BmDataIdx = s32BmRow * s_stOSDTextBitMap.stCanvasInfo.u32Stride / 2 + s32BmCol;
             /* Character Index in Text String */
             HI_S32 s32CharIdx = s32BmCol / pstContent->stFontSize.u32Width;
             HI_S32 s32StringIdx = s32CharIdx+NonASCShow * (NOASCII_CHARACTER_BYTES - 1);
@@ -539,7 +540,7 @@ static HI_S32 OSD_UpdateTextBitmap(RGN_HANDLE RgnHdl, HI_OSD_CONTENT_S* pstConte
 
         for (s32BmCol = pstContent->stBitmap.u32Width;
             s32BmCol < s_stOSDParam[RgnHdl].stMaxSize.u32Width; ++s32BmCol) {
-            HI_S32 s32BmDataIdx = s32BmRow * stCanvasInfo.u32Stride / 2 + s32BmCol;
+            HI_S32 s32BmDataIdx = s32BmRow * s_stOSDTextBitMap.stCanvasInfo.u32Stride / 2 + s32BmCol;
             puBmData[s32BmDataIdx] = 0;
         }
     }
@@ -547,14 +548,22 @@ static HI_S32 OSD_UpdateTextBitmap(RGN_HANDLE RgnHdl, HI_OSD_CONTENT_S* pstConte
     for (s32BmRow = pstContent->stBitmap.u32Height;
         s32BmRow < s_stOSDParam[RgnHdl].stMaxSize.u32Height; ++s32BmRow) {
         for (s32BmCol = 0; s32BmCol < s_stOSDParam[RgnHdl].stMaxSize.u32Width; ++s32BmCol) {
-            HI_S32 s32BmDataIdx = s32BmRow * stCanvasInfo.u32Stride / 2 + s32BmCol;
+            HI_S32 s32BmDataIdx = s32BmRow * s_stOSDTextBitMap.stCanvasInfo.u32Stride / 2 + s32BmCol;
             puBmData[s32BmDataIdx] = 0;
         }
     }
 
-    stCanvasInfo.enPixelFmt = PIXEL_FORMAT_ARGB_1555;
-    stCanvasInfo.stSize.u32Width = pstContent->stBitmap.u32Width;
-    stCanvasInfo.stSize.u32Height = pstContent->stBitmap.u32Height;
+    return s32Ret;
+}
+
+static HI_S32 OSD_UpdateTextBitmap(RGN_HANDLE RgnHdl, HI_OSD_CONTENT_S* pstContent)
+{
+    HI_S32 s32Ret = HI_SUCCESS;
+
+    OSD_Generate_Bitmap(RgnHdl, pstContent);
+    s_stOSDTextBitMap.stCanvasInfo.enPixelFmt = PIXEL_FORMAT_ARGB_1555;
+    s_stOSDTextBitMap.stCanvasInfo.stSize.u32Width = pstContent->stBitmap.u32Width;
+    s_stOSDTextBitMap.stCanvasInfo.stSize.u32Height = pstContent->stBitmap.u32Height;
 
     s32Ret = HI_MPI_RGN_UpdateCanvas(RgnHdl);
     SAMPLE_CHECK_EXPR_RET(s32Ret != HI_SUCCESS, s32Ret, "RGN_UpdateCanvas FAIL, s32Ret=%x\n", s32Ret);
@@ -573,27 +582,12 @@ static HI_S32 OSD_RGNAttach(RGN_HANDLE RgnHdl, const HI_OSD_DISP_ATTR_S* pstDisp
     memset_s(&stRgnChnAttr, sizeof(RGN_CHN_ATTR_S), 0x0, sizeof(RGN_CHN_ATTR_S));
     stRgnChnAttr.bShow = pstDispAttr->bShow;
     stRgnChnAttr.enType = OVERLAYEX_RGN;
-
     switch (pstDispAttr->enBindedMod) {
         case HI_OSD_BINDMOD_VI:
             stChn.enModId = HI_ID_VI;
             break;
         case HI_OSD_BINDMOD_VPSS:
             stChn.enModId = HI_ID_VPSS;
-            break;
-        case HI_OSD_BINDMOD_AVS:
-#ifdef SUPPORT_STITCH
-            stChn.enModId = HI_ID_AVS;
-            break;
-#else
-            SAMPLE_PRT("stitch is not support.\n");
-            return HI_EPAERM;
-#endif
-        case HI_OSD_BINDMOD_VENC:
-            stChn.enModId = HI_ID_VENC;
-            stChn.s32DevId = 0;
-            stRgnChnAttr.enType = OVERLAY_RGN;
-            stRgnChnAttr.unChnAttr.stOverlayChn.enAttachDest = pstDispAttr->enAttachDest;
             break;
         case HI_OSD_BINDMOD_VO:
             stChn.enModId = HI_ID_VO;
@@ -604,13 +598,9 @@ static HI_S32 OSD_RGNAttach(RGN_HANDLE RgnHdl, const HI_OSD_DISP_ATTR_S* pstDisp
     }
 
     POINT_S stStartPos;
-
     if (pstDispAttr->enCoordinate == HI_OSD_COORDINATE_RATIO_COOR) {
         s32Ret = OSD_Ratio2Absolute(stChn, &pstDispAttr->stStartPos, &stStartPos);
-        if (s32Ret != HI_SUCCESS) {
-            SAMPLE_PRT("OSD_Ratio2Absolute fail,RgnHdl[%d] Error Code: [0x%08X]\n", RgnHdl, s32Ret);
-            return s32Ret;
-        }
+        SAMPLE_CHECK_EXPR_RET(s32Ret != HI_SUCCESS, s32Ret, "Ratio2Absolute FAIL, s32Ret=%x\n", s32Ret);
     } else {
         stStartPos = pstDispAttr->stStartPos;
     }
@@ -630,11 +620,7 @@ static HI_S32 OSD_RGNAttach(RGN_HANDLE RgnHdl, const HI_OSD_DISP_ATTR_S* pstDisp
     }
 
     s32Ret = HI_MPI_RGN_AttachToChn(RgnHdl, &stChn, &stRgnChnAttr);
-    if (s32Ret != HI_SUCCESS) {
-        SAMPLE_PRT("HI_MPI_RGN_AttachToChn fail,RgnHdl[%d] stChn[%d,%d,%d] Error Code: [0x%08X]\n",
-            RgnHdl, stChn.enModId, stChn.s32DevId, stChn.s32ChnId, s32Ret);
-        return s32Ret;
-    }
+    SAMPLE_CHECK_EXPR_RET(s32Ret != HI_SUCCESS, s32Ret, "RGN_AttachToChn FAIL, s32Ret=%x\n", s32Ret);
 
     return HI_SUCCESS;
 }
