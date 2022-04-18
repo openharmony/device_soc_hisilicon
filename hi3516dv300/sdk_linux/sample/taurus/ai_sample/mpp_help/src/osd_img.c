@@ -157,7 +157,7 @@ static HI_VOID OSD_GetTimeStr(struct tm* pstTime, HI_CHAR* pazStr, HI_S32 s32Len
     /* Generate Time String */
     if (snprintf_s(pazStr, s32Len, s32Len - 1, "%04d-%02d-%02d %02d:%02d:%02d",
         pstTime->tm_year + BASE_YAER, pstTime->tm_mon + 1, pstTime->tm_mday,
-            pstTime->tm_hour, pstTime->tm_min, pstTime->tm_sec) < 0) {
+        pstTime->tm_hour, pstTime->tm_min, pstTime->tm_sec) < 0) {
         HI_ASSERT(0);
     }
 
@@ -375,7 +375,6 @@ static HI_S32 OSD_Ratio2Absolute(MPP_CHN_S stChn, const POINT_S* pstRatioCoor, P
         SAMPLE_PRT("invalide Ratio coordinate(%d,%d)\n", pstRatioCoor->s32X, pstRatioCoor->s32Y);
         return HI_EINVAL;
     }
-    printf("=======================stChn.enModId:%d===================\n", stChn.enModId);
     switch (stChn.enModId) {
         case HI_ID_VI: {
             VI_CHN_ATTR_S stChnAttr;
@@ -398,34 +397,6 @@ static HI_S32 OSD_Ratio2Absolute(MPP_CHN_S stChn, const POINT_S* pstRatioCoor, P
             }
             stImageSize.u32Width = stChnAttr.u32Width;
             stImageSize.u32Height = stChnAttr.u32Height;
-            break;
-        }
-        case HI_ID_AVS: {
-#ifdef SUPPORT_STITCH
-            AVS_CHN_ATTR_S stChnAttr;
-            s32Ret = HI_MPI_AVS_GetChnAttr(stChn.s32DevId, stChn.s32ChnId, &stChnAttr);
-            if (s32Ret != HI_SUCCESS) {
-                SAMPLE_PRT("HI_MPI_AVS_GetChnAttr(%d,%d) fail,Error Code: [0x%08X]\n",
-                    stChn.s32DevId, stChn.s32ChnId, s32Ret);
-                return s32Ret;
-            }
-            stImageSize.u32Width = stChnAttr.u32Width;
-            stImageSize.u32Height = stChnAttr.u32Height;
-#else
-            SAMPLE_PRT("stitch is not support.\n");
-            return HI_EPAERM;
-#endif
-            break;
-        }
-        case HI_ID_VENC: {
-            VENC_CHN_ATTR_S stChnAttr;
-            s32Ret = HI_MPI_VENC_GetChnAttr(stChn.s32ChnId, &stChnAttr);
-            if (s32Ret != HI_SUCCESS) {
-                SAMPLE_PRT("HI_MPI_VENC_GetChnAttr(%d) fail,Error Code: [0x%08X]\n", stChn.s32ChnId, s32Ret);
-                return s32Ret;
-            }
-            stImageSize.u32Width = stChnAttr.stVencAttr.u32PicWidth;
-            stImageSize.u32Height = stChnAttr.stVencAttr.u32PicHeight;
             break;
         }
         case HI_ID_VO: {
@@ -478,7 +449,7 @@ static HI_S32 OSD_Update(RGN_HANDLE RgnHdl, const HI_OSD_ATTR_S* pstAttr)
                 stChn.enModId = HI_ID_VO;
                 break;
             default:
-                SAMPLE_PRT("RgnHdl[%d] invalide bind mode [%d]\n", RgnHdl, pstAttr->astDispAttr[s32DispIdx].enBindedMod);
+                SAMPLE_PRT("invalide bind mode [%d]\n", pstAttr->astDispAttr[s32DispIdx].enBindedMod);
                 return HI_EINVAL;
         }
 
@@ -521,10 +492,7 @@ static HI_S32 OSD_UpdateTextBitmap(RGN_HANDLE RgnHdl, HI_OSD_CONTENT_S* pstConte
 
     RGN_CANVAS_INFO_S stCanvasInfo;
     s32Ret = HI_MPI_RGN_GetCanvasInfo(RgnHdl, &stCanvasInfo);
-    if (s32Ret != HI_SUCCESS) {
-        SAMPLE_PRT("HI_MPI_RGN_GetCanvasInfo fail,RgnHdl[%d] Error Code: [0x%08X]\n", RgnHdl, s32Ret);
-        return s32Ret;
-    }
+    SAMPLE_CHECK_EXPR_RET(s32Ret != HI_SUCCESS, s32Ret, "RGN_GetCanvasInfo FAIL, s32Ret=%x\n", s32Ret);
 
     /* Generate Bitmap */
     pstContent->stBitmap.u32Width = pstContent->stFontSize.u32Width *
@@ -555,7 +523,7 @@ static HI_S32 OSD_UpdateTextBitmap(RGN_HANDLE RgnHdl, HI_OSD_CONTENT_S* pstConte
             HI_S32 FontModLen = 0;
             if (s_stOSDFonts.pfnGetFontMod(&pstContent->szStr[s32StringIdx], &FontMod, &FontModLen)
                 == HI_SUCCESS) {
-                if (FontMod != NULL && s32HexOffset<FontModLen) {
+                if (FontMod != NULL && s32HexOffset < FontModLen) {
                     HI_U8 temp = FontMod[s32HexOffset];
                     if ((temp >> ((BYTE_BITS - 1) - s32BitOffset)) & 0x1) {
                         puBmData[s32BmDataIdx] = (HI_U16)pstContent->u32Color;
@@ -589,11 +557,7 @@ static HI_S32 OSD_UpdateTextBitmap(RGN_HANDLE RgnHdl, HI_OSD_CONTENT_S* pstConte
     stCanvasInfo.stSize.u32Height = pstContent->stBitmap.u32Height;
 
     s32Ret = HI_MPI_RGN_UpdateCanvas(RgnHdl);
-    if (s32Ret != HI_SUCCESS) {
-        SAMPLE_PRT("HI_MPI_RGN_UpdateCanvas fail, RgnHdl[%d] Error Code: [0x%08X]\n",
-            RgnHdl, s32Ret);
-        return s32Ret;
-    }
+    SAMPLE_CHECK_EXPR_RET(s32Ret != HI_SUCCESS, s32Ret, "RGN_UpdateCanvas FAIL, s32Ret=%x\n", s32Ret);
 
     return s32Ret;
 }
@@ -963,18 +927,11 @@ HI_S32 HI_OSD_SetAttr(HI_S32 s32OsdIdx, const HI_OSD_ATTR_S* pstAttr)
                 stBitmap.u32Height = pstAttr->stContent.stBitmap.u32Height;
                 stBitmap.pData = pstAttr->stContent.stBitmap.pvData;
                 s32Ret = HI_MPI_RGN_SetBitMap(s32OsdIdx, &stBitmap);
-                if (s32Ret != HI_SUCCESS) {
-                    pthread_mutex_unlock(&pstOsdParam->mutexLock);
-                    SAMPLE_PRT("HI_MPI_RGN_SetBitMap fail,RgnHdl[%d] Error Code: [0x%08X]\n", s32OsdIdx, s32Ret);
-                    return s32Ret;
-                }
+                SAMPLE_CHECK_EXPR_GOTO(s32Ret != HI_SUCCESS, FAIL, "HI_MPI_RGN_SetBitMap. s32Ret: 0x%x\n", s32Ret);
             } else {
                 /* Time/String Type: Update text bitmap */
                 s32Ret = OSD_UpdateTextBitmap(s32OsdIdx, (HI_OSD_CONTENT_S*)&pstOsdParam->stAttr.stContent);
-                if (s32Ret != HI_SUCCESS) {
-                    pthread_mutex_unlock(&pstOsdParam->mutexLock);
-                    return s32Ret;
-                }
+                SAMPLE_CHECK_EXPR_GOTO(s32Ret != HI_SUCCESS, FAIL, "OSD_UpdateTextBitmap fail, err(%#x)\n", s32Ret);
             }
 
             HI_S32 s32DispIdx = 0;
@@ -988,10 +945,7 @@ HI_S32 HI_OSD_SetAttr(HI_S32 s32OsdIdx, const HI_OSD_ATTR_S* pstAttr)
                 }
             }
             s32Ret = OSD_Update(s32OsdIdx, pstAttr);
-            if (s32Ret != HI_SUCCESS) {
-                pthread_mutex_unlock(&pstOsdParam->mutexLock);
-                return s32Ret;
-            }
+            SAMPLE_CHECK_EXPR_GOTO(s32Ret != HI_SUCCESS, FAIL, "OSD_Update fail, err(%#x)\n", s32Ret);
         }
     }
 
@@ -1006,6 +960,10 @@ HI_S32 HI_OSD_SetAttr(HI_S32 s32OsdIdx, const HI_OSD_ATTR_S* pstAttr)
     pthread_mutex_unlock(&pstOsdParam->mutexLock);
 
     return HI_SUCCESS;
+
+FAIL:
+    pthread_mutex_unlock(&pstOsdParam->mutexLock);
+    return s32Ret;
 }
 
 static HI_S32 OSD_Start(HI_S32 s32OsdIdx)
