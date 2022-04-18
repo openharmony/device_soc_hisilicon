@@ -8,9 +8,11 @@ ohos_prebuilt_shared_library("gpu_libs") {
     source = "lib/libmali.z.so"
   }
 
-  subsystem_name = "hdf"
-  part_name = "display_device_driver"
+  subsystem_name = "hisilicon_products"
+  part_name = "hisilicon_products"
   install_enable = true
+  install_images = [ chipset_base_dir ]
+  relative_install_dir = "chipsetsdk"
 
   symlink_target_name = [
     "libEGL.so",
