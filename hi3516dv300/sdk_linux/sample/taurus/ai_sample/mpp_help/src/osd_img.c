@@ -27,6 +27,7 @@
 #include "sample_media_ai.h"
 #include "vgs_img.h"
 #include "osd_img.h"
+#include "sample_comm_ive.h"
 
 /* OSD font library */
 static const HI_U8 G_FONT_LIB[] __attribute__((aligned(4))) = {
@@ -51,7 +52,6 @@ extern "C" {
 #define Y_COORDINATE            100
 #define BASE_YAER               1900
 #define MULTIPLE_NUM            100
-#define IsASCII(a) (((a)>=0x00&&(a)<=0x7F)?1:0)
 
 /*
  * Global object.
@@ -98,6 +98,11 @@ HI_U32 min(HI_U32 a, HI_U32 b)
     return (((a) > (b)) ? (b) : (a));
 }
 
+HI_S32 IsAscii(HI_S32 a)
+{
+    return (((a) >= 0x00 && (a) <= 0x7F) ? 1 : 0);
+}
+
 static HI_S32 OSD_GetNonASCNum(HI_CHAR* string, HI_S32 len)
 {
     HI_S32 i;
@@ -106,7 +111,7 @@ static HI_S32 OSD_GetNonASCNum(HI_CHAR* string, HI_S32 len)
         if (string[i] == '\0') {
             break;
         }
-        if (!IsASCII(string[i])) {
+        if (!IsAscii(string[i])) {
             i++;
             n++;
         }
@@ -152,7 +157,7 @@ static HI_VOID OSD_GetTimeStr(struct tm* pstTime, HI_CHAR* pazStr, HI_S32 s32Len
     /* Generate Time String */
     if (snprintf_s(pazStr, s32Len, s32Len - 1, "%04d-%02d-%02d %02d:%02d:%02d",
             pstTime->tm_year + BASE_YAER, pstTime->tm_mon + 1, pstTime->tm_mday,
-                pstTime->tm_hour, pstTime->tm_min, pstTime->tm_sec) < 0) {
+            pstTime->tm_hour, pstTime->tm_min, pstTime->tm_sec) < 0) {
         HI_ASSERT(0);
     }
 
@@ -375,13 +380,11 @@ static HI_S32 OSD_Ratio2Absolute(MPP_CHN_S stChn, const POINT_S* pstRatioCoor, P
         case HI_ID_VI: {
             VI_CHN_ATTR_S stChnAttr;
             s32Ret = HI_MPI_VI_GetChnAttr(stChn.s32DevId, stChn.s32ChnId, &stChnAttr);
-
             if (s32Ret != HI_SUCCESS) {
                 SAMPLE_PRT("HI_MPI_VI_GetChnAttr(%d,%d) fail,Error Code: [0x%08X]\n",
                     stChn.s32DevId, stChn.s32ChnId, s32Ret);
                 return s32Ret;
             }
-
             stImageSize = stChnAttr.stSize;
             break;
         }
@@ -393,7 +396,6 @@ static HI_S32 OSD_Ratio2Absolute(MPP_CHN_S stChn, const POINT_S* pstRatioCoor, P
                     stChn.s32DevId, stChn.s32ChnId, s32Ret);
                 return s32Ret;
             }
-
             stImageSize.u32Width = stChnAttr.u32Width;
             stImageSize.u32Height = stChnAttr.u32Height;
             break;
@@ -407,7 +409,6 @@ static HI_S32 OSD_Ratio2Absolute(MPP_CHN_S stChn, const POINT_S* pstRatioCoor, P
                     stChn.s32DevId, stChn.s32ChnId, s32Ret);
                 return s32Ret;
             }
-
             stImageSize.u32Width = stChnAttr.u32Width;
             stImageSize.u32Height = stChnAttr.u32Height;
 #else
@@ -419,12 +420,10 @@ static HI_S32 OSD_Ratio2Absolute(MPP_CHN_S stChn, const POINT_S* pstRatioCoor, P
         case HI_ID_VENC: {
             VENC_CHN_ATTR_S stChnAttr;
             s32Ret = HI_MPI_VENC_GetChnAttr(stChn.s32ChnId, &stChnAttr);
-
             if (s32Ret != HI_SUCCESS) {
                 SAMPLE_PRT("HI_MPI_VENC_GetChnAttr(%d) fail,Error Code: [0x%08X]\n", stChn.s32ChnId, s32Ret);
                 return s32Ret;
             }
-
             stImageSize.u32Width = stChnAttr.stVencAttr.u32PicWidth;
             stImageSize.u32Height = stChnAttr.stVencAttr.u32PicHeight;
             break;
@@ -437,7 +436,6 @@ static HI_S32 OSD_Ratio2Absolute(MPP_CHN_S stChn, const POINT_S* pstRatioCoor, P
                     stChn.s32DevId, stChn.s32ChnId, s32Ret);
                 return s32Ret;
             }
-
             stImageSize.u32Width = stChnAttr.stRect.u32Width;
             stImageSize.u32Height = stChnAttr.stRect.u32Height;
             break;
@@ -500,12 +498,9 @@ static HI_S32 OSD_Update(RGN_HANDLE RgnHdl, const HI_OSD_ATTR_S* pstAttr)
         }
 
         stRgnChnAttr.bShow = pstAttr->astDispAttr[s32DispIdx].bShow;
-
         POINT_S stStartPos;
-
         if (pstAttr->astDispAttr[s32DispIdx].enCoordinate == HI_OSD_COORDINATE_RATIO_COOR) {
             s32Ret = OSD_Ratio2Absolute(stChn, &pstAttr->astDispAttr[s32DispIdx].stStartPos, &stStartPos);
-
             if (s32Ret != HI_SUCCESS) {
                 SAMPLE_PRT("OSD_Ratio2Absolute fail,RgnHdl[%d] Error Code: [0x%08X]\n", RgnHdl, s32Ret);
                 return s32Ret;
@@ -545,7 +540,6 @@ static HI_S32 OSD_UpdateTextBitmap(RGN_HANDLE RgnHdl, HI_OSD_CONTENT_S* pstConte
 
     RGN_CANVAS_INFO_S stCanvasInfo;
     s32Ret = HI_MPI_RGN_GetCanvasInfo(RgnHdl, &stCanvasInfo);
-
     if (s32Ret != HI_SUCCESS) {
         SAMPLE_PRT("HI_MPI_RGN_GetCanvasInfo fail,RgnHdl[%d] Error Code: [0x%08X]\n", RgnHdl, s32Ret);
         return s32Ret;
@@ -731,10 +725,8 @@ static HI_S32 OSD_CreateRGN(RGN_HANDLE RgnHdl, const HI_OSD_ATTR_S* pstAttr)
     }
 
     s32Ret = HI_MPI_RGN_Create(RgnHdl, &stRgnAttr);
-    if (s32Ret != HI_SUCCESS) {
-        SAMPLE_PRT("HI_MPI_RGN_Create fail,RgnHdl[%d] Error Code: [0x%08X]\n", RgnHdl, s32Ret);
-        return s32Ret;
-    }
+    SAMPLE_CHECK_EXPR_RET(s32Ret != HI_SUCCESS, s32Ret,
+        "HI_MPI_RGN_Create fail,RgnHdl[%d] Error Code: [0x%08X]\n", RgnHdl, s32Ret);
 
     if (pstAttr->stContent.enType == HI_OSD_TYPE_BITMAP) {
         BITMAP_S stBitmap;
@@ -743,16 +735,11 @@ static HI_S32 OSD_CreateRGN(RGN_HANDLE RgnHdl, const HI_OSD_ATTR_S* pstAttr)
         stBitmap.u32Height = pstAttr->stContent.stBitmap.u32Height;
         stBitmap.pData = pstAttr->stContent.stBitmap.pvData;
         s32Ret = HI_MPI_RGN_SetBitMap(RgnHdl, &stBitmap);
-        if (s32Ret != HI_SUCCESS) {
-            SAMPLE_PRT("HI_MPI_RGN_SetBitMap fail,RgnHdl[%d] Error Code: [0x%08X]\n", RgnHdl, s32Ret);
-            return s32Ret;
-        }
+        SAMPLE_CHECK_EXPR_RET(s32Ret != HI_SUCCESS, s32Ret,
+            "HI_MPI_RGN_SetBitMap fail,RgnHdl[%d] Error Code: [0x%08X]\n", RgnHdl, s32Ret);
     } else {
         s32Ret = OSD_UpdateTextBitmap(RgnHdl, (HI_OSD_CONTENT_S*)&pstAttr->stContent);
-        if (HI_SUCCESS != s32Ret) {
-            SAMPLE_PRT("OSD_UpdateTextBitmap failed\n");
-            return s32Ret;
-        }
+        SAMPLE_CHECK_EXPR_RET(s32Ret != HI_SUCCESS, s32Ret, "UpdateTextBitmap fail, ret=%x\n", s32Ret);
     }
 
     for (s32DispIdx = 0; s32DispIdx < pstAttr->u32DispNum; ++s32DispIdx) {
@@ -779,14 +766,12 @@ static HI_VOID* OSD_TimeUpdate(HI_VOID* pvParam)
     prctl(PR_SET_NAME, __FUNCTION__, 0, 0, 0);
 
     while (s_bOSDTimeRun) {
-        time(&nowTime);
-
+        nowTime = time(NULL); // also means time(&nowTime)
         if (nowTime == lastTime) {
             usleep(10000); // 10000:usleep time
             continue;
         } else {
             localtime_r(&nowTime, &stTime);
-
             for (s32OsdIdx = 0; s32OsdIdx < HI_OSD_MAX_CNT; ++s32OsdIdx) {
                 pthread_mutex_lock(&s_stOSDParam[s32OsdIdx].mutexLock);
                 if (s_stOSDParam[s32OsdIdx].stAttr.stContent.enType ==
@@ -877,7 +862,7 @@ static int OsdInitFont(HI_CHAR *character, HI_U8 **fontMod, HI_S32 *fontModLen)
         return HI_FAILURE;
     }
     // Return true if the parameter is an ASCII character, otherwise NULL (0)
-    if (!isascii(character[0])) {
+    if (!IsAscii(character[0])) {
         return HI_FAILURE;
     }
     HI_U32 offset = (character[0] - baseChar) * (OSD_FONT_MOD_H * OSD_FONT_MOD_W / HI_BYTE_BITS);
@@ -997,7 +982,6 @@ HI_S32 HI_OSD_SetAttr(HI_S32 s32OsdIdx, const HI_OSD_ATTR_S* pstAttr)
                 stBitmap.u32Height = pstAttr->stContent.stBitmap.u32Height;
                 stBitmap.pData = pstAttr->stContent.stBitmap.pvData;
                 s32Ret = HI_MPI_RGN_SetBitMap(s32OsdIdx, &stBitmap);
-
                 if (s32Ret != HI_SUCCESS) {
                     pthread_mutex_unlock(&pstOsdParam->mutexLock);
                     SAMPLE_PRT("HI_MPI_RGN_SetBitMap fail,RgnHdl[%d] Error Code: [0x%08X]\n", s32OsdIdx, s32Ret);

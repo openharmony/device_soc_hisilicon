@@ -35,9 +35,6 @@ extern "C" {
 /* String OSD Maximum Length */
 #define HI_OSD_MAX_STR_LEN  (64)
 
-/** Value Align */
-#define HI_APPCOMM_ALIGN(value, base) (((value) + (base)-1) / (base) * (base))
-
 /* typedef */
 typedef HI_S32 HI_ERRNO;
 
