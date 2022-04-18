@@ -506,6 +506,38 @@ HI_VOID OSD_PuBmData_Cal(HI_OSD_CONTENT_S* pstContent, HI_U16* puBmData, HI_S32 
     return;
 }
 
+HI_S32 OSD_Bitmap_Cal(HI_OSD_CONTENT_S* pstContent, HI_S32 NonASCNum, HI_U16* puBmData)
+{
+    HI_S32 NonASCShow = 0;
+    for (s32BmCol = 0; s32BmCol < pstContent->stBitmap.u32Width; ++s32BmCol) {
+        /* Bitmap Data Offset for the point */
+        HI_S32 s32BmDataIdx = s32BmRow * s_stOSDTextBitMap.stCanvasInfo.u32Stride / 2 + s32BmCol;
+        /* Character Index in Text String */
+        HI_S32 s32CharIdx = s32BmCol / pstContent->stFontSize.u32Width;
+        HI_S32 s32StringIdx = s32CharIdx+NonASCShow * (NOASCII_CHARACTER_BYTES - 1);
+        if (NonASCNum > 0 && s32CharIdx > 0) {
+            NonASCShow = OSD_GetNonASCNum(pstContent->szStr, s32StringIdx);
+            s32StringIdx = s32CharIdx+NonASCShow * (NOASCII_CHARACTER_BYTES - 1);
+        }
+        /* Point Row/Col Index in Character */
+        HI_S32 s32CharCol = (s32BmCol - (pstContent->stFontSize.u32Width * s32CharIdx)) *
+            OSD_LIB_FONT_W / pstContent->stFontSize.u32Width;
+        HI_S32 s32CharRow = s32BmRow * OSD_LIB_FONT_H / pstContent->stFontSize.u32Height;
+        HI_S32 s32HexOffset = s32CharRow * OSD_LIB_FONT_W / BYTE_BITS + s32CharCol / BYTE_BITS;
+        HI_S32 s32BitOffset = s32CharCol % BYTE_BITS;
+
+        if (s_stOSDFonts.pfnGetFontMod(&pstContent->szStr[s32StringIdx], &FontMod, &FontModLen)
+            == HI_SUCCESS) {
+            if (FontMod != NULL && s32HexOffset < FontModLen) {
+                OSD_PuBmData_Cal(pstContent, puBmData, s32HexOffset, s32BmDataIdx, s32BitOffset);
+                continue;
+            }
+        }
+        SAMPLE_PRT("GetFontMod Fail\n");
+        return HI_FAILURE;
+    }
+}
+
 HI_S32 OSD_Generate_Bitmap(RGN_HANDLE RgnHdl, HI_OSD_CONTENT_S* pstContent)
 {
     HI_S32 s32Ret;
@@ -522,35 +554,7 @@ HI_S32 OSD_Generate_Bitmap(RGN_HANDLE RgnHdl, HI_OSD_CONTENT_S* pstContent)
     HI_U16* puBmData = (HI_U16*)(HI_UL)s_stOSDTextBitMap.stCanvasInfo.u64VirtAddr;
 
     for (s32BmRow = 0; s32BmRow < pstContent->stBitmap.u32Height; ++s32BmRow) {
-        HI_S32 NonASCShow = 0;
-        for (s32BmCol = 0; s32BmCol < pstContent->stBitmap.u32Width; ++s32BmCol) {
-            /* Bitmap Data Offset for the point */
-            HI_S32 s32BmDataIdx = s32BmRow * s_stOSDTextBitMap.stCanvasInfo.u32Stride / 2 + s32BmCol;
-            /* Character Index in Text String */
-            HI_S32 s32CharIdx = s32BmCol / pstContent->stFontSize.u32Width;
-            HI_S32 s32StringIdx = s32CharIdx+NonASCShow * (NOASCII_CHARACTER_BYTES - 1);
-            if (NonASCNum > 0 && s32CharIdx > 0) {
-                NonASCShow = OSD_GetNonASCNum(pstContent->szStr, s32StringIdx);
-                s32StringIdx = s32CharIdx+NonASCShow * (NOASCII_CHARACTER_BYTES - 1);
-            }
-            /* Point Row/Col Index in Character */
-            HI_S32 s32CharCol = (s32BmCol - (pstContent->stFontSize.u32Width * s32CharIdx)) *
-                OSD_LIB_FONT_W / pstContent->stFontSize.u32Width;
-            HI_S32 s32CharRow = s32BmRow * OSD_LIB_FONT_H / pstContent->stFontSize.u32Height;
-            HI_S32 s32HexOffset = s32CharRow * OSD_LIB_FONT_W / BYTE_BITS + s32CharCol / BYTE_BITS;
-            HI_S32 s32BitOffset = s32CharCol % BYTE_BITS;
-
-            if (s_stOSDFonts.pfnGetFontMod(&pstContent->szStr[s32StringIdx], &FontMod, &FontModLen)
-                == HI_SUCCESS) {
-                if (FontMod != NULL && s32HexOffset < FontModLen) {
-                    OSD_PuBmData_Cal(pstContent, puBmData, s32HexOffset, s32BmDataIdx, s32BitOffset);
-                    continue;
-                }
-            }
-            SAMPLE_PRT("GetFontMod Fail\n");
-            return HI_FAILURE;
-        }
-
+        OSD_Bitmap_Cal(pstContent, NonASCNum, puBmData);
         for (s32BmCol = pstContent->stBitmap.u32Width;
             s32BmCol < s_stOSDParam[RgnHdl].stMaxSize.u32Width; ++s32BmCol) {
             HI_S32 s32BmDataIdx = s32BmRow * s_stOSDTextBitMap.stCanvasInfo.u32Stride / 2 + s32BmCol;
