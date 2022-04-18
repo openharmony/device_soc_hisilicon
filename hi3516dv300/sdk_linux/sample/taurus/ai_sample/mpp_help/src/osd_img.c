@@ -85,6 +85,7 @@ static HI_S32 FontModLen = 0;
 /* Bitmap Row/Col Index */
 static HI_S32 s32BmRow;
 static HI_S32 s32BmCol;
+struct tm stTime = {0};
 
 /* OSD Font Step In Lib, in bytes */
 #define OSD_LIB_FONT_W (s_stOSDFonts.u32FontWidth)
@@ -699,6 +700,36 @@ static HI_S32 OSD_CreateRGN(RGN_HANDLE RgnHdl, const HI_OSD_ATTR_S* pstAttr)
     return HI_SUCCESS;
 }
 
+HI_VOID OSD_Update_Relate_Info(HI_S32 s32OsdIdx)
+{
+    HI_S32 s32Ret = 0;
+
+    for (s32OsdIdx = 0; s32OsdIdx < HI_OSD_MAX_CNT; ++s32OsdIdx) {
+        pthread_mutex_lock(&s_stOSDParam[s32OsdIdx].mutexLock);
+        if (s_stOSDParam[s32OsdIdx].stAttr.stContent.enType ==
+            HI_OSD_TYPE_TIME && s_stOSDParam[s32OsdIdx].bOn) {
+            /* Update OSD Time String */
+            OSD_GetTimeStr(&stTime,
+                s_stOSDParam[s32OsdIdx].stAttr.stContent.szStr, HI_OSD_MAX_STR_LEN);
+            /* Update OSD Text Bitmap */
+            s32Ret = OSD_UpdateTextBitmap(s32OsdIdx, &s_stOSDParam[s32OsdIdx].stAttr.stContent);
+            if (HI_SUCCESS != s32Ret) {
+                pthread_mutex_unlock(&s_stOSDParam[s32OsdIdx].mutexLock);
+                SAMPLE_PRT("Update Text Bitmap failed\n");
+                continue;
+            }
+            /* Update OSD Attribute */
+            s32Ret = OSD_Update(s32OsdIdx, &s_stOSDParam[s32OsdIdx].stAttr);
+            if (HI_SUCCESS != s32Ret) {
+                SAMPLE_PRT("Update Attribute failed\n");
+            }
+        }
+        pthread_mutex_unlock(&s_stOSDParam[s32OsdIdx].mutexLock);
+    }
+
+    return;
+}
+
 /**
  * @brief   time osd update task
  * @param[in]pvParam : nonuse
@@ -710,7 +741,6 @@ static HI_VOID* OSD_TimeUpdate(HI_VOID* pvParam)
     HI_S32 s32OsdIdx = 0;
     time_t nowTime = 0;
     time_t lastTime = 0;
-    struct tm stTime = {0};
     prctl(PR_SET_NAME, __FUNCTION__, 0, 0, 0);
 
     while (s_bOSDTimeRun) {
@@ -720,28 +750,7 @@ static HI_VOID* OSD_TimeUpdate(HI_VOID* pvParam)
             continue;
         } else {
             localtime_r(&nowTime, &stTime);
-            for (s32OsdIdx = 0; s32OsdIdx < HI_OSD_MAX_CNT; ++s32OsdIdx) {
-                pthread_mutex_lock(&s_stOSDParam[s32OsdIdx].mutexLock);
-                if (s_stOSDParam[s32OsdIdx].stAttr.stContent.enType ==
-                    HI_OSD_TYPE_TIME && s_stOSDParam[s32OsdIdx].bOn) {
-                    /* Update OSD Time String */
-                    OSD_GetTimeStr(&stTime,
-                        s_stOSDParam[s32OsdIdx].stAttr.stContent.szStr, HI_OSD_MAX_STR_LEN);
-                    /* Update OSD Text Bitmap */
-                    s32Ret = OSD_UpdateTextBitmap(s32OsdIdx, &s_stOSDParam[s32OsdIdx].stAttr.stContent);
-                    if (HI_SUCCESS != s32Ret) {
-                        pthread_mutex_unlock(&s_stOSDParam[s32OsdIdx].mutexLock);
-                        SAMPLE_PRT("Update Text Bitmap failed\n");
-                        continue;
-                    }
-                    /* Update OSD Attribute */
-                    s32Ret = OSD_Update(s32OsdIdx, &s_stOSDParam[s32OsdIdx].stAttr);
-                    if (HI_SUCCESS != s32Ret) {
-                        SAMPLE_PRT("Update Attribute failed\n");
-                    }
-                }
-                pthread_mutex_unlock(&s_stOSDParam[s32OsdIdx].mutexLock);
-            }
+            OSD_Update_Relate_Info(s32OsdIdx);
             lastTime = nowTime; /* update time */
         }
         usleep(500000); // 500000: usleep time
@@ -754,9 +763,6 @@ static HI_VOID* OSD_TimeUpdate(HI_VOID* pvParam)
  * @brief    osd module initialization, eg. create time osd update task.
  * @param[in] pstFonts:osd fonts lib
  * @return 0 success,non-zero error code.
- * @exception    None
- * @author    HiMobileCam Reference Develop Team
- * @date      2017/12/18
  */
 HI_S32 HI_OSD_Init(const HI_OSD_FONTS_S* pstFonts)
 {
@@ -837,41 +843,8 @@ int OsdLibInit(void)
 #   endif
 }
 
-/*
- * @brief    set osd attribute.
- * @param[in] s32OsdIdx:osd index, range[0,HI_OSD_MAX_CNT)
- * @param[in] pstAttr:osd configure attribute
- * @return 0 success,non-zero error code.
- * @exception    None
- * @author    HiMobileCam Reference Develop Team
- * @date      2017/12/18
- */
-HI_S32 HI_OSD_SetAttr(HI_S32 s32OsdIdx, const HI_OSD_ATTR_S* pstAttr)
+HI_VOID Osd_Param_Config(const HI_OSD_ATTR_S* pstAttr, OSD_PARAM_S* pstOsdParam)
 {
-    /* Check Module Init or not */
-    HI_ASSERT(HI_TRUE == s_bOSDInitFlg);
-    /* Check Input Param */
-    HI_ASSERT(s32OsdIdx >= 0);
-    HI_ASSERT(HI_OSD_MAX_CNT > s32OsdIdx);
-    HI_ASSERT(pstAttr);
-    HI_ASSERT(HI_OSD_MAX_DISP_CNT >= pstAttr->u32DispNum);
-
-    if (HI_OSD_TYPE_BITMAP == pstAttr->stContent.enType) {
-        if (!pstAttr->stContent.stBitmap.pvData) {
-            return HI_FAILURE;
-        }
-    } else {
-        if (s_stOSDFonts.pfnGetFontMod == NULL) {
-            SAMPLE_PRT("The font library is not registered,only support bitmaps OSD\n");
-            return HI_FAILURE;
-        }
-    }
-
-    HI_S32 s32Ret = HI_SUCCESS;
-    OSD_PARAM_S* pstOsdParam = &s_stOSDParam[s32OsdIdx];
-    pthread_mutex_lock(&pstOsdParam->mutexLock);
-    HI_BOOL bOn = pstOsdParam->bOn;
-
     /* Update Attribute */
     pstOsdParam->stAttr.stContent.u32Color = pstAttr->stContent.u32Color;
     pstOsdParam->stAttr.stContent.u32BgColor = pstAttr->stContent.u32BgColor;
@@ -903,6 +876,81 @@ HI_S32 HI_OSD_SetAttr(HI_S32 s32OsdIdx, const HI_OSD_ATTR_S* pstAttr)
     pstOsdParam->stAttr.stContent.stBitmap.u32Height = pstAttr->stContent.stBitmap.u32Height;
     pstOsdParam->stAttr.stContent.enType = pstAttr->stContent.enType;
 
+    return;
+}
+
+static HI_S32 OSD_Update_RGN_Content(const HI_OSD_ATTR_S* pstAttr, OSD_PARAM_S* pstOsdParam, HI_S32 s32OsdIdx)
+{
+    HI_S32 s32Ret = HI_SUCCESS;
+    /* Update RGN Content */
+    if (pstAttr->stContent.enType == HI_OSD_TYPE_BITMAP) {
+        BITMAP_S stBitmap;
+        stBitmap.enPixelFormat = PIXEL_FORMAT_ARGB_1555;
+        stBitmap.u32Width = pstAttr->stContent.stBitmap.u32Width;
+        stBitmap.u32Height = pstAttr->stContent.stBitmap.u32Height;
+        stBitmap.pData = pstAttr->stContent.stBitmap.pvData;
+        s32Ret = HI_MPI_RGN_SetBitMap(s32OsdIdx, &stBitmap);
+        SAMPLE_CHECK_EXPR_GOTO(s32Ret != HI_SUCCESS, FAIL, "HI_MPI_RGN_SetBitMap. s32Ret: 0x%x\n", s32Ret);
+    } else {
+        /* Time/String Type: Update text bitmap */
+        s32Ret = OSD_UpdateTextBitmap(s32OsdIdx, (HI_OSD_CONTENT_S*)&pstOsdParam->stAttr.stContent);
+        SAMPLE_CHECK_EXPR_GOTO(s32Ret != HI_SUCCESS, FAIL, "OSD_UpdateTextBitmap fail, err(%#x)\n", s32Ret);
+    }
+
+    HI_S32 s32DispIdx = 0;
+    for (s32DispIdx = 0; s32DispIdx < pstAttr->u32DispNum ; ++s32DispIdx) {
+        if (HI_TRUE == pstAttr->astDispAttr[s32DispIdx].bShow && HI_FALSE ==
+            pstOsdParam->stAttr.astDispAttr[s32DispIdx].bShow) {
+            OSD_RGNAttach(s32OsdIdx, &pstAttr->astDispAttr[s32DispIdx]);
+        } else if (HI_FALSE == pstAttr->astDispAttr[s32DispIdx].bShow && HI_TRUE ==
+            pstOsdParam->stAttr.astDispAttr[s32DispIdx].bShow) {
+            OSD_RGNDetach(s32OsdIdx, &pstOsdParam->stAttr.astDispAttr[s32DispIdx]);
+        }
+    }
+    s32Ret = OSD_Update(s32OsdIdx, pstAttr);
+    SAMPLE_CHECK_EXPR_GOTO(s32Ret != HI_SUCCESS, FAIL, "OSD_Update fail, err(%#x)\n", s32Ret);
+
+    return s32Ret;
+
+FAIL:
+    pthread_mutex_unlock(&pstOsdParam->mutexLock);
+    return s32Ret;
+}
+
+/*
+ * @brief    set osd attribute.
+ * @param[in] s32OsdIdx:osd index, range[0,HI_OSD_MAX_CNT)
+ * @param[in] pstAttr:osd configure attribute
+ * @return 0 success,non-zero error code.
+ */
+HI_S32 HI_OSD_SetAttr(HI_S32 s32OsdIdx, const HI_OSD_ATTR_S* pstAttr)
+{
+    /* Check Module Init or not */
+    HI_ASSERT(HI_TRUE == s_bOSDInitFlg);
+    /* Check Input Param */
+    HI_ASSERT(s32OsdIdx >= 0);
+    HI_ASSERT(HI_OSD_MAX_CNT > s32OsdIdx);
+    HI_ASSERT(pstAttr);
+    HI_ASSERT(HI_OSD_MAX_DISP_CNT >= pstAttr->u32DispNum);
+
+    if (HI_OSD_TYPE_BITMAP == pstAttr->stContent.enType) {
+        if (!pstAttr->stContent.stBitmap.pvData) {
+            return HI_FAILURE;
+        }
+    } else {
+        if (s_stOSDFonts.pfnGetFontMod == NULL) {
+            SAMPLE_PRT("The font library is not registered,only support bitmaps OSD\n");
+            return HI_FAILURE;
+        }
+    }
+
+    HI_S32 s32Ret = HI_SUCCESS;
+    OSD_PARAM_S* pstOsdParam = &s_stOSDParam[s32OsdIdx];
+    pthread_mutex_lock(&pstOsdParam->mutexLock);
+    HI_BOOL bOn = pstOsdParam->bOn;
+
+    /* Update Attribute */
+    Osd_Param_Config(pstAttr, pstOsdParam);
     if (bOn) {
         if (pstOsdParam->stMaxSize.u32Width < pstOsdParam->stAttr.stContent.stBitmap.u32Width
             || pstOsdParam->stMaxSize.u32Height < pstOsdParam->stAttr.stContent.stBitmap.u32Height) {
@@ -922,33 +970,7 @@ HI_S32 HI_OSD_SetAttr(HI_S32 s32OsdIdx, const HI_OSD_ATTR_S* pstAttr)
                 return s32Ret;
             }
         } else {
-            /* Update RGN Content */
-            if (pstAttr->stContent.enType == HI_OSD_TYPE_BITMAP) {
-                BITMAP_S stBitmap;
-                stBitmap.enPixelFormat = PIXEL_FORMAT_ARGB_1555;
-                stBitmap.u32Width = pstAttr->stContent.stBitmap.u32Width;
-                stBitmap.u32Height = pstAttr->stContent.stBitmap.u32Height;
-                stBitmap.pData = pstAttr->stContent.stBitmap.pvData;
-                s32Ret = HI_MPI_RGN_SetBitMap(s32OsdIdx, &stBitmap);
-                SAMPLE_CHECK_EXPR_GOTO(s32Ret != HI_SUCCESS, FAIL, "HI_MPI_RGN_SetBitMap. s32Ret: 0x%x\n", s32Ret);
-            } else {
-                /* Time/String Type: Update text bitmap */
-                s32Ret = OSD_UpdateTextBitmap(s32OsdIdx, (HI_OSD_CONTENT_S*)&pstOsdParam->stAttr.stContent);
-                SAMPLE_CHECK_EXPR_GOTO(s32Ret != HI_SUCCESS, FAIL, "OSD_UpdateTextBitmap fail, err(%#x)\n", s32Ret);
-            }
-
-            HI_S32 s32DispIdx = 0;
-            for (s32DispIdx = 0; s32DispIdx < pstAttr->u32DispNum ; ++s32DispIdx) {
-                if (HI_TRUE == pstAttr->astDispAttr[s32DispIdx].bShow && HI_FALSE ==
-                    pstOsdParam->stAttr.astDispAttr[s32DispIdx].bShow) {
-                    OSD_RGNAttach(s32OsdIdx, &pstAttr->astDispAttr[s32DispIdx]);
-                } else if (HI_FALSE == pstAttr->astDispAttr[s32DispIdx].bShow && HI_TRUE ==
-                    pstOsdParam->stAttr.astDispAttr[s32DispIdx].bShow) {
-                    OSD_RGNDetach(s32OsdIdx, &pstOsdParam->stAttr.astDispAttr[s32DispIdx]);
-                }
-            }
-            s32Ret = OSD_Update(s32OsdIdx, pstAttr);
-            SAMPLE_CHECK_EXPR_GOTO(s32Ret != HI_SUCCESS, FAIL, "OSD_Update fail, err(%#x)\n", s32Ret);
+            OSD_Update_RGN_Content(pstAttr, pstOsdParam, s32OsdIdx);
         }
     }
 
@@ -963,10 +985,6 @@ HI_S32 HI_OSD_SetAttr(HI_S32 s32OsdIdx, const HI_OSD_ATTR_S* pstAttr)
     pthread_mutex_unlock(&pstOsdParam->mutexLock);
 
     return HI_SUCCESS;
-
-FAIL:
-    pthread_mutex_unlock(&pstOsdParam->mutexLock);
-    return s32Ret;
 }
 
 static HI_S32 OSD_Start(HI_S32 s32OsdIdx)
@@ -992,9 +1010,6 @@ static HI_S32 OSD_Start(HI_S32 s32OsdIdx)
  * @brief    start osd by index.
  * @param[in] s32OsdIdx:osd index, range[0,HI_OSD_MAX_CNT)
  * @return 0 success,non-zero error code.
- * @exception    None
- * @author    HiMobileCam Reference Develop Team
- * @date      2017/12/18
  */
 HI_S32 HI_OSD_Start(HI_S32 s32OsdIdx)
 {
