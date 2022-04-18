@@ -26,8 +26,8 @@
 #include "sample_comm_ive.h"
 #include "sample_media_ai.h"
 #include "vgs_img.h"
-#include "osd_img.h"
 #include "sample_comm_ive.h"
+#include "osd_img.h"
 
 /* OSD font library */
 static const HI_U8 G_FONT_LIB[] __attribute__((aligned(4))) = {
@@ -156,7 +156,7 @@ static HI_VOID OSD_GetTimeStr(struct tm* pstTime, HI_CHAR* pazStr, HI_S32 s32Len
 
     /* Generate Time String */
     if (snprintf_s(pazStr, s32Len, s32Len - 1, "%04d-%02d-%02d %02d:%02d:%02d",
-            pstTime->tm_year + BASE_YAER, pstTime->tm_mon + 1, pstTime->tm_mday,
+        pstTime->tm_year + BASE_YAER, pstTime->tm_mon + 1, pstTime->tm_mday,
             pstTime->tm_hour, pstTime->tm_min, pstTime->tm_sec) < 0) {
         HI_ASSERT(0);
     }
@@ -375,7 +375,7 @@ static HI_S32 OSD_Ratio2Absolute(MPP_CHN_S stChn, const POINT_S* pstRatioCoor, P
         SAMPLE_PRT("invalide Ratio coordinate(%d,%d)\n", pstRatioCoor->s32X, pstRatioCoor->s32Y);
         return HI_EINVAL;
     }
-
+    printf("=======================stChn.enModId:%d===================\n", stChn.enModId);
     switch (stChn.enModId) {
         case HI_ID_VI: {
             VI_CHN_ATTR_S stChnAttr;
@@ -474,37 +474,22 @@ static HI_S32 OSD_Update(RGN_HANDLE RgnHdl, const HI_OSD_ATTR_S* pstAttr)
             case HI_OSD_BINDMOD_VPSS:
                 stChn.enModId = HI_ID_VPSS;
                 break;
-            case HI_OSD_BINDMOD_AVS:
-                stChn.enModId = HI_ID_AVS;
-                break;
-            case HI_OSD_BINDMOD_VENC:
-                stChn.s32DevId = 0;
-                stChn.enModId = HI_ID_VENC;
-                break;
             case HI_OSD_BINDMOD_VO:
                 stChn.enModId = HI_ID_VO;
                 break;
             default:
-                SAMPLE_PRT("RgnHdl[%d] invalide bind mode [%d]\n", RgnHdl,
-                    pstAttr->astDispAttr[s32DispIdx].enBindedMod);
+                SAMPLE_PRT("RgnHdl[%d] invalide bind mode [%d]\n", RgnHdl, pstAttr->astDispAttr[s32DispIdx].enBindedMod);
                 return HI_EINVAL;
         }
 
         s32Ret = HI_MPI_RGN_GetDisplayAttr(RgnHdl, &stChn, &stRgnChnAttr);
-        if (s32Ret != HI_SUCCESS) {
-            SAMPLE_PRT("HI_MPI_RGN_GetDisplayAttr fail,RgnHdl[%d] stChn[%d,%d,%d] Error Code: [0x%08X]\n",
-                RgnHdl, stChn.enModId, stChn.s32DevId, stChn.s32ChnId, s32Ret);
-            return s32Ret;
-        }
+        SAMPLE_CHECK_EXPR_RET(s32Ret != HI_SUCCESS, s32Ret, "GetDisplayAttr fail, s32Ret:[0x%08X]\n", s32Ret);
 
         stRgnChnAttr.bShow = pstAttr->astDispAttr[s32DispIdx].bShow;
         POINT_S stStartPos;
         if (pstAttr->astDispAttr[s32DispIdx].enCoordinate == HI_OSD_COORDINATE_RATIO_COOR) {
             s32Ret = OSD_Ratio2Absolute(stChn, &pstAttr->astDispAttr[s32DispIdx].stStartPos, &stStartPos);
-            if (s32Ret != HI_SUCCESS) {
-                SAMPLE_PRT("OSD_Ratio2Absolute fail,RgnHdl[%d] Error Code: [0x%08X]\n", RgnHdl, s32Ret);
-                return s32Ret;
-            }
+            SAMPLE_CHECK_EXPR_RET(s32Ret != HI_SUCCESS, s32Ret, "Ratio2Absolute fail, s32Ret:[0x%08X]\n", s32Ret);
         } else {
             stStartPos = pstAttr->astDispAttr[s32DispIdx].stStartPos;
         }
@@ -522,11 +507,7 @@ static HI_S32 OSD_Update(RGN_HANDLE RgnHdl, const HI_OSD_ATTR_S* pstAttr)
         }
 
         s32Ret = HI_MPI_RGN_SetDisplayAttr(RgnHdl, &stChn, &stRgnChnAttr);
-        if (s32Ret != HI_SUCCESS) {
-            SAMPLE_PRT("HI_MPI_RGN_SetDisplayAttr fail,RgnHdl[%d] stChn[%d,%d,%d] Error Code: [0x%08X]\n",
-                RgnHdl, stChn.enModId, stChn.s32DevId, stChn.s32ChnId, s32Ret);
-            return s32Ret;
-        }
+        SAMPLE_CHECK_EXPR_RET(s32Ret != HI_SUCCESS, s32Ret, "SetDisplayAttr fail, s32Ret:[0x%08X]\n", s32Ret);
     }
 
     return HI_SUCCESS;
