@@ -27,6 +27,8 @@
 #include "posix_help.h"
 #include "audio_aac_adp.h"
 #include "base_interface.h"
+#include "osd_img.h"
+#include "cnn_trash_classify.h"
 
 #ifdef __cplusplus
 #if __cplusplus
@@ -42,6 +44,8 @@ extern "C" {
 
 #define FRM_WIDTH           256
 #define FRM_HEIGHT          256
+#define TXT_BEGX            20
+#define TXT_BEGY            20
 
 static int g_num = 108;
 static int g_count = 0;
@@ -57,6 +61,8 @@ static int g_count = 0;
 
 static HI_BOOL g_bAudioProcessStopSignal = HI_FALSE;
 static pthread_t g_audioProcessThread = 0;
+static OsdSet* g_osdsTrash = NULL;
+static HI_S32 g_osd0Trash = -1;
 
 static SkPair g_stmChn = {
     .in = -1,
@@ -96,11 +102,19 @@ static HI_VOID* GetAudioFileName(HI_VOID* arg)
     return NULL;
 }
 
-HI_S32 CnnTrashClassifyLoadModel(uintptr_t* model)
+HI_S32 CnnTrashClassifyLoadModel(uintptr_t* model, OsdSet* osds)
 {
     SAMPLE_SVP_NNIE_CFG_S *self = NULL;
     HI_S32 ret;
     HI_CHAR audioThreadName[BUFFER_SIZE] = {0};
+
+    ret = OsdLibInit();
+    HI_ASSERT(ret == HI_SUCCESS);
+
+    g_osdsTrash = osds;
+    HI_ASSERT(g_osdsTrash);
+    g_osd0Trash = OsdsCreateRgn(g_osdsTrash);
+    HI_ASSERT(g_osd0Trash >= 0);
 
     ret = CnnCreate(&self, MODEL_FILE_TRASH);
     *model = ret < 0 ? 0 : (uintptr_t)self;
@@ -127,6 +141,7 @@ HI_S32 CnnTrashClassifyUnloadModel(uintptr_t model)
 {
     CnnDestroy((SAMPLE_SVP_NNIE_CFG_S*)model);
     SAMPLE_PRT("unload trash classify model success\n");
+    OsdsClear(g_osdsTrash);
 
     if (GetCfgBool("audio_player:support_audio", true)) {
         SkPairDestroy(&g_stmChn);
@@ -139,9 +154,12 @@ HI_S32 CnnTrashClassifyUnloadModel(uintptr_t model)
     return HI_SUCCESS;
 }
 
-static HI_S32 CnnTrashClassifyFlag(const RecogNumInfo items[], HI_S32 itemNum)
+static HI_S32 CnnTrashClassifyFlag(const RecogNumInfo items[], HI_S32 itemNum, HI_CHAR* buf, HI_S32 size)
 {
+    HI_S32 offset = 0;
     HI_CHAR *trashName = NULL;
+
+    offset += snprintf_s(buf + offset, size - offset, size - offset - 1, "trash classify: {");
     for (HI_U32 i = 0; i < itemNum; i++) {
         const RecogNumInfo *item = &items[i];
         uint32_t score = item->score * HI_PER_BASE / SCORE_MAX;
@@ -157,14 +175,12 @@ static HI_S32 CnnTrashClassifyFlag(const RecogNumInfo items[], HI_S32 itemNum)
             case 4u:
             case 5u:
                 trashName = "Kitchen Waste";
-                SAMPLE_PRT("----trash name----:%s\n", trashName);
                 break;
             case 6u:
             case 7u:
             case 8u:
             case 9u:
                 trashName = "Harmful Waste";
-                SAMPLE_PRT("----trash name----:%s\n", trashName);
                 break;
             case 10u:
             case 11u:
@@ -173,22 +189,23 @@ static HI_S32 CnnTrashClassifyFlag(const RecogNumInfo items[], HI_S32 itemNum)
             case 14u:
             case 15u:
                 trashName = "Recyle Waste";
-                SAMPLE_PRT("----trash name----:%s\n", trashName);
                 break;
             case 16u:
             case 17u:
             case 18u:
             case 19u:
                 trashName = "Other Waste";
-                SAMPLE_PRT("----trash name----:%s\n", trashName);
                 break;
             default:
                 trashName = "Unkown Waste";
-                SAMPLE_PRT("----trash name----:%s\n", trashName);
                 break;
         }
+        offset += snprintf_s(buf + offset, size - offset, size - offset - 1,
+            "%s%s %u:%u%%", (i == 0 ? " " : ", "), trashName, (int)item->num, (int)score);
+        HI_ASSERT(offset < size);
     }
-
+    offset += snprintf_s(buf + offset, size - offset, size - offset - 1, " }");
+    HI_ASSERT(offset < size);
     return HI_SUCCESS;
 }
 
@@ -199,6 +216,8 @@ HI_S32 CnnTrashClassifyCal(uintptr_t model, VIDEO_FRAME_INFO_S *srcFrm, VIDEO_FR
     IVE_IMAGE_S img; // referece to SDK hi_comm_ive.h Line 143
     RectBox cnnBoxs[DETECT_OBJ_MAX] = {0};
     VIDEO_FRAME_INFO_S resizeFrm;  // Meet the input frame of the plug
+    static HI_CHAR prevOsd[NORM_BUF_SIZE] = "";
+    HI_CHAR osdBuf[NORM_BUF_SIZE] = "";
     /*
         01-Kitchen_Watermelon_rind    02_Kitchen_Egg_shell
         03_Kitchen_Fishbone           04_Kitchen_Eggplant
@@ -223,38 +242,38 @@ HI_S32 CnnTrashClassifyCal(uintptr_t model, VIDEO_FRAME_INFO_S *srcFrm, VIDEO_FR
     cnnBoxs[0].ymax = MAX_OF_BOX;
 
     ret = MppFrmResize(srcFrm, &resizeFrm, FRM_WIDTH, FRM_HEIGHT);  // resize 256*256
-    if (ret != HI_SUCCESS) {
-        SAMPLE_PRT("for resize FAIL, ret=%x\n", ret);
-        return ret;
-    }
+    SAMPLE_CHECK_EXPR_RET(ret != HI_SUCCESS, ret, "for resize FAIL, ret=%x\n", ret);
 
     ret = FrmToOrigImg(&resizeFrm, &img);
-    if (ret != HI_SUCCESS) {
-        SAMPLE_PRT("for Frm2Img FAIL, ret=%x\n", ret);
-        return ret;
-    }
+    SAMPLE_CHECK_EXPR_RET(ret != HI_SUCCESS, ret, "for Frm2Img FAIL, ret=%x\n", ret);
 
     ret = ImgYuvCrop(&img, &imgIn, &cnnBoxs[0]); // Crop the image to classfication network
-    if (ret < 0) {
-        SAMPLE_PRT("ImgYuvCrop FAIL, ret=%x\n", ret);
-        return ret;
-    }
+    SAMPLE_CHECK_EXPR_RET(ret < 0, ret, "ImgYuvCrop FAIL, ret=%x\n", ret);
+
     // Follow the reasoning logic
     ret = CnnCalU8c1Img(self, &imgIn, resBuf, sizeof(resBuf) / sizeof((resBuf)[0]), &resLen);
-    if (ret < 0) {
-        SAMPLE_PRT("cnn cal FAIL, ret=%x\n", ret);
-        return ret;
-    }
+    SAMPLE_CHECK_EXPR_RET(ret < 0, ret, "cnn cal FAIL, ret=%x\n", ret);
+
     HI_ASSERT(resLen <= sizeof(resBuf) / sizeof(resBuf[0]));
-    ret = CnnTrashClassifyFlag(resBuf, resLen);
-    if (ret < 0) {
-        SAMPLE_PRT("CnnTrashClassifyFlag cal FAIL, ret=%x\n", ret);
-        return ret;
-    }
+    ret = CnnTrashClassifyFlag(resBuf, resLen, osdBuf, sizeof(osdBuf));
+    SAMPLE_CHECK_EXPR_RET(ret < 0, ret, "CnnTrashClassifyFlag cal FAIL, ret=%x\n", ret);
 
     if (GetCfgBool("audio_player:support_audio", true)) {
         if (FdWriteMsg(g_stmChn.out, &resBuf[0], sizeof(RecogNumInfo)) != sizeof(RecogNumInfo)) {
             SAMPLE_PRT("FdWriteMsg FAIL\n");
+        }
+    }
+
+    if (strcmp(osdBuf, prevOsd) != 0) {
+        HiStrxfrm(prevOsd, osdBuf, sizeof(prevOsd));
+
+        // Superimpose graphics into resFrm
+        HI_OSD_ATTR_S rgn;
+        TxtRgnInit(&rgn, osdBuf, TXT_BEGX, TXT_BEGY, ARGB1555_YELLOW2); // font width and heigt use default 40
+        OsdsSetRgn(g_osdsTrash, g_osd0Trash, &rgn);
+        ret = HI_MPI_VPSS_SendFrame(0, 0, srcFrm, 0);
+        if (ret != HI_SUCCESS) {
+            SAMPLE_PRT("Error(%#x), HI_MPI_VPSS_SendFrame failed!\n", ret);
         }
     }
 

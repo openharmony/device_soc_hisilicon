@@ -50,6 +50,8 @@ int FdWriteMsg(int fd, const HI_VOID* msgData, int msgLen);
 /* SkPair destroy */
 void SkPairDestroy(SkPair* chn);
 
+void RecurMutexInit(pthread_mutex_t* mutex);
+
 #ifdef __cplusplus
 }
 #endif

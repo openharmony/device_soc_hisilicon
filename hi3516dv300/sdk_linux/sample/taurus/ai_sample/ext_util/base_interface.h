@@ -38,6 +38,7 @@ bool SectGetCfgBool(const char* section, const char* field, bool defVal);
 const char* SectGetCfgStr(const char* section, const char* field, const char* defVal);
 
 int HiStrincmp(const char *s1, const char *s2, size_t n);
+int HiStrxfrm(char *s1, char *s2, int n);
 
 #ifdef __cplusplus
 }
