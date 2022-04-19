@@ -31,7 +31,7 @@
 
 /* OSD font library */
 static const HI_U8 G_FONT_LIB[] __attribute__((aligned(4))) = {
-#include "simsunb_16x32.dat"
+#include "simsunb_16x32.txt"
 };
 
 #ifdef __cplusplus
