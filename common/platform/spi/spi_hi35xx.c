@@ -578,7 +578,7 @@ static int32_t Pl022TransferOneMessage(struct Pl022 *pl022, struct SpiMsg *msg)
     } else {
         ret = Pl022TxRx(pl022, msg);
     }
-    if (ret || msg->csChange) {
+    if (ret != HDF_SUCCESS || msg->keepCs == 0) {
         Pl022SetCs(pl022, pl022->curCs, SPI_CS_INACTIVE);
     }
     return ret;
