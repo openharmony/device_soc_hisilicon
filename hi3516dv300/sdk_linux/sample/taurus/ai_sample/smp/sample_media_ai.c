@@ -32,7 +32,6 @@
 #include "cnn_trash_classify.h"
 #include "hand_classify.h"
 #include "vgs_img.h"
-#include "base_interface.h"
 #include "osd_img.h"
 #include "base_interface.h"
 #include "posix_help.h"
@@ -49,7 +48,6 @@ static HI_U32 g_num = 0;
 AicMediaInfo g_aicMediaInfo = { 0 };
 static pthread_t g_aiProcessThread = 0;
 AiPlugLib g_workPlug = {0};
-AicMediaInfo g_aicMediaInfo;
 
 #define HAND_FRM_WIDTH    640
 #define HAND_FRM_HEIGHT   384
