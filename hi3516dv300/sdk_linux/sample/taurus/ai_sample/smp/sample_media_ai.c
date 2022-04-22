@@ -32,7 +32,6 @@
 #include "cnn_trash_classify.h"
 #include "hand_classify.h"
 #include "vgs_img.h"
-#include "base_interface.h"
 #include "osd_img.h"
 #include "base_interface.h"
 #include "posix_help.h"
