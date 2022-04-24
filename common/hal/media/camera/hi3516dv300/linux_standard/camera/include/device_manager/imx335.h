@@ -26,14 +26,14 @@ class Imx335 : public ISensor {
 public:
     Imx335();
     virtual ~Imx335();
-    void InitSensitivityRange(CameraStandard::CameraMetadata& camera_meta_data);
-    void InitAwbModes(CameraStandard::CameraMetadata& camera_meta_data);
-    void InitCompensationRange(CameraStandard::CameraMetadata& camera_meta_data);
-    void InitFpsTarget(CameraStandard::CameraMetadata& camera_meta_data);
-    void InitAvailableModes(CameraStandard::CameraMetadata& camera_meta_data);
-    void InitAntiBandingModes(CameraStandard::CameraMetadata& camera_meta_data);
-    void InitPhysicalSize(CameraStandard::CameraMetadata& camera_meta_data);
-    void Init(CameraStandard::CameraMetadata& camera_meta_data);
+    void InitSensitivityRange(Camera::CameraMetadata& camera_meta_data);
+    void InitAwbModes(Camera::CameraMetadata& camera_meta_data);
+    void InitCompensationRange(Camera::CameraMetadata& camera_meta_data);
+    void InitFpsTarget(Camera::CameraMetadata& camera_meta_data);
+    void InitAvailableModes(Camera::CameraMetadata& camera_meta_data);
+    void InitAntiBandingModes(Camera::CameraMetadata& camera_meta_data);
+    void InitPhysicalSize(Camera::CameraMetadata& camera_meta_data);
+    void Init(Camera::CameraMetadata& camera_meta_data);
 };
 } // namespace OHOS::Camera
 #endif
