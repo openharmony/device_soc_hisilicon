@@ -26,12 +26,12 @@ class Imx600 : public ISensor {
 public:
     Imx600();
     virtual ~Imx600();
-    void Init(CameraStandard::CameraMetadata& camera_meta_data);
-    void InitPhysicalSize(CameraStandard::CameraMetadata& camera_meta_data);
-    void InitAntiBandingModes(CameraStandard::CameraMetadata& camera_meta_data);
-    void InitAeFpsTarget(CameraStandard::CameraMetadata& camera_meta_data);
-    void InitCompensationRange(CameraStandard::CameraMetadata& camera_meta_data);
-    void InitSensitivityRange(CameraStandard::CameraMetadata& camera_meta_data);
+    void Init(Camera::CameraMetadata& camera_meta_data);
+    void InitPhysicalSize(Camera::CameraMetadata& camera_meta_data);
+    void InitAntiBandingModes(Camera::CameraMetadata& camera_meta_data);
+    void InitAeFpsTarget(Camera::CameraMetadata& camera_meta_data);
+    void InitCompensationRange(Camera::CameraMetadata& camera_meta_data);
+    void InitSensitivityRange(Camera::CameraMetadata& camera_meta_data);
 };
 } // namespace OHOS::Camera
 #endif
