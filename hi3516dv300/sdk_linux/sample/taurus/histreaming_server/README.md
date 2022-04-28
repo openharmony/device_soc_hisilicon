@@ -49,7 +49,100 @@
 | LinkAgentFree  | 释放LinkAgent对象    |
 | QueryResultFree  | 释放设备列表QueryResult。同时也释放设备列表关联的LinkServiceAgent对象    |
 
-**使用NFS挂载的方式进行资料文件的拷贝**
+## 获取WiFi可执行文件([util_OHOSL1_3516.zip](https://gitee.com/hihope_iot/embedded-race-hisilicon-track-2022/tree/master/taurus_resource))
+* 解压util_OHOSL1_3516.zip到util_OHOSL1_3516文件。
+* 在util_OHOSL1_3516文件包新建hostapd.cof，udhcpd.cof，wpa_supplicant.cof文件。
+* 在hostapd.conf文件写入如下内容。
+
+```
+interface=wlan0
+driver=hdf wifi
+ssid=H
+hw_mode=g
+channel=6
+ignore_broadcast_ssid=0
+#下面wpa2-psk类型加密的配置
+#如果不需要可以删除
+auth_algs=1
+wpa=2
+wpa_passphrase=12345678
+rsn_pairwise=CCMP
+```
+
+* 在udhcpd.cof文件写入如下内容。
+
+```
+# Sample udhcpd configuration file (/etc/udhcpd.conf)
+# The start and end of the IP lease block
+start 192.168.12.2
+end 192.168.12.100
+
+# The interface that udhcpd will use
+interface wlan0 #default: eth0
+
+# The maximim number of leases (includes addressesd reserved
+# by OFFER's, DECLINE's, and ARP conficts
+max_leases 20 #default: 254
+
+# If remaining is true (default), udhcpd will store the time
+# remaining for each lease in the udhcpd leases file. This is
+# for embedded systems that cannot keep time between reboots.
+# If you set remaining to no, the absolute time that the lease
+# expires at will be stored in the dhcpd.leases file.
+remaining yes #default: yes
+
+# The time period at which udhcpd will write out a dhcpd.leases
+# file. If this is 0, udhcpd will never automatically write a
+# lease file. (specified in seconds)
+auto_time 7200 #default: 7200 (2 hours)
+
+# The amount of time that an IP will be reserved (leased) for if a
+# DHCP decline message is received (seconds).
+decline_time 3600 #default: 3600 (1 hour)
+
+# The amount of time that an IP will be reserved (leased) for if an
+# ARP conflct occurs. (seconds)
+conflict_time 3600 #default: 3600 (1 hour)
+
+# How long an offered address is reserved (leased) in seconds
+offer_time 60 #default: 60 (1 minute)
+
+# If a lease to be given is below this value, the full lease time is
+# instead used (seconds).
+min_lease 60 #defult: 60
+
+# The location of the leases file
+lease_file /vendor/etc/udhcpd.leases
+
+# The remainer of options are DHCP options and can be specifed with the
+# keyword 'opt' or 'option'. If an option can take multiple items, such
+# as the dns option, they can be listed on the same line, or multiple
+# lines. The only option with a default is 'lease'.
+
+#Examples
+opt dns 10.221.0.11 8.8.8.8
+option subnet 255.255.255.0
+opt router 192.168.12.1
+```
+
+* 在wpa_supplicant.cof文件写入如下内容。
+```
+country=GB
+network={
+    ssid="H"
+    psk="12345678"
+}
+```
+
+**编译
+
+* 在编译histreaming_server之前，需确保OpenHarmony 小型系统的主干代码已经整编通过，**且已经按照《[修改源码及配置文件适配Taurus开发板](../doc/2.2.1.%E4%BF%AE%E6%94%B9%E6%BA%90%E7%A0%81%E5%8F%8A%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E9%80%82%E9%85%8DTaurus%E5%BC%80%E5%8F%91%E6%9D%BF.md)》的内容进行修改**。在单编ohos_histreaming_server之前，需修改目录下的一处依赖，进入//device/soc/hisilicon/hi3516dv300/sdk_linux目录下，通过修改BUILD.gn，在deps下面新增target，``"sample/taurus/histreaming_server:hi3516dv300_histreaming_server"``。
+
+* 点击Deveco Device Tool工具的Build按键进行编译，具体的编译过程这里不再赘述。
+
+* 编译成功后，即可在out/hispark_taurus/ipcamera_hispark_taurus_linux/rootfs/bin目录下，生成ohos_histreaming_server可执行文件。
+
+**使用NFS挂载的方式进行资料文件的拷贝
 
 * 首先需要自己准备一根网线
 
@@ -57,7 +150,7 @@
 
 * 步骤2：将编译后生成的可执行文件拷贝到Windows的nfs共享路径下
 
-* 步骤3：将device\soc\hisilicon\hi3516dv300\sdk_linux\out\lib\目录下的**libhistreaminglink.a**和 out\hispark_taurus\ipcamera_hispark_taurus_linux\libs\libcoap_static.a**拷贝至Windows的nfs共享路径下
+* 步骤3：将device\soc\hisilicon\hi3516dv300\sdk_linux\sample\taurus\histreaming_server\lib\目录下的**libhistreaminglink.a**和解压后的**util_OHOSL1_3516文件夹**拷贝至Windows的nfs共享路径下
 
 * 步骤4：依赖文件拷贝至Windows的nfs共享路径下后，执行下面的命令，将Windows的nfs共享路径挂载至开发板的mnt目录下
 
@@ -65,24 +158,35 @@
 mount -o nolock,addr=192.168.200.1 -t nfs 192.168.200.1:/d/nfs /mnt
 ```
 
-## 5.拷贝mnt目录下的文件至正确的目录下
-
-* 执行下面的命令，拷贝mnt目录下面的ohos_camera_ai_demo至userdata目录，拷贝mnt目录下面的libvb_server.so和 libmpp_vbs.so至/usr/lib/目录下，再将models和aac_file文件夹拷贝至userdata目录下
+## 拷贝mnt目录下的文件至正确的目录下
+* 执行下面的命令，拷贝mnt目录下面的ohos_histreaming_server至userdata目录，拷贝mnt目录下面的libhistreaminglink.a和util_OHOSL1_3516至/usr/lib/目录下，再将目录下
 
 ```
 cp /mnt/ohos_histreaming_server  /userdata/
 cp /mnt/*.so /usr/lib/
+cp /mnt/util_OHOSL1_3516/*  /usr/lib/
 ```
 
-* 拷贝完成后参考WiFi使用说明。
-
-* 执行下面的命令，给ohos_histreaming_server  文件可执行权限,同时运行
+* 第一种方式：执行下面的命令，将Taurus设置为AP模式。hostapd.conf文件设置AP名和密码。启动成功后，手机端可以搜索wifi名：H，密码：12345678。
 
 ```
-chmod 777 /userdata/ohos_histreaming_server
+cd /usr/lib/util_OHOSL1_3516  
+mkdir /usr/tmp
+mkdir /var/run
+touch /var/run/udhcpd.pid
+mkdir -p /vendor/etc
+touch /vendor/etc/udhcpd.leases
+./hostapd -i wlan0 hostapd.conf &
+ifconfig wlan0 192.168.12.145
+./busybox ./udhcpd udhcpd.conf
+```
+* 执行下面的命令，Taurus运行ohos_histreaming_server
+```
 cd /userdata
+chmod 777 ohos_histreaming_server
 ./ohos_histreaming_server
 ```
+
 * 板端运行后，参考[WiFi互联client端](http://gitee.com/openharmony/vendor_hisilicon/blob/master/hispark_pegasus/demo/histreaming_client_demo/README.md)
 
 * Taurus端或者路由器需要发出热点，同时Taurus端运行ohos_histreaming_server可执行文件，再次点击Hi3861核心板上的“RST”复位键，此时开发板的系统会运行起来。运行结果:打开串口工具，可以看到如下打印,同时3861主板灯闪亮一下。
@@ -109,3 +213,45 @@ APP安装成功后，打开手机的WiFi列表，连接到Taurus开发板的AP�
   ![输入图片说明](https://gitee.com/asd1122/tupian/raw/master/%E5%9B%BE%E7%89%87/wifi%E4%BA%92%E8%81%94/23.jpg)
 
   ![输入图片说明](https://gitee.com/asd1122/tupian/raw/master/%E5%9B%BE%E7%89%87/wifi%E4%BA%92%E8%81%94/22.jpg)
+
+* 第二种方式：执行下面的命令，将Taurus设置为STA模式。wpa_supplicant.conf文件设置连接的WIFI名和密码。(手机和路由器使用4G网)
+```
+cd /usr/lib/util_OHOSL1_3516  
+./wpa_supplicant -i wlan0 -c wpa_supplicant.conf &
+连接热点：
+./busybox ./udhcpc -s ./default.script -b -i wlan0
+```
+* 执行下面的命令，Taurus运行ohos_histreaming_server
+```
+cd /userdata
+chmod 777 ohos_histreaming_server
+./ohos_histreaming_server
+```
+
+* 板端运行后，参考[WiFi互联client端](http://gitee.com/openharmony/vendor_hisilicon/blob/master/hispark_pegasus/demo/histreaming_client_demo/README.md)
+
+* Taurus端或者路由器需要发出热点，同时Taurus端运行ohos_histreaming_server可执行文件，再次点击Hi3861核心板上的“RST”复位键，此时开发板的系统会运行起来。运行结果:打开串口工具，可以看到如下打印,同时3861主板灯闪亮一下。
+
+  ![输入图片说明](https://gitee.com/asd1122/tupian/raw/master/%E5%9B%BE%E7%89%87/wifi%E4%BA%92%E8%81%94/260.jpg)
+
+  ![输入图片说明](https://gitee.com/asd1122/tupian/raw/master/%E5%9B%BE%E7%89%87/wifi%E4%BA%92%E8%81%94/22.jpg)
+
+  ![输入图片说明](https://gitee.com/asd1122/tupian/raw/master/%E5%9B%BE%E7%89%87/wifi%E4%BA%92%E8%81%94/24.jpg)
+
+* 如果你想使用手机APP来控制Pegasus或者Taurus，手机端APP安装及使用（[histreaming APP源码](http://gitee.com/leo593362220/sources-histreaming-app.git)），然后进入app-release.rar目录，将app-debug.apk安装到手机上，具体的安装过程这里就不介绍了(通过数据线复制到手机，或使用微信、QQ等方式发送到手机再安装)。
+APP安装成功后，打开手机的WiFi列表，连接到Taurus开发板的AP热点或者路由器热点，再打开刚安装好的HiStreaming APP，下拉刷新几次，手机会发现两个设备，分别是Pegasus开发板设备和Taurus开发板设备。
+
+  ![输入图片说明](https://gitee.com/asd1122/tupian/raw/master/%E5%9B%BE%E7%89%87/wifi%E4%BA%92%E8%81%94/20.jpg)
+
+  ![输入图片说明](https://gitee.com/asd1122/tupian/raw/master/%E5%9B%BE%E7%89%87/wifi%E4%BA%92%E8%81%94/21.jpg)
+
+* 任意点击一个设备进行操作，点击LED灯控制按钮，会进入一个灯的控制界面。点击图片会发生变化，且会给对应的设备发送数据,同时控制灯亮与熄。
+
+  ![输入图片说明](https://gitee.com/asd1122/tupian/raw/master/%E5%9B%BE%E7%89%87/wifi%E4%BA%92%E8%81%94/6.jpg)
+
+  ![输入图片说明](https://gitee.com/asd1122/tupian/raw/master/%E5%9B%BE%E7%89%87/wifi%E4%BA%92%E8%81%94/25.jpg)
+    
+  ![输入图片说明](https://gitee.com/asd1122/tupian/raw/master/%E5%9B%BE%E7%89%87/wifi%E4%BA%92%E8%81%94/23.jpg)
+
+  ![输入图片说明](https://gitee.com/asd1122/tupian/raw/master/%E5%9B%BE%E7%89%87/wifi%E4%BA%92%E8%81%94/22.jpg)
+
