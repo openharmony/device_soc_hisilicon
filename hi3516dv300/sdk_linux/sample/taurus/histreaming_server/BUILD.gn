@@ -50,5 +50,9 @@ executable("ohos_histreaming_server") {
     ldflags += [ "-lhistreaminglink" ]
     ldflags += [ "-lcjson_shared" ]
     ldflags += [ "-lsecurec" ]
+    histreaming_lib_dir = rebase_path(
+            "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/taurus/histreaming_server/lib")
+    ldflags += [ "-L$histreaming_lib_dir" ]
+    ldflags += [ "-lhistreaminglink" ]
   }
 }
