@@ -15,4 +15,4 @@ import(
     "//device/soc/hisilicon/common/hal/media/camera/hi3516dv300/linux_standard/camera/product.gni")
 
 usb_default_config_path =
-    "//device/soc/hisilicon/common/hal/usb/hi3751v350/include"
+    "//device/soc/hisilicon/common/hal/usb/hi3516dv300/include"
