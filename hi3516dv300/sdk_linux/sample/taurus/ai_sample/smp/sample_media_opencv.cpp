@@ -106,11 +106,11 @@ static HI_VOID TennisStVbParamCfg(VbCfg *self)
 static HI_VOID TennisVpssParamCfg(HI_VOID)
 {
     VpssCfgInit(&g_aicTennisMediaInfo.vpssCfg);
-    VpssCfgSetGrp(&g_aicTennisMediaInfo.vpssCfg, AIC_VPSS_GRP, NULL,
+    VpssCfgSetGrp(&g_aicTennisMediaInfo.vpssCfg, 0, NULL,
         g_aicTennisMediaInfo.stSize.u32Width, g_aicTennisMediaInfo.stSize.u32Width);
     g_aicTennisMediaInfo.vpssCfg.grpAttr.enPixelFormat = PIXEL_FORMAT_YVU_SEMIPLANAR_420;
     // 1920:AICSTART_VI_OUTWIDTH, 1080: AICSTART_VI_OUTHEIGHT
-    VpssCfgAddChn(&g_aicTennisMediaInfo.vpssCfg, AIC_VPSS_ZOUT_CHN, NULL, 1920, 1080);
+    VpssCfgAddChn(&g_aicTennisMediaInfo.vpssCfg, 1, NULL, 1920, 1080);
     HI_ASSERT(!g_aicTennisMediaInfo.viSess);
 }
 
@@ -199,9 +199,8 @@ static HI_VOID PauseDoUnloadTennisModel(HI_VOID)
 static HI_S32 TennisDetectAiThreadProcess(HI_VOID)
 {
     HI_S32 s32Ret;
-    // 16: sizeOfBuffer, 15: count=sizeOfBuffer-1
-    if (snprintf_s(tennisDetectThreadName, OPENCV_BUFFER_SIZE,
-        OPENCV_BUFFER_SIZE - 1, "OpencvProcess") < 0) {
+    if (snprintf_s(tennisDetectThreadName, sizeof(tennisDetectThreadName),
+        sizeof(tennisDetectThreadName) - 1, "OpencvProcess") < 0) {
         HI_ASSERT(0);
     }
     prctl(PR_SET_NAME, (unsigned long)tennisDetectThreadName, 0, 0, 0);
@@ -247,8 +246,8 @@ HI_S32 sample_media_opencv::SAMPLE_MEDIA_TENNIS_DETECT(HI_VOID)
     TennisVpssParamCfg();
     s32Ret = ViVpssCreate(&g_aicTennisMediaInfo.viSess, &g_aicTennisMediaInfo.viCfg, &g_aicTennisMediaInfo.vpssCfg);
     SAMPLE_CHECK_EXPR_GOTO(s32Ret != HI_SUCCESS, EXIT1, "ViVpss Sess create FAIL, ret=%#x\n", s32Ret);
-    g_aicTennisMediaInfo.vpssGrp = AIC_VPSS_GRP;
-    g_aicTennisMediaInfo.vpssChn0 = AIC_VPSS_ZOUT_CHN;
+    g_aicTennisMediaInfo.vpssGrp = 0;
+    g_aicTennisMediaInfo.vpssChn0 = 1;
 
     /* config vo */
     TennisStVoParamCfg(&g_aicTennisMediaInfo.voCfg);
