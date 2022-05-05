@@ -4,7 +4,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -172,6 +172,11 @@ static HI_VOID* GetVpssChnFrameTennisDetect(HI_VOID* arg)
         if (ret != 0) {
             SAMPLE_PRT("HI_MPI_VPSS_GetChnFrame FAIL, err=%#x, grp=%d, chn=%d\n",
                 ret, g_aicTennisMediaInfo.vpssGrp, g_aicTennisMediaInfo.vpssChn0);
+            ret = HI_MPI_VPSS_ReleaseChnFrame(g_aicTennisMediaInfo.vpssGrp, g_aicTennisMediaInfo.vpssChn0, &frm);
+            if (ret != HI_SUCCESS) {
+                SAMPLE_PRT("Error(%#x),HI_MPI_VPSS_ReleaseChnFrame failed,Grp(%d) chn(%d)!\n",
+                    ret, g_aicTennisMediaInfo.vpssGrp, g_aicTennisMediaInfo.vpssChn0);
+            }
             continue;
         }
         SAMPLE_PRT("get vpss frame success, weight:%d, height:%d\n", frm.stVFrame.u32Width, frm.stVFrame.u32Height);

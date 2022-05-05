@@ -1640,6 +1640,11 @@ static HI_VOID* GetVpssChnFrameCnnTrashClassify(HI_VOID* arg)
         if (ret != 0) {
             SAMPLE_PRT("HI_MPI_VPSS_GetChnFrame FAIL, err=%#x, grp=%d, chn=%d\n",
                 ret, g_aicMediaInfo.vpssGrp, g_aicMediaInfo.vpssChn0);
+            ret = HI_MPI_VPSS_ReleaseChnFrame(g_aicMediaInfo.vpssGrp, g_aicMediaInfo.vpssChn0, &frm);
+            if (ret != HI_SUCCESS) {
+                SAMPLE_PRT("Error(%#x),HI_MPI_VPSS_ReleaseChnFrame failed,Grp(%d) chn(%d)!\n",
+                    ret, g_aicMediaInfo.vpssGrp, g_aicMediaInfo.vpssChn0);
+            }
             continue;
         }
         SAMPLE_PRT("get vpss frame success, weight:%d, height:%d\n", frm.stVFrame.u32Width, frm.stVFrame.u32Height);
@@ -1703,6 +1708,11 @@ static HI_VOID* GetVpssChnFrameHandClassify(HI_VOID* arg)
         if (ret != 0) {
             SAMPLE_PRT("HI_MPI_VPSS_GetChnFrame FAIL, err=%#x, grp=%d, chn=%d\n",
                 ret, g_aicMediaInfo.vpssGrp, g_aicMediaInfo.vpssChn0);
+            ret = HI_MPI_VPSS_ReleaseChnFrame(g_aicMediaInfo.vpssGrp, g_aicMediaInfo.vpssChn0, &frm);
+            if (ret != HI_SUCCESS) {
+                SAMPLE_PRT("Error(%#x),HI_MPI_VPSS_ReleaseChnFrame failed,Grp(%d) chn(%d)!\n",
+                    ret, g_aicMediaInfo.vpssGrp, g_aicMediaInfo.vpssChn0);
+            }
             continue;
         }
         SAMPLE_PRT("get vpss frame success, weight:%d, height:%d\n", frm.stVFrame.u32Width, frm.stVFrame.u32Height);
