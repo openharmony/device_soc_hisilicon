@@ -80,7 +80,9 @@ static HI_S32 yuvFrame2rgb(VIDEO_FRAME_INFO_S *srcFrame, IPC_IMAGE *dstImage)
         HI_MPI_SYS_MmzFree(pstDst.au64PhyAddr[0], (void *)pstDst.au64VirAddr[0]);
         return s32Ret;
     }
-    memset((void *)pstDst.au64VirAddr[0], 0, pstDst.u32Height*pstDst.au32Stride[0] * 3); // 3: multiple
+    // 3: multiple
+    memset_s((void *)pstDst.au64VirAddr[0], pstDst.u32Height*pstDst.au32Stride[0] * 3,
+        0, pstDst.u32Height*pstDst.au32Stride[0] * 3); // 3: multiple
     HI_BOOL bInstant = HI_TRUE;
 
     s32Ret = HI_MPI_IVE_CSC(&hIveHandle, &pstSrc, &pstDst, &stCscCtrl, bInstant);
@@ -119,7 +121,7 @@ static HI_S32 frame2Mat(VIDEO_FRAME_INFO_S *srcFrame, Mat &dstMat)
     }
     srcRGB = (HI_U8 *)dstImage.u64VirAddr;
     dstMat.create(h, w, CV_8UC3);
-    memcpy(dstMat.data, srcRGB, bufLen * sizeof(HI_U8));
+    memcpy_s(dstMat.data, bufLen * sizeof(HI_U8), srcRGB, bufLen * sizeof(HI_U8));
     HI_MPI_SYS_MmzFree(dstImage.u64PhyAddr, (void *)&(dstImage.u64VirAddr));
     return HI_SUCCESS;
 }

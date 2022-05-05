@@ -131,22 +131,18 @@ static HI_VOID TennisDetectAiProcess(VIDEO_FRAME_INFO_S frm, VO_LAYER voLayer, V
             ret = TennisDetectLoad(&g_tennisWorkPlug.model);
             if (ret < 0) {
                 g_tennisWorkPlug.model = 0;
-                goto TENNIS_RELEASE;
+                SAMPLE_CHECK_EXPR_GOTO(ret < 0, TENNIS_RELEASE, "TennisDetectLoad err, ret=%#x\n", ret);
             }
         }
 
         VIDEO_FRAME_INFO_S calFrm;
         ret = MppFrmResize(&frm, &calFrm, 640, 480); // 640: FRM_WIDTH, 480: FRM_HEIGHT
         ret = TennisDetectCal(g_tennisWorkPlug.model, &calFrm, &frm);
-        if (ret < 0) {
-            SAMPLE_PRT("TennisDetectCal cal FAIL, ret=%x\n", ret);
-            goto TENNIS_RELEASE;
-        }
+        SAMPLE_CHECK_EXPR_GOTO(ret < 0, TENNIS_RELEASE, "TennisDetectCal err, ret=%#x\n", ret);
+
         ret = HI_MPI_VO_SendFrame(voLayer, voChn, &frm, 0);
-        if (ret != HI_SUCCESS) {
-            SAMPLE_PRT("HI_MPI_VO_SendFrame fail,Error(%#x)\n", ret);
-            goto TENNIS_RELEASE;
-        }
+        SAMPLE_CHECK_EXPR_GOTO(ret != HI_SUCCESS, TENNIS_RELEASE,
+            "HI_MPI_VO_SendFrame err, ret=%#x\n", ret);
         MppFrmDestroy(&calFrm);
     }
 
@@ -190,11 +186,24 @@ static HI_VOID* GetVpssChnFrameTennisDetect(HI_VOID* arg)
 static HI_VOID PauseDoUnloadTennisModel(HI_VOID)
 {
     if (GetCfgBool("tennis_detect_switch:support_tennis_detect", true)) {
-        memset(&g_tennisWorkPlug, 0x00, sizeof(g_tennisWorkPlug));
+        memset_s(&g_tennisWorkPlug, sizeof(g_tennisWorkPlug), 0x00, sizeof(g_tennisWorkPlug));
         ConfBaseExt();
         SAMPLE_PRT("tennis detect exit success\n");
         g_opencv = 0;
     }
+}
+
+static HI_S32 TennisDetectAiThreadProcess(HI_VOID)
+{
+    HI_S32 s32Ret;
+    // 16: sizeOfBuffer, 15: count=sizeOfBuffer-1
+    if (snprintf_s(tennisDetectThreadName, 16, 15, "OpencvProcess") < 0) {
+        HI_ASSERT(0);
+    }
+    prctl(PR_SET_NAME, (unsigned long)tennisDetectThreadName, 0, 0, 0);
+    s32Ret = pthread_create(&g_openCVProcessThread, NULL, GetVpssChnFrameTennisDetect, NULL);
+
+    return s32Ret;
 }
 
 /*
@@ -251,14 +260,11 @@ HI_S32 SAMPLE_MEDIA_TENNIS_DETECT(HI_VOID)
     SAMPLE_PRT("vpssGrp:%d, vpssChn:%d\n", g_aicTennisMediaInfo.vpssGrp, g_aicTennisMediaInfo.vpssChn0);
 
     /* create work thread to run ai */
-    snprintf(tennisDetectThreadName, 16, "OpencvProcess"); // 16: size_t size
-    prctl(PR_SET_NAME, (unsigned long)tennisDetectThreadName, 0, 0, 0);
-    s32Ret = pthread_create(&g_openCVProcessThread, NULL, GetVpssChnFrameTennisDetect, NULL);
+    s32Ret = TennisDetectAiThreadProcess();
     SAMPLE_CHECK_EXPR_RET(s32Ret != HI_SUCCESS, s32Ret, "ai proccess thread creat fail:%s\n", strerror(s32Ret));
 
     PAUSE();
     s_bOpenCVProcessStopSignal = HI_TRUE;
-    // Waiting for the end of a thread, the operation of synchronization between threads
     pthread_join(g_openCVProcessThread, nullptr);
     g_openCVProcessThread = 0;
     PauseDoUnloadTennisModel();
