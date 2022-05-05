@@ -14,12 +14,12 @@
  */
 
 #include <iostream>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <csignal>
 #include <unistd.h>
 #include <pthread.h>
-#include <signal.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -38,16 +38,12 @@
 
 using namespace std;
 
-#define FRM_WIDTH          640
-#define FRM_HEIGHT         480
-#define AI_SAMPLE_CFG_FILE      "./sample_ai.conf" // global app config file
-
 static HI_BOOL s_bOpenCVProcessStopSignal = HI_FALSE;
 static pthread_t g_openCVProcessThread = 0;
 static int g_opencv = 0;
-AicMediaInfo g_aicTennisMediaInfo = { 0 };
-AiPlugLib g_tennisWorkPlug = {0};
-HI_CHAR tennisDetectThreadName[16] = {0};
+static AicMediaInfo g_aicTennisMediaInfo = { 0 };
+static AiPlugLib g_tennisWorkPlug = {0};
+static HI_CHAR tennisDetectThreadName[16] = {0};
 
 /* Set VI DEV information */
 static void TennisViCfgSetDev(ViCfg* self, int devId, WDR_MODE_E wdrMode)
@@ -146,7 +142,7 @@ static void* GetVpssChnFrameTennisDetect(void* arg)
         SAMPLE_PRT("get vpss frame success, weight:%d, height:%d\n", frm.stVFrame.u32Width, frm.stVFrame.u32Height);
 
         if (g_opencv == 0) {
-            ConfBaseInit(AI_SAMPLE_CFG_FILE);
+            ConfBaseInit("./sample_ai.conf");
             g_opencv++;
         }
 
@@ -160,7 +156,7 @@ static void* GetVpssChnFrameTennisDetect(void* arg)
             }
 
             VIDEO_FRAME_INFO_S calFrm;
-            ret = MppFrmResize(&frm, &calFrm, FRM_WIDTH, FRM_HEIGHT);
+            ret = MppFrmResize(&frm, &calFrm, 640, 480); // 640: FRM_WIDTH, 480: FRM_HEIGHT
             ret = TennisDetectCal(g_tennisWorkPlug.model, &calFrm, &frm);
             if (ret < 0) {
                 SAMPLE_PRT("TennisDetectCal cal FAIL, ret=%x\n", ret);

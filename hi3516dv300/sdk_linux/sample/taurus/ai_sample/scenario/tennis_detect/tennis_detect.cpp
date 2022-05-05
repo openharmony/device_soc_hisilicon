@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2021 Huawei Device Co., Ltd.
+ * Copyright (c) 2022 HiSilicon (Shanghai) Technologies CO., LIMITED.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -26,16 +26,6 @@
 
 using namespace std;
 using namespace cv;
-
-#define TENNIS_OBJ_MAX     32
-#define DRAW_RETC_THICK    2
-
-typedef struct tagIPC_IMAGE{
-    HI_U64 u64PhyAddr;
-    HI_U64 u64VirAddr;
-    HI_U32 u32Width;
-    HI_U32 u32Height;
-} IPC_IMAGE;
 
 static HI_S32 yuvFrame2rgb(VIDEO_FRAME_INFO_S *srcFrame, IPC_IMAGE *dstImage)
 {
@@ -146,7 +136,7 @@ HI_S32 TennisDetectCal(uintptr_t model, VIDEO_FRAME_INFO_S *srcFrm, VIDEO_FRAME_
 {
     (void)model;
     int ret = 0;
-    RectBox boxs[TENNIS_OBJ_MAX] = {0};
+    RectBox boxs[32] = {0}; // 32: TENNIS_OBJ_MAX
     int j = 0;
 
     Mat image;
@@ -196,7 +186,7 @@ HI_S32 TennisDetectCal(uintptr_t model, VIDEO_FRAME_INFO_S *srcFrm, VIDEO_FRAME_
 
     if (j > 0 && j <= 25) {
         SAMPLE_PRT("box num:%d\n", j);
-        MppFrmDrawRects(dstFrm, boxs, j, RGB888_RED, DRAW_RETC_THICK);
+        MppFrmDrawRects(dstFrm, boxs, j, RGB888_RED, 2); // 2: DRAW_RETC_THICK
     }
 
     return ret;
