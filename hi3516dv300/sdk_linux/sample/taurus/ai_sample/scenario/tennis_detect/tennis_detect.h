@@ -13,8 +13,8 @@
  * limitations under the License.
  */
 
-#ifndef TENNIS_DETECT_HPP
-#define TENNIS_DETECT_HPP
+#ifndef TENNIS_DETECT_H
+#define TENNIS_DETECT_H
 
 #if __cplusplus
 extern "C" {
@@ -23,7 +23,7 @@ extern "C" {
 #include <iostream>
 #include "sample_comm_nnie.h"
 
-typedef struct tagIPC_IMAGE{
+typedef struct tagIPC_IMAGE {
     HI_U64 u64PhyAddr;
     HI_U64 u64VirAddr;
     HI_U32 u32Width;

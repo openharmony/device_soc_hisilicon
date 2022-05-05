@@ -30,7 +30,7 @@
 #include "sdk.h"
 #include "sample_comm.h"
 #include "ai_infer_process.h"
-#include "tennis_detect.hpp"
+#include "tennis_detect.h"
 #include "vgs_img.h"
 #include "base_interface.h"
 #include "posix_help.h"
@@ -244,7 +244,7 @@ HI_S32 SAMPLE_MEDIA_TENNIS_DETECT(HI_VOID)
     SAMPLE_PRT("vpssGrp:%d, vpssChn:%d\n", g_aicTennisMediaInfo.vpssGrp, g_aicTennisMediaInfo.vpssChn0);
 
     /* create work thread to run ai */
-    snprintf(tennisDetectThreadName, 16, "OpencvProcess");
+    snprintf(tennisDetectThreadName, 16, "OpencvProcess"); // 16: size_t size
     prctl(PR_SET_NAME, (unsigned long)tennisDetectThreadName, 0, 0, 0);
     s32Ret = pthread_create(&g_openCVProcessThread, NULL, GetVpssChnFrameTennisDetect, NULL);
     SAMPLE_CHECK_EXPR_RET(s32Ret != HI_SUCCESS, s32Ret, "ai proccess thread creat fail:%s\n", strerror(s32Ret));
