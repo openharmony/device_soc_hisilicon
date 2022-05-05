@@ -13,32 +13,28 @@
  * limitations under the License.
  */
 
-#ifndef TENNIS_DETECT_H
-#define TENNIS_DETECT_H
+#ifndef SAMPLE_MEDIA_OPENCV_H
+#define SAMPLE_MEDIA_OPENCV_H
 
-#include <iostream>
-#include "sample_comm_nnie.h"
+#include "sample_comm.h"
+#include "list.h"
 
+#ifdef __cplusplus
 #if __cplusplus
 extern "C" {
 #endif
+#endif /* End of #ifdef __cplusplus */
 
-typedef struct tagIPC_IMAGE {
-    HI_U64 u64PhyAddr;
-    HI_U64 u64VirAddr;
-    HI_U32 u32Width;
-    HI_U32 u32Height;
-} IPC_IMAGE;
-
-class Opencv {
+class MediaOpencv
+{
 public:
-    HI_S32 TennisDetectLoad(uintptr_t* model);
-    HI_S32 TennisDetectUnload(uintptr_t model);
-    /* Tennis detect calculation */
-    HI_S32 TennisDetectCal(uintptr_t model, VIDEO_FRAME_INFO_S *srcFrm, VIDEO_FRAME_INFO_S *dstFrm);
+    HI_S32 SAMPLE_MEDIA_TENNIS_DETECT(HI_VOID);
 };
 
 #ifdef __cplusplus
+#if __cplusplus
 }
 #endif
-#endif
+#endif /* End of #ifdef __cplusplus */
+
+#endif /* End of #ifndef __SAMPLE_MEDIA_OPENCV_H__ */

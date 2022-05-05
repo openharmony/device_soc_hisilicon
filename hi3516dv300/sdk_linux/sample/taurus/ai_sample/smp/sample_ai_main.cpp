@@ -14,11 +14,13 @@
  */
 
 #include <iostream>
-#include "sample_media_ai.h"
 #include "unistd.h"
 #include "sdk.h"
+#include "sample_media_ai.h"
+#include "sample_media_opencv.h"
 
 using namespace std;
+MediaOpencv mediaOpencv;
 
 /* function : show usage */
 static void SAMPLE_AI_Usage(char* pchPrgName)
@@ -59,7 +61,7 @@ int main(int argc, char *argv[])
             SAMPLE_MEDIA_HAND_CLASSIFY();
             break;
         case '2':
-            SAMPLE_MEDIA_TENNIS_DETECT();
+            mediaOpencv.SAMPLE_MEDIA_TENNIS_DETECT();
             break;
         default:
             SAMPLE_AI_Usage(argv[0]);

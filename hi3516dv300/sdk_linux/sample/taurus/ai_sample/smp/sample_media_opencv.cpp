@@ -35,8 +35,11 @@
 #include "base_interface.h"
 #include "posix_help.h"
 #include "sample_media_ai.h"
+#include "sample_media_opencv.h"
 
 using namespace std;
+
+Opencv opencv; 
 
 static HI_BOOL s_bOpenCVProcessStopSignal = HI_FALSE;
 static pthread_t g_openCVProcessThread = 0;
@@ -128,7 +131,7 @@ static HI_VOID TennisDetectAiProcess(VIDEO_FRAME_INFO_S frm, VO_LAYER voLayer, V
     int ret;
     if (GetCfgBool("tennis_detect_switch:support_tennis_detect", true)) {
         if (g_tennisWorkPlug.model == 0) {
-            ret = TennisDetectLoad(&g_tennisWorkPlug.model);
+            ret = opencv.TennisDetectLoad(&g_tennisWorkPlug.model);
             if (ret < 0) {
                 g_tennisWorkPlug.model = 0;
                 SAMPLE_CHECK_EXPR_GOTO(ret < 0, TENNIS_RELEASE, "TennisDetectLoad err, ret=%#x\n", ret);
@@ -137,7 +140,7 @@ static HI_VOID TennisDetectAiProcess(VIDEO_FRAME_INFO_S frm, VO_LAYER voLayer, V
 
         VIDEO_FRAME_INFO_S calFrm;
         ret = MppFrmResize(&frm, &calFrm, 640, 480); // 640: FRM_WIDTH, 480: FRM_HEIGHT
-        ret = TennisDetectCal(g_tennisWorkPlug.model, &calFrm, &frm);
+        ret = opencv.TennisDetectCal(g_tennisWorkPlug.model, &calFrm, &frm);
         SAMPLE_CHECK_EXPR_GOTO(ret < 0, TENNIS_RELEASE, "TennisDetectCal err, ret=%#x\n", ret);
 
         ret = HI_MPI_VO_SendFrame(voLayer, voChn, &frm, 0);
@@ -197,7 +200,8 @@ static HI_S32 TennisDetectAiThreadProcess(HI_VOID)
 {
     HI_S32 s32Ret;
     // 16: sizeOfBuffer, 15: count=sizeOfBuffer-1
-    if (snprintf_s(tennisDetectThreadName, 16, 15, "OpencvProcess") < 0) {
+    if (snprintf_s(tennisDetectThreadName, OPENCV_BUFFER_SIZE,
+        OPENCV_BUFFER_SIZE - 1, "OpencvProcess") < 0) {
         HI_ASSERT(0);
     }
     prctl(PR_SET_NAME, (unsigned long)tennisDetectThreadName, 0, 0, 0);
@@ -210,7 +214,7 @@ static HI_S32 TennisDetectAiThreadProcess(HI_VOID)
  * Display the data collected by sensor to LCD screen
  * VI->VPSS->VO->MIPI
  */
-HI_S32 SAMPLE_MEDIA_TENNIS_DETECT(HI_VOID)
+HI_S32 MediaOpencv::SAMPLE_MEDIA_TENNIS_DETECT(HI_VOID)
 {
     HI_S32 s32Ret;
     HI_S32 fd = 0;
