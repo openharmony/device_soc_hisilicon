@@ -12,11 +12,9 @@ ohos_prebuilt_shared_library("gpu_libs") {
   part_name = "hisilicon_products"
   install_enable = true
 
-  # [TODO]:decoupling system.img and vendor.img
-  # install_images = [ chipset_base_dir ]
-  # relative_install_dir = "chipsetsdk"
-  # revert
-  install_images = [ system_base_dir ]
+  # decoupling system.img and vendor.img
+  install_images = [ chipset_base_dir ]
+  relative_install_dir = "chipsetsdk"
 
   symlink_target_name = [
     "libEGL.so",
