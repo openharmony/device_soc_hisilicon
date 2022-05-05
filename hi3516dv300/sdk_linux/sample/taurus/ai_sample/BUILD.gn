@@ -40,14 +40,17 @@ executable("ohos_camera_ai_demo") {
     "ext_util/base_interface.c",
     "ext_util/misc_util.c",
     "ext_util/posix_help.c",
+    "interconnection_server/hisignalling.c",
     "mpp_help/src/ive_img.c",
     "mpp_help/src/osd_img.c",
     "mpp_help/src/vgs_img.c",
     "scenario/cnn_trash_classify/cnn_trash_classify.c",
     "scenario/hand_classify/hand_classify.c",
     "scenario/hand_classify/yolov2_hand_detect.c",
+    "scenario/tennis_detect/tennis_detect.cpp",
     "smp/sample_ai_main.cpp",
     "smp/sample_media_ai.c",
+    "smp/sample_media_opencv.cpp",
     "third_party/src/iniparser/src/dictionary.c",
     "third_party/src/iniparser/src/iniparser.c",
   ]
@@ -65,11 +68,14 @@ executable("ohos_camera_ai_demo") {
     "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/audio/adp/",
     "scenario/cnn_trash_classify",
     "scenario/hand_classify",
+    "scenario/tennis_detect",
     "mpp_help/include",
     "ext_util",
     "dependency",
     "third_party/src/iniparser/src",
+    "third_party/output/opencv/include/opencv4",
     "//third_party/bounds_checking_function/include",
+    "interconnection_server",
   ]
 
   defines = [
@@ -80,6 +86,7 @@ executable("ohos_camera_ai_demo") {
   if (need_link_mpp_lib) {
     outdir = rebase_path("$mpp_lib_path/lib")
     ldflags = [ "-L$outdir" ]
+    ldflags += [ "-lopencv_world" ]
     ldflags += [ "-laaccomm" ]
     ldflags += [ "-laacdec" ]
     ldflags += [ "-laacenc" ]
