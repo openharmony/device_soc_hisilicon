@@ -30,7 +30,7 @@ typedef struct tagIPC_IMAGE {
     HI_U32 u32Height;
 } IPC_IMAGE;
 
-class Opencv {
+class tennis_detect {
 public:
     HI_S32 TennisDetectLoad(uintptr_t* model);
     HI_S32 TennisDetectUnload(uintptr_t model);

@@ -25,8 +25,7 @@ extern "C" {
 #endif
 #endif /* End of #ifdef __cplusplus */
 
-class MediaOpencv
-{
+class sample_media_opencv {
 public:
     HI_S32 SAMPLE_MEDIA_TENNIS_DETECT(HI_VOID);
 };

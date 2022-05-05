@@ -39,8 +39,6 @@
 
 using namespace std;
 
-Opencv opencv; 
-
 static HI_BOOL s_bOpenCVProcessStopSignal = HI_FALSE;
 static pthread_t g_openCVProcessThread = 0;
 static int g_opencv = 0;
@@ -111,7 +109,8 @@ static HI_VOID TennisVpssParamCfg(HI_VOID)
     VpssCfgSetGrp(&g_aicTennisMediaInfo.vpssCfg, AIC_VPSS_GRP, NULL,
         g_aicTennisMediaInfo.stSize.u32Width, g_aicTennisMediaInfo.stSize.u32Width);
     g_aicTennisMediaInfo.vpssCfg.grpAttr.enPixelFormat = PIXEL_FORMAT_YVU_SEMIPLANAR_420;
-    VpssCfgAddChn(&g_aicTennisMediaInfo.vpssCfg, AIC_VPSS_ZOUT_CHN, NULL, AICSTART_VI_OUTWIDTH, AICSTART_VI_OUTHEIGHT);
+    // 1920:AICSTART_VI_OUTWIDTH, 1080: AICSTART_VI_OUTHEIGHT
+    VpssCfgAddChn(&g_aicTennisMediaInfo.vpssCfg, AIC_VPSS_ZOUT_CHN, NULL, 1920, 1080);
     HI_ASSERT(!g_aicTennisMediaInfo.viSess);
 }
 
@@ -129,6 +128,7 @@ static HI_VOID TennisStVoParamCfg(VoCfg *self)
 static HI_VOID TennisDetectAiProcess(VIDEO_FRAME_INFO_S frm, VO_LAYER voLayer, VO_CHN voChn)
 {
     int ret;
+    tennis_detect opencv;
     if (GetCfgBool("tennis_detect_switch:support_tennis_detect", true)) {
         if (g_tennisWorkPlug.model == 0) {
             ret = opencv.TennisDetectLoad(&g_tennisWorkPlug.model);
@@ -214,7 +214,7 @@ static HI_S32 TennisDetectAiThreadProcess(HI_VOID)
  * Display the data collected by sensor to LCD screen
  * VI->VPSS->VO->MIPI
  */
-HI_S32 MediaOpencv::SAMPLE_MEDIA_TENNIS_DETECT(HI_VOID)
+HI_S32 sample_media_opencv::SAMPLE_MEDIA_TENNIS_DETECT(HI_VOID)
 {
     HI_S32 s32Ret;
     HI_S32 fd = 0;

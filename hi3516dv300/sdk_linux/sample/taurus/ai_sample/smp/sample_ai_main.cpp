@@ -20,7 +20,6 @@
 #include "sample_media_opencv.h"
 
 using namespace std;
-MediaOpencv mediaOpencv;
 
 /* function : show usage */
 static void SAMPLE_AI_Usage(char* pchPrgName)
@@ -39,7 +38,7 @@ static void SAMPLE_AI_Usage(char* pchPrgName)
 int main(int argc, char *argv[])
 {
     HI_S32 s32Ret = HI_FAILURE;
-    printf("------------------begin---------------------\n");
+    sample_media_opencv mediaOpencv;
     if (argc < 2 || argc > 2) { // 2: argc indicates the number of parameters
         SAMPLE_AI_Usage(argv[0]);
         return HI_FAILURE;

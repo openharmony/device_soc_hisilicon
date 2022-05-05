@@ -126,7 +126,7 @@ static HI_S32 frame2Mat(VIDEO_FRAME_INFO_S *srcFrame, Mat &dstMat)
     return HI_SUCCESS;
 }
 
-HI_S32 Opencv::TennisDetectLoad(uintptr_t* model)
+HI_S32 tennis_detect::TennisDetectLoad(uintptr_t* model)
 {
     HI_S32 ret = 1;
     *model = 1;
@@ -135,14 +135,14 @@ HI_S32 Opencv::TennisDetectLoad(uintptr_t* model)
     return ret;
 }
 
-HI_S32 Opencv::TennisDetectUnload(uintptr_t model)
+HI_S32 tennis_detect::TennisDetectUnload(uintptr_t model)
 {
     model = 0;
 
     return HI_SUCCESS;
 }
 
-HI_S32 Opencv::TennisDetectCal(uintptr_t model, VIDEO_FRAME_INFO_S *srcFrm, VIDEO_FRAME_INFO_S *dstFrm)
+HI_S32 tennis_detect::TennisDetectCal(uintptr_t model, VIDEO_FRAME_INFO_S *srcFrm, VIDEO_FRAME_INFO_S *dstFrm)
 {
     (void)model;
     int ret = 0;

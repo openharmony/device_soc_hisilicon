@@ -39,9 +39,9 @@ extern "C" {
 #define APIPE2    2
 #define APIPE3    3
 
-#define AIC_VPSS_GRP            0 // default use VPSS group
-#define AIC_VPSS_ZIN_CHN        0 // default use VPSS amplification channel
-#define AIC_VPSS_ZOUT_CHN       1 // default use VPSS narrowing channel
+#define AIC_VPSS_GRP            0x00 // default use VPSS group
+#define AIC_VPSS_ZIN_CHN        0x00 // default use VPSS amplification channel
+#define AIC_VPSS_ZOUT_CHN       0x01 // default use VPSS narrowing channel
 
 #define AICSTART_VI_OUTWIDTH    1920
 #define AICSTART_VI_OUTHEIGHT   1080
@@ -71,7 +71,7 @@ extern "C" {
 #define MPP_VENC    HI_BIT3
 #define MPP_VO      HI_BIT5
 
-#define OPENCV_BUFFER_SIZE 16
+#define OPENCV_BUFFER_SIZE 0x10U
 
 typedef SAMPLE_VI_CONFIG_S ViCfg;
 typedef SAMPLE_VO_CONFIG_S VoCfg;
