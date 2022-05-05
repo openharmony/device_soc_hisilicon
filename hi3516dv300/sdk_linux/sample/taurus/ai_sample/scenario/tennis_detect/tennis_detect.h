@@ -16,12 +16,12 @@
 #ifndef TENNIS_DETECT_H
 #define TENNIS_DETECT_H
 
+#include <iostream>
+#include "sample_comm_nnie.h"
+
 #if __cplusplus
 extern "C" {
 #endif
-
-#include <iostream>
-#include "sample_comm_nnie.h"
 
 typedef struct tagIPC_IMAGE {
     HI_U64 u64PhyAddr;

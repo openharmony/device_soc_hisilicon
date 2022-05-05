@@ -38,15 +38,15 @@ static HI_VOID IveImageParamCfg(IVE_SRC_IMAGE_S *pstSrc, IVE_DST_IMAGE_S *pstDst
     pstSrc->enType = IVE_IMAGE_TYPE_YUV420SP;
     pstSrc->au64VirAddr[0] = srcFrame->stVFrame.u64VirAddr[0];
     pstSrc->au64VirAddr[1] = srcFrame->stVFrame.u64VirAddr[1];
-    pstSrc->au64VirAddr[2] = srcFrame->stVFrame.u64VirAddr[2];
+    pstSrc->au64VirAddr[2] = srcFrame->stVFrame.u64VirAddr[2]; // 2: Image data virtual address
 
     pstSrc->au64PhyAddr[0] = srcFrame->stVFrame.u64PhyAddr[0];
     pstSrc->au64PhyAddr[1] = srcFrame->stVFrame.u64PhyAddr[1];
-    pstSrc->au64PhyAddr[2] = srcFrame->stVFrame.u64PhyAddr[2];
+    pstSrc->au64PhyAddr[2] = srcFrame->stVFrame.u64PhyAddr[2]; // 2: Image data physical address
 
     pstSrc->au32Stride[0] = srcFrame->stVFrame.u32Stride[0];
     pstSrc->au32Stride[1] = srcFrame->stVFrame.u32Stride[1];
-    pstSrc->au32Stride[2] = srcFrame->stVFrame.u32Stride[2];
+    pstSrc->au32Stride[2] = srcFrame->stVFrame.u32Stride[2]; // 2: Image data span
 
     pstSrc->u32Width = srcFrame->stVFrame.u32Width;
     pstSrc->u32Height = srcFrame->stVFrame.u32Height;
@@ -56,7 +56,7 @@ static HI_VOID IveImageParamCfg(IVE_SRC_IMAGE_S *pstSrc, IVE_DST_IMAGE_S *pstDst
     pstDst->u32Height = pstSrc->u32Height;
     pstDst->au32Stride[0] = pstSrc->au32Stride[0];
     pstDst->au32Stride[1] = 0;
-    pstDst->au32Stride[2] = 0;
+    pstDst->au32Stride[2] = 0; // 2: Image data span
 }
 
 static HI_S32 yuvFrame2rgb(VIDEO_FRAME_INFO_S *srcFrame, IPC_IMAGE *dstImage)
@@ -84,7 +84,7 @@ static HI_S32 yuvFrame2rgb(VIDEO_FRAME_INFO_S *srcFrame, IPC_IMAGE *dstImage)
     HI_BOOL bInstant = HI_TRUE;
 
     s32Ret = HI_MPI_IVE_CSC(&hIveHandle, &pstSrc, &pstDst, &stCscCtrl, bInstant);
-    if(HI_SUCCESS != s32Ret) {
+    if (HI_SUCCESS != s32Ret) {
         HI_MPI_SYS_MmzFree(pstDst.au64PhyAddr[0], (void *)pstDst.au64VirAddr[0]);
         return s32Ret;
     }
@@ -94,8 +94,8 @@ static HI_S32 yuvFrame2rgb(VIDEO_FRAME_INFO_S *srcFrame, IPC_IMAGE *dstImage)
         HI_BOOL bBlock = HI_TRUE;
         s32Ret = HI_MPI_IVE_Query(hIveHandle, &bFinish, bBlock);
         while (HI_ERR_IVE_QUERY_TIMEOUT == s32Ret) {
-            usleep(100);
-            s32Ret = HI_MPI_IVE_Query(hIveHandle,&bFinish,bBlock);
+            usleep(100); // 100: usleep time
+            s32Ret = HI_MPI_IVE_Query(hIveHandle, &bFinish, bBlock);
         }
     }
     dstImage->u64PhyAddr = pstDst.au64PhyAddr[0];
@@ -130,7 +130,7 @@ HI_S32 TennisDetectLoad(uintptr_t* model)
     *model = 1;
     SAMPLE_PRT("TennisDetectLoad success\n");
 
-	return ret;
+    return ret;
 }
 
 HI_S32 TennisDetectUnload(uintptr_t model)
@@ -163,10 +163,9 @@ HI_S32 TennisDetectCal(uintptr_t model, VIDEO_FRAME_INFO_S *srcFrm, VIDEO_FRAME_
     // The cvtColor operator is used to convert an image from one color space to another color space
     cvtColor(src1, hsv, COLOR_BGR2HSV); // Convert original image to HSV image
 
-    // Binarize the hsv image, here is to binarize the green background, this parameter can be adjusted according to requirements
-    // 31: B, 82: G, 68:R
-    // 65: B, 248:G, 255:R
-    inRange(hsv, Scalar(31, 82, 68), Scalar(65, 248, 255), gray);
+    // Binarize the hsv image, here is to binarize the green background,
+    // this parameter can be adjusted according to requirements
+    inRange(hsv, Scalar(31, 82, 68), Scalar(65, 248, 255), gray); // 31: B, 82: G, 68:R / 65: B, 248:G, 255:R
 
     // Use canny operator for edge detection
     // 3: threshold1, 9: threshold2, 3: apertureSize
