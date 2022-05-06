@@ -34,7 +34,6 @@
 #include "vgs_img.h"
 #include "base_interface.h"
 #include "osd_img.h"
-#include "base_interface.h"
 #include "posix_help.h"
 #include "sample_media_ai.h"
 
