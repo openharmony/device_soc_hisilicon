@@ -33,7 +33,6 @@
 #include "hand_classify.h"
 #include "vgs_img.h"
 #include "osd_img.h"
-#include "base_interface.h"
 #include "posix_help.h"
 #include "sample_media_ai.h"
 
@@ -1599,7 +1598,7 @@ int ViVpssCreate(MppSess** sess, const ViCfg* viCfg, const VpssCfg* vpssCfg)
         return ret;
 }
 
-static void CnnTrashClassifyAiProcess(VIDEO_FRAME_INFO_S frm)
+static HI_VOID CnnTrashClassifyAiProcess(VIDEO_FRAME_INFO_S frm)
 {
     int ret;
     if (GetCfgBool("trash_classify_switch:support_trash_classify", true)) {
@@ -1639,6 +1638,11 @@ static HI_VOID* GetVpssChnFrameCnnTrashClassify(HI_VOID* arg)
         if (ret != 0) {
             SAMPLE_PRT("HI_MPI_VPSS_GetChnFrame FAIL, err=%#x, grp=%d, chn=%d\n",
                 ret, g_aicMediaInfo.vpssGrp, g_aicMediaInfo.vpssChn0);
+            ret = HI_MPI_VPSS_ReleaseChnFrame(g_aicMediaInfo.vpssGrp, g_aicMediaInfo.vpssChn0, &frm);
+            if (ret != HI_SUCCESS) {
+                SAMPLE_PRT("Error(%#x),HI_MPI_VPSS_ReleaseChnFrame failed,Grp(%d) chn(%d)!\n",
+                    ret, g_aicMediaInfo.vpssGrp, g_aicMediaInfo.vpssChn0);
+            }
             continue;
         }
         SAMPLE_PRT("get vpss frame success, weight:%d, height:%d\n", frm.stVFrame.u32Width, frm.stVFrame.u32Height);
@@ -1653,7 +1657,7 @@ static HI_VOID* GetVpssChnFrameCnnTrashClassify(HI_VOID* arg)
     return HI_NULL;
 }
 
-static void HandClassifyAiProcess(VIDEO_FRAME_INFO_S frm, VO_LAYER voLayer, VO_CHN voChn)
+static HI_VOID HandClassifyAiProcess(VIDEO_FRAME_INFO_S frm, VO_LAYER voLayer, VO_CHN voChn)
 {
     int ret;
     if (GetCfgBool("hand_classify_switch:support_hand_classify", true)) {
@@ -1702,6 +1706,11 @@ static HI_VOID* GetVpssChnFrameHandClassify(HI_VOID* arg)
         if (ret != 0) {
             SAMPLE_PRT("HI_MPI_VPSS_GetChnFrame FAIL, err=%#x, grp=%d, chn=%d\n",
                 ret, g_aicMediaInfo.vpssGrp, g_aicMediaInfo.vpssChn0);
+            ret = HI_MPI_VPSS_ReleaseChnFrame(g_aicMediaInfo.vpssGrp, g_aicMediaInfo.vpssChn0, &frm);
+            if (ret != HI_SUCCESS) {
+                SAMPLE_PRT("Error(%#x),HI_MPI_VPSS_ReleaseChnFrame failed,Grp(%d) chn(%d)!\n",
+                    ret, g_aicMediaInfo.vpssGrp, g_aicMediaInfo.vpssChn0);
+            }
             continue;
         }
         SAMPLE_PRT("get vpss frame success, weight:%d, height:%d\n", frm.stVFrame.u32Width, frm.stVFrame.u32Height);

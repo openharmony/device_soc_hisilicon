@@ -26,7 +26,6 @@
 #include "sample_comm_ive.h"
 #include "sample_media_ai.h"
 #include "vgs_img.h"
-#include "sample_comm_ive.h"
 #include "osd_img.h"
 
 /* OSD font library */
