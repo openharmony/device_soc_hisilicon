@@ -16,3 +16,5 @@ import(
 
 usb_default_config_path =
     "//device/soc/hisilicon/common/hal/usb/hi3516dv300/include"
+
+display_device_hal = "soc/hisilicon/common/hal"
