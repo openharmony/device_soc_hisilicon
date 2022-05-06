@@ -167,6 +167,7 @@ executable("ohos_camera_ai_demo") {
     opencv_lib_dir = rebase_path("$opencv_lib_path/output/opencv/lib")
     ldflags += [ "-L$opencv_lib_dir" ]
     ldflags += [ "-lopencv_world" ]
+    ldflags += [ "-Wl,-rpath=//userdata/lib" ]
 
     deps = []
   }
