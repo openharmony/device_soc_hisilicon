@@ -21,6 +21,11 @@ if (need_link_mpp_lib) {
   mpp_lib_path = "//device/soc/hisilicon/hi3516dv300/sdk_linux/out"
 }
 
+need_link_opencv_lib = true
+if (need_link_opencv_lib) {
+  opencv_lib_path = "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/taurus/ai_sample/third_party"
+}
+
 executable("ohos_camera_ai_demo") {
   output_name = "ohos_camera_ai_demo"
   sources = [
@@ -86,7 +91,6 @@ executable("ohos_camera_ai_demo") {
   if (need_link_mpp_lib) {
     outdir = rebase_path("$mpp_lib_path/lib")
     ldflags = [ "-L$outdir" ]
-    ldflags += [ "-lopencv_world" ]
     ldflags += [ "-laaccomm" ]
     ldflags += [ "-laacdec" ]
     ldflags += [ "-laacenc" ]
@@ -159,6 +163,10 @@ executable("ohos_camera_ai_demo") {
     ldflags += [ "-lupvqe" ]
     ldflags += [ "-lvb_server" ]
     ldflags += [ "-lVoiceEngine" ]
+
+    opencv_lib_dir = rebase_path("$opencv_lib_path/output/opencv/lib")
+    ldflags += [ "-L$opencv_lib_dir" ]
+    ldflags += [ "-lopencv_world" ]
 
     deps = []
   }
