@@ -1,4 +1,5 @@
-# Pegasus与Taurus串口互联通信<a name="ZH-CN_TOPIC_0000001130176841"></a>
+# Pegasus与Taurus WiFi互联通信<a name="ZH-CN_TOPIC_0000001130176841"></a>
+-    在学习Pegasus与Taurus WiFi互联通信前，需要将https://gitee.com/openharmony/device_soc_hisilicon仓下载下来，下载完成后，将device_soc_hisilicon\hi3516dv300\sdk_linux\sample\taurus\histreaming_server这整个文件夹放到docker里面的device\soc\hisilicon\hi3516dv300\sdk_linux\sample\taurus目录下，同时将device_soc_hisilicon/hi3861v100/sdk_liteos/build/libs/libhistreaminglink.a这个库文件替换到device\soc\hisilicon\hi3861v100\sdk_liteos\build\libs\目录下。
 
 -    前言：HiStreaming 组件作为一种技术基础设施，使得海思芯片可以通过WiFi或有线网络实现物联网设备之间的设备自动发现、服务注册与识别、服务操作。HiStreaming把物联网设备分为两类角色，对外部提供服务的设备称之为 Server 设备，而使用其他设备提供的服务的设备称之为 Client 设备。
 
@@ -136,7 +137,17 @@ network={
 
 **编译
 
-* 在编译histreaming_server之前，需确保OpenHarmony 小型系统的主干代码已经整编通过，**且已经按照《[修改源码及配置文件适配Taurus开发板](../doc/2.2.1.%E4%BF%AE%E6%94%B9%E6%BA%90%E7%A0%81%E5%8F%8A%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E9%80%82%E9%85%8DTaurus%E5%BC%80%E5%8F%91%E6%9D%BF.md)》的内容进行修改**。在单编ohos_histreaming_server之前，需修改目录下的一处依赖，进入//device/soc/hisilicon/hi3516dv300/sdk_linux目录下，通过修改BUILD.gn，在deps下面新增target，``"sample/taurus/histreaming_server:hi3516dv300_histreaming_server"``。
+* 在编译histreaming_server之前，需确保已经在docker上整编通过，整编成功后，将./out/hispark_taurus/ipcamera_hispark_taurus_linux/usr/lib/libcjson_shared.so放到device\soc\hisilicon\hi3516dv300\sdk_linux\out\lib目录下，**且已经按照《[修改源码及配置文件适配Taurus开发板](../doc/2.2.1.%E4%BF%AE%E6%94%B9%E6%BA%90%E7%A0%81%E5%8F%8A%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E9%80%82%E9%85%8DTaurus%E5%BC%80%E5%8F%91%E6%9D%BF.md)》的内容进行修改**。然后在单编ohos_histreaming_server之前，需修改目录下的一处依赖，进入//device/soc/hisilicon/hi3516dv300/sdk_linux目录下，通过修改BUILD.gn，在deps下面新增target，``"sample/taurus/histreaming_server:hi3516dv300_histreaming_server"``。
+```
+group("hispark_taurus_sdk") {
+  if (defined(ohos_lite)) {
+    deps = [
+      ":sdk_linux_lite_libs",
+      ":sdk_make",
+      "//kernel/linux/build:linux_kernel",
+      "sample/taurus/histreaming_server:hi3516dv300_histreaming_server",
+    ]
+```
 
 * 点击Deveco Device Tool工具的Build按键进行编译，具体的编译过程这里不再赘述。
 
