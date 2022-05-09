@@ -53,7 +53,7 @@ insmod hi_mipi_tx.ko
 
 ![](https://gitee.com/wgm2022/mypic/raw/master/hispark_taurus_ai_sample/040%E5%8A%A0%E8%BD%BDmipi_txko.png)
 
-* 执行下面的命令，进行手势识别sample的验证
+* 执行下面的命令，进行垃圾分类sample的验证
 
 ```
 cd  /userdata
@@ -66,6 +66,18 @@ cd  /userdata
 
 ![](https://gitee.com/wgm2022/mypic/raw/master/hispark_taurus_ai_sample/049%E6%8E%A8%E7%90%86%E7%BB%93%E6%9E%9C%E5%9B%BE.png)
 
+![](https://gitee.com/wgm2022/mypic/raw/master/hispark_taurus_ai_sample/056%E4%BD%BF%E7%94%A8OSD%E6%98%BE%E7%A4%BA%E5%85%B7%E4%BD%93%E7%9A%84%E6%96%87%E5%AD%97.png)
+
+**注意：**
+
+​	（1）支持osd在MIPI屏上叠加字符，字库文件为：ai_sample/mpp_help/include/simsunb_16x32.txt；
+​	（2）字库支持的格式为：英文字母、符号和数字，不支持汉字
+
+
+
 * 敲两下回车即可关闭程序
 
 ![](https://gitee.com/wgm2022/mypic/raw/master/hispark_taurus_helloworld_sample/0007-helloworld%20log.png)
+
+
+

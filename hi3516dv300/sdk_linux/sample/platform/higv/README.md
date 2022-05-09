@@ -4,7 +4,7 @@
 
 * HiGV是一个轻量级的 GUI 系统，主要是为芯片平台提供统一的轻量级、高效、易用的 GUI解决方案，higv  sample是海思Hi3516DV300的SDK sample，本文以Taurus套件为例，higv  sample主要介绍了如何使用海思的HIGV进行UI应用程序设计。
 
-* higv的开发工具可以访问**[higvbuilder下载链接](https://repo.harmonyos.com/#/cn/bundles/@huawei%2Fhigvbuilder)**进行下载。
+* higv的开发工具可以访问[higvbuilder下载链接](https://repo.harmonyos.com/#/cn/bundles/@huawei%2Fhigvbuilder)进行下载。
 * higv开发相关的参考文档可[访问链接](https://gitee.com/openharmony/device_soc_hisilicon/tree/master/hi3516dv300/sdk_linux/sample/doc)进行下载，主要包括《GVBuilderTool 使用指南.pdf》、《HiGV API参考.pdf》、《HiGV 开发指南.pdf》、《HiGV 标签 使用指南.pdf》。
 
 ## 2. 目录
