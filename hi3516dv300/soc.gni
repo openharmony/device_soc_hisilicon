@@ -11,9 +11,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import(
-    "//device/soc/hisilicon/common/hal/media/camera/hi3516dv300/linux_standard/camera/product.gni")
-
 usb_default_config_path =
     "//device/soc/hisilicon/common/hal/usb/hi3516dv300/include"
 
