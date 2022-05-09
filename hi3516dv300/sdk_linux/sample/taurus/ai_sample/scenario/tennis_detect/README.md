@@ -1,4 +1,4 @@
-# 5.3、网球检测实验功能验证
+# 5.4、网球检测实验功能验证
 
 * 步骤1：在SD卡或Windows的nfs共享目录下，创建一个**sample_ai.conf**的文件，然后把下面的内容拷贝到此文件中
 
@@ -74,7 +74,7 @@ cd  /userdata
 
 * 具体的现象如下图所示
 
-![](https://gitee.com/wgm2022/mypic/raw/master/hispark_taurus_ai_sample/055%20opencv%E7%BD%91%E7%90%83%E6%A3%80%E6%B5%8B.png)
+![](https://gitee.com/wgm2022/mypic/raw/master/hispark_taurus_ai_sample/055%20%E7%BD%91%E7%90%83%E6%A3%80%E6%B5%8B.png)
 
 * 敲两下回车即可关闭程序
 
