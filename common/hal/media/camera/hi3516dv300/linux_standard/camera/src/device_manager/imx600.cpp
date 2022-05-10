@@ -22,17 +22,17 @@ Imx600::Imx600() : ISensor("imx600") {}
 
 Imx600::~Imx600() {}
 
-void Imx600::InitPhysicalSize(CameraStandard::CameraMetadata& camera_meta_data)
+void Imx600::InitPhysicalSize(Camera::CameraMetadata& camera_meta_data)
 {
     ISensor::InitPhysicalSize(camera_meta_data);
 }
 
-void Imx600::InitAntiBandingModes(CameraStandard::CameraMetadata& camera_meta_data)
+void Imx600::InitAntiBandingModes(Camera::CameraMetadata& camera_meta_data)
 {
     ISensor::InitAntiBandingModes(camera_meta_data);
 }
 
-void Imx600::InitAeFpsTarget(CameraStandard::CameraMetadata& camera_meta_data)
+void Imx600::InitAeFpsTarget(Camera::CameraMetadata& camera_meta_data)
 {
     std::vector<int32_t> availableAeFpsTarget = {
         15,
@@ -42,17 +42,17 @@ void Imx600::InitAeFpsTarget(CameraStandard::CameraMetadata& camera_meta_data)
                               availableAeFpsTarget.size());
 }
 
-void Imx600::InitCompensationRange(CameraStandard::CameraMetadata& camera_meta_data)
+void Imx600::InitCompensationRange(Camera::CameraMetadata& camera_meta_data)
 {
     ISensor::InitCompensationRange(camera_meta_data);
 }
 
-void Imx600::InitSensitivityRange(CameraStandard::CameraMetadata& camera_meta_data)
+void Imx600::InitSensitivityRange(Camera::CameraMetadata& camera_meta_data)
 {
     ISensor::InitSensitivityRange(camera_meta_data);
 }
 
-void Imx600::Init(CameraStandard::CameraMetadata& camera_meta_data)
+void Imx600::Init(Camera::CameraMetadata& camera_meta_data)
 {
     InitPhysicalSize(camera_meta_data);
     InitAntiBandingModes(camera_meta_data);
