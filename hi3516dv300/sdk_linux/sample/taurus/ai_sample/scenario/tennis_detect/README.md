@@ -74,7 +74,7 @@ cd  /userdata
 
 * 具体的现象如下图所示
 
-![](https://gitee.com/wgm2022/mypic/raw/master/hispark_taurus_ai_sample/055%20opencv%E7%BD%91%E7%90%83%E6%A3%80%E6%B5%8B.png)
+![](https://gitee.com/wgm2022/mypic/raw/master/hispark_taurus_ai_sample/055.png)
 
 * 敲两下回车即可关闭程序
 
