@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2021 HiSilicon (Shanghai) Technologies CO., LIMITED.
+# Copyright (C) 2021-2022 HiSilicon (Shanghai) Technologies CO., LIMITED.
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -56,7 +56,7 @@ HI1131_HOST_CFLAGS += $(HI1131_WIFI_CFLAGS)
 
 
 ####################################### platform module start #########################################
-oal-objs := oal_util.o oal_net.o oal_main.o oal_mem.o oal_shellcmd.c
+oal-objs := oal_util.o oal_net.o oal_main.o oal_mem.o oal_shellcmd.o
 oal-objs += oal_cfg80211.o oal_sdio_host.o oal_kernel_file.o exception_rst.o \
             plat_firmware.o plat_pm.o plat_pm_wlan.o plat_sdio.o oal_chr.o
 ifeq ($(CFG_LITEOS), y)
