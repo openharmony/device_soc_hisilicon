@@ -74,7 +74,7 @@ cp third_party/iniparser device/soc/hisilicon/hi3516dv300/sdk_linux/sample/tauru
 
 ![](https://gitee.com/wgm2022/mypic/raw/master/hispark_taurus_ai_sample/050%E5%A4%8D%E5%88%B6opencv%E5%8E%8B%E7%BC%A9%E5%8C%85%E5%88%B0Ubuntu.png)
 
-* 执行下面的命令，创建output，然后把opencv压缩包解压只output目录下。
+* 执行下面的命令，创建output，然后把opencv压缩包解压至output目录下。
 
 ```
 mkdir device/soc/hisilicon/hi3516dv300/sdk_linux/sample/taurus/ai_sample/third_party/output/ -p

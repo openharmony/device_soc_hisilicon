@@ -41,7 +41,7 @@ pubAttr.enIntfSync = VO_OUTPUT_1080P60; // 第259行的VO_OUTPUT_1080P30; 改成
 
 ![](https://gitee.com/wgm2022/mypic/raw/master/hispark_taurus_nnie_sample/175%E9%80%82%E9%85%8D%E6%98%BE%E7%A4%BA%E5%B1%8F.png)
 
-* **按照《[获取sample依赖的资源文件到本地](../../taurus/doc/6.2.%E8%8E%B7%E5%8F%96sample%E4%BE%9D%E8%B5%96%E7%9A%84%E8%B5%84%E6%BA%90%E6%96%87%E4%BB%B6%E5%88%B0%E6%9C%AC%E5%9C%B0.md)》文档获取higv sample编译是依赖的资源文件**
+* **按照《[获取sample依赖的资源文件到本地](../../taurus/doc/6.2.%E8%8E%B7%E5%8F%96sample%E4%BE%9D%E8%B5%96%E7%9A%84%E8%B5%84%E6%BA%90%E6%96%87%E4%BB%B6%E5%88%B0%E6%9C%AC%E5%9C%B0.md)》文档获取higv sample编译时依赖的资源文件**
 
 ## 4. 编译
 
