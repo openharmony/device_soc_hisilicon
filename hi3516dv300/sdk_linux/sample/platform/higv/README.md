@@ -2,7 +2,10 @@
 
 ## 1. 概述
 
-HiGV是一个轻量级的 GUI 系统，主要是为芯片平台提供统一的轻量级、高效、易用的 GUI解决方案，higv  sample是海思Hi3516DV300的SDK sample，本文以Taurus套件为例，higv  sample主要介绍了如何使用海思的HIGV进行UI应用程序设计。
+* HiGV是一个轻量级的 GUI 系统，主要是为芯片平台提供统一的轻量级、高效、易用的 GUI解决方案，higv  sample是海思Hi3516DV300的SDK sample，本文以Taurus套件为例，higv  sample主要介绍了如何使用海思的HIGV进行UI应用程序设计。
+
+* higv的开发工具可以访问[higvbuilder下载链接](https://repo.harmonyos.com/#/cn/bundles/@huawei%2Fhigvbuilder)进行下载。
+* higv开发相关的参考文档可[访问链接](https://gitee.com/openharmony/device_soc_hisilicon/tree/master/hi3516dv300/sdk_linux/sample/doc)进行下载，主要包括《GVBuilderTool 使用指南.pdf》、《HiGV API参考.pdf》、《HiGV 开发指南.pdf》、《HiGV 标签 使用指南.pdf》。
 
 ## 2. 目录
 
@@ -30,13 +33,15 @@ HiGV是一个轻量级的 GUI 系统，主要是为芯片平台提供统一的�
 
 ## 3.代码修改
 
-由于我的显示器是只支持1080P60帧，所以需要修改device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/higv/目录下的higv_mw_media.c的**HI_MW_DISP_Open()**函数中的VO 输出配置，这个请根据自己的显示器支持的参数进行配置。
+* 由于我的显示器是只支持1080P60帧，所以需要修改device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/higv/目录下的higv_mw_media.c的**HI_MW_DISP_Open()**函数中的VO 输出配置，这个请根据自己的显示器支持的参数进行配置。
 
 ```c++
 pubAttr.enIntfSync = VO_OUTPUT_1080P60; // 第259行的VO_OUTPUT_1080P30; 改成 VO_OUTPUT_1080P60;
 ```
 
 ![](https://gitee.com/wgm2022/mypic/raw/master/hispark_taurus_nnie_sample/175%E9%80%82%E9%85%8D%E6%98%BE%E7%A4%BA%E5%B1%8F.png)
+
+* **按照《[获取sample依赖的资源文件到本地](../../taurus/doc/6.2.%E8%8E%B7%E5%8F%96sample%E4%BE%9D%E8%B5%96%E7%9A%84%E8%B5%84%E6%BA%90%E6%96%87%E4%BB%B6%E5%88%B0%E6%9C%AC%E5%9C%B0.md)》文档获取higv sample编译时依赖的资源文件**
 
 ## 4. 编译
 
