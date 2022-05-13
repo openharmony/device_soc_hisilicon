@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2021 HiSilicon (Shanghai) Technologies CO., LIMITED.
+# Copyright (C) 2021-2022 HiSilicon (Shanghai) Technologies CO., LIMITED.
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -27,11 +27,9 @@ LOCAL_INCLUDE = $(HDM_WIFI_ROOT)/include \
                 $(HDM_WIFI_ROOT)/platform/include \
                 $(HDM_WIFI_ROOT)/core \
                 $(LITEOSTOPDIR)/../../drivers/peripheral/wlan/client/include \
-                $(VENDOR_WIFI_ROOT)/hi3881/linuxkpi/include
+                $(VENDOR_WIFI_ROOT)/driver/linuxkpi/include
 
-HDF_WIFI_CORE = $(VENDOR_WIFI_ROOT)/core
-
-LOCAL_SRCS += $(HDF_WIFI_CORE)/hdf_wlan_sdio_adapt.c
+LOCAL_SRCS += $(wildcard adapter/*.c)
 
 LOCAL_CFLAGS += -fstack-protector-strong -fno-common -fsigned-char -fno-strict-aliasing
 
