@@ -1,0 +1,35 @@
+{
+    "name": "@ohos/hardware",
+    "description": "hardware media sdk.",
+    "version": "3.1",
+    "license": "Apache License 2.0",
+    "publishAs": "code-segment",
+    "segment": {
+        "destPath": "device/soc/hisilicon/common/hal/media"
+    },
+    "dirs": {},
+    "scripts": {},
+    "component": {
+        "name": "hardware",
+        "subsystem": "vendor",
+        "syscap": [],
+        "features": [],
+        "adapted_system_type": [
+            "mini",
+	    "small"
+        ],
+        "rom": "",
+        "ram": "",
+        "deps": {
+            "components": [],
+            "third_party": []
+        },
+        "build": {
+            "sub_component": [
+                "//device/soc/hisilicon/common/hal/media:hardware_media_sdk"
+            ],
+            "inner_kits": [],
+            "test": []
+        }
+    }
+}
