@@ -64,16 +64,6 @@ if (defined(ohos_lite)) {
   import("//build/ohos.gni")
 
   if (device_name == "hispark_phoenix") {
-    ohos_prebuilt_shared_library("display_device") {
-      if (target_cpu == "arm") {
-        source = "hi3751v350/linux_standard/lib/libdisplay_device.z.so"
-      }
-
-      install_images = [ "system" ]
-      subsystem_name = "hdf"
-      part_name = "display_device_driver"
-    }
-
     ohos_prebuilt_shared_library("display_gralloc") {
       if (target_cpu == "arm") {
         source = "hi3751v350/linux_standard/lib/libdisplay_gralloc.z.so"
@@ -89,11 +79,14 @@ if (defined(ohos_lite)) {
         "//drivers/peripheral/display/hal/default_standard:def_display_gralloc",
       ]
     }
+  }
 
-    group("display_device") {
-      deps = [
-        "//drivers/peripheral/display/hal/default_standard:def_display_device",
-      ]
+  group("display_device") {
+    deps = [
+      "//drivers/peripheral/display/hal/default_standard:def_display_device",
+    ]
+    if (device_name == "hispark_phoenix") {
+      deps += [ "hi3751v350/linux_standard/adapter:display_adapter_impl" ]
     }
   }
 
