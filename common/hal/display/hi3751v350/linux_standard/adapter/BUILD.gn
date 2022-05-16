@@ -30,7 +30,7 @@ ohos_shared_library("display_adapter_impl") {
     "//device/soc/hisilicon/hi3751v350/sdk_linux:libdriver_invocation.z.so",
     "//device/soc/hisilicon/hi3751v350/sdk_linux:libfb_mpdi_adapter.z.so",
   ]
-  install_images = [ chipset_base_dir ]
+  install_images = [ "system" ]
   subsystem_name = "hdf"
   part_name = "display_device_driver"
 }
