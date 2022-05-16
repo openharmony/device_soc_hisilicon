@@ -1,0 +1,20 @@
+{
+  "subsystem": "vendor",
+  "parts": {
+    "hardware": {
+      "module_list": [
+        "//device/soc/hisilicon/common/hal/media:hardware_media_sdk"
+      ]
+    },
+    "hi3861_sdk": {
+      "module_list": [
+        "//device/soc/hisilicon/hi3861v100/sdk_liteos:wifiiot_sdk"
+      ]
+    },
+    "middleware": {
+      "module_list": [
+        "//device/soc/hisilicon/common/hal/middleware:middleware_source_sdk"
+      ]
+    }
+  }
+}

@@ -1,0 +1,35 @@
+{
+    "name": "@ohos/hi3861_sdk",
+    "description": "hi3861 wifiiot sdk.",
+    "version": "3.1",
+    "license": "Apache License 2.0",
+    "publishAs": "code-segment",
+    "segment": {
+        "destPath": "device/soc/hisilicon/hi3861v100/sdk_liteos"
+    },
+    "dirs": {},
+    "scripts": {},
+    "component": {
+        "name": "hi3861_sdk",
+        "subsystem": "vendor",
+        "syscap": [],
+        "features": [],
+        "adapted_system_type": [
+            "mini",
+	    "small"
+        ],
+        "rom": "",
+        "ram": "",
+        "deps": {
+            "components": [],
+            "third_party": []
+        },
+        "build": {
+            "sub_component": [
+                "//device/soc/hisilicon/hi3861v100/sdk_liteos:wifiiot_sdk"
+            ],
+            "inner_kits": [],
+            "test": []
+        }
+    }
+}
