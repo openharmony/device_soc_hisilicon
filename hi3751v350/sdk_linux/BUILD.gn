@@ -8,6 +8,7 @@ group("hispark_phoenix_sdk") {
     deps = [
       ":ohos_drv_mgr",
       ":sdk_linux_libs",
+      "//device/board/hisilicon/hispark_phoenix/peripherals/bluetooth/rtkbt:rtkbt_group",
     ]
   }
 }
