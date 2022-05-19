@@ -18,7 +18,7 @@ support_trash_classify = false ; 是否支持垃圾分类功能
 support_hand_classify = true ; 是否手势检测识别功能
 ```
 
-![](https://gitee.com/wgm2022/mypic/raw/master/hispark_taurus_ai_sample/038%E4%BF%AE%E6%94%B9conf%E6%96%87%E4%BB%B6%E4%BD%BF%E8%83%BD%E6%89%8B%E5%8A%BF%E8%AF%86%E5%88%AB.png)
+![](../../../doc/figures/hispark_taurus_ai_sample/038%E4%BF%AE%E6%94%B9conf%E6%96%87%E4%BB%B6%E4%BD%BF%E8%83%BD%E6%89%8B%E5%8A%BF%E8%AF%86%E5%88%AB.png)
 
 * 步骤2：再通过下面的挂载命令，把SD卡或者Windows的nfs共享目录挂载到开发板上
 
@@ -41,7 +41,7 @@ support_hand_classify = true ; 是否手势检测识别功能
 cp /mnt/sample_ai.conf  /userdata
 ```
 
-![](https://gitee.com/wgm2022/mypic/raw/master/hispark_taurus_ai_sample/039%E6%8B%B7%E8%B4%9Dai%20sample%20config%E8%87%B3userdata.png)
+![](../../../doc/figures/hispark_taurus_ai_sample/039%E6%8B%B7%E8%B4%9Dai%20sample%20config%E8%87%B3userdata.png)
 
 * 步骤4：执行下面的命令：进入/ko目录，加载mipi_tx驱动。
 
@@ -50,7 +50,7 @@ cd /ko
 insmod hi_mipi_tx.ko
 ```
 
-![](https://gitee.com/wgm2022/mypic/raw/master/hispark_taurus_ai_sample/040%E5%8A%A0%E8%BD%BDmipi_txko.png)
+![](../../../doc/figures/hispark_taurus_ai_sample/040%E5%8A%A0%E8%BD%BDmipi_txko.png)
 
 * 执行下面的命令，进行手势识别sample的验证
 
@@ -59,12 +59,12 @@ cd  /userdata
 ./ohos_camera_ai_demo 1
 ```
 
-![](https://gitee.com/wgm2022/mypic/raw/master/hispark_taurus_ai_sample/041%E6%89%A7%E8%A1%8C%E6%89%8B%E5%8A%BF%E8%AF%86%E5%88%AB.png)
+![](../../../doc/figures/hispark_taurus_ai_sample/041%E6%89%A7%E8%A1%8C%E6%89%8B%E5%8A%BF%E8%AF%86%E5%88%AB.png)
 
 
 
-![](https://gitee.com/wgm2022/mypic/raw/master/hispark_taurus_ai_sample/045%E6%89%8B%E5%8A%BF%E8%AF%86%E5%88%AB%E7%9A%84%E7%BB%93%E6%9E%9C%E5%9B%BE.png)
+![](../../../doc/figures/hispark_taurus_ai_sample/045%E6%89%8B%E5%8A%BF%E8%AF%86%E5%88%AB%E7%9A%84%E7%BB%93%E6%9E%9C%E5%9B%BE.png)
 
 * 敲两下回车即可关闭程序
 
-![](https://gitee.com/wgm2022/mypic/raw/master/hispark_taurus_helloworld_sample/0007-helloworld%20log.png)
+![](../../../doc/figures/hispark_taurus_helloworld_sample/0007-helloworld%20log.png)
