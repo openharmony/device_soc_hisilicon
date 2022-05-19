@@ -60,7 +60,7 @@ mkdir device/soc/hisilicon/hi3516dv300/sdk_linux/sample/taurus/ai_sample/third_p
 cp third_party/iniparser device/soc/hisilicon/hi3516dv300/sdk_linux/sample/taurus/ai_sample/third_party/src/ -rf
 ```
 
-![](https://gitee.com/wgm2022/mypic/raw/master/hispark_taurus_ai_sample/046%E6%8B%B7%E8%B4%9D%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93%E8%87%B3ai%20sample.png)
+![](../doc/figures/hispark_taurus_ai_sample/046%E6%8B%B7%E8%B4%9D%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93%E8%87%B3ai%20sample.png)
 
 * 步骤2：使用IDE打开device/soc/hisilicon/hi3516dv300/sdk_linux/sample/taurus/ai_sample/third_party/src/iniparser/src/iniparser.c文件，把第15行的1024改成8192。
 
@@ -68,11 +68,11 @@ cp third_party/iniparser device/soc/hisilicon/hi3516dv300/sdk_linux/sample/tauru
 #define ASCIILINESZ         ((8192))  // (1024)
 ```
 
-![](https://gitee.com/wgm2022/mypic/raw/master/hispark_taurus_ai_sample/047%E4%BF%AE%E6%94%B9iniparser.png)
+![](../doc/figures/hispark_taurus_ai_sample/047%E4%BF%AE%E6%94%B9iniparser.png)
 
-* 把opencv压缩包复制到Ubuntu的openharmony的源码目录下
+* 把交叉编译好的opencv压缩包复制到Ubuntu的openharmony的源码目录下
 
-![](https://gitee.com/wgm2022/mypic/raw/master/hispark_taurus_ai_sample/050%E5%A4%8D%E5%88%B6opencv%E5%8E%8B%E7%BC%A9%E5%8C%85%E5%88%B0Ubuntu.png)
+![](../doc/figures/hispark_taurus_ai_sample/050%E5%A4%8D%E5%88%B6opencv%E5%8E%8B%E7%BC%A9%E5%8C%85%E5%88%B0Ubuntu.png)
 
 * 执行下面的命令，创建output，然后把opencv压缩包解压至output目录下。
 
@@ -82,21 +82,21 @@ mkdir device/soc/hisilicon/hi3516dv300/sdk_linux/sample/taurus/ai_sample/third_p
 tar -zxvf opencv.tgz -C device/soc/hisilicon/hi3516dv300/sdk_linux/sample/taurus/ai_sample/third_party/output/
 ```
 
-![](https://gitee.com/wgm2022/mypic/raw/master/hispark_taurus_ai_sample/051%E8%A7%A3%E5%8E%8Bopencv%E8%87%B3%E6%8C%87%E5%AE%9A%E7%9B%AE%E5%BD%95%E4%B8%8B.png)
+![](../doc/figures/hispark_taurus_ai_sample/051%E8%A7%A3%E5%8E%8Bopencv%E8%87%B3%E6%8C%87%E5%AE%9A%E7%9B%AE%E5%BD%95%E4%B8%8B.png)
 
 ## 4. 编译
 
 在编译ai_sample之前，需确保OpenHarmony 小型系统的主干代码已经整编通过，**且已经按照《[修改源码及配置文件适配Taurus开发板](../doc/2.2.1.%E4%BF%AE%E6%94%B9%E6%BA%90%E7%A0%81%E5%8F%8A%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E9%80%82%E9%85%8DTaurus%E5%BC%80%E5%8F%91%E6%9D%BF.md)》的内容进行修改**。在单编ai_sample之前，需修改目录下的一处依赖，进入//device/soc/hisilicon/hi3516dv300/sdk_linux目录下，通过修改BUILD.gn，在deps下面新增target，``"sample/taurus/ai_sample:hi3516dv300_ai_sample"``，如下图所示：
 
-![](https://gitee.com/wgm2022/mypic/raw/master/hispark_taurus_ai_sample/033%E4%BF%AE%E6%94%B9BUILDgn.png)
+![](../doc/figures/hispark_taurus_ai_sample/033%E4%BF%AE%E6%94%B9BUILDgn.png)
 
 * 点击Deveco Device Tool工具的Build按键进行编译，具体的编译过程这里不再赘述，编译成功后，如下图所示：
 
-![](https://gitee.com/wgm2022/mypic/raw/master/hispark_taurus_helloworld_sample/0002-build%20success.png)
+![](../doc/figures/hispark_taurus_helloworld_sample/0002-build%20success.png)
 
 * 编译成功后，即可在out/hispark_taurus/ipcamera_hispark_taurus_linux/rootfs/bin目录下，生成 ohos_camera_ai_demo可执行文件，如下图所示：
 
-![](https://gitee.com/wgm2022/mypic/raw/master/hispark_taurus_ai_sample/044%E5%BE%97%E5%88%B0ai%E5%8F%AF%E6%89%A7%E8%A1%8C%E6%96%87%E4%BB%B6.png)
+![](../doc/figures/hispark_taurus_ai_sample/044%E5%BE%97%E5%88%B0ai%E5%8F%AF%E6%89%A7%E8%A1%8C%E6%96%87%E4%BB%B6.png)
 
 ## 5. 拷贝可执行程序和依赖文件至开发板的mnt目录下
 
@@ -108,7 +108,7 @@ tar -zxvf opencv.tgz -C device/soc/hisilicon/hi3516dv300/sdk_linux/sample/taurus
 * 步骤3：将device/soc/hisilicon/hi3516dv300/sdk_linux/sample/taurus/目录下的models文件夹和aac_file文件夹拷贝至SD卡中。（前提是按照《[获取sample依赖的资源文件到本地](../doc/6.2.%E8%8E%B7%E5%8F%96sample%E4%BE%9D%E8%B5%96%E7%9A%84%E8%B5%84%E6%BA%90%E6%96%87%E4%BB%B6%E5%88%B0%E6%9C%AC%E5%9C%B0.md)》文档获取了资源文件）
 * 步骤4：复制device\soc\hisilicon\hi3516dv300\sdk_linux\sample\taurus\ai_sample\third_party\output\opencv\lib\目录下的libopencv_world.so.4.5.5 拷贝至Windows的nfs共享路径下
 
-![](https://gitee.com/wgm2022/mypic/raw/master/hispark_taurus_ai_sample/035%E5%B0%86%E5%8F%AF%E6%89%A7%E8%A1%8C%E6%96%87%E4%BB%B6%E5%92%8C%E4%BE%9D%E8%B5%96%E6%96%87%E4%BB%B6%E6%8B%B7%E8%B4%9D%E8%87%B3SD%E5%8D%A1.png)
+![](../doc/figures/hispark_taurus_ai_sample/035%E5%B0%86%E5%8F%AF%E6%89%A7%E8%A1%8C%E6%96%87%E4%BB%B6%E5%92%8C%E4%BE%9D%E8%B5%96%E6%96%87%E4%BB%B6%E6%8B%B7%E8%B4%9D%E8%87%B3SD%E5%8D%A1.png)
 
 * 步骤5：可执行文件拷贝成功后，将内存卡插入开发板的SD卡槽中，可通过挂载的方式挂载到板端，可选择SD卡 mount指令进行挂载。
 
@@ -119,7 +119,7 @@ mount -t vfat /dev/mmcblk1p1 /mnt
 
 * 挂载成功后，如下图所示：
 
-![](https://gitee.com/wgm2022/mypic/raw/master/hispark_taurus_ai_sample/036%E6%8C%82%E8%BD%BDSD%E5%8D%A1%E8%87%B3%E5%BC%80%E5%8F%91%E6%9D%BF.png)
+![](../doc/figures/hispark_taurus_ai_sample/036%E6%8C%82%E8%BD%BDSD%E5%8D%A1%E8%87%B3%E5%BC%80%E5%8F%91%E6%9D%BF.png)
 
 **方式二：使用NFS挂载的方式进行资料文件的拷贝**
 
@@ -131,7 +131,7 @@ mount -t vfat /dev/mmcblk1p1 /mnt
 * 步骤5：复制device\soc\hisilicon\hi3516dv300\sdk_linux\sample\taurus\ai_sample\third_party\output\opencv\lib\目录下的libopencv_world.so.4.5.5 拷贝至Windows的nfs共享路径下
 
 
-![](https://gitee.com/wgm2022/mypic/raw/master/hispark_taurus_ai_sample/048%E5%B0%86%E5%8F%AF%E6%89%A7%E8%A1%8C%E6%96%87%E4%BB%B6%E5%92%8C%E4%BE%9D%E8%B5%96%E6%96%87%E4%BB%B6%E6%8B%B7%E8%B4%9D%E8%87%B3nfs.png)
+![](../doc/figures/hispark_taurus_ai_sample/048%E5%B0%86%E5%8F%AF%E6%89%A7%E8%A1%8C%E6%96%87%E4%BB%B6%E5%92%8C%E4%BE%9D%E8%B5%96%E6%96%87%E4%BB%B6%E6%8B%B7%E8%B4%9D%E8%87%B3nfs.png)
 
 * 步骤6：依赖文件拷贝至Windows的nfs共享路径下后，执行下面的命令，将Windows的nfs共享路径挂载至开发板的mnt目录下
 
@@ -155,7 +155,7 @@ ln -s /userdata/lib/libopencv_world.so.4.5.5  /userdata/lib/libopencv_world.so.4
 ln -s /userdata/lib/libopencv_world.so.405  /userdata/lib/libopencv_world.so
 ```
 
-![](https://gitee.com/wgm2022/mypic/raw/master/hispark_taurus_ai_sample/037%E6%8B%B7%E8%B4%9DSD%E5%8D%A1%E4%B8%AD%E7%9A%84%E6%96%87%E4%BB%B6%E8%87%B3%E5%AF%B9%E5%BA%94%E8%B7%AF%E5%BE%84%E4%B8%8B.png)
+![](../doc/figures/hispark_taurus_ai_sample/037%E6%8B%B7%E8%B4%9DSD%E5%8D%A1%E4%B8%AD%E7%9A%84%E6%96%87%E4%BB%B6%E8%87%B3%E5%AF%B9%E5%BA%94%E8%B7%AF%E5%BE%84%E4%B8%8B.png)
 
 * 执行下面的命令，给ohos_camera_ai_demo文件可执行权限
 

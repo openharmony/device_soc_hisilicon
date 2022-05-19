@@ -4,9 +4,9 @@
 ## 硬件环境搭建
 -    硬件要求：Taurus开发板；硬件搭建如下图所示。注意这里需要跟Pegasus同时使用，详情可以参考[串口互联client端](http://gitee.com/openharmony/vendor_hisilicon/blob/master/hispark_pegasus/demo/interconnection_client_demo/README.md),由于Pegasus有两种方式，下面介绍两种硬件搭建方式。
 
-![输入图片说明](https://gitee.com/asd1122/tupian/raw/master/%E5%9B%BE%E7%89%87/%E4%BA%92%E8%81%94/10.jpg)
+![输入图片说明](../../doc/figures/uart_connect/10.jpg)
 
-![输入图片说明](https://gitee.com/asd1122/tupian/raw/master/%E5%9B%BE%E7%89%87/%E4%BA%92%E8%81%94/11.jpg)
+![输入图片说明](../../doc/figures/uart_connect/11.jpg)
 
 ## 串口通信控制协议HiSignalling介绍
 -    为了便于Taurus与Pegasus开发套件之间进行通信和控制，定义了一套简易的HiSignalling通信控制协议，数据帧格式如下表所示，并提供相关参考代码，大家也可以根据自己的需要使用其他协议。
@@ -36,8 +36,8 @@
 -    2.在HandDetectFlag调用UartSendRead()函数实现数据的发送，Pegasus接收到数据后实现对应外设的响应。
 -    3.当Taurus的摄像头检测到特定的手势之后，Taurus会将对应的检测结果通过串口发送给Pegasus端，此时Pegasus主板上的灯会亮起，具体实验结果及打印信息如下图所示。
 
-     ![输入图片说明](https://gitee.com/asd1122/tupian/raw/master/%E5%9B%BE%E7%89%87/%E4%BA%92%E8%81%94/6.png)
+     ![输入图片说明](../../doc/figures/uart_connect/6.png)
 
-     ![输入图片说明](https://gitee.com/asd1122/tupian/raw/master/%E5%9B%BE%E7%89%87/%E4%BA%92%E8%81%94/7.png)
+     ![输入图片说明](../../doc/figures/uart_connect/7.png)
 
-     ![输入图片说明](https://gitee.com/asd1122/tupian/raw/master/%E5%9B%BE%E7%89%87/%E4%BA%92%E8%81%94/8.jpg)
+     ![输入图片说明](../../doc/figures/uart_connect/8.jpg)

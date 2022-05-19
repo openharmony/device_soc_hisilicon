@@ -39,7 +39,7 @@
 pubAttr.enIntfSync = VO_OUTPUT_1080P60; // 第259行的VO_OUTPUT_1080P30; 改成 VO_OUTPUT_1080P60;
 ```
 
-![](https://gitee.com/wgm2022/mypic/raw/master/hispark_taurus_nnie_sample/175%E9%80%82%E9%85%8D%E6%98%BE%E7%A4%BA%E5%B1%8F.png)
+![](../../taurus/doc/figures/hispark_taurus_nnie_sample/175%E9%80%82%E9%85%8D%E6%98%BE%E7%A4%BA%E5%B1%8F.png)
 
 * **按照《[获取sample依赖的资源文件到本地](../../taurus/doc/6.2.%E8%8E%B7%E5%8F%96sample%E4%BE%9D%E8%B5%96%E7%9A%84%E8%B5%84%E6%BA%90%E6%96%87%E4%BB%B6%E5%88%B0%E6%9C%AC%E5%9C%B0.md)》文档获取higv sample编译时依赖的资源文件**
 
@@ -47,7 +47,7 @@ pubAttr.enIntfSync = VO_OUTPUT_1080P60; // 第259行的VO_OUTPUT_1080P30; 改成
 
 在编译higv sample之前，需确保OpenHarmony 小型系统的主干代码已经整编通过，**且已经按照《[修改源码及配置文件适配Taurus开发板](../../taurus/doc/2.2.1.%E4%BF%AE%E6%94%B9%E6%BA%90%E7%A0%81%E5%8F%8A%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E9%80%82%E9%85%8DTaurus%E5%BC%80%E5%8F%91%E6%9D%BF.md)》的内容进行修改**。在单编higv sample之前，需修改目录下的一处依赖，进入//device/soc/hisilicon/hi3516dv300/sdk_linux目录下，通过修改BUILD.gn，在deps下面新增target，``"sample/platform/higv:higv_sample"``，如下图所示：
 
-![](https://gitee.com/wgm2022/mypic/raw/master/hispark_taurus_nnie_sample/174higv%E4%BF%AE%E6%94%B9buildgn.png)
+![](../../taurus/doc/figures/hispark_taurus_nnie_sample/174higv%E4%BF%AE%E6%94%B9buildgn.png)
 
 * 执行下面的命令，进入device\soc\hisilicon\hi3516dv300\sdk_linux\sample\platform\higv\xml\目录下，执行执行 make命令，生成higv.bin文件并自动更新higv_cextfile.c和higv_cextfile.c文件。
 
@@ -57,15 +57,15 @@ cd device/soc/hisilicon/hi3516dv300/sdk_linux/sample/platform/higv/xml
 make clean && make
 ```
 
-![](https://gitee.com/wgm2022/mypic/raw/master/hispark_taurus_nnie_sample/173higv%20make%20xml%E6%96%87%E4%BB%B6.png)
+![](../../taurus/doc/figures/hispark_taurus_nnie_sample/173higv%20make%20xml%E6%96%87%E4%BB%B6.png)
 
 * 点击Deveco Device Tool工具的Build按键进行编译，具体的编译过程这里不再赘述，编译成功后，如下图所示：
 
-![](https://gitee.com/wgm2022/mypic/raw/master/hispark_taurus_helloworld_sample/0002-build%20success.png)
+![](../../taurus/doc/figures/hispark_taurus_helloworld_sample/0002-build%20success.png)
 
 * 编译成功后，即可在out/hispark_taurus/ipcamera_hispark_taurus_linux/rootfs/bin目录下，生成 ohos_higv_demo可执行文件，如下图所示：
 
-![](https://gitee.com/wgm2022/mypic/raw/master/hispark_taurus_nnie_sample/176%E7%94%9F%E6%88%90hig%20%E5%8F%AF%E6%89%A7%E8%A1%8C%E7%A8%8B%E5%BA%8F.png)
+![](../../taurus/doc/figures/hispark_taurus_nnie_sample/176%E7%94%9F%E6%88%90hig%20%E5%8F%AF%E6%89%A7%E8%A1%8C%E7%A8%8B%E5%BA%8F.png)
 
 ## 5. 拷贝可执行程序和依赖文件至开发板的mnt目录下
 
@@ -76,7 +76,7 @@ make clean && make
 * 步骤2：将device\soc\hisilicon\hi3516dv300\sdk_linux\out\lib\目录下的**libvb_server.so和 libmpp_vbs.so**拷贝至SD卡中
 * 步骤3：拷贝依赖文件，将device\soc\hisilicon\hi3516dv300\sdk_linux\sample\platform\higv 目录下的higv.bin和**res**文件夹拷贝到SD卡中（前提是按照《[获取sample依赖的资源文件到本地](../../taurus/doc/6.2.%E8%8E%B7%E5%8F%96sample%E4%BE%9D%E8%B5%96%E7%9A%84%E8%B5%84%E6%BA%90%E6%96%87%E4%BB%B6%E5%88%B0%E6%9C%AC%E5%9C%B0.md)》文档获取了资源文件）
 
-![](https://gitee.com/wgm2022/mypic/raw/master/hispark_taurus_nnie_sample/177%E5%A4%8D%E5%88%B6higv%E6%96%87%E4%BB%B6%E8%87%B3U%E7%9B%98.png)
+![](../../taurus/doc/figures/hispark_taurus_nnie_sample/177%E5%A4%8D%E5%88%B6higv%E6%96%87%E4%BB%B6%E8%87%B3U%E7%9B%98.png)
 
 * 步骤4：可执行文件拷贝成功后，将内存卡插入开发板的SD卡槽中，可通过挂载的方式挂载到板端，可选择SD卡 mount指令进行挂载。
 
@@ -87,7 +87,7 @@ mount -t vfat /dev/mmcblk1p1 /mnt
 
 * 挂载成功后，如下图所示：
 
-![](https://gitee.com/wgm2022/mypic/raw/master/hispark_taurus_nnie_sample/179%E5%B0%86higv%E6%96%87%E4%BB%B6%E8%BF%9B%E8%A1%8CSD%E5%8D%A1%E7%9A%84%E6%8C%82%E8%BD%BD.png)
+![](../../taurus/doc/figures/hispark_taurus_nnie_sample/179%E5%B0%86higv%E6%96%87%E4%BB%B6%E8%BF%9B%E8%A1%8CSD%E5%8D%A1%E7%9A%84%E6%8C%82%E8%BD%BD.png)
 
 **方式二：使用NFS挂载的方式进行资料文件的拷贝**
 
@@ -97,7 +97,7 @@ mount -t vfat /dev/mmcblk1p1 /mnt
 * 步骤3：将device\soc\hisilicon\hi3516dv300\sdk_linux\out\lib\目录下的**libvb_server.so和 libmpp_vbs.so**拷贝至Windows的nfs共享路径下
 * 步骤4：拷贝依赖文件，将device\soc\hisilicon\hi3516dv300\sdk_linux\sample\platform\higv 目录下的higv.bin和**res**文件夹拷贝到Windows的nfs共享路径下（前提是《[获取sample依赖的资源文件到本地](../../taurus/doc/6.2.%E8%8E%B7%E5%8F%96sample%E4%BE%9D%E8%B5%96%E7%9A%84%E8%B5%84%E6%BA%90%E6%96%87%E4%BB%B6%E5%88%B0%E6%9C%AC%E5%9C%B0.md)》文档获取了资源文件）
 
-![](https://gitee.com/wgm2022/mypic/raw/master/hispark_taurus_nnie_sample/178%E5%A4%8D%E5%88%B6higv%E6%96%87%E4%BB%B6%E8%87%B3nfs%E8%B7%AF%E5%BE%84.png)
+![](../../taurus/doc/figures/hispark_taurus_nnie_sample/178%E5%A4%8D%E5%88%B6higv%E6%96%87%E4%BB%B6%E8%87%B3nfs%E8%B7%AF%E5%BE%84.png)
 
 * 步骤5：执行下面的命令，将Windows的nfs共享路径挂载至开发板的mnt目录下
 
@@ -119,7 +119,7 @@ cp /mnt/higv.bin /userdata
 cp /mnt/res /userdata -rf
 ```
 
-![](https://gitee.com/wgm2022/mypic/raw/master/hispark_taurus_nnie_sample/180%E6%8B%B7%E8%B4%9Dhigv%E4%BE%9D%E8%B5%96%E6%96%87%E4%BB%B6%E8%87%B3userdate.png)
+![](../../taurus/doc/figures/hispark_taurus_nnie_sample/180%E6%8B%B7%E8%B4%9Dhigv%E4%BE%9D%E8%B5%96%E6%96%87%E4%BB%B6%E8%87%B3userdate.png)
 
 * 执行下面的命令，给ohos_higv_demo文件可执行权限
 
@@ -137,12 +137,12 @@ cd /userdata
 ./ohos_higv_demo
 ```
 
-![](https://gitee.com/wgm2022/mypic/raw/master/hispark_taurus_nnie_sample/181%E8%BF%90%E8%A1%8Chigv%E7%A8%8B%E5%BA%8F.png)
+![](../../taurus/doc/figures/hispark_taurus_nnie_sample/181%E8%BF%90%E8%A1%8Chigv%E7%A8%8B%E5%BA%8F.png)
 
 * 此时，通过HDMI线，在显示器上面显示higv的应用程序的UI界面，如下图所示：
 
-![](https://gitee.com/wgm2022/mypic/raw/master/hispark_taurus_nnie_sample/182higv%E8%BF%90%E8%A1%8C%E5%90%8E%E7%9A%84%E7%BB%93%E6%9E%9C.png)
+![](../../taurus/doc/figures/hispark_taurus_nnie_sample/182higv%E8%BF%90%E8%A1%8C%E5%90%8E%E7%9A%84%E7%BB%93%E6%9E%9C.png)
 
 * 输入quit或q，然后敲回车即可关闭程序
 
-![](https://gitee.com/wgm2022/mypic/raw/master/hispark_taurus_nnie_sample/182%E8%BE%93%E5%85%A5q%E9%80%80%E5%87%BAhigv%E7%A8%8B%E5%BA%8F.png)
+![](../../taurus/doc/figures/hispark_taurus_nnie_sample/182%E8%BE%93%E5%85%A5q%E9%80%80%E5%87%BAhigv%E7%A8%8B%E5%BA%8F.png)

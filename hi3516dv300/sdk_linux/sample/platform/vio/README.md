@@ -23,21 +23,21 @@ vio  sample是海思Hi3516DV300的SDK sample，本文以Taurus套件为例，vio
 pstVoConfig->enIntfSync = VO_OUTPUT_1080P60; // 第483行的VO_OUTPUT_1080P30; 改成 VO_OUTPUT_1080P60;
 ```
 
-![](https://gitee.com/wgm2022/mypic/raw/master/hispark_taurus_color_space_convert_sample/037%E4%BF%AE%E6%94%B9KCF%E7%9A%84HDMI%E8%BE%93%E5%87%BA.png)
+![](../../taurus/doc/figures/hispark_taurus_color_space_convert_sample/037%E4%BF%AE%E6%94%B9KCF%E7%9A%84HDMI%E8%BE%93%E5%87%BA.png)
 
 ## 4. 编译
 
 在编译vio sample之前，需确保OpenHarmony 小型系统的主干代码已经整编通过，**且已经按照《[修改源码及配置文件适配Taurus开发板](../../taurus/doc/2.2.1.%E4%BF%AE%E6%94%B9%E6%BA%90%E7%A0%81%E5%8F%8A%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E9%80%82%E9%85%8DTaurus%E5%BC%80%E5%8F%91%E6%9D%BF.md)》的内容进行修改**。在单编vio sample之前，需修改目录下的一处依赖，进入//device/soc/hisilicon/hi3516dv300/sdk_linux目录下，通过修改BUILD.gn，在deps下面新增target，``"sample/platform/vio:vio_sample"``，如下图所示：
 
-![](https://gitee.com/wgm2022/mypic/raw/master/hispark_taurus_nnie_sample/151vio_build_gn.png)
+![](../../taurus/doc/figures/hispark_taurus_nnie_sample/151vio_build_gn.png)
 
 * 编译成功后，如下图所示：
 
-![](https://gitee.com/wgm2022/mypic/raw/master/hispark_taurus_helloworld_sample/0002-build%20success.png)
+![](../../taurus/doc/figures/hispark_taurus_helloworld_sample/0002-build%20success.png)
 
 * 编译成功后，即可在out/hispark_taurus/ipcamera_hispark_taurus_linux/rootfs/bin目录下，生成 ohos_vio_demo可执行文件，如下图所示：
 
-![](https://gitee.com/wgm2022/mypic/raw/master/hispark_taurus_nnie_sample/152vio_%E5%8F%AF%E6%89%A7%E8%A1%8C%E6%96%87%E4%BB%B6.png)
+![](../../taurus/doc/figures/hispark_taurus_nnie_sample/152vio_%E5%8F%AF%E6%89%A7%E8%A1%8C%E6%96%87%E4%BB%B6.png)
 
 ## 5. 拷贝可执行程序和依赖文件至开发板的mnt目录下
 
@@ -48,7 +48,7 @@ pstVoConfig->enIntfSync = VO_OUTPUT_1080P60; // 第483行的VO_OUTPUT_1080P30; �
 
 * 步骤2：将device\soc\hisilicon\hi3516dv300\sdk_linux\out\lib\目录下的**libvb_server.so和 libmpp_vbs.so**拷贝至SD卡中
 
-![](https://gitee.com/wgm2022/mypic/raw/master/hispark_taurus_nnie_sample/153vio%E7%9A%84U%E7%9B%98%E6%8B%B7%E8%B4%9D%E4%BE%9D%E8%B5%96%E6%96%87%E4%BB%B6.png)
+![](../../taurus/doc/figures/hispark_taurus_nnie_sample/153vio%E7%9A%84U%E7%9B%98%E6%8B%B7%E8%B4%9D%E4%BE%9D%E8%B5%96%E6%96%87%E4%BB%B6.png)
 
 
 
@@ -61,7 +61,7 @@ mount -t vfat /dev/mmcblk1p1 /mnt
 
 * 挂载成功后，如下图所示：
 
-![](https://gitee.com/wgm2022/mypic/raw/master/hispark_taurus_nnie_sample/155vioSD%E5%8D%A1%E6%8C%82%E8%BD%BD.png)
+![](../../taurus/doc/figures/hispark_taurus_nnie_sample/155vioSD%E5%8D%A1%E6%8C%82%E8%BD%BD.png)
 
 **方式二：使用NFS挂载的方式进行资料文件的拷贝**
 
@@ -72,7 +72,7 @@ mount -t vfat /dev/mmcblk1p1 /mnt
 
 * 步骤3：将device\soc\hisilicon\hi3516dv300\sdk_linux\out\lib\目录下的**libvb_server.so和 libmpp_vbs.so**拷贝至Windows的nfs共享路径下
 
-![](https://gitee.com/wgm2022/mypic/raw/master/hispark_taurus_nnie_sample/154vio%E7%9A%84nfs%E6%8B%B7%E8%B4%9D%E4%BE%9D%E8%B5%96%E6%96%87%E4%BB%B6.png)
+![](../../taurus/doc/figures/hispark_taurus_nnie_sample/154vio%E7%9A%84nfs%E6%8B%B7%E8%B4%9D%E4%BE%9D%E8%B5%96%E6%96%87%E4%BB%B6.png)
 
 * 步骤4：执行下面的命令，将Windows的nfs共享路径挂载至开发板的mnt目录下
 
@@ -89,7 +89,7 @@ cp /mnt/ohos_vio_demo  /userdata
 cp /mnt/*.so /usr/lib/
 ```
 
-![](https://gitee.com/wgm2022/mypic/raw/master/hispark_taurus_nnie_sample/156vio%E6%8B%B7%E8%B4%9D%E4%BE%9D%E8%B5%96%E6%96%87%E4%BB%B6%E8%87%B3%E5%BC%80%E5%8F%91%E6%9D%BF.png)
+![](../../taurus/doc/figures/hispark_taurus_nnie_sample/156vio%E6%8B%B7%E8%B4%9D%E4%BE%9D%E8%B5%96%E6%96%87%E4%BB%B6%E8%87%B3%E5%BC%80%E5%8F%91%E6%9D%BF.png)
 
 * 执行下面的命令，给ohos_vio_demo文件可执行权限
 
@@ -107,13 +107,13 @@ cd /userdata
 ./ohos_vio_demo 0
 ```
 
-![](https://gitee.com/wgm2022/mypic/raw/master/hispark_taurus_nnie_sample/157vio%E6%89%A7%E8%A1%8Csampleindex0.png)
+![](../../taurus/doc/figures/hispark_taurus_nnie_sample/157vio%E6%89%A7%E8%A1%8Csampleindex0.png)
 
 * 此时，通过HDMI在显示屏幕上即可出现实时码流，如下图所示：
 
-![](https://gitee.com/wgm2022/mypic/raw/master/hispark_taurus_nnie_sample/169vio%E6%98%BE%E7%A4%BA%E7%9A%84%E7%8E%B0%E8%B1%A1.png)
+![](../../taurus/doc/figures/hispark_taurus_nnie_sample/169vio%E6%98%BE%E7%A4%BA%E7%9A%84%E7%8E%B0%E8%B1%A1.png)
 
 * 敲两下回车即可关闭程序
 
-![](https://gitee.com/wgm2022/mypic/raw/master/hispark_taurus_helloworld_sample/0007-helloworld%20log.png)
+![](../../taurus/doc/figures/hispark_taurus_helloworld_sample/0007-helloworld%20log.png)
 
