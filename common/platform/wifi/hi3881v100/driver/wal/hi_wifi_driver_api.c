@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 HiSilicon (Shanghai) Technologies CO., LIMITED.
+ * Copyright (C) 2021-2022 HiSilicon (Shanghai) Technologies CO., LIMITED.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1722,7 +1722,6 @@ hi_u32 hi_wifi_get_tx_params(const char *ifname, unsigned char ifname_len)
     wal_msg_write_stru write_msg = { 0 };
     hi_char ifname_cpy[WIFI_IFNAME_MAX_SIZE + 1] = {0};
 
-    (void)ifname_len;
     if (ifname == HI_NULL) {
         oam_error_log0(0, 0, "{hi_wifi_get_tx_params:: input point is NULL}");
         return HI_FAIL;

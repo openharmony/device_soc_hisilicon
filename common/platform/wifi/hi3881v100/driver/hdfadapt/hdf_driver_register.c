@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 HiSilicon (Shanghai) Technologies CO., LIMITED.
+ * Copyright (C) 2021-2022 HiSilicon (Shanghai) Technologies CO., LIMITED.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,7 +43,6 @@ static struct HdfChipDriver *BuildHi3881Driver(struct HdfWlanDevice *device, uin
         HDF_LOGE("%s fail : channel is NULL", __func__);
         return NULL;
     }
-    (void)device;
     (void)ifIndex;
     specificDriver = (struct HdfChipDriver *)OsalMemCalloc(sizeof(struct HdfChipDriver));
     if (specificDriver == NULL) {

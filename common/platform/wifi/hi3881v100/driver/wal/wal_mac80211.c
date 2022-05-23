@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 HiSilicon (Shanghai) Technologies CO., LIMITED.
+ * Copyright (C) 2021-2022 HiSilicon (Shanghai) Technologies CO., LIMITED.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -784,7 +784,6 @@ void WalReleaseHwCapability(struct WlanHwCapability *self)
 int32_t WalGetHwCapability(struct NetDevice *netDev, struct WlanHwCapability **capability)
 {
     uint8_t loop;
-    (void)netDev;
     if (netDev == NULL || GET_NET_DEV_CFG80211_WIRELESS(netDev) == NULL ||
         GET_NET_DEV_CFG80211_WIRELESS(netDev)->wiphy == NULL) {
         return HI_FAIL;
@@ -1021,7 +1020,11 @@ int32_t WalSendAction(struct NetDevice *netDev, WifiActionData *actionData)
 
 int32_t WalGetIftype(struct NetDevice *netDev, uint8_t *iftype)
 {
-    iftype = &(GET_NET_DEV_CFG80211_WIRELESS(netDev)->iftype);
+    iftype = (uint8_t *)(&(GET_NET_DEV_CFG80211_WIRELESS(netDev)->iftype));
+    if (iftype == NULL) {
+        HDF_LOGE("%s: iftype is NULL!", __func__);
+        return HI_FAIL;
+    }
     return HI_SUCCESS;
 }
 
