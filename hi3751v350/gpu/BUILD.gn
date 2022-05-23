@@ -1,0 +1,24 @@
+# Copyright (C) 2022 Hisilicon (Shanghai) Technologies Co., Ltd. All rights reserved.
+
+import("//build/ohos.gni")
+import("//build/ohos/ndk/ndk.gni")
+
+ohos_prebuilt_shared_library("gpu_libs") {
+  if (target_cpu == "arm") {
+    source = "lib/libmali.z.so"
+  }
+
+  subsystem_name = "hdf"
+  part_name = "display_device_driver"
+  install_enable = true
+
+  symlink_target_name = [
+    "libEGL.so",
+    "libGLESv1.so",
+    "libGLESv2.so",
+    "libGLESv3.so",
+    "libmali.so.0",
+    "libmali.so.1",
+    "libMali.so",
+  ]
+}
