@@ -194,7 +194,7 @@ chmod 777 ohos_histreaming_server
 
   ![输入图片说明](../doc/figures/wifi_connect/24.jpg)
 
-* 如果你想使用手机APP来控制Pegasus或者Taurus，手机端APP安装及使用（[histreaming APP源码](http://gitee.com/leo593362220/sources-histreaming-app.git)），然后进入app-release.rar目录，将app-debug.apk安装到手机上，具体的安装过程这里就不介绍了(通过数据线复制到手机，或使用微信、QQ等方式发送到手机再安装)。
+* 如果你想使用手机来控制Pegasus或者Taurus，手机端安装及使用（源码下载](https://gitee.com/leo593362220/shistreaming.git)），然后进入app-release.rar目录，将程序安装到手机上，具体的安装过程这里就不介绍了(通过数据线复制到手机，或使用微信、QQ等方式发送到手机再安装)。
 APP安装成功后，打开手机的WiFi列表，连接到Taurus开发板的AP热点或者路由器热点，再打开刚安装好的HiStreaming APP，下拉刷新几次，手机会发现两个设备，分别是Pegasus开发板设备和Taurus开发板设备。
 
   ![输入图片说明](../doc/figures/wifi_connect/20.jpg)
