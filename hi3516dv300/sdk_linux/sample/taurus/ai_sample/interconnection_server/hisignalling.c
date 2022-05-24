@@ -361,27 +361,6 @@ int UartRead(int uartFd, char *buf, int len, int timeoutMs)
     return rsum;
 }
 
-/*
-* crc32 Verification implementation
-*/
-static const unsigned int crc32table[] = {
-};
-
-/**
-    @berf CRC check
-    @param const unsigned char *buf: Data to be verified buff
-    @param unsigned int size: Data to be verified length
-*/
-static unsigned int crc32(const unsigned char *buf, unsigned int size)
-{
-    unsigned int  i, crc = 0xFFFFFFFF;
-
-    for (i = 0; i < size; i++) {
-        crc = crc32table[(crc ^ buf[i]) & 0xff] ^ (crc >> 8); /* 8: 右移8bit */
-    }
-    return crc ^ 0xFFFFFFFF;
-}
-
 #define RIGHT_MOVE_8_BIT (8)
 #define RIGHT_MOVE_16_BIT (16)
 #define RIGHT_MOVE_24_BIT (24)
@@ -399,7 +378,6 @@ static unsigned int HisignallingDataPackage(HisignallingProtocalType *buf,
         DataPackLen, buf->hisignallingMsgBuf, DataPackLen);
     (void)memcpy_s(&hisignallingDataBuf[HISGNALLING_MSG_FRAME_HEADER_LEN + DataPackLen],
         HISIGNALLING_MSG_HEADER_LEN, &(buf->endOfFrame), HISIGNALLING_MSG_HEADER_LEN);
-    crcCheckSend = crc32(hisignallingDataBuf, (DataPackLen + HISIGNALLING_MSG_HEADER_TAIL_LEN));
     hisignallingDataBuf[DataPackLen + HISIGNALLING_MSG_HEADER_TAIL_LEN] =
         (unsigned char)((crcCheckSend & 0xff000000) >> RIGHT_MOVE_24_BIT);
     hisignallingDataBuf[DataPackLen + HISIGNALLING_MSG_HEADER_TAIL_LEN + 1] = /* 1: addr offset */
