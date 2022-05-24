@@ -25,7 +25,6 @@ if (need_link_mpp_lib) {
 executable("ohos_histreaming_server") {
   output_name = "ohos_histreaming_server"
   sources = [
-    "src/hisignalling.c",
     "src/histreaming_client_server.c",
   ]
 

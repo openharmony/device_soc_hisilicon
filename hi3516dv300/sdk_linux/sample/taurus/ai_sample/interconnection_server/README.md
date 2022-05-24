@@ -8,22 +8,8 @@
 
 ![输入图片说明](../../doc/figures/uart_connect/11.jpg)
 
-## 串口通信控制协议HiSignalling介绍
--    为了便于Taurus与Pegasus开发套件之间进行通信和控制，定义了一套简易的HiSignalling通信控制协议，数据帧格式如下表所示，并提供相关参考代码，大家也可以根据自己的需要使用其他协议。
-
-| 帧头（2Byte）  | Payload Len (2Byte)  | payload  | 帧尾（1Byte）  | CRC32(4Byte)  |
-|---|---|---|---|---|
-| 0xAA,0x55  |   |   | 0xFF  | CRC32 |
-
-例如一组数据帧为：AA5500020003FF8ED2BEDF (十六进制不区分大小写)
--    0AA55:       帧头
--    0002：       Payload Len
--    0003:        Payload
--    FF:          帧尾
--    8ED2BEDF:    CRC32校验码
-
 ## 软件介绍
--    这里以手势识别为例：1.hand_classify.c文件中在初始化uart
+-    这里以手势识别为例：1.hand_classify.c文件中在初始化uart,这里要注意需要加到线程一直跑的逻辑里。
      ```
      uartFd = UartOpenInit();
      if (uartFd < 0) {

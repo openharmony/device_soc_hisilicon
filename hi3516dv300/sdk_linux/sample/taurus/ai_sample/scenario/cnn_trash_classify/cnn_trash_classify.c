@@ -118,7 +118,7 @@ HI_S32 CnnTrashClassifyLoadModel(uintptr_t* model, OsdSet* osds)
 
     ret = CnnCreate(&self, MODEL_FILE_TRASH);
     *model = ret < 0 ? 0 : (uintptr_t)self;
-    SAMPLE_PRT("laod cnn trash classify model, ret:%d\n", ret);
+    SAMPLE_PRT("load cnn trash classify model, ret:%d\n", ret);
 
     if (GetCfgBool("audio_player:support_audio", true)) {
         ret = SkPairCreate(&g_stmChn);
