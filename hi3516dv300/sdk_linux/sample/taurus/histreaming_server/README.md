@@ -1,5 +1,5 @@
 # Pegasus与Taurus WiFi互联通信<a name="ZH-CN_TOPIC_0000001130176841"></a>
--    在学习Pegasus与Taurus WiFi互联通信前，需要将[device_soc_hisilicon](http://gitee.com/openharmony/device_soc_hisilicon)仓下载，下载完成后，将device_soc_hisilicon\hi3516dv300\sdk_linux\sample\taurus\histreaming_server这整个文件夹放到docker里面的device\soc\hisilicon\hi3516dv300\sdk_linux\sample\taurus目录下，同时将device_soc_hisilicon/hi3861v100/sdk_liteos/build/libs/libhistreaminglink.a这个库文件替换到device\soc\hisilicon\hi3861v100\sdk_liteos\build\libs\目录下。
+-    在学习Pegasus与Taurus WiFi互联通信前，需要将[device_soc_hisilicon](http://gitee.com/openharmony/device_soc_hisilicon)仓下载，在ubuntu下执行：git lfs clone xxxxx仓库地址,下载完成后，将device_soc_hisilicon\hi3516dv300\sdk_linux\sample\taurus\histreaming_server这整个文件夹放到自己源码对应device\soc\hisilicon\hi3516dv300\sdk_linux\sample\taurus目录下，同时将device_soc_hisilicon/hi3861v100/sdk_liteos/build/libs/libhistreaminglink.a这个库文件替换到device\soc\hisilicon\hi3861v100\sdk_liteos\build\libs\目录下。
 
 -    前言：HiStreaming 组件作为一种技术基础设施，使得海思芯片可以通过WiFi或有线网络实现物联网设备之间的设备自动发现、服务注册与识别、服务操作。HiStreaming把物联网设备分为两类角色，对外部提供服务的设备称之为 Server 设备，而使用其他设备提供的服务的设备称之为 Client 设备。
 
@@ -21,20 +21,6 @@
 
      ![输入图片说明](../doc/figures/wifi_connect/3.jpg)
 
-## 串口通信控制协议HiSignalling介绍
--    为了便于Taurus与Pegasus开发套件之间进行通信和控制，定义了一套简易的HiSignalling通信控制协议，数据帧格式如下表所示，并提供相关参考代码，大家也可以根据自己的需要使用其他协议。
-
-| 帧头（2Byte）  | Payload Len (2Byte)  | payload  | 帧尾（1Byte）  | CRC32(4Byte)  |
-|---|---|---|---|---|
-| 0xAA,0x55  |   |   | 0xFF  | CRC32 |
-
-例如一组数据帧为：AA5500020003FF8ED2BEDF (十六进制不区分大小写)
--    0AA55:       帧头
--    0002：       Payload Len
--    0003:        Payload
--    FF:          帧尾
--    8ED2BEDF:    CRC32校验码
-
 ## 软件介绍
 -    注意这里需要跟Taurus同时使用，Taurus软件介绍详情可以参考[WiFi互联client端](http://gitee.com/openharmony/vendor_hisilicon/blob/master/hispark_pegasus/demo/histreaming_client_demo/README.md)。
 -    1.代码目录结构及相应接口功能介绍
@@ -52,7 +38,7 @@
 
 ## 获取WiFi可执行文件([util_OHOSL1_3516.zip](https://gitee.com/hihope_iot/embedded-race-hisilicon-track-2022/tree/master/taurus_resource))
 * 解压util_OHOSL1_3516.zip到util_OHOSL1_3516文件。
-* 在util_OHOSL1_3516文件包新建hostapd.cof，udhcpd.cof，wpa_supplicant.cof文件。
+* 在util_OHOSL1_3516文件包新建hostapd.conf，udhcpd.conf，wpa_supplicant.conf文件(注意这些文件需要在ubuntu下创建，windows下会出现格式问题)。
 * 在hostapd.conf文件写入如下内容。
 
 ```
@@ -70,7 +56,7 @@ wpa_passphrase=12345678
 rsn_pairwise=CCMP
 ```
 
-* 在udhcpd.cof文件写入如下内容。
+* 在udhcpd.conf文件写入如下内容。
 
 ```
 # Sample udhcpd configuration file (/etc/udhcpd.conf)
@@ -126,7 +112,7 @@ option subnet 255.255.255.0
 opt router 192.168.12.1
 ```
 
-* 在wpa_supplicant.cof文件写入如下内容。
+* 在wpa_supplicant.conf文件写入如下内容。
 ```
 country=GB
 network={
@@ -175,13 +161,13 @@ mount -o nolock,addr=192.168.200.1 -t nfs 192.168.200.1:/d/nfs /mnt
 ```
 cp /mnt/ohos_histreaming_server  /userdata/
 cp /mnt/*.so /usr/lib/
-cp /mnt/util_OHOSL1_3516/*  /usr/lib/
+cp -rf /mnt/util_OHOSL1_3516/  /usr/lib/
 ```
 
 * 第一种方式：执行下面的命令，将Taurus设置为AP模式。hostapd.conf文件设置AP名和密码。启动成功后，手机端可以搜索wifi名：H，密码：12345678。
 
 ```
-cd /usr/lib/util_OHOSL1_3516  
+cd /usr/lib/util_OHOSL1_3516
 mkdir /usr/tmp
 mkdir /var/run
 touch /var/run/udhcpd.pid
@@ -208,7 +194,7 @@ chmod 777 ohos_histreaming_server
 
   ![输入图片说明](../doc/figures/wifi_connect/24.jpg)
 
-* 如果你想使用手机APP来控制Pegasus或者Taurus，手机端APP安装及使用（[histreaming APP源码](http://gitee.com/leo593362220/sources-histreaming-app.git)），然后进入app-release.rar目录，将app-debug.apk安装到手机上，具体的安装过程这里就不介绍了(通过数据线复制到手机，或使用微信、QQ等方式发送到手机再安装)。
+* 如果你想使用手机来控制Pegasus或者Taurus，手机端安装及使用（源码下载](https://gitee.com/leo593362220/shistreaming.git)），然后进入app-release.rar目录，将程序安装到手机上，具体的安装过程这里就不介绍了(通过数据线复制到手机，或使用微信、QQ等方式发送到手机再安装)。
 APP安装成功后，打开手机的WiFi列表，连接到Taurus开发板的AP热点或者路由器热点，再打开刚安装好的HiStreaming APP，下拉刷新几次，手机会发现两个设备，分别是Pegasus开发板设备和Taurus开发板设备。
 
   ![输入图片说明](../doc/figures/wifi_connect/20.jpg)
@@ -249,12 +235,8 @@ chmod 777 ohos_histreaming_server
 
   ![输入图片说明](../doc/figures/wifi_connect/24.jpg)
 
-* 如果你想使用手机APP来控制Pegasus或者Taurus，手机端APP安装及使用（[histreaming APP源码](http://gitee.com/leo593362220/sources-histreaming-app.git)），然后进入app-release.rar目录，将app-debug.apk安装到手机上，具体的安装过程这里就不介绍了(通过数据线复制到手机，或使用微信、QQ等方式发送到手机再安装)。
+* 如果你想使用手机来控制Pegasus或者Taurus，手机端安装及使用（源码下载](https://gitee.com/leo593362220/shistreaming.git)），然后进入app-release.rar目录，将程序安装到手机上，具体的安装过程这里就不介绍了(通过数据线复制到手机，或使用微信、QQ等方式发送到手机再安装)。
 APP安装成功后，打开手机的WiFi列表，连接到Taurus开发板的AP热点或者路由器热点，再打开刚安装好的HiStreaming APP，下拉刷新几次，手机会发现两个设备，分别是Pegasus开发板设备和Taurus开发板设备。
-
-  ![输入图片说明](../doc/figures/wifi_connect/20.jpg)
-
-  ![输入图片说明](../doc/figures/wifi_connect/21.jpg)
 
 * 任意点击一个设备进行操作，点击LED灯控制按钮，会进入一个灯的控制界面。点击图片会发生变化，且会给对应的设备发送数据,同时控制灯亮与熄。
 
