@@ -24,9 +24,7 @@ if (need_link_mpp_lib) {
 
 executable("ohos_histreaming_server") {
   output_name = "ohos_histreaming_server"
-  sources = [
-    "src/histreaming_client_server.c",
-  ]
+  sources = [ "src/histreaming_client_server.c" ]
 
   include_dirs = [
     "include",
@@ -46,9 +44,8 @@ executable("ohos_histreaming_server") {
   if (need_link_mpp_lib) {
     outdir = rebase_path("$mpp_lib_path/lib")
     ldflags = [ "-L$outdir" ]
-    ldflags += [ "-lhistreaminglink" ]
-    ldflags += [ "-lcjson_shared" ]
     ldflags += [ "-lsecurec" ]
+    ldflags += [ "-lcjson_shared" ]
     histreaming_lib_dir = rebase_path(
             "//device/soc/hisilicon/hi3516dv300/sdk_linux/sample/taurus/histreaming_server/lib")
     ldflags += [ "-L$histreaming_lib_dir" ]
