@@ -16,6 +16,7 @@
 #include "hal_hota_board.h"
 #include "hi_upg_api.h"
 #include "stdio.h"
+#include "string.h"
 
 #define PUBKEY_LENGTH 270
 
@@ -145,7 +146,7 @@ int HotaHalRollback(void)
     return OHOS_SUCCESS;
 }
 
-const ComponentTableInfo *HotaHalGetPartitionInfo()
+const ComponentTableInfo *HotaHalGetPartitionInfo(void)
 {
     return g_componentTable;
 }
@@ -183,11 +184,13 @@ int HotaHalIsDeviceCanReboot(void)
 
 int HotaHalGetMetaData(UpdateMetaData *metaData)
 {
+    (void)metaData;
     return OHOS_SUCCESS;
 }
 
 int HotaHalSetMetaData(UpdateMetaData *metaData)
 {
+    (void)metaData;
     return OHOS_SUCCESS;
 }
 
