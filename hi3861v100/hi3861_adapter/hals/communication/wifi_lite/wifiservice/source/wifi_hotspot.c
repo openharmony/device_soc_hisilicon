@@ -233,7 +233,7 @@ static int GetPeerSTAWifiIp(const unsigned char *macAddress, int macLen, unsigne
         return HISI_FAIL;
     }
 
-    ret = netifapi_dhcps_get_client_ip(netif_node, macAddress, macLen, &clientIP);
+    ret = netifapi_dhcps_get_client_ip(netif_node, (u8_t *)macAddress, macLen, &clientIP);
     if (ret == 0) {
         *ip = ntohl(ip4_addr_get_u32(&clientIP));
         return HISI_OK;
