@@ -38,7 +38,9 @@
 
 static int g_wifiStaStatus = WIFI_STA_NOT_ACTIVE;
 static WifiDeviceConfig g_wifiConfigs[WIFI_MAX_CONFIG_SIZE] = {
-    {0}, {0}, {0}, 0, WIFI_CONFIG_INVALID, 0, 0, UNKNOWN, {0, 0, {0, 0}, 0}
+    {
+        {0}, {0}, {0}, 0, WIFI_CONFIG_INVALID, 0, 0, UNKNOWN, {0, 0, {0, 0}, 0}, 0
+    }
 };
 static WifiEvent* g_wifiEvents[WIFI_MAX_EVENT_SIZE] = {0};
 static int g_connectState = WIFI_STATE_NOT_AVALIABLE;
