@@ -224,7 +224,7 @@ uint32_t AiaoGetRxIfAttri(struct I2sConfigInfo *i2sCfg, enum I2sProtocolType typ
     return HDF_SUCCESS;
 }
 
-uint32_t AiaogetPllFre()
+uint32_t AiaogetPllFre(void)
 {
     return I2S_AIAO_PLL_FEQ; // default 1188M
 }
