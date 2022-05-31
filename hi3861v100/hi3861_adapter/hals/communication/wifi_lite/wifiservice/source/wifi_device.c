@@ -21,6 +21,7 @@
 
 #include "lwip/if_api.h"
 #include "lwip/netifapi.h"
+#include "lwip/dns.h"
 #include "wifi_device_util.h"
 #include "wifi_hotspot_config.h"
 #include "utils_file.h"
@@ -162,7 +163,7 @@ static void StaSetLocaladdr(const struct netif *netif, int gw, int ipaddr, int n
     ip4_addr_set_u32(&st_gw, gw);
     ip4_addr_set_u32(&st_ipaddr, ipaddr);
     ip4_addr_set_u32(&st_netmask, netmask);
-    netifapi_netif_set_addr(netif, &st_ipaddr, &st_netmask, &st_gw);
+    netifapi_netif_set_addr((struct netif *)netif, &st_ipaddr, &st_netmask, &st_gw);
     return;
 }
 
