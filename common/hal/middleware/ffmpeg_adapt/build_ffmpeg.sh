@@ -33,7 +33,7 @@ function main(){
     cp $CUR_DIR/disable_decoder_config.sh $FFMPEG_DIR/disable_decoder_config.sh
     cp $CUR_DIR/library.mak $FFMPEG_DIR/ffbuild/library.mak
     cp $CUR_DIR/Makefile_llvm $FFMPEG_DIR/Makefile
-
+    chmod -R 777 $FFMPEG_DIR
     cd $FFMPEG_DIR
 
     ############################################
