@@ -31,7 +31,6 @@ void *osal_kmalloc(unsigned int module_id, unsigned long size, unsigned int osal
 void osal_kfree(unsigned int module_id, const void *addr);
 void *osal_vmalloc(unsigned int module_id, unsigned long size);
 void osal_vfree(unsigned int module_id, const void *addr);
-extern int hi_get_irq_byname(char *name);
 
 // atomic api
 typedef struct osal_atomic_ {

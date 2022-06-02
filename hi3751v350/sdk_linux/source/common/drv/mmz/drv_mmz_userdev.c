@@ -1037,6 +1037,7 @@ err:
 int mmz_userdev_mmap(struct file *file, struct vm_area_struct *vma)
 {
     struct mmz_userdev_info *pmu = NULL;
+    struct mmz_udata *udata = NULL;
     hil_mmb_t *mmb = NULL;
     int ret;
 
@@ -1047,8 +1048,9 @@ int mmz_userdev_mmap(struct file *file, struct vm_area_struct *vma)
 
     pmu = file->private_data;
     mmb = pmu->tmp;
+    udata = pmu->private_data;
 
-    if (mmb == NULL || mmb->handle == NULL) {
+    if (mmb == NULL || mmb->handle == NULL || udata == NULL) {
         return -EPERM;
     }
     if (current->tgid != pmu->mmap_tpid) {
@@ -1063,6 +1065,9 @@ int mmz_userdev_mmap(struct file *file, struct vm_area_struct *vma)
      */
     vma->vm_private_data = mmb;
     vma->vm_ops = &g_mmz_vma_ops;
+    if (!udata->map_cached) {
+        vma->vm_page_port = pgport_writecombine(vma->vm_page_port);
+    }
     mmz_vm_open(vma);
 
     ret = dma_buf_mmap(mmb->handle, vma, vma->vm_pgoff);
