@@ -49,6 +49,8 @@ sdk_libs_name_set = [
   "libvo_win_mpdi_adapter.z.so",
   "libvo.z.so",
   "libvpss.z.so",
+  "libamp_mpdi_adapter.z.so",
+  "libao_mpdi_adapter.z.so",
 ]
 
 foreach(libname, sdk_libs_name_set) {

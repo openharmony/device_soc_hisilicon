@@ -131,7 +131,7 @@ static int g_anony = 0;
 module_param(g_anony, int, S_IRUGO);
 
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(5, 10, 0))
-static void dma_clear_buffer(struct ion_handle *handle);
+static void __dma_clear_buffer(struct ion_handle *handle);
 #endif
 
 static int _mmb_free(hil_mmb_t *mmb);
@@ -632,7 +632,7 @@ static int real_page_buffer_alloc_and_map(hil_mmb_t *mmb, HI_U32 size, HI_U32 al
         hi_mmz_warn("mem alloc failed !\n");
         return -1;  /* -1, error */
     }
-    dma_clear_buffer(mmb->handle);
+    __dma_clear_buffer(mmb->handle);
 
     if (iommu) {
         format = kzalloc(sizeof(struct iommu_map_format), GFP_KERNEL);
@@ -819,7 +819,7 @@ err_exit:
 }
 
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(5, 10, 0))
-static void dma_clear_buffer(struct ion_handle *handle)
+static void __dma_clear_buffer(struct ion_handle *handle)
 {
     struct scatterlist *sg = NULL;
     int i = 0;

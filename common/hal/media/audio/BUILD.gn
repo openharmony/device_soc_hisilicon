@@ -17,6 +17,7 @@ if ("${product_name}" == "hispark_phoenix") {
 
 ohos_prebuilt_shared_library("hdi_audio") {
   source = "${board}/linux_standard/libs/libhdi_audio.z.so"
+  install_enable = true
   install_images = [ chipset_base_dir ]
   subsystem_name = "hdf"
   part_name = "audio_device_driver"
@@ -24,6 +25,7 @@ ohos_prebuilt_shared_library("hdi_audio") {
 
 ohos_prebuilt_shared_library("audio_primary_port") {
   source = "${board}/linux_standard/libs/libaudio_primary_port.so"
+  install_enable = true
   install_images = [ chipset_base_dir ]
   subsystem_name = "hdf"
   part_name = "audio_device_driver"
@@ -31,6 +33,7 @@ ohos_prebuilt_shared_library("audio_primary_port") {
 
 ohos_prebuilt_shared_library("hal_common") {
   source = "../common/${board}/linux_standard/libs/libmedia_hal_common.so"
+  install_enable = true
   install_images = [ chipset_base_dir ]
   subsystem_name = "hdf"
   part_name = "audio_device_driver"
