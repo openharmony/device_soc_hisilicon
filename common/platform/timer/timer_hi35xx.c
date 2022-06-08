@@ -89,7 +89,7 @@ static int32_t TimerHi35xxSetPre(struct TimerHi35xxInfo *info, uint16_t pre)
             tmpVal = TIMERx_CONTROL_TIMERPRE_8_LEVEL;
             break;
         default:
-            HDF_LOGE("%s: unsupported pre [%u]", __func__, pre);
+            HDF_LOGE("%s: unsupported pre [%hu]", __func__, pre);
             return HDF_ERR_INVALID_PARAM;
     }
     value &= ~TIMERx_CONTROL_TIMERPRE;
@@ -221,7 +221,7 @@ static int32_t TimerHi35xxSet(struct TimerCntrl *cntrl, uint32_t useconds, Timer
     struct TimerHi35xxInfo *info = cntrl->priv;
     info->cb = cb;
     info->isPeriod = true;
-    HDF_LOGD("%s: timer[%u][%d][%d] ",
+    HDF_LOGD("%s: timer[%u][%u][%d] ",
         __func__, info->number, cntrl->info.useconds, cntrl->info.isPeriod);
 
     if (TimerHi35xxSetMode(info, TIMERx_CONTROL_TIMERMODE_PERIOD) != HDF_SUCCESS) {
@@ -268,7 +268,7 @@ static int32_t TimerHi35xxSetTimeout(struct TimerCntrl *cntrl)
     struct TimerHi35xxInfo *info = cntrl->priv;
     OSAL_WRITEL(value, info->regBase + HI35XX_TIMERx_LOAD);
 
-    HDF_LOGD("%s: timer[%u] [%d][%d][%d] ", __func__, info->number, maxSeconds, value, cntrl->info.useconds);
+    HDF_LOGD("%s: timer[%u] [%u][%u][%u] ", __func__, info->number, maxSeconds, value, cntrl->info.useconds);
 
     return HDF_SUCCESS;
 }
@@ -459,9 +459,8 @@ static int32_t TimerHi35xxReadHcs(struct TimerHi35xxInfo *info, const struct Dev
         HDF_LOGE("%s:OsalIoRemap fail", __func__);
         return HDF_FAILURE;
     }
-    HDF_LOGD("%s:regBase[0x%x][%px]", __func__, tmp, info->regBase);
 
-    HDF_LOGD("%s:number[%u], bus_clock[%d], mode[%d], init_count_val[%d] irq[%u]", __func__,
+    HDF_LOGD("%s:number[%u], bus_clock[%u], mode[%u], init_count_val[%u] irq[%u]", __func__,
         info->number, info->busClock, info->mode, info->initCountVal, info->irq);
 
     return HDF_SUCCESS;
@@ -559,7 +558,7 @@ static int32_t TimerHi35xxDeviceInit(struct HdfDeviceObject *device)
 static int32_t TimerHi35xxDeviceBind(struct HdfDeviceObject *device)
 {
     CHECK_NULL_PTR_RETURN_VALUE(device, HDF_ERR_INVALID_OBJECT);
-    HDF_LOGD("%s: success", __func__);
+    HDF_LOGI("%s: success", __func__);
     return HDF_SUCCESS;
 }
 
@@ -588,6 +587,7 @@ static void TimerHi35xxRemoveById(const struct DeviceResourceNode *node)
 static void TimerHi35xxDeviceRelease(struct HdfDeviceObject *device)
 {
     const struct DeviceResourceNode *childNode = NULL;
+
     HDF_LOGD("%s: in", __func__);
     if (device == NULL || device->property == NULL) {
         HDF_LOGE("%s: device is NULL", __func__);
@@ -597,8 +597,6 @@ static void TimerHi35xxDeviceRelease(struct HdfDeviceObject *device)
     DEV_RES_NODE_FOR_EACH_CHILD_NODE(device->property, childNode) {
         TimerHi35xxRemoveById(childNode);
     }
-
-    HDF_LOGD("%s: success", __func__);
 }
 
 struct HdfDriverEntry g_hdfTimerDevice = {

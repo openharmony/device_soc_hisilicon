@@ -797,7 +797,7 @@ void MipiRxDrvSetDataRate(uint8_t devno, MipiDataRate dataRate)
     } else if (dataRate == MIPI_DATA_RATE_X2) {
         mipiDoublePixEn = 1;
     } else {
-        HDF_LOGE("%s: unsupported  dataRate:%d  devno %d", __func__, dataRate, devno);
+        HDF_LOGE("%s: unsupported  dataRate:%d  devno %hhu", __func__, dataRate, devno);
         return;
     }
 
@@ -1451,7 +1451,7 @@ void MipiRxDrvSetLvdsDataRate(uint8_t devno, MipiDataRate dataRate)
     } else if (dataRate == MIPI_DATA_RATE_X2) {
         lvdsDoublePixEn = 0x1;
     } else {
-        HDF_LOGE("%s: unsupported  dataRate:%d  devno %d", __func__, dataRate, devno);
+        HDF_LOGE("%s: unsupported  dataRate:%d  devno %hhu", __func__, dataRate, devno);
         return;
     }
 

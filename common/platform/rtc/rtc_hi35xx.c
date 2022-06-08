@@ -318,7 +318,7 @@ static int32_t HiRtcWriteTime(struct RtcHost *host, const struct RtcTime *time)
     OsalMSleep(RTC_WAIT_TIME);
 
     if ((ret == HDF_SUCCESS) && ((value & RTC_LOAD_MASK) == RTC_LOAD_MASK)) {
-        HDF_LOGE("HiRtcWriteTime: fail!ret[%d], value[%d]", ret, value);
+        HDF_LOGE("HiRtcWriteTime: fail!ret[%u], value[%hhu]", ret, value);
         return HDF_ERR_DEVICE_BUSY;
     }
 
@@ -709,7 +709,7 @@ static int32_t HiRtcSwInit(struct RtcConfigInfo *rtcInfo)
 
     ret = OsalRegisterIrq(rtcInfo->irq, 0, HiRtcIrqHandle, "rtc_alarm", (void*)rtcInfo);
     if (ret != 0) {
-        HDF_LOGE("HiRtcSwInit: register irq(%d) fail!", rtcInfo->irq);
+        HDF_LOGE("HiRtcSwInit: register irq(%hhu) fail!", rtcInfo->irq);
         (void)OsalMutexDestroy(&rtcInfo->mutex);
         OsalIoUnmap((void*)rtcInfo->remapBaseAddr);
         rtcInfo->remapBaseAddr = NULL;
@@ -794,6 +794,7 @@ static int32_t HiRtcBind(struct HdfDeviceObject *device)
 
     host->device = device;
     device->service = &host->service;
+    HDF_LOGI("%s: rtc bind success.", __func__);
     return HDF_SUCCESS;
 }
 
@@ -842,6 +843,7 @@ static void HiRtcRelease(struct HdfDeviceObject *device)
     struct RtcHost *host = NULL;
     struct RtcConfigInfo *rtcInfo = NULL;
 
+    HDF_LOGI("%s: enter", __func__);
     if (device == NULL) {
         return;
     }

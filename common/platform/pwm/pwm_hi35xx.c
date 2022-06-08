@@ -37,7 +37,7 @@ int32_t HiPwmSetConfig(struct PwmDev *pwm, struct PwmConfig *config)
         return HDF_ERR_INVALID_PARAM;
     }
     if (config->polarity != PWM_NORMAL_POLARITY && config->polarity != PWM_INVERTED_POLARITY) {
-        HDF_LOGE("%s: polarity %u is invalid", __func__, config->polarity);
+        HDF_LOGE("%s: polarity %hhu is invalid", __func__, config->polarity);
         return HDF_ERR_INVALID_PARAM;
     }
     if (config->period < PWM_MIN_PERIOD) {
@@ -50,10 +50,9 @@ int32_t HiPwmSetConfig(struct PwmDev *pwm, struct PwmConfig *config)
         return HDF_ERR_INVALID_PARAM;
     }
     HiPwmDisable(hp->reg);
-    HDF_LOGI("%s: [HiPwmDisable] done.", __func__);
     if (pwm->cfg.polarity != config->polarity && hp->supportPolarity) {
         HiPwmSetPolarity(hp->reg, config->polarity);
-        HDF_LOGI("%s: [HiPwmSetPolarity] done, polarity: %u -> %u.", __func__, pwm->cfg.polarity, config->polarity);
+        HDF_LOGI("%s: [HiPwmSetPolarity] done, polarity: %hhu -> %hhu.", __func__, pwm->cfg.polarity, config->polarity);
     }
     if (pwm->cfg.period != config->period) {
         HiPwmSetPeriod(hp->reg, config->period);
@@ -72,9 +71,8 @@ int32_t HiPwmSetConfig(struct PwmDev *pwm, struct PwmConfig *config)
             HDF_LOGI("%s: [HiPwmOutputNumberSquareWaves] done, then enable.", __func__);
         }
     }
-    HDF_LOGI("%s: set PwmConfig done: number %u, period %u, duty %u, polarity %u, enable %u.",
+    HDF_LOGI("%s: set PwmConfig done: number %u, period %u, duty %u, polarity %hhu, enable %hhu.",
         __func__, config->number, config->period, config->duty, config->polarity, config->status);
-    HDF_LOGI("%s: success.", __func__);
     return HDF_SUCCESS;
 }
 
@@ -131,10 +129,8 @@ static int32_t HiPwmProbe(struct HiPwm *hp, struct HdfDeviceObject *obj)
         HDF_LOGE("%s: [PwmDeviceAdd] failed.", __func__);
         return HDF_FAILURE;
     }
-    HDF_LOGI("%s: set PwmConfig: number %u, period %u, duty %u, polarity %u, enable %u.", __func__,
+    HDF_LOGI("%s: set PwmConfig: number %u, period %u, duty %u, polarity %hhu, enable %hhu.", __func__,
         hp->dev.cfg.number, hp->dev.cfg.period, hp->dev.cfg.duty, hp->dev.cfg.polarity, hp->dev.cfg.status);
-    HDF_LOGI("%s: success.", __func__);
-
     return HDF_SUCCESS;
 }
 
@@ -149,7 +145,6 @@ static int32_t HdfPwmInit(struct HdfDeviceObject *obj)
     int ret;
     struct HiPwm *hp = NULL;
 
-    HDF_LOGI("%s: entry", __func__);
     if (obj == NULL) {
         HDF_LOGE("%s: obj is null", __func__);
         return HDF_ERR_INVALID_OBJECT;
@@ -165,6 +160,7 @@ static int32_t HdfPwmInit(struct HdfDeviceObject *obj)
         HDF_LOGE("%s: error probe, ret is %d", __func__, ret);
         OsalMemFree(hp);
     }
+    HDF_LOGI("%s: pwm init success", __func__);
     return ret;
 }
 

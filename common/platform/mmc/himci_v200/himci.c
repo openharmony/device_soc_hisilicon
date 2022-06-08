@@ -24,7 +24,7 @@
 
 static void HimciDumpRegs(struct HimciHost *host)
 {
-    HDF_LOGE(": =========== DUMP (host%d) REGISTER===========", host->id);
+    HDF_LOGE(": =========== DUMP (host%u) REGISTER===========", host->id);
     HDF_LOGE(": CTRL : 0x%08x | PWREN:  0x%04x",
         HIMCI_READL((uintptr_t)host->base + MMC_CTRL), HIMCI_READL((uintptr_t)host->base + MMC_PWREN));
     HDF_LOGE(": CLKDIV : 0x%08x | CLKENA:  0x%04x",
@@ -447,7 +447,7 @@ static int32_t HimciWaitCmd(struct HimciHost *host)
             val |= HLE_INT_STATUS;
             HIMCI_WRITEL(val, (uintptr_t)host->base + MMC_RINTSTS);
             HIMCI_IRQ_UNLOCK(flags);
-            HDF_LOGE("host%d: Other CMD is running! please operate cmd again!", host->id);
+            HDF_LOGE("host%u: Other CMD is running! please operate cmd again!", host->id);
             return HDF_MMC_ERR_OTHER_CMD_IS_RUNNING;
         }
         HIMCI_IRQ_UNLOCK(flags);
@@ -544,7 +544,7 @@ static void HimciWaitCmdComplete(struct HimciHost *host)
             cmd->returnError = HDF_ERR_TIMEOUT;
             if (host->isTuning == false) {
                 HimciDumpRegs(host);
-                HDF_LOGE("host%d cmd%d(arg 0x%x) timeout!", host->id, cmd->cmdCode, cmd->argument);
+                HDF_LOGE("host%u cmd%u(arg 0x%x) timeout!", host->id, cmd->cmdCode, cmd->argument);
             }
         }
         if (host->cmd->data != NULL) {
@@ -696,7 +696,7 @@ static int32_t HimciSetupData(struct HimciHost *host, struct MmcData *data)
         sgLength = HIMCI_SG_DMA_LEN(&host->sg[i]);
         sgPhyAddr = HIMCI_SG_DMA_ADDRESS(&host->sg[i]);
         if ((sgPhyAddr & (CACHE_ALIGNED_SIZE - 1)) != 0) {
-            HDF_LOGE("host%d:sg_phyaddr:0x%x sg_length:0x%x.", host->id, sgPhyAddr, sgLength);
+            HDF_LOGE("host%u:sg_phyaddr:0x%x sg_length:0x%x.", host->id, sgPhyAddr, sgLength);
             return HDF_FAILURE;
         }
         if (dmaDir == DMA_TO_DEVICE) {
@@ -822,7 +822,7 @@ static int32_t HimciDoRequest(struct MmcCntlr *cntlr, struct MmcCmd *cmd)
     if (ret != HDF_SUCCESS) {
         cmd->returnError = ret;
         HimciDmaStop(host);
-        HDF_LOGE("cmd%d exec fail, err = %d!", cmd->cmdCode, ret);
+        HDF_LOGE("cmd%u exec fail, err = %d!", cmd->cmdCode, ret);
         goto _END;
     }
     HimciWaitCmdComplete(host);
@@ -888,7 +888,7 @@ static void HimciSetCClk(struct HimciHost *host, uint32_t clock)
     HIMCI_WRITEL(cmdArg.arg, (uintptr_t)host->base + MMC_CMD);
 
     if (HimciWaitCmd(host) != HDF_SUCCESS) {
-        HDF_LOGE("host%d: set card clk divider is failed!", host->id);
+        HDF_LOGE("host%u: set card clk divider is failed!", host->id);
     }
 }
 
@@ -1097,7 +1097,7 @@ static int32_t HimciVoltageSwitchTo3v3(struct MmcCntlr *cntlr, struct HimciHost 
     OsalMSleep(10);
     ctrl = HIMCI_READL((uintptr_t)host->base + MMC_UHS_REG);
     if ((ctrl & HI_SDXC_CTRL_VDD_180) > 0) {
-        HDF_LOGD("host%d: Switching to 3.3V failed\n", host->id);
+        HDF_LOGE("host%u: Switching to 3.3V failed\n", host->id);
         return HDF_ERR_IO;
     }
     HimciSetDrvCap(cntlr);
@@ -1199,7 +1199,7 @@ static void HimciEdgeTuningEnable(struct HimciHost *host)
     uint32_t regs[] = { PERI_CRG83, PERI_CRG89, PERI_CRG86 };
 
     if (host->id >= MMC_CNTLR_NR_MAX) {
-        HDF_LOGE("host%d id error", host->id);
+        HDF_LOGE("host%u id error", host->id);
         return;
     }
 
@@ -1226,7 +1226,7 @@ static void HimciEdgeTuningDisable(struct HimciHost *host)
     uint32_t regs[] = { PERI_CRG83, PERI_CRG89, PERI_CRG86 };
 
     if (host->id >= MMC_CNTLR_NR_MAX) {
-        HDF_LOGE("host%d id error", host->id);
+        HDF_LOGE("host%u id error", host->id);
         return;
     }
 
@@ -1296,7 +1296,7 @@ static uint32_t HimciGetSapDllTaps(struct HimciHost *host)
     uint32_t regs[] = { PERI_CRG84, PERI_CRG90, PERI_CRG87 };
 
     if (host->id >= MMC_CNTLR_NR_MAX) {
-        HDF_LOGE("host%d id error", host->id);
+        HDF_LOGE("host%u id error", host->id);
         return 0;
     }
 
@@ -1310,7 +1310,7 @@ static void HimciSetDllElement(struct HimciHost *host, uint32_t element)
     uint32_t regs[] = { PERI_CRG83, PERI_CRG89, PERI_CRG86 };
 
     if (host->id >= MMC_CNTLR_NR_MAX) {
-        HDF_LOGE("host%d id error", host->id);
+        HDF_LOGE("host%u id error", host->id);
         return;
     }
 
@@ -1443,7 +1443,7 @@ static int32_t HimciEdgedllModeTuning(struct HimciHost *host,
         param.endp += totalPhases;
     }
     if (totalPhases == 0) {
-        HDF_LOGD("host%d:total phases is zero.", host->id);
+        HDF_LOGE("host%u:total phases is zero.", host->id);
         return HDF_FAILURE;
     }
     phaseOffset = ((param.startp + param.endp) / 2) % totalPhases;
@@ -1928,28 +1928,25 @@ static int32_t HimciMmcBind(struct HdfDeviceObject *obj)
 
     /* add card detect msg to queue. */
     (void)MmcCntlrAddDetectMsgToQueue(cntlr);
-
-    HDF_LOGD("HimciMmcBind: success.");
+    HDF_LOGI("%s: mmc bind success.", __func__);
     return HDF_SUCCESS;
 _ERR:
     HimciDeleteHost(host);
-    HDF_LOGD("HimciMmcBind: fail, err = %d.", ret);
+    HDF_LOGE("HimciMmcBind: fail, err = %d.", ret);
     return ret;
 }
 
 static int32_t HimciMmcInit(struct HdfDeviceObject *obj)
 {
     static bool procInit = false;
-    (void)obj;
 
+    (void)obj;
     if (procInit == false) {
         if (ProcMciInit() == HDF_SUCCESS) {
             procInit = true;
-            HDF_LOGD("HimciMmcInit: proc init success.");
         }
     }
-
-    HDF_LOGD("HimciMmcInit: success.");
+    HDF_LOGI("%s: mmc init success.", __func__);
     return HDF_SUCCESS;
 }
 
@@ -1957,6 +1954,7 @@ static void HimciMmcRelease(struct HdfDeviceObject *obj)
 {
     struct MmcCntlr *cntlr = NULL;
 
+    HDF_LOGI("%s: enter", __func__);
     if (obj == NULL) {
         return;
     }

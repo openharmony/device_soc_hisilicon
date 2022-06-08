@@ -228,7 +228,7 @@ static void Hi35xxI2cCfgCmd(const struct Hi35xxI2cCntlr *hi35xx, const struct Hi
     }
 
     if ((td->index == (td->count - 1)) || (msg->flags & I2C_FLAG_STOP)) {
-        PLAT_LOGV("%s: TX stop, idx:%d, count:%d, flags:%d", __func__,
+        PLAT_LOGV("%s: TX stop, idx:%hd, count:%hd, flags:%u", __func__,
             td->index, td->count, msg->flags);
         Hi35xxI2cCmdregSet(hi35xx, CMD_TX_P, &offset);
     }
@@ -298,8 +298,7 @@ static void Hi35xxI2cRescure(const struct Hi35xxI2cCntlr *hi35xx)
 __DISABLE_RESCURE:
     val = (0x1 << FORCE_SCL_OEN_SHIFT) | 0x1;
     OSAL_WRITEL(val, hi35xx->regBase + HI35XX_I2C_CTRL2);
-
-    HDF_LOGE("%s: done!", __func__);
+    HDF_LOGW("%s: done!", __func__);
 }
 
 static int Hi35xxI2cWaitRxNoempty(const struct Hi35xxI2cCntlr *hi35xx)
@@ -393,7 +392,7 @@ static int32_t Hi35xxI2cXferOneMsgPolling(const struct Hi35xxI2cCntlr *hi35xx, c
     uint8_t val;
     struct I2cMsg *msg = &td->msgs[td->index];
 
-    PLAT_LOGV("%s: msg:%p, addr:%x, flags:0x%x, len=%d", __func__, msg, msg->addr, msg->flags, msg->len);
+    PLAT_LOGV("%s: addr:%x, flags:0x%x, len=%hu", __func__, msg->addr, msg->flags, msg->len);
 
     Hi35xxI2cEnable(hi35xx);
     Hi35xxI2cDisableIrq(hi35xx, INTR_ALL_MASK);
@@ -446,7 +445,7 @@ static void Hi35xxI2cCntlrInit(struct Hi35xxI2cCntlr *hi35xx)
     Hi35xxI2cDisableIrq(hi35xx, INTR_ALL_MASK);
     Hi35xxI2cSetFreq(hi35xx);
     Hi35xxI2cSetWater(hi35xx);
-    HDF_LOGI("%s: cntlr:%u init done!", __func__, hi35xx->bus);
+    HDF_LOGI("%s: cntlr:%hd init done!", __func__, hi35xx->bus);
 }
 
 static int32_t Hi35xxI2cTransfer(struct I2cCntlr *cntlr, struct I2cMsg *msgs, int16_t count)
@@ -462,7 +461,7 @@ static int32_t Hi35xxI2cTransfer(struct I2cCntlr *cntlr, struct I2cMsg *msgs, in
     hi35xx = (struct Hi35xxI2cCntlr *)cntlr;
 
     if (msgs == NULL || count <= 0) {
-        HDF_LOGE("Hi35xxI2cTransfer: err parms! count:%d", count);
+        HDF_LOGE("Hi35xxI2cTransfer: err parms! count:%hd", count);
         return HDF_ERR_INVALID_PARAM;
     }
     td.msgs = msgs;
@@ -615,7 +614,6 @@ static int32_t Hi35xxI2cInit(struct HdfDeviceObject *device)
     int32_t ret;
     const struct DeviceResourceNode *childNode = NULL;
 
-    HDF_LOGE("%s: Enter", __func__);
     if (device == NULL || device->property == NULL) {
         HDF_LOGE("%s: device or property is NULL", __func__);
         return HDF_ERR_INVALID_OBJECT;
@@ -628,7 +626,7 @@ static int32_t Hi35xxI2cInit(struct HdfDeviceObject *device)
             break;
         }
     }
-
+    HDF_LOGI("%s: I2c init success!", __func__);
     return ret;
 }
 

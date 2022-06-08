@@ -181,7 +181,7 @@ static unsigned int MipiGetLaneBitmap(InputMode inputMode, const short *pLaneId,
 static int MipiCheckCombDevAttr(const ComboDevAttr *pAttr)
 {
     if (pAttr->devno >= COMBO_DEV_MAX_NUM) {
-        HDF_LOGE("%s: invalid comboDev number(%d).", __func__, pAttr->devno);
+        HDF_LOGE("%s: invalid comboDev number(%u).", __func__, pAttr->devno);
         return HDF_ERR_INVALID_PARAM;
     }
 
@@ -201,20 +201,20 @@ static int MipiCheckCombDevAttr(const ComboDevAttr *pAttr)
     }
 
     if (pAttr->imgRect.width < COMBO_MIN_WIDTH || pAttr->imgRect.height < COMBO_MIN_HEIGHT) {
-        HDF_LOGE("%s: invalid imgSize(%d, %d), can't be smaller than (%d, %d)", __func__,
+        HDF_LOGE("%s: invalid imgSize(%u, %u), can't be smaller than (%d, %d)", __func__,
             pAttr->imgRect.width, pAttr->imgRect.height, COMBO_MIN_WIDTH, COMBO_MIN_HEIGHT);
         return HDF_ERR_INVALID_PARAM;
     }
 
     /* width and height align 2 */
     if ((pAttr->imgRect.width & (MIPI_WIDTH_ALIGN - 1)) != 0) {
-        HDF_LOGE("%s: imgWidth should be %d bytes align which is %d!", __func__,
+        HDF_LOGE("%s: imgWidth should be %d bytes align which is %u!", __func__,
             MIPI_WIDTH_ALIGN, pAttr->imgRect.width);
         return HDF_ERR_INVALID_PARAM;
     }
 
     if ((pAttr->imgRect.height & (MIPI_HEIGHT_ALIGN - 1)) != 0) {
-        HDF_LOGE("%s: imgHeight should be %d bytes align which is %d!", __func__,
+        HDF_LOGE("%s: imgHeight should be %d bytes align which is %u!", __func__,
             MIPI_WIDTH_ALIGN, pAttr->imgRect.height);
         return HDF_ERR_INVALID_PARAM;
     }
@@ -494,7 +494,7 @@ static int CheckMipiDevAttr(struct MipiCsiCntlr *cntlr, uint8_t devno, const Mip
         for (i = 0; i < WDR_VC_NUM; i++) {
             /* dataType must be the CSI-2 reserve Type [0x38, 0x3f] */
             if (pAttr->dataType[i] < 0x38 || pAttr->dataType[i] > 0x3f) {
-                HDF_LOGE("%s: invalid dataType[%d]: %d, must be in [0x38, 0x3f]", __func__, i, pAttr->dataType[i]);
+                HDF_LOGE("%s: invalid dataType[%d]: %hd, must be in [0x38, 0x3f]", __func__, i, pAttr->dataType[i]);
                 return HDF_ERR_INVALID_PARAM;
             }
         }
@@ -635,7 +635,7 @@ static int MipiSetCmosDevAttr(const ComboDevAttr *pComboDevAttr)
     devno = pComboDevAttr->devno;
 
     if ((devno > CMOS_MAX_DEV_NUM) || (devno == 0)) {
-        HDF_LOGE("%s: invalid cmos devno(%d)!", __func__, devno);
+        HDF_LOGE("%s: invalid cmos devno(%hhu)!", __func__, devno);
         return HDF_ERR_INVALID_PARAM;
     }
 
@@ -765,12 +765,12 @@ static int32_t Hi35xxSetExtDataType(struct MipiCsiCntlr *cntlr, ExtDataType *dat
     devno = dataType->devno;
 
     if (devno >= COMBO_DEV_MAX_NUM) {
-        HDF_LOGE("%s: invalid mipi dev number(%d).", __func__, devno);
+        HDF_LOGE("%s: invalid mipi dev number(%hhu).", __func__, devno);
         return HDF_ERR_INVALID_PARAM;
     }
 
     if (!MipiIsDevCfged(cntlr, devno)) {
-        HDF_LOGE("%s: MIPI device %d has not beed configured", __func__, devno);
+        HDF_LOGE("%s: MIPI device %hhu has not beed configured", __func__, devno);
         return HDF_FAILURE;
     }
 
@@ -780,24 +780,24 @@ static int32_t Hi35xxSetExtDataType(struct MipiCsiCntlr *cntlr, ExtDataType *dat
     OsalSpinUnlock(&cntlr->ctxLock);
 
     if (inputMode != INPUT_MODE_MIPI) {
-        HDF_LOGE("%s: devno: %d, input mode: %d, not support set data type", __func__, devno, inputMode);
+        HDF_LOGE("%s: devno: %hhu, input mode: %d, not support set data type", __func__, devno, inputMode);
         return HDF_ERR_INVALID_PARAM;
     }
 
     if (dataType->num > MAX_EXT_DATA_TYPE_NUM) {
-        HDF_LOGE("%s: invalid ext data type num(%d)", __func__, dataType->num);
+        HDF_LOGE("%s: invalid ext data type num(%u)", __func__, dataType->num);
         return HDF_ERR_INVALID_PARAM;
     }
 
     for (i = 0; i < dataType->num; i++) {
         if (dataType->extDataBitWidth[i] < MIPI_RX_MIN_EXT_DATA_TYPE_BIT_WIDTH ||
             dataType->extDataBitWidth[i] > MIPI_RX_MAX_EXT_DATA_TYPE_BIT_WIDTH) {
-            HDF_LOGE("%s: invalid ext data bit width(%d)", __func__, dataType->extDataBitWidth[i]);
+            HDF_LOGE("%s: invalid ext data bit width(%u)", __func__, dataType->extDataBitWidth[i]);
             return HDF_ERR_INVALID_PARAM;
         }
 
         if (dataType->extDataBitWidth[i] % 2 != 0) { /* 2:even check */
-            HDF_LOGE("%s: invalid ext data bit width(%d),must be even value", __func__, dataType->extDataBitWidth[i]);
+            HDF_LOGE("%s: invalid ext data bit width(%u),must be even value", __func__, dataType->extDataBitWidth[i]);
             return HDF_ERR_INVALID_PARAM;
         }
     }
@@ -813,7 +813,7 @@ static int32_t Hi35xxSetPhyCmvmode(struct MipiCsiCntlr *cntlr, uint8_t devno, Ph
     unsigned int laneBitMap;
 
     if (devno >= COMBO_DEV_MAX_NUM) {
-        HDF_LOGE("%s: invalid mipi dev number(%d).", __func__, devno);
+        HDF_LOGE("%s: invalid mipi dev number(%hhu).", __func__, devno);
         return HDF_ERR_INVALID_PARAM;
     }
 
@@ -824,7 +824,7 @@ static int32_t Hi35xxSetPhyCmvmode(struct MipiCsiCntlr *cntlr, uint8_t devno, Ph
     }
 
     if (!MipiIsDevCfged(cntlr, devno)) {
-        HDF_LOGE("%s: MIPI device %d has not beed configured", __func__, devno);
+        HDF_LOGE("%s: MIPI device %hhu has not beed configured", __func__, devno);
         return HDF_ERR_INVALID_PARAM;
     }
 
@@ -837,7 +837,7 @@ static int32_t Hi35xxSetPhyCmvmode(struct MipiCsiCntlr *cntlr, uint8_t devno, Ph
         inputMode != INPUT_MODE_SUBLVDS &&
         inputMode != INPUT_MODE_LVDS &&
         inputMode != INPUT_MODE_HISPI) {
-        HDF_LOGE("%s: devno: %d, input mode: %d, not support set common voltage mode", __func__, devno, inputMode);
+        HDF_LOGE("%s: devno: %hhu, input mode: %d, not support set common voltage mode", __func__, devno, inputMode);
         return HDF_ERR_INVALID_PARAM;
     }
 
@@ -850,7 +850,7 @@ static int32_t Hi35xxResetSensor(struct MipiCsiCntlr *cntlr, uint8_t snsResetSou
 {
     (void)cntlr;
     if (snsResetSource >= SNS_MAX_RST_SOURCE_NUM) {
-        HDF_LOGE("%s: invalid snsResetSource(%d).", __func__, snsResetSource);
+        HDF_LOGE("%s: invalid snsResetSource(%hhu).", __func__, snsResetSource);
         return HDF_ERR_INVALID_PARAM;
     }
 
@@ -863,7 +863,7 @@ static int32_t Hi35xxUnresetSensor(struct MipiCsiCntlr *cntlr, uint8_t snsResetS
 {
     (void)cntlr;
     if (snsResetSource >= SNS_MAX_RST_SOURCE_NUM) {
-        HDF_LOGE("%s: invalid snsResetSource(%d).", __func__, snsResetSource);
+        HDF_LOGE("%s: invalid snsResetSource(%hhu).", __func__, snsResetSource);
         return HDF_ERR_INVALID_PARAM;
     }
 
@@ -876,7 +876,7 @@ static int32_t Hi35xxResetRx(struct MipiCsiCntlr *cntlr, uint8_t comboDev)
 {
     (void)cntlr;
     if (comboDev >= MIPI_RX_MAX_DEV_NUM) {
-        HDF_LOGE("%s: invalid comboDev num(%d).", __func__, comboDev);
+        HDF_LOGE("%s: invalid comboDev num(%hhu).", __func__, comboDev);
         return HDF_ERR_INVALID_PARAM;
     }
 
@@ -889,7 +889,7 @@ static int32_t Hi35xxUnresetRx(struct MipiCsiCntlr *cntlr, uint8_t comboDev)
 {
     (void)cntlr;
     if (comboDev >= MIPI_RX_MAX_DEV_NUM) {
-        HDF_LOGE("%s: invalid comboDev num(%d).", __func__, comboDev);
+        HDF_LOGE("%s: invalid comboDev num(%hhu).", __func__, comboDev);
         return HDF_ERR_INVALID_PARAM;
     }
 
@@ -938,7 +938,7 @@ static int32_t Hi35xxEnableClock(struct MipiCsiCntlr *cntlr, uint8_t comboDev)
 {
     (void)cntlr;
     if (comboDev >= MIPI_RX_MAX_DEV_NUM) {
-        HDF_LOGE("%s: invalid comboDev num(%d).", __func__, comboDev);
+        HDF_LOGE("%s: invalid comboDev num(%hhu).", __func__, comboDev);
         return HDF_ERR_INVALID_PARAM;
     }
 
@@ -951,7 +951,7 @@ static int32_t Hi35xxDisableClock(struct MipiCsiCntlr *cntlr, uint8_t comboDev)
 {
     (void)cntlr;
     if (comboDev >= MIPI_RX_MAX_DEV_NUM) {
-        HDF_LOGE("%s: invalid comboDev num(%d).", __func__, comboDev);
+        HDF_LOGE("%s: invalid comboDev num(%hhu).", __func__, comboDev);
         return HDF_ERR_INVALID_PARAM;
     }
 
@@ -964,7 +964,7 @@ static int32_t Hi35xxEnableSensorClock(struct MipiCsiCntlr *cntlr, uint8_t snsCl
 {
     (void)cntlr;
     if (snsClkSource >= SNS_MAX_CLK_SOURCE_NUM) {
-        HDF_LOGE("%s: invalid snsClkSource(%d).", __func__, snsClkSource);
+        HDF_LOGE("%s: invalid snsClkSource(%hhu).", __func__, snsClkSource);
         return HDF_ERR_INVALID_PARAM;
     }
 
@@ -977,7 +977,7 @@ static int32_t Hi35xxDisableSensorClock(struct MipiCsiCntlr *cntlr, uint8_t snsC
 {
     (void)cntlr;
     if (snsClkSource >= SNS_MAX_CLK_SOURCE_NUM) {
-        HDF_LOGE("%s: invalid snsClkSource(%d).", __func__, snsClkSource);
+        HDF_LOGE("%s: invalid snsClkSource(%hhu).", __func__, snsClkSource);
         return HDF_ERR_INVALID_PARAM;
     }
 
@@ -1144,7 +1144,6 @@ static int32_t Hi35xxMipiCsiInit(struct HdfDeviceObject *device)
 {
     int32_t ret;
 
-    HDF_LOGI("%s: enter!", __func__);
     g_mipiCsi.priv = NULL;
     g_mipiCsi.ops = &g_method;
 #ifdef CONFIG_HI_PROC_SHOW_SUPPORT
@@ -1170,8 +1169,7 @@ static int32_t Hi35xxMipiCsiInit(struct HdfDeviceObject *device)
 #endif
 
     OsalSpinInit(&g_mipiCsi.ctxLock);
-    HDF_LOGI("%s: load mipi csi driver success!", __func__);
-
+    HDF_LOGI("%s: Mipi Csi init success.", __func__);
     return ret;
 }
 
@@ -1197,8 +1195,6 @@ static void Hi35xxMipiCsiRelease(struct HdfDeviceObject *device)
     MipiRxDrvExit();
     MipiCsiUnregisterCntlr(&g_mipiCsi);
     g_mipiCsi.priv = NULL;
-
-    HDF_LOGI("%s: unload mipi csi driver success!", __func__);
 }
 
 struct HdfDriverEntry g_mipiCsiDriverEntry = {

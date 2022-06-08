@@ -32,7 +32,7 @@
 
 static void SdhciDumpregs(struct SdhciHost *host)
 {
-    HDF_LOGE(": =========== DUMP (host%d) REGISTER===========", host->hostId);
+    HDF_LOGE(": =========== DUMP (host%u) REGISTER===========", host->hostId);
     HDF_LOGE(": Sys addr: 0x%08x | Version:  0x%04x",
         SdhciReadl(host, SDMASA_R), SdhciReadw(host, HOST_VERSION_R));
     HDF_LOGE(": Blk size: 0x%04x | Blk cnt:  0x%04x",
@@ -139,7 +139,7 @@ static void SdhciReset(struct SdhciHost *host, uint32_t mask)
         OsalMDelay(1);
     }
 
-    HDF_LOGE("host%d: Reset 0x%x never completed.", host->hostId, mask);
+    HDF_LOGE("host%u: Reset 0x%x never completed.", host->hostId, mask);
     SdhciDumpregs(host);
 }
 
@@ -417,7 +417,7 @@ static void SdhciExecCmd(struct SdhciHost *host, struct MmcCmd *cmd)
     /* wait host ready */
     while (SdhciReadl(host, PSTATE_R) & mask) {
         if (timeout == 0) {
-            HDF_LOGE("exec cmd %d timeout!\n", cmd->cmdCode);
+            HDF_LOGE("exec cmd %u timeout!\n", cmd->cmdCode);
             SdhciDumpregs(host);
             cmd->returnError = HDF_ERR_IO;
             SdhciTaskletFinish(host);
@@ -433,7 +433,7 @@ static void SdhciExecCmd(struct SdhciHost *host, struct MmcCmd *cmd)
     SdhciSetTransferMode(host, cmd);
 
     if ((cmd->respType & RESP_136) && (cmd->respType & RESP_BUSY)) {
-        HDF_LOGE("host%d: Unsupported response type!", host->hostId);
+        HDF_LOGE("host%u: Unsupported response type!", host->hostId);
         cmd->returnError = HDF_FAILURE;
         SdhciTaskletFinish(host);
         return;
@@ -620,12 +620,12 @@ static uint32_t SdhciSelectClock(struct SdhciHost *host, uint32_t clock)
     uint32_t cfgArray[] = { PERI_CRG125, PERI_CRG139 };
 
     if (host->hostId >= SDHCI_MAX_HOST_NUM) {
-        HDF_LOGE("host id=%d is not supported!", host->hostId);
+        HDF_LOGE("host id=%u is not supported!", host->hostId);
         return 0;
     }
 
     if (host->hostId == 1 && (clock > SDHCI_MMC_FREQ_50M)) {
-        HDF_LOGE("host%d doesn't support freq %d!", host->hostId, clock);
+        HDF_LOGE("host%u doesn't support freq %u!", host->hostId, clock);
         return 0;
     }
 
@@ -1272,7 +1272,7 @@ static void SdhciWaitDrvDllLock(uint32_t id)
         }
         OsalMDelay(1);
     }
-    HDF_LOGD("host%d: DRV DLL not locked.", id);
+    HDF_LOGD("host%u: DRV DLL not locked.", id);
 }
 
 static void SdhciEnableSamplDll(uint32_t id)
@@ -1339,7 +1339,7 @@ void SdhciWaitSamplDllReady(uint32_t id)
         }
         OsalMDelay(1);
     }
-    HDF_LOGD("host%d: SAMPL DLL not ready.", id);
+    HDF_LOGD("host%u: SAMPL DLL not ready.", id);
 }
 
 static void SdhciCardClk(struct SdhciHost *host, bool action)
@@ -1405,7 +1405,7 @@ static void SdhciDoTune(struct SdhciHost *host, uint32_t opcode, uint32_t start,
         SdhciSelectSamplPhase(host, index % SDHCI_PHASE_SCALE);
         err = MmcSendTuning(host->mmc, opcode, true);
         if (err != HDF_SUCCESS) {
-            HDF_LOGD("send tuning CMD%u fail! phase:%d err:%d.", opcode, index, err);
+            HDF_LOGD("send tuning CMD%u fail! phase:%u err:%d.", opcode, index, err);
         }
         if (err && index == start) {
             if (!fallUpdateFlag) {
@@ -1472,7 +1472,7 @@ static int32_t SdhciTune(struct MmcCntlr *cntlr, uint32_t cmdCode)
     }
 
     if ((edgeP2F == start) && (edgeF2P == end)) {
-        HDF_LOGE("host%d: tuning failed! can not found edge!", host->hostId);
+        HDF_LOGE("host%u: tuning failed! can not found edge!", host->hostId);
         return HDF_FAILURE;
     }
     SdhciDisEdgeTune(host);
@@ -1910,7 +1910,7 @@ static void SdhciDataIrq(struct SdhciHost *host, uint32_t intMask)
     if (cmd->data->returnError != HDF_SUCCESS) {
         command = SDHCI_PARSE_CMD(SdhciReadw(host, CMD_R));
         if (command != SD_CMD_SEND_TUNING_BLOCK && command != SEND_TUNING_BLOCK_HS200) {
-            HDF_LOGE("err = 0x%x, cmd = %d, interrupt = 0x%x.", cmd->data->returnError, command, intMask);
+            HDF_LOGE("err = 0x%x, cmd = %u, interrupt = 0x%x.", cmd->data->returnError, command, intMask);
             SdhciDumpregs(host);
         }
         SdhciFinishData(host);
@@ -1954,7 +1954,7 @@ static uint32_t SdhciIrqHandler(uint32_t irq, void *data)
             SdhciDataIrq(host, (intMask & SDHCI_INT_DATA_MASK));
         }
         if (intMask & SDHCI_INTERRUPT_BUS_POWER) {
-            HDF_LOGD("host%d: card is consuming too much power!", host->hostId);
+            HDF_LOGD("host%u: card is consuming too much power!", host->hostId);
         }
         if (intMask & SDHCI_INTERRUPT_CARD_INT) {
             SdhciEnableSdioIrqNoLock(host, false);
@@ -2057,7 +2057,7 @@ static int32_t SdhciMmcBind(struct HdfDeviceObject *obj)
     }
 
     (void)MmcCntlrAddDetectMsgToQueue(cntlr);
-    HDF_LOGD("SdhciMmcBind: success.");
+    HDF_LOGI("%s: mmc bind success.", __func__);
     return HDF_SUCCESS;
 _ERR:
     SdhciDeleteHost(host);
@@ -2068,16 +2068,15 @@ _ERR:
 static int32_t SdhciMmcInit(struct HdfDeviceObject *obj)
 {
     static bool procInit = false;
-    (void)obj;
 
+    (void)obj;
     if (procInit == false) {
         if (ProcMciInit() == HDF_SUCCESS) {
             procInit = true;
             HDF_LOGD("SdhciMmcInit: proc init success.");
         }
     }
-
-    HDF_LOGD("SdhciMmcInit: success.");
+    HDF_LOGI("%s: mmc init success.", __func__);
     return HDF_SUCCESS;
 }
 
@@ -2085,6 +2084,7 @@ static void SdhciMmcRelease(struct HdfDeviceObject *obj)
 {
     struct MmcCntlr *cntlr = NULL;
 
+    HDF_LOGI("%s: enter", __func__);
     if (obj == NULL) {
         return;
     }

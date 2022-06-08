@@ -49,6 +49,7 @@ static int32_t Hi35xxWatchdogGetStatus(struct WatchdogCntlr *wdt, int32_t *statu
     unsigned int ctlValue;
 
     if (wdt == NULL) {
+        HDF_LOGE("%s: wdt is NULL!", __func__);
         return HDF_ERR_INVALID_OBJECT;
     }
     hwdt = (struct Hi35xxWatchdog *)wdt;
@@ -63,6 +64,7 @@ static int32_t Hi35xxWatchdogStart(struct WatchdogCntlr *wdt)
     struct Hi35xxWatchdog *hwdt = NULL;
 
     if (wdt == NULL) {
+        HDF_LOGE("%s: wdt is NULL!", __func__);
         return HDF_ERR_INVALID_OBJECT;
     }
     hwdt = (struct Hi35xxWatchdog *)wdt;
@@ -84,6 +86,7 @@ static int32_t Hi35xxWatchdogStop(struct WatchdogCntlr *wdt)
     struct Hi35xxWatchdog *hwdt = NULL;
 
     if (wdt == NULL) {
+        HDF_LOGE("%s: wdt is NULL!", __func__);
         return HDF_ERR_INVALID_OBJECT;
     }
     hwdt = (struct Hi35xxWatchdog *)wdt;
@@ -116,6 +119,7 @@ static int32_t Hi35xxWatchdogSetTimeout(struct WatchdogCntlr *wdt, uint32_t seco
     }
 
     if (wdt == NULL) {
+        HDF_LOGE("%s: wdt is NULL!", __func__);
         return HDF_ERR_INVALID_OBJECT;
     }
     hwdt = (struct Hi35xxWatchdog *)wdt;
@@ -136,6 +140,7 @@ static int32_t Hi35xxWatchdogGetTimeout(struct WatchdogCntlr *wdt, uint32_t *sec
     struct Hi35xxWatchdog *hwdt = NULL;
 
     if (wdt == NULL) {
+        HDF_LOGE("%s: wdt is NULL!", __func__);
         return HDF_ERR_INVALID_OBJECT;
     }
     hwdt = (struct Hi35xxWatchdog *)wdt;
@@ -150,6 +155,7 @@ static int32_t Hi35xxWatchdogFeed(struct WatchdogCntlr *wdt)
     struct Hi35xxWatchdog *hwdt = NULL;
 
     if (wdt == NULL) {
+        HDF_LOGE("%s: wdt is NULL!", __func__);
         return HDF_ERR_INVALID_OBJECT;
     }
     hwdt = (struct Hi35xxWatchdog *)wdt;
@@ -204,7 +210,6 @@ static int32_t Hi35xxWatchdogBind(struct HdfDeviceObject *device)
     int32_t ret;
     struct Hi35xxWatchdog *hwdt = NULL;
 
-    HDF_LOGI("%s: Enter", __func__);
     if (device == NULL || device->property == NULL) {
         HDF_LOGE("%s: device or property is null!", __func__);
         return HDF_ERR_INVALID_OBJECT;
@@ -240,7 +245,7 @@ static int32_t Hi35xxWatchdogBind(struct HdfDeviceObject *device)
         OsalMemFree(hwdt);
         return ret;
     }
-    HDF_LOGI("%s: dev service %s init success!", __func__, HdfDeviceGetServiceName(device));
+    HDF_LOGI("%s: dev service %s bind success!", __func__, HdfDeviceGetServiceName(device));
     return HDF_SUCCESS;
 }
 
@@ -257,11 +262,13 @@ static void Hi35xxWatchdogRelease(struct HdfDeviceObject *device)
 
     HDF_LOGI("%s: enter", __func__);
     if (device == NULL) {
+        HDF_LOGE("%s: device is NULL!", __func__);
         return;
     }
 
     wdt = WatchdogCntlrFromDevice(device);
     if (wdt == NULL) {
+        HDF_LOGE("%s: wdt is NULL!", __func__);
         return;
     }
     WatchdogCntlrRemove(wdt);
