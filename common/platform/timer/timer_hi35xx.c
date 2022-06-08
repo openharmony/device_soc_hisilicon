@@ -203,7 +203,7 @@ static uint32_t TimerHi35xxIrqHandle(uint32_t irqId, void *data)
     TimerHi35xxIntClear(info);
 
     CHECK_NULL_PTR_RETURN_VALUE(info->cb, HDF_ERR_INVALID_OBJECT);
-    info->cb();
+    info->cb(info->number);
     HDF_LOGD("------------->%s: timer[%u], irqId [%u] process success", __func__, info->number, irqId);
     return HDF_SUCCESS;
 }
