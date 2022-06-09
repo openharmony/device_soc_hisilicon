@@ -1037,7 +1037,7 @@ err:
 int mmz_userdev_mmap(struct file *file, struct vm_area_struct *vma)
 {
     struct mmz_userdev_info *pmu = NULL;
-    struct mmz_udata *udata = NULL;
+    struct mmb_udata *udata = NULL;
     hil_mmb_t *mmb = NULL;
     int ret;
 
@@ -1066,7 +1066,7 @@ int mmz_userdev_mmap(struct file *file, struct vm_area_struct *vma)
     vma->vm_private_data = mmb;
     vma->vm_ops = &g_mmz_vma_ops;
     if (!udata->map_cached) {
-        vma->vm_page_port = pgport_writecombine(vma->vm_page_port);
+        vma->vm_page_prot = pgprot_writecombine(vma->vm_page_prot);
     }
     mmz_vm_open(vma);
 
