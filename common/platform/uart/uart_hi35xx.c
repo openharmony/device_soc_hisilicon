@@ -109,11 +109,11 @@ static int32_t Hi35xxSetBaud(struct UartHost *host, uint32_t baudRate)
             return HDF_ERR_NOT_SUPPORT;
         }
         if (udd->ops->Config(udd) != HDF_SUCCESS) {
-            HDF_LOGE("%s: config baudrate %d failed", __func__, baudRate);
+            HDF_LOGE("%s: config baudrate %u failed", __func__, baudRate);
             return HDF_FAILURE;
         }
     } else {
-        HDF_LOGE("%s: invalid baudrate, which is:%d", __func__, baudRate);
+        HDF_LOGE("%s: invalid baudrate, which is:%u", __func__, baudRate);
         return HDF_FAILURE;
     }
     return HDF_SUCCESS;
@@ -432,7 +432,6 @@ int32_t HdfUartDeviceInit(struct HdfDeviceObject *device)
     int32_t ret;
     struct UartHost *host = NULL;
 
-    HDF_LOGI("%s: entry", __func__);
     if (device == NULL) {
         HDF_LOGE("%s: device is null", __func__);
         return HDF_ERR_INVALID_OBJECT;
@@ -448,6 +447,7 @@ int32_t HdfUartDeviceInit(struct HdfDeviceObject *device)
         return HDF_FAILURE;
     }
     host->method = &g_uartHostMethod;
+    HDF_LOGI("%s: uart device init success.", __func__);
     return ret;
 }
 

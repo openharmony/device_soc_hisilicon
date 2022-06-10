@@ -53,7 +53,6 @@ static int32_t Hi35xxPinSetPull(struct PinCntlr *cntlr, uint32_t index, enum Pin
     value = OSAL_READL(hi35xx->regBase + index * HI35XX_PIN_REG_SIZE);
     value = (value & ~PIN_PULL_TYPE_MASK) | ((uint32_t)pullType << PIN_PULL_TYPE_OFFSET);
     OSAL_WRITEL(value, hi35xx->regBase + index * HI35XX_PIN_REG_SIZE);
-
     HDF_LOGD("%s: set pin Pull success.", __func__);
     return HDF_SUCCESS;
 }
@@ -66,7 +65,6 @@ static int32_t Hi35xxPinGetPull(struct PinCntlr *cntlr, uint32_t index, enum Pin
 
     value = OSAL_READL(hi35xx->regBase + index * HI35XX_PIN_REG_SIZE);
     *pullType = (enum PinPullType)((value & PIN_PULL_TYPE_MASK) >> PIN_PULL_TYPE_OFFSET);
-
     HDF_LOGD("%s: get pin Pull success.", __func__);
     return HDF_SUCCESS;
 }
@@ -144,8 +142,7 @@ static struct PinCntlrMethod g_method = {
 };
 
 static int32_t Hi35xxPinReadFunc(struct Hi35xxPinDesc *desc,
-                                 const struct DeviceResourceNode *node,
-                                 struct DeviceResourceIface *drsOps)
+    const struct DeviceResourceNode *node, struct DeviceResourceIface *drsOps)
 {
     int32_t ret;
     uint32_t funcNum = 0;
@@ -190,14 +187,11 @@ static int32_t Hi35xxPinReadFunc(struct Hi35xxPinDesc *desc,
         HDF_LOGE("%s: read F5 failed", __func__);
         return ret;
     }
-    HDF_LOGD("%s:Pin Read Func succe. F0:%s", __func__, desc->func[0]);
-
     return HDF_SUCCESS;
 }
 
 static int32_t Hi35xxPinParsePinNode(const struct DeviceResourceNode *node,
-                                     struct Hi35xxPinCntlr *hi35xx,
-                                     int32_t index)
+    struct Hi35xxPinCntlr *hi35xx, int32_t index)
 {
     int32_t ret;
     struct DeviceResourceIface *drsOps = NULL;
@@ -226,7 +220,6 @@ static int32_t Hi35xxPinParsePinNode(const struct DeviceResourceNode *node,
     }
     hi35xx->cntlr.pins[index].pinName = hi35xx->desc[index].pinName;
     hi35xx->cntlr.pins[index].priv = (void *)node;
-    HDF_LOGD("%s:Pin Parse Pin Node success.", __func__);
     return HDF_SUCCESS;
 }
 
@@ -270,14 +263,12 @@ static int32_t Hi35xxPinCntlrInit(struct HdfDeviceObject *device, struct Hi35xxP
     }
     hi35xx->desc = (struct Hi35xxPinDesc *)OsalMemCalloc(sizeof(struct Hi35xxPinDesc) * hi35xx->pinCount);
     hi35xx->cntlr.pins = (struct PinDesc *)OsalMemCalloc(sizeof(struct PinDesc) * hi35xx->pinCount);
-    HDF_LOGD("%s: Pin Cntlr Init success", __func__);
     return HDF_SUCCESS;
 }
 
 static int32_t Hi35xxPinBind(struct HdfDeviceObject *device)
 {
     (void)device;
-    HDF_LOGD("%s: success", __func__);
     return HDF_SUCCESS;
 }
 
@@ -288,7 +279,6 @@ static int32_t Hi35xxPinInit(struct HdfDeviceObject *device)
     const struct DeviceResourceNode *childNode = NULL;
     struct Hi35xxPinCntlr *hi35xx = NULL;
 
-    HDF_LOGI("%s: Enter", __func__);
     hi35xx = (struct Hi35xxPinCntlr *)OsalMemCalloc(sizeof(*hi35xx));
     if (hi35xx == NULL) {
         HDF_LOGE("%s: alloc hi35xx failed", __func__);
@@ -312,7 +302,7 @@ static int32_t Hi35xxPinInit(struct HdfDeviceObject *device)
         HDF_LOGE("%s: add Pin cntlr: failed", __func__);
         ret = HDF_FAILURE;
     }
-    HDF_LOGD("%s: Pin Init success", __func__);
+    HDF_LOGI("%s: Pin Init success", __func__);
     return HDF_SUCCESS;
 }
 
@@ -324,7 +314,7 @@ static void Hi35xxPinRelease(struct HdfDeviceObject *device)
     struct Hi35xxPinCntlr *hi35xx = NULL;
     struct DeviceResourceIface *drsOps = NULL;
 
-    HDF_LOGI("%s: Enter", __func__);
+    HDF_LOGI("%s: enter", __func__);
     if (device == NULL || device->property == NULL) {
         HDF_LOGE("%s: device or property is null", __func__);
         return;

@@ -304,8 +304,8 @@ static int32_t Hi35xxAdcParseInit(struct HdfDeviceObject *device, struct DeviceR
 {
     int32_t ret;
     struct Hi35xxAdcDevice *hi35xx = NULL;
-    (void)device;
 
+    (void)device;
     hi35xx = (struct Hi35xxAdcDevice *)OsalMemCalloc(sizeof(*hi35xx));
     if (hi35xx == NULL) {
         HDF_LOGE("%s: alloc hi35xx failed", __func__);
@@ -360,7 +360,6 @@ static int32_t Hi35xxAdcInit(struct HdfDeviceObject *device)
     int32_t ret;
     struct DeviceResourceNode *childNode = NULL;
 
-    HDF_LOGI("%s: Enter", __func__);
     if (device == NULL || device->property == NULL) {
         HDF_LOGE("%s: device or property is null", __func__);
         return HDF_ERR_INVALID_OBJECT;
@@ -373,6 +372,7 @@ static int32_t Hi35xxAdcInit(struct HdfDeviceObject *device)
             break;
         }
     }
+    HDF_LOGI("%s: adc init success.", __func__);
     return ret;
 }
 

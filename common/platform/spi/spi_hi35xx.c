@@ -60,7 +60,7 @@ static int32_t SpiCfgCs(struct Pl022 *pl022, uint32_t cs)
     uint32_t value;
 
     if ((cs + 1) > pl022->numCs) {
-        HDF_LOGE("%s: cs %d is big than pl022 csNum %d", __func__, cs, pl022->numCs);
+        HDF_LOGE("%s: cs %u is big than pl022 csNum %u", __func__, cs, pl022->numCs);
         return HDF_FAILURE;
     }
     if (pl022->numCs == 1) {
@@ -207,17 +207,17 @@ static int32_t Pl022Config(struct Pl022 *pl022)
 
     /* Check if we can provide the requested rate */
     if (pl022->speed > pl022->maxSpeedHz) {
-        HDF_LOGW("%s: invalid speed:%d, use max:%d instead", __func__, pl022->speed, pl022->maxSpeedHz);
+        HDF_LOGW("%s: invalid speed:%u, use max:%u instead", __func__, pl022->speed, pl022->maxSpeedHz);
         pl022->speed = pl022->maxSpeedHz;
     }
     /* Min possible */
     if (pl022->speed == 0 || pl022->speed < pl022->minSpeedHz) {
-        HDF_LOGW("%s: invalid speed:%d, use min:%d instead", __func__, pl022->speed, pl022->minSpeedHz);
+        HDF_LOGW("%s: invalid speed:%u, use min:%u instead", __func__, pl022->speed, pl022->minSpeedHz);
         pl022->speed = pl022->minSpeedHz;
     }
     /* Check if we can provide the requested bits_per_word */
     if ((pl022->bitsPerWord < BITS_PER_WORD_MIN) || (pl022->bitsPerWord > BITS_PER_WORD_MAX)) {
-        HDF_LOGE("%s: pl022->bitsPerWord is %d not support", __func__, pl022->bitsPerWord);
+        HDF_LOGE("%s: pl022->bitsPerWord is %hhu not support", __func__, pl022->bitsPerWord);
         return HDF_FAILURE;
     }
     /* compute spi speed, speed=clk/(cpsdvsr*(scr+1)) */
@@ -414,7 +414,7 @@ static int32_t Pl022SetCfg(struct SpiCntlr *cntlr, struct SpiCfg *cfg)
     dev->cfg.mode = cfg->mode;
     dev->cfg.transferMode = cfg->transferMode;
     if (cfg->bitsPerWord < BITS_PER_WORD_MIN || cfg->bitsPerWord > BITS_PER_WORD_MAX) {
-        HDF_LOGE("%s: bitsPerWord %d not support, use defaule bitsPerWord %d",
+        HDF_LOGE("%s: bitsPerWord %hhu not support, use defaule bitsPerWord %d",
             __func__, cfg->bitsPerWord, BITS_PER_WORD_EIGHT);
         dev->cfg.bitsPerWord = BITS_PER_WORD_EIGHT;
     } else {
@@ -891,7 +891,6 @@ static int32_t HdfSpiDeviceInit(struct HdfDeviceObject *device)
     int32_t ret;
     struct SpiCntlr *cntlr = NULL;
 
-    HDF_LOGI("%s: entry", __func__);
     if (device == NULL) {
         HDF_LOGE("%s: ptr is null", __func__);
         return HDF_ERR_INVALID_OBJECT;
@@ -911,6 +910,7 @@ static int32_t HdfSpiDeviceInit(struct HdfDeviceObject *device)
     if (ret != 0) {
         HDF_LOGE("%s: error probe", __func__);
     }
+    HDF_LOGI("%s: spi device init success.", __func__);
     return ret;
 }
 

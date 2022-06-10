@@ -92,7 +92,7 @@ static int32_t Pl061GpioSetDir(struct GpioCntlr *cntlr, uint16_t local, uint16_t
     unsigned int bitNum = local;
     struct Pl061GpioGroup *group = (struct Pl061GpioGroup *)cntlr;
 
-    PLAT_LOGV("%s: local:%u, dir:%u", __func__, local, dir);
+    PLAT_LOGV("%s: local:%hu, dir:%hu", __func__, local, dir);
 
     if (OsalSpinLockIrqSave(&group->lock, &group->irqSave) != HDF_SUCCESS) {
         return HDF_ERR_DEVICE_BUSY;
@@ -117,7 +117,7 @@ static int32_t Pl061GpioGetDir(struct GpioCntlr *cntlr, uint16_t local, uint16_t
     unsigned int bitNum = local;
     struct Pl061GpioGroup *group = (struct Pl061GpioGroup *)cntlr;
 
-    PLAT_LOGV("%s: local:%u", __func__, local);
+    PLAT_LOGV("%s: local:%hu", __func__, local);
 
     addr = PL061_GPIO_DIR(group->regBase);
     val = OSAL_READL(addr);
@@ -337,12 +337,12 @@ static int32_t Pl061GpioSetIrq(struct GpioCntlr *cntlr, uint16_t local, uint16_t
 
     if (group->irqFunc != NULL) {
         (void)OsalSpinUnlockIrqRestore(&group->lock, &group->irqSave);
-        PLAT_LOGI("%s: group irq(%u@%p) already registered!", __func__, group->irq, group->irqFunc);
+        PLAT_LOGI("%s: group irq(%u) already registered!", __func__, group->irq);
         return HDF_SUCCESS;
     }
     ret = Pl061GpioRegisterGroupIrqUnsafe(group);
     (void)OsalSpinUnlockIrqRestore(&group->lock, &group->irqSave);
-    PLAT_LOGI("%s: group irq(%u@%p) registered!", __func__, group->irq, group->irqFunc);
+    PLAT_LOGI("%s: group irq(%u) registered!", __func__, group->irq);
     return ret;
 }
 
@@ -402,7 +402,7 @@ static int32_t Pl061GpioInitGroups(struct Pl061GpioData *pl061)
             goto ERR_EXIT;
         }
         if ((ret = GpioCntlrAdd(&groups[i].cntlr)) != HDF_SUCCESS) {
-            PLAT_LOGE("%s: err add controller(%u:%u):%d", __func__,
+            PLAT_LOGE("%s: err add controller(%hu:%hu):%d", __func__,
                 groups[i].cntlr.start, groups[i].cntlr.count, ret);
             (void)OsalSpinDestroy(&groups[i].lock);
             goto ERR_EXIT;
@@ -491,11 +491,10 @@ static void Pl061GpioDebug(const struct Pl061GpioData *pl061)
     uint16_t i;
     struct Pl061GpioGroup *group = NULL;
 
-    PLAT_LOGI("%s:pl061:%p, groupNum:%u, bitNum:%u", __func__,
-        pl061, pl061->groupNum, pl061->bitNum);
+    PLAT_LOGI("%s:groupNum:%hu, bitNum:%hu", __func__, pl061->groupNum, pl061->bitNum);
     for (i = 0; i < pl061->groupNum; i++) {
         group = &pl061->groups[i];
-        PLAT_LOGD("group[%u]: index:%u, regBase:0x%x, irq:%u(cntlr:%u:%u)",
+        PLAT_LOGI("group[%hu]: index:%u, regBase:0x%x, irq:%u(cntlr:%hu:%hu)",
             i, group->index, group->regBase, group->irq, group->cntlr.start, group->cntlr.count);
     }
 #else
@@ -514,7 +513,6 @@ static int32_t Pl061GpioInit(struct HdfDeviceObject *device)
     int32_t ret;
     struct Pl061GpioData *pl061 = &g_pl061;
 
-    PLAT_LOGI("%s: Enter", __func__);
     if (device == NULL || device->property == NULL) {
         PLAT_LOGE("%s: device or property null!", __func__);
         return HDF_ERR_INVALID_OBJECT;
@@ -528,7 +526,7 @@ static int32_t Pl061GpioInit(struct HdfDeviceObject *device)
 
     if (pl061->groupNum > PL061_GROUP_MAX || pl061->groupNum <= 0 ||
         pl061->bitNum > PL061_BIT_MAX || pl061->bitNum <= 0) {
-        PLAT_LOGE("%s: err groupNum:%u, bitNum:%u", __func__, pl061->groupNum, pl061->bitNum);
+        PLAT_LOGE("%s: err groupNum:%hu, bitNum:%hu", __func__, pl061->groupNum, pl061->bitNum);
         return HDF_ERR_INVALID_PARAM;
     }
 
@@ -562,6 +560,7 @@ static void Pl061GpioRelease(struct HdfDeviceObject *device)
 {
     struct Pl061GpioData *pl061 = NULL;
 
+    PLAT_LOGI("%s: enter", __func__);
     if (device == NULL) {
         PLAT_LOGE("%s: device is null!", __func__);
         return;
