@@ -24,6 +24,7 @@
 #include "hdi_gfx_composition.h"
 #include "fb_composition.h"
 #include "vsync/sorft_vsync.h"
+#include "hdi_gles_composition.h"
 #include "hdi_gfx_composition.h"
 #include "display_adapter.h"
 
@@ -49,6 +50,24 @@ FbDisplay::~FbDisplay()
     DISPLAY_LOGD();
 }
 
+std::unique_ptr<HdiComposition> FbDisplay::GetPreComposition(uint32_t w, uint32_t h)
+{
+    int ret;
+#ifdef ENABLE_GLES_COMPOSITION
+    auto preComp = std::make_unique<HdiGlesComposition>();
+    DISPLAY_CHK_RETURN((preComp == nullptr), nullptr,
+        DISPLAY_LOGE("can not new HdiGlesComposition errno %{public}d", errno));
+    ret = preComp->Init(w, h);
+    DISPLAY_CHK_RETURN((ret != DISPLAY_SUCCESS), nullptr, DISPLAY_LOGE("can not init HdiGfxComposition"));
+#else
+    auto preComp = std::make_unique<HdiGfxComposition>();
+    DISPLAY_CHK_RETURN((preComp == nullptr), nullptr,
+        DISPLAY_LOGE("can not new HdiGfxComposition errno %{public}d", errno));
+    ret = preComp->Init();
+    DISPLAY_CHK_RETURN((ret != DISPLAY_SUCCESS), nullptr, DISPLAY_LOGE("can not init HdiGfxComposition"));
+#endif // ENABLE_GLES_COMPOSITION
+    return preComp;
+}
 int32_t FbDisplay::Init()
 {
     int ret;
@@ -71,11 +90,8 @@ int32_t FbDisplay::Init()
     displayCapability_.phyHeight = varInfo.yres;
     displayCapability_.type = DISP_INTF_PANEL;
     mActiveModeId = 0;
-    auto preComp = std::make_unique<HdiGfxComposition>();
-    DISPLAY_CHK_RETURN((preComp == nullptr), DISPLAY_FAILURE,
-        DISPLAY_LOGE("can not new HdiGfxComposition errno %{public}d", errno));
-    ret = preComp->Init();
-    DISPLAY_CHK_RETURN((ret != DISPLAY_SUCCESS), DISPLAY_FAILURE, DISPLAY_LOGE("can not init HdiGfxComposition"));
+
+    auto preComp = GetPreComposition(mode.width, mode.height);
 
     auto postComp = std::make_unique<FbComposition>(deviceFds_);
     DISPLAY_CHK_RETURN((postComp == nullptr), DISPLAY_FAILURE,

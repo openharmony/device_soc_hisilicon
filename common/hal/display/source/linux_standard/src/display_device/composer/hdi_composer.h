@@ -25,6 +25,10 @@ namespace DISPLAY {
 class HdiComposition {
 public:
     HdiComposition() {}
+    virtual int32_t Init(uint32_t width, uint32_t height)
+    {
+        return DISPLAY_SUCCESS;
+    }
     virtual int32_t Init()
     {
         return DISPLAY_SUCCESS;

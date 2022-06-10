@@ -18,7 +18,6 @@
 #include <string.h>
 #include <stdint.h>
 #include "hilog/log.h"
-#include "stdio.h"
 #ifdef HDF_LOG_TAG
 #undef HDF_LOG_TAG
 #endif
@@ -26,6 +25,8 @@
 #if defined(__cplusplus)
 extern "C" {
 #endif
+
+#define FENCE_TIMEOUT 3000
 
 #undef LOG_TAG
 #undef LOG_DOMAIN

@@ -1,0 +1,53 @@
+# Copyright (c) Hisilicon Technologies Co., Ltd. 2022-2022. All rights reserved.
+import("//build/ohos.gni")
+config("gles_composition_confg") {
+    include_dirs = [
+        ".",
+        "//third_party/libdrm"
+    ]
+}
+
+ohos_static_library("gles_composition") {
+    sources = [
+        "egl_ext_function.cpp",
+        "gl_egl_state.cpp",
+        "gles_fbo.cpp",
+        "gles_gfx_image.cpp",
+        "hardware_buffer.cpp",
+        "hdi_gles_composition.cpp",
+        "display_mock_surface.cpp",
+        "gles_sharder.cpp",
+        "gles_program.cpp"
+    ]
+
+    include_dirs = [
+        ".",
+        "..",
+        "../../../../include",
+        "//base/hiviewdfx/interfaces/innerkits/libhilog/include",
+        "//drivers/peripheral/base",
+        "//drivers/peripheral/display/interfaces/include",
+        "../../core",
+        "../../../utils"
+    ]
+    public_deps = [
+        "//foundation/graphic/standard:libgl",
+        "//third_party/openGLES:libGLES",
+        "//foundation/graphic/standard/frameworks/surface:surface",
+        "//foundation/graphic/standard/utils:buffer_handle",
+        "//developtools/bytrace_standard/interfaces/innerkits/native:bytrace_core",
+    ]
+    external_deps = [
+        "hiviewdfx_hilog_native:libhilog",
+        "utils_base:utils",
+    ]
+
+    public_configs = [":gles_composition_confg"]
+
+    cflags_cc = [
+        "-Wno-error=unused-function",
+        "-Wno-error=missing-braces",
+        "-Wno-error=#warnings",
+    ]
+
+}

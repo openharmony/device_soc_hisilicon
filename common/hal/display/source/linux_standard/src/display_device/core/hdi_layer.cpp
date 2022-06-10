@@ -28,7 +28,7 @@ HdiLayerBuffer::HdiLayerBuffer(const BufferHandle &hdl)
 {
     DISPLAY_LOGD();
     mFd = dup(hdl.fd);
-    mHandle = hdl;
+    mHandle = &hdl;
     if (mFd < 0) {
         DISPLAY_LOGE("the fd : %{public}d dup failed errno  %{public}d", hdl.fd, errno);
     }
@@ -199,16 +199,6 @@ void HdiLayer::SetPixel(const BufferHandle &handle, int x, int y, uint32_t color
     *pixel = color;
 }
 
-void HdiLayer::ClearColor(uint32_t color)
-{
-    DISPLAY_LOGD();
-    BufferHandle &handle = mHdiBuffer->mHandle;
-    for (int32_t x = 0; x < handle.width; x++) {
-        for (int32_t y = 0; y < handle.height; y++) {
-            SetPixel(handle, x, y, color);
-        }
-    }
-}
 HdiLayer::~HdiLayer()
 {
     while (!releaseFences_.empty()) {

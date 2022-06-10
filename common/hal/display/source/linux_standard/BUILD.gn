@@ -113,14 +113,23 @@ ohos_shared_library("hisi_display_device") {
     "//third_party/libdrm:libdrm",
     "//developtools/bytrace_standard/interfaces/innerkits/native:bytrace_core",
     "//base/hiviewdfx/hilog/interfaces/native/innerkits:libhilog",
+    "src/display_device/composer/gles:gles_composition"
   ]
 
-  cflags = [ "-Wno-unused-function" ]
+  cflags_cc = [
+    "-Wno-error=unused-function",
+    "-Wno-error=missing-braces",
+    "-Wno-error=#warnings",
+  ]
 
   external_deps = [
     "device_driver_framework:libhdf_utils",
     "hiviewdfx_hilog_native:libhilog",
     "utils_base:utils",
+  ]
+
+  defines = [
+    "ENABLE_GLES_COMPOSITION"
   ]
 
   install_enable = true

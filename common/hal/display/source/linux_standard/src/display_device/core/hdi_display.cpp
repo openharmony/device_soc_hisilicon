@@ -197,7 +197,7 @@ int32_t HdiDisplay::PrepareDisplayLayers(bool *needFlushFb)
             mChangeLayers.push_back(layer);
         }
     }
-    *needFlushFb = true;
+    *needFlushFb = NEED_FLUSH_FB;
     return DISPLAY_SUCCESS;
 }
 
@@ -205,7 +205,11 @@ int32_t HdiDisplay::Commit(int32_t *fence)
 {
     DISPLAY_LOGD();
     mComposer->Commit(false);
-    *fence = mClientLayer->GetReleaseFenceFd();
+    if (NEED_FLUSH_FB) {
+        *fence = mClientLayer->GetReleaseFenceFd();
+    } else {
+        *fence = -1;
+    }
     DISPLAY_LOGD("the release fence is %{public}d", *fence);
     return DISPLAY_SUCCESS;
 }
