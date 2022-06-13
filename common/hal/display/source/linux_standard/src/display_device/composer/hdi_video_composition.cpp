@@ -116,7 +116,7 @@ int32_t HdiVideoComposition::Apply(bool modeSet)
         layerFuncs_->SetLayerZorder(0, voLayerId, hdiLayer->GetZorder());
         layerFuncs_->SetTransformMode(0, voLayerId, hdiLayer->GetTransFormType());
         // now the display_layer has no fence
-        layerFuncs_->SetLayerBuffer(0, voLayerId, &(hdiLayer->GetCurrentBuffer()->mHandle),
+        layerFuncs_->SetLayerBuffer(0, voLayerId, hdiLayer->GetCurrentBuffer()->mHandle,
             hdiLayer->GetAcquireFenceFd());
         hdiLayer->SetReleaseFence(-1); // todo check the fence wether use the last fence.
     }

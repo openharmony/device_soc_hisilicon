@@ -121,6 +121,11 @@ protected:
     std::multiset<HdiLayer *, SortLayersByZ> mLayers;
     std::unique_ptr<HdiLayer> mClientLayer;
     std::vector<HdiLayer *> mChangeLayers;
+#ifdef ENABLE_GLES_COMPOSITION
+    static constexpr const bool NEED_FLUSH_FB = false;
+#else
+    static constexpr const bool NEED_FLUSH_FB = true;
+#endif
 };
 } // namespace OHOS
 } // namespace HDI

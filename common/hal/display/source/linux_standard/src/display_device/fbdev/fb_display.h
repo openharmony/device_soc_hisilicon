@@ -41,6 +41,7 @@ public:
     virtual int32_t RegDisplayVBlankCallback(VBlankCallback cb, void *data) override;
     virtual bool IsConnected() override;
     virtual int32_t SetDisplayVsyncEnabled(bool enabled) override;
+    std::unique_ptr<HdiComposition> GetPreComposition(uint32_t w, uint32_t h);
 protected:
     std::unique_ptr<HdiLayer> CreateHdiLayer(LayerType type) override;
 private:

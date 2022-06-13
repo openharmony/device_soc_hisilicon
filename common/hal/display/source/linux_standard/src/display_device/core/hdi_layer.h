@@ -19,6 +19,7 @@
 #include <vector>
 #include <memory>
 #include <queue>
+#include <libsync.h>
 #include "buffer_handle.h"
 #include "display_common.h"
 #include "hdi_device_common.h"
@@ -61,7 +62,7 @@ public:
     {
         return mFd;
     }
-    BufferHandle mHandle;
+    const BufferHandle* mHandle;
 
 private:
     HdiLayerBuffer(const HdiLayerBuffer &rhs);
@@ -142,7 +143,7 @@ public:
             fd = releaseFences_.front();
             releaseFences_.pop();
         }
-        DISPLAY_LOGD("fd is %d releaseFences_ size %d", fd, releaseFences_.size());
+        DISPLAY_LOGD("fd is %{public}d releaseFences_ size %{public}d", fd, releaseFences_.size());
         return fd;
     }
 
@@ -155,7 +156,6 @@ public:
     {
         releaseFences_.push(fd);
     };
-    void ClearColor(uint32_t color);
 
     void SetPixel(const BufferHandle &handle, int x, int y, uint32_t color);
 
@@ -176,7 +176,15 @@ public:
         return mHdiBuffer.get();
     }
     virtual ~HdiLayer();
-
+    void WaitAcquireFence()
+    {
+        int fd = GetAcquireFenceFd();
+        if (fd < 0) {
+            DISPLAY_LOGD("fd is invaild");
+            return;
+        }
+        sync_wait(fd, FENCE_TIMEOUT);
+    }
 private:
     static uint32_t GetIdleId();
     static uint32_t mIdleId;
