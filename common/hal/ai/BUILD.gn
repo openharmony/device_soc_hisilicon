@@ -12,7 +12,7 @@
 # limitations under the License.
 import("//build/lite/config/component/lite_component.gni")
 
-board=board_name
+board = board_name
 if (board_name == "hispark_taurus" || board_name == "aegis_hi3516dv300") {
   board = "hi3516dv300"
 } else if (board_name == "hispark_aries") {
@@ -24,9 +24,7 @@ config("engine_nnie_config") {
 }
 
 copy("engine_nnie_sdk") {
-  sources = [
-    "./$board/libs/libnnie_adapter.so",
-  ]
+  sources = [ "./$board/libs/libnnie_adapter.so" ]
   outputs = [ "$root_out_dir/{{source_file_part}}" ]
   public_configs = [ ":engine_nnie_config" ]
 }

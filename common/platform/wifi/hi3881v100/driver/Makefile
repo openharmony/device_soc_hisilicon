@@ -17,9 +17,9 @@
 #
 
 include $(LITEOSTOPDIR)/config.mk
-include $(LITEOSTOPDIR)/../../drivers/adapter/khdf/liteos/lite.mk
+include $(LITEOSTOPDIR)/../../drivers/hdf_core/adapter/khdf/liteos/lite.mk
 
-HDM_WIFI_ROOT = $(LITEOSTOPDIR)/../../drivers/framework/model/network/wifi
+HDM_WIFI_ROOT = $(LITEOSTOPDIR)/../../drivers/hdf_core/framework/model/network/wifi
 WIFI_DRIVER_DIR = .
 
 MODULE_NAME := hi3881

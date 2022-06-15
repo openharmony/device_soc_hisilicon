@@ -17,11 +17,11 @@
 #
 
 include $(LITEOSTOPDIR)/config.mk
-include $(LITEOSTOPDIR)/../../drivers/adapter/khdf/liteos/lite.mk
+include $(LITEOSTOPDIR)/../../drivers/hdf_core/adapter/khdf/liteos/lite.mk
 
 MODULE_NAME := hdf_vendor_wifi
 VENDOR_WIFI_ROOT = .
-HDM_WIFI_ROOT = $(LITEOSTOPDIR)/../../drivers/framework/model/network/wifi
+HDM_WIFI_ROOT = $(LITEOSTOPDIR)/../../drivers/hdf_core/framework/model/network/wifi
 
 LOCAL_INCLUDE = $(HDM_WIFI_ROOT)/include \
                 $(HDM_WIFI_ROOT)/platform/include \

@@ -15,7 +15,7 @@ import("//build/lite/config/component/lite_component.gni")
 import("//build/lite/config/subsystem/aafwk/path.gni")
 import("//build/lite/ndk/ndk.gni")
 
-board=board_name
+board = board_name
 if (board_name == "hispark_taurus" || board_name == "aegis_hi3516dv300") {
   board = "hi3516dv300"
 } else if (board_name == "hispark_aries") {

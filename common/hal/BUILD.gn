@@ -7,7 +7,7 @@ if (defined(ohos_lite)) {
 }
 
 if (defined(ohos_lite)) {
-# do something
+  # do something
 } else {
-# do something
+  # do something
 }
