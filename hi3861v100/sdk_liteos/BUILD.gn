@@ -21,7 +21,7 @@ build_ext_component("run_wifiiot_scons") {
   }
   deps = [
     ":sdk",
-    "//base/security/deviceauth/frameworks/deviceauth_lite:hichainsdk",
+    "//base/security/device_auth/frameworks/deviceauth_lite:hichainsdk",
     "//build/lite:ohos",
   ]
   if (enable_hos_vendor_wifiiot_xts) {
