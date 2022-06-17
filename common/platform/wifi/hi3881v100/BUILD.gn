@@ -14,12 +14,12 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-import("//drivers/adapter/khdf/liteos/hdf.gni")
+import("//drivers/hdf_core/adapter/khdf/liteos/hdf.gni")
 
 module_switch = defined(LOSCFG_DRIVERS_HDF_WIFI)
 module_name = "hdf_vendor_wifi"
 
-HDM_WIFI_ROOT = "//drivers/framework/model/network/wifi"
+HDM_WIFI_ROOT = "//drivers/hdf_core/framework/model/network/wifi"
 
 hdf_driver(module_name) {
   sources = [ "adapter/hdf_wlan_sdio_adapt.c" ]

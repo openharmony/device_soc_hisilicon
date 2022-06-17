@@ -11,7 +11,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import("//drivers/adapter/khdf/liteos/hdf.gni")
+import("//drivers/hdf_core/adapter/khdf/liteos/hdf.gni")
 
 module_switch = defined(LOSCFG_DRIVERS_HIETH_SF)
 module_name = "hieth-sf"
@@ -31,7 +31,7 @@ hdf_driver(module_name) {
     "include",
     "include/internal",
     "adapter",
-    "//drivers/framework/model/network/ethernet/include",
-    "//drivers/framework/include/ethernet",
+    "//drivers/hdf_core/framework/model/network/ethernet/include",
+    "//drivers/hdf_core/framework/include/ethernet",
   ]
 }

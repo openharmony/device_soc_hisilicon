@@ -12,7 +12,7 @@
 # limitations under the License.
 
 include $(LITEOSTOPDIR)/config.mk
-include $(LITEOSTOPDIR)/../../drivers/adapter/khdf/liteos/lite.mk
+include $(LITEOSTOPDIR)/../../drivers/hdf_core/adapter/khdf/liteos/lite.mk
 
 MODULE_NAME := $(notdir $(shell pwd))
 
@@ -20,8 +20,8 @@ LOCAL_SRCS :=  $(wildcard src/*.c)
 LOCAL_SRCS +=  $(wildcard adapter/*.c)
 
 LOCAL_FLAGS := -I include/internal
-LOCAL_FLAGS += -I $(LITEOSTOPDIR)/../../drivers/framework/model/network/ethernet/include
-LOCAL_FLAGS += -I $(LITEOSTOPDIR)/../../drivers/framework/include/ethernet
+LOCAL_FLAGS += -I $(LITEOSTOPDIR)/../../drivers/hdf_core/framework/model/network/ethernet/include
+LOCAL_FLAGS += -I $(LITEOSTOPDIR)/../../drivers/hdf_core/framework/include/ethernet
 LOCAL_FLAGS += -I $(LITEOSTOPDIR)/../../device/soc/hisilicon/common/platform/hieth-sf/adapter
 
 include $(HDF_DRIVER)
