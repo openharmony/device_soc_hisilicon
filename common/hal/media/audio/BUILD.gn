@@ -20,7 +20,7 @@ ohos_prebuilt_shared_library("hdi_audio") {
   install_enable = true
   install_images = [ chipset_base_dir ]
   subsystem_name = "hdf"
-  part_name = "audio_device_driver"
+  part_name = "drivers_peripheral_audio"
 }
 
 ohos_prebuilt_shared_library("audio_primary_port") {
@@ -28,7 +28,7 @@ ohos_prebuilt_shared_library("audio_primary_port") {
   install_enable = true
   install_images = [ chipset_base_dir ]
   subsystem_name = "hdf"
-  part_name = "audio_device_driver"
+  part_name = "drivers_peripheral_audio"
 }
 
 ohos_prebuilt_shared_library("hal_common") {
@@ -36,5 +36,5 @@ ohos_prebuilt_shared_library("hal_common") {
   install_enable = true
   install_images = [ chipset_base_dir ]
   subsystem_name = "hdf"
-  part_name = "audio_device_driver"
+  part_name = "drivers_peripheral_audio"
 }
