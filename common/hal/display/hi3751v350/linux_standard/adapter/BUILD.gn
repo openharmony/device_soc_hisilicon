@@ -32,5 +32,5 @@ ohos_shared_library("display_adapter_impl") {
   ]
   install_images = [ "system" ]
   subsystem_name = "hdf"
-  part_name = "display_device_driver"
+  part_name = "drivers_peripheral_display"
 }

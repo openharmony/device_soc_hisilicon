@@ -89,7 +89,7 @@ if (defined(ohos_lite)) {
     }
     install_images = [ chipset_base_dir ]
     subsystem_name = "hdf"
-    part_name = "display_device_driver"
+    part_name = "drivers_peripheral_display"
   }
 
   ohos_prebuilt_shared_library("display_layer") {
@@ -100,6 +100,6 @@ if (defined(ohos_lite)) {
     }
     install_images = [ chipset_base_dir ]
     subsystem_name = "hdf"
-    part_name = "display_device_driver"
+    part_name = "drivers_peripheral_display"
   }
 }
