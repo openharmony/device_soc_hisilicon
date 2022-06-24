@@ -168,7 +168,7 @@ static void StaResetAddr(struct netif *ptrLwipNetif)
 #define TEST_CONNECT_RETRY_COUNT 5
 static void WifiConnectionChangedHandler(int state, WifiLinkedInfo *info)
 {
-    if (state == WIFI_STATE_AVALIABLE) {
+    if (state == WIFI_STATE_AVAILABLE) {
         NetCfgResult(NETCFG_RST_SUCC);
         NetCfgResult(TEST_NUM_2);
         NetCfgResult(TEST_NUM_3);
@@ -176,7 +176,7 @@ static void WifiConnectionChangedHandler(int state, WifiLinkedInfo *info)
         NetCfgResult(TEST_NUM_5);
         printf("[sample] WiFi: Connected.\n");
         netifapi_dhcp_start(g_staNetif);
-    } else if (state == WIFI_STATE_NOT_AVALIABLE) {
+    } else if (state == WIFI_STATE_NOT_AVAILABLE) {
         printf("[sample] WiFi: Disconnected retry = %d, reason = %d\n", g_connectRetryCount, info->disconnectedReason);
         if (g_connectRetryCount < TEST_CONNECT_RETRY_COUNT) {
             g_connectRetryCount++;

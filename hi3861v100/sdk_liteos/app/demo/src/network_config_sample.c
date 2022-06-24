@@ -181,11 +181,11 @@ static int g_state;
 static void *WifiConnectTask(const char *arg)
 {
     (void)arg;
-    if (g_state == WIFI_STATE_AVALIABLE) {
+    if (g_state == WIFI_STATE_AVAILABLE) {
         NetCfgResult(0);
         printf("[sample] WiFi: Connected.\n");
         netifapi_dhcp_start(g_staNetif);
-    } else if (g_state == WIFI_STATE_NOT_AVALIABLE) {
+    } else if (g_state == WIFI_STATE_NOT_AVAILABLE) {
         printf("[sample] WiFi: Disconnected retry = %d\n", g_connectRetryCount);
         if (g_connectRetryCount < TEST_CONNECT_RETRY_COUNT) {
             g_connectRetryCount++;
