@@ -52,7 +52,7 @@ class UsrCfgParser:
         #print('execute with exe...') if getattr(sys, 'frozen', False) else print('execute with python...')
         self.config_file = self.get_default_config_file()
         #print('config file:',self.config_file)
-        if os.path.exists(self.config_file) is False:
+        if os.path.exists(self.config_file) == False:
             raise UsrCfgParserError("Config file not found! Please execute 'python usr_config.py' first!")
         self.translate = Translator()
 
@@ -68,23 +68,23 @@ class UsrCfgParser:
 
     def do_parse(self):
         cfg_options = {}
-        if self.config_file is None:
+        if self.config_file == None:
             raise UsrCfgParserError("Config file not found! Please execute \'python usr_config.py\' first!")
         with open(self.config_file, 'r') as cfg:
             for option in cfg.readlines():
                 option = option.strip()
-                if self.cfg_is_valid(option) is True:
+                if self.cfg_is_valid(option) == True:
                     marco, value = self.parse_option(option)
                     marco = self.translate.translate(marco)
                     cfg_options[marco.strip()] = value.strip()
         return cfg_options
 
     def cfg_is_valid(self, option):
-        if option is None:
+        if option == None:
             return False
-        if option is '':
+        if option == '':
             return False
-        if option.startswith('#') is True:
+        if option.startswith('#') == True:
             return False
         if option.find('HiSilicon menuconfig tool') > 0:
             return False

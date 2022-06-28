@@ -263,7 +263,7 @@ class NvEnv:
 g_nv_env = NvEnv()
 
 def hi_str_to_int(line, num):
-    if num is not None:
+    if num != None:
         return int(line, num)
     match1 = re.match(r'\s*0x', line)
     match2 = re.match(r'\s*0X', line)
@@ -279,7 +279,7 @@ def hi_nv_set_cfg(root_dir, product_lib_out, xml_hfile_dir, product_name, app_na
     if subver =='common':
         subver = app_name
 
-    if hnv_dir is None:#hnv存放位置
+    if hnv_dir == None:#hnv存放位置
         g_nv_env.hnv_dir=product_lib_out
     else:
         g_nv_env.hnv_dir=hnv_dir
@@ -387,7 +387,7 @@ def hi_nv_mk_temp_dir(temp_dir, hnv_dir):
     else:
         os.makedirs(temp_dir)
 
-    if hnv_dir is None:
+    if hnv_dir == None:
         pass
     elif not os.path.exists(hnv_dir):
         os.makedirs(hnv_dir)
@@ -672,7 +672,7 @@ if __name__ == '__main__':
         filename = sys.argv[1]
         target_name = sys.argv[2]
         default_target_path = os.path.join(g_root_dir, '..', '..', 'build', 'build_tmp', 'nv')
-        if os.path.exists(default_target_path) is False:
+        if os.path.exists(default_target_path) == False:
             os.makedirs(default_target_path)
         make_nv_bin(default_target_path, target_name, filename)
 
