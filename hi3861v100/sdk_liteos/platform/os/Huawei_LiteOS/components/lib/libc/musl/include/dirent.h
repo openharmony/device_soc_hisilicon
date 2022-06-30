@@ -81,7 +81,7 @@ DIR           *fdopendir(int);
  * </ul>
  *
  * @retval #DIR* Upon successful completion, these functions shall return a pointer to an object of type DIR.
- * @retval #NULL An error is encountered and open the directory faild.
+ * @retval #NULL An error is encountered and open the directory failed.
  *
  * @par Errors
  * <ul>
