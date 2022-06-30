@@ -17,8 +17,6 @@
 */
 
 #include <linux/delay.h>
-#include <linux/gpio/consumer.h>
-#include <linux/i2c.h>
 #include <linux/input.h>
 #include <linux/input/mt.h>
 #include <linux/interrupt.h>
@@ -32,326 +30,352 @@
 #include <linux/errno.h>
 #include <linux/miscdevice.h>
 #include <linux/fcntl.h>
-#include <linux/spinlock.h>
 #include <linux/init.h>
 #include <linux/proc_fs.h>
 #include <linux/workqueue.h>
-#include <linux/gpio.h>
 #include <asm/uaccess.h>
 #include <asm/io.h>
 #include <linux/slab.h>
 #include <linux/string.h>
-#include <linux/i2c.h>
 #include "hi_drv_i2c.h"
 #include "hi_osal.h"
 #include "hi_module.h"
 #include "hi_drv_gpio.h"
 
-#define I2C_NUM         (1)
 #define FST_ADDR        (0xBB)
+#define DEFAULT_MD_LEN  (128)
+
+#define I2C_NUM         (1)
+#define I2C_BYTE_NUM    (2)
+#define I2C1_SDA_REG    0xF8A21000
+#define I2C1_SCL_REG    0xF8A21004
 
 #define RST_GPIO_NUM   (33) // GPIO4_1 = 4*8+1=33
 #define INT_GPIO_NUM    (34) // GPIO4_2 = 4*8+2=34
 #define RST_GPIO_NUM_REG    0xF8A21470
 #define INT_GPIO_NUM_REG    0xF8A21474
-#define I2C1_SDA_REG    0xF8A21000
-#define I2C1_SCL_REG    0xF8A21004
 
-#define RST_GPIO_CHIP   (1)
-#define RST_GPIO_OFFSET (0)
-#define INT_GPIO_CHIP   (1)
-#define INT_GPIO_OFFSET (1)
-#define gpio_num(gpio_chip_num, gpio_offset_num)  ((gpio_chip_num) * 8 + (gpio_offset_num))
-
-#define GT911_BIT0    0x01
-#define GT911_BIT1    0x02
-#define GT911_DATA_RECVIVED    0x80
-#define FINGGER_DATA_NUM (4)
-#define I2C_BYTE_NUM  (2)
-#define INT_DELAY_TIME  (20)
-#define GT911_STAY_HIGH_TIME  (100)
-#define GT911_STAY_LOW_TIME  (20)
-
-/* start define of ft */
-static struct input_dev* tp_ts_dev = NULL;
-
-volatile unsigned long gpio_base;
-
-/**The TP can support 5 points, but we only use 1*/
-#define MAX_TOUCH_POINTS             (1)
-#define OUCH_POINTS_LIMIT             (5)
-
-/**screen resolution*/
-#define TP_SCREEN_WIDTH_NUM             (1024)
-#define TP_SCREEN_HEIGHT_NUM            (600)
-
-#define TP_EVENT_PRESS_DOWN             (0)
-#define TP_EVENT_LIFT_UP                (1)
-#define TP_EVENT_CONTACT                (2)
-
+#define GT_BIT0 0x01
+#define GT_BIT1 0x02
+#define GT_DATA_RECVIVED 0x80
+#define GT_FINGGER_DATA_NUM (8)
+#define GT_STAY_HIGH_TIME  (100)
+#define GT_STAY_LOW_TIME  (20)
 #define GT_BUFFER_STAT_ADDR             (0x814E)
+#define GT_FINGGER_DATA_BASE            (0x814F)
 #define GT_COORDINATE_X_LOWBYPE_BASE    (0x8150)
 #define GT_COORDINATE_X_HIGHBYPE_BASE   (0x8151)
 #define GT_COORDINATE_Y_LOWBYPE_BASE    (0x8152)
 #define GT_COORDINATE_Y_HIGHBYPE_BASE   (0x8153)
 
-#define DEFAULT_MD_LEN (128)
+#define TP_MAX_TOUCH_POINTS             (5)
+#define TP_OUCH_POINTS_LIMIT            (5)
+/**screen resolution*/
+#define TP_SCREEN_WIDTH_NUM             (1024)
+#define TP_SCREEN_HEIGHT_NUM            (600)
+#define TP_EVENT_PRESS_DOWN             (0)
+#define TP_EVENT_LIFT_UP                (1)
+#define TP_EVENT_CONTACT                (2)
+#define TP_SLOT_REPORT                  0
+#define TP_BIT_OFFSET1                  1
+#define TP_BIT_OFFSET2                  2
+#define TP_BIT_OFFSET3                  3
+#define TP_BIT_OFFSET4                  4
+#define TP_BIT_OFFSET5                  5
+#define TP_BIT_OFFSET6                  6
+#define TP_BIT_OFFSET7                  7
+#define TP_BIT_OFFSET8                  8
+volatile unsigned long gpio_base;
+i2c_ext_func *g_i2c_func = HI_NULL;
+gpio_ext_func *g_pst_gpio_func = HI_NULL;
+static struct work_struct g_work;
+static struct input_dev *g_ts_dev = HI_NULL;
+static struct workqueue_struct *g_tp_workqueue;
+
+extern hi_void hi_drv_gpio_set_irq_ctrl(hi_u32 gpio_no, hi_bool b_enable);
 
 static const struct i2c_device_id ft_id[] = {
     { "ft", },
     { }
 };
 
-typedef struct tagts_event {
-    u16 au16_x[MAX_TOUCH_POINTS]; /* x coordinate */
-    u16 au16_y[MAX_TOUCH_POINTS]; /* y coordinate */
-    u16 pressure[MAX_TOUCH_POINTS];
-    u8 au8_touch_event[MAX_TOUCH_POINTS]; /* touch event: 0 -- down; 1-- up; 2 -- contact */
-    u8 au8_finger_id[MAX_TOUCH_POINTS];   /* touch ID */
-    u8 area[MAX_TOUCH_POINTS];
-    u8 touch_point;
-    u8 point_num;
-} ts_event;
-
 MODULE_DEVICE_TABLE(i2c, ft_id);
-
-static int touch_set_reg(unsigned int Addr, unsigned int Value)
+static hi_void tp_touch_down(struct input_dev *input_dev, hi_s32 id, hi_s32 x, hi_s32 y, hi_s32 w)
 {
-    void* pmem = ioremap(Addr, DEFAULT_MD_LEN);
-    if (pmem == NULL) {
+#if TP_SLOT_REPORT
+    input_mt_slot(input_dev, id);
+    input_report_abs(input_dev, ABS_MT_TRACKING_ID, id);
+    input_report_abs(input_dev, ABS_MT_POSITION_X, x);
+    input_report_abs(input_dev, ABS_MT_POSITION_Y, y);
+    input_report_abs(input_dev, ABS_MT_TOUCH_MAJOR, w);
+    input_report_abs(input_dev, ABS_MT_WIDTH_MAJOR, w);
+#else
+    input_report_key(input_dev, BTN_TOUCH, 1);
+    input_report_abs(input_dev, ABS_MT_POSITION_X, x);
+    input_report_abs(input_dev, ABS_MT_POSITION_Y, y);
+    input_report_abs(input_dev, ABS_MT_TOUCH_MAJOR, w);
+    input_report_abs(input_dev, ABS_MT_WIDTH_MAJOR, w);
+    input_report_abs(input_dev, ABS_MT_TRACKING_ID, id);
+    input_mt_sync(input_dev);
+#endif
+}
+
+static hi_void tp_touch_up(struct input_dev *input_dev, hi_s32 id)
+{
+#if TP_SLOT_REPORT
+    input_mt_slot(input_dev, id);
+    input_report_abs(input_dev, ABS_MT_TRACKING_ID, -1);
+#else
+    input_report_key(input_dev, BTN_TOUCH, 0);
+#endif
+}
+
+static hi_s32 tp_set_reg(hi_u32 addr, hi_u32 value)
+{
+    hi_void* pmem = ioremap(addr, DEFAULT_MD_LEN);
+    if (pmem == HI_NULL) {
         return -1;
     }
 
-    *(unsigned int*)pmem = Value;
+    *(hi_u32 *)pmem = value;
     iounmap(pmem);
     return 0;
 }
 
-static int touch_reset_buffer(void)
+static hi_s32 tp_reset_buffer(hi_void)
 {
-    int i = 0;
-    i2c_ext_func *i2c_func = NULL;
+    hi_s32 i = 0;
     hi_u8 data[1] = {0};
-    i2c_drv_get_i2c_ext_func(&i2c_func);
-    if (i2c_func == NULL) {
-        printk("HI_ID_I2C handle get failed \r\n");
-        return 0;
-    }
 
-    for (i = 0; i < OUCH_POINTS_LIMIT; i++) {
-        i2c_func->pfn_i2c_write(1, FST_ADDR, GT_BUFFER_STAT_ADDR, I2C_BYTE_NUM, data, 1);
+    for (i = 0; i < TP_OUCH_POINTS_LIMIT; i++) {
+        g_i2c_func->pfn_i2c_write(1, FST_ADDR, GT_BUFFER_STAT_ADDR, I2C_BYTE_NUM, data, 1);
     }
     return 0;
 }
 
-/**only support onetouch*/
-static int touch_event_handler(ts_event *event)
+static void tp_report_by_slot(struct input_dev *input, hi_u16 *pretouch, hi_s32 fingernum)
 {
-    hi_s32 ret = -1;
-    int i = 0;
-    int fingernum = 0;
-    int coord_x = 0;
-    int coord_y = 0;
-    static bool pretouch = 0;
-    unsigned char data = 0;
-    i2c_ext_func *i2c_func = NULL;
-    memset(event, 0, sizeof(ts_event));
-
-    i2c_drv_get_i2c_ext_func(&i2c_func);
-    if (i2c_func == NULL) {
-        printk("HI_ID_I2C handle get failed \r\n");
-        return 0;
+    hi_s32 i;
+    hi_s32 id = 0;
+    hi_s32 input_x = 0;
+    hi_s32 input_y = 0;
+    hi_s32 input_w = 0;
+    hi_s32 pos = 0;
+    hi_u16 touch_index = 0;
+    hi_u8 report_num = 0;
+    hi_u8 finggerdata[GT_FINGGER_DATA_NUM * TP_MAX_TOUCH_POINTS] = {0};
+    hi_s32 ret = g_i2c_func->pfn_i2c_read(I2C_NUM, FST_ADDR, GT_FINGGER_DATA_BASE, I2C_BYTE_NUM, finggerdata,
+        GT_FINGGER_DATA_NUM * TP_MAX_TOUCH_POINTS);
+    if (fingernum) {
+        id = finggerdata[pos] & 0x0F;
+        touch_index |= (0x01 << id);
     }
 
-    ret = i2c_func->pfn_i2c_read(1, FST_ADDR, GT_BUFFER_STAT_ADDR, I2C_BYTE_NUM, &data, 1);
-    if (ret != 0) {
-        printk("i2c_func->pfn_i2c_read failed \r\n");
-        return 0;
-    }
-
-    if (data == GT911_DATA_RECVIVED) {
-        if (pretouch) {
-            event->point_num = 1;
-            event->au8_finger_id[0] = 0;
-            event->au8_touch_event[0] = TP_EVENT_LIFT_UP;
-        }
-        pretouch = 0;
-        goto exit_work_func;
-    } else if (data == 0) {
-        return 0;
-    }
-    pretouch = 1;
-    fingernum = data & (GT911_BIT0 | GT911_BIT1);
-
-    if (fingernum > 0) {
-        unsigned char finggerdata[FINGGER_DATA_NUM] = {0};
-        ret = i2c_func->pfn_i2c_read(1, FST_ADDR, GT_COORDINATE_X_LOWBYPE_BASE, I2C_BYTE_NUM, finggerdata,
-            FINGGER_DATA_NUM);
-        coord_x = (finggerdata[0] & 0xFF) | ((finggerdata[1] & 0xFF) << 8); // 8 for low position
-        coord_y = (finggerdata[2] & 0xFF) | ((finggerdata[3] & 0xFF) << 8); // 8 for low position 2 3 if fingger number
-        memset(event, 0, sizeof(ts_event));
-        event->point_num = fingernum;
-        event->touch_point = 0;
-
-        for (i = 0; i < MAX_TOUCH_POINTS; i++) {
-            event->touch_point++;
-            /**Notice the  array bound !!*/
-            event->au16_x[i] = coord_x;
-            event->au16_y[i] = coord_y;
-            event->au8_touch_event[i] = TP_EVENT_CONTACT;
-            event->au8_finger_id[i] = 0;
-
-            if ((event->au8_touch_event[i] == 0 || event->au8_touch_event[i] == TP_EVENT_CONTACT) &&
-                (event->point_num == 0)) {
-                printk("abnormal touch data from fw");
-                return -1;
+    for (i = 0; i < TP_MAX_TOUCH_POINTS; i++) {
+        if (touch_index & (0x01 << i)) {
+            input_x = finggerdata[pos + TP_BIT_OFFSET1] | (finggerdata[pos + TP_BIT_OFFSET2] << TP_BIT_OFFSET8);
+            input_y = finggerdata[pos + TP_BIT_OFFSET3] | (finggerdata[pos + TP_BIT_OFFSET4] << TP_BIT_OFFSET8);
+            input_w = finggerdata[pos + TP_BIT_OFFSET5] | (finggerdata[pos + TP_BIT_OFFSET6] << TP_BIT_OFFSET8);
+            tp_touch_down(input, id, input_x, input_y, input_w);
+            *pretouch |= 0x01 << i;
+            report_num++;
+            if (report_num < fingernum) {
+                pos += TP_BIT_OFFSET8;
+                id = finggerdata[pos] & 0x0F;
+                touch_index |= (0x01 << id);
             }
+        } else {
+            tp_touch_up(input, i);
+            *pretouch &= ~(0x01 << i);
         }
-    } else {
-        printk("The touch_handler is other number. %d. The finggernum is %d.\n", data, fingernum);
     }
-exit_work_func:
-    touch_reset_buffer();
-    return 0;
 }
 
-hi_void tpint_irq(hi_u32 irq)
+static void tp_report_by_point(struct input_dev *input, hi_u16 *pretouch, hi_s32 fingernum)
 {
-    int i = 0;
-    int ret = 0;
-    bool act;
-    struct input_dev* input = tp_ts_dev;
-    ts_event event;
-    gpio_ext_func *g_pst_gpio_func = HI_NULL;
+    hi_s32 i;
+    hi_s32 id = 0;
+    hi_s32 ret = 0;
+    hi_s32 input_x = 0;
+    hi_s32 input_y = 0;
+    hi_s32 input_w = 0;
+    if (fingernum > 0) {
+        hi_u8 finggerdata[GT_FINGGER_DATA_NUM * TP_MAX_TOUCH_POINTS] = {0};
+        ret = g_i2c_func->pfn_i2c_read(I2C_NUM, FST_ADDR, GT_FINGGER_DATA_BASE, I2C_BYTE_NUM, finggerdata,
+        GT_FINGGER_DATA_NUM * TP_MAX_TOUCH_POINTS);
 
-    gpio_drv_get_gpio_ext_func(&g_pst_gpio_func);
-    if (g_pst_gpio_func == HI_NULL) {
-        printk("tpint_irq get gpio export function failed!\n");
+        for (i = 0; i < fingernum; i++) {
+            input_x = (finggerdata[i * GT_FINGGER_DATA_NUM + TP_BIT_OFFSET1] & 0xFF) |
+                ((finggerdata[i * GT_FINGGER_DATA_NUM + TP_BIT_OFFSET2] & 0xFF) << TP_BIT_OFFSET8);
+            input_y = (finggerdata[i * GT_FINGGER_DATA_NUM + TP_BIT_OFFSET3] & 0xFF) |
+                ((finggerdata[i * GT_FINGGER_DATA_NUM + TP_BIT_OFFSET4] & 0xFF) << TP_BIT_OFFSET8);
+            input_w = (finggerdata[i * GT_FINGGER_DATA_NUM + TP_BIT_OFFSET5] & 0xFF) |
+                ((finggerdata[i * GT_FINGGER_DATA_NUM + TP_BIT_OFFSET6] & 0xFF) << TP_BIT_OFFSET8);
+            id = finggerdata[i * GT_FINGGER_DATA_NUM] & 0x0F;
+            tp_touch_down(input, id, input_x, input_y, input_w);
+        }
+    } else if (*pretouch) {
+        tp_touch_up(input, 0);
     }
+    *pretouch = fingernum;
+}
 
-    touch_event_handler(&event);
+static hi_s32 tp_event_handler(struct input_dev *input)
+{
+    hi_u8 data = 0;
+    hi_s32 fingernum = 0;
+    static hi_u16 pretouch = 0;
+    hi_s32 ret = g_i2c_func->pfn_i2c_read(I2C_NUM, FST_ADDR, GT_BUFFER_STAT_ADDR, I2C_BYTE_NUM, &data, 1);
     if (ret != 0) {
-        printk("\n buffer_read failed \n");
-    }
-
-    if (event.point_num != 0) {
-        for (i = 0; i < event.touch_point; i++) {
-            input_mt_slot(input, i);
-            act = (event.au8_touch_event[i] == TP_EVENT_PRESS_DOWN || event.au8_touch_event[i] == TP_EVENT_CONTACT);
-            input_mt_report_slot_state(input, MT_TOOL_FINGER, act);
-            if (!act)
-                continue;
-            input_report_abs(input, ABS_MT_POSITION_X, event.au16_x[i]);
-            input_report_abs(input, ABS_MT_POSITION_Y, event.au16_y[i]);
-        }
-    }
-    input_mt_sync_frame(input);
-    input_sync(input);
-    mdelay(INT_DELAY_TIME);
-
-    g_pst_gpio_func->pfn_gpio_clear_bit_int(INT_GPIO_NUM);
-    return;
-}
-
-static int tp_irq_register(void)
-{
-    gpio_ext_func *g_pst_gpio_func = HI_NULL;
-
-    gpio_drv_get_gpio_ext_func(&g_pst_gpio_func);
-    if (g_pst_gpio_func == NULL) {
-        printk("tpint_irq get gpio export function failed!\n");
+        printk("g_i2c_func->pfn_i2c_read read failed \r\n");
         return 0;
     }
 
+    if (data == 0) {
+        return 0;
+    }
+
+    if ((data & GT_DATA_RECVIVED) == 0) {
+        goto exit_work_func;
+    }
+
+    fingernum = data & (GT_BIT0 | GT_BIT1);
+
+#if TP_SLOT_REPORT
+    if (pretouch || fingernum) {
+        tp_report_by_slot(input, &pretouch, fingernum);
+    }
+#else
+    tp_report_by_point(input, &pretouch, fingernum);
+#endif
+    input_sync(input);
+
+exit_work_func:
+    tp_reset_buffer();
+    return 0;
+}
+
+hi_void tp_irq_handler(hi_u32 irq)
+{
+    g_pst_gpio_func->pfn_gpio_set_int_enable(INT_GPIO_NUM, 0);
+    queue_work(g_tp_workqueue, &g_work);
+}
+
+static hi_s32 tp_irq_register(hi_void)
+{
     g_pst_gpio_func->pfn_gpio_set_int_type(INT_GPIO_NUM, GPIO_INTTYPE_UPDOWN);
-    g_pst_gpio_func->pfn_gpio_register_server_func(INT_GPIO_NUM, tpint_irq);
+    g_pst_gpio_func->pfn_gpio_register_server_func(INT_GPIO_NUM, tp_irq_handler);
     g_pst_gpio_func->pfn_gpio_clear_bit_int(INT_GPIO_NUM);
     g_pst_gpio_func->pfn_gpio_set_int_enable(INT_GPIO_NUM, 1);
 
     return 0;
 }
 
-static int devinput_init(void)
+static hi_s32 tp_devinput_init(hi_void)
 {
-    int error = 0;
-    /* 1. distribution a "input_dev" structure */
-    tp_ts_dev = input_allocate_device();
-    if (tp_ts_dev == NULL) {
+    hi_s32 ret;
+    g_ts_dev = input_allocate_device();
+    if (g_ts_dev == HI_NULL) {
         printk(" func:%s line:%d \r\n", __FUNCTION__, __LINE__);
         return -1;
     }
-    tp_ts_dev->evbit[0] = BIT_MASK(EV_SYN) | BIT_MASK(EV_KEY) | BIT_MASK(EV_ABS);
-    set_bit(EV_SYN, tp_ts_dev->evbit);
-    set_bit(EV_KEY, tp_ts_dev->evbit);
-    set_bit(EV_ABS, tp_ts_dev->evbit);
-    set_bit(INPUT_PROP_DIRECT, tp_ts_dev->propbit);
-    input_set_abs_params(tp_ts_dev, ABS_MT_POSITION_X, 0, TP_SCREEN_WIDTH_NUM, 0, 0);
-    input_set_abs_params(tp_ts_dev, ABS_MT_POSITION_Y, 0, TP_SCREEN_HEIGHT_NUM, 0, 0);
-    input_set_abs_params(tp_ts_dev, ABS_MT_TOUCH_MAJOR, 0, 0xff, 0, 0);
-    input_set_abs_params(tp_ts_dev, ABS_MT_PRESSURE, 0, 0xff, 0, 0);
-    input_set_abs_params(tp_ts_dev, ABS_MT_TRACKING_ID, 0, 0xff, 0, 0);
-    error = input_mt_init_slots(tp_ts_dev, MAX_TOUCH_POINTS, INPUT_MT_DIRECT | INPUT_MT_DROP_UNUSED);
-    if (error != 0) {
-        return error;
-    }
-    tp_ts_dev->name = "tp";
-    tp_ts_dev->id.bustype = BUS_I2C;
+    g_ts_dev->evbit[0] = BIT_MASK(EV_SYN) | BIT_MASK(EV_KEY) | BIT_MASK(EV_ABS);
+    set_bit(EV_SYN, g_ts_dev->evbit);
+    set_bit(EV_KEY, g_ts_dev->evbit);
+    set_bit(EV_ABS, g_ts_dev->evbit);
+    set_bit(INPUT_PROP_DIRECT, g_ts_dev->propbit);
+    input_set_abs_params(g_ts_dev, ABS_MT_POSITION_X, 0, TP_SCREEN_WIDTH_NUM, 0, 0);
+    input_set_abs_params(g_ts_dev, ABS_MT_POSITION_Y, 0, TP_SCREEN_HEIGHT_NUM, 0, 0);
+    input_set_abs_params(g_ts_dev, ABS_MT_TOUCH_MAJOR, 0, 0xff, 0, 0);
+    input_set_abs_params(g_ts_dev, ABS_MT_PRESSURE, 0, 0xff, 0, 0);
+    input_set_abs_params(g_ts_dev, ABS_MT_TRACKING_ID, 0, 0xff, 0, 0);
+#if TP_SLOT_REPORT
+    input_mt_init_slots(g_ts_dev, 16, INPUT_MT_DIRECT | INPUT_MT_DROP_UNUSED); // 16 in case of "out of memery"
+#else
+    g_ts_dev->keybit[BIT_WORD(BTN_TOUCH)] = BIT_MASK(BTN_TOUCH);
+#endif
 
-    error = input_register_device(tp_ts_dev);
-    if (error != 0) {
-        dev_err(NULL, "failed to register input device: %d\n", error);
-        return error;
+    g_ts_dev->name = "tp";
+    g_ts_dev->id.bustype = BUS_I2C;
+
+    ret = input_register_device(g_ts_dev);
+    if (ret != 0) {
+        dev_err(HI_NULL, "failed to register input device: %d\n", ret);
+        return ret;
     }
 
-    error = tp_irq_register();
-    if (error != 0) {
-        dev_err(NULL, "failed to register input device: %d\n", error);
-        return error;
+    ret = tp_irq_register();
+    if (ret != 0) {
+        dev_err(HI_NULL, "failed to register input device: %d\n", ret);
+        return ret;
     }
 
     return 0;
 }
 
-static int __init tp_init(void)
+static hi_void tp_ts_work_func(struct work_struct *work)
 {
-    int ret = 0;
-    gpio_ext_func *g_pst_gpio_func = HI_NULL;
-    touch_set_reg(RST_GPIO_NUM_REG, 0x0); // GPIO4_1 reset 0
-    touch_set_reg(INT_GPIO_NUM_REG, 0x0); // GPIO4_2 int   0
-    touch_set_reg(I2C1_SDA_REG, 0x03); // GPIO0_4 I2C    011：I2C1_SDA；
-    touch_set_reg(I2C1_SCL_REG, 0x03); // GPIO0_5 I2C    011：I2C1_SCL；
+    struct input_dev *input = g_ts_dev;
+    hi_drv_gpio_set_irq_ctrl(INT_GPIO_NUM, 0);
+    tp_event_handler(input);
+
+    g_pst_gpio_func->pfn_gpio_clear_bit_int(INT_GPIO_NUM);
+    hi_drv_gpio_set_irq_ctrl(INT_GPIO_NUM, 1);
+    return;
+}
+
+static hi_s32 __init tp_init(hi_void)
+{
+    hi_s32 ret = 0;
+    tp_set_reg(RST_GPIO_NUM_REG, 0x0); // GPIO4_1 reset 0
+    tp_set_reg(INT_GPIO_NUM_REG, 0x0); // GPIO4_2 int   0
+    tp_set_reg(I2C1_SDA_REG, 0x03);    // GPIO0_4 I2C    011：I2C1_SDA；
+    tp_set_reg(I2C1_SCL_REG, 0x03);    // GPIO0_5 I2C    011：I2C1_SCL；
     msleep(1);
 
     ret = hi_drv_i2c_init();
     if (ret != 0) {
-        dev_err(NULL, "I2C init failed: %d\n", ret);
+        dev_err(HI_NULL, "I2C init failed: %d\n", ret);
         goto error_end;
     }
 
     gpio_drv_get_gpio_ext_func(&g_pst_gpio_func);
-    if (g_pst_gpio_func == NULL) {
+    if (g_pst_gpio_func == HI_NULL) {
         printk("get gpio export function failed!\n");
         goto error_end;
     }
 
-    /**set INT and GPIO to be output*/
+    i2c_drv_get_i2c_ext_func(&g_i2c_func);
+    if (g_i2c_func == HI_NULL) {
+        printk("HI_ID_I2C handle get failed \r\n");
+        goto error_end;
+    }
+
+    /* set INT and GPIO to be output */
     g_pst_gpio_func->pfn_gpio_dir_set_bit(RST_GPIO_NUM, 0); // set GPIO1_0 Reset output
     g_pst_gpio_func->pfn_gpio_dir_set_bit(INT_GPIO_NUM, 0); // set GPIO1_1 INT output
     msleep(1);
 
-    /**Set Reset*/
+    /* Set Reset */
     g_pst_gpio_func->pfn_gpio_write_bit(RST_GPIO_NUM, 0); // set Reset low level
     g_pst_gpio_func->pfn_gpio_write_bit(INT_GPIO_NUM, 0); // set INT low level
-    msleep(GT911_STAY_LOW_TIME);
+    msleep(GT_STAY_LOW_TIME);
 
     g_pst_gpio_func->pfn_gpio_write_bit(RST_GPIO_NUM, 1); // set Reset high level
-    msleep(GT911_STAY_HIGH_TIME);
+    msleep(GT_STAY_HIGH_TIME);
 
     g_pst_gpio_func->pfn_gpio_dir_set_bit(INT_GPIO_NUM, 1); // set GPIO1_1 INT input
 
-    ret = devinput_init();
+    g_tp_workqueue = create_singlethread_workqueue("g_tp_workqueue");
+    if (!g_tp_workqueue) {
+        printk("Creat workqueue failed.");
+        return -ENOMEM;
+    }
+    INIT_WORK(&g_work, tp_ts_work_func);
+
+    ret = tp_devinput_init();
     if (ret != 0) {
-        dev_err(NULL, " devinput_init fail!\n");
+        dev_err(HI_NULL, "tp_devinput_init fail!\n");
         goto error_end;
     }
 
@@ -360,12 +384,15 @@ error_end:
     return -1;
 }
 
-static void __exit tp_exit(void)
+static hi_void __exit tp_exit(hi_void)
 {
-    free_irq(gpio_to_irq(INT_GPIO_NUM), tp_ts_dev);
-    input_unregister_device(tp_ts_dev);
-    input_free_device(tp_ts_dev);
+    g_pst_gpio_func->pfn_gpio_set_int_enable(INT_GPIO_NUM, 0);
+    input_unregister_device(g_ts_dev);
+    input_free_device(g_ts_dev);
     hi_drv_i2c_de_init();
+    if (g_tp_workqueue) {
+        destroy_workqueue(g_tp_workqueue);
+    }
 }
 
 module_init(tp_init);
@@ -373,3 +400,4 @@ module_exit(tp_exit);
 
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("hisilicon");
+
