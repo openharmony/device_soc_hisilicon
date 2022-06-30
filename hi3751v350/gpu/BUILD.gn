@@ -17,10 +17,10 @@ ohos_prebuilt_shared_library("gpu_libs") {
   relative_install_dir = "chipsetsdk"
 
   symlink_target_name = [
-    "libEGL.so",
-    "libGLESv1.so",
-    "libGLESv2.so",
-    "libGLESv3.so",
+    "libEGL_impl.so",
+    "libGLESv1_impl.so",
+    "libGLESv2_impl.so",
+    "libGLESv3_impl.so",
     "libmali.so.0",
     "libmali.so.1",
     "libMali.so",
