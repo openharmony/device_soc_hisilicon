@@ -149,6 +149,7 @@ objects += hiproc
 objects += gpio
 objects += i2c
 objects += gt911
+objects += fm11nt081d
 objects += devfreq
 objs_depended :=
 
