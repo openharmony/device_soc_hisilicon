@@ -143,7 +143,7 @@ hi_u32 download_to_flash(hi_u32 flash_offset, hi_u32 erase_size, hi_u32 flash_si
 
     ret = g_flash_cmd_funcs.erase(flash_offset, erase_size);
     if (ret != HI_ERR_SUCCESS) {
-        boot_msg1("erase faild ret=", (hi_u32)ret);
+        boot_msg1("erase failed ret=", (hi_u32)ret);
         load_malloc_deinit();
         return HI_ERR_FAILURE;
     }

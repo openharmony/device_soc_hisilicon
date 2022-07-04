@@ -124,7 +124,7 @@ int imx307_2l_write_register(VI_PIPE vi_pipe, HI_U32 addr, HI_U32 data)
 
     ret = ioctl(g_fd[vi_pipe], GPIO_I2C_WRITE, &i2c_data);
     if (ret) {
-        SNS_ERR_TRACE("GPIO-I2C write faild!\n");
+        SNS_ERR_TRACE("GPIO-I2C write failed!\n");
         return ret;
     }
 #else
