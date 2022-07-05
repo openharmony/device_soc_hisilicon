@@ -44,7 +44,7 @@ private:
     std::vector<float> GetVertexArrays(const IRect &displayRect);
     std::unordered_map<uint32_t, std::unique_ptr<GlesGfxImage>> imageMaps_;
     std::unordered_map<uint32_t, std::unique_ptr<GlesFbo>> glesFbo_;
-    int32_t InitProgram();
+    int32_t InitProgram(uint32_t width, uint32_t height);
     std::unique_ptr<GlEglState> eglState_ = nullptr;
     std::unique_ptr<GlesProgram> programRgba_ = nullptr;
     std::unique_ptr<GlesProgram> programYuv_ = nullptr;
