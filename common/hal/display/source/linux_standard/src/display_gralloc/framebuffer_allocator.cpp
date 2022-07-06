@@ -70,6 +70,9 @@ int32_t FramebufferAllocator::InitFb()
     ret = DisplayAdapter::GetInstance()->Ioctl(deviceFd_, FBIOGET_VSCREENINFO, &varInfo_);
     DISPLAY_CHK_RETURN((ret < 0), DISPLAY_FAILURE, DISPLAY_LOGE("FBIOGET_VSCREENINFO failed errno : %d", errno));
 
+    ret = DisplayAdapter::GetInstance()->Ioctl(deviceFd_, FBIOGET_FSCREENINFO, &fixInfo_);
+    DISPLAY_CHK_RETURN((ret < 0), DISPLAY_FAILURE, DISPLAY_LOGE("FBIOGET_FSCREENINFO failed errno : %d", errno));
+
     size_t frameBufferSize = fixInfo_.line_length * varInfo_.yres_virtual;
 
     frameBufferSize_ = frameBufferSize;

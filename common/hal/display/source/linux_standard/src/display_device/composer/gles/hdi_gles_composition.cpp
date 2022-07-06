@@ -22,10 +22,12 @@ namespace HDI {
 namespace DISPLAY {
 static const char g_vertexShader[] = "attribute vec4 vertexPosition;   \n"
     "attribute vec2 textureCoord;   \n"
-    "varying vec2 textureCoordVar;     \n"
+    "varying vec2 textureCoordVar;  \n"
+    "uniform int width; \n"
+    "uniform int height; \n"
     "void main()                  \n"
     "{                            \n"
-    "   vec2 zeroToOne = vertexPosition.xy / vec2(1024, 600);\n"
+    "   vec2 zeroToOne = vertexPosition.xy / vec2(width, height);\n"
     "   vec2 zeroToTwo = zeroToOne * 2.0;\n"
     "   vec2 clipSpace = zeroToTwo - 1.0;\n"
     "   gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);\n"
@@ -69,7 +71,7 @@ static const char g_clearfragmentShader[] = "precision mediump float;\n"
     "   gl_FragColor = vec4(0.0, 0.0, 0.0, 0.0);\n"
     "}\n";
 
-int32_t HdiGlesComposition::InitProgram()
+int32_t HdiGlesComposition::InitProgram(uint32_t width, uint32_t height)
 {
     bool ret;
     // init the rgba program
@@ -81,7 +83,8 @@ int32_t HdiGlesComposition::InitProgram()
     programRgba_->Use();
     
     programRgba_->SetUniform("textureSampler", 0);
-
+    programRgba_->SetUniform("width", static_cast<int32_t>(width));
+    programRgba_->SetUniform("height", static_cast<int32_t>(height));
     // init the yuv program
     programYuv_ = std::make_unique<GlesProgram>();
     DISPLAY_CHK_RETURN((programYuv_ == nullptr), DISPLAY_FAILURE, DISPLAY_LOGE("can not create program for rgba"));
@@ -91,11 +94,11 @@ int32_t HdiGlesComposition::InitProgram()
     programYuv_->Use();
     
     programYuv_->SetUniform("s_texureY", GlesGfxImage::INDEX_Y_TEXTURE);
-    
     programYuv_->SetUniform("s_texureU", GlesGfxImage::INDEX_U_TEXTURE);
-    
     programYuv_->SetUniform("s_texureV", GlesGfxImage::INDEX_V_TEXTURE);
-    
+    programRgba_->SetUniform("width", static_cast<int32_t>(width));
+    programRgba_->SetUniform("height", static_cast<int32_t>(height));
+
     // init the clear program
     programClear_ = std::make_unique<GlesProgram>();
     DISPLAY_CHK_RETURN((programClear_ == nullptr), DISPLAY_FAILURE, DISPLAY_LOGE("can not create program for rgba"));
@@ -128,7 +131,7 @@ int32_t HdiGlesComposition::Init(uint32_t width, uint32_t height)
         DISPLAY_LOGE("can not init EglState");
     }
     eglState_->MakeCurrent(); // todo need ?
-    ret = InitProgram();
+    ret = InitProgram(width, height);
     glViewport(0, 0, width, height);
     DISPLAY_CHK_RETURN((ret != DISPLAY_SUCCESS), DISPLAY_FAILURE, DISPLAY_LOGE("can not init program"));
     return DISPLAY_SUCCESS;
