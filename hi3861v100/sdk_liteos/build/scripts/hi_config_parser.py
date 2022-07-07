@@ -82,7 +82,7 @@ class UsrCfgParser:
     def cfg_is_valid(self, option):
         if option is None:
             return False
-        if option is '':
+        if option == '':
             return False
         if option.startswith('#') is True:
             return False
