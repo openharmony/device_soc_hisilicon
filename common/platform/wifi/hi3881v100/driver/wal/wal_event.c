@@ -589,7 +589,7 @@ hi_u32 wal_send_mgmt_to_host(frw_event_mem_stru *event_mem)
 #else
     ret = oal_cfg80211_rx_mgmt(netdev, l_freq, puc_buf, us_len, GFP_ATOMIC);
 #endif
-    if (ret != HI_TRUE) {
+    if (ret != HI_SUCCESS) {
         oam_warning_log2(event->event_hdr.vap_id, OAM_SF_ANY, "{wal_send_mgmt_to_host::fc[0x%04x], if_type[%d]!}",
             ieee80211_mgmt->frame_control, GET_NET_DEV_CFG80211_WIRELESS(netdev)->iftype);
         oam_warning_log3(event->event_hdr.vap_id, OAM_SF_ANY,
