@@ -41,7 +41,7 @@ include $(SRC_PATH)/tools/Makefile
 include $(SRC_PATH)/ffbuild/common.mak
 
 ifeq ($(LLVM_COMPILER), y)
-SYSROOT_PATH ?= ../../../../../prebuilts/lite/sysroot
+SYSROOT_PATH ?= ../../../../../sysroot
 ARCH_CFLAGS ?= --target=arm-liteos-ohos
 CFLAGS += --sysroot=$(SYSROOT_PATH) $(ARCH_CFLAGS)
 LDFLAGS += --sysroot=$(SYSROOT_PATH) $(ARCH_CFLAGS)
