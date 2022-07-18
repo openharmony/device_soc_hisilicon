@@ -91,6 +91,7 @@ oal_net_device_ops_stru *wal_get_net_dev_ops(hi_void);
 hi_u32 wal_get_efuse_mac_addr(hi_void);
 hi_s32 InitNetdev(struct NetDevice *netDevice, nl80211_iftype_uint8 type);
 hi_s32 DeinitNetdev(nl80211_iftype_uint8 type);
+hi_s32 SetIfName(WifiIfAdd *ifAdd);
 #ifdef __cplusplus
 #if __cplusplus
 }

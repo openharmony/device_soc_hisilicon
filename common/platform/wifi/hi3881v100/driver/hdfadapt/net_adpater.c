@@ -66,6 +66,7 @@ wal_dev_addr_stru g_dev_addr = { 0 };
 hi_u8 g_efuseMacExist = false;
 
 hi_u8 g_wait_mac_set = 1;
+WifiIfAdd g_ifAdd = { 0 };
 #define netif_is_not_ready() (NETIF_FLOW_CTRL_ON == g_netif_flow_ctrl)
 
 /* ****************************************************************************
@@ -1477,6 +1478,20 @@ hi_s32 wal_init_drv_wlan_netdev(nl80211_iftype_uint8 type, wal_phy_mode mode, oa
     return HI_SUCCESS;
 }
 
+hi_s32 SetIfName(WifiIfAdd *ifAdd)
+{
+    if (ifAdd == NULL || ifAdd->ifName == NULL) {
+        HDF_LOGE("%s:para is null!", __func__);
+        return HI_FAIL;
+    }
+    hi_s32 ret = strcpy_s(g_ifAdd.ifName, IFNAMSIZ, ifAdd->ifName);
+    if (ret != HI_SUCCESS) {
+        HDF_LOGE("%s:copy ifName fail", __func__);
+        return HI_FAIL;
+    }
+    return HI_SUCCESS;
+}
+
 int32_t GetIfName(nl80211_iftype_uint8 type, char *ifName, uint32_t len)
 {
     if (ifName == NULL || len == 0) {
@@ -1493,8 +1508,8 @@ int32_t GetIfName(nl80211_iftype_uint8 type, char *ifName, uint32_t len)
         case NL80211_IFTYPE_P2P_CLIENT:
             /*  fall-through */
         case NL80211_IFTYPE_P2P_GO:
-            if (snprintf_s(ifName, len, len - 1, "p2p-p2p0-%d", 0) < 0) {
-                HDF_LOGE("%s:format ifName failed!", __func__);
+            if (strcpy_s(ifName, IFNAMSIZ, g_ifAdd.ifName) != EOK) {
+                HDF_LOGE("%s:copy ifName fail", __func__);
                 return HI_FAIL;
             }
             break;

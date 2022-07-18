@@ -874,7 +874,10 @@ int32_t WalAddIf(struct NetDevice *netDev, WifiIfAdd *ifAdd)
         HDF_LOGE("%s:NULL ptr!", __func__);
         return HI_FAIL;
     }
-
+    if (SetIfName(ifAdd) != HI_SUCCESS) {
+        HDF_LOGE("%s:set ifName fail!", __func__);
+        return HI_FAIL;
+    }
     int32_t ret = InitNetdev(netDev, (nl80211_iftype_uint8)ifAdd->type);
     if (ret != HI_SUCCESS) {
         oam_error_log0(0, 0, "hwal_ioctl_add_if: wal_init_drv_wlan_netdev failed!");
@@ -891,7 +894,7 @@ int32_t WalRemoveIf(struct NetDevice *netDev, WifiIfRemove *ifRemove)
     }
 
     struct NetDevice *removeNetdev = NULL;
-    removeNetdev = NetDeviceGetInstByName((const char*)(ifRemove->ifname));
+    removeNetdev = NetDeviceGetInstByName((const char*)(ifRemove->ifName));
     if (removeNetdev == NULL) {
         return -HI_FAIL;
     }
