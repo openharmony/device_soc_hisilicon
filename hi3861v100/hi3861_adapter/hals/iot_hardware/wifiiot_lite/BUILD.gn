@@ -24,7 +24,7 @@ static_library("hal_iothardware") {
   ]
   include_dirs = [
     "//utils/native/lite/include",
-    "//base/iot_hardware/peripheral/interfaces/kits",
+    "//base/iothardware/peripheral/interfaces/inner_api",
     "//device/soc/hisilicon/hi3861v100/sdk_liteos/include",
   ]
 }
