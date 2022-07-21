@@ -21,7 +21,7 @@ static_library("wifiservice") {
     "//device/soc/hisilicon/hi3861v100/sdk_liteos/include",
     "//foundation/communication/wifi_lite/interfaces/wifiservice",
     "//kernel/liteos_m/kal",
-    "//foundation/distributedschedule/samgr_lite/interfaces/kits/samgr",
+    "//foundation/systemabilitymgr/samgr_lite/interfaces/kits/samgr",
   ]
 }
 if (ohos_kernel_type == "liteos_m") {
