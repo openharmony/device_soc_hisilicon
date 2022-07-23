@@ -18,12 +18,13 @@ function main(){
         OS_TYPE="linux_small"
     fi
     cp -rf $CUR_DIR/audio/$BOARD_NAME/$OS_TYPE/libs/libaudio_hw.so $OUT_DIR/
-    cp -rf $CUR_DIR/audio/$BOARD_NAME/$OS_TYPE/libs/libaudio_input_port.so $OUT_DIR/
-    cp -rf $CUR_DIR/audio/$BOARD_NAME/$OS_TYPE/libs/libaudio_output_port.so $OUT_DIR/
+    #cp -rf $CUR_DIR/audio/$BOARD_NAME/$OS_TYPE/libs/libaudio_input_port.so $OUT_DIR/
+    #cp -rf $CUR_DIR/audio/$BOARD_NAME/$OS_TYPE/libs/libaudio_output_port.so $OUT_DIR/
+    cp -rf $CUR_DIR/audio/$BOARD_NAME/$OS_TYPE/libs/libaudio_primary_port.so $OUT_DIR/
 
     cp -rf $CUR_DIR/codec/$BOARD_NAME/$OS_TYPE/libs/libcodec.so $OUT_DIR/
     cp -rf $CUR_DIR/codec/$BOARD_NAME/$OS_TYPE/libs/libhiaacdec.so $OUT_DIR/
-    cp -rf $CUR_DIR/codec/$BOARD_NAME/$OS_TYPE/libs/libhimp3dec.so $OUT_DIR/
+    #cp -rf $CUR_DIR/codec/$BOARD_NAME/$OS_TYPE/libs/libhimp3dec.so $OUT_DIR/
     cp -rf $CUR_DIR/codec/$BOARD_NAME/$OS_TYPE/libs/libplugin_adec_35xx.so $OUT_DIR/
     cp -rf $CUR_DIR/codec/$BOARD_NAME/$OS_TYPE/libs/libplugin_aenc_35xx.so $OUT_DIR/
     cp -rf $CUR_DIR/codec/$BOARD_NAME/$OS_TYPE/libs/libplugin_vdec_35xx.so $OUT_DIR/
