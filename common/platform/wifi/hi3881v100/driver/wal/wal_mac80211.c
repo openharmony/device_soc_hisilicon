@@ -1005,6 +1005,9 @@ int32_t WalSendAction(struct NetDevice *netDev, WifiActionData *actionData)
         }
     }
     actionParam->data_len = actionData->dataLen;
+    actionParam->freq = actionData->freq;
+    actionParam->wait = actionData->freq;
+    actionParam->no_cck = actionData->noCck;
 
     oam_warning_log4(0, 0, "hwal_ioctl_send_action send action frame(mac addr = %02X:XX:%02X:XX:%02X:%02X)",
         actionParam->dst[0], actionParam->dst[2],   /* 0 2 */
