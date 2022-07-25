@@ -984,6 +984,25 @@ static hi_void gpio_set_gpio_attr(hi_void)
     return;
 }
 
+hi_void hi_drv_gpio_set_irq_ctrl(hi_u32 gpio_no, hi_bool b_enable)
+{
+    hi_u32 group_no = 0;
+    hi_u32 bit_no = 0;
+
+    if (drv_gpio_convert(gpio_no, &group_no, &bit_no) == HI_FALSE) {
+        HI_LOG_ERR("para gpio_no is invaild\n");
+        hi_err_print_u32(group_no);
+        return;
+    }
+
+    if ((b_enable != HI_TRUE) && (b_enable != HI_FALSE)) {
+        HI_LOG_ERR("para b_enable is invaild\n");
+        return;
+    }
+
+    gpio_set_irq_ctrl_reg(group_no, bit_no, b_enable);
+}
+
 hi_s32 hi_drv_gpio_init(hi_void)
 {
     hi_s32 ret;
@@ -1098,3 +1117,4 @@ EXPORT_SYMBOL(hi_drv_gpio_set_int_type);
 EXPORT_SYMBOL(hi_drv_gpio_set_bit_int_enable);
 EXPORT_SYMBOL(hi_drv_gpio_clear_group_int);
 EXPORT_SYMBOL(hi_drv_gpio_clear_bit_int);
+EXPORT_SYMBOL(hi_drv_gpio_set_irq_ctrl);
