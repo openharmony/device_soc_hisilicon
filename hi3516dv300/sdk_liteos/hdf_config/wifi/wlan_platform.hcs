@@ -58,6 +58,7 @@ root {
                 }
                 bootUpTimeOut = 30;
                 bus {
+                    busEnable = 1;   /* 0-not enable; 1-enable */
                     busType = 0; /* 0-sdio 1-usb 2-spi etc. */
                     busIdx = 2;
                     funcNum = [1,2];
@@ -91,6 +92,7 @@ root {
                 }
                 bootUpTimeOut = 32;
                 bus {
+                    busEnable = 1;   /* 0-not enable; 1-enable */
                     busType = 0; /* 0-sdio 1-usb 2-spi etc. */
                     busIdx = 2;
                     funcNum = [1];
