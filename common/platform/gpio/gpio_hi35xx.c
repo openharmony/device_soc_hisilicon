@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 HiSilicon (Shanghai) Technologies CO., LIMITED.
+ * Copyright (c) 2020-2022 HiSilicon (Shanghai) Technologies CO., LIMITED.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -28,6 +28,7 @@
 #define HDF_LOG_TAG gpio_hi35xx
 #define PL061_GROUP_MAX 32
 #define PL061_BIT_MAX   16
+#define GPIO_MAX_INFO_NUM 96
 
 #define PL061_GPIO_DATA_ALL(base)   ((base) + 0x3FC)
 #define PL061_GPIO_DATA(base, bit)  ((base) + 0x000 + (1 << ((bit) + 2)))
@@ -60,6 +61,7 @@ struct Pl061GpioData {
     uint16_t bitNum;
     uint8_t irqShare;
     struct Pl061GpioGroup *groups;
+    struct GpioInfo *gpioInfo;
     void *priv;
 };
 
@@ -71,7 +73,7 @@ static struct Pl061GpioData g_pl061 = {
 
 static void Pl061GpioRegDump(struct Pl061GpioGroup *group)
 {
-    PLAT_LOGI("%s: GROUP-%u: DATA-%x DIR-%x, IS-%x, IBE-%x, IEV-%x, IE-%x, RIS-%x, MIS-%x, IC-%x",
+    HDF_LOGI("%s: GROUP-%u: DATA-%x DIR-%x, IS-%x, IBE-%x, IEV-%x, IE-%x, RIS-%x, MIS-%x, IC-%x",
         __func__, group->index,
         OSAL_READL(PL061_GPIO_DATA_ALL(group->regBase)),
         OSAL_READL(PL061_GPIO_DIR(group->regBase)),
@@ -92,7 +94,7 @@ static int32_t Pl061GpioSetDir(struct GpioCntlr *cntlr, uint16_t local, uint16_t
     unsigned int bitNum = local;
     struct Pl061GpioGroup *group = (struct Pl061GpioGroup *)cntlr;
 
-    PLAT_LOGV("%s: local:%hu, dir:%hu", __func__, local, dir);
+    HDF_LOGV("%s: local:%hu, dir:%hu", __func__, local, dir);
 
     if (OsalSpinLockIrqSave(&group->lock, &group->irqSave) != HDF_SUCCESS) {
         return HDF_ERR_DEVICE_BUSY;
@@ -117,7 +119,7 @@ static int32_t Pl061GpioGetDir(struct GpioCntlr *cntlr, uint16_t local, uint16_t
     unsigned int bitNum = local;
     struct Pl061GpioGroup *group = (struct Pl061GpioGroup *)cntlr;
 
-    PLAT_LOGV("%s: local:%hu", __func__, local);
+    HDF_LOGV("%s: local:%hu", __func__, local);
 
     addr = PL061_GPIO_DIR(group->regBase);
     val = OSAL_READL(addr);
@@ -182,15 +184,15 @@ static uint32_t Pl061IrqHandleNoShare(uint32_t irq, void *data)
     unsigned int val;
     struct Pl061GpioGroup *group = (struct Pl061GpioGroup *)data;
 
-    PLAT_LOGV("%s: >>>>>>>>>>>>enter irq-%u<<<<<<<<<<<<<<<", __func__, irq);
+    HDF_LOGV("%s: >>>>>>>>>>>>enter irq-%u<<<<<<<<<<<<<<<", __func__, irq);
     if (data == NULL) {
-        PLAT_LOGW("%s: data is NULL!", __func__);
+        HDF_LOGW("%s: data is NULL!", __func__);
         return HDF_ERR_INVALID_PARAM;
     }
     val = OSAL_READL(PL061_GPIO_MIS(group->regBase));
     OSAL_WRITEL(val, PL061_GPIO_IC(group->regBase));
     if (val == 0) {
-        PLAT_LOGW("%s: share irq(%u) trigerred but not hit any, mis=%x", __func__, irq, val);
+        HDF_LOGW("%s: share irq(%u) trigerred but not hit any, mis=%x", __func__, irq, val);
         Pl061GpioRegDump(group);
         return HDF_FAILURE;
     }
@@ -208,7 +210,7 @@ static int32_t Pl061GpioRegisterGroupIrqUnsafe(struct Pl061GpioGroup *group)
     if (group->irqShare == 1) {
         ret = OsalRegisterIrq(group->irq, 0, Pl061IrqHandleShare, "GPIO", NULL);
         if (ret != 0) {
-            PLAT_LOGE("%s: share irq:%u reg fail:%d!", __func__, group->irq, ret);
+            HDF_LOGE("%s: share irq:%u reg fail:%d!", __func__, group->irq, ret);
             return HDF_FAILURE;
         }
         group->irqFunc = Pl061IrqHandleShare;
@@ -219,12 +221,12 @@ static int32_t Pl061GpioRegisterGroupIrqUnsafe(struct Pl061GpioGroup *group)
             ret = OsalRegisterIrq(group->irq, 0, Pl061IrqHandleNoShare, "GPIO", group);
         }
         if (ret != 0) {
-            PLAT_LOGE("%s: noshare irq:%u reg fail:%d!", __func__, group->irq, ret);
+            HDF_LOGE("%s: noshare irq:%u reg fail:%d!", __func__, group->irq, ret);
             return HDF_FAILURE;
         }
         ret = OsalEnableIrq(group->irq);
         if (ret != 0) {
-            PLAT_LOGE("%s: noshare irq:%u enable fail:%d!", __func__, group->irq, ret);
+            HDF_LOGE("%s: noshare irq:%u enable fail:%d!", __func__, group->irq, ret);
             (void)OsalUnregisterIrq(group->irq, group);
             return HDF_FAILURE;
         }
@@ -337,12 +339,12 @@ static int32_t Pl061GpioSetIrq(struct GpioCntlr *cntlr, uint16_t local, uint16_t
 
     if (group->irqFunc != NULL) {
         (void)OsalSpinUnlockIrqRestore(&group->lock, &group->irqSave);
-        PLAT_LOGI("%s: group irq(%u) already registered!", __func__, group->irq);
+        HDF_LOGI("%s: group irq(%u) already registered!", __func__, group->irq);
         return HDF_SUCCESS;
     }
     ret = Pl061GpioRegisterGroupIrqUnsafe(group);
     (void)OsalSpinUnlockIrqRestore(&group->lock, &group->irqSave);
-    PLAT_LOGI("%s: group irq(%u) registered!", __func__, group->irq);
+    HDF_LOGI("%s: group irq(%u) registered!", __func__, group->irq);
     return ret;
 }
 
@@ -398,27 +400,29 @@ static int32_t Pl061GpioInitGroups(struct Pl061GpioData *pl061)
         groups[i].cntlr.start = i * pl061->bitNum;
         groups[i].cntlr.count = pl061->bitNum;
         groups[i].cntlr.ops = &g_method;
+        groups[i].cntlr.ginfos = &pl061->gpioInfo[i * pl061->bitNum];
+
         if ((ret = OsalSpinInit(&groups[i].lock)) != HDF_SUCCESS) {
             goto ERR_EXIT;
         }
-        if ((ret = GpioCntlrAdd(&groups[i].cntlr)) != HDF_SUCCESS) {
-            PLAT_LOGE("%s: err add controller(%hu:%hu):%d", __func__,
+
+        ret =  GpioCntlrAdd(&groups[i].cntlr);
+        if (ret != HDF_SUCCESS) {
+            HDF_LOGE("%s: err add controller(%hu:%hu):%d", __func__,
                 groups[i].cntlr.start, groups[i].cntlr.count, ret);
             (void)OsalSpinDestroy(&groups[i].lock);
             goto ERR_EXIT;
         }
     }
-
     return HDF_SUCCESS;
 
 ERR_EXIT:
-        while (i-- > 0) {
-            GpioCntlrRemove(&groups[i].cntlr);
-            (void)OsalSpinDestroy(&groups[i].lock);
-        }
-        pl061->groups = NULL;
-        OsalMemFree(groups);
-
+    while (i-- > 0) {
+        GpioCntlrRemove(&groups[i].cntlr);
+        (void)OsalSpinDestroy(&groups[i].lock);
+    }
+    pl061->groups = NULL;
+    OsalMemFree(groups);
     return ret;
 }
 
@@ -431,8 +435,36 @@ static void Pl061GpioUninitGroups(struct Pl061GpioData *pl061)
         group = &pl061->groups[i];
         GpioCntlrRemove(&group->cntlr);
     }
+
     OsalMemFree(pl061->groups);
     pl061->groups = NULL;
+}
+
+static int32_t Pl061GpioReadInfo(struct Pl061GpioData *pl061, const struct DeviceResourceNode *node,
+    struct DeviceResourceIface *drsOps)
+{
+    int32_t ret;
+    uint32_t gpioIndex = 0;
+    const struct DeviceResourceNode *childNode = NULL;
+    const char *tempName = NULL;
+
+    DEV_RES_NODE_FOR_EACH_CHILD_NODE(node, childNode) {
+        if (gpioIndex >= GPIO_MAX_INFO_NUM) {
+            break;
+        }
+        ret = drsOps->GetString(childNode, "gpioCustomName", &tempName, "");
+        if (ret != HDF_SUCCESS) {
+            HDF_LOGW("%s: failed to read gpioCustomName!", __func__);
+        }
+        ret = strcpy_s(pl061->gpioInfo[gpioIndex].name, GPIO_NAME_LEN, tempName);
+        if (ret != EOK) {
+            HDF_LOGE("%s: failed to copy name for gpioInfo name:%d", __func__, ret);
+            return HDF_ERR_IO;
+        }
+
+        gpioIndex++;
+    }
+    return HDF_SUCCESS;
 }
 
 static int32_t Pl061GpioReadDrs(struct Pl061GpioData *pl061, const struct DeviceResourceNode *node)
@@ -441,44 +473,51 @@ static int32_t Pl061GpioReadDrs(struct Pl061GpioData *pl061, const struct Device
     struct DeviceResourceIface *drsOps = NULL;
 
     drsOps = DeviceResourceGetIfaceInstance(HDF_CONFIG_SOURCE);
-    if (drsOps == NULL || drsOps->GetUint32 == NULL) {
-        PLAT_LOGE("%s: invalid drs ops fail!", __func__);
+    if (drsOps == NULL || drsOps->GetUint32 == NULL || drsOps->GetUint16 == NULL ||
+        drsOps->GetUint8 == NULL || drsOps->GetUint8 == NULL || drsOps->GetString == NULL) {
+        HDF_LOGE("%s: invalid drs ops!", __func__);
         return HDF_FAILURE;
     }
 
     ret = drsOps->GetUint32(node, "regBase", &pl061->phyBase, 0);
     if (ret != HDF_SUCCESS) {
-        PLAT_LOGE("%s: read regBase fail!", __func__);
+        HDF_LOGE("%s: failed to read regBase!", __func__);
         return ret;
     }
 
     ret = drsOps->GetUint32(node, "regStep", &pl061->regStep, 0);
     if (ret != HDF_SUCCESS) {
-        PLAT_LOGE("%s: read regStep fail!", __func__);
+        HDF_LOGE("%s: failed to read regStep!", __func__);
         return ret;
     }
 
     ret = drsOps->GetUint16(node, "groupNum", &pl061->groupNum, 0);
     if (ret != HDF_SUCCESS) {
-        PLAT_LOGE("%s: read groupNum fail!", __func__);
+        HDF_LOGE("%s: failed to read groupNum!", __func__);
         return ret;
     }
 
     ret = drsOps->GetUint16(node, "bitNum", &pl061->bitNum, 0);
     if (ret != HDF_SUCCESS) {
-        PLAT_LOGE("%s: read bitNum fail!", __func__);
+        HDF_LOGE("%s: failed to read bitNum!", __func__);
         return ret;
     }
 
     ret = drsOps->GetUint32(node, "irqStart", &pl061->irqStart, 0);
     if (ret != HDF_SUCCESS) {
-        PLAT_LOGE("%s: read irqStart fail!", __func__);
+        HDF_LOGE("%s: failed to read irqStart!", __func__);
         return ret;
     }
 
     ret = drsOps->GetUint8(node, "irqShare", &pl061->irqShare, 0);
     if (ret != HDF_SUCCESS) {
-        PLAT_LOGE("%s: read irqShare fail!", __func__);
+        HDF_LOGE("%s: failed to read irqShare!", __func__);
+        return ret;
+    }
+
+    ret = Pl061GpioReadInfo(pl061, node, drsOps);
+    if (ret != HDF_SUCCESS) {
+        HDF_LOGE("%s: failed to read info!", __func__);
         return ret;
     }
 
@@ -491,10 +530,10 @@ static void Pl061GpioDebug(const struct Pl061GpioData *pl061)
     uint16_t i;
     struct Pl061GpioGroup *group = NULL;
 
-    PLAT_LOGI("%s:groupNum:%hu, bitNum:%hu", __func__, pl061->groupNum, pl061->bitNum);
+    HDF_LOGI("%s:groupNum:%hu, bitNum:%hu", __func__, pl061->groupNum, pl061->bitNum);
     for (i = 0; i < pl061->groupNum; i++) {
         group = &pl061->groups[i];
-        PLAT_LOGI("group[%hu]: index:%u, regBase:0x%x, irq:%u(cntlr:%hu:%hu)",
+        HDF_LOGI("group[%hu]: index:%u, regBase:0x%x, irq:%u(cntlr:%hu:%hu)",
             i, group->index, group->regBase, group->irq, group->cntlr.start, group->cntlr.count);
     }
 #else
@@ -514,31 +553,37 @@ static int32_t Pl061GpioInit(struct HdfDeviceObject *device)
     struct Pl061GpioData *pl061 = &g_pl061;
 
     if (device == NULL || device->property == NULL) {
-        PLAT_LOGE("%s: device or property null!", __func__);
+        HDF_LOGE("%s: device or property null!", __func__);
         return HDF_ERR_INVALID_OBJECT;
+    }
+
+    pl061->gpioInfo = OsalMemCalloc(sizeof(struct GpioInfo) * GPIO_MAX_INFO_NUM);
+    if (pl061->gpioInfo == NULL) {
+        HDF_LOGE("%s: failed to calloc gpioInfo!", __func__);
+        return HDF_ERR_MALLOC_FAIL;
     }
 
     ret = Pl061GpioReadDrs(pl061, device->property);
     if (ret != HDF_SUCCESS) {
-        PLAT_LOGE("%s: read drs fail:%d", __func__, ret);
+        HDF_LOGE("%s: failed to read drs:%d", __func__, ret);
         return ret;
     }
 
     if (pl061->groupNum > PL061_GROUP_MAX || pl061->groupNum <= 0 ||
         pl061->bitNum > PL061_BIT_MAX || pl061->bitNum <= 0) {
-        PLAT_LOGE("%s: err groupNum:%hu, bitNum:%hu", __func__, pl061->groupNum, pl061->bitNum);
+        HDF_LOGE("%s: err groupNum:%hu, bitNum:%hu", __func__, pl061->groupNum, pl061->bitNum);
         return HDF_ERR_INVALID_PARAM;
     }
 
     pl061->regBase = OsalIoRemap(pl061->phyBase, pl061->groupNum * pl061->regStep);
     if (pl061->regBase == NULL) {
-        PLAT_LOGE("%s: err remap phy:0x%x", __func__, pl061->phyBase);
+        HDF_LOGE("%s: err remap phy:0x%x", __func__, pl061->phyBase);
         return HDF_ERR_IO;
     }
 
     ret = Pl061GpioInitGroups(pl061);
     if (ret != HDF_SUCCESS) {
-        PLAT_LOGE("%s: err init groups:%d", __func__, ret);
+        HDF_LOGE("%s: err init groups:%d", __func__, ret);
         OsalIoUnmap((void *)pl061->regBase);
         pl061->regBase = NULL;
         return ret;
@@ -549,10 +594,10 @@ static int32_t Pl061GpioInit(struct HdfDeviceObject *device)
 
 #ifdef PL061_GPIO_USER_SUPPORT
     if (GpioAddVfs(pl061->bitNum) != HDF_SUCCESS) {
-        PLAT_LOGE("%s: add vfs fail!", __func__);
+        HDF_LOGE("%s: add vfs fail!", __func__);
     }
 #endif
-    PLAT_LOGI("%s: dev service:%s init success!", __func__, HdfDeviceGetServiceName(device));
+    HDF_LOGI("%s: dev service:%s init success!", __func__, HdfDeviceGetServiceName(device));
     return HDF_SUCCESS;
 }
 
@@ -560,9 +605,9 @@ static void Pl061GpioRelease(struct HdfDeviceObject *device)
 {
     struct Pl061GpioData *pl061 = NULL;
 
-    PLAT_LOGI("%s: enter", __func__);
+    HDF_LOGI("%s: enter", __func__);
     if (device == NULL) {
-        PLAT_LOGE("%s: device is null!", __func__);
+        HDF_LOGE("%s: device is null!", __func__);
         return;
     }
 
@@ -572,11 +617,13 @@ static void Pl061GpioRelease(struct HdfDeviceObject *device)
 
     pl061 = (struct Pl061GpioData *)device->priv;
     if (pl061 == NULL) {
-        PLAT_LOGE("%s: device priv is null", __func__);
+        HDF_LOGE("%s: device priv is null", __func__);
         return;
     }
 
     Pl061GpioUninitGroups(pl061);
+    OsalMemFree(pl061->gpioInfo);
+    pl061->gpioInfo = NULL;
     OsalIoUnmap((void *)pl061->regBase);
     pl061->regBase = NULL;
 }
