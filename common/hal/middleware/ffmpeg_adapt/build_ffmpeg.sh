@@ -72,6 +72,7 @@ function main(){
     cp -rf $FFMPEG_DIR/install/lib/libavcodec.so $OUT_DIR/
     cp -rf $FFMPEG_DIR/install/lib/libavformat.so $OUT_DIR/
     cp -rf $FFMPEG_DIR/install/lib/libavutil.so $OUT_DIR/
+    cp -rf $FFMPEG_DIR/install/lib/libswresample.so $OUT_DIR/
 
     cd -;
     rm -rf $FFMPEG_DIR
