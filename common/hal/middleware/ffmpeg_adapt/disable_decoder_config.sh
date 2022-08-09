@@ -27,7 +27,7 @@ configure_attr=" --prefix=./install \
     --disable-devices \
     --disable-programs \
     --disable-ffplay \
-    --disable-swresample \
+    --enable-swresample \
     --disable-swscale \
     --disable-avdevice \
     --disable-postproc \
