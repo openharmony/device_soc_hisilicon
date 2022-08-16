@@ -29,7 +29,7 @@
 #include "hi_common.h"
 #include "hi_module.h"
 
-#if defined(LINUX_VERSION_CODE) && (LINUX_VERSION_CODE < KERNEL_VERSION(5,10,0))
+#if !defined(CFG_HI_USER_DRV)
 #include "hi_drv_sys.h"
 #endif
 
@@ -124,7 +124,7 @@ hi_u32 gpio_drv_get_chip_version(hi_void)
 {
     HI_CHIP_VERSION_E chip_version = HI_CHIP_VERSION_BUTT;
     gpio_drv_chip chip = GPIO_DRV_CHIP_V350;
-#if defined(LINUX_VERSION_CODE) && (LINUX_VERSION_CODE < KERNEL_VERSION(5,10,0))
+#if !defined(CFG_HI_USER_DRV)
     HI_CHIP_TYPE_E chip_type;
     hi_drv_sys_get_chip_version(&chip_type, &chip_version);
 #else
@@ -457,34 +457,21 @@ static hi_void gpio_set_bit_irq_disable(hi_u32 chip, hi_u32 gpio_no, hi_u32 grou
     hi_u32 index;
 
     index = (group_no <= 15) ? (0) : (1); /* hi_gpio_irq: group 0 ~ 15; hi_stb_gpio_irq: group 18 ~ 22 */
-#if defined(__KERNEL__) && (LINUX_VERSION_CODE >= KERNEL_VERSION(5,10,0))
-    free_irq(g_gpio_irq_table[index].irq_no, NULL);
-#else
+#ifdef ENABLE_GPIO_IRQ_FREE
     osal_irq_free(g_gpio_irq_table[index].irq_no, NULL);
 #endif
-
     g_st_gpio_attr.gpio_int_attr[gpio_no].gpio_int_enable = HI_FALSE;
 
     return;
 }
-extern hi_s32 hiirq_get_irq_byname(char *name);
 
 static hi_s32 gpio_set_bit_irq_enable(hi_u32 chip, hi_u32 gpio_no, hi_u32 group_no, hi_u32 bit_no)
 {
     hi_s32 ret, index;
-#if defined(__KERNEL__) && (LINUX_VERSION_CODE >= KERNEL_VERSION(5,10,0))
-    hi_s32 gpio_irq;
-#endif
 
     index = (group_no <= 15) ? (0) : (1); /* hi_gpio_irq: group 0 ~ 15; hi_stb_gpio_irq: group 18 ~ 22 */
-#if defined(__KERNEL__) && (LINUX_VERSION_CODE >= KERNEL_VERSION(5,10,0))
-    gpio_irq = hiirq_get_irq_byname(g_gpio_irq_table[index].name);
-    ret = request_threaded_irq(gpio_irq, (irq_handler_t)drv_gpio_isr, (irq_handler_t)0,
-        0, g_gpio_irq_table[index].name, HI_NULL);
-#else
     ret = osal_irq_request(g_gpio_irq_table[index].irq_no, drv_gpio_isr, 0,
                            g_gpio_irq_table[index].name, HI_NULL);
-#endif
     if (ret != HI_SUCCESS) {
         HI_LOG_INFO("register GPIO INT failed return 0x%x.\n", ret);
         return HI_FAILURE;
@@ -990,13 +977,13 @@ hi_void hi_drv_gpio_set_irq_ctrl(hi_u32 gpio_no, hi_bool b_enable)
     hi_u32 bit_no = 0;
 
     if (drv_gpio_convert(gpio_no, &group_no, &bit_no) == HI_FALSE) {
-        HI_LOG_ERR("para gpio_no is invaild\n");
+        HI_LOG_ERR("para gpio_no is invalid\n");
         hi_err_print_u32(group_no);
         return;
     }
 
     if ((b_enable != HI_TRUE) && (b_enable != HI_FALSE)) {
-        HI_LOG_ERR("para b_enable is invaild\n");
+        HI_LOG_ERR("para b_enable is invalid. \n");
         return;
     }
 
@@ -1012,13 +999,12 @@ hi_s32 hi_drv_gpio_init(hi_void)
 
     i = 0; /* don't delete it */
 
-#if !defined(__KERNEL__) || (LINUX_VERSION_CODE < KERNEL_VERSION(5,10,0))
     ret = osal_exportfunc_register(HI_ID_GPIO, "HI_GPIO", (hi_void *)&g_st_gpio_export_funcs);
     if (ret != HI_SUCCESS) {
         HI_LOG_INFO(" GPIO Module register failed 0x%x.\n", ret);
         return HI_FAILURE;
     }
-#endif
+
     chip = gpio_drv_get_chip_version();
 
     g_gpio_grp_num = HI_GPIO_GROUP_NUM;
@@ -1078,12 +1064,12 @@ hi_void hi_drv_gpio_de_init(hi_void)
         g_st_gpio_attr.gpio_int_attr[i].gpio_int_type = GPIO_INTTYPE_DOWN;
         g_st_gpio_attr.gpio_int_attr[i].gpio_server = HI_NULL;
     }
-#if !defined(__KERNEL__) || (LINUX_VERSION_CODE < KERNEL_VERSION(5,10,0))
+
     ret = osal_exportfunc_unregister(HI_ID_GPIO);
     if (ret != HI_SUCCESS) {
         HI_LOG_INFO(" GPIO Module unregister failed 0x%x.\n", ret);
     }
-#endif
+
     /* unmap gpio reg address */
     for (i = 0; i < HI_GPIO_MAX_GROUP_NUM; i++) {
         if (g_gpio_usr_addr[i] == NULL) {

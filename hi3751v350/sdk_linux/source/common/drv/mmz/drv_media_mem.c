@@ -864,7 +864,7 @@ static void __dma_clear_buffer(struct ion_handle *handle)
 }
 #endif
 
-#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 10, 0)
+#ifndef DMABUF_FLUSH_CACHE
 static void *_map2kern(const hil_mmb_t *mmb, int cached)
 {
     struct scatterlist *sg = NULL;
@@ -880,7 +880,12 @@ static void *_map2kern(const hil_mmb_t *mmb, int cached)
     struct mmz_iommu *common = &g_mmz_iommu;
     unsigned long len;
 
+#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 10, 0)
     table = get_pages_from_buffer(common->client, mmb->handle, &len);
+#else
+    table = hi_dma_buf_sgt(mmb->handle);
+    len = mmb->length;
+#endif
     if (table == NULL) {
         hi_mmz_warn("get pages failed!\n");
         return NULL;
@@ -933,7 +938,7 @@ static void *_mmb_map2kern(hil_mmb_t *mmb, int cached)
         hi_mmz_warn("remap failed!\n");
         return NULL;
     }
-#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 10, 0)
+#ifndef DMABUF_FLUSH_CACHE
     kdata->kvirt = _map2kern(mmb, cached);
 #else
     kdata->kvirt = dma_buf_vmap(mmb->handle);
@@ -983,7 +988,7 @@ void *hil_mmb_map2kern_cached(hil_mmb_t *mmb)
     return p;
 }
 
-#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 10, 0)
+#ifndef DMABUF_FLUSH_CACHE
 int hil_mmb_unmap(hil_mmb_t *mmb, const void *addr)
 {
     struct mmb_kdata *kdata = NULL;
@@ -1367,7 +1372,7 @@ int hil_mmb_cma_unmapfrom_iommu(mmb_addr_t addr, int iommu)
     return HI_SUCCESS;
 }
 
-#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 10, 0)
+
 struct sg_table *hil_get_meminfo(const hil_mmb_t *mmb)
 {
     unsigned long size;
@@ -1378,7 +1383,11 @@ struct sg_table *hil_get_meminfo(const hil_mmb_t *mmb)
         hi_mmz_error("invalid params!\n");
         return NULL;
     }
+#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 10, 0)
     table = get_pages_from_buffer(common->client, mmb->handle, &size);
+#else
+    table = hi_dma_buf_sgt(mmb->handle);
+#endif
     if (table == NULL) {
         hi_mmz_warn("get pages failed!\n");
         return NULL;
@@ -1386,6 +1395,7 @@ struct sg_table *hil_get_meminfo(const hil_mmb_t *mmb)
     return table;
 }
 
+#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 10, 0)
 int sec_mmb_get(u32 addr, int iommu, u32 sec_smmu)
 {
     hil_mmb_t *mmb;

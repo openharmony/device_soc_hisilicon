@@ -32,9 +32,8 @@
 
 static osal_dev g_i2c_register_data;
 static unsigned int g_i2c_id = 0;
-#if defined(LINUX_VERSION_CODE) && (LINUX_VERSION_CODE < KERNEL_VERSION(5,10,0))
 static gpio_i2c_ext_func *g_pst_gpio_i2c_ext_funcs = HI_NULL;
-#endif
+
 #ifdef HI_GPIOI2C_SUPPORT
 extern i2c_gpio g_st_i2c_gpio[HI_I2C_MAX_NUM];
 #endif
@@ -161,10 +160,9 @@ static hi_s32 i2c_proc_wr_read(unsigned int arg_count,
     hi_s32 ret;
     hi_u32 i = 0;
     hi_u8 p_data[32] = {0}; // 数据发送缓冲区长度32
-#if defined(LINUX_VERSION_CODE) && (LINUX_VERSION_CODE < KERNEL_VERSION(5,10,0))
     hi_bool b_used = HI_FALSE;
     hi_bool b_temp = HI_FALSE;
-#endif
+
     ret = i2c_proc_wr_read_get_dev_msg(arg_count, argv, &i2c_dev_msg);
     if (ret != HI_SUCCESS) {
         HI_PRINT("i2c_proc_wr_read_get_dev_msg is failed!!!\n");
@@ -187,7 +185,6 @@ static hi_s32 i2c_proc_wr_read(unsigned int arg_count,
 
         HI_PRINT("\n");
     }
-#if defined(LINUX_VERSION_CODE) && (LINUX_VERSION_CODE < KERNEL_VERSION(5,10,0))
     else {
         if (g_pst_gpio_i2c_ext_funcs == HI_NULL) {
             ret = osal_exportfunc_get(HI_ID_GPIO_I2C, (hi_void **)&g_pst_gpio_i2c_ext_funcs);
@@ -221,7 +218,6 @@ static hi_s32 i2c_proc_wr_read(unsigned int arg_count,
             HI_PRINT("\n");
         }
     }
-#endif
     return ret;
 }
 
@@ -281,10 +277,9 @@ hi_s32 i2c_proc_wr_write(unsigned int arg_count,
                          char (*argv)[PROC_CMD_SINGEL_LENGTH_MAX], hi_void *private)
 {
     hi_s32 ret;
-#if defined(LINUX_VERSION_CODE) && (LINUX_VERSION_CODE < KERNEL_VERSION(5,10,0))
     hi_bool b_temp = HI_FALSE;
     hi_bool b_used = HI_FALSE;
-#endif
+
     send_msg send = {0};
     i2c_msg i2c_dev_msg = {0};
 
@@ -299,7 +294,6 @@ hi_s32 i2c_proc_wr_write(unsigned int arg_count,
                                i2c_dev_msg.reg_addr, i2c_dev_msg.reg_addr_len, send.send_data, send.len);
         HI_I2C_ERR_PRINT(ret != HI_SUCCESS, ret, "Write failed\n\n");
     }
-#if defined(LINUX_VERSION_CODE) && (LINUX_VERSION_CODE < KERNEL_VERSION(5,10,0))
     else {
         if (g_pst_gpio_i2c_ext_funcs == HI_NULL) {
             ret = osal_exportfunc_get(HI_ID_GPIO_I2C, (hi_void **)&g_pst_gpio_i2c_ext_funcs);
@@ -327,7 +321,6 @@ hi_s32 i2c_proc_wr_write(unsigned int arg_count,
             HI_I2C_ERR_PRINT(ret != HI_SUCCESS, ret, "Write failed(Ret:0x%x)\n\n", ret);
         }
     }
-#endif
     return ret;
 }
 
@@ -342,14 +335,12 @@ static osal_pmops g_i2c_pmops = {
 
 hi_s32 i2c_open(hi_void *private_data)
 {
-#if defined(LINUX_VERSION_CODE) && (LINUX_VERSION_CODE < KERNEL_VERSION(5,10,0))
     hi_s32 ret;
 
     ret = osal_exportfunc_get(HI_ID_GPIO_I2C, (hi_void **)&g_pst_gpio_i2c_ext_funcs);
     if ((ret != HI_SUCCESS) || (g_pst_gpio_i2c_ext_funcs == HI_NULL)) {
         HI_LOG_INFO("Get GPIO_I2C Function ERR: ret:0x%08x, func:0x%08x\n", ret, g_pst_gpio_i2c_ext_funcs);
     }
-#endif
     return HI_SUCCESS;
 }
 
@@ -441,7 +432,7 @@ hi_s32 i2c_drv_mod_init(hi_void)
         return HI_FAILURE;
     }
 
-#if defined(MODULE) || (LINUX_VERSION_CODE >= KERNEL_VERSION(5,10,0))
+#if defined(MODULE) || defined(CFG_HI_USER_DRV)
     HI_PRINT("Load hi_i2c.ko success.  \t(%s)\n", VERSION_STRING);
 #endif
     return 0;
@@ -457,7 +448,7 @@ hi_void i2c_drv_mod_exit(hi_void)
     return;
 }
 
-#if defined(MODULE) || (LINUX_VERSION_CODE >= KERNEL_VERSION(5,10,0))
+#if defined(MODULE) || defined(CFG_HI_USER_DRV)
 module_init(i2c_drv_mod_init);
 module_exit(i2c_drv_mod_exit);
 #endif

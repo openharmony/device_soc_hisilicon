@@ -55,7 +55,9 @@ int osal_exportfunc_register(unsigned int module_id, const char *name, void *fun
     exportfunc_node *func_node_new  = NULL;
     exportfunc_node *func_node_find = NULL;
 
+#ifndef CFG_HI_USER_DRV
     return hi_drv_module_register(module_id, name, func);
+#endif
 
     func_node_new = kmalloc(sizeof(exportfunc_node), GFP_KERNEL);
     if (func_node_new == NULL) {
@@ -92,7 +94,9 @@ int osal_exportfunc_unregister(unsigned int module_id)
     unsigned long flags;
     exportfunc_node *func_node_find = NULL;
 
+#ifndef CFG_HI_USER_DRV
     return hi_drv_module_un_register(module_id);
+#endif
 
     spin_lock_irqsave(&g_func_lock, flags);
 
@@ -120,7 +124,9 @@ int osal_exportfunc_get(unsigned int module_id, void **func)
         return -1;
     }
 
+#ifndef CFG_HI_USER_DRV
     return hi_drv_module_get_function(module_id, func);
+#endif
 
     spin_lock_irqsave(&g_func_lock, flags);
 

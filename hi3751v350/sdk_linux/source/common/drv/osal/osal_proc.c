@@ -453,11 +453,9 @@ EXPORT_SYMBOL(osal_proc_exit);
 #ifdef MODULE
 module_init(osal_proc_init);
 module_exit(osal_proc_exit);
-#else
-#if defined(LINUX_VERSION_CODE) && (LINUX_VERSION_CODE >= KERNEL_VERSION(5,0,0))
+#elif defined(CFG_HI_USER_DRV)
 subsys_initcall(osal_proc_init);
 module_exit(osal_proc_exit);
-#endif
 #endif
 
 osal_proc_entry *osal_proc_add(const char *name, unsigned long name_size)
@@ -559,16 +557,18 @@ int osal_proc_print(void *seqfile, const char *fmt, ...)
 }
 EXPORT_SYMBOL(osal_proc_print);
 
-void osal_printk(const char *fmt, ...)
+int osal_printk(const char *fmt, ...)
 {
     va_list args;
+    int ret;
 
     if (!fmt) {
-        return;
+        return 0;
     }
 
     va_start(args, fmt);
-    vprintk(fmt, args);
+    ret = vprintk(fmt, args);
     va_end(args);
+    return ret;
 }
 EXPORT_SYMBOL(osal_printk);

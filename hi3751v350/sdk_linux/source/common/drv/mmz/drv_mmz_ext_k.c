@@ -892,6 +892,82 @@ HI_S32 hi_drv_secsmmu_get_smmu(const smmu_buffer *sec_smmu_buf, smmu_buffer *smm
 
     return HI_SUCCESS;
 }
+#else
+HI_S32 hi_drv_secmmz_alloc(const HI_CHAR *bufname, HI_U32 size, HI_U32 align, mmz_buffer *secmmz_buf)
+{
+    return HI_SUCCESS;
+}
+
+HI_S32 hi_drv_secmmz_release(const mmz_buffer *secmmz_buf)
+{
+    return HI_SUCCESS;
+}
+
+HI_S32 hi_drv_secsmmu_alloc(const HI_CHAR *bufname, HI_U32 size, HI_U32 align, smmu_buffer *sec_smmu_buf)
+{
+    return HI_SUCCESS;
+}
+
+HI_S32 hi_drv_secsmmu_release(const smmu_buffer *sec_smmu_buf)
+{
+    return HI_SUCCESS;
+}
+
+HI_S32 hi_drv_smmu_map_to_sec_smmu(HI_U32 non_sec_smmu, smmu_buffer *sec_smmu_buf)
+{
+    return HI_SUCCESS;
+}
+
+HI_S32 hi_drv_smmu_unmap_from_sec_smmu(const smmu_buffer *sec_smmu_buf)
+{
+    return HI_SUCCESS;
+}
+
+HI_S32 hi_drv_mmz_map_to_sec_smmu(const mmz_buffer *mmz_buf, smmu_buffer *sec_smmu_buf)
+{
+    return HI_SUCCESS;
+}
+
+HI_S32 hi_drv_mmz_unmap_from_sec_smmu(const smmu_buffer *sec_smmu_buf)
+{
+    return HI_SUCCESS;
+}
+
+HI_S32 hi_drv_secmmz_buffer_get(mmz_buffer *secmmz_buf)
+{
+    return HI_SUCCESS;
+}
+
+HI_S32 hi_drv_secmmz_buffer_put(mmz_buffer *secmmz_buf)
+{
+    return HI_SUCCESS;
+}
+
+HI_S32 hi_drv_secsmmu_buffer_get(smmu_buffer *sec_smmu_buf)
+{
+    return HI_SUCCESS;
+}
+
+HI_S32 hi_drv_secsmmu_buffer_put(smmu_buffer *sec_smmu_buf)
+{
+    return HI_SUCCESS;
+}
+
+HI_S32 hi_drv_secmmz_query_buffer_ref(mmz_buffer *secmmz_buf, HI_U32 *ref)
+{
+    return HI_SUCCESS;
+}
+
+HI_S32 hi_drv_secsmmu_query_buffer_ref(smmu_buffer *sec_smmu_buf, HI_U32 *ref)
+{
+    return HI_SUCCESS;
+}
+
+HI_S32 hi_drv_secsmmu_get_smmu(const smmu_buffer *sec_smmu_buf, smmu_buffer *smmu_buf)
+{
+    return HI_SUCCESS;
+}
+
 #endif
 
 EXPORT_SYMBOL(hi_drv_mmz_alloc_and_map);
@@ -927,7 +1003,6 @@ EXPORT_SYMBOL(hi_drv_smmu_query_buffer_source);
 EXPORT_SYMBOL(hi_drv_sec_smmu_query_buffer_source);
 #endif
 
-#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 10, 0)
 EXPORT_SYMBOL(hi_drv_secmmz_alloc);
 EXPORT_SYMBOL(hi_drv_secmmz_release);
 EXPORT_SYMBOL(hi_drv_secsmmu_alloc);
@@ -943,4 +1018,4 @@ EXPORT_SYMBOL(hi_drv_secsmmu_buffer_put);
 EXPORT_SYMBOL(hi_drv_secmmz_query_buffer_ref);
 EXPORT_SYMBOL(hi_drv_secsmmu_query_buffer_ref);
 EXPORT_SYMBOL(hi_drv_secsmmu_get_smmu);
-#endif
+

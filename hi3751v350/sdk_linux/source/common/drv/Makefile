@@ -191,7 +191,7 @@ endif
 ###############################################################################
 obj-$(CFG_MSP_BUILDTYPE) += $(MOD_NAME_MEDIA).o $(MOD_NAME_MMZ).o $(MOD_NAME_CMN).o
 
-ifeq ($(KERNEL_VERSION), linux-5.10)
+ifeq ($(CFG_HI_USER_DRV),y)
 $(MOD_NAME_CMN)-y :=    osal/osal_debug.o            \
                         osal/osal_atomic.o           \
                         osal/osal_semaphore.o        \
@@ -199,14 +199,20 @@ $(MOD_NAME_CMN)-y :=    osal/osal_debug.o            \
                         osal/osal_spinlock.o         \
                         osal/osal_wait.o         \
                         osal/osal_workqueue.o         \
+                        osal/osal_fence.o         \
+                        osal/osal_interrupt.o         \
                         osal/osal_task.o         \
                         osal/osal_addr.o         \
                         osal/osal_cache.o         \
                         osal/osal_barrier.o         \
                         osal/osal_string.o         \
+                        osal/osal_timer.o         \
                         osal/osal_proc.o         \
+                        osal/osal_fileops.o         \
                         osal/osal_device.o         \
-                        osal/osal_math.o
+                        osal/osal_math.o         \
+                        osal/osal_gpio.o         \
+                        osal/osal_exportfunc.o
 
 DEPENDS := $(patsubst %.o, %.d, $($(MOD_NAME_MEDIA)-y))
 DEPENDS += $(patsubst %.o, %.d, $($(MOD_NAME_CMN)-y))
