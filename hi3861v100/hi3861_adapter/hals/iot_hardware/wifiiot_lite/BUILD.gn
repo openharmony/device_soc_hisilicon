@@ -23,7 +23,7 @@ static_library("hal_iothardware") {
     "hal_reset.c",
   ]
   include_dirs = [
-    "//utils/native/lite/include",
+    "//commonlibrary/utils_lite/include",
     "//base/iothardware/peripheral/interfaces/inner_api",
     "//device/soc/hisilicon/hi3861v100/sdk_liteos/include",
   ]
