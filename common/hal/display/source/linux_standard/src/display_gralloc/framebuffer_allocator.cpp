@@ -82,7 +82,7 @@ int32_t FramebufferAllocator::InitFb()
     smemStart_ = fixInfo_.smem_start;
     dmaBufferFb_ = DisplayAdapter::GetInstance()->FbGetDmaBuffer(deviceFd_);
     DISPLAY_LOGD("the dmabuffer fd of framebuffer is %{public}d", dmaBufferFb_);
-    for (uint32_t i = 0; i < bufferSize_; i++) {
+    for (uint32_t i = 0; i < buffersNum_; i++) {
         freeBuffers_.push(smemStart_ + i * bufferSize_);
     }
     DISPLAY_LOGD();
