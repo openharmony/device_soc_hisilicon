@@ -106,7 +106,7 @@ hi_s32 hi_drv_gpio_get_gpio_num(gpio_get_gpionum *gpio_num);
 
 hi_s32 hi_drv_gpio_set_int_type(hi_u32 gpio_no, gpio_inttpye en_int_tri_mode);
 hi_s32 hi_drv_gpio_set_bit_int_enable(hi_u32 gpio_no, HI_BOOL b_enable);
-hi_s32 hi_drv_gpio_register_server_func (hi_u32 gpio_no, hi_void(*func)(hi_u32));
+hi_s32 hi_drv_gpio_register_server_func(hi_u32 gpio_no, hi_void(*func)(hi_u32));
 hi_s32 hi_drv_gpio_unregister_server_func(hi_u32 gpio_no);
 hi_s32 hi_drv_gpio_clear_group_int(hi_u32 group_no);
 hi_s32 hi_drv_gpio_clear_bit_int(hi_u32 gpio_no);

@@ -217,6 +217,8 @@ static int osal_ioctl_copy_from_user(unsigned int cmd, unsigned long arg,
             }
 
             break;
+        default:
+            break;
     }
 
     return 0;
@@ -247,6 +249,8 @@ static int osal_ioctl_copy_to_user(unsigned int cmd, unsigned long arg, const vo
             {
                 return copy_to_user((void __user *)(uintptr_t)arg, ioctl_arg, arg_size);
             }
+            break;
+        default:
             break;
     }
 
@@ -386,7 +390,7 @@ static int osal_mmap(struct file *file, struct vm_area_struct *vm)
 
     osal_vm.vm = vm;
     if (fops->mmap != NULL) {
-        ret = fops->mmap(&osal_vm, vm->vm_start, vm->vm_end, vm->vm_pgoff, (void *)file);
+        ret = fops->mmap(&osal_vm, vm->vm_start, vm->vm_end, vm->vm_pgoff, (void *)&(fileops_node->private_data));
     }
 
     return ret;
@@ -620,3 +624,22 @@ int osal_set_freezable(void)
     return set_freezable();
 }
 EXPORT_SYMBOL(osal_set_freezable);
+
+int osal_irq_mmap(osal_vm *vm, void *ptr, unsigned long start, unsigned long sz)
+{
+    unsigned long pfn;
+    struct vm_area_struct *v = NULL;
+    struct page *page = NULL;
+    if (vm == NULL) {
+        return -EINVAL;
+    }
+    page = virt_to_head_page(ptr);
+    if (sz > (PAGE_SIZE << compound_order(page))) {
+        return -EINVAL;
+    }
+
+    pfn = virt_to_phys(ptr) >> PAGE_SHIFT;
+    v = (struct vm_area_struct *)(vm->vm);
+    return remap_pfn_range(v, start, pfn, sz, v->vm_page_prot);
+}
+EXPORT_SYMBOL(osal_irq_mmap);

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2022 HiSilicon (Shanghai) Technologies CO., LIMITED.
- *set fileencoding
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
@@ -68,34 +68,34 @@ extern "C" {
 /* @{ */ /* <!-- [HI_DEBUG] */
 
 /* Default level of the output debugging information */
-/* CNcomment: Ĭ?ϵĵ?????Ϣ???����? */
+/* CNcomment: 默认的调试信息输出级别 */
 #define HI_LOG_LEVEL_DEFAULT HI_LOG_LEVEL_NOTICE
 
 /* Level of the output debugging information */
-/* CNcomment: ??????Ϣ???����? */
+/* CNcomment: 调试信息输出级别 */
 typedef enum HI_LOG_LEVEL_E {
     /* <fatal error. it indicates that a critical problem occurs in the system. */
     /* therefore, you must pay attention to it. */
     HI_LOG_LEVEL_FATAL = 0,
-    /* <CNcomment: ????????, ??????????Ҫ?ر???ע??һ?????ִ???????????ϵͳ???????ش????? */
+    /* <CNcomment: 致命错误, 此类错误需要特别关注，一般出现此类错误代表系统出现了重大问题 */
     /* <Major error. It indicates that a major problem occurs in the system and the system cannot run. */
     HI_LOG_LEVEL_ERROR = 1,
-    /* <CNcomment: һ??????, һ?????ִ???????????ϵͳ?????˱Ƚϴ??????⣬?????????????? */
+    /* <CNcomment: 一般错误, 一般出现此类错误代表系统出现了比较大的问题，不能再正常运行 */
     /* <Warning. It indicates that a minor problem occurs in the system, but the system still can run properly. */
     HI_LOG_LEVEL_WARNING = 2,
-    /* <CNcomment: ?澯??Ϣ, һ?????ִ?????Ϣ????ϵͳ???ܳ??????⣬???ǻ??ܼ??????? */
+    /* <CNcomment: 告警信息, 一般出现此类信息代表系统可能出现问题，但是还能继续运行 */
     /* <Notice. It indicates that a normal but significant condition in the system, */
     /* but the system still can run properly. */
     HI_LOG_LEVEL_NOTICE = 3,
-    /* <CNcomment: ????????Ҫ????Ϣ, һ????????ϵͳ?Ĺؼ?·???????? */
+    /* <CNcomment: 正常但重要的信息, 一般出现在系统的关键路径调用上 */
     /* <Message. It is used to prompt users. Users can open the message when locating problems. */
     /* It is recommended to disable this message in general. */
     HI_LOG_LEVEL_INFO = 4,
-    /* <CNcomment: ??ʾ??Ϣ, һ????Ϊ?????û??????????ڶ?λ??????ʱ?????Դ򿪣?һ???????½????ر? */
+    /* <CNcomment: 提示信息, 一般是为提醒用户而输出，在定位问题的时候可以打开，一般情况下建议关闭 */
     /* <Debug. It is used to prompt developers. Developers can open the message when locating problems. */
     /* It is recommended to disable this message in general. */
     HI_LOG_LEVEL_DBG = 5,
-    /* <CNcomment: ??ʾ??Ϣ, һ????Ϊ??????Ա???????????趨?Ĵ?ӡ??????һ???????½????ر? */
+    /* <CNcomment: 提示信息, 一般是为开发人员调试问题而设定的打印级别，一般情况下建议关闭 */
     /* <Verbose. It is used to prompt developers. Developers can open the message when locating problems. */
     /* It is recommended to disable this message in general. */
     HI_LOG_LEVEL_VERBOSE = 6,
@@ -103,27 +103,27 @@ typedef enum HI_LOG_LEVEL_E {
     HI_LOG_LEVEL_BUTT
 } HI_LOG_LEVEL_E;
 
-/* Just only for fatal level print.   */ /* CNcomment: Ϊ?˴?ӡ??????Ϣ???ƶ??ĺ???ӡ???? */
+/* Just only for fatal level print.   */ /* CNcomment: 为了打印致命信息而制定的宏打印级别 */
 #define HI_TRACE_LEVEL_FATAL (0)
-/* Just only for error level print.   */ /* CNcomment: Ϊ?˴?ӡ??????Ϣ???ƶ??ĺ???ӡ???? */
+/* Just only for error level print.   */ /* CNcomment: 为了打印错误信息而制定的宏打印级别 */
 #define HI_TRACE_LEVEL_ERROR (1)
-/* Just only for warning level print. */ /* CNcomment: Ϊ?˴?ӡ??????Ϣ???ƶ??ĺ???ӡ???? */
+/* Just only for warning level print. */ /* CNcomment: 为了打印警告信息而制定的宏打印级别 */
 #define HI_TRACE_LEVEL_WARN (2)
-/* Just only for notice level print.  */ /* CNcomment: Ϊ?˴?ӡע????Ϣ???ƶ??ĺ???ӡ???? */
+/* Just only for notice level print.  */ /* CNcomment: 为了打印注意信息而制定的宏打印级别 */
 #define HI_TRACE_LEVEL_NOTICE (3)
-/* Just only for info level print.    */ /* CNcomment: Ϊ?˴?ӡ??Ϣ???????ƶ??ĺ???ӡ???? */
+/* Just only for info level print.    */ /* CNcomment: 为了打印信息级别而制定的宏打印级别 */
 #define HI_TRACE_LEVEL_INFO (4)
-/* Just only for debug level print.   */ /* CNcomment: Ϊ?˴?ӡ??????Ϣ???ƶ??ĺ???ӡ???? */
+/* Just only for debug level print.   */ /* CNcomment: 为了打印调试信息而制定的宏打印级别 */
 #define HI_TRACE_LEVEL_DBG (5)
-/* Just only for verbose level print. */ /* CNcomment: Ϊ?˴?ӡ?߳??ĵ?????Ϣ???ƶ??ĺ???ӡ???? */
+/* Just only for verbose level print. */ /* CNcomment: 为了打印冗长的调试信息而制定的宏打印级别 */
 #define HI_TRACE_LEVEL_VERBOSE (6)
 
 /* Just only debug output,MUST BE NOT calling it. */
-/* CNcomment: ??????????Ϣ?ӿڣ????Ƽ?ֱ?ӵ??ô˽ӿ? */
+/* CNcomment: 调试输出信息接口，不推荐直接调用此接口 */
 extern hi_void hi_log_out(hi_u32 level, HI_MOD_ID_E enModId,
-                          hi_u8 *p_func_name, hi_u32 line_num, const char *format, ...);
+                         hi_u8 *p_func_name, hi_u32 line_num, const char *format, ...);
 extern hi_void hi_log_out(hi_u32 level, HI_MOD_ID_E enModId,
-		          hi_u8 *p_func_name, hi_u32 line_num, const char *format, ...);
+		                         hi_u8 *p_func_name, hi_u32 line_num, const char *format, ...);
 extern hi_u32 log_get_time_ms(void);
 
 #ifdef HI_DEBUG
@@ -137,13 +137,18 @@ extern hi_u32 log_get_time_ms(void);
 #endif
 
 #ifdef __KERNEL__
-#if defined(LINUX_VERSION_CODE) && (LINUX_VERSION_CODE < KERNEL_VERSION(5,10,0))
+#if !defined(CFG_HI_USER_DRV)
 #define HI_TRACE(level, module_id, fmt...)                                 \
     do {                                                                   \
         hi_log_out(level, module_id, (hi_u8 *)__FUNCTION__, __LINE__, fmt); \
     } while (0)
 #else
-#define HI_TRACE(level, module_id, fmt...)
+#define HI_TRACE(level, module_id, fmt...) \
+    do { \
+        if (level <= HI_TRACE_LEVEL_ERROR) { \
+            printk(fmt); \
+        } \
+    } while (0)
 #endif
 #else
 #define HI_TRACE(level, module_id, fmt...)                                 \
@@ -169,9 +174,9 @@ extern hi_u32 log_get_time_ms(void);
     } while (0)
 
 /* Supported for debug output to serial/network/u-disk. */
-/* CNcomment: ????ģ????Ҫ???????º???????????????Ϣ???????����??ڡ????ڡ?U?̴洢?? */
+/* CNcomment: 各个模块需要调用以下宏进行输出调试信息、可输出到串口、网口、U盘存储等 */
 /* Just only reserve the fatal level output. */
-/* CNcomment: ?????????????ĵ?????Ϣ */
+/* CNcomment: 仅仅保留致命的调试信息 */
 #if (HI_LOG_LEVEL == HI_TRACE_LEVEL_FATAL)
 #define HI_LOG_FATAL(fmt...)  HI_TRACE(HI_TRACE_LEVEL_FATAL, LOG_D_MODULE_ID, fmt)
 #define HI_LOG_ERR(fmt...)
@@ -181,7 +186,7 @@ extern hi_u32 log_get_time_ms(void);
 #define HI_LOG_DBG(fmt...)
 #define HI_LOG_VERBOSE(fmt...)
 /* Just only reserve the fatal/error level output. */
-/* CNcomment: ?????????????ĺʹ??󼶱??ĵ?????Ϣ */
+/* CNcomment: 仅仅保留致命的和错误级别的调试信息 */
 #elif (HI_LOG_LEVEL == HI_TRACE_LEVEL_ERROR)
 #define HI_LOG_FATAL(fmt...)  HI_TRACE(HI_TRACE_LEVEL_FATAL, LOG_D_MODULE_ID, fmt)
 #define HI_LOG_ERR(fmt...)   HI_TRACE(HI_TRACE_LEVEL_ERROR, LOG_D_MODULE_ID, fmt)
@@ -191,7 +196,7 @@ extern hi_u32 log_get_time_ms(void);
 #define HI_LOG_DBG(fmt...)
 #define HI_LOG_VERBOSE(fmt...)
 /* Just only reserve the fatal/error/warning level output. */
-/* CNcomment: ?????????????ġ??????ġ????漶???ĵ?????Ϣ */
+/* CNcomment: 仅仅保留致命的、错误的、警告级别的调试信息 */
 #elif (HI_LOG_LEVEL == HI_TRACE_LEVEL_WARN)
 #define HI_LOG_FATAL(fmt...)  HI_TRACE(HI_TRACE_LEVEL_FATAL, LOG_D_MODULE_ID, fmt)
 #define HI_LOG_ERR(fmt...)   HI_TRACE(HI_TRACE_LEVEL_ERROR, LOG_D_MODULE_ID, fmt)
@@ -201,7 +206,7 @@ extern hi_u32 log_get_time_ms(void);
 #define HI_LOG_DBG(fmt...)
 #define HI_LOG_VERBOSE(fmt...)
 /* Just only reserve the fatal/error/warning/note level output. */
-/* CNcomment: ?????????????ġ??????ġ???????ע?⼶???ĵ?????Ϣ */
+/* CNcomment: 仅仅保留致命的、错误的、警告和注意级别的调试信息 */
 #elif (HI_LOG_LEVEL == HI_TRACE_LEVEL_NOTICE)
 #define HI_LOG_FATAL(fmt...)  HI_TRACE(HI_TRACE_LEVEL_FATAL, LOG_D_MODULE_ID, fmt)
 #define HI_LOG_ERR(fmt...)   HI_TRACE(HI_TRACE_LEVEL_ERROR, LOG_D_MODULE_ID, fmt)
@@ -211,7 +216,7 @@ extern hi_u32 log_get_time_ms(void);
 #define HI_LOG_DBG(fmt...)
 #define HI_LOG_VERBOSE(fmt...)
 /* Just only reserve the fatal/error/warning/info level output. */
-/* CNcomment: ?????????????ġ??????ġ?????????Ϣ?????ĵ?????Ϣ */
+/* CNcomment: 仅仅保留致命的、错误的、警告和信息级别的调试信息 */
 #elif (HI_LOG_LEVEL == HI_TRACE_LEVEL_INFO)
 #define HI_LOG_FATAL(fmt...)  HI_TRACE(HI_TRACE_LEVEL_FATAL, LOG_D_MODULE_ID, fmt)
 #define HI_LOG_ERR(fmt...)   HI_TRACE(HI_TRACE_LEVEL_ERROR, LOG_D_MODULE_ID, fmt)
@@ -222,7 +227,7 @@ extern hi_u32 log_get_time_ms(void);
 #define HI_LOG_VERBOSE(fmt...)
 #elif (HI_LOG_LEVEL == HI_TRACE_LEVEL_DBG)
 /* Reserve all the levels output. */
-/* CNcomment: ???????м?????????Ϣ */
+/* CNcomment: 保留所有级别调试信息 */
 #define HI_LOG_FATAL(fmt...)  HI_TRACE(HI_TRACE_LEVEL_FATAL, LOG_D_MODULE_ID, fmt)
 #define HI_LOG_ERR(fmt...)   HI_TRACE(HI_TRACE_LEVEL_ERROR, LOG_D_MODULE_ID, fmt)
 #define HI_LOG_WARN(fmt...)  HI_TRACE(HI_TRACE_LEVEL_WARN, LOG_D_MODULE_ID, fmt)
@@ -232,7 +237,7 @@ extern hi_u32 log_get_time_ms(void);
 #define HI_LOG_VERBOSE(fmt...)
 #elif (HI_LOG_LEVEL == HI_TRACE_LEVEL_VERBOSE)
 /* Reserve all the levels output. */
-/* CNcomment: ???????м?????????Ϣ */
+/* CNcomment: 保留所有级别调试信息 */
 #define HI_LOG_FATAL(fmt...)  HI_TRACE(HI_TRACE_LEVEL_FATAL, LOG_D_MODULE_ID, fmt)
 #define HI_LOG_ERR(fmt...)   HI_TRACE(HI_TRACE_LEVEL_ERROR, LOG_D_MODULE_ID, fmt)
 #define HI_LOG_WARN(fmt...)  HI_TRACE(HI_TRACE_LEVEL_WARN, LOG_D_MODULE_ID, fmt)
@@ -244,7 +249,7 @@ extern hi_u32 log_get_time_ms(void);
 #endif
 
 /* Only for debug, forbidden to modify and upload */
-/* CNcomment: ?����???ʹ?ã???ֹ?????ϴ? */
+/* CNcomment: 仅供调试使用，禁止打开上传 */
 #ifdef HI_KEY_PRINT_OUT
 #define HI_KEY_PRINT(module_id, fmt...)
 #define HI_KEY_PRINT_HEX(module_id, str, addr, len) \
@@ -291,7 +296,7 @@ extern hi_u32 log_get_time_ms(void);
 #define hi_dbg_func_trace() HI_LOG_DBG(" =TRACE=\n")
 
 /* Function trace log for user input low frequency counts */
-/* CNcomment: ???????뽵Ƶ??ӡ?Ĵ??? */
+/* CNcomment: 用于输入降频打印的次数 */
 #define hi_dbg_func_trace_low_freq_cnt(freq)                                    \
     do {                                                                    \
         static unsigned int freqtimes = 0;                                  \
@@ -302,9 +307,9 @@ extern hi_u32 log_get_time_ms(void);
     } while (0)
 
 /* function trace log for user add extra print log as need */
-/* CNcomment: ?û????????????Ӷ????Ĵ?ӡ */
+/* CNcomment: 用户根据需求增加额外的打印 */
 /* need use hi_func_trace_low_freq_cnt_end at the same time, to repesent the addtional prints is the end */
-/* CNcomment: ??Ҫͬʱʹ??hi_func_trace_low_freq_cnt_end?????????????ӵĴ?ӡ??ֹ */
+/* CNcomment: 需要同时使用hi_func_trace_low_freq_cnt_end，表明额外增加的打印截止 */
 #define hi_func_trace_low_freq_cnt_begin(freq)            \
     do {                                             \
         static unsigned int freqtimes = 0;           \
@@ -319,7 +324,7 @@ extern hi_u32 log_get_time_ms(void);
     while (0)
 
 /* Function trace log for user input low frequency time */
-/* CNcomment: ???????뽵Ƶ??ӡ??ʱ?? */
+/* CNcomment: 用于输入降频打印的时间 */
 #define hi_dbg_func_trace_low_freq_time(time)                                     \
     do {                                                                      \
         static hi_u32 last_time = 0;                                        \
@@ -332,9 +337,9 @@ extern hi_u32 log_get_time_ms(void);
     } while (0)
 
 /* function trace log for user add extra print log as need */
-/* CNcomment: ?û????????????Ӷ????Ĵ?ӡ */
+/* CNcomment: 用户根据需求增加额外的打印 */
 /* need use hi_func_trace_low_freq_time_end at the same time, to repesent the addtional prints is the end */
-/* CNcomment: ??Ҫͬʱʹ??hi_func_trace_low_freq_time_end?????????????ӵĴ?ӡ??ֹ */
+/* CNcomment: 需要同时使用hi_func_trace_low_freq_time_end，表明额外增加的打印截止 */
 #define hi_func_trace_low_freq_time_begin(time)         \
     do {                                           \
         static hi_u32 last_time = 0;             \

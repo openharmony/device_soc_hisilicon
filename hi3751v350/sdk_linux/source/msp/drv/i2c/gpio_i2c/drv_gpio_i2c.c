@@ -31,7 +31,7 @@
 #include "hi_error_mpi.h"
 #include "hi_osal.h"
 
-#if defined(LINUX_VERSION_CODE) && (LINUX_VERSION_CODE < KERNEL_VERSION(5,10,0))
+#if !defined(CFG_HI_USER_DRV)
 #include "hi_drv_sys.h"
 #endif
 
@@ -69,7 +69,7 @@ static hi_u8 g_gpio_grp_num;
 #define DELAY(i2c_num, us) time_delay_us(i2c_num, us)
 
 osal_semaphore g_gpio_i2_sem;
-#if defined(LINUX_VERSION_CODE) && (LINUX_VERSION_CODE < KERNEL_VERSION(5,10,0))
+
 static gpio_i2c_ext_func g_st_gpioi2c_ext_funcs = {
     // .pfnGpioI2cConfig         = drv_gpioi2c_config,
     .pfn_gpio_i2c_write = hi_drv_gpioi2c_write,
@@ -87,7 +87,7 @@ static gpio_i2c_ext_func g_st_gpioi2c_ext_funcs = {
     .pfn_gpio_i2c_destroy_channel = hi_drv_gpioi2c_destroy_gpio_i2c,
     .pfn_gpio_i2c_is_used = drv_gpioi2c_is_used,
 };
-#endif
+
 /*
  * I2C by GPIO simulated  clear 0 routine.
  *
@@ -1118,7 +1118,7 @@ hi_u32 hi_drv_i2c_get_chip_version(hi_void)
 {
     HI_CHIP_VERSION_E chip_version = HI_CHIP_VERSION_BUTT;
     i2c_drv_chip chip = I2C_DRV_CHIP_V350;
-#if defined(LINUX_VERSION_CODE) && (LINUX_VERSION_CODE < KERNEL_VERSION(5,10,0))
+#if !defined(CFG_HI_USER_DRV)
     HI_CHIP_TYPE_E chip_type;
     hi_drv_sys_get_chip_version(&chip_type, &chip_version);
 #endif
@@ -1152,13 +1152,13 @@ hi_s32 hi_drv_gpioi2c_init(hi_void)
 {
     hi_u32 i, chip;
     hi_s32 ret;
-#if defined(LINUX_VERSION_CODE) && (LINUX_VERSION_CODE < KERNEL_VERSION(5,10,0))
+
     ret = osal_exportfunc_register(HI_ID_GPIO_I2C, "HI_GPIO_I2C", (hi_void *)&g_st_gpioi2c_ext_funcs);
     if (ret != HI_SUCCESS) {
         HI_LOG_FATAL(" GPIO_I2C Module register failed 0x%x.\n", ret);
         return HI_FAILURE;
     }
-#endif
+
     if (g_gpio_initialized == 0) {
         g_gpio_grp_num = HI_GPIO_GROUP_NUM;
         ret = osal_sem_init(&g_gpioi2c_mutex, 1);
@@ -1193,18 +1193,17 @@ hi_s32 hi_drv_gpioi2c_init(hi_void)
 hi_void hi_drv_gpioi2c_de_init(hi_void)
 {
     hi_u32 i = 0;
-#if defined(LINUX_VERSION_CODE) && (LINUX_VERSION_CODE < KERNEL_VERSION(5,10,0))
     hi_s32 ret;
-#endif
+
     osal_spin_lock_destory(&g_gpio_i2c_lock);
     osal_sem_destory(&g_gpio_i2_sem);
     osal_sem_destory(&g_gpioi2c_mutex);
-#if defined(LINUX_VERSION_CODE) && (LINUX_VERSION_CODE < KERNEL_VERSION(5,10,0))
+
     ret = osal_exportfunc_unregister(HI_ID_GPIO_I2C);
     if (ret != HI_SUCCESS) {
         HI_LOG_FATAL(" GPIO_I2C Module unregister failed 0x%x.\n", ret);
     }
-#endif
+
     g_gpio_initialized = 0;
 
     for (i = HI_STD_I2C_NUM; i < HI_I2C_MAX_NUM; i++) {

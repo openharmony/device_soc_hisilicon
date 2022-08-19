@@ -19,12 +19,13 @@
 #ifndef __HIMEDIA_H__
 #define __HIMEDIA_H__
 
+#include <asm/types.h>
+#include <asm/atomic.h>
 #include <linux/module.h>
 #include <linux/device.h>
 #include <linux/major.h>
-#include <asm/types.h>
 #include <linux/fs.h>
-#include <asm/atomic.h>
+
 
 #include "hi_type.h"
 #include "hi_module.h"
