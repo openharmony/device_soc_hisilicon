@@ -59,8 +59,7 @@ typedef struct tag_pm_baseops {
 } pm_baseops;
 
 typedef struct tag_pm_basedrv {
-    HI_S32(*probe)
-    (pm_basedev *);
+    HI_S32(*probe)(pm_basedev *);
     HI_S32 (*remove)(pm_basedev *);
     HI_VOID (*shutdown)(pm_basedev *);
     HI_S32 (*suspend)(pm_basedev *, pm_message_t state);
