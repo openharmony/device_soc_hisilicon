@@ -16,9 +16,9 @@
 #include "device_resource_if.h"
 #include "hdf_base.h"
 #include "hdf_log.h"
-#include "osal_mem.h"
 #include "osal_io.h"
 #include "osal_irq.h"
+#include "osal_mem.h"
 
 #define HDF_LOG_TAG timer_hi35xx
 
@@ -158,6 +158,24 @@ static void TimerHi35xxTimerGetAllReg(struct TimerHi35xxInfo *info)
     TimerHi35xxRegRead(info->regBase + HI35XX_TIMERx_BGLOAD);
 }
 
+static void TimerDumperAddDatas(struct TimerHi35xxInfo *info)
+{
+    struct PlatformDumperData datas[] = {
+        {"HI35XX_TIMERx_LOAD", PLATFORM_DUMPER_REGISTERB, (void *)(info->regBase + HI35XX_TIMERx_LOAD)},
+        {"HI35XX_TIMERx_VALUE", PLATFORM_DUMPER_REGISTERB, (void *)(info->regBase + HI35XX_TIMERx_VALUE)},
+        {"HI35XX_TIMERx_CONTROL", PLATFORM_DUMPER_REGISTERB, (void *)(info->regBase + HI35XX_TIMERx_CONTROL)},
+        {"HI35XX_TIMERx_INTCLR", PLATFORM_DUMPER_REGISTERB, (void *)(info->regBase + HI35XX_TIMERx_INTCLR)},
+        {"HI35XX_TIMERx_RIS", PLATFORM_DUMPER_REGISTERB, (void *)(info->regBase + HI35XX_TIMERx_RIS)},
+        {"HI35XX_TIMERx_MIS", PLATFORM_DUMPER_REGISTERB, (void *)(info->regBase + HI35XX_TIMERx_MIS)},
+        {"HI35XX_TIMERx_BGLOAD", PLATFORM_DUMPER_REGISTERB, (void *)(info->regBase + HI35XX_TIMERx_BGLOAD)},
+    };
+    if (info->dumper == NULL) {
+        return;
+    }
+
+    PlatformDumperAddDatas(info->dumper, datas, sizeof(datas) / sizeof(struct PlatformDumperData));
+}
+
 // timer count clk
 static void TimerHi35xxScCtrlSet(void)
 {
@@ -186,7 +204,7 @@ static void TimerHi35xxScCtrlSet(void)
     value |= (0x0 << HI35XX_SC_CTRL_TIMEREN7OV_SHIFT);
     TimerHi35xxRegWrite(value, regBase);
     TimerHi35xxRegRead(regBase);
-    OsalIoUnmap((void*)regBase);
+    OsalIoUnmap((void *)regBase);
     regBase = NULL;
 }
 
@@ -277,7 +295,7 @@ static int32_t TimerHi35xxIrqRegister(struct TimerHi35xxInfo *info)
 {
     CHECK_NULL_PTR_RETURN_VALUE(info, HDF_ERR_INVALID_OBJECT);
 
-    if (OsalRegisterIrq(info->irq, 0, TimerHi35xxIrqHandle, "timer_alarm", (void*)info) != HDF_SUCCESS) {
+    if (OsalRegisterIrq(info->irq, 0, TimerHi35xxIrqHandle, "timer_alarm", (void *)info) != HDF_SUCCESS) {
         HDF_LOGE("%s: OsalRegisterIrq[%u][%u] fail!", __func__, info->irq, info->number);
         return HDF_FAILURE;
     }
@@ -325,6 +343,8 @@ static int32_t TimerHi35xxStart(struct TimerCntrl *cntrl)
         return HDF_FAILURE;
     }
     TimerHi35xxTimerGetAllReg(info);
+    TimerDumperAddDatas(info);
+    PlatformDumperDump(info->dumper);
     return HDF_SUCCESS;
 }
 
@@ -350,6 +370,7 @@ static int32_t TimerHi35xxStop(struct TimerCntrl *cntrl)
         HDF_LOGE("%s: TimerHi35xxIrqUnregister fail!", __func__);
         return HDF_FAILURE;
     }
+    PlatformDumperDump(info->dumper);
     return HDF_SUCCESS;
 }
 
@@ -374,9 +395,11 @@ static int32_t TimerHi35xxRemove(struct TimerCntrl *cntrl)
 
     TimerHi35xxStop(cntrl);
     if (info->regBase != NULL) {
-        OsalIoUnmap((void*)info->regBase);
+        OsalIoUnmap((void *)info->regBase);
         info->regBase = NULL;
     }
+    PlatformDumperDestroy(info->dumper);
+    OsalMemFree(info->dumperName);
 
     OsalMemFree(cntrl->priv);
     cntrl->priv = NULL;
@@ -499,6 +522,30 @@ static void TimerHi35xxInfoFree(struct TimerCntrl *cntrl)
         OsalMemFree(cntrl);
     }
 }
+
+static void TimerDumperGet(struct TimerHi35xxInfo *info)
+{
+    struct PlatformDumper *dumper = NULL;
+    char *name = (char *)OsalMemAlloc(TIMER_DUMPER_NAME_LEN);
+    if (name == NULL) {
+        return;
+    }
+    if (snprintf_s(name, TIMER_DUMPER_NAME_LEN, TIMER_DUMPER_NAME_LEN - 1, "%s%d",
+        TIMER_DUMPER_NAME_PREFIX, info->number) < 0) {
+        HDF_LOGE("%s: snprintf_s name fail!", __func__);
+        OsalMemFree(name);
+        return;
+    }
+    dumper = PlatformDumperCreate(name);
+    if (dumper == NULL) {
+        HDF_LOGE("%s: get dumper for %s fail!", __func__, name);
+        OsalMemFree(name);
+        return;
+    }
+    info->dumperName = name;
+    info->dumper = dumper;
+}
+
 static int32_t TimerHi35xxParseAndInit(struct HdfDeviceObject *device, const struct DeviceResourceNode *node)
 {
     int32_t ret;
@@ -526,6 +573,7 @@ static int32_t TimerHi35xxParseAndInit(struct HdfDeviceObject *device, const str
 
     cntrl->info.number = info->number;
     cntrl->ops = &g_timerCntlrMethod;
+    TimerDumperGet(info);
     ret = TimerCntrlAdd(cntrl);
     if (ret != HDF_SUCCESS) {
         HDF_LOGE("%s: TimerCntrlAdd fail!", __func__);
