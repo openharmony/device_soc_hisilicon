@@ -88,23 +88,6 @@ CFG_HI_BASE_ENV+=" MODULE_DIR ROOTFS_DIR ROOTBOX_DIR BIN_DIR APP_DIR ROOTBOX_DIR
 #=============LINUX_DIR====================================================================
 LINUX_DIR=${KERNEL_DIR}/${CFG_HI_KERNEL_VERSION}
 CFG_HI_BASE_ENV+=" LINUX_DIR "
-#2de7a70d8d08eaaddff325e9b272c81e9cbc17c1��Ӧ��linux�ں˰汾Ϊ: linux-4.9.y
-KERNEL_FILE_COMMITID=2de7a70d8d08eaaddff325e9b272c81e9cbc17c1
-
-#=============TOOL CHAINS FOR APP COMPILE==================================================
-ifneq ($(CC), ${CFG_HI_TOOLCHAINS_NAME}-gcc)
-AR	=${CFG_HI_TOOLCHAINS_NAME}-ar
-AS	=${CFG_HI_TOOLCHAINS_NAME}-as
-LD	=${CFG_HI_TOOLCHAINS_NAME}-ld
-CPP	=${CFG_HI_TOOLCHAINS_NAME}-cpp
-CC	=${CFG_HI_TOOLCHAINS_NAME}-gcc
-NM	=${CFG_HI_TOOLCHAINS_NAME}-nm
-STRIP	=${CFG_HI_TOOLCHAINS_NAME}-strip
-OBJCOPY	=${CFG_HI_TOOLCHAINS_NAME}-objcopy
-OBJDUMP	=${CFG_HI_TOOLCHAINS_NAME}-objdump
-endif
-
-CFG_HI_BASE_ENV+=" AR AS LD CPP CC NM STRIP OBJCOPY OBJDUMP "
 
 #=============SERVER_UNTILS=================================================================
 SERVER_UNTILS_DIR=${TOOLS_DIR}/utils
