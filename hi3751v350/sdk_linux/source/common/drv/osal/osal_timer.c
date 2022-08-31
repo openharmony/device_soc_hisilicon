@@ -58,8 +58,11 @@ int osal_timer_init(osal_timer *timer)
         osal_printk("%s - kmalloc error!\n", __FUNCTION__);
         return -1;
     }
-
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 1, 0)
+    timer_setup(t, NULL, 0);
+#else
     init_timer(t);
+#endif
     timer->timer = t;
     return 0;
 }
@@ -73,8 +76,12 @@ int osal_timer_set(osal_timer *timer, unsigned long interval)
         return -1;
     }
     t = timer->timer;
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 1, 0)
+    t->function = (void (*)(struct timer_list *))timer->handler;
+#else
     t->function = timer->handler;
     t->data = timer->data;
+#endif
     return mod_timer(t, jiffies + msecs_to_jiffies(interval) - 1);
 }
 EXPORT_SYMBOL(osal_timer_set);
@@ -146,8 +153,15 @@ unsigned long long osal_sched_clock()
 }
 EXPORT_SYMBOL(osal_sched_clock);
 
+#define S_TO_NS 1000000000ULL
+#define US_TO_NS 1000
 void osal_get_timeofday(osal_timeval *tv)
 {
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 1, 0)
+    uint64_t ns = ktime_to_ns(ktime_get());
+    tv->tv_sec = osal_div64_u64(ns, S_TO_NS);
+    tv->tv_usec = osal_div_u64(osal_div64_u64_rem(ns, S_TO_NS), US_TO_NS);
+#else
     struct timeval t;
 
     if (tv == NULL) {
@@ -158,6 +172,7 @@ void osal_get_timeofday(osal_timeval *tv)
 
     tv->tv_sec = t.tv_sec;
     tv->tv_usec = t.tv_usec;
+#endif
 }
 EXPORT_SYMBOL(osal_get_timeofday);
 
@@ -190,7 +205,11 @@ void osal_rtc_time_to_tm(unsigned long time, osal_rtc_time *tm)
 {
     struct rtc_time _tm = { 0 };
 
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 1, 0)
+    rtc_time64_to_tm(time, &_tm);
+#else
     rtc_time_to_tm(time, &_tm);
+#endif
 
     tm->tm_sec = _tm.tm_sec;
     tm->tm_min = _tm.tm_min;
@@ -216,8 +235,11 @@ void osal_rtc_tm_to_time(osal_rtc_time *tm, unsigned long *time)
     _tm.tm_wday = tm->tm_wday;
     _tm.tm_yday = tm->tm_yday;
     _tm.tm_isdst = tm->tm_isdst;
-
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 1, 0)
+    *time = rtc_tm_to_time64(&_tm);
+#else
     rtc_tm_to_time(&_tm, time);
+#endif
 }
 EXPORT_SYMBOL(osal_rtc_tm_to_time);
 

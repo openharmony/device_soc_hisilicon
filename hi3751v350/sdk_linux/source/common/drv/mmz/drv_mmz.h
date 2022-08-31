@@ -31,7 +31,7 @@ mmb_addr_t new_mmb(const char *name, int size, unsigned int align, const char *z
 void delete_mmb(mmb_addr_t addr, unsigned int iommu);
 void *remap_mmb(mmb_addr_t addr, unsigned int iommu);
 void *remap_mmb_cached(mmb_addr_t addr, unsigned int iommu);
-#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 10, 0)
+#ifndef DMABUF_FLUSH_CACHE
 int unmap_mmb(const void *mapped_addr);
 #else
 int unmap_mmb(void *mapped_addr);
@@ -40,8 +40,8 @@ mmb_addr_t cma_mapto_smmu(mmb_addr_t addr, int iommu);
 int cma_unmapfrom_smmu(mmb_addr_t addr, int iommu);
 mmb_addr_t get_phyaddr_byvirt(const void *mapped_addr, int iommu);
 void flush_cache_kern(mmb_addr_t phyaddr, const void *viraddr, mmb_addr_t len, unsigned int iommu);
-#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 10, 0)
 struct sg_table *get_meminfo(hi_u32 addr, hi_u32 iommu, hi_u32 *size, hi_u32 *base);
+#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 10, 0)
 mmb_addr_t get_sec_smmu_by_nosmmu(HI_U32 nonsmmu);
 mmb_addr_t get_sec_smmu_by_phys(HI_U32 phys_addr);
 mmb_addr_t get_phys_by_secsmmu(HI_U32 sec_smmu);
@@ -54,5 +54,6 @@ int mmb_buf_put(HI_U32 addr, HI_U32 iommu);
 int mmb_buf_ref_query(HI_U32 addr, HI_U32 iommu, HI_U32 *ref);
 int query_buffer_source(HI_U32 iommu_addr, HI_S32 *source);
 int query_secure_buffer_source(HI_U32 sec_smmu, HI_S32 *source);
+int dma_buf_export_fd(unsigned int phyaddr, unsigned int iommu);
 #endif
 

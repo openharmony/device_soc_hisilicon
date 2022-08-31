@@ -220,9 +220,7 @@ extern hil_mmb_t *hil_mmb_alloc(const char *name, HI_U32 size, HI_U32 align, con
 extern int hil_mmb_free(hil_mmb_t *mmb);
 extern mmb_addr_t hil_mmb_cma_mapto_iommu(mmb_addr_t addr, int iommu);
 extern int hil_mmb_cma_unmapfrom_iommu(mmb_addr_t addr, int iommu);
-#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 10, 0)
 extern struct sg_table *hil_get_meminfo(const hil_mmb_t *mmb);
-#endif
 
 extern int mmz_read_proc(struct seq_file *m, void *v);
 extern int mmz_write_proc(struct file *file, const char __user *buffer, HI_U32 count, void *data);

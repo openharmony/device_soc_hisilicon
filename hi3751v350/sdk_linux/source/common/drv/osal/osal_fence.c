@@ -16,6 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+#include <linux/sched.h>
 #include <linux/slab.h>
 #include <linux/wait.h>
 #include <linux/spinlock.h>
@@ -35,7 +36,7 @@ typedef struct osal_fence_ {
     struct osal_list_head node;
 } osal_fence;
 
-int g_fd_no = 0; // 临时占用，一秒1000个，可使用49天
+static int g_fd_no = 0; // 临时占用，一秒1000个，可使用49天
 
 static DEFINE_SPINLOCK(lock);
 static OSAL_LIST_HEAD(fence_list);

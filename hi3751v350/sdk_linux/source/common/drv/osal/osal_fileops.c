@@ -59,7 +59,7 @@ int klib_fread(char *buf, unsigned long size, struct file *filp)
     }
 
     old_fs = get_fs();
-    set_fs(get_ds());
+    set_fs(KERNEL_DS);
     /* The cast to a user pointer is valid due to the set_fs() */
     readlen = vfs_read(filp, (void __user *)buf, size, &filp->f_pos);
     set_fs(old_fs);

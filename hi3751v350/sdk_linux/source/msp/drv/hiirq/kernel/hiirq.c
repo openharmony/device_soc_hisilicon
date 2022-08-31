@@ -792,6 +792,9 @@ hi_s32 hiirq_get_irq_byname(char *name)
 }
 
 EXPORT_SYMBOL(hiirq_get_irq_byname);
+#ifdef CFG_HI_USER_DRV
+hi_s32 hi_get_irq_byname(char *name) __attribute__((weak, alias("hiirq_get_irq_byname")));
+#endif
 static hi_s32 hiirq_map_irq_reg_for_aio(hiirq_aio_reg_map *map, hi_aio_int_reg *reg)
 {
     int i;

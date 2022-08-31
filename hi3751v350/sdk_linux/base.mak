@@ -137,6 +137,10 @@ CFG_HI_SEC_COMPILE_CFLAGS += -Wno-error=unused-command-line-argument
 #CFG_HI_CFLAGS += -DHI_PEACH_SUPPORT
 #CFG_HI_KMOD_CFLAGS += -DHI_PEACH_SUPPORT
 
+ifeq ($(CFG_HI_USER_DRV),y)
+CFG_HI_KMOD_CFLAGS += -DCFG_HI_USER_DRV
+endif
+
 ifeq ($(CFG_HI_ASAN_TEST_SUPPORT),y)
 CFG_ASAN_CFLAGS := -Wall -g -fsanitize=address -fsanitize=leak -fsanitize=undefined -O0 -fno-omit-frame-pointer
 CFG_HI_CFLAGS += $(CFG_ASAN_CFLAGS)

@@ -79,7 +79,7 @@ int osal_irq_request(unsigned int irq, osal_irq_handler handler, osal_irq_handle
     }
 
     __irq = hi_get_irq_byname((char *)name);
-    if (-1 == __irq) {
+    if (__irq == -1) {
         printk("hi_get_irq_byname:%s failed.\n", name);
         kfree(irq_node);
         return -1;
@@ -137,7 +137,7 @@ int osal_irq_set_affinity(unsigned int irq, const char *name, int cpu_mask)
         0 : cpumask_set_cpu(3, &cpumask_set); // cpu 3
 
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(4, 4, 0))
-        __irq = hi_get_irq_byname((char *)name);
+    __irq = hi_get_irq_byname((char *)name);
 #endif
 
     return irq_set_affinity_hint(__irq, &cpumask_set);

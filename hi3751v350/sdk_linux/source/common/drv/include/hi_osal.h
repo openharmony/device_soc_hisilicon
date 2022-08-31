@@ -231,6 +231,8 @@ int osal_irq_set_affinity(unsigned int irq, const char *name, int cpu_mask);
 void osal_irq_enable(unsigned int irq);
 void osal_irq_disable(unsigned int irq);
 int osal_in_interrupt(void);
+int osal_irq_init(void);
+void osal_irq_exit(void);
 
 // tasklet api
 typedef struct osal_tasklet_ {
@@ -344,7 +346,7 @@ typedef struct osal_proc_entry_ {
 osal_proc_entry *osal_proc_add(const char *name, unsigned long name_size);
 void osal_proc_remove(const char *name, unsigned long name_size);
 int osal_proc_print(void *seqfile, const char *fmt, ...) __attribute__((format(printf, 2, 3)));
-void osal_printk(const char *fmt, ...);
+int osal_printk(const char *fmt, ...);
 int osal_get_buildvariant(void);
 
 // device api
@@ -429,6 +431,7 @@ void osal_poll_wait(osal_poll *table, osal_wait *wait);
 int osal_remap_pfn_range(osal_vm *vm, unsigned long addr, unsigned long pfn, unsigned long size, unsigned int cached);
 int osal_try_to_freeze(void);
 int osal_set_freezable(void);
+extern int osal_irq_mmap(osal_vm *vm, void *ptr, unsigned long start, unsigned long sz);
 
 
 // export function

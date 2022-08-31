@@ -309,12 +309,23 @@ static int ioctl_mmb_query_source(const struct file *file, unsigned int iocmd, s
     return ret;
 }
 
+int dma_buf_export_fd(unsigned int phyaddr, unsigned int iommu)
+{
+    hil_mmb_t *mmb = NULL;
+    mmb = hil_mmb_getby_phys(phyaddr, iommu);
+    if (mmb == NULL || mmb->handle == NULL) {
+        hi_mmz_warn("export dma buf fd failed!\n");
+        return -EPERM;
+    }
+
+    return hi_dma_buf_fd(mmb->handle, O_RDWR | O_CLOEXEC);
+}
+
 static int ioctl_dma_buf_export_fd(const struct file *file, unsigned int iocmd, struct mmb_info *mi)
 {
     int fd;
     unsigned int iommu;
     unsigned int phyaddr;
-    hil_mmb_t *mmb = NULL;
 
     if (mi->phys_addr != MMB_ADDR_INVALID) {
         phyaddr = mi->phys_addr;
@@ -324,17 +335,10 @@ static int ioctl_dma_buf_export_fd(const struct file *file, unsigned int iocmd, 
         iommu = 1;
     }
 
-    mmb = hil_mmb_getby_phys(phyaddr, iommu);
-    if (mmb == NULL || mmb->handle == NULL) {
-        hi_mmz_warn("export dma buf fd failed!\n");
-        return -EPERM;
-    }
-
-    fd = hi_dma_buf_fd(mmb->handle, O_RDWR | O_CLOEXEC);
+    fd = dma_buf_export_fd(phyaddr, iommu);
     if (fd < 0) {
         return HI_FAILURE;
     }
-
     mi->fd = fd;
 
     return HI_SUCCESS;
@@ -1050,7 +1054,8 @@ int mmz_userdev_mmap(struct file *file, struct vm_area_struct *vma)
     mmb = pmu->tmp;
     udata = pmu->private_data;
 
-    if (mmb == NULL || mmb->handle == NULL || udata == NULL) {
+    if (mmb == NULL || mmb->handle == NULL
+                    || udata == NULL) {
         return -EPERM;
     }
     if (current->tgid != pmu->mmap_tpid) {
@@ -1068,6 +1073,7 @@ int mmz_userdev_mmap(struct file *file, struct vm_area_struct *vma)
     if (!udata->map_cached) {
         vma->vm_page_prot = pgprot_writecombine(vma->vm_page_prot);
     }
+
     mmz_vm_open(vma);
 
     ret = dma_buf_mmap(mmb->handle, vma, vma->vm_pgoff);
@@ -1464,7 +1470,7 @@ void drv_mmz_mod_exit(void)
 #endif
 }
 
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5,10,0)) || defined MODULE
+#if defined(MODULE) || defined(CFG_HI_USER_DRV)
 module_init(drv_mmz_mod_init);
 module_exit(drv_mmz_mod_exit);
 #endif

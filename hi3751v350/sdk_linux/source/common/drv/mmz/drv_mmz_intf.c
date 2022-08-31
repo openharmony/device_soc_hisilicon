@@ -120,7 +120,7 @@ void *remap_mmb_cached(mmb_addr_t addr, unsigned int iommu)
     return (void *)((uintptr_t) virt + offset);
 }
 
-#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 10, 0)
+#ifndef DMABUF_FLUSH_CACHE
 int unmap_mmb(const void *mapped_addr)
 {
     hil_mmb_t *mmb = NULL;
@@ -203,7 +203,6 @@ mmb_addr_t get_phyaddr_byvirt(const void *mapped_addr, int iommu)
     }
 }
 
-#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 10, 0)
 struct sg_table *get_meminfo(u32 addr, u32 iommu, u32 *size, u32 *base)
 {
     hil_mmb_t *mmb = NULL;
@@ -225,6 +224,7 @@ struct sg_table *get_meminfo(u32 addr, u32 iommu, u32 *size, u32 *base)
     return hil_get_meminfo(mmb);
 }
 
+#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 10, 0)
 mmb_addr_t get_nonsecsmmu_by_secsmmu(HI_U32 sec_smmu)
 {
     hil_mmb_t *mmb = NULL;
