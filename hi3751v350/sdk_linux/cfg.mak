@@ -23,7 +23,7 @@
 #
 # Base
 #
-# CFG_HI_USER_DRV is not set
+CFG_HI_USER_DRV=y
 # CFG_LINUX_PRODUCT is not set
 CFG_HI3751V350=y
 CFG_HI_CHIP_TYPE=hi3751v350

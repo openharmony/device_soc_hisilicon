@@ -31,7 +31,7 @@
 #include "hi_drv_gpioi2c.h"
 #include "drv_base_ext.h"
 
-#if defined(LINUX_VERSION_CODE) && (LINUX_VERSION_CODE >= KERNEL_VERSION(5,10,0))
+#ifdef CFG_HI_USER_DRV
 volatile hi_reg_crg *g_pst_reg_crg = NULL;
 #endif
 
@@ -825,7 +825,7 @@ so relational opened operation register need to  store
 */
 int i2c_pm_suspend(hi_void *private_data)
 {
-#if defined(LINUX_VERSION_CODE) && (LINUX_VERSION_CODE < KERNEL_VERSION(5,10,0))
+#if !defined(CFG_HI_USER_DRV)
     int i = 0;
     int ret ;
 
@@ -894,22 +894,12 @@ int i2c_pm_resume(hi_void *private_data)
 
 hi_s32 i2c_drv_lowpower_enter(hi_void *private_data)
 {
-#if defined(LINUX_VERSION_CODE) && (LINUX_VERSION_CODE < KERNEL_VERSION(5,10,0))
-    hi_u32 chip;
-
-    chip = hi_drv_i2c_get_chip_version();
     HI_LOG_NOTICE("I2C lowpower enter OK\n");
-#endif
     return HI_SUCCESS;
 }
 
 hi_s32 i2c_drv_lowpower_exit(hi_void *private_data)
 {
-#if defined(LINUX_VERSION_CODE) && (LINUX_VERSION_CODE < KERNEL_VERSION(5,10,0))
-    hi_u32 chip;
-
-    chip = hi_drv_i2c_get_chip_version();
-#endif
     HI_LOG_NOTICE("I2C lowpower exit OK\n");
     return HI_SUCCESS;
 }
@@ -1156,31 +1146,43 @@ hi_s32 hi_drv_i2c_cmd_set_rate(unsigned int cmd, hi_void *arg, hi_void *private_
     return ret;
 }
 
+static hi_void init_reg_crg(hi_void)
+{
+#ifdef CFG_HI_USER_DRV
+#define V350_REG_BASE 0xF8A22000
+#define V350_REG_REMAP_SIZE 4096
+    if (g_pst_reg_crg != NULL) {
+        return;
+    }
+    g_pst_reg_crg = (hi_reg_crg *)osal_ioremap_nocache(V350_REG_BASE, V350_REG_REMAP_SIZE);
+    if (g_pst_reg_crg == NULL) {
+        HI_LOG_FATAL("g_pst_reg_crg osal_ioremap_nocache failure!\n");
+        return;
+    }
+#endif
+    return;
+}
+
 hi_s32 hi_drv_i2c_init(hi_void)
 {
-    hi_u32 reg_val, chip;
+    hi_u32 reg_val;
     hi_s32 ret;
     hi_u32 i = 0;
 
     hi_dbg_func_enter();
 
-    chip = hi_drv_i2c_get_chip_version();
+    if (g_i2c_state == 1) {
+        return HI_SUCCESS;
+    }
 
-#if defined(LINUX_VERSION_CODE) && (LINUX_VERSION_CODE < KERNEL_VERSION(5,10,0))
+    init_reg_crg();
+
     ret = osal_exportfunc_register(HI_ID_I2C, "HI_I2C", (hi_void *)&g_st_i2c_ext_funcs);
     if (ret != HI_SUCCESS) {
         HI_LOG_INFO(" I2C Module register failed 0x%x.\n", ret);
         return HI_FAILURE;
     }
-#else
-#define V350_REG_BASE 0xF8A22000
-#define V350_REG_REMAP_SIZE 4096
-    g_pst_reg_crg = (hi_reg_crg *)osal_ioremap_nocache(V350_REG_BASE, V350_REG_REMAP_SIZE);
-    if (g_pst_reg_crg == NULL) {
-        HI_LOG_FATAL("g_pst_reg_crg osal_ioremap_nocache failure!\n");
-        return HI_FAILURE;
-    }
-#endif
+
     ret = osal_sem_init(&g_i2c_sem, 1);
     if (ret != HI_SUCCESS) {
         HI_LOG_FATAL(" I2C semaphore init failed.\n");
@@ -1224,9 +1226,8 @@ hi_void hi_drv_i2c_de_init(hi_void)
     hi_u32 reg_val;
     hi_u32 i = 0;
     i2c_drv_chip chip;
-#if defined(LINUX_VERSION_CODE) && (LINUX_VERSION_CODE < KERNEL_VERSION(5,10,0))
     hi_s32 ret;
-#endif
+
     hi_dbg_func_enter();
 
     chip = hi_drv_i2c_get_chip_version();
@@ -1236,12 +1237,12 @@ hi_void hi_drv_i2c_de_init(hi_void)
         osal_sem_destory(&g_i2c_sem_rw[i]);
         osal_wait_destroy(&g_i2c_wait_queue[i]);
     }
-#if defined(LINUX_VERSION_CODE) && (LINUX_VERSION_CODE < KERNEL_VERSION(5,10,0))
+
     ret = osal_exportfunc_unregister(HI_ID_I2C);
     if (ret != HI_SUCCESS) {
         HI_LOG_INFO(" GPIO Module unregister failed 0x%x.\n", ret);
     }
-#endif
+
     reg_val = g_pst_reg_crg->peri_crg27.u32;
         reg_val &= ~0x27E023F;
         reg_val |= 0x27E0000;

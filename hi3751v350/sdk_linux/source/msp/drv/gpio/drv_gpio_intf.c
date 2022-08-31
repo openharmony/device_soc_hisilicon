@@ -783,7 +783,7 @@ hi_void gpio_drv_mod_exit(hi_void)
     return;
 }
 #ifdef __KERNEL__
-#if defined(MODULE) || (LINUX_VERSION_CODE >= KERNEL_VERSION(5,10,0))
+#if defined(MODULE) || defined(CFG_HI_USER_DRV)
 module_init(gpio_drv_mod_init);
 module_exit(gpio_drv_mod_exit);
 #endif

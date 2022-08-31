@@ -46,10 +46,8 @@ endif
 ifeq ($(CFG_HI_FPGA),y)
 objects += ssp
 endif
-ifeq ($(CFG_HI_USER_DRV),y)
 objects += hiirq
 objects += hiproc
-endif
 objects += i2c
 objects += frontend
 objects += vfe
@@ -144,15 +142,24 @@ ifeq ($(CFG_MSP_BUILDTYPE),y)
 objects += base
 
 ifeq ($(KERNEL_VERSION), linux-5.10)
+ifeq ($(CFG_HI_USER_DRV),y)
 objects := hiirq
 objects += hiproc
+objects += hidev
 objects += gpio
 objects += i2c
 objects += gt911
 objects += fm11nt081d
 objects += devfreq
 objs_depended :=
+else
+objects += gt911
+objects += fm11nt081d
+objects += devfreq
+objects += securec
+endif
 
+EXTRA_CFLAGS += -I$(srctree)/bounds_checking_function/include
 endif
 
 obj-$(CFG_MSP_BUILDTYPE) += ${addsuffix /,${objs_depended}}

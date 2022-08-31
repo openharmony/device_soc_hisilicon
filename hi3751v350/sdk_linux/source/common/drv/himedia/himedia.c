@@ -284,7 +284,7 @@ hi_s32 hi_drv_pm_register(pm_device *himedia)
         goto out;
     }
 
-    // 2 base device
+    // 2 base device, then class = NULL;
     ret = pm_register_add_media_device(himedia, &bdev);
     if (ret != HI_SUCCESS) {
         goto err0;
@@ -443,7 +443,7 @@ hi_void drv_pm_mod_exit(hi_void)
 module_init(drv_pm_mod_init);
 module_exit(drv_pm_mod_exit);
 #else
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(5,10,0)
+#ifdef CFG_HI_USER_DRV
 subsys_initcall(drv_pm_mod_init);
 module_exit(drv_pm_mod_exit);
 #endif

@@ -16,8 +16,6 @@
 #ifndef __HIFB_USERSPACE_H__
 #define __HIFB_USERSPACE_H__
 
-#include "display_type.h"
-
 #define HIFB_GET_MEMBUF _IOR('F', 0x21, struct hifb_membuf_info)
 #define HIFB_REFRESH_FRAMEINFO _IOWR('F', 0x25, struct hifb_frame_info)
 
@@ -29,6 +27,9 @@ struct hifb_membuf_info {
     int fd;
 };
 
+#ifndef __KERNEL__
+#include "display_type.h"
+
 struct hifb_frame_info {
     IRect rect;
     unsigned int stride;
@@ -37,4 +38,5 @@ struct hifb_frame_info {
     int in_fence;
     int out_fence;
 };
+#endif
 #endif

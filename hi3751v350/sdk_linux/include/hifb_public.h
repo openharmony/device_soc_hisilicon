@@ -15,9 +15,9 @@
 
 #ifndef __HIFB_PUBLIC_H__
 #define __HIFB_PUBLIC_H__
-#ifdef USING_USERSPACE_DRV
+
 #include "hifb_userspace.h"
-#else
+#ifndef USING_USERSPACE_DRV
 #include "hifb.h"
 #endif
 #endif
