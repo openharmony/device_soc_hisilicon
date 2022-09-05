@@ -81,6 +81,14 @@ if (defined(ohos_lite)) {
     }
   }
 
+  group("display_layer") {
+    if (device_name == "hispark_phoenix") {
+      deps = [ ":display_device" ]
+    } else {
+      deps = [ ":display_layer_lib" ]
+    }
+  }
+
   ohos_prebuilt_shared_library("display_gfx") {
     if (target_cpu == "arm") {
       source = "hi3516dv300/linux_standard/lib/libdisplay_gfx.z.so"
@@ -92,7 +100,7 @@ if (defined(ohos_lite)) {
     part_name = "drivers_peripheral_display"
   }
 
-  ohos_prebuilt_shared_library("display_layer") {
+  ohos_prebuilt_shared_library("display_layer_lib") {
     if (target_cpu == "arm") {
       source = "hi3516dv300/linux_standard/lib/libdisplay_layer.z.so"
     } else {
