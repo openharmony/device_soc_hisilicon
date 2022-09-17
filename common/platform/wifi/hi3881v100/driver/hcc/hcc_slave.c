@@ -917,7 +917,7 @@ hi_void hcc_slave_tx_queue_sched(hi_void)
     }
 
     /* The sdio register must access by 4 bytes */
-    hcc_extfunc->valid_commreg_cnt = (hi_s32)(i & (~3)); /* 3 is used for 4 btyes down align. */
+    hcc_extfunc->valid_commreg_cnt = (hi_s32)(i & (~3)); /* 3 is used for 4 bytes down align. */
     hcc_extfunc->commreg_isvalid = 1;
     /* tx_aggr_total_len 32 B对齐，未作512对齐 */
     g_tx_aggr_info.tx_aggr_total_len = total_len;
