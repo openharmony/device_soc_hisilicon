@@ -1,34 +1,42 @@
 # device_soc_hisilicon
 
-#### 介绍
+## 简介
 
-本仓用于放置hisilicon soc相关内容，包含hal等管理模块。
+本仓用于存放上海海思芯片相关内容，包含HDI实现（media、display、camera、codec、audio、ai等）、芯片驱动、外设驱动、芯片SDK库和头文件等，具体内容参考各soc子目录下的readme说明，对应开发板详细信息请点击下表开发板名称跳转。
 
-#### 软件架构
-
-参见各soc readme
-
-#### 安装教程
-
-参见各board readme
-
-#### 使用说明
-
-参见各board readme
-
-#### 参与贡献
-
-1.  Fork 本仓库
-2.  新建 Feat_xxx 分支
-3.  提交代码
-4.  新建 Pull Request
+|                 SoC型号                 |                                             对应开发板                                              |      系统类型      |   领域   |
+| :-------------------------------------: | :-------------------------------------------------------------------------------------------------: | :----------------: | :------: |
+| [Hi3518EV300](hi3518ev300/README_zh.md) |   [HiSpark Aries](https://gitee.com/openharmony/device_board_hisilicon/tree/master/hispark_aries)   |      小型系统      | 智慧视觉 |
+|  [Hi3861V100](hi3861v100/README_zh.md)  | [HiSpark Pegasus](https://gitee.com/openharmony/device_board_hisilicon/tree/master/hispark_pegasus) |      轻量系统      | 智慧IOT  |
+|  [Hi3751V351](hi3751v350/README_zh.md)  | [HiSpark Phoenix](https://gitee.com/openharmony/device_board_hisilicon/tree/master/hispark_phoenix) |      标准系统      | 智慧媒体 |
+| [Hi3516DV300](hi3516dv300/README_zh.md) |  [HiSpark Taurus](https://gitee.com/openharmony/device_board_hisilicon/tree/master/hispark_taurus)  | 小型系统、标准系统 | 智慧视觉 |
 
 
-#### 特技
+## 目录
+```
+/device/soc/hisilicon
+├── common         # 平台驱动、HDI实现相关
+├── hi3516dv300    # hi3516dv300芯片相关内容
+├── hi3518ev300    # hi3518ev300芯片相关内容
+├── hi3751v350     # hi3751v350芯片相关内容
+├── hi3861v100     # hi3861v100芯片相关内容
+```
 
-1.  使用 Readme\_XXX.md 来支持不同的语言，例如 Readme\_en.md, Readme\_zh.md
-2.  Gitee 官方博客 [blog.gitee.com](https://blog.gitee.com)
-3.  你可以 [https://gitee.com/explore](https://gitee.com/explore) 这个地址来了解 Gitee 上的优秀开源项目
-4.  [GVP](https://gitee.com/gvp) 全称是 Gitee 最有价值开源项目，是综合评定出的优秀开源项目
-5.  Gitee 官方提供的使用手册 [https://gitee.com/help](https://gitee.com/help)
-6.  Gitee 封面人物是一档用来展示 Gitee 会员风采的栏目 [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
+
+## 使用方法
+
+参考各开发板子目录下readme说明
+
+
+## 许可说明
+
+参见对应目录的LICENSE文件及代码声明
+
+
+## 相关仓
+
+[device_board_hisilicon](https://gitee.com/openharmony/device_board_hisilicon)
+
+[vendor_hisilicon](https://gitee.com/openharmony/vendor_hisilicon)
+
+[third_party_u-boot](https://gitee.com/openharmony/third_party_u-boot)
