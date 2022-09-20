@@ -51,6 +51,7 @@ sdk_libs_name_set = [
   "libvpss.z.so",
   "libamp_mpdi_adapter.z.so",
   "libao_mpdi_adapter.z.so",
+  "libutilsecurec_shared.z.so",
 ]
 
 foreach(libname, sdk_libs_name_set) {
