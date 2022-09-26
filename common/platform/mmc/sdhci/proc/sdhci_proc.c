@@ -32,7 +32,7 @@ static bool ProcGetMmcCardUnplugged(struct MmcCntlr *mmc)
          * removable, for sd cards only.
          * slots for sd cards can detect if the card is plugged.
          */
-        return (MmcCntlrDevPluged(mmc) == false);
+        return (MmcCntlrDevPlugged(mmc) == false);
     } else {
         /* slots for sdio or emmc can't detect if the card is plugged in hardware. */
         return (mmc->curDev == NULL);
