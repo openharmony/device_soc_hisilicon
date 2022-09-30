@@ -443,7 +443,7 @@ static void SdhciExecCmd(struct SdhciHost *host, struct MmcCmd *cmd)
     SdhciWritew(host, SDHCI_GEN_CMD(cmd->cmdCode, flags), CMD_R);
 }
 
-static bool SdhciCardPluged(struct MmcCntlr *cntlr)
+static bool SdhciCardPlugged(struct MmcCntlr *cntlr)
 {
     struct SdhciHost *host = NULL;
 
@@ -555,7 +555,7 @@ static int32_t SdhciDoRequest(struct MmcCntlr *cntlr, struct MmcCmd *cmd)
         }
     }
 
-    if (SdhciCardPluged(host->mmc) == false || (host->flags & SDHCI_DEVICE_DEAD) > 0) {
+    if (SdhciCardPlugged(host->mmc) == false || (host->flags & SDHCI_DEVICE_DEAD) > 0) {
         cmd->returnError = HDF_ERR_IO;
         HDF_LOGE("card is not present!");
         SdhciEnableCardDetection(host);
@@ -1181,7 +1181,7 @@ static int32_t SdhciSystemInit(struct MmcCntlr *cntlr)
     return HDF_SUCCESS;
 }
 
-static int32_t SdhciSetEnhanceSrobe(struct MmcCntlr *cntlr, bool enable)
+static int32_t SdhciSetEnhanceStrobe(struct MmcCntlr *cntlr, bool enable)
 {
     struct SdhciHost *host = (struct SdhciHost *)cntlr->priv;
     uint32_t reg;
@@ -1512,10 +1512,10 @@ static struct MmcCntlrOps g_sdhciHostOps = {
     .setSdioIrq = SdhciSetSdioIrq,
     .hardwareReset = SdhciHardwareReset,
     .systemInit = SdhciSystemInit,
-    .setEnhanceSrobe = SdhciSetEnhanceSrobe,
+    .setEnhanceStrobe = SdhciSetEnhanceStrobe,
     .switchVoltage = SdhciSwitchVoltage,
     .devReadOnly = SdhciDevReadOnly,
-    .devPluged = SdhciCardPluged,
+    .devPlugged = SdhciCardPlugged,
     .devBusy = SdhciDevBusy,
     .tune = SdhciTune,
     .rescanSdioDev = SdhciRescanSdioDev,

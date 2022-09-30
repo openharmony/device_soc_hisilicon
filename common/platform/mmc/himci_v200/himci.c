@@ -561,7 +561,7 @@ static void HimciWaitCmdComplete(struct HimciHost *host)
     HimciCmdDone(host);
 }
 
-static bool HimciCardPluged(struct MmcCntlr *cntlr)
+static bool HimciCardPlugged(struct MmcCntlr *cntlr)
 {
     unsigned int status;
     struct HimciHost *host = NULL;
@@ -752,7 +752,7 @@ static bool HimciWaitCardComplete(struct HimciHost *host)
                 return true;
             }
         }
-        if (HimciCardPluged(host->mmc) == false) {
+        if (HimciCardPlugged(host->mmc) == false) {
             HDF_LOGE("card is unplugged.");
             return false;
         }
@@ -803,7 +803,7 @@ static int32_t HimciDoRequest(struct MmcCntlr *cntlr, struct MmcCmd *cmd)
 
     host = (struct HimciHost *)cntlr->priv;
     (void)OsalMutexLock(&host->mutex);
-    if (HimciCardPluged(cntlr) == false) {
+    if (HimciCardPlugged(cntlr) == false) {
         cmd->returnError = HDF_PLT_ERR_NO_DEV;
         goto _END;
     }
@@ -1082,7 +1082,7 @@ static int32_t HimciHardwareReset(struct MmcCntlr *cntlr)
     return HDF_SUCCESS;
 }
 
-static int32_t HimciSetEnhanceSrobe(struct MmcCntlr *cntlr, bool enable)
+static int32_t HimciSetEnhanceStrobe(struct MmcCntlr *cntlr, bool enable)
 {
     (void)cntlr;
     (void)enable;
@@ -1641,10 +1641,10 @@ static struct MmcCntlrOps g_himciHostOps = {
     .setSdioIrq = HimciSetSdioIrq,
     .hardwareReset = HimciHardwareReset,
     .systemInit = HimciSystemInit,
-    .setEnhanceSrobe = HimciSetEnhanceSrobe,
+    .setEnhanceStrobe = HimciSetEnhanceStrobe,
     .switchVoltage = HimciSwitchVoltage,
     .devReadOnly = HimciDevReadOnly,
-    .devPluged = HimciCardPluged,
+    .devPlugged = HimciCardPlugged,
     .devBusy = HimciDevBusy,
     .tune = HimciTune,
     .rescanSdioDev = HimciRescanSdioDev,
