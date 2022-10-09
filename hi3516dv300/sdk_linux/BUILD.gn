@@ -37,7 +37,6 @@ sdk_modules_name_list = [
   "hi3516cv500_tde.ko",
   "hi3516cv500_vo_dev.ko",
   "hi3516cv500_wdt.ko",
-  "hi_cipher.ko",
   "hifb.ko",
   "hi_irq.ko",
   "hi_mipi_rx.ko",
