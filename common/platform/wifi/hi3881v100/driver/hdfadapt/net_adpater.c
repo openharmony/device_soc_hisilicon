@@ -1418,11 +1418,9 @@ hi_s32 wal_init_netif(nl80211_iftype_uint8 type, oal_net_device_stru *netdev)
     ret = NetDeviceAdd(netdev);
     if (oal_unlikely(ret != 0)) {
         oam_warning_log1(0, OAM_SF_ANY, "{wal_init_netif::NetDeviceAdd return error code %d}", ret);
-        oal_net_unregister_netdev(netdev);
         return HI_FAIL;
     }
     if (wal_init_wlan_vap(netdev) != HI_SUCCESS) {
-        oal_net_unregister_netdev(netdev);
         return HI_FAIL;
     }
 
