@@ -18,6 +18,7 @@
 #include "hdf_log.h"
 #include "osal_io.h"
 #include "osal_mem.h"
+#include "platform_dumper.h"
 #include "pwm_core.h"
 
 #define HDF_LOG_TAG pwm_hi35xx
@@ -26,8 +27,63 @@ struct HiPwm {
     struct PwmDev dev;
     volatile unsigned char *base;
     struct HiPwmRegs *reg;
+    struct PlatformDumper *dumper;
+    char *dumperName;
     bool supportPolarity;
 };
+
+static int32_t PwmDumperCreate(struct HiPwm *hp)
+{
+    struct PlatformDumper *dumper = NULL;
+    char *name = (char *)OsalMemCalloc(PWM_DUMPER_NAME_LEN);
+
+    if (snprintf_s(name, PWM_DUMPER_NAME_LEN, PWM_DUMPER_NAME_LEN - 1, "%s%u",
+        PWM_DUMPER_NAME_PREFIX, hp->dev.num) < 0) {
+        HDF_LOGE("%s: snprintf_s name fail!", __func__);
+        OsalMemFree(name);
+        return HDF_ERR_IO;
+    }
+    dumper = PlatformDumperCreate(name);
+    if (dumper == NULL) {
+        HDF_LOGE("%s: get dumper for %s fail!", __func__, name);
+        OsalMemFree(name);
+        return HDF_ERR_IO;
+    }
+    hp->dumper = dumper;
+    hp->dumperName = name;
+
+    return HDF_SUCCESS;
+}
+
+static void PwmDumperDump(struct HiPwm *hp)
+{
+    int32_t ret;
+    struct PlatformDumperData datas[] = {
+        {"PWM_CFG0", PLATFORM_DUMPER_REGISTERL, (void *)hp->base},
+        {"PWM_CFG1", PLATFORM_DUMPER_REGISTERL, (void *)(hp->base+ PWM_CFG1_SHIFT)},
+        {"PWM_CFG2", PLATFORM_DUMPER_REGISTERL, (void *)(hp->base + PWM_CFG2_SHIFT)},
+        {"PWM_CTRL", PLATFORM_DUMPER_REGISTERL, (void *)(hp->base + PWM_CTRL_SHIFT)},
+        {"PWM_STATE0", PLATFORM_DUMPER_REGISTERL, (void *)(hp->base + PWM_STATE0_SHIFT)},
+        {"PWM_STATE1", PLATFORM_DUMPER_REGISTERL, (void *)(hp->base + PWM_STATE1_SHIFT)},
+        {"PWM_STATE2", PLATFORM_DUMPER_REGISTERL, (void *)(hp->base + PWM_STATE2_SHIFT)},
+    };
+    if (hp->dumper == NULL) {
+        HDF_LOGE("%s: pwm dumper is NULL", __func__);
+        return;
+    }
+    ret = PlatformDumperAddDatas(hp->dumper, datas, sizeof(datas) / sizeof(struct PlatformDumperData));
+    if (ret != HDF_SUCCESS) {
+        return;
+    }
+    (void)PlatformDumperDump(hp->dumper);
+    (void)PlatformDumperClearDatas(hp->dumper);
+}
+
+static inline void PwmDumperDestroy(struct HiPwm *hp)
+{
+    PlatformDumperDestroy(hp->dumper);
+    OsalMemFree(hp->dumperName);
+}
 
 int32_t HiPwmSetConfig(struct PwmDev *pwm, struct PwmConfig *config)
 {
@@ -38,15 +94,18 @@ int32_t HiPwmSetConfig(struct PwmDev *pwm, struct PwmConfig *config)
     }
     if (config->polarity != PWM_NORMAL_POLARITY && config->polarity != PWM_INVERTED_POLARITY) {
         HDF_LOGE("%s: polarity %hhu is invalid", __func__, config->polarity);
+        PwmDumperDump(hp);
         return HDF_ERR_INVALID_PARAM;
     }
     if (config->period < PWM_MIN_PERIOD) {
         HDF_LOGE("%s: period %u is not support, min period %d", __func__, config->period, PWM_MIN_PERIOD);
+        PwmDumperDump(hp);
         return HDF_ERR_INVALID_PARAM;
     }
     if (config->duty < 1 || config->duty > config->period) {
         HDF_LOGE("%s: duty %u is not support, duty must in [1, period = %u].",
             __func__, config->duty, config->period);
+        PwmDumperDump(hp);
         return HDF_ERR_INVALID_PARAM;
     }
     HiPwmDisable(hp->reg);
@@ -91,6 +150,7 @@ static void HiPwmRemove(struct HiPwm *hp)
 static int32_t HiPwmProbe(struct HiPwm *hp, struct HdfDeviceObject *obj)
 {
     uint32_t tmp;
+    int32_t ret;
     struct DeviceResourceIface *iface = NULL;
 
     iface = DeviceResourceGetIfaceInstance(HDF_CONFIG_SOURCE);
@@ -129,6 +189,12 @@ static int32_t HiPwmProbe(struct HiPwm *hp, struct HdfDeviceObject *obj)
         HDF_LOGE("%s: [PwmDeviceAdd] failed.", __func__);
         return HDF_FAILURE;
     }
+    ret = PwmDumperCreate(hp);
+    if (ret != HDF_SUCCESS) {
+        HDF_LOGE("%s: create dumper failed:%d", __func__, ret);
+        OsalIoUnmap((void *)hp->base);
+        return ret;
+    }
     HDF_LOGI("%s: set PwmConfig: number %u, period %u, duty %u, polarity %hhu, enable %hhu.", __func__,
         hp->dev.cfg.number, hp->dev.cfg.period, hp->dev.cfg.duty, hp->dev.cfg.polarity, hp->dev.cfg.status);
     return HDF_SUCCESS;
@@ -160,6 +226,7 @@ static int32_t HdfPwmInit(struct HdfDeviceObject *obj)
         HDF_LOGE("%s: error probe, ret is %d", __func__, ret);
         OsalMemFree(hp);
     }
+    PwmDumperDump(hp);
     HDF_LOGI("%s: pwm init success", __func__);
     return ret;
 }
@@ -178,6 +245,7 @@ static void HdfPwmRelease(struct HdfDeviceObject *obj)
         HDF_LOGE("%s: hp is null", __func__);
         return;
     }
+    PwmDumperDestroy(hp);
     PwmDeviceRemove(obj, &(hp->dev));
     HiPwmRemove(hp);
 }

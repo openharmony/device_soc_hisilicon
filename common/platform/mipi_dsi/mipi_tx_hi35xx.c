@@ -21,6 +21,7 @@
 #include "mipi_dsi_define.h"
 #include "mipi_dsi_core.h"
 #include "mipi_tx_reg.h"
+#include "platform_dumper.h"
 
 #ifdef __cplusplus
 #if __cplusplus
@@ -202,8 +203,8 @@ static void MipiTxDrvGetPhyClkPrepare(unsigned char *clkPrepare)
         temp1 = 0; /* 0 is the minimum */
     }
 
-    if (((temp1 + 1) * INNER_PEROID - PREPARE_COMPENSATE * g_actualPhyDataRate) /* temp + 1 is next level period */
-        > 94 * g_actualPhyDataRate) { /* 94 is the  maximum in mipi protocol */
+    if (((temp1 + 1) * INNER_PEROID - PREPARE_COMPENSATE * g_actualPhyDataRate) > /* temp + 1 is next level period */
+        94 * g_actualPhyDataRate) { /* 94 is the  maximum in mipi protocol */
         if (temp0 > 0) {
             *clkPrepare = temp0 - 1;
         } else {
@@ -577,8 +578,106 @@ static void MipiTxDrvSetControllerCfg(const ComboDevCfgTag *cfg)
     g_mipiTxRegsVa->PWR_UP.u32 = 0xf;
 }
 
+static ComboDevCfgTag *GetDevCfg(struct MipiDsiCntlr *cntlr)
+{
+    static ComboDevCfgTag dev;
+    int i;
+
+    if (cntlr == NULL) {
+        HDF_LOGE("%s: cntlr is NULL!", __func__);
+        return NULL;
+    }
+    dev.devno = cntlr->devNo;
+    dev.outputMode = (OutPutModeTag)cntlr->cfg.mode;
+    dev.videoMode = (VideoModeTag)cntlr->cfg.burstMode;
+    dev.outputFormat = (OutputFormatTag)cntlr->cfg.format;
+    dev.syncInfo.vidPktSize = cntlr->cfg.timing.xPixels;
+    dev.syncInfo.vidHsaPixels = cntlr->cfg.timing.hsaPixels;
+    dev.syncInfo.vidHbpPixels = cntlr->cfg.timing.hbpPixels;
+    dev.syncInfo.vidHlinePixels = cntlr->cfg.timing.hlinePixels;
+    dev.syncInfo.vidVsaLines = cntlr->cfg.timing.vsaLines;
+    dev.syncInfo.vidVbpLines = cntlr->cfg.timing.vbpLines;
+    dev.syncInfo.vidVfpLines = cntlr->cfg.timing.vfpLines;
+    dev.syncInfo.vidActiveLines = cntlr->cfg.timing.ylines;
+    dev.syncInfo.edpiCmdSize = cntlr->cfg.timing.edpiCmdSize;
+    dev.phyDataRate = cntlr->cfg.phyDataRate;
+    dev.pixelClk = cntlr->cfg.pixelClk;
+    for (i = 0; i < LANE_MAX_NUM; i++) {
+        dev.laneId[i] = -1;   /* -1 : not use */
+    }
+    for (i = 0; i < cntlr->cfg.lane; i++) {
+        dev.laneId[i] = i;
+    }
+    return &dev;
+}
+
+static struct MipiDsiCntlr g_mipiTx = {
+    .devNo = 0
+};
+
+static int32_t MipiTxDumperCreate(void)
+{
+    struct PlatformDumper *dumper = NULL;
+    ComboDevCfgTag *dev = GetDevCfg(&g_mipiTx);
+    char *name = NULL;
+
+    name = (char *)OsalMemCalloc(MIPI_TX_DUMPER_NAME_LEN);
+    if (name == NULL) {
+        HDF_LOGE("%s: alloc name fail", __func__);
+        return HDF_ERR_MALLOC_FAIL;
+    }
+
+    if (snprintf_s(name, MIPI_TX_DUMPER_NAME_LEN, MIPI_TX_DUMPER_NAME_LEN - 1, "%s%d",
+        MIPI_TX_DUMPER_NAME_PREFIX, g_mipiTx.devNo) < 0) {
+        HDF_LOGE("%s: snprintf_s name fail!", __func__);
+        OsalMemFree(name);
+        return HDF_ERR_IO;
+    }
+    dumper = PlatformDumperCreate(name);
+    if (dumper == NULL) {
+        HDF_LOGE("%s: get dumper for %s fail!", __func__, name);
+        OsalMemFree(name);
+        return HDF_ERR_IO;
+    }
+    dev->dumper = dumper;
+    dev->dumperName = name;
+
+    return HDF_SUCCESS;
+}
+
+static void MipiTxDumperDump(struct PlatformDumper *dumper)
+{
+    int32_t ret;
+    struct PlatformDumperData datas[] = {
+        {"PWR_UP", PLATFORM_DUMPER_REGISTERL, (void *)(g_mipiTxRegsVa + MIPI_TX_PWR_UP)},
+        {"CLKMGR_CFG", PLATFORM_DUMPER_REGISTERL, (void *)(g_mipiTxRegsVa + MIPI_TX_CLKMGR_CFG)},
+        {"VCID", PLATFORM_DUMPER_REGISTERL, (void *)(g_mipiTxRegsVa + MIPI_TX_VCID)},
+        {"COLOR_CODING", PLATFORM_DUMPER_REGISTERL, (void *)(g_mipiTxRegsVa + MIPI_TX_COLOR_CODING)},
+        {"MIPI_TX_LP_CMD_TIM", PLATFORM_DUMPER_REGISTERL, (void *)(g_mipiTxRegsVa + MIPI_TX_LP_CMD_TIM)},
+        {"MIPI_TX_GEN_VCID", PLATFORM_DUMPER_REGISTERL, (void *)(g_mipiTxRegsVa + MIPI_TX_GEN_VCID)},
+        {"MIPI_TX_VID_HSA_TIME", PLATFORM_DUMPER_REGISTERL, (void *)(g_mipiTxRegsVa + MIPI_TX_VID_HSA_TIME)},
+        {"MIPI_TX_VID_HBP_TIME", PLATFORM_DUMPER_REGISTERL, (void *)(g_mipiTxRegsVa + MIPI_TX_VID_HBP_TIME)},
+        {"MIPI_TX_VID_HLINE_TIME", PLATFORM_DUMPER_REGISTERL, (void *)(g_mipiTxRegsVa + MIPI_TX_VID_HLINE_TIME)},
+        {"MIPI_TX_VID_VSA_LINES", PLATFORM_DUMPER_REGISTERL, (void *)(g_mipiTxRegsVa + MIPI_TX_VID_VSA_LINES)},
+        {"MIPI_TX_VID_VBP_LINES", PLATFORM_DUMPER_REGISTERL, (void *)(g_mipiTxRegsVa + MIPI_TX_VID_VBP_LINES)},
+        {"MIPI_TX_VID_VFP_LINES", PLATFORM_DUMPER_REGISTERL, (void *)(g_mipiTxRegsVa + MIPI_TX_VID_VFP_LINES)},
+    };
+
+    if (dumper == NULL) {
+        HDF_LOGE("%s: mipitxRegsVa dumper is NULL!", __func__);
+        return;
+    }
+    ret = PlatformDumperAddDatas(dumper, datas, sizeof(datas) / sizeof(struct PlatformDumperData));
+    if (ret != HDF_SUCCESS) {
+        return;
+    }
+    (void)PlatformDumperDump(dumper);
+    (void)PlatformDumperClearDatas(dumper);
+}
+
 static int MipiTxWaitCmdFifoEmpty(void)
 {
+    ComboDevCfgTag *dev = GetDevCfg(&g_mipiTx);
     U_CMD_PKT_STATUS cmdPktStatus;
     unsigned int waitCnt;
 
@@ -589,6 +688,7 @@ static int MipiTxWaitCmdFifoEmpty(void)
         OsalUDelay(1);
         if (waitCnt >  MIPI_TX_READ_TIMEOUT_CNT) {
             HDF_LOGW("%s: timeout when send cmd buffer.", __func__);
+            MipiTxDumperDump(dev->dumper);
             return HDF_ERR_TIMEOUT;
         }
     } while (cmdPktStatus.bits.gen_cmd_empty == 0);
@@ -597,6 +697,7 @@ static int MipiTxWaitCmdFifoEmpty(void)
 
 static int MipiTxWaitWriteFifoEmpty(void)
 {
+    ComboDevCfgTag *dev = GetDevCfg(&g_mipiTx);
     U_CMD_PKT_STATUS cmdPktStatus;
     unsigned int waitCnt;
 
@@ -607,6 +708,7 @@ static int MipiTxWaitWriteFifoEmpty(void)
         OsalUDelay(1);
         if (waitCnt >  MIPI_TX_READ_TIMEOUT_CNT) {
             HDF_LOGW("%s: timeout when send data buffer.", __func__);
+            MipiTxDumperDump(dev->dumper);
             return HDF_ERR_TIMEOUT;
         }
     } while (cmdPktStatus.bits.gen_pld_w_empty == 0);
@@ -615,6 +717,7 @@ static int MipiTxWaitWriteFifoEmpty(void)
 
 static int MipiTxWaitWriteFifoNotFull(void)
 {
+    ComboDevCfgTag *dev = GetDevCfg(&g_mipiTx);
     U_CMD_PKT_STATUS cmdPktStatus;
     unsigned int waitCnt;
 
@@ -627,6 +730,7 @@ static int MipiTxWaitWriteFifoNotFull(void)
         }
         if (waitCnt >  MIPI_TX_READ_TIMEOUT_CNT) {
             HDF_LOGW("%s: timeout when wait write fifo not full buffer.", __func__);
+            MipiTxDumperDump(dev->dumper);
             return HDF_ERR_TIMEOUT;
         }
         waitCnt++;
@@ -687,6 +791,7 @@ static int MipiTxDrvSetCmdInfo(const CmdInfoTag *cmdInfo)
     int32_t ret;
     U_GEN_HDR genHdr;
     unsigned char *cmd = NULL;
+    ComboDevCfgTag *dev = GetDevCfg(&g_mipiTx);
 
     if (cmdInfo == NULL) {
         HDF_LOGE("%s: cmdInfo is NULL.", __func__);
@@ -707,6 +812,7 @@ static int MipiTxDrvSetCmdInfo(const CmdInfoTag *cmdInfo)
             OsalMemFree(cmd);
             cmd = NULL;
             HDF_LOGE("%s: [CopyFromUser] failed.", __func__);
+            MipiTxDumperDump(dev->dumper);
             return HDF_ERR_IO;
         }
         MipiTxDrvSetPayloadData(cmd, cmdInfo->cmdSize);
@@ -908,6 +1014,7 @@ static void MipiTxDrvDisableInput(void)
 
 static int MipiTxDrvRegInit(void)
 {
+    int32_t ret;
     if (!g_mipiTxRegsVa) {
         g_mipiTxRegsVa = (MipiTxRegsTypeTag *)OsalIoRemap(MIPI_TX_REGS_ADDR, (unsigned int)MIPI_TX_REGS_SIZE);
         if (g_mipiTxRegsVa == NULL) {
@@ -916,12 +1023,19 @@ static int MipiTxDrvRegInit(void)
         }
         g_regMapFlag = 1;
     }
+    ret = MipiTxDumperCreate();
+    if (ret != HDF_SUCCESS) {
+        HDF_LOGE("%s: create dumper failed:%d", __func__, ret);
+        return ret;
+    }
 
     return HDF_SUCCESS;
 }
 
 static void MipiTxDrvRegExit(void)
 {
+    ComboDevCfgTag *dev = GetDevCfg(&g_mipiTx);
+
     if (g_regMapFlag == 1) {
         if (g_mipiTxRegsVa != NULL) {
             OsalIoUnmap((void *)g_mipiTxRegsVa);
@@ -929,6 +1043,8 @@ static void MipiTxDrvRegExit(void)
         }
         g_regMapFlag = 0;
     }
+    PlatformDumperDestroy(dev->dumper);
+    OsalMemFree(dev->dumperName);
 }
 
 static void MipiTxDrvHwInit(int smooth)
@@ -965,39 +1081,6 @@ static int MipiTxDrvInit(int smooth)
 static void MipiTxDrvExit(void)
 {
     MipiTxDrvRegExit();
-}
-
-static ComboDevCfgTag *GetDevCfg(struct MipiDsiCntlr *cntlr)
-{
-    static ComboDevCfgTag dev;
-    int i;
-
-    if (cntlr == NULL) {
-        HDF_LOGE("%s: cntlr is NULL!", __func__);
-        return NULL;
-    }
-    dev.devno = cntlr->devNo;
-    dev.outputMode = (OutPutModeTag)cntlr->cfg.mode;
-    dev.videoMode = (VideoModeTag)cntlr->cfg.burstMode;
-    dev.outputFormat = (OutputFormatTag)cntlr->cfg.format;
-    dev.syncInfo.vidPktSize = cntlr->cfg.timing.xPixels;
-    dev.syncInfo.vidHsaPixels = cntlr->cfg.timing.hsaPixels;
-    dev.syncInfo.vidHbpPixels = cntlr->cfg.timing.hbpPixels;
-    dev.syncInfo.vidHlinePixels = cntlr->cfg.timing.hlinePixels;
-    dev.syncInfo.vidVsaLines = cntlr->cfg.timing.vsaLines;
-    dev.syncInfo.vidVbpLines = cntlr->cfg.timing.vbpLines;
-    dev.syncInfo.vidVfpLines = cntlr->cfg.timing.vfpLines;
-    dev.syncInfo.vidActiveLines = cntlr->cfg.timing.ylines;
-    dev.syncInfo.edpiCmdSize = cntlr->cfg.timing.edpiCmdSize;
-    dev.phyDataRate = cntlr->cfg.phyDataRate;
-    dev.pixelClk = cntlr->cfg.pixelClk;
-    for (i = 0; i < LANE_MAX_NUM; i++) {
-        dev.laneId[i] = -1;   /* -1 : not use */
-    }
-    for (i = 0; i < cntlr->cfg.lane; i++) {
-        dev.laneId[i] = i;
-    }
-    return &dev;
 }
 
 static int MipiTxCheckCombDevCfg(const ComboDevCfgTag *devCfg)
@@ -1038,9 +1121,7 @@ static int MipiTxCheckCombDevCfg(const ComboDevCfgTag *devCfg)
 
 static int MipiTxSetComboDevCfg(const ComboDevCfgTag *devCfg)
 {
-    int32_t ret;
-
-    ret = MipiTxCheckCombDevCfg(devCfg);
+    int32_t ret = MipiTxCheckCombDevCfg(devCfg);
     if (ret != HDF_SUCCESS) {
         HDF_LOGE("%s: mipi_tx check combo_dev config failed!", __func__);
         return ret;
@@ -1198,10 +1279,6 @@ static void Hi35xxToHs(struct MipiDsiCntlr *cntlr)
     }
     MipiTxDrvEnableInput(dev->outputMode);
 }
-
-static struct MipiDsiCntlr g_mipiTx = {
-    .devNo = 0
-};
 
 static struct MipiDsiCntlrMethod g_method = {
     .setCntlrCfg = Hi35xxSetCntlrCfg,

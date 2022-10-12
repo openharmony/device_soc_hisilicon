@@ -24,11 +24,16 @@
 #include "osal_irq.h"
 #include "osal_mem.h"
 #include "osal_spinlock.h"
+#include "platform_dumper.h"
 
 #define HDF_LOG_TAG gpio_hi35xx
 #define PL061_GROUP_MAX 32
 #define PL061_BIT_MAX   16
 #define GPIO_MAX_INFO_NUM 96
+
+#define GPIO_DUMPER_NAME_PREFIX "gpio_dumper_"
+#define GPIO_DUMPER_NAME_LEN 64
+#define GPIO_DUMPER_DATAS_REGISTER_SIZE 10
 
 #define PL061_GPIO_DATA_ALL(base)   ((base) + 0x3FC)
 #define PL061_GPIO_DATA(base, bit)  ((base) + 0x000 + (1 << ((bit) + 2)))
@@ -50,6 +55,8 @@ struct Pl061GpioGroup {
     OsalSpinlock lock;
     uint32_t irqSave;
     bool irqShare;
+    struct PlatformDumper *dumper;
+    char *dumperName;
 };
 
 struct Pl061GpioData {
@@ -71,20 +78,65 @@ static struct Pl061GpioData g_pl061 = {
     .bitNum = PL061_BIT_MAX,
 };
 
-static void Pl061GpioRegDump(struct Pl061GpioGroup *group)
+static int32_t GpioDumperCreate(struct Pl061GpioGroup *group)
 {
-    HDF_LOGI("%s: GROUP-%u: DATA-%x DIR-%x, IS-%x, IBE-%x, IEV-%x, IE-%x, RIS-%x, MIS-%x, IC-%x",
-        __func__, group->index,
-        OSAL_READL(PL061_GPIO_DATA_ALL(group->regBase)),
-        OSAL_READL(PL061_GPIO_DIR(group->regBase)),
-        OSAL_READL(PL061_GPIO_IS(group->regBase)),
-        OSAL_READL(PL061_GPIO_IBE(group->regBase)),
-        OSAL_READL(PL061_GPIO_IEV(group->regBase)),
-        OSAL_READL(PL061_GPIO_IE(group->regBase)),
-        OSAL_READL(PL061_GPIO_RIS(group->regBase)),
-        OSAL_READL(PL061_GPIO_MIS(group->regBase)),
-        OSAL_READL(PL061_GPIO_IC(group->regBase))
-    );
+    struct PlatformDumper *dumper = NULL;
+    char *name = NULL;
+
+    name = (char *)OsalMemCalloc(GPIO_DUMPER_NAME_LEN);
+    if (name == NULL) {
+        HDF_LOGE("%s: alloc name fail", __func__);
+        return HDF_ERR_MALLOC_FAIL;
+    }
+
+    if (snprintf_s(name, GPIO_DUMPER_NAME_LEN, GPIO_DUMPER_NAME_LEN - 1, "%s%d",
+        GPIO_DUMPER_NAME_PREFIX, group->index) < 0) {
+        HDF_LOGE("%s: snprintf_s name fail!", __func__);
+        OsalMemFree(name);
+        return HDF_ERR_IO;
+    }
+    dumper = PlatformDumperCreate(name);
+    if (dumper == NULL) {
+        HDF_LOGE("%s: get dumper for %s fail!", __func__, name);
+        OsalMemFree(name);
+        return HDF_ERR_IO;
+    }
+    group->dumper = dumper;
+    group->dumperName = name;
+
+    return HDF_SUCCESS;
+}
+
+static void GpioDumperDump(struct Pl061GpioGroup *group)
+{
+    int32_t ret;
+    struct PlatformDumperData datas[] = {
+        {"PL061_GPIO_DIR", PLATFORM_DUMPER_REGISTERB, (void *)(PL061_GPIO_DIR(group->regBase))},
+        {"PL061_GPIO_IS", PLATFORM_DUMPER_REGISTERB, (void *)(PL061_GPIO_IS(group->regBase))},
+        {"PL061_GPIO_IBE", PLATFORM_DUMPER_REGISTERB, (void *)(PL061_GPIO_IBE(group->regBase))},
+        {"PL061_GPIO_IEV", PLATFORM_DUMPER_REGISTERB, (void *)(PL061_GPIO_IEV(group->regBase))},
+        {"PL061_GPIO_IE", PLATFORM_DUMPER_REGISTERB, (void *)(PL061_GPIO_IE(group->regBase))},
+        {"PL061_GPIO_RIS", PLATFORM_DUMPER_REGISTERB, (void *)(PL061_GPIO_RIS(group->regBase))},
+        {"PL061_GPIO_MIS", PLATFORM_DUMPER_REGISTERB, (void *)(PL061_GPIO_MIS(group->regBase))},
+        {"PL061_GPIO_IC", PLATFORM_DUMPER_REGISTERB, (void *)(PL061_GPIO_IC(group->regBase))},
+    };
+
+    if (group->dumper == NULL) {
+        HDF_LOGE("%s: group dumper is NULL!", __func__);
+        return;
+    }
+    ret = PlatformDumperAddDatas(group->dumper, datas, sizeof(datas) / sizeof(struct PlatformDumperData));
+    if (ret != HDF_SUCCESS) {
+        return;
+    }
+    (void)PlatformDumperDump(group->dumper);
+    (void)PlatformDumperClearDatas(group->dumper);
+}
+
+static inline void GpioDumperDestroy(struct Pl061GpioGroup *group)
+{
+    PlatformDumperDestroy(group->dumper);
+    OsalMemFree(group->dumperName);
 }
 
 static int32_t Pl061GpioSetDir(struct GpioCntlr *cntlr, uint16_t local, uint16_t dir)
@@ -193,7 +245,7 @@ static uint32_t Pl061IrqHandleNoShare(uint32_t irq, void *data)
     OSAL_WRITEL(val, PL061_GPIO_IC(group->regBase));
     if (val == 0) {
         HDF_LOGW("%s: share irq(%u) trigerred but not hit any, mis=%x", __func__, irq, val);
-        Pl061GpioRegDump(group);
+        GpioDumperDump(group);
         return HDF_FAILURE;
     }
     for (i = 0; i < group->cntlr.count && val != 0; i++, val >>= 1) {
@@ -222,12 +274,14 @@ static int32_t Pl061GpioRegisterGroupIrqUnsafe(struct Pl061GpioGroup *group)
         }
         if (ret != 0) {
             HDF_LOGE("%s: noshare irq:%u reg fail:%d!", __func__, group->irq, ret);
+            GpioDumperDump(group);
             return HDF_FAILURE;
         }
         ret = OsalEnableIrq(group->irq);
         if (ret != 0) {
             HDF_LOGE("%s: noshare irq:%u enable fail:%d!", __func__, group->irq, ret);
             (void)OsalUnregisterIrq(group->irq, group);
+            GpioDumperDump(group);
             return HDF_FAILURE;
         }
         group->irqFunc = Pl061IrqHandleNoShare;
@@ -413,7 +467,13 @@ static int32_t Pl061GpioInitGroups(struct Pl061GpioData *pl061)
             (void)OsalSpinDestroy(&groups[i].lock);
             goto ERR_EXIT;
         }
+        ret = GpioDumperCreate(&pl061->groups[i]);
+        if (ret != HDF_SUCCESS) {
+            HDF_LOGE("%s: create dumper failed:%d", __func__, ret);
+            return ret;
+        }
     }
+
     return HDF_SUCCESS;
 
 ERR_EXIT:
@@ -433,6 +493,7 @@ static void Pl061GpioUninitGroups(struct Pl061GpioData *pl061)
 
     for (i = 0; i < pl061->groupNum; i++) {
         group = &pl061->groups[i];
+        GpioDumperDestroy(&pl061->groups[i]);
         GpioCntlrRemove(&group->cntlr);
     }
 

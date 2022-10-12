@@ -19,6 +19,7 @@
 #include "osal_io.h"
 #include "osal_mem.h"
 #include "pin_core.h"
+#include "platform_dumper.h"
 
 #define HDF_LOG_TAG pin_hi35xx
 
@@ -42,7 +43,63 @@ struct Hi35xxPinCntlr {
     uint32_t regStartBasePhy;
     uint32_t regSize;
     uint32_t pinCount;
+    struct PlatformDumper *dumper;
+    char *dumperName;
 };
+
+static int32_t PinDumperCreate(struct Hi35xxPinCntlr *hi35xx)
+{
+    struct PlatformDumper *dumper = NULL;
+    char *name = NULL;
+
+    name = (char *)OsalMemCalloc(PIN_DUMPER_NAME_LEN);
+    if (name == NULL) {
+        HDF_LOGE("%s: alloc name fail", __func__);
+        return HDF_ERR_MALLOC_FAIL;
+    }
+
+    if (snprintf_s(name, PIN_DUMPER_NAME_LEN, PIN_DUMPER_NAME_LEN - 1, "%s%hu",
+        PIN_DUMPER_NAME_PREFIX, hi35xx->number) < 0) {
+        HDF_LOGE("%s: snprintf_s name fail!", __func__);
+        OsalMemFree(name);
+        return HDF_ERR_IO;
+    }
+    dumper = PlatformDumperCreate(name);
+    if (dumper == NULL) {
+        HDF_LOGE("%s: get dumper for %s fail!", __func__, name);
+        OsalMemFree(name);
+        return HDF_ERR_IO;
+    }
+    hi35xx->dumper = dumper;
+    hi35xx->dumperName = name;
+
+    return HDF_SUCCESS;
+}
+
+static void PinDumperDump(struct Hi35xxPinCntlr *hi35xx, uint32_t index)
+{
+    int32_t ret;
+    struct PlatformDumperData data[] = {
+        {"PIN_REGISTER", PLATFORM_DUMPER_REGISTERL, (void *)(hi35xx->regBase + index * HI35XX_PIN_REG_SIZE)},
+    };
+
+    if (hi35xx->dumper == NULL) {
+        return;
+    }
+
+    ret = PlatformDumperAddDatas(hi35xx->dumper, data, sizeof(data) / sizeof(struct PlatformDumperData));
+    if (ret != HDF_SUCCESS) {
+        return;
+    }
+    (void)PlatformDumperDump(hi35xx->dumper);
+    (void)PlatformDumperClearDatas(hi35xx->dumper);
+}
+
+static inline void PinDumperDestroy(struct Hi35xxPinCntlr *hi35xx)
+{
+    PlatformDumperDestroy(hi35xx->dumper);
+    OsalMemFree(hi35xx->dumperName);
+}
 
 static int32_t Hi35xxPinSetPull(struct PinCntlr *cntlr, uint32_t index, enum PinPullType pullType)
 {
@@ -110,10 +167,11 @@ static int32_t Hi35xxPinSetFunc(struct PinCntlr *cntlr, uint32_t index, const ch
             value = (value & ~PIN_FUNC_MASK) | funcNum;
             OSAL_WRITEL(value, hi35xx->regBase + index * HI35XX_PIN_REG_SIZE);
             HDF_LOGD("%s: set pin function success.", __func__);
-            return HDF_SUCCESS; 
+            return HDF_SUCCESS;
         }
     }
     HDF_LOGE("%s: set pin Function failed.", __func__);
+    PinDumperDump(hi35xx, index);
     return HDF_ERR_IO;
 }
 
@@ -146,7 +204,7 @@ static int32_t Hi35xxPinReadFunc(struct Hi35xxPinDesc *desc,
 {
     int32_t ret;
     uint32_t funcNum = 0;
-    
+
     ret = drsOps->GetString(node, "F0", &desc->func[funcNum], "NULL");
     if (ret != HDF_SUCCESS) {
         HDF_LOGE("%s: read F0 failed", __func__);
@@ -220,6 +278,7 @@ static int32_t Hi35xxPinParsePinNode(const struct DeviceResourceNode *node,
     }
     hi35xx->cntlr.pins[index].pinName = hi35xx->desc[index].pinName;
     hi35xx->cntlr.pins[index].priv = (void *)node;
+
     return HDF_SUCCESS;
 }
 
@@ -238,7 +297,6 @@ static int32_t Hi35xxPinCntlrInit(struct HdfDeviceObject *device, struct Hi35xxP
         HDF_LOGE("%s: read number failed", __func__);
         return ret;
     }
-
     ret = drsOps->GetUint32(device->property, "regStartBasePhy", &hi35xx->regStartBasePhy, 0);
     if (ret != HDF_SUCCESS) {
         HDF_LOGE("%s: read regStartBasePhy failed", __func__);
@@ -262,7 +320,20 @@ static int32_t Hi35xxPinCntlrInit(struct HdfDeviceObject *device, struct Hi35xxP
         return HDF_ERR_IO;
     }
     hi35xx->desc = (struct Hi35xxPinDesc *)OsalMemCalloc(sizeof(struct Hi35xxPinDesc) * hi35xx->pinCount);
+    if (hi35xx->desc == NULL) {
+        HDF_LOGE("%s: malloc desc failed:%d", __func__, ret);
+        return ret;
+    }
     hi35xx->cntlr.pins = (struct PinDesc *)OsalMemCalloc(sizeof(struct PinDesc) * hi35xx->pinCount);
+    if (hi35xx->cntlr.pins == NULL) {
+        HDF_LOGE("%s: malloc pins failed:%d", __func__, ret);
+        return ret;
+    }
+    ret = PinDumperCreate(hi35xx);
+    if (ret != HDF_SUCCESS) {
+        HDF_LOGE("%s: create dumper failed:%d", __func__, ret);
+        return ret;
+    }
     return HDF_SUCCESS;
 }
 
@@ -286,11 +357,16 @@ static int32_t Hi35xxPinInit(struct HdfDeviceObject *device)
     }
 
     ret = Hi35xxPinCntlrInit(device, hi35xx);
+    if (ret != HDF_SUCCESS) {
+        HDF_LOGE("%s: init cntlr failed:%d", __func__, ret);
+        return ret;
+    }
     index = 0;
 
     DEV_RES_NODE_FOR_EACH_CHILD_NODE(device->property, childNode) {
         ret = Hi35xxPinParsePinNode(childNode, hi35xx, index);
         if (ret != HDF_SUCCESS) {
+            PinDumperDestroy(hi35xx);
             return ret;
         }
         index++;
@@ -299,7 +375,8 @@ static int32_t Hi35xxPinInit(struct HdfDeviceObject *device)
     hi35xx->cntlr.method = &g_method;
     ret = PinCntlrAdd(&hi35xx->cntlr);
     if (ret != HDF_SUCCESS) {
-        HDF_LOGE("%s: add Pin cntlr: failed", __func__);
+        HDF_LOGE("%s: add Pin cntlr failed", __func__);
+        PinDumperDestroy(hi35xx);
         ret = HDF_FAILURE;
     }
     HDF_LOGI("%s: Pin Init success", __func__);
@@ -320,7 +397,7 @@ static void Hi35xxPinRelease(struct HdfDeviceObject *device)
         return;
     }
     drsOps = DeviceResourceGetIfaceInstance(HDF_CONFIG_SOURCE);
-    if (drsOps == NULL || drsOps->GetUint32 == NULL || drsOps->GetString == NULL) {   
+    if (drsOps == NULL || drsOps->GetUint32 == NULL || drsOps->GetString == NULL) {
         HDF_LOGE("%s: invalid drs ops", __func__);
         return;
     }
@@ -338,6 +415,7 @@ static void Hi35xxPinRelease(struct HdfDeviceObject *device)
         if (hi35xx->regBase != NULL) {
             OsalIoUnmap((void *)hi35xx->regBase);
         }
+        PinDumperDestroy(hi35xx);
         OsalMemFree(hi35xx);
     }
 }

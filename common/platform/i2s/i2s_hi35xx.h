@@ -52,6 +52,10 @@ extern "C" {
 #define AIAO_CKEN               (0x1 << 1)
 #define AIAO_CKEN_SHIFT         1
 
+#define I2S_DUMPER_NAME_PREFIX "i2s_dumper_"
+#define I2S_DUMPER_NAME_LEN 64
+#define I2S_DUMPER_DATAS_REGISTER_SIZE 10
+
 typedef enum {
     ACODEC_ADC_MODESEL_6144 = 0x0,
     ACODEC_ADC_MODESEL_4096 = 0x1,
@@ -136,6 +140,9 @@ struct I2sConfigInfo {
     volatile unsigned char *crg103Addr;
     bool isplay;
     bool txEn;
+    uint32_t busNum;
+    struct PlatformDumper *dumper;
+    char *dumperName;
 };
 
 int32_t Hi35xxI2sRegWrite(uint32_t value, volatile unsigned char *addr);
