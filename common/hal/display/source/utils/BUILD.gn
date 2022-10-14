@@ -12,28 +12,43 @@
 # limitations under the License.
 
 import("//build/ohos.gni")
+config("utils_config") {
+  visibility = [ ":*" ]
 
-ohos_shared_library("display_adapter_impl") {
-  sources = [ "display_adapter_impl.cpp" ]
-
-  output_name = "display_adapter_impl"
   include_dirs = [
-    "//drivers/peripheral/display/hal/default_standard/include",
-    "//device/soc/hisilicon/hi3751v350/sdk_linux/include",
     "//drivers/peripheral/display/interfaces/include",
     "//drivers/peripheral/base",
+    "include",
   ]
 
-  defines = [ "USING_USERSPACE_DRV" ]
+  cflags_cc = [
+    "-Wno-error=missing-braces",
+    "-Wno-error=#warnings",
+  ]
+}
+
+ohos_static_library("display_utils") {
+  sources = [
+    "src/display_adapter.cpp",
+    "src/display_utils.cpp",
+    "src/id_generator.cpp",
+  ]
+
+  public_configs = [ ":utils_config" ]
+
+  output_name = "display_utils"
+
+  include_dirs = [ "src" ]
+
+  external_deps = [
+    "c_utils:utils",
+    "hiviewdfx_hilog_native:libhilog",
+  ]
 
   deps = [
-    "//device/soc/hisilicon/hi3751v350/sdk_linux:libdriver_invocation.z.so",
-    "//device/soc/hisilicon/hi3751v350/sdk_linux:libfb_mpdi_adapter.z.so",
+    "//device/soc/hisilicon/hi3751v350/sdk_linux:libhal.so",
+    "//drivers/peripheral/display/hal/default_standard:def_display_gralloc",
   ]
-
-  external_deps = [ "hiviewdfx_hilog_native:libhilog" ]
-
-  install_images = [ "system" ]
   subsystem_name = "hdf"
-  part_name = "drivers_peripheral_display"
+  part_name = "display_device_driver"
 }

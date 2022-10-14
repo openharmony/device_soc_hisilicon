@@ -16,9 +16,10 @@
 #include <cerrno>
 #include "hifb_adapter.h"
 #include "display_adapter_interface.h"
-
+#include "display_common.h"
 static int32_t DisplayOpenDevice(const char *path, int flags, mode_t mode)
 {
+    DISPLAY_LOGI();
     return OSAL_OPEN(path, flags, mode);
 }
 
@@ -58,6 +59,7 @@ static int32_t DisplayFbFresh(int32_t devFd, DisplayFrameInfo *frame)
     fbFrameInfo.stride = frame->stride;
     fbFrameInfo.bufaddr = frame->bufaddr;
     fbFrameInfo.format = frame->format;
+    DISPLAY_LOGI("bufaddr %{public}lx", fbFrameInfo.bufaddr);
     if (OSAL_IOCTL(devFd, HIFB_REFRESH_FRAMEINFO, &fbFrameInfo) != 0) {
         return DISPLAY_FAILURE;
     }

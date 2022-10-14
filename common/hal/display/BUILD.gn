@@ -68,7 +68,7 @@ if (defined(ohos_lite)) {
       "//drivers/peripheral/display/hal/default_standard:def_display_gralloc",
     ]
     if (device_name == "hispark_phoenix") {
-      deps += [ "hi3751v350/linux_standard/adapter:display_adapter_impl" ]
+      deps += [ "source/display_gralloc:hisi_display_gralloc" ]
     }
   }
 

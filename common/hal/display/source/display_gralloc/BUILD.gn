@@ -1,0 +1,59 @@
+# Copyright (c) 2022 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//build/ohos.gni")
+import("../display_config.gni")
+
+config("display_gralloc_config") {
+  visibility = [ ":*" ]
+
+  include_dirs = [ "include" ]
+}
+ohos_shared_library("hisi_display_gralloc") {
+  sources = [
+    "src/allocator.cpp",
+    "src/allocator_manager.cpp",
+    "src/display_gralloc.cpp",
+    "src/display_gralloc_private.cpp",
+    "src/dmabufferheap_allocator.cpp",
+    "src/drm_allocator.cpp",
+    "src/framebuffer_allocator.cpp",
+  ]
+
+  public_configs = [ ":display_gralloc_config" ]
+
+  configs = []
+
+  output_name = "display_gralloc"
+
+  include_dirs = [
+    "//drivers/peripheral/display/interfaces/include",
+    "//drivers/peripheral/base",
+    "//third_party/libdrm",
+    "//third_party/libdrm/include/drm",
+    "src",
+  ]
+
+  external_deps = [ "hiviewdfx_hilog_native:libhilog" ]
+
+  deps = [
+    "../utils:display_utils",
+    "//commonlibrary/memory_utils/libdmabufheap:libdmabufheap",
+    "//third_party/libdrm:libdrm",
+  ]
+
+  install_enable = true
+  install_images = [ "system" ]
+  subsystem_name = "hdf"
+  part_name = "display_device_driver"
+}
