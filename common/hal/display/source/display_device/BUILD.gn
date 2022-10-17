@@ -1,0 +1,88 @@
+# Copyright (c) 2022 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//build/ohos.gni")
+import("../display_config.gni")
+
+config("hisi_display_device_pub_config") {
+  visibility = [ ":*" ]
+
+  include_dirs = [
+    "//drivers/peripheral/display/interfaces/include",
+    "//drivers/peripheral/base",
+    "//drivers/peripheral/display/hal/default_standard/src/display_device",
+    "//drivers/peripheral/display/hal/default_standard/include",
+  ]
+}
+
+ohos_shared_library("hisi_display_device") {
+  sources = [
+    "src/composer/hdi_composer.cpp",
+    "src/composer/hdi_gfx_composition.cpp",
+    "src/composer/hdi_video_composition.cpp",
+    "src/core/hdi_device_interface.cpp",
+    "src/core/hdi_display.cpp",
+    "src/core/hdi_layer.cpp",
+    "src/core/hdi_session.cpp",
+    "src/drm/drm_connector.cpp",
+    "src/drm/drm_crtc.cpp",
+    "src/drm/drm_device.cpp",
+    "src/drm/drm_display.cpp",
+    "src/drm/drm_encoder.cpp",
+    "src/drm/drm_plane.cpp",
+    "src/drm/drm_vsync_worker.cpp",
+    "src/drm/hdi_drm_composition.cpp",
+    "src/drm/hdi_drm_layer.cpp",
+    "src/fbdev/fb_composition.cpp",
+    "src/fbdev/fb_device.cpp",
+    "src/fbdev/fb_display.cpp",
+    "src/vsync/sorft_vsync.cpp",
+  ]
+  public_configs = [ ":hisi_display_device_pub_config" ]
+
+  output_name = "display_device"
+
+  include_dirs = [
+    "include",
+    "//drivers/peripheral/display/interfaces/include",
+    "//drivers/peripheral/base",
+    "src/drm",
+    "src/fbdev",
+    "src/core",
+    "src/composer",
+    "src/vsync",
+  ]
+
+  deps = [
+    "../utils:display_utils",
+    "//drivers/peripheral/display/hal:hdi_display_gralloc",
+    "//third_party/libdrm:libdrm",
+  ]
+
+  cflags = [ "-Wno-unused-function" ]
+
+  external_deps = [
+    "c_utils:utils",
+    "hdf_core:libhdf_utils",
+    "hitrace_native:hitrace_meter",
+    "hiviewdfx_hilog_native:libhilog",
+  ]
+
+  symlink_target_name = [ "libdisplay_layer.z.so" ]
+
+  install_enable = true
+  install_images = [ system_base_dir ]
+  relative_install_dir = "chipset-sdk"
+  subsystem_name = "hdf"
+  part_name = "display_device_driver"
+}
