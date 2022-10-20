@@ -29,13 +29,13 @@ if (defined(ohos_lite)) {
   ohos_prebuilt_etc("wifi_cfg") {
     source = "wifi_cfg"
     module_install_dir = "firmware/hi3881"
-    install_images = [ vendor_base_dir ]
+    install_images = [ chipset_base_dir ]
     part_name = "hisilicon_products"
   }
   ohos_prebuilt_etc("wifi_fw_bin") {
     source = "hi3881_fw.bin"
     module_install_dir = "firmware/hi3881"
-    install_images = [ vendor_base_dir ]
+    install_images = [ chipset_base_dir ]
     part_name = "hisilicon_products"
   }
   group("wifi_firmware") {
