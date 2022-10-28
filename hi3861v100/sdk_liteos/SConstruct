@@ -498,7 +498,7 @@ def build_all(build_env, link_sys, flash_boot_bin, loader_boot_bin):
             loader_bin = os.path.join('#', env_cfg.bin_path, '%s_loader_signed.bin'%(env.get('CHIP_TYPE')))
             efuse_bin = os.path.join('build', 'basebin', 'efuse_cfg.bin')
             burn_bin = os.path.join(env_cfg.bin_path, '%s_burn.bin'%env_cfg.target_name)
-            allinone_bin = os.path.join(env_cfg.bin_path, '%s_allinone.bin'%env_cfg.target_name)
+            allinone_bin = os.path.join(env_cfg.bin_path, 'OHOS_Image.bin')
             burn_bins = sign_build.BurnImg(source=[ota_bin, loader_bin, efuse_bin] if os.path.exists(efuse_bin) else [ota_bin, loader_bin],
                                            target=[burn_bin, allinone_bin])
             imgs.append(burn_bins)
