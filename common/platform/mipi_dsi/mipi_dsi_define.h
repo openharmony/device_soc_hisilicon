@@ -69,6 +69,9 @@ typedef struct {
     SyncInfoTag     syncInfo;
     unsigned int    phyDataRate;          /* mbps */
     unsigned int    pixelClk;             /* KHz */
+    bool initFlag;
+    struct PlatformDumper *dumper;
+    char *dumperName;
 } ComboDevCfgTag;
 
 typedef struct {

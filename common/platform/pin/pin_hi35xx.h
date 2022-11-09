@@ -31,6 +31,10 @@ extern "C" {
 #define PIN_PULL_TYPE_OFFSET  8
 #define PIN_STRENGTH_OFFSET   4
 
+#define PIN_DUMPER_NAME_PREFIX "pin_dumper_"
+#define PIN_DUMPER_NAME_LEN 64
+#define PIN_DUMPER_DATAS_REGISTER_SIZE 10
+
 #ifdef __cplusplus
 #if __cplusplus
 }

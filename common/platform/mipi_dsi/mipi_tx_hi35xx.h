@@ -80,6 +80,23 @@
 #define ROUNDUP_VALUE     7999
 #define INNER_PEROID      8000   /* 8 * 1000 ,1000 is 1us = 1000ns, 8 is division ratio */
 
+#define MIPI_TX_DUMPER_NAME_PREFIX         "mipi_tx_dumper_"
+#define MIPI_TX_DUMPER_NAME_LEN            64
+#define MIPI_TX_DUMPER_DATAS_REGISTER_SIZE 10
+
+#define MIPI_TX_PWR_UP                     0x4
+#define MIPI_TX_CLKMGR_CFG                 0x8
+#define MIPI_TX_VCID                       0xc
+#define MIPI_TX_COLOR_CODING               0x10
+#define MIPI_TX_LP_CMD_TIM                 0x18
+#define MIPI_TX_GEN_VCID                   0x30
+#define MIPI_TX_VID_HSA_TIME               0x48
+#define MIPI_TX_VID_HBP_TIME               0x4c
+#define MIPI_TX_VID_HLINE_TIME             0x50
+#define MIPI_TX_VID_VSA_LINES              0x54
+#define MIPI_TX_VID_VBP_LINES              0x58
+#define MIPI_TX_VID_VFP_LINES              0x5c
+
 typedef struct {
     unsigned char dataTpreDelay;
     unsigned char clkTlpx;

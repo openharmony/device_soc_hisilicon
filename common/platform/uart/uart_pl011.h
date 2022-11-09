@@ -181,6 +181,8 @@ struct UartPl011Port {
 #define PL011_FLG_DMA_TX_REQUESTED (1 << 2)
     struct UartDmaTransfer *rxUdt;
     struct UartDriverData *udd;
+    struct PlatformDumper *dumper;
+    char *dumperName;
 };
 
 /* read some data from rx_data buf in UartTransfer */

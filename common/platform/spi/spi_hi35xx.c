@@ -26,8 +26,10 @@
 #include "osal_time.h"
 #include "spi_core.h"
 #include "spi_dev.h"
+#include "platform_dumper.h"
 
 #define HDF_LOG_TAG spi_hi35xx
+#define SPI_DUMPER_NAME_LEN     100
 
 struct Pl022 {
     struct SpiCntlr *cntlr;
@@ -53,7 +55,70 @@ struct Pl022 {
     uint16_t mode;
     uint8_t bitsPerWord;
     uint8_t transferMode;
+    struct PlatformDumper *dumper;
+    char *dumperName;
 };
+
+static void SpiDumperDump(struct Pl022 *pl022)
+{
+    int32_t ret;
+    struct PlatformDumperData datas[] = {
+        {"REG_SPI_CR0", PLATFORM_DUMPER_REGISTERL, (void *)(pl022->regBase + REG_SPI_CR0)},
+        {"REG_SPI_CR1", PLATFORM_DUMPER_REGISTERL, (void *)(pl022->regBase + REG_SPI_CR1)},
+        {"REG_SPI_DR", PLATFORM_DUMPER_REGISTERL, (void *)(pl022->regBase + REG_SPI_DR)},
+        {"REG_SPI_SR", PLATFORM_DUMPER_REGISTERL, (void *)(pl022->regBase + REG_SPI_SR)},
+        {"REG_SPI_CPSR", PLATFORM_DUMPER_REGISTERL, (void *)(pl022->regBase + REG_SPI_CPSR)},
+        {"REG_SPI_IMSC", PLATFORM_DUMPER_REGISTERL, (void *)(pl022->regBase + REG_SPI_IMSC)},
+        {"REG_SPI_RIS", PLATFORM_DUMPER_REGISTERL, (void *)(pl022->regBase + REG_SPI_RIS)},
+        {"REG_SPI_MIS", PLATFORM_DUMPER_REGISTERL, (void *)(pl022->regBase + REG_SPI_MIS)},
+        {"REG_SPI_ICR", PLATFORM_DUMPER_REGISTERL, (void *)(pl022->regBase + REG_SPI_ICR)},
+    };
+
+    if (pl022->dumper == NULL) {
+        return;
+    }
+    ret = PlatformDumperAddDatas(pl022->dumper, datas, sizeof(datas) / sizeof(struct PlatformDumperData));
+    if (ret != HDF_SUCCESS) {
+        return;
+    }
+    (void)PlatformDumperDump(pl022->dumper);
+    (void)PlatformDumperClearDatas(pl022->dumper);
+}
+
+static int32_t SpiDumperCreate(struct Pl022 *pl022)
+{
+    struct PlatformDumper *dumper = NULL;
+    char *spiName = NULL;
+
+    spiName = (char *)OsalMemCalloc(SPI_DUMPER_NAME_LEN);
+    if (spiName == NULL) {
+        HDF_LOGE("%s: alloc spiName fail", __func__);
+        return HDF_ERR_MALLOC_FAIL;
+    }
+
+    if (snprintf_s(spiName, SPI_DUMPER_NAME_LEN, SPI_DUMPER_NAME_LEN - 1, "%s%u",
+        "spi_dumper_", pl022->busNum) < 0) {
+        HDF_LOGE("%s: snprintf_s spiName fail!", __func__);
+        OsalMemFree(spiName);
+        return HDF_ERR_IO;
+    }
+    dumper = PlatformDumperCreate(spiName);
+    if (dumper == NULL) {
+        HDF_LOGE("%s: create dumper for %s fail!", __func__, spiName);
+        OsalMemFree(spiName);
+        return HDF_ERR_IO;
+    }
+    pl022->dumper = dumper;
+    pl022->dumperName = spiName;
+
+    return HDF_SUCCESS;
+}
+
+static inline void SpiDumperDestroy(struct Pl022 *pl022)
+{
+    PlatformDumperDestroy(pl022->dumper);
+    OsalMemFree(pl022->dumperName);
+}
 
 static int32_t SpiCfgCs(struct Pl022 *pl022, uint32_t cs)
 {
@@ -409,6 +474,7 @@ static int32_t Pl022SetCfg(struct SpiCntlr *cntlr, struct SpiCfg *cfg)
     pl022 = (struct Pl022 *)cntlr->priv;
     dev = Pl022FindDeviceByCsNum(pl022, cntlr->curCs);
     if (dev == NULL) {
+        SpiDumperDump(pl022);
         return HDF_FAILURE;
     }
     dev->cfg.mode = cfg->mode;
@@ -438,6 +504,7 @@ static int32_t Pl022GetCfg(struct SpiCntlr *cntlr, struct SpiCfg *cfg)
     pl022 = (struct Pl022 *)cntlr->priv;
     dev = Pl022FindDeviceByCsNum(pl022, cntlr->curCs);
     if (dev == NULL) {
+        SpiDumperDump(pl022);
         return HDF_FAILURE;
     }
     *cfg = dev->cfg;
@@ -586,7 +653,7 @@ static int32_t Pl022TransferOneMessage(struct Pl022 *pl022, struct SpiMsg *msg)
 
 static int32_t Pl022Transfer(struct SpiCntlr *cntlr, struct SpiMsg *msg, uint32_t count)
 {
-    int32_t ret = HDF_FAILURE;
+    int32_t ret;
     uint32_t i;
     struct Pl022 *pl022 = NULL;
     struct SpiDev *dev = NULL;
@@ -603,7 +670,8 @@ static int32_t Pl022Transfer(struct SpiCntlr *cntlr, struct SpiMsg *msg, uint32_
     pl022 = (struct Pl022 *)cntlr->priv;
     dev = Pl022FindDeviceByCsNum(pl022, cntlr->curCs);
     if (dev == NULL) {
-        goto __ERR;
+        HDF_LOGE("%s: invalid dev", __func__);
+        return HDF_ERR_INVALID_OBJECT;
     }
     Pl022Disable(pl022);
     pl022->mode = dev->cfg.mode;
@@ -615,10 +683,11 @@ static int32_t Pl022Transfer(struct SpiCntlr *cntlr, struct SpiMsg *msg, uint32_
         ret = Pl022TransferOneMessage(pl022, &(msg[i]));
         if (ret != 0) {
             HDF_LOGE("%s: transfer error", __func__);
-            goto __ERR;
+            SpiDumperDump(pl022);
+            return ret;
         }
     }
-__ERR:
+
     return ret;
 }
 
@@ -698,14 +767,9 @@ static void Pl022Release(struct Pl022 *pl022)
     OsalMemFree(pl022);
 }
 
-static int32_t SpiGetBaseCfgFromHcs(struct Pl022 *pl022, const struct DeviceResourceNode *node)
+static int32_t SpiGetBaseCfgFromHcs(struct DeviceResourceIface *iface,
+    struct Pl022 *pl022, const struct DeviceResourceNode *node)
 {
-    struct DeviceResourceIface *iface = DeviceResourceGetIfaceInstance(HDF_CONFIG_SOURCE);
-
-    if (iface == NULL || iface->GetUint8 == NULL || iface->GetUint16 == NULL || iface->GetUint32 == NULL) {
-        HDF_LOGE("%s: face is invalid", __func__);
-        return HDF_FAILURE;
-    }
     if (iface->GetUint32(node, "busNum", &pl022->busNum, 0) != HDF_SUCCESS) {
         HDF_LOGE("%s: read busNum fail", __func__);
         return HDF_FAILURE;
@@ -741,13 +805,17 @@ static int32_t SpiGetBaseCfgFromHcs(struct Pl022 *pl022, const struct DeviceReso
     return 0;
 }
 
-static int32_t SpiGetRegCfgFromHcs(struct Pl022 *pl022, const struct DeviceResourceNode *node)
+static int32_t SpiGetCfgFromHcs(struct Pl022 *pl022, const struct DeviceResourceNode *node)
 {
     uint32_t tmp;
     struct DeviceResourceIface *iface = DeviceResourceGetIfaceInstance(HDF_CONFIG_SOURCE);
 
-    if (iface == NULL || iface->GetUint32 == NULL) {
-        HDF_LOGE("%s: face is invalid", __func__);
+    if (iface == NULL || iface->GetUint8 == NULL || iface->GetUint16 == NULL || iface->GetUint32 == NULL) {
+        HDF_LOGE("%s: iface is invalid", __func__);
+        return HDF_FAILURE;
+    }
+    if (SpiGetBaseCfgFromHcs(iface, pl022, node) != HDF_SUCCESS) {
+        HDF_LOGE("%s: SpiGetBaseCfgFromHcs error", __func__);
         return HDF_FAILURE;
     }
     if (iface->GetUint32(node, "regBase", &tmp, 0) != HDF_SUCCESS) {
@@ -826,13 +894,7 @@ static int32_t Pl022Init(struct SpiCntlr *cntlr, const struct HdfDeviceObject *d
         HDF_LOGE("%s: OsalMemCalloc error", __func__);
         return HDF_FAILURE;
     }
-    ret = SpiGetBaseCfgFromHcs(pl022, device->property);
-    if (ret != HDF_SUCCESS) {
-        HDF_LOGE("%s: SpiGetBaseCfgFromHcs error", __func__);
-        OsalMemFree(pl022);
-        return HDF_FAILURE;
-    }
-    ret = SpiGetRegCfgFromHcs(pl022, device->property);
+    ret = SpiGetCfgFromHcs(pl022, device->property);
     if (ret != HDF_SUCCESS) {
         HDF_LOGE("%s: SpiGetRegCfgFromHcs error", __func__);
         OsalMemFree(pl022);
@@ -866,6 +928,12 @@ static int32_t Pl022Init(struct SpiCntlr *cntlr, const struct HdfDeviceObject *d
         Pl022Release(pl022);
         return ret;
     }
+    ret = SpiDumperCreate(pl022);
+    if (ret != HDF_SUCCESS) {
+        HDF_LOGE("%s: create dumper failed:%d", __func__, ret);
+        return ret;
+    }
+    SpiDumperDump(pl022);
     return 0;
 }
 
@@ -929,6 +997,7 @@ static void HdfSpiDeviceRelease(struct HdfDeviceObject *device)
         return;
     }
     if (cntlr->priv != NULL) {
+        SpiDumperDestroy((struct Pl022 *)cntlr->priv);
         Pl022Remove((struct Pl022 *)cntlr->priv);
     }
     SpiCntlrDestroy(cntlr);

@@ -26,6 +26,7 @@
 #include "osal_mem.h"
 #include "osal_spinlock.h"
 #include "osal_time.h"
+#include "platform_dumper.h"
 
 #define HDF_LOG_TAG i2c_hi35xx
 #define USER_VFS_SUPPORT
@@ -40,6 +41,9 @@
 #define HI35XX_I2C_RESCUE_TIMES 9
 #define HI35XX_I2C_RESCUE_DELAY 10
 
+#define I2C_DUMPER_NAME_LEN     64
+#define I2C_DUMPER_NAME_PREFIX  "i2c_dumper_"
+
 struct Hi35xxI2cCntlr {
     struct I2cCntlr cntlr;
     OsalSpinlock spin;
@@ -51,6 +55,8 @@ struct Hi35xxI2cCntlr {
     uint32_t freq;
     uint32_t irq;
     uint32_t regBasePhy;
+    struct PlatformDumper *dumper;
+    char *dumperName;
 };
 
 struct Hi35xxTransferData {
@@ -72,6 +78,86 @@ struct Hi35xxTransferData {
 #define REG_CRG_I2C           (CRG_REG_BASE + 0x01b8)
 #define I2C_CRG_RST_OFFSET    19
 #define I2C_CRG_CLK_OFFSET    11
+
+static int32_t I2cDumperAddDatas(const struct Hi35xxI2cCntlr *hi35xx)
+{
+    struct PlatformDumperData datas[] = {
+        {"HI35XX_I2Cx_GLB", PLATFORM_DUMPER_REGISTERL, (void *)(hi35xx->regBase + HI35XX_I2C_GLB)},
+        {"HI35XX_I2Cx_SCL_H", PLATFORM_DUMPER_REGISTERL, (void *)(hi35xx->regBase + HI35XX_I2C_SCL_H)},
+        {"HI35XX_I2Cx_SCL_L", PLATFORM_DUMPER_REGISTERL, (void *)(hi35xx->regBase + HI35XX_I2C_SCL_L)},
+        {"HI35XX_I2Cx_DATA1", PLATFORM_DUMPER_REGISTERL, (void *)(hi35xx->regBase + HI35XX_I2C_DATA1)},
+        {"HI35XX_I2C_TXF", PLATFORM_DUMPER_REGISTERL, (void *)(hi35xx->regBase + HI35XX_I2C_TXF)},
+        {"HI35XX_I2C_RXF", PLATFORM_DUMPER_REGISTERL, (void *)(hi35xx->regBase + HI35XX_I2C_RXF)},
+        {"HI35XX_I2C_CTRL2", PLATFORM_DUMPER_REGISTERL, (void *)(hi35xx->regBase + HI35XX_I2C_CTRL2)},
+        {"HI35XX_I2C_STAT", PLATFORM_DUMPER_REGISTERL, (void *)(hi35xx->regBase + HI35XX_I2C_STAT)},
+        {"HI35XX_I2C_INTR_RAW", PLATFORM_DUMPER_REGISTERL, (void *)(hi35xx->regBase + HI35XX_I2C_INTR_RAW)},
+        {"HI35XX_I2C_INTR_EN", PLATFORM_DUMPER_REGISTERL, (void *)(hi35xx->regBase + HI35XX_I2C_INTR_EN)},
+        {"HI35XX_I2C_INTR_STAT", PLATFORM_DUMPER_REGISTERL, (void *)(hi35xx->regBase + HI35XX_I2C_INTR_STAT)},
+    };
+
+    if (hi35xx->dumper == NULL) {
+        HDF_LOGE("%s: dumper is NULL", __func__);
+        return HDF_ERR_INVALID_OBJECT;
+    }
+    return PlatformDumperAddDatas(hi35xx->dumper, datas, sizeof(datas) / sizeof(struct PlatformDumperData));
+}
+
+static int32_t I2cDumperCreate(struct Hi35xxI2cCntlr *hi35xx)
+{
+    struct PlatformDumper *dumper = NULL;
+    char *name = NULL;
+
+    name = (char *)OsalMemCalloc(I2C_DUMPER_NAME_LEN);
+    if (name == NULL) {
+        HDF_LOGE("%s: alloc name fail", __func__);
+        return HDF_ERR_MALLOC_FAIL;
+    }
+
+    if (snprintf_s(name, I2C_DUMPER_NAME_LEN, I2C_DUMPER_NAME_LEN - 1, "%s%hd",
+        I2C_DUMPER_NAME_PREFIX, hi35xx->bus) < 0) {
+        HDF_LOGE("%s: snprintf_s name fail!", __func__);
+        OsalMemFree(name);
+        return HDF_ERR_IO;
+    }
+    dumper = PlatformDumperCreate(name);
+    if (dumper == NULL) {
+        HDF_LOGE("%s: create dumper for %s fail!", __func__, name);
+        OsalMemFree(name);
+        return HDF_ERR_IO;
+    }
+
+    hi35xx->dumper = dumper;
+    hi35xx->dumperName = name;
+
+    return HDF_SUCCESS;
+}
+
+static inline void I2cDumperDestroy(struct Hi35xxI2cCntlr *hi35xx)
+{
+    PlatformDumperDestroy(hi35xx->dumper);
+    OsalMemFree(hi35xx->dumperName);
+}
+
+static void I2cDumperDump(const struct Hi35xxI2cCntlr *hi35xx, const char *executor, int srcLine)
+{
+    static int line = 0;
+    struct PlatformDumperData header = {executor, PLATFORM_DUMPER_INT32, &line};
+    int32_t ret;
+
+    line = srcLine;
+    ret = PlatformDumperAddData(hi35xx->dumper, &header);
+    if (ret != HDF_SUCCESS) {
+        HDF_LOGE("%s: add header fail", __func__);
+        return;
+    }
+    ret = I2cDumperAddDatas(hi35xx);
+    if (ret != HDF_SUCCESS) {
+        return;
+    }
+    (void)PlatformDumperDump(hi35xx->dumper);
+    (void)PlatformDumperClearDatas(hi35xx->dumper);
+}
+
 static inline void Hi35xxI2cHwInitCfg(struct Hi35xxI2cCntlr *hi35xx)
 {
     unsigned long busId = (unsigned long)hi35xx->bus;
@@ -79,7 +165,6 @@ static inline void Hi35xxI2cHwInitCfg(struct Hi35xxI2cCntlr *hi35xx)
     WRITE_REG_BIT(1, I2C_CRG_CLK_OFFSET + busId, REG_CRG_I2C);
     WRITE_REG_BIT(0, I2C_CRG_RST_OFFSET + busId, REG_CRG_I2C);
 }
-
 
 static inline void Hi35xxI2cEnable(const struct Hi35xxI2cCntlr *hi35xx)
 {
@@ -112,7 +197,6 @@ static inline void Hi35xxI2cCfgIrq(const struct Hi35xxI2cCntlr *hi35xx, unsigned
 {
     OSAL_WRITEL(flag, hi35xx->regBase + HI35XX_I2C_INTR_EN);
 }
-
 
 static inline void Hi35xxI2cClrIrq(const struct Hi35xxI2cCntlr *hi35xx)
 {
@@ -317,6 +401,7 @@ static int Hi35xxI2cWaitRxNoempty(const struct Hi35xxI2cCntlr *hi35xx)
     Hi35xxI2cRescure(hi35xx);
     HDF_LOGE("%s:wait rx no empty timeout, RIS:0x%x, SR: 0x%x",
         __func__, OSAL_READL(hi35xx->regBase + HI35XX_I2C_INTR_RAW), val);
+    I2cDumperDump(hi35xx, __func__, __LINE__);
     return HDF_ERR_IO;
 }
 
@@ -336,6 +421,7 @@ static int Hi35xxI2cWaitTxNofull(const struct Hi35xxI2cCntlr *hi35xx)
     Hi35xxI2cRescure(hi35xx);
     HDF_LOGE("%s: wait rx no empty timeout, RIS: 0x%x, SR: 0x%x",
         __func__, OSAL_READL(hi35xx->regBase + HI35XX_I2C_INTR_RAW), val);
+    I2cDumperDump(hi35xx, __func__, __LINE__);
     return HDF_ERR_IO;
 }
 
@@ -359,7 +445,7 @@ static int32_t Hi35xxI2cWaitIdle(const struct Hi35xxI2cCntlr *hi35xx)
     Hi35xxI2cRescure(hi35xx);
     HDF_LOGE("%s: wait idle timeout, RIS: 0x%x, SR: 0x%x",
         __func__, val, OSAL_READL(hi35xx->regBase + HI35XX_I2C_STAT));
-
+    I2cDumperDump(hi35xx, __func__, __LINE__);
     return HDF_ERR_IO;
 }
 
@@ -445,6 +531,7 @@ static void Hi35xxI2cCntlrInit(struct Hi35xxI2cCntlr *hi35xx)
     Hi35xxI2cDisableIrq(hi35xx, INTR_ALL_MASK);
     Hi35xxI2cSetFreq(hi35xx);
     Hi35xxI2cSetWater(hi35xx);
+    I2cDumperDump(hi35xx, __func__, __LINE__);
     HDF_LOGI("%s: cntlr:%hd init done!", __func__, hi35xx->bus);
 }
 
@@ -554,11 +641,10 @@ static int32_t Hi35xxI2cReadDrs(struct Hi35xxI2cCntlr *hi35xx, const struct Devi
     return HDF_SUCCESS;
 }
 
-static int32_t Hi35xxI2cParseAndInit(struct HdfDeviceObject *device, const struct DeviceResourceNode *node)
+static int32_t Hi35xxI2cParseAndInit(const struct DeviceResourceNode *node)
 {
     int32_t ret;
     struct Hi35xxI2cCntlr *hi35xx = NULL;
-    (void)device;
 
     hi35xx = (struct Hi35xxI2cCntlr *)OsalMemCalloc(sizeof(*hi35xx));
     if (hi35xx == NULL) {
@@ -576,6 +662,12 @@ static int32_t Hi35xxI2cParseAndInit(struct HdfDeviceObject *device, const struc
     if (hi35xx->regBase == NULL) {
         HDF_LOGE("%s: ioremap regBase fail!", __func__);
         ret = HDF_ERR_IO;
+        goto __ERR__;
+    }
+
+    ret = I2cDumperCreate(hi35xx);
+    if (ret != HDF_SUCCESS) {
+        HDF_LOGE("%s: create dumper failed:%d", __func__, ret);
         goto __ERR__;
     }
 
@@ -621,7 +713,7 @@ static int32_t Hi35xxI2cInit(struct HdfDeviceObject *device)
 
     ret = HDF_SUCCESS;
     DEV_RES_NODE_FOR_EACH_CHILD_NODE(device->property, childNode) {
-        ret = Hi35xxI2cParseAndInit(device, childNode);
+        ret = Hi35xxI2cParseAndInit(childNode);
         if (ret != HDF_SUCCESS) {
             break;
         }
@@ -650,6 +742,7 @@ static void Hi35xxI2cRemoveByNode(const struct DeviceResourceNode *node)
         return;
     }
 
+    I2cDumperDestroy(hi35xx);
     cntlr = I2cCntlrGet(bus);
     if (cntlr != NULL && cntlr->priv == node) {
         I2cCntlrPut(cntlr);

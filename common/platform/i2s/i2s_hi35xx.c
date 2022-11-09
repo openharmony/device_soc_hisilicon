@@ -26,8 +26,81 @@
 #include "osal_mem.h"
 #include "osal_sem.h"
 #include "osal_time.h"
+#include "platform_dumper.h"
 
 #define HDF_LOG_TAG i2s_hi35xx
+
+static void I2sDumperDump(struct I2sConfigInfo *configInfo)
+{
+    int32_t ret;
+    struct PlatformDumperData datas[] = {
+        {"I2S_AIAO_INT_ENA", PLATFORM_DUMPER_REGISTERL, (void *)(configInfo->regBase + I2S_AIAO_INT_ENA)},
+        {"RX_IF_ATTR1", PLATFORM_DUMPER_REGISTERL, (void *)(configInfo->regBase + RX_IF_ATTR1)},
+        {"RX_DSP_CTRL", PLATFORM_DUMPER_REGISTERL, (void *)(configInfo->regBase + RX_DSP_CTRL)},
+        {"RX_BUFF_SIZE", PLATFORM_DUMPER_REGISTERL, (void *)(configInfo->regBase + RX_BUFF_SIZE)},
+        {"RX_BUFF_WPTR", PLATFORM_DUMPER_REGISTERL, (void *)(configInfo->regBase + RX_BUFF_WPTR)},
+        {"RX_BUFF_RPTR", PLATFORM_DUMPER_REGISTERL, (void *)(configInfo->regBase + RX_BUFF_RPTR)},
+        {"RX_TRANS_SIZE", PLATFORM_DUMPER_REGISTERL, (void *)(configInfo->regBase + RX_TRANS_SIZE)},
+        {"RX_INT_ENA", PLATFORM_DUMPER_REGISTERL, (void *)(configInfo->regBase + RX_INT_ENA)},
+        {"RX_INT_STATUS", PLATFORM_DUMPER_REGISTERL, (void *)(configInfo->regBase + RX_INT_STATUS)},
+        {"RX_INT_CLR", PLATFORM_DUMPER_REGISTERL, (void *)(configInfo->regBase + RX_INT_CLR)},
+        {"TX_IF_ATTR1", PLATFORM_DUMPER_REGISTERL, (void *)(configInfo->regBase + TX_IF_ATTR1)},
+        {"TX_DSP_CTRL", PLATFORM_DUMPER_REGISTERL, (void *)(configInfo->regBase + TX_DSP_CTRL)},
+        {"TX_BUFF_SADDR", PLATFORM_DUMPER_REGISTERL, (void *)(configInfo->regBase + TX_BUFF_SADDR)},
+        {"TX_BUFF_SIZE", PLATFORM_DUMPER_REGISTERL, (void *)(configInfo->regBase + TX_BUFF_SIZE)},
+        {"TX_BUFF_WPTR", PLATFORM_DUMPER_REGISTERL, (void *)(configInfo->regBase + TX_BUFF_WPTR)},
+        {"TX_BUFF_RPTR", PLATFORM_DUMPER_REGISTERL, (void *)(configInfo->regBase + TX_BUFF_RPTR)},
+        {"TX_TRANS_SIZE", PLATFORM_DUMPER_REGISTERL, (void *)(configInfo->regBase + TX_TRANS_SIZE)},
+        {"AUDIO_CTRL_REG_1", PLATFORM_DUMPER_REGISTERL, (void *)(configInfo->regBase + AUDIO_CTRL_REG_1)},
+        {"AUDIO_DAC_REG_0", PLATFORM_DUMPER_REGISTERL, (void *)(configInfo->regBase + AUDIO_DAC_REG_0)},
+    };
+
+    if (configInfo->dumper == NULL) {
+        HDF_LOGE("%s: configInfo dumper is NULL!", __func__);
+        return;
+    }
+    ret = PlatformDumperAddDatas(configInfo->dumper, datas, sizeof(datas) / sizeof(struct PlatformDumperData));
+    if (ret != HDF_SUCCESS) {
+        return;
+    }
+    (void)PlatformDumperDump(configInfo->dumper);
+    (void)PlatformDumperClearDatas(configInfo->dumper);
+}
+
+static int32_t I2sDumperCreate(struct I2sConfigInfo *configInfo)
+{
+    struct PlatformDumper *dumper = NULL;
+    char *name = NULL;
+
+    name = (char *)OsalMemCalloc(I2S_DUMPER_NAME_LEN);
+    if (name == NULL) {
+        HDF_LOGE("%s: alloc name fail", __func__);
+        return HDF_ERR_MALLOC_FAIL;
+    }
+
+    if (snprintf_s(name, I2S_DUMPER_NAME_LEN, I2S_DUMPER_NAME_LEN - 1, "%s%u",
+        I2S_DUMPER_NAME_PREFIX, configInfo->busNum) < 0) {
+        HDF_LOGE("%s: snprintf_s name fail!", __func__);
+        OsalMemFree(name);
+        return HDF_ERR_IO;
+    }
+    dumper = PlatformDumperCreate(name);
+    if (dumper == NULL) {
+        HDF_LOGE("%s: get dumper for %s fail!", __func__, name);
+        OsalMemFree(name);
+        return HDF_ERR_IO;
+    }
+    configInfo->dumper = dumper;
+    configInfo->dumperName = name;
+
+    return HDF_SUCCESS;
+}
+
+static inline void I2sDumperDestroy(struct I2sConfigInfo *configInfo)
+{
+    PlatformDumperDestroy(configInfo->dumper);
+    OsalMemFree(configInfo->dumperName);
+}
 
 void GetI2sRxRegInfo(struct I2sConfigInfo *i2sCfg)
 {
@@ -88,6 +161,7 @@ static int32_t Hi35xxI2sDisable(struct I2sCntlr *cntlr)
     struct I2sConfigInfo *i2sCfg = (struct I2sConfigInfo *)cntlr->priv;
     if (Hi35xxI2sRegWrite(0x0, i2sCfg->crg103Addr) != HDF_SUCCESS) {
         I2S_PRINT_LOG_ERR("%s: Hi35xxI2sRegWrite i2sCfg->crg103Addr failed", __func__);
+        I2sDumperDump(i2sCfg);
         return HDF_FAILURE;
     }
 
@@ -129,8 +203,8 @@ static int32_t Hi35xxI2sGetCfg(struct I2sCntlr *cntlr, struct I2sCfg *cfg)
 
     I2S_PRINT_LOG_DBG("%s: writeChannel[%u], i2slFsSel[%u], mclk[%d], bclk[%d], sampleRate[%u], \
         type[%u], channelMode[%u], channelIfMode[%u], samplePrecision[%u]", __func__,
-    cfg->writeChannel, cfg->i2slFsSel, cfg->mclk, cfg->bclk, cfg->sampleRate,
-    cfg->type, cfg->channelMode, cfg->channelIfMode, cfg->samplePrecision);
+        cfg->writeChannel, cfg->i2slFsSel, cfg->mclk, cfg->bclk, cfg->sampleRate,
+        cfg->type, cfg->channelMode, cfg->channelIfMode, cfg->samplePrecision);
     return HDF_SUCCESS;
 }
 
@@ -193,6 +267,7 @@ static int32_t Hi35xxI2sSetCfg(struct I2sCntlr *cntlr, struct I2sCfg *cfg)
     CfgSetI2sCrgCfg008(i2sCfg, cfg->i2slFsSel, cfg->sampleRate);
     CfgSetI2sCrgCfg108(i2sCfg);
     CfgSetTxIfSAttr1(i2sCfg);
+    I2sDumperDump(i2sCfg);
     return HDF_SUCCESS;
 }
 
@@ -207,6 +282,7 @@ static int32_t Hi35xxI2sStartWrite(struct I2sCntlr *cntlr)
     // prepare tx buff
     if (Hi35xxI2sWriteGetBuff(i2sCfg) != HDF_SUCCESS) {
         I2S_PRINT_LOG_ERR("%s: Hi35xxI2sWrite error", __func__);
+        I2sDumperDump(i2sCfg);
         return HDF_FAILURE;
     }
     CfgSetTxBuffInfo(i2sCfg);
@@ -235,6 +311,7 @@ static int32_t Hi35xxI2sStopWrite(struct I2sCntlr *cntlr)
     value |= (0x0 << TX_DISABLE_SHIFT);
     if (Hi35xxI2sRegWrite(value, i2sCfg->regBase + TX_DSP_CTRL) != HDF_SUCCESS) {
         I2S_PRINT_LOG_ERR("%s: Hi35xxI2sRegWrite i2sCfg->regBase + TX_DSP_CTRL failed", __func__);
+        I2sDumperDump(i2sCfg);
         return HDF_FAILURE;
     }
 
@@ -274,7 +351,8 @@ static int32_t Hi35xxI2sStartRead(struct I2sCntlr *cntlr)
 
     // prepare rx buff
     if (Hi35xxI2sReadGetBuff(i2sCfg) != 0) {
-    I2S_PRINT_LOG_ERR("%s: Hi35xxI2sRead error", __func__);
+        I2S_PRINT_LOG_ERR("%s: Hi35xxI2sRead error", __func__);
+        I2sDumperDump(i2sCfg);
         return HDF_FAILURE;
     }
 
@@ -308,6 +386,7 @@ static int32_t Hi35xxI2sStopRead(struct I2sCntlr *cntlr)
     value |= (0x0 << RX_DISABLE_SHIFT);
     if (Hi35xxI2sRegWrite(value, i2sCfg->regBase + RX_DSP_CTRL) != HDF_SUCCESS) {
         I2S_PRINT_LOG_ERR("%s: Hi35xxI2sRegWrite i2sCfg->regBase + RX_DSP_CTRL failed", __func__);
+        I2sDumperDump(i2sCfg);
         return HDF_FAILURE;
     }
 
@@ -350,6 +429,7 @@ static int32_t Hi35xxI2sRead(struct I2sCntlr *cntlr, struct I2sMsg *msgs)
     uint32_t rptrOffset = 0;
     if (GetRxBuffData(i2sCfg, msgs, &rptrOffset) != HDF_SUCCESS) {
         I2S_PRINT_LOG_ERR("%s: GetRxBuffData failed", __func__);
+        I2sDumperDump(i2sCfg);
         return HDF_FAILURE;
     }
 
@@ -431,9 +511,9 @@ static int32_t Hi35xxI2sTransfer(struct I2sCntlr *cntlr, struct I2sMsg *msgs)
         Hi35xxI2sWrite(cntlr, msgs);
     } else {
         I2S_PRINT_LOG_ERR("%s: buf null", __func__);
+        I2sDumperDump(i2sCfg);
         return HDF_FAILURE;
     }
-
     return HDF_SUCCESS;
 }
 
@@ -505,6 +585,7 @@ static int32_t I2sGetRegCfgFromHcs(struct I2sConfigInfo *configInfo, const struc
     I2S_PRINT_LOG_DBG("%s:codecAddr[0x%x][%px]", __func__, AUDIO_CODEC_BASE_ADDR, configInfo->codecAddr);
     configInfo->crg103Addr = OsalIoRemap(PERI_CRG103, sizeof(unsigned int));
     I2S_PRINT_LOG_DBG("%s:crg103Addr[0x%x][%px]", __func__, PERI_CRG103, configInfo->crg103Addr);
+
     return HDF_SUCCESS;
 }
 
@@ -552,6 +633,7 @@ static int32_t I2sInit(struct I2sCntlr *cntlr, const struct HdfDeviceObject *dev
         OsalMemFree(configInfo);
         return HDF_FAILURE;
     }
+    configInfo->busNum = cntlr->busNum;
     configInfo->isplay = false;
     configInfo->rxVirData = NULL;
     configInfo->txVirData = NULL;
@@ -564,6 +646,13 @@ static int32_t I2sInit(struct I2sCntlr *cntlr, const struct HdfDeviceObject *dev
     cntlr->priv = configInfo;
     cntlr->method = &g_i2sCntlrMethod;
 
+    ret = I2sDumperCreate(configInfo);
+    if (ret != HDF_SUCCESS) {
+        HDF_LOGE("%s: create dumper failed:%d", __func__, ret);
+        OsalMemFree(configInfo);
+        return ret;
+    }
+    I2sDumperDump(configInfo);
     return HDF_SUCCESS;
 }
 
@@ -624,6 +713,7 @@ static void HdfI2sDeviceRelease(struct HdfDeviceObject *device)
         if (configInfo->crg103Addr != 0) {
             OsalIoUnmap((void *)configInfo->crg103Addr);
         }
+        I2sDumperDestroy(configInfo);
         OsalMemFree(cntlr->priv);
     }
 

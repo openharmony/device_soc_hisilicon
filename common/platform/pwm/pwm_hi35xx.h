@@ -36,6 +36,16 @@
 #define PWM_DEFAULT_POLARITY   0
 #define PWM_DEFAULT_DUTY_CYCLE 0x14D // 333
 
+#define PWM_DUMPER_NAME_PREFIX "pwm_dumper_"
+#define PWM_DUMPER_NAME_LEN    64
+
+#define PWM_CFG1_SHIFT      0x4   // Offset Address 0x4
+#define PWM_CFG2_SHIFT      0x8   // Offset Address 0x8
+#define PWM_CTRL_SHIFT      0xC   // Offset Address 0xC
+#define PWM_STATE0_SHIFT    0x10  // Offset Address 0x10
+#define PWM_STATE1_SHIFT    0x14  // Offset Address 0x14
+#define PWM_STATE2_SHIFT    0x18  // Offset Address 0x18
+
 struct HiPwmRegs {
     volatile uint32_t cfg0;
     volatile uint32_t cfg1;

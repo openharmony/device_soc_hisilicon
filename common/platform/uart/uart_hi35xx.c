@@ -20,12 +20,83 @@
 #include "osal_io.h"
 #include "osal_mem.h"
 #include "osal_time.h"
+#include "platform_dumper.h"
 #include "uart_core.h"
 #include "uart_dev.h"
 #include "uart_if.h"
 #include "uart_pl011.h"
 
 #define HDF_LOG_TAG uart_hi35xx
+
+#define UART_DUMPER_NAME_PREFIX    "uart_dumper_"
+#define UART_DUMPER_NAME_LEN     64
+
+static void UartDumperDump(struct UartPl011Port *port)
+{
+    int32_t ret;
+    struct PlatformDumperData datas[] = {
+        {"UART_DR", PLATFORM_DUMPER_REGISTERL, (void *)port->physBase},
+        {"UART_RSR", PLATFORM_DUMPER_REGISTERL, (void *)(port->physBase + UART_RSR)},
+        {"UART_FR", PLATFORM_DUMPER_REGISTERL, (void *)(port->physBase + UART_FR)},
+        {"UART_IBRD", PLATFORM_DUMPER_REGISTERL, (void *)(port->physBase + UART_IBRD)},
+        {"UART_FBRD", PLATFORM_DUMPER_REGISTERL, (void *)(port->physBase + UART_FBRD)},
+        {"UART_LCR_H", PLATFORM_DUMPER_REGISTERL, (void *)(port->physBase + UART_LCR_H)},
+        {"UART_CR", PLATFORM_DUMPER_REGISTERL, (void *)(port->physBase + UART_CR)},
+        {"UART_IFLS", PLATFORM_DUMPER_REGISTERL, (void *)(port->physBase + UART_IFLS)},
+        {"UART_IMSC", PLATFORM_DUMPER_REGISTERL, (void *)(port->physBase + UART_IMSC)},
+        {"UART_RIS", PLATFORM_DUMPER_REGISTERL, (void *)(port->physBase + UART_RIS)},
+        {"UART_MIS", PLATFORM_DUMPER_REGISTERL, (void *)(port->physBase + UART_MIS)},
+        {"UART_ICR", PLATFORM_DUMPER_REGISTERL, (void *)(port->physBase + UART_ICR)},
+        {"UART_DMACR", PLATFORM_DUMPER_REGISTERL, (void *)(port->physBase + UART_DMACR)},
+    };
+    if (port->dumper == NULL) {
+        HDF_LOGE("%s: uart dumper is NULL", __func__);
+        return;
+    }
+    ret = PlatformDumperAddDatas(port->dumper, datas, sizeof(datas) / sizeof(struct PlatformDumperData));
+    if (ret != HDF_SUCCESS) {
+        return;
+    }
+    (void)PlatformDumperDump(port->dumper);
+    (void)PlatformDumperClearDatas(port->dumper);
+}
+
+static int32_t UartDumperCreate(struct UartPl011Port *port)
+{
+    struct PlatformDumper *dumper = NULL;
+    char *name = NULL;
+
+    name = (char *)OsalMemCalloc(UART_DUMPER_NAME_LEN);
+    if (name == NULL) {
+        HDF_LOGE("%s: alloc name fail", __func__);
+        return HDF_ERR_MALLOC_FAIL;
+    }
+
+    if (snprintf_s(name, UART_DUMPER_NAME_LEN, UART_DUMPER_NAME_LEN - 1, "%s%d",
+        UART_DUMPER_NAME_PREFIX, port->udd->num) < 0) {
+        HDF_LOGE("%s: snprintf_s name fail!", __func__);
+        OsalMemFree(name);
+        return HDF_ERR_IO;
+    }
+
+    dumper = PlatformDumperCreate(name);
+    if (dumper == NULL) {
+        HDF_LOGE("%s: get dumper for %s fail!", __func__, name);
+        OsalMemFree(name);
+        return HDF_ERR_IO;
+    }
+
+    port->dumper = dumper;
+    port->dumperName = name;
+
+    return HDF_SUCCESS;
+}
+
+static inline void UartDumperDestroy(struct UartPl011Port *port)
+{
+    PlatformDumperDestroy(port->dumper);
+    OsalMemFree(port->dumperName);
+}
 
 static int32_t Hi35xxRead(struct UartHost *host, uint8_t *data, uint32_t size)
 {
@@ -92,6 +163,7 @@ static int32_t Hi35xxGetBaud(struct UartHost *host, uint32_t *baudRate)
 static int32_t Hi35xxSetBaud(struct UartHost *host, uint32_t baudRate)
 {
     struct UartDriverData *udd = NULL;
+    struct UartPl011Port *port = NULL;
 
     if (host == NULL || host->priv == NULL) {
         HDF_LOGE("%s: invalid parameter", __func__);
@@ -99,9 +171,11 @@ static int32_t Hi35xxSetBaud(struct UartHost *host, uint32_t baudRate)
     }
 
     udd = (struct UartDriverData *)host->priv;
-    if (udd->state != UART_STATE_USEABLE) {
+    if (udd->state != UART_STATE_USEABLE || udd->private == NULL) {
         return HDF_FAILURE;
     }
+    port = udd->private;
+
     if ((baudRate > 0) && (baudRate <= CONFIG_MAX_BAUDRATE)) {
         udd->baudrate = baudRate;
         if (udd->ops->Config == NULL) {
@@ -110,6 +184,7 @@ static int32_t Hi35xxSetBaud(struct UartHost *host, uint32_t baudRate)
         }
         if (udd->ops->Config(udd) != HDF_SUCCESS) {
             HDF_LOGE("%s: config baudrate %u failed", __func__, baudRate);
+            UartDumperDump(port);
             return HDF_FAILURE;
         }
     } else {
@@ -144,15 +219,18 @@ static int32_t Hi35xxGetAttribute(struct UartHost *host, struct UartAttribute *a
 static int32_t Hi35xxSetAttribute(struct UartHost *host, struct UartAttribute *attribute)
 {
     struct UartDriverData *udd = NULL;
+    struct UartPl011Port *port = NULL;
 
     if (host == NULL || host->priv == NULL || attribute == NULL) {
         HDF_LOGE("%s: invalid parameter", __func__);
         return HDF_ERR_INVALID_PARAM;
     }
     udd = (struct UartDriverData *)host->priv;
-    if (udd->state != UART_STATE_USEABLE) {
+    if (udd->state != UART_STATE_USEABLE || udd->private == NULL) {
         return HDF_FAILURE;
     }
+
+    port = udd->private;
     udd->attr.cts = attribute->cts;
     udd->attr.dataBits = attribute->dataBits;
     udd->attr.fifoRxEn = attribute->fifoRxEn;
@@ -166,6 +244,7 @@ static int32_t Hi35xxSetAttribute(struct UartHost *host, struct UartAttribute *a
     }
     if (udd->ops->Config(udd) != HDF_SUCCESS) {
         HDF_LOGE("%s: config failed", __func__);
+        UartDumperDump(port);
         return HDF_FAILURE;
     }
     return HDF_SUCCESS;
@@ -196,13 +275,21 @@ static int32_t Hi35xxInit(struct UartHost *host)
 {
     int32_t ret = 0;
     struct UartDriverData *udd = NULL;
+    struct UartPl011Port *port = NULL;
     struct wait_queue_head *wait = NULL;
+
     if (host == NULL || host->priv == NULL) {
         HDF_LOGE("%s: invalid parameter", __func__);
         return HDF_ERR_INVALID_PARAM;
     }
 
     udd = (struct UartDriverData *)host->priv;
+    if (udd->private == NULL) {
+        HDF_LOGE("%s:udd private is NULL", __func__);
+        return HDF_FAILURE;
+    }
+    port = udd->private;
+
     wait = &udd->wait;
     if (udd->state == UART_STATE_NOT_OPENED) {
         udd->state = UART_STATE_OPENING;
@@ -221,6 +308,7 @@ static int32_t Hi35xxInit(struct UartHost *host)
         }
         if (udd->ops->StartUp(udd) != HDF_SUCCESS) {
             HDF_LOGE("%s: StartUp failed", __func__);
+            UartDumperDump(port);
             ret = HDF_FAILURE;
             goto FREE_TRANSFER;
         }
@@ -239,6 +327,7 @@ static int32_t Hi35xxDeinit(struct UartHost *host)
 {
     struct wait_queue_head *wait = NULL;
     struct UartDriverData *udd = NULL;
+
     if (host == NULL || host->priv == NULL) {
         HDF_LOGE("%s: invalid parameter", __func__);
         return HDF_ERR_INVALID_PARAM;
@@ -310,7 +399,7 @@ static int32_t UartGetConfigFromHcs(struct UartPl011Port *port, const struct Dev
 {
     uint32_t tmp, regPbase, iomemCount;
     struct UartDriverData *udd = port->udd;
-    struct DeviceResourceIface *iface = DeviceResourceGetIfaceInstance(HDF_CONFIG_SOURCE); 
+    struct DeviceResourceIface *iface = DeviceResourceGetIfaceInstance(HDF_CONFIG_SOURCE);
     if (iface == NULL || iface->GetUint32 == NULL) {
         HDF_LOGE("%s: face is invalid", __func__);
         return HDF_FAILURE;
@@ -388,6 +477,14 @@ static int32_t Hi35xxAttach(struct UartHost *host, struct HdfDeviceObject *devic
     host->priv = udd;
     host->num = udd->num;
     UartAddDev(host);
+    ret = UartDumperCreate(port);
+    if (ret != HDF_SUCCESS) {
+        HDF_LOGE("%s: create dumper failed:%d", __func__, ret);
+        OsalMemFree(port);
+        OsalMemFree(udd);
+        return ret;
+    }
+    UartDumperDump(port);
     return HDF_SUCCESS;
 }
 
@@ -408,6 +505,7 @@ static void Hi35xxDetach(struct UartHost *host)
     UartRemoveDev(host);
     port = udd->private;
     if (port != NULL) {
+        UartDumperDestroy(port);
         if (port->physBase != 0) {
             OsalIoUnmap((void *)port->physBase);
         }
