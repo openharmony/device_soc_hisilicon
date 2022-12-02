@@ -16,8 +16,6 @@
 #ifndef UART_H
 #define UART_H
 
-
-
 unsigned int UartOpenInit(void);
 int UartRead(int uartFd, char *buf, int len, int timeoutMs);
 int UartSend(int fd, char *buf, int len);

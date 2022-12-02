@@ -22,7 +22,6 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <termios.h>
-#include <poll.h>
 
 int uartFd = 0;
 
@@ -96,7 +95,7 @@ int UartSend(int fd, char *buf, int len)
     @param int len:data buf len
     @param int timeoutMs: read data time
 */
-int UartRead(int uartFd, char *buf, int len, int timeoutMs)
+int UartRead(int fd, char *buf, int len, int timeoutMs)
 {
     int ret = 0;
     size_t  rsum = 0;
@@ -111,8 +110,8 @@ int UartRead(int uartFd, char *buf, int len, int timeoutMs)
         time.tv_sec = timeout / 1000; /* 1000:转换成秒 */
         time.tv_usec = (timeout - time.tv_sec * 1000) * 1000; /* 1000, 1000:转换为微秒 */
         FD_ZERO(&rset);
-        FD_SET(uartFd, &rset);
-        ret = select(uartFd + 1, &rset, NULL, NULL, &time); // 非阻塞式读取数据
+        FD_SET(fd, &rset);
+        ret = select(fd + 1, &rset, NULL, NULL, &time); // 非阻塞式读取数据
         if (ret <= 0) {
             if (ret == 0) {
                 printf("time over!\r\n");
@@ -125,7 +124,7 @@ int UartRead(int uartFd, char *buf, int len, int timeoutMs)
             }
             return -1;
         } else {
-            ret = read(uartFd, (char *)readBuf + rsum, readLen - rsum);
+            ret = read(fd, (char *)readBuf + rsum, readLen - rsum);
             if (ret < 0) {
                 printf("read data failed\r\n");
                 return ret;
@@ -182,5 +181,6 @@ int main(void)
             break;
         }
     }
+    uartFd = 0;
     return 0;
 }
