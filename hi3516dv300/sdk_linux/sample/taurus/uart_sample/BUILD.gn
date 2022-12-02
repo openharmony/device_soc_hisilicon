@@ -23,13 +23,9 @@ if (need_link_mpp_lib) {
 
 executable("ohos_camera_uart_demo") {
   output_name = "ohos_camera_uart_demo"
-  sources = [
-    "uart.c",
-  ]
+  sources = [ "uart.c" ]
 
-  include_dirs = [
-    "./",
-  ]
+  include_dirs = [ "./" ]
 
   if (need_link_mpp_lib) {
     outdir = rebase_path("$mpp_lib_path/lib")
