@@ -16,8 +16,8 @@ import("//build/lite/config/component/lite_component.gni")
 static_library("hal_update_static") {
   sources = [ "hal_hota_board.c" ]
   include_dirs = [
-    "//base/update/ota_lite/hals",
-    "//base/update/ota_lite/interfaces/kits",
+    "//base/update/sys_installer_lite/hals",
+    "//base/update/sys_installer_lite/interfaces/kits",
     "//device/soc/hisilicon/hi3861v100/sdk_liteos/include",
   ]
 }
