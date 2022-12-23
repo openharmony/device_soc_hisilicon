@@ -195,7 +195,7 @@ int IveImgCreate(IVE_IMAGE_S* img,
 
         /*
          * 目前如下格式不支持，主要为YVC420P, YUV422P, S8C2_PACKAGE, S8C2_PLANAR,
-         * S32C1, U32C1, S64C1, U64C1, S16C1, U16C1, U8C3_PACKAGE等 
+         * S32C1, U32C1, S64C1, U64C1, S16C1, U16C1, U8C3_PACKAGE等
          *
          * Types not currently supported: YVC420P, YUV422P, S8C2_PACKAGE, S8C2_PLANAR,
          * S32C1, U32C1, S64C1, U64C1, S16C1, U16C1, U8C3_PACKAGE,etc.
