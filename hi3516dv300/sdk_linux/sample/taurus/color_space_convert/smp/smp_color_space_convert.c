@@ -24,13 +24,19 @@ extern "C" {
 #endif
 #endif /* End of #ifdef __cplusplus */
 
-/* consts */
+/*
+ * 常量
+ * Constant
+ */
 #define IMG_FULL_CHN    3 // Full channel / three channel, for YUV444, RGB888
 #define IMG_HALF_CHN    2 // Half channel, for YUV420/422
 #define THREE_TIMES     3
 #define TWO_TIMES       2
 
-/* Commonly used numerical units */
+/*
+ * 常用数值单位
+ * Commonly used numerical units
+ */
 #define HI_KB               1024
 #define HI_MB               (1024 * 1024)
 #define HI_MS_OF_SEC        1000 // 1s in milliseconds
@@ -43,7 +49,10 @@ extern "C" {
 #define HI_INT64_BITS       64 // The number of bits of a 64-bit integer
 #define HI_PER_BASE         100
 
-/* debug log level */
+/*
+ * 调试log等级
+ * Debug log level
+ */
 #define HI_DLEV_NONE        0 // disable
 #define HI_DLEV_ERR         1 // error
 #define HI_DLEV_WARN        2 // warning
@@ -54,14 +63,20 @@ extern "C" {
 
 #define LOGI(format, ...) LOG_ONLY(HI_DLEV_INFO, format, ##__VA_ARGS__)
 
-/* log with file/name */
+/*
+ * 打印log文件格式
+ * Log with file/name
+ */
 #define LOG_ONLY(lev, format, ...) do { \
     if (g_hiDbgLev >= (lev)) { \
         printf(format, ##__VA_ARGS__); \
     } \
 }   while (0)
 
-/* rect box */
+/*
+ * 矩形坐标结构体定义
+ * Rectangular coordinate structure definition
+ */
 typedef struct RectBox {
     int xmin;
     int ymin;
@@ -69,7 +84,10 @@ typedef struct RectBox {
     int ymax;
 } RectBox;
 
-/* Alignment type */
+/*
+ * 对齐类型
+ * Alignment type
+ */
 typedef enum AlignType {
     ALIGN_TYPE_2 = 2, // Align by 2 bytes
     ALIGN_TYPE_16 = 16, // Align by 16 bytes
@@ -84,7 +102,10 @@ typedef struct HiSampleIveColorSpaceConvInfo {
 
 static SampleIveColorSpaceConvInfo g_stColorSpaceInfo;
 
-/* debug level */
+/*
+ * 调试等级
+ * Debug level
+ */
 int g_hiDbgLev = HI_DLEV_INFO;
 
 int HiAlign16(int num)
@@ -97,7 +118,10 @@ int HiAlign32(int num)
     return (((num) + 32 - 1) / 32 * 32); // 32: Align32
 }
 
-/* Take the file name part of the path */
+/*
+ * 取路径的文件名部分
+ * Take the file name part of the path
+ */
 const char* HiPathName(const char* path)
 {
     HI_ASSERT(path);
@@ -109,7 +133,10 @@ const char* HiPathName(const char* path)
     return path;
 }
 
-/* Calculate the stride of a channel */
+/*
+ * 计算通道的步幅
+ * Calculate the stride of a channel
+ */
 static uint32_t IveCalStride(IVE_IMAGE_TYPE_E enType, uint32_t width, AlignType align)
 {
     uint32_t size = 1;
@@ -149,7 +176,10 @@ static uint32_t IveCalStride(IVE_IMAGE_TYPE_E enType, uint32_t width, AlignType 
     }
 }
 
-/* Create ive image buffer based on type and size */
+/*
+ * 根据类型和大小创建缓存
+ * Create IVE image buffer based on type and size
+ */
 int IveImgCreate(IVE_IMAGE_S* img,
     IVE_IMAGE_TYPE_E enType, uint32_t width, uint32_t height)
 {
@@ -173,9 +203,16 @@ int IveImgCreate(IVE_IMAGE_S* img,
             ret = HI_MPI_SYS_MmzAlloc(&img->au64PhyAddr[0], (void**)&img->au64VirAddr[0], NULL, NULL, size);
             SAMPLE_CHECK_EXPR_RET(HI_SUCCESS != ret, ret, "Error(%#x), HI_MPI_SYS_MmzAlloc!\n", ret);
             break;
-        // The size is equivalent to 1.5 times (3/2) of the pixel, which is equivalent to 2 channels
+        /*
+         * 大小相当于像素的1.5倍(3/2), 相当于2个通道
+         * The size is equivalent to 1.5 times (3/2) of the pixel, which is equivalent to 2 channels
+         */
         case IVE_IMAGE_TYPE_YUV420SP:
-        case IVE_IMAGE_TYPE_YUV422SP: // The size is equivalent to 2 times the pixel, which is equivalent to 2 channels
+        /*
+         * 大小相当于像素的2倍，相当于2个通道
+         * The size is equivalent to 2 times the pixel, which is equivalent to 2 channels
+         */
+        case IVE_IMAGE_TYPE_YUV422SP:
             if (enType == IVE_IMAGE_TYPE_YUV420SP) {
                 size = img->au32Stride[0] * img->u32Height * THREE_TIMES / TWO_TIMES;
             } else {
@@ -184,7 +221,10 @@ int IveImgCreate(IVE_IMAGE_S* img,
             ret = HI_MPI_SYS_MmzAlloc(&img->au64PhyAddr[0], (void**)&img->au64VirAddr[0], NULL, NULL, size);
             SAMPLE_CHECK_EXPR_RET(HI_SUCCESS != ret, ret, "Error(%#x), HI_MPI_SYS_MmzAlloc!\n", ret);
 
-            // Set the stride of the address of channel 1, both of which require channel 1
+            /*
+             * 设置通道1地址的步长，两者都需要通道1
+             * Set the stride of the address of channel 1, both of which require channel 1
+             */
             img->au32Stride[1] = img->au32Stride[0];
             img->au64PhyAddr[1] = img->au64PhyAddr[0] + img->au32Stride[0] * (uint64_t)img->u32Height;
             img->au64VirAddr[1] = img->au64VirAddr[0] + img->au32Stride[0] * (uint64_t)img->u32Height;
@@ -196,7 +236,10 @@ int IveImgCreate(IVE_IMAGE_S* img,
             ret = HI_MPI_SYS_MmzAlloc(&img->au64PhyAddr[0], (void**)&img->au64VirAddr[0], NULL, NULL, size);
             SAMPLE_CHECK_EXPR_RET(HI_SUCCESS != ret, ret, "Error(%#x), HI_MPI_SYS_MmzAlloc!\n", ret);
 
-            // Set the address and stride of channel 1 and channel 2
+            /*
+             * 设置通道1和通道2的地址和步长
+             * Set the address and stride of channel 1 and channel 2
+             */
             img->au64VirAddr[1] = img->au64VirAddr[0] + oneChnSize;
             img->au64PhyAddr[1] = img->au64PhyAddr[0] + oneChnSize;
             img->au32Stride[1] = img->au32Stride[0];
@@ -205,8 +248,13 @@ int IveImgCreate(IVE_IMAGE_S* img,
             img->au32Stride[2] = img->au32Stride[0]; // 2: au64VirAddr array subscript, not out of bounds
             break;
 
-        // Types not currently supported: YVC420P, YUV422P, S8C2_PACKAGE, S8C2_PLANAR,
-        // S32C1, U32C1, S64C1, U64C1, S16C1, U16C1, U8C3_PACKAGE,etc.
+        /*
+         * 目前如下格式不支持，主要为YVC420P, YUV422P, S8C2_PACKAGE, S8C2_PLANAR,
+         * S32C1, U32C1, S64C1, U64C1, S16C1, U16C1, U8C3_PACKAGE等
+         *
+         * Types not currently supported: YVC420P, YUV422P, S8C2_PACKAGE, S8C2_PLANAR,
+         * S32C1, U32C1, S64C1, U64C1, S16C1, U16C1, U8C3_PACKAGE,etc.
+         */
         default:
             HI_ASSERT(0);
             break;
@@ -214,7 +262,10 @@ int IveImgCreate(IVE_IMAGE_S* img,
     return HI_SUCCESS;
 }
 
-/* destory ive image */
+/*
+ * 销毁IVE image
+ * Destory IVE image
+ */
 void IveImgDestroy(IVE_IMAGE_S* img)
 {
     for (int i = 0; i < IMG_FULL_CHN; i++) {
@@ -229,7 +280,10 @@ void IveImgDestroy(IVE_IMAGE_S* img)
     }
 }
 
-/* function : Canny uninit */
+/*
+ * 函数：色彩转换去初始化
+ * function : color convert uninit
+ */
 static HI_VOID SampleIveColorConvertUninit(SampleIveColorSpaceConvInfo* pstColorConvertInfo)
 {
     IveImgDestroy(&pstColorConvertInfo->stSrc);
@@ -238,7 +292,10 @@ static HI_VOID SampleIveColorConvertUninit(SampleIveColorSpaceConvInfo* pstColor
     IVE_CLOSE_FILE(pstColorConvertInfo->pFpDst);
 }
 
-/* function : Crop init */
+/*
+ * 函数：色彩转换初始化
+ * function : color convert init
+ */
 static HI_S32 SampleIveColorConvertInit(SampleIveColorSpaceConvInfo* g_stColorSpaceInfo,
     HI_CHAR* pchSrcFileName, HI_CHAR* pchDstFileName, HI_U32 u32Width, HI_U32 u32Height)
 {
@@ -276,7 +333,10 @@ static HI_S32 SampleIveReadFile(SampleIveColorSpaceConvInfo* g_stColorSpaceInfo)
     return s32Ret;
 }
 
-/* ive image RGB to BGR */
+/*
+ * 将image由RGB格式转成BGR格式
+ * Convert image from RGB format to BGR format
+ */
 int ImgRgbToBgr(IVE_IMAGE_S *img)
 {
     uint8_t *rp = NULL;
@@ -284,7 +344,6 @@ int ImgRgbToBgr(IVE_IMAGE_S *img)
     uint8_t c;
     int i, j;
 
-    // Replace with IVE DMA to improve performance
     HI_ASSERT(img->enType == IVE_IMAGE_TYPE_U8C3_PLANAR);
     HI_ASSERT(img->au32Stride[0] >= img->u32Width);
     HI_ASSERT(img->au32Stride[1] >= img->u32Width);
@@ -306,7 +365,10 @@ int ImgRgbToBgr(IVE_IMAGE_S *img)
 }
 
 /*
- * video frame to ive image.
+ * VIDEO_FRAME_INFO_S格式转换成IVE_IMAGE_S格式
+ * 复制数据指针，不复制数据
+ *
+ * Video frame to IVE image.
  * Copy the data pointer, do not copy the data.
  */
 int FrmToOrigImg(const VIDEO_FRAME_INFO_S* frm, IVE_IMAGE_S *img)
@@ -339,7 +401,10 @@ int FrmToOrigImg(const VIDEO_FRAME_INFO_S* frm, IVE_IMAGE_S *img)
 }
 
 /*
- * ive image to video frame.
+ * IVE_IMAGE_S格式转成VIDEO_FRAME_INFO_S格式
+ * 复制数据指针，不复制数据
+ *
+ * IVE image to video frame.
  * Copy the data pointer, do not copy the data.
  */
 int OrigImgToFrm(const IVE_IMAGE_S *img, VIDEO_FRAME_INFO_S* frm)
@@ -370,7 +435,10 @@ int OrigImgToFrm(const IVE_IMAGE_S *img, VIDEO_FRAME_INFO_S* frm)
     return 0;
 }
 
-/* video YUV frame to ive image (U8C1) */
+/*
+ * VIDEO_FRAME_INFO_S格式转成IVE_IMAGE_S格式（U8C1）
+ * Video YUV frame to IVE image (U8C1)
+ */
 int FrmToU8c1Img(const VIDEO_FRAME_INFO_S* frm, IVE_IMAGE_S *img)
 {
     PIXEL_FORMAT_E pixelFormat = frm->stVFrame.enPixelFormat;
@@ -395,7 +463,10 @@ int FrmToU8c1Img(const VIDEO_FRAME_INFO_S* frm, IVE_IMAGE_S *img)
     return 0;
 }
 
-/* YUV video frame to RGB ive image */
+/*
+ * YUV VIDEO_FRAME_INFO_S格式转成RGB IVE_DST_IMAGE_S格式
+ * YUV video frame to RGB IVE image
+ */
 int FrmToRgbImg(VIDEO_FRAME_INFO_S* srcFrm, IVE_DST_IMAGE_S *dstImg)
 {
     HI_ASSERT(srcFrm && dstImg);
@@ -421,7 +492,10 @@ int FrmToRgbImg(VIDEO_FRAME_INFO_S* srcFrm, IVE_DST_IMAGE_S *dstImg)
         return -1;
     }
 
-    // Copy the addresses of the 3 channels separately
+    /*
+     * 分别复制3个通道的地址
+     * Copy the addresses of the 3 channels separately
+     */
     for (int i = 0; i < chnNum; i++) {
         srcImg.au64PhyAddr[i] = srcFrm->stVFrame.u64PhyAddr[i];
         srcImg.au64VirAddr[i] = srcFrm->stVFrame.u64VirAddr[i];
@@ -444,7 +518,10 @@ int FrmToRgbImg(VIDEO_FRAME_INFO_S* srcFrm, IVE_DST_IMAGE_S *dstImg)
         return ret;
 }
 
-/* ive image RGB to YUV */
+/*
+ * 通过IVE将RGB格式转成YUV格式
+ * IVE image RGB to YUV
+ */
 int ImgRgbToYuv(IVE_IMAGE_S *src, IVE_IMAGE_S *dst, IVE_IMAGE_TYPE_E dstType)
 {
     IVE_HANDLE iveHnd;
@@ -467,7 +544,10 @@ int ImgRgbToYuv(IVE_IMAGE_S *src, IVE_IMAGE_S *dst, IVE_IMAGE_TYPE_E dstType)
     return ret;
 }
 
-/* ive image to video frame */
+/*
+ * Sample实现将IVE image格式转成video frame格式
+ * Sample implements converting IVE image format into video frame format
+ */
 void SampleIveOrigImgToFrm(void)
 {
     HI_U16 u32Width = 1920;
@@ -477,7 +557,10 @@ void SampleIveOrigImgToFrm(void)
     HI_CHAR achDstFileName[IVE_FILE_NAME_LEN];
     VIDEO_FRAME_INFO_S frm;
     HI_S32 s32Ret;
-    // Initialize the g_stColorSpaceInfo structure
+    /*
+     * 初始化g_stColorSpaceInfo结构体
+     * Initialize the g_stColorSpaceInfo structure
+     */
     memset_s(&g_stColorSpaceInfo, sizeof(g_stColorSpaceInfo), 0, sizeof(g_stColorSpaceInfo));
     SAMPLE_COMM_IVE_CheckIveMpiInit();
 
@@ -509,6 +592,10 @@ CONVERT_FAIL:
     SAMPLE_COMM_IVE_IveMpiExit();
 }
 
+/*
+ * Sample实现将video frame格式转成IVE image格式
+ * Sample implements converting video frame format into IVE image format
+ */
 void SampleIveFrmToOrigImg(void)
 {
     HI_U16 u32Width = 1920;
@@ -519,7 +606,10 @@ void SampleIveFrmToOrigImg(void)
     VIDEO_FRAME_INFO_S frm;
     IVE_IMAGE_S img;
     HI_S32 s32Ret;
-    // Initialize the g_stColorSpaceInfo structure
+    /*
+     * 初始化g_stColorSpaceInfo结构体
+     * Initialize the g_stColorSpaceInfo structure
+     */
     memset_s(&g_stColorSpaceInfo, sizeof(g_stColorSpaceInfo), 0, sizeof(g_stColorSpaceInfo));
     SAMPLE_COMM_IVE_CheckIveMpiInit();
 
@@ -562,6 +652,10 @@ CONVERT_FAIL:
     SAMPLE_COMM_IVE_IveMpiExit();
 }
 
+/*
+ * Sample实现将video frame格式转成U8C1格式
+ * Sample implements converting video frame format into U8C1 format
+ */
 void SampleIveFrmToU8c1Img(void)
 {
     HI_U16 u32Width = 1920;
@@ -572,7 +666,10 @@ void SampleIveFrmToU8c1Img(void)
     VIDEO_FRAME_INFO_S frm;
     IVE_IMAGE_S img;
     HI_S32 s32Ret;
-    // Initialize the g_stColorSpaceInfo structure
+    /*
+     * 初始化g_stColorSpaceInfo结构体
+     * Initialize the g_stColorSpaceInfo structure
+     */
     memset_s(&g_stColorSpaceInfo, sizeof(g_stColorSpaceInfo), 0, sizeof(g_stColorSpaceInfo));
     SAMPLE_COMM_IVE_CheckIveMpiInit();
 
@@ -615,6 +712,10 @@ CONVERT_FAIL:
     SAMPLE_COMM_IVE_IveMpiExit();
 }
 
+/*
+ * Sample实现将video frame格式转成RGB格式，最后转成YUV格式进行存储
+ * Sample realizes converting the video frame format into RGB format, and finally into YUV format for storage
+ */
 void SampleIveFrmToRgbImgToYuv(void)
 {
     HI_U16 u32Width = 1920;
@@ -626,7 +727,10 @@ void SampleIveFrmToRgbImgToYuv(void)
     IVE_IMAGE_S img;
     IVE_IMAGE_S dst;
     HI_S32 s32Ret;
-    // Initialize the g_stColorSpaceInfo structure
+    /*
+     * 初始化g_stColorSpaceInfo结构体
+     * Initialize the g_stColorSpaceInfo structure
+     */
     memset_s(&g_stColorSpaceInfo, sizeof(g_stColorSpaceInfo), 0, sizeof(g_stColorSpaceInfo));
     SAMPLE_COMM_IVE_CheckIveMpiInit();
 
@@ -673,6 +777,10 @@ CONVERT_FAIL:
     SAMPLE_COMM_IVE_IveMpiExit();
 }
 
+/*
+ * Sample实现将video frame格式转成RGB格式，再转成BGR格式
+ * Sample implements converting the video frame format into RGB format and then into BGR format
+ */
 void SampleIveFrmToRgbImgToBgr(void)
 {
     HI_U16 u32Width = 1920;
@@ -683,7 +791,10 @@ void SampleIveFrmToRgbImgToBgr(void)
     VIDEO_FRAME_INFO_S frm;
     IVE_IMAGE_S img;
     HI_S32 s32Ret;
-    // Initialize the g_stColorSpaceInfo structure
+    /*
+     * 初始化g_stColorSpaceInfo结构体
+     * Initialize the g_stColorSpaceInfo structure
+     */
     memset_s(&g_stColorSpaceInfo, sizeof(g_stColorSpaceInfo), 0, sizeof(g_stColorSpaceInfo));
     SAMPLE_COMM_IVE_CheckIveMpiInit();
 

@@ -33,13 +33,19 @@ extern "C" {
 #endif
 #endif /* End of #ifdef __cplusplus */
 
-/* consts */
+/*
+ * 常量
+ * Constant
+ */
 #define IMG_FULL_CHN    3 // Full channel / three channel, for YUV444, RGB888
 #define IMG_HALF_CHN    2 // Half channel, for YUV420/422
 #define THREE_TIMES     3
 #define TWO_TIMES       2
 
-/* Commonly used numerical units */
+/*
+ * 常用数值单位
+ * Commonly used numerical units
+ */
 #define HI_KB               1024
 #define HI_MB               (1024 * 1024)
 #define HI_MS_OF_SEC        1000 // 1s in milliseconds
@@ -52,7 +58,10 @@ extern "C" {
 #define HI_INT64_BITS       64 // The number of bits of a 64-bit integer
 #define HI_PER_BASE         100
 
-/* debug log level */
+/*
+ * 调试日志等级
+ * Debug log level
+ */
 #define HI_DLEV_NONE        0 // disable
 #define HI_DLEV_ERR         1 // error
 #define HI_DLEV_WARN        2 // warning
@@ -65,14 +74,20 @@ extern "C" {
 
 #define LOGI(format, ...) LOG_ONLY(HI_DLEV_INFO, format, ##__VA_ARGS__)
 
-/* log with file/name */
+/*
+ * 打印log文件格式
+ * Log with file/name
+ */
 #define LOG_ONLY(lev, format, ...) do { \
     if (g_hiDbgLev >= (lev)) { \
         printf(format, ##__VA_ARGS__); \
     } \
 } while (0)
 
-/* rect box */
+/*
+ * 矩形坐标结构体定义
+ * Rectangular coordinate structure definition
+ */
 typedef struct RectBox {
     int xmin;
     int ymin;
@@ -80,7 +95,10 @@ typedef struct RectBox {
     int ymax;
 } RectBox;
 
-/* Alignment type */
+/*
+ * 对齐类型
+ * Alignment type
+ */
 typedef enum AlignType {
     ALIGN_TYPE_2 = 2, // Align by 2 bytes
     ALIGN_TYPE_16 = 16, // Align by 16 bytes
@@ -95,7 +113,10 @@ typedef struct HiSampleIveResizeCropInfo {
 
 static SampleIveResizeCropInfo g_stResizeCropInfo;
 
-/* debug level */
+/*
+ * 调试等级
+ * Debug level
+ */
 int g_hiDbgLev = HI_DLEV_INFO;
 
 int HiAlign16(int num)
@@ -108,7 +129,10 @@ int HiAlign32(int num)
     return (((num) + 32 - 1) / 32 * 32); // 32: Align32
 }
 
-/* Take the file name part of the path */
+/*
+ * 取路径的文件名部分
+ * Take the file name part of the path
+ */
 const char* HiPathName(const char* path)
 {
     HI_ASSERT(path);
@@ -120,7 +144,10 @@ const char* HiPathName(const char* path)
     return path;
 }
 
-/* Calculate the stride of a channel */
+/*
+ * Ive计算步长
+ * Calculate the stride of a channel
+ */
 static uint32_t IveCalStride(IVE_IMAGE_TYPE_E enType, uint32_t width, AlignType align)
 {
     uint32_t size = 1;
@@ -160,7 +187,10 @@ static uint32_t IveCalStride(IVE_IMAGE_TYPE_E enType, uint32_t width, AlignType 
     }
 }
 
-/* Create ive image buffer based on type and size */
+/*
+ * 根据类型和大小创建缓存
+ * Create ive image buffer based on type and size
+ */
 int IveImgCreate(IVE_IMAGE_S* img,
     IVE_IMAGE_TYPE_E enType, uint32_t width, uint32_t height)
 {
@@ -184,9 +214,15 @@ int IveImgCreate(IVE_IMAGE_S* img,
             ret = HI_MPI_SYS_MmzAlloc(&img->au64PhyAddr[0], (void**)&img->au64VirAddr[0], NULL, NULL, size);
             SAMPLE_CHECK_EXPR_RET(HI_SUCCESS != ret, ret, "Error(%#x), HI_MPI_SYS_MmzAlloc!\n", ret);
             break;
-        // The size is equivalent to 1.5 times (3/2) of the pixel, which is equivalent to 2 channels
+        /*
+         * 大小相当于像素的1.5倍(3/2), 相当于2个通道
+         * The size is equivalent to 1.5 times (3/2) of the pixel, which is equivalent to 2 channels
+         */
         case IVE_IMAGE_TYPE_YUV420SP:
-        // The size is equivalent to 2 times the pixel, which is equivalent to 2 channels
+        /*
+         * 大小相当于像素的2倍，相当于2个通道
+         * The size is equivalent to 2 times the pixel, which is equivalent to 2 channels
+         */
         case IVE_IMAGE_TYPE_YUV422SP:
             if (enType == IVE_IMAGE_TYPE_YUV420SP) {
                 size = img->au32Stride[0] * img->u32Height * THREE_TIMES / TWO_TIMES;
@@ -196,7 +232,10 @@ int IveImgCreate(IVE_IMAGE_S* img,
             ret = HI_MPI_SYS_MmzAlloc(&img->au64PhyAddr[0], (void**)&img->au64VirAddr[0], NULL, NULL, size);
             SAMPLE_CHECK_EXPR_RET(HI_SUCCESS != ret, ret, "Error(%#x), HI_MPI_SYS_MmzAlloc!\n", ret);
 
-            // Set the stride of the address of channel 1, both of which require channel 1
+            /*
+             * 设置通道1地址的步长，两者都需要通道1
+             * Set the stride of the address of channel 1, both of which require channel 1
+             */
             img->au32Stride[1] = img->au32Stride[0];
             img->au64PhyAddr[1] = img->au64PhyAddr[0] + img->au32Stride[0] * (uint64_t)img->u32Height;
             img->au64VirAddr[1] = img->au64VirAddr[0] + img->au32Stride[0] * (uint64_t)img->u32Height;
@@ -208,7 +247,10 @@ int IveImgCreate(IVE_IMAGE_S* img,
             ret = HI_MPI_SYS_MmzAlloc(&img->au64PhyAddr[0], (void**)&img->au64VirAddr[0], NULL, NULL, size);
             SAMPLE_CHECK_EXPR_RET(HI_SUCCESS != ret, ret, "Error(%#x), HI_MPI_SYS_MmzAlloc!\n", ret);
 
-            // Set the address and stride of channel 1 and channel 2
+            /*
+             * 设置通道1和通道2的地址和步长
+             * Set the address and stride of channel 1 and channel 2
+             */
             img->au64VirAddr[1] = img->au64VirAddr[0] + oneChnSize;
             img->au64PhyAddr[1] = img->au64PhyAddr[0] + oneChnSize;
             img->au32Stride[1] = img->au32Stride[0];
@@ -217,8 +259,13 @@ int IveImgCreate(IVE_IMAGE_S* img,
             img->au32Stride[2] = img->au32Stride[0]; // 2: au64VirAddr array subscript, not out of bounds
             break;
 
-        // Types not currently supported: YVC420P, YUV422P, S8C2_PACKAGE, S8C2_PLANAR,
-        // S32C1, U32C1, S64C1, U64C1, S16C1, U16C1, U8C3_PACKAGE,etc.
+        /*
+         * 目前如下格式不支持，主要为YVC420P, YUV422P, S8C2_PACKAGE, S8C2_PLANAR,
+         * S32C1, U32C1, S64C1, U64C1, S16C1, U16C1, U8C3_PACKAGE等
+         *  
+         * Types not currently supported: YVC420P, YUV422P, S8C2_PACKAGE, S8C2_PLANAR,
+         * S32C1, U32C1, S64C1, U64C1, S16C1, U16C1, U8C3_PACKAGE,etc.
+         */
         default:
             HI_ASSERT(0);
             break;
@@ -238,7 +285,10 @@ int ImgYuvCrop(const IVE_IMAGE_S *src, IVE_IMAGE_S *dst, const RectBox* origBox)
     HI_ASSERT(src->au64VirAddr[0]);
     HI_ASSERT(src->au32Stride[0] >= src->u32Width);
 
-    // Adjust the width/height of the box to a multiple of 2
+    /*
+     * 将框的宽度/高度调整为 2 的倍数
+     * Adjust the width/height of the box to a multiple of 2
+     */
     if (boxWidth == 1 || boxHeight == 1) {
         printf("box dstWidth=1 && dstHeight=1\n");
         return -1;
@@ -251,13 +301,19 @@ int ImgYuvCrop(const IVE_IMAGE_S *src, IVE_IMAGE_S *dst, const RectBox* origBox)
         box.ymax--;
         boxHeight--;
     }
-    // Create empty dst img
     LOGI("ImgYuvCrop boxWidth:%d, ImgYuvCrop boxHeight:%d, entype:%d\n", boxWidth, boxWidth, src->enType);
+
     ret = IveImgCreate(dst, src->enType, boxWidth, boxHeight);
     HI_ASSERT(!ret);
-    // Use IVE DMA to copy to improve performance
-    // copy box from src to dst
-    // Y
+
+    /*
+     * 将框从源地址复制到目的地址
+     * Copy box from src to dst
+     */
+    /*
+     * Y分量
+     * Y component
+     */
     int srcStrideY = src->au32Stride[0];
     int dstStrideY = dst->au32Stride[0];
     uint8_t *srcBufY = (uint8_t*)((uintptr_t)src->au64VirAddr[0]);
@@ -271,7 +327,10 @@ int ImgYuvCrop(const IVE_IMAGE_S *src, IVE_IMAGE_S *dst, const RectBox* origBox)
     }
     HI_ASSERT(dstPtrY - dstBufY == boxHeight * dstStrideY);
 
-    // UV
+    /*
+     * UV分量
+     * UV component
+     */
     int srcStrideUV = src->au32Stride[1];
     int dstStrideUV = dst->au32Stride[1];
     uint8_t *srcBufUV = (uint8_t*)((uintptr_t)src->au64VirAddr[1]);
@@ -288,7 +347,10 @@ int ImgYuvCrop(const IVE_IMAGE_S *src, IVE_IMAGE_S *dst, const RectBox* origBox)
     return ret;
 }
 
-/* destory ive image */
+/*
+ * 销毁ive image
+ * Destory ive image
+ */
 void IveImgDestroy(IVE_IMAGE_S* img)
 {
     for (int i = 0; i < IMG_FULL_CHN; i++) {
@@ -303,7 +365,10 @@ void IveImgDestroy(IVE_IMAGE_S* img)
     }
 }
 
-/* function : SampleIveResizeCropUninit */
+/*
+ * 函数：IVE裁剪和缩放去初始化
+ * function : SampleIveResizeCropUninit
+ */
 static HI_VOID SampleIveResizeCropUninit(SampleIveResizeCropInfo* pstResizeCropInfo)
 {
     IveImgDestroy(&pstResizeCropInfo->stSrc);
@@ -312,7 +377,10 @@ static HI_VOID SampleIveResizeCropUninit(SampleIveResizeCropInfo* pstResizeCropI
     IVE_CLOSE_FILE(pstResizeCropInfo->pFpDst);
 }
 
-/* function : Resize init */
+/*
+ * 函数：缩放初始化
+ * function : Resize init
+ */
 static HI_S32 SampleIveResizeInit(SampleIveResizeCropInfo* pstResizeCropInfo,
     HI_CHAR* pchSrcFileName, HI_CHAR* pchDstFileName, HI_U32 u32Width, HI_U32 u32Height)
 {
@@ -342,7 +410,10 @@ RESIZE_INIT_FAIL:
     return s32Ret;
 }
 
-/* function : Crop init */
+/*
+ * 函数：裁剪初始化
+ * function : Crop init
+ */
 static HI_S32 SampleIveCropInit(SampleIveResizeCropInfo* pstResizeCropInfo,
     HI_CHAR* pchSrcFileName, HI_CHAR* pchDstFileName, HI_U32 u32Width, HI_U32 u32Height)
 {
@@ -372,7 +443,10 @@ CROP_INIT_FAIL:
     return s32Ret;
 }
 
-/* Allocate memory for structures such as ive resize ctrl */
+/*
+ * 申请内存，如ive resize ctrl
+ * Allocate memory for structures such as ive resize ctrl
+ */
 static int IveCtrlAlloc(IVE_MEM_INFO_S *memInfo, uint32_t size, HI_BOOL cached)
 {
     HI_ASSERT(memInfo && size > 0);
@@ -391,7 +465,10 @@ static int IveCtrlAlloc(IVE_MEM_INFO_S *memInfo, uint32_t size, HI_BOOL cached)
     return ret;
 }
 
-/* Release memory allocated for ive resize ctrl etc */
+/*
+ * 释放内存，如ive resize ctrl
+ * Release memory allocated for ive resize ctrl
+ */
 static void IveCtrlFree(IVE_MEM_INFO_S *memInfo)
 {
     if (HI_MPI_SYS_MmzFree(memInfo->u64PhyAddr, (void*)((uintptr_t)memInfo->u64VirAddr)) < 0) {
@@ -403,6 +480,9 @@ static void IveCtrlFree(IVE_MEM_INFO_S *memInfo)
 }
 
 /*
+ * 使用 IVE 执行一次图像缩放。
+ * 仅支持U8C3/U8C1 planer，不支持YUV。
+ *
  * Image scaling is performed once with IVE.
  * Only U8C3/U8C1 planers are supported, but YUV is not supported.
  */
@@ -416,23 +496,39 @@ static int IveResizeOnce(const IVE_IMAGE_S *src, IVE_IMAGE_S *dst, uint32_t dstW
 
     HI_ASSERT((src->u32Height % HI_OVEN_BASE) == 0 && (src->u32Width % HI_OVEN_BASE) == 0);
 
-    // Prepare resizeCtrl
+    /*
+     * 为IVE_RESIZE_CTRL_S结构体赋值
+     * Assign a value to the IVE_RESIZE_CTRL_S structure
+     */
     resizeCtrl.enMode = IVE_RESIZE_MODE_LINEAR;
     resizeCtrl.u16Num = 1;
-    // pstResizeCtrl.stMem memory needs at least 25*U8C1_NUM + 49 * (pstResizeCtrl->u16Num-U8C1_NUM) bytes,
-    // where U8C1_NUM is the number of U8C1 images in the mixed image array.
+    /*
+     * pstResizeCtrl.stMem 内存至少需要 25*U8C1_NUM + 49 * (pstResizeCtrl->u16Num-U8C1_NUM) 字节，
+     * 其中 U8C1_NUM 是混合图像阵列中 U8C1 图像的数量
+     *
+     * pstResizeCtrl.stMem memory needs at least 25*U8C1_NUM + 49 * (pstResizeCtrl->u16Num-U8C1_NUM) bytes,
+     * where U8C1_NUM is the number of U8C1 images in the mixed image array.
+     */
     ret = IveCtrlAlloc(&resizeCtrl.stMem, resizeCtrlNum * resizeCtrl.u16Num, HI_FALSE);
     HI_ASSERT(!ret);
 
-    // Create empty dst img
     ret = IveImgCreate(dst, src->enType, dstWidth, dstHeight);
     HI_ASSERT(!ret);
 
-    // resize request
+    /*
+     * 创建图像缩放任务，支持 bilinear、area 插值缩放，
+     * 支持多张 U8C1\ U8C3_PLANAR图像同时输入做一种类型的缩放
+     *
+     * Create an image scaling task, Support bilinear and area interpolation scaling,
+     * and support multiple U8C1\ U8C3_PLANAR images to be input at the same time for one type of scaling.
+     */
     ret = HI_MPI_IVE_Resize(&iveHnd, (IVE_IMAGE_S*)src, dst, &resizeCtrl, HI_TRUE);
     SAMPLE_CHECK_EXPR_GOTO(HI_SUCCESS != ret, FAIL, "Error(%#x), HI_MPI_IVE_Resize failed!\n", ret);
 
-    // waiting resize result, blocking
+    /*
+     * 查询已创建任务完成情况。
+     * Query the completion status of created tasks.
+     */
     ret = HI_MPI_IVE_Query(iveHnd, &finish, HI_TRUE);
     SAMPLE_CHECK_EXPR_GOTO(HI_SUCCESS != ret, FAIL, "Error(%#x), HI_MPI_IVE_Query failed!\n", ret);
 
@@ -454,7 +550,10 @@ static int IveResizeOnce(const IVE_IMAGE_S *src, IVE_IMAGE_S *dst, uint32_t dstW
         return ret;
 }
 
-/* Amplify the integer to the given multiple range */
+/*
+ * 将整数放大到给定的倍数范围
+ * Amplify the integer to the given multiple range
+ */
 int IntZoomTo(int n, double rate, double rateMin, double rateMax)
 {
     HI_ASSERT(rateMin < 1 && rateMax > 1);
@@ -476,6 +575,12 @@ int IntZoomTo(int n, double rate, double rateMin, double rateMax)
 }
 
 /*
+ * 缩放IVE image
+ * 多次调用ive_resize以实现任意比例的缩放。
+ * 为简化实现，约定每次缩放最大14倍，此时宽、高仅需2像素对齐。
+ * 当两个方向缩放方向不同时，例如一向(如X)放大，另一向缩小倍，无需特别处理。
+ * 此时某个方向或两个方向缩放比例均超标，也不需要特别处理。
+ *
  * resize ive image.
  * Call ive_resize multiple times to achieve arbitrary scaling.
  * To simplify implementation, each scaled maximum agreement 14 times, this time width, height only 2 pixels aligned.
@@ -499,18 +604,31 @@ int IveImgResize(
     HI_ASSERT(!(dstWidth % HI_OVEN_BASE) && !(dstHeight % HI_OVEN_BASE));
     int ret;
 
-    // Magnification
+    /*
+     * 放大倍数
+     * Magnification
+     */
     double widthRate = ((double)dstWidth) / (double)srcWidth; // >1 means zoom in, <1 means zoom out
     double heightRate = ((double)dstHeight) / (double)srcHeight; // >1 means zoom in, <1 means zoom out
 
-    // Separate processing according to zoom factor
+    /*
+     * 根据缩放倍数分别处理
+     * Separate processing according to zoom factor
+     */
     if (widthRate > rateMax || widthRate < rateMin ||
         heightRate > rateMax || heightRate < rateMin) {
-        // When the zoom factor exceeds the maximum value of one IVE resize, recursive processing...
+        /*
+         * 缩放倍数超过一次IVE resize的最大值时，递归处理 ...
+         * When the zoom factor exceeds the maximum value of one IVE resize, recursive processing...
+         */
         uint32_t midWidth = (uint32_t)IntZoomTo((int)srcWidth, widthRate, rateMin, rateMax);
         uint32_t midHeight = (uint32_t)IntZoomTo((int)srcHeight, heightRate, rateMin, rateMax);
-        // Make sure it is an even number. When it is an odd number, the zoom is reduced by one,
-        // otherwise it is increased by one
+        /*
+         * 确保为偶数。为奇数时，放大则减一，否则加一
+         *
+         * Make sure it is an even number. When it is an odd number, the zoom is reduced by one,
+         * otherwise it is increased by one
+         */
         if (midWidth % HI_OVEN_BASE) {
             midWidth += widthRate > 1 ? -1 : 1;
         }
@@ -518,13 +636,19 @@ int IveImgResize(
             midHeight += heightRate > 1 ? -1 : 1;
         }
 
-        // Scaling at once
+        /*
+         * 缩放一次
+         * Scaling at once
+         */
         IVE_IMAGE_S midImg;
         ret = IveResizeOnce(src, &midImg, midWidth, midHeight);
         LOGI("IveResizeOnce(dw=%u, dh=%u) \n", midWidth, midHeight);
         SAMPLE_CHECK_EXPR_RET(HI_SUCCESS != ret, ret, "Error(%#x), IveResizeOnce failed!\n", ret);
 
-        // Scaling at once
+        /*
+         * 以midImg为srcImg递归调用
+         * Recursively call midImg as srcImg
+         */
         ret = IveImgResize(&midImg, dst, dstWidth, dstHeight);
         IveImgDestroy(&midImg);
         LOGI("sub call IveImgResize(dw=%u, dh=%u) FAIL\n", dstWidth, dstHeight);
@@ -544,7 +668,10 @@ static HI_S32 SampleIveReadResizeCropFile(SampleIveResizeCropInfo* pstResizeCrop
     return s32Ret;
 }
 
-/* cut YUV P/SP image to U8C1 image(Grayscale image) */
+/*
+ * 将YUV P/SP图像裁剪成U8C1图像（灰度图像）
+ * cut YUV P/SP image to U8C1 image(Grayscale image)
+ */
 int ImgYuvCropU8c1(
     const IVE_IMAGE_S *src, IVE_IMAGE_S *dst,
     const RectBox* origBox, int dstWidth, int dstHeight)
@@ -559,7 +686,10 @@ int ImgYuvCropU8c1(
     HI_ASSERT(src->au64VirAddr[0]);
     HI_ASSERT(src->au32Stride[0] >= src->u32Width);
 
-    // Adjust the width/height of the box to a multiple of 2
+    /*
+     * box的width/height调整为2的倍数
+     * Adjust the width/height of the box to a multiple of 2
+     */
     if (boxWidth == 1 || boxHeight == 1) {
         printf("box dstWidth=1 && dstHeight=1\n");
         return -1;
@@ -573,12 +703,13 @@ int ImgYuvCropU8c1(
         boxHeight--;
     }
 
-    // Create empty dst img
     ret = IveImgCreate(dst, IVE_IMAGE_TYPE_U8C1, boxWidth, boxHeight);
     HI_ASSERT(!ret);
 
-    // Use IVE DMA to copy to improve performance
-    // copy box from src to dst
+    /*
+     * 从box的源地址复制到目的地址
+     * Copy box from src to dst
+     */
     int srcStride = src->au32Stride[0];
     int dstStride = dst->au32Stride[0];
     uint8_t *srcBuf = (uint8_t*)((uintptr_t)src->au64VirAddr[0]);
@@ -592,14 +723,21 @@ int ImgYuvCropU8c1(
     }
     HI_ASSERT(dstPtr - dstBuf == boxHeight * dstStride);
 
-    // When the user does not specify dstWidth/dstHeight,
-    // or the specified value is the same as the box, there is no need to resize
+    /*
+     * 当user未指定dstWidth/dstHeight，或指定的值与box相同时，无需resize
+     *
+     * When the user does not specify dstWidth/dstHeight,
+     * or the specified value is the same as the box, there is no need to resize
+     */
     if (dstWidth <= 0 || dstHeight <= 0 ||
         (dstWidth == boxWidth && dstHeight == boxHeight)) {
         return 0;
     }
 
-    // resize
+    /*
+     * 缩放
+     * Resize
+     */
     IVE_IMAGE_S realDst;
     ret = IveImgResize(dst, &realDst, dstWidth, dstHeight);
     IveImgDestroy(dst);
@@ -624,7 +762,10 @@ void SampleIveImgResize(void)
     cropU8c1Box.ymin = 100; // 100: crop u8c1 image size ymin
     cropU8c1Box.ymax = 1000; // 1000: crop u8c1 image size ymax
 
-    // Initialize the g_stResizeCropInfo structure
+    /*
+     * 初始化g_stResizeCropInfo结构体
+     * Initialize the g_stResizeCropInfo structure
+     */
     memset_s(&g_stResizeCropInfo, sizeof(g_stResizeCropInfo), 0, sizeof(g_stResizeCropInfo));
     SAMPLE_COMM_IVE_CheckIveMpiInit();
 
@@ -671,7 +812,10 @@ void SampleIveImgCrop(void)
     IVE_IMAGE_S cropImg;
     HI_S32 s32Ret;
 
-    // Initialize the g_stResizeCropInfo structure
+    /*
+     * 初始化g_stResizeCropInfo结构体
+     * Initialize the g_stResizeCropInfo structure
+     */
     memset_s(&g_stResizeCropInfo, sizeof(g_stResizeCropInfo), 0, sizeof(g_stResizeCropInfo));
     SAMPLE_COMM_IVE_CheckIveMpiInit();
 

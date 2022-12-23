@@ -43,6 +43,9 @@ HI_U32 HiAlign32(HI_U32 num)
 }
 
 /*
+ * VIDEO_FRAME_INFO_S格式转换成IVE_IMAGE_S格式
+ * 复制数据指针，不复制数据
+ *
  * video frame to ive image.
  * Copy the data pointer, do not copy the data.
  */
@@ -75,7 +78,10 @@ int FrmToOrigImg(const VIDEO_FRAME_INFO_S* frm, IVE_IMAGE_S *img)
     return 0;
 }
 
-/* Calculate the stride of a channel */
+/*
+ * 计算通道的步长
+ * Calculate the stride of a channel
+ */
 static uint32_t IveCalStride(IVE_IMAGE_TYPE_E enType, uint32_t width, AlignType align)
 {
     uint32_t size = 1;
@@ -115,7 +121,10 @@ static uint32_t IveCalStride(IVE_IMAGE_TYPE_E enType, uint32_t width, AlignType 
     }
 }
 
-/* Create ive image buffer based on type and size */
+/*
+ * 根据类型和大小创建缓存
+ * Create ive image buffer based on type and size
+ */
 int IveImgCreate(IVE_IMAGE_S* img,
     IVE_IMAGE_TYPE_E enType, uint32_t width, uint32_t height)
 {
@@ -139,9 +148,15 @@ int IveImgCreate(IVE_IMAGE_S* img,
             ret = HI_MPI_SYS_MmzAlloc(&img->au64PhyAddr[0], (void**)&img->au64VirAddr[0], NULL, NULL, size);
             SAMPLE_CHECK_EXPR_RET(HI_SUCCESS != ret, ret, "Error(%#x), HI_MPI_SYS_MmzAlloc!\n", ret);
             break;
-        // The size is equivalent to 1.5 times (3/2) of the pixel, which is equivalent to 2 channels
+        /*
+         * 大小相当于像素的1.5倍(3/2), 相当于2个通道
+         * The size is equivalent to 1.5 times (3/2) of the pixel, which is equivalent to 2 channels
+         */
         case IVE_IMAGE_TYPE_YUV420SP:
-        // The size is equivalent to 2 times the pixel, which is equivalent to 2 channels
+        /*
+         * 大小相当于像素的2倍，相当于2个通道
+         * The size is equivalent to 2 times the pixel, which is equivalent to 2 channels
+         */
         case IVE_IMAGE_TYPE_YUV422SP:
             if (enType == IVE_IMAGE_TYPE_YUV420SP) {
                 size = img->au32Stride[0] * img->u32Height * THREE_TIMES / TWO_TIMES;
@@ -151,7 +166,10 @@ int IveImgCreate(IVE_IMAGE_S* img,
             ret = HI_MPI_SYS_MmzAlloc(&img->au64PhyAddr[0], (void**)&img->au64VirAddr[0], NULL, NULL, size);
             SAMPLE_CHECK_EXPR_RET(HI_SUCCESS != ret, ret, "Error(%#x), HI_MPI_SYS_MmzAlloc!\n", ret);
 
-            // Set the stride of the address of channel 1, both of which require channel 1
+            /*
+             * 设置通道1地址的步长，两者都需要通道1
+             * Set the stride of the address of channel 1, both of which require channel 1
+             */
             img->au32Stride[1] = img->au32Stride[0];
             img->au64PhyAddr[1] = img->au64PhyAddr[0] + img->au32Stride[0] * (uint64_t)img->u32Height;
             img->au64VirAddr[1] = img->au64VirAddr[0] + img->au32Stride[0] * (uint64_t)img->u32Height;
@@ -163,7 +181,10 @@ int IveImgCreate(IVE_IMAGE_S* img,
             ret = HI_MPI_SYS_MmzAlloc(&img->au64PhyAddr[0], (void**)&img->au64VirAddr[0], NULL, NULL, size);
             SAMPLE_CHECK_EXPR_RET(HI_SUCCESS != ret, ret, "Error(%#x), HI_MPI_SYS_MmzAlloc!\n", ret);
 
-            // Set the address and stride of channel 1 and channel 2
+            /*
+             * 设置通道1和通道2的地址和步长
+             * Set the address and stride of channel 1 and channel 2
+             */
             img->au64VirAddr[1] = img->au64VirAddr[0] + oneChnSize;
             img->au64PhyAddr[1] = img->au64PhyAddr[0] + oneChnSize;
             img->au32Stride[1] = img->au32Stride[0];
@@ -172,8 +193,13 @@ int IveImgCreate(IVE_IMAGE_S* img,
             img->au32Stride[2] = img->au32Stride[0]; // 2: au64VirAddr array subscript, not out of bounds
             break;
 
-        // Types not currently supported: YVC420P, YUV422P, S8C2_PACKAGE, S8C2_PLANAR,
-        // S32C1, U32C1, S64C1, U64C1, S16C1, U16C1, U8C3_PACKAGE,etc.
+        /*
+         * 目前如下格式不支持，主要为YVC420P, YUV422P, S8C2_PACKAGE, S8C2_PLANAR,
+         * S32C1, U32C1, S64C1, U64C1, S16C1, U16C1, U8C3_PACKAGE等     
+         *  
+         * Types not currently supported: YVC420P, YUV422P, S8C2_PACKAGE, S8C2_PLANAR,
+         * S32C1, U32C1, S64C1, U64C1, S16C1, U16C1, U8C3_PACKAGE,etc.
+         */
         default:
             HI_ASSERT(0);
             break;
@@ -193,7 +219,10 @@ int ImgYuvCrop(const IVE_IMAGE_S *src, IVE_IMAGE_S *dst, const RectBox* origBox)
     HI_ASSERT(src->au64VirAddr[0]);
     HI_ASSERT(src->au32Stride[0] >= src->u32Width);
 
-    // Adjust the width/height of the box to a multiple of 2
+    /*
+     * 将框的宽度/高度调整为 2 的倍数
+     * Adjust the width/height of the box to a multiple of 2
+     */
     if (boxWidth == 1 || boxHeight == 1) {
         SAMPLE_PRT("box dstWidth=1 && dstHeight=1\n");
         return -1;
@@ -206,12 +235,18 @@ int ImgYuvCrop(const IVE_IMAGE_S *src, IVE_IMAGE_S *dst, const RectBox* origBox)
         box.ymax--;
         boxHeight--;
     }
-    // Create empty dst img
+
     ret = IveImgCreate(dst, src->enType, boxWidth, boxHeight);
     HI_ASSERT(!ret);
-    // Use IVE DMA to copy to improve performance
-    // copy box from src to dst
-    // Y
+
+    /*
+     * 将框从源地址复制到目的地址
+     * copy box from src to dst
+     */
+    /*
+     * Y分量
+     * Y component
+     */
     int srcStrideY = src->au32Stride[0];
     int dstStrideY = dst->au32Stride[0];
     uint8_t *srcBufY = (uint8_t*)((uintptr_t)src->au64VirAddr[0]);
@@ -225,7 +260,10 @@ int ImgYuvCrop(const IVE_IMAGE_S *src, IVE_IMAGE_S *dst, const RectBox* origBox)
     }
     HI_ASSERT(dstPtrY - dstBufY == boxHeight * dstStrideY);
 
-    // UV
+    /*
+     * UV分量
+     * UV component
+     */
     int srcStrideUV = src->au32Stride[1];
     int dstStrideUV = dst->au32Stride[1];
     uint8_t *srcBufUV = (uint8_t*)((uintptr_t)src->au64VirAddr[1]);
@@ -243,7 +281,10 @@ int ImgYuvCrop(const IVE_IMAGE_S *src, IVE_IMAGE_S *dst, const RectBox* origBox)
     return ret;
 }
 
-/* Destory ive Image */
+/*
+ * 销毁ive image
+ * Destory ive image
+ */
 void IveImgDestroy(IVE_IMAGE_S* img)
 {
     for (int i = 0; i < IMG_FULL_CHN; i++) {

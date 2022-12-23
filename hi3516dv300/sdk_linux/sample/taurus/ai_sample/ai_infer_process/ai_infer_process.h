@@ -26,7 +26,10 @@ extern "C" {
 #define HI_PER_BASE         100
 #define HI_OVEN_BASE        2 // Even base
 
-/* rect box */
+/*
+ * 矩形框坐标定义
+ * Definition of rectangular box coordinates
+ */
 typedef struct RectBox {
     int xmin;
     int xmax;
@@ -34,40 +37,70 @@ typedef struct RectBox {
     int ymax;
 } RectBox;
 
-/* recognized number information */
+/*
+ * 识别的结果信息
+ * Recognized number information
+ */
 typedef struct RecogNumInfo {
     uint32_t num; // Recognized numeric value, 0~9
     uint32_t score; // The credibility score of a number, the value range of which is defined by a specific model
 } RecogNumInfo;
 
-/* plug related information */
+/*
+ * 与插件有关的信息
+ * Plug related information
+ */
 typedef struct AiPlugLib {
     int width;
     int height;
     uintptr_t model;
 } AiPlugLib;
 
-/* Information of detected objects */
+/*
+ * 检测对象信息
+ * Information of detected objects
+ */
 typedef struct DetectObjInfo {
     int cls; // The category of the object, an integer> 0
     RectBox box; // The rectangular area of the object (pixels)
     float score; // Object's credibility score
 } DetectObjInfo;
 
+/*
+ * 销毁CNN模型
+ * Destroy CNN model
+ */
 void CnnDestroy(SAMPLE_SVP_NNIE_CFG_S *self);
+
+/*
+ * 基于模型文件创建CNN模型
+ * Create CNN model based mode file
+ */
 int CnnCreate(SAMPLE_SVP_NNIE_CFG_S **model, const char* modelFile);
 
-/* Calculate a U8C1 image */
-int CnnCalU8c1Img(SAMPLE_SVP_NNIE_CFG_S* self,
+/*
+ * 对一帧图像进行推理
+ * Calculate a frame of image
+ */
+int CnnCalImg(SAMPLE_SVP_NNIE_CFG_S* self,
     const IVE_IMAGE_S *img, RecogNumInfo resBuf[], int resSize, int* resLen);
 
-/* creat yolo2 model basad mode file */
+/*
+ * 函数：基于模型文件创建Yolov2模型
+ * function : Creat Yolov2 model basad mode file
+ */
 int Yolo2Create(SAMPLE_SVP_NNIE_CFG_S **model, const char* modelFile);
 
-/* destory yolo2 model */
+/*
+ * 销毁Yolov2模型
+ * Destroy Yolov2 model
+ */
 void Yolo2Destory(SAMPLE_SVP_NNIE_CFG_S *self);
 
-/* cal U8C3 image */
+/*
+ * 对一帧yuv图片进行推理
+ * Calculation yuv image
+ */
 int Yolo2CalImg(SAMPLE_SVP_NNIE_CFG_S* self,
     const IVE_IMAGE_S *img, DetectObjInfo resBuf[], int resSize, int* resLen);
 

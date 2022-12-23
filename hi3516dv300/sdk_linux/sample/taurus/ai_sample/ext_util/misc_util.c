@@ -27,7 +27,10 @@ extern "C" {
 #endif
 #endif /* End of #ifdef __cplusplus */
 
-/* Amplify the integer to the given multiple range */
+/*
+ * 将整数放大到给定的倍数范围
+ * Amplify the integer to the given multiple range
+ */
 int IntZoomTo(int n, double rate, double rateMin, double rateMax)
 {
     HI_ASSERT(rateMin < 1 && rateMax > 1);
@@ -48,7 +51,10 @@ int IntZoomTo(int n, double rate, double rateMin, double rateMax)
     }
 }
 
-/* Convert coordinates proportionally */
+/*
+ * 按比例转换坐标
+ * Convert coordinates proportionally
+ */
 void RectBoxTran(RectBox* box, int srcWidth, int srcHeight, int dstWidth, int dstHeight)
 {
     if (!srcWidth || !srcHeight) {

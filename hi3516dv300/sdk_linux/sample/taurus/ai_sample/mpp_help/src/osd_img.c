@@ -53,27 +53,49 @@ extern "C" {
 #define MULTIPLE_NUM            100
 
 /*
+ * 全局对象
+ * 多个OsdSet实例将从全局池中分配id
+ *
  * Global object.
  * Multiple OsdSet instances will allocate ids from the global pool.
  */
 static void* g_osdHndPool[HI_OSD_MAX_CNT]; // Used to identify whether the index handle is used
 static pthread_mutex_t g_osdMutex; // pool access lock
-/* OSD Parameter Array */
+
+/*
+ * OSD参数数组
+ * OSD Parameter Array、
+ */
 static OSD_PARAM_S s_stOSDParam[HI_OSD_MAX_CNT];
 
-/* OSD Module Init Flag
- * Canbe modified only by HI_PDT_OSD_Init/HI_PDT_OSD_DeInit
+/*
+ * OSD 模块初始化标志
+ * 只能被HI_PDT_OSD_Init/HI_PDT_OSD_DeInit修改
+ *
+ * OSD Module Init Flag
+ * Only modified by HI_PDT_OSD_Init/HI_PDT_OSD_DeInit
  */
 static HI_BOOL s_bOSDInitFlg = HI_FALSE;
 
-/* OSD Fonts Lib, inited by HI_PDT_OSD_Init */
+/*
+ * OSD 字体库，由 HI_PDT_OSD_Init 初始化
+ * OSD Fonts Lib, inited by HI_PDT_OSD_Init
+ */
 static HI_OSD_FONTS_S s_stOSDFonts;
 
-/** OSD Time Update Runing Flag
-      Canbe modified only by HI_PDT_OSD_Init/HI_PDT_OSD_DeInit */
+/*
+ * OSD 时间更新运行标志
+ * 只能被HI_PDT_OSD_Init/HI_PDT_OSD_DeInit修改
+ *
+ * OSD Time Update Runing Flag
+ * Only modified by HI_PDT_OSD_Init/HI_PDT_OSD_DeInit
+ */
 static HI_BOOL s_bOSDTimeRun = HI_FALSE;
 
-/* Time OSD Update Task Thread ID, created by HI_PDT_OSD_Init, destroyed by HI_OSD_DeInit */
+/*
+ * 时间OSD更新任务线程ID，由HI_PDT_OSD_Init创建，由HI_OSD_DeInit销毁
+ * Time OSD Update Task Thread ID, created by HI_PDT_OSD_Init, destroyed by HI_OSD_DeInit
+ */
 static pthread_t s_OSDTimeTskId = 0;
 
 static HI_OSD_TEXTBITMAP_S s_stOSDTextBitMap;
@@ -81,17 +103,26 @@ static HI_OSD_TEXTBITMAP_S s_stOSDTextBitMap;
 static HI_U8* FontMod = NULL;
 static HI_S32 FontModLen = 0;
 
-/* Bitmap Row/Col Index */
+/*
+ * 位图行/列索引
+ * Bitmap Row/Col Index
+ */
 static HI_S32 s32BmRow;
 static HI_S32 s32BmCol;
 struct tm stTime = {0};
 
-/* OSD Font Step In Lib, in bytes */
+/*
+ * OSD Font Step In Lib，以字节为单位
+ * OSD Font Step In Lib, in bytes
+ */
 #define OSD_LIB_FONT_W (s_stOSDFonts.u32FontWidth)
 #define OSD_LIB_FONT_H (s_stOSDFonts.u32FontHeight)
 #define OSD_LIB_FONT_STEP (OSD_LIB_FONT_W * OSD_LIB_FONT_H / BYTE_BITS)
 
-/* Value Align */
+/*
+ * 数据对齐
+ * Value Align
+ */
 HI_S32 HiAppcommAlign(HI_S32 value, HI_S32 base)
 {
     return (((value) + (base)-1) / (base) * (base));
@@ -128,7 +159,10 @@ static HI_S32 OSD_GetNonASCNum(HI_CHAR* string, HI_S32 len)
     return n;
 }
 
-/* Creat OsdSet */
+/*
+ * 创建OsdSet
+ * Creat OsdSet
+ */
 OsdSet* OsdsCreate(HI_OSD_BIND_MOD_E bindMod, HI_U32 modHnd, HI_U32 chnHnd)
 {
     OsdSet *self = NULL;
@@ -148,14 +182,22 @@ OsdSet* OsdsCreate(HI_OSD_BIND_MOD_E bindMod, HI_U32 modHnd, HI_U32 chnHnd)
 }
 
 /*
- * @brief   get time string with given format
+ * @brief 获取给定格式的时间字符串
+ * @param[in]pstTime : 时间结构，如果为空则获取当前系统时间
+ * @param[out]pazStr : 时间字符串缓冲区
+ * @param[in]s32Len : 时间字符串缓冲区长度
+ *
+ * @brief get time string with given format
  * @param[in]pstTime : time struct, get current system time if null
  * @param[out]pazStr : time string buffer
  * @param[in]s32Len : time string buffer length
  */
 static HI_VOID OSD_GetTimeStr(struct tm* pstTime, HI_CHAR* pazStr, HI_S32 s32Len)
 {
-    /* Get Time */
+    /*
+     * 获取时间
+     * Get Time
+     */
     time_t nowTime;
 
     if (!pstTime) {
@@ -163,7 +205,10 @@ static HI_VOID OSD_GetTimeStr(struct tm* pstTime, HI_CHAR* pazStr, HI_S32 s32Len
         localtime_r(&nowTime, pstTime);
     }
 
-    /* Generate Time String */
+    /*
+     * 生成时间字符串
+     * Generate Time String
+     */
     if (snprintf_s(pazStr, s32Len, s32Len - 1, "%04d-%02d-%02d %02d:%02d:%02d",
         pstTime->tm_year + BASE_YAER, pstTime->tm_mon + 1, pstTime->tm_mday,
         pstTime->tm_hour, pstTime->tm_min, pstTime->tm_sec) < 0) {
@@ -232,7 +277,10 @@ static HI_S32 OSD_DestroyRGN(RGN_HANDLE RgnHdl, const HI_OSD_ATTR_S* pstAttr)
     return HI_SUCCESS;
 }
 
-/* Create a region in OsdSet */
+/*
+ * 在OsdSet中创建区域
+ * Create a region in OsdSet
+ */
 int OsdsCreateRgn(OsdSet* self)
 {
     HI_ASSERT(self);
@@ -270,15 +318,25 @@ static HI_S32 OSD_Stop(HI_S32 s32OsdIdx)
 }
 
 /*
+ * @brief 按索引停止osd
+ * @param[in] s32OsdIdx:osd 索引，范围[0,HI_OSD_MAX_CNT)
+ * @return 0 成功，非零错误码
+ *
  * @brief    stop osd by index.
  * @param[in] s32OsdIdx:osd index, range[0,HI_OSD_MAX_CNT)
  * @return 0 success,non-zero error code.
  */
 HI_S32 HI_OSD_Stop(HI_S32 s32OsdIdx)
 {
-    /* Check Module Init or not */
+    /*
+     * 检查模块初始化与否
+     * Check Module Init or not
+     */
     HI_ASSERT(HI_TRUE == s_bOSDInitFlg);
-    /* Check Input Param */
+    /*
+     * 检查输入参数
+     * Check Input Param
+     */
     HI_ASSERT(s32OsdIdx >= 0);
     HI_ASSERT(HI_OSD_MAX_CNT > s32OsdIdx);
 
@@ -287,13 +345,19 @@ HI_S32 HI_OSD_Stop(HI_S32 s32OsdIdx)
 
     pthread_mutex_lock(&pstOsdParam->mutexLock);
 
-    /* Check OSD Attrbute init or not */
+    /*
+     * 检查OSD Attrbute是否初始化
+     * Check OSD Attrbute init or not
+     */
     if (!pstOsdParam->bInit) {
         pthread_mutex_unlock(&pstOsdParam->mutexLock);
         return HI_SUCCESS;
     }
 
-    /* Check OSD stop or not */
+    /*
+     * 检查OSD是否停止
+     * Check OSD stop or not
+     */
     if (!pstOsdParam->bOn) {
         pthread_mutex_unlock(&pstOsdParam->mutexLock);
         return HI_SUCCESS;
@@ -306,7 +370,10 @@ HI_S32 HI_OSD_Stop(HI_S32 s32OsdIdx)
     return s32Ret;
 }
 
-/* Destroy the region specified in the OsdSet */
+/*
+ * 销毁OsdSet中指定的区域
+ * Destroy the region specified in the OsdSet
+ */
 void OsdsDestroyRgn(OsdSet* self, int rgnHnd)
 {
     HI_ASSERT(self);
@@ -320,7 +387,10 @@ void OsdsDestroyRgn(OsdSet* self, int rgnHnd)
     HI_OSD_Stop(rgnHnd);
 }
 
-/* Destroy all regions in OsdSet */
+/*
+ * 销毁OsdSet中的所有区域
+ * Destroy all regions in OsdSet
+ */
 void OsdsClear(OsdSet* self)
 {
     MutexLock(&g_osdMutex);
@@ -332,7 +402,10 @@ void OsdsClear(OsdSet* self)
     MutexUnlock(&g_osdMutex);
 }
 
-/* Destory OsdSet */
+/*
+ * 销毁OsdSet
+ * Destory OsdSet
+ */
 void OsdsDestroy(OsdSet* self)
 {
     HI_ASSERT(self);
@@ -340,7 +413,10 @@ void OsdsDestroy(OsdSet* self)
     free(self);
 }
 
-/* Set the attribute value of the text region */
+/*
+ * 设置文本区域的属性值
+ * Set the attribute value of the text region
+ */
 int TxtRgnInit(HI_OSD_ATTR_S* rgnAttr, const char* str, uint32_t begX, uint32_t begY, uint32_t color)
 {
     HI_ASSERT(rgnAttr);
@@ -441,7 +517,6 @@ static HI_S32 OSD_Update(RGN_HANDLE RgnHdl, const HI_OSD_ATTR_S* pstAttr)
 
     for (s32DispIdx = 0; s32DispIdx < pstAttr->u32DispNum ; ++s32DispIdx) {
         if (!pstAttr->astDispAttr[s32DispIdx].bShow) {
-            /* not no show,no need to update */
             continue;
         }
 
@@ -461,7 +536,10 @@ static HI_S32 OSD_Update(RGN_HANDLE RgnHdl, const HI_OSD_ATTR_S* pstAttr)
                 SAMPLE_PRT("invalide bind mode [%d]\n", pstAttr->astDispAttr[s32DispIdx].enBindedMod);
                 return HI_EINVAL;
         }
-
+        /*
+         * 获取区域的通道显示属性
+         * Get the channel display properties of the zone
+         */
         s32Ret = HI_MPI_RGN_GetDisplayAttr(RgnHdl, &stChn, &stRgnChnAttr);
         SAMPLE_CHECK_EXPR_RET(s32Ret != HI_SUCCESS, s32Ret, "GetDisplayAttr fail, s32Ret:[0x%08X]\n", s32Ret);
 
@@ -485,7 +563,10 @@ static HI_S32 OSD_Update(RGN_HANDLE RgnHdl, const HI_OSD_ATTR_S* pstAttr)
             stRgnChnAttr.unChnAttr.stOverlayChn.u32BgAlpha = pstAttr->astDispAttr[s32DispIdx].u32BgAlpha;
             stRgnChnAttr.unChnAttr.stOverlayChn.u32FgAlpha = pstAttr->astDispAttr[s32DispIdx].u32FgAlpha;
         }
-
+        /*
+         * 设置区域的通道显示属性
+         * Sets the channel display properties for the zone
+         */
         s32Ret = HI_MPI_RGN_SetDisplayAttr(RgnHdl, &stChn, &stRgnChnAttr);
         SAMPLE_CHECK_EXPR_RET(s32Ret != HI_SUCCESS, s32Ret, "SetDisplayAttr fail, s32Ret:[0x%08X]\n", s32Ret);
     }
@@ -510,16 +591,25 @@ HI_S32 OSD_Bitmap_Cal(HI_OSD_CONTENT_S* pstContent, HI_S32 NonASCNum, HI_U16* pu
 {
     HI_S32 NonASCShow = 0;
     for (s32BmCol = 0; s32BmCol < pstContent->stBitmap.u32Width; ++s32BmCol) {
-        /* Bitmap Data Offset for the point */
+        /*
+         * 点的位图数据偏移
+         * Bitmap Data Offset for the point
+         */
         HI_S32 s32BmDataIdx = s32BmRow * s_stOSDTextBitMap.stCanvasInfo.u32Stride / 2 + s32BmCol;
-        /* Character Index in Text String */
+        /*
+         * 文本字符串中的字符索引
+         * Character Index in Text String
+         */
         HI_S32 s32CharIdx = s32BmCol / pstContent->stFontSize.u32Width;
         HI_S32 s32StringIdx = s32CharIdx+NonASCShow * (NOASCII_CHARACTER_BYTES - 1);
         if (NonASCNum > 0 && s32CharIdx > 0) {
             NonASCShow = OSD_GetNonASCNum(pstContent->szStr, s32StringIdx);
             s32StringIdx = s32CharIdx+NonASCShow * (NOASCII_CHARACTER_BYTES - 1);
         }
-        /* Point Row/Col Index in Character */
+        /*
+         * 字符中的点行/列索引
+         * Point Row/Col Index in Character
+         */
         HI_S32 s32CharCol = (s32BmCol - (pstContent->stFontSize.u32Width * s32CharIdx)) *
             OSD_LIB_FONT_W / pstContent->stFontSize.u32Width;
         HI_S32 s32CharRow = s32BmRow * OSD_LIB_FONT_H / pstContent->stFontSize.u32Height;
@@ -547,7 +637,10 @@ HI_S32 OSD_Generate_Bitmap(RGN_HANDLE RgnHdl, HI_OSD_CONTENT_S* pstContent)
     s32Ret = HI_MPI_RGN_GetCanvasInfo(RgnHdl, &s_stOSDTextBitMap.stCanvasInfo);
     SAMPLE_CHECK_EXPR_RET(s32Ret != HI_SUCCESS, s32Ret, "RGN_GetCanvasInfo FAIL, s32Ret=%x\n", s32Ret);
 
-    /* Generate Bitmap */
+    /*
+     * 生成位图
+     * Generate Bitmap
+     */
     pstContent->stBitmap.u32Width = pstContent->stFontSize.u32Width *
         (s32StrLen - NonASCNum * (NOASCII_CHARACTER_BYTES - 1));
     pstContent->stBitmap.u32Height = pstContent->stFontSize.u32Height;
@@ -707,17 +800,26 @@ HI_VOID OSD_Update_Relate_Info(HI_S32 s32OsdIdx)
         pthread_mutex_lock(&s_stOSDParam[s32OsdIdx].mutexLock);
         if (s_stOSDParam[s32OsdIdx].stAttr.stContent.enType ==
             HI_OSD_TYPE_TIME && s_stOSDParam[s32OsdIdx].bOn) {
-            /* Update OSD Time String */
+            /*
+             * 更新OSD时间字符串
+             * Update OSD Time String
+             */
             OSD_GetTimeStr(&stTime,
                 s_stOSDParam[s32OsdIdx].stAttr.stContent.szStr, HI_OSD_MAX_STR_LEN);
-            /* Update OSD Text Bitmap */
+            /*
+             * 更新OSD文本位图
+             * Update OSD Text Bitmap
+             */
             s32Ret = OSD_UpdateTextBitmap(s32OsdIdx, &s_stOSDParam[s32OsdIdx].stAttr.stContent);
             if (HI_SUCCESS != s32Ret) {
                 pthread_mutex_unlock(&s_stOSDParam[s32OsdIdx].mutexLock);
                 SAMPLE_PRT("Update Text Bitmap failed\n");
                 continue;
             }
-            /* Update OSD Attribute */
+            /*
+             * 更新OSD属性
+             * Update OSD Attribute
+             */
             s32Ret = OSD_Update(s32OsdIdx, &s_stOSDParam[s32OsdIdx].stAttr);
             if (HI_SUCCESS != s32Ret) {
                 SAMPLE_PRT("Update Attribute failed\n");
@@ -729,10 +831,14 @@ HI_VOID OSD_Update_Relate_Info(HI_S32 s32OsdIdx)
     return;
 }
 
-/**
+/*
+ * @brief 时间 osd 更新任务
+ * @param[in]pvParam : 不使用
+ * @return 0 成功，非零错误码
+ *
  * @brief   time osd update task
  * @param[in]pvParam : nonuse
- * @return 0 success,non-zero error code.
+ * @return 0 success, non-zero error code.
  */
 static HI_VOID* OSD_TimeUpdate(HI_VOID* pvParam)
 {
@@ -758,10 +864,14 @@ static HI_VOID* OSD_TimeUpdate(HI_VOID* pvParam)
     return NULL;
 }
 
-/**
+/*
+ * @brief osd模块初始化，例如：创建时间OSD更新任务
+ * @param[in] pstFonts:osd 字体库
+ * @return 0 成功，非零表示错误码
+ *
  * @brief    osd module initialization, eg. create time osd update task.
  * @param[in] pstFonts:osd fonts lib
- * @return 0 success,non-zero error code.
+ * @return 0 success, non-zero error code.
  */
 HI_S32 HI_OSD_Init(const HI_OSD_FONTS_S* pstFonts)
 {
@@ -783,7 +893,10 @@ HI_S32 HI_OSD_Init(const HI_OSD_FONTS_S* pstFonts)
     HI_S32 s32Idx = 0;
     HI_S32 s32Ret = HI_SUCCESS;
 
-    /* Init OSD Param */
+    /*
+     * 初始化OSD参数
+     * Init OSD Param
+     */
     for (s32Idx = 0; s32Idx < HI_OSD_MAX_CNT; ++s32Idx) {
         pthread_mutex_init(&s_stOSDParam[s32Idx].mutexLock, NULL);
         pthread_mutex_lock(&s_stOSDParam[s32Idx].mutexLock);
@@ -792,7 +905,10 @@ HI_S32 HI_OSD_Init(const HI_OSD_FONTS_S* pstFonts)
     }
 
     if (pstFonts != NULL) {
-        /* Create Time OSD Update Thread */
+        /*
+         * 创建时间OSD更新线程
+         * Create Time OSD Update Thread
+         */
         s_bOSDTimeRun = HI_TRUE;
         s32Ret = pthread_create(&s_OSDTimeTskId, NULL, OSD_TimeUpdate, NULL);
         if (HI_SUCCESS != s32Ret) {
@@ -805,16 +921,25 @@ HI_S32 HI_OSD_Init(const HI_OSD_FONTS_S* pstFonts)
     return HI_SUCCESS;
 }
 
-/* Initialize OSD font */
+/*
+ * 初始化OSD字体
+ * Initialize OSD font
+ */
 static int OsdInitFont(HI_CHAR *character, HI_U8 **fontMod, HI_S32 *fontModLen)
 {
     static const HI_CHAR baseChar = 0x20;
 
-    // Get Font Mod in ASCII Fontlib
+    /*
+     * 获取ASCII字体库中的字体模组
+     * Get Font Mod in ASCII Fontlib
+     */
     if (!character || !fontMod || !fontModLen) {
         return HI_FAILURE;
     }
-    // Return true if the parameter is an ASCII character, otherwise NULL (0)
+    /*
+     * 如果参数是ASCII字符则返回true，否则返回NULL(0)
+     * Return true if the parameter is an ASCII character, otherwise NULL (0)
+     */
     if (!IsAscii(character[0])) {
         return HI_FAILURE;
     }
@@ -824,7 +949,10 @@ static int OsdInitFont(HI_CHAR *character, HI_U8 **fontMod, HI_S32 *fontModLen)
     return HI_SUCCESS;
 }
 
-/* Initialize OsdSet lib */
+/*
+ * 初始化OsdSet库
+ * Initialize OsdSet lib
+ */
 int OsdLibInit(void)
 {
     RecurMutexInit(&g_osdMutex);
@@ -844,18 +972,27 @@ int OsdLibInit(void)
 
 HI_VOID Osd_Param_Config(const HI_OSD_ATTR_S* pstAttr, OSD_PARAM_S* pstOsdParam)
 {
-    /* Update Attribute */
+    /*
+     * 更新属性
+     * Update Attribute
+     */
     pstOsdParam->stAttr.stContent.u32Color = pstAttr->stContent.u32Color;
     pstOsdParam->stAttr.stContent.u32BgColor = pstAttr->stContent.u32BgColor;
 
     if (HI_OSD_TYPE_BITMAP != pstAttr->stContent.enType) {
         if (HI_OSD_TYPE_TIME == pstAttr->stContent.enType) {
-            /* Time Type: Update time string */
+            /*
+             * 时间类型：更新时间字符串
+             * Time Type: Update time string
+             */
             pstOsdParam->stAttr.stContent.enTimeFmt = pstAttr->stContent.enTimeFmt;
             OSD_GetTimeStr(NULL, ((HI_OSD_ATTR_S*)pstAttr)->stContent.szStr, HI_OSD_MAX_STR_LEN);
         }
 
-        /* Update string */
+        /*
+         * 更新字符串
+         * Update string
+         */
         if (snprintf_s(pstOsdParam->stAttr.stContent.szStr, HI_OSD_MAX_STR_LEN,
             HI_OSD_MAX_STR_LEN - 1, "%s", pstAttr->stContent.szStr) < 0) {
             HI_ASSERT(0);
@@ -881,17 +1018,27 @@ HI_VOID Osd_Param_Config(const HI_OSD_ATTR_S* pstAttr, OSD_PARAM_S* pstOsdParam)
 static HI_S32 OSD_Update_RGN_Content(const HI_OSD_ATTR_S* pstAttr, OSD_PARAM_S* pstOsdParam, HI_S32 s32OsdIdx)
 {
     HI_S32 s32Ret = HI_SUCCESS;
-    /* Update RGN Content */
+    /*
+     * 更新RGN内容
+     * Update RGN Content
+     */
     if (pstAttr->stContent.enType == HI_OSD_TYPE_BITMAP) {
         BITMAP_S stBitmap;
         stBitmap.enPixelFormat = PIXEL_FORMAT_ARGB_1555;
         stBitmap.u32Width = pstAttr->stContent.stBitmap.u32Width;
         stBitmap.u32Height = pstAttr->stContent.stBitmap.u32Height;
         stBitmap.pData = pstAttr->stContent.stBitmap.pvData;
+        /*
+         * 设置区域位图，即对区域进行位图填充
+         * Set the area bitmap, that is, fill the area with a bitmap
+         */
         s32Ret = HI_MPI_RGN_SetBitMap(s32OsdIdx, &stBitmap);
         SAMPLE_CHECK_EXPR_GOTO(s32Ret != HI_SUCCESS, FAIL, "HI_MPI_RGN_SetBitMap. s32Ret: 0x%x\n", s32Ret);
     } else {
-        /* Time/String Type: Update text bitmap */
+        /*
+         * 时间/字符串类型：更新文本位图
+         * Time/String Type: Update text bitmap
+         */
         s32Ret = OSD_UpdateTextBitmap(s32OsdIdx, (HI_OSD_CONTENT_S*)&pstOsdParam->stAttr.stContent);
         SAMPLE_CHECK_EXPR_GOTO(s32Ret != HI_SUCCESS, FAIL, "OSD_UpdateTextBitmap fail, err(%#x)\n", s32Ret);
     }
@@ -917,6 +1064,11 @@ FAIL:
 }
 
 /*
+ * @brief 设置osd属性
+ * @param[in] s32OsdIdx:osd索引，范围[0,HI_OSD_MAX_CNT)
+ * @param[in] pstAttr:osd配置属性
+ * @return 0 成功，非零错误码
+ *
  * @brief    set osd attribute.
  * @param[in] s32OsdIdx:osd index, range[0,HI_OSD_MAX_CNT)
  * @param[in] pstAttr:osd configure attribute
@@ -924,9 +1076,15 @@ FAIL:
  */
 HI_S32 HI_OSD_SetAttr(HI_S32 s32OsdIdx, const HI_OSD_ATTR_S* pstAttr)
 {
-    /* Check Module Init or not */
+    /*
+     * 检查模块是否初始化成功
+     * Check Module Init or not
+     */
     HI_ASSERT(HI_TRUE == s_bOSDInitFlg);
-    /* Check Input Param */
+    /*
+     * 检查输入的参数
+     * Check Input Param
+     */
     HI_ASSERT(s32OsdIdx >= 0);
     HI_ASSERT(HI_OSD_MAX_CNT > s32OsdIdx);
     HI_ASSERT(pstAttr);
@@ -948,7 +1106,10 @@ HI_S32 HI_OSD_SetAttr(HI_S32 s32OsdIdx, const HI_OSD_ATTR_S* pstAttr)
     pthread_mutex_lock(&pstOsdParam->mutexLock);
     HI_BOOL bOn = pstOsdParam->bOn;
 
-    /* Update Attribute */
+    /*
+     * 更新属性
+     * Update Attribute
+     */
     Osd_Param_Config(pstAttr, pstOsdParam);
     if (bOn) {
         if (pstOsdParam->stMaxSize.u32Width < pstOsdParam->stAttr.stContent.stBitmap.u32Width
@@ -956,7 +1117,10 @@ HI_S32 HI_OSD_SetAttr(HI_S32 s32OsdIdx, const HI_OSD_ATTR_S* pstAttr)
             SAMPLE_PRT("RGN(%d) size increase[%d,%d->%d,%d], rebuild\n", s32OsdIdx,
                 pstOsdParam->stMaxSize.u32Width, pstOsdParam->stMaxSize.u32Height,
                 pstAttr->stContent.stBitmap.u32Width, pstAttr->stContent.stBitmap.u32Height);
-            /* rebuild RGN */
+            /*
+             * 销毁区域
+             * Destory region
+             */
             s32Ret = OSD_DestroyRGN(s32OsdIdx, &pstOsdParam->stAttr);
             if (s32Ret != HI_SUCCESS) {
                 pthread_mutex_unlock(&pstOsdParam->mutexLock);
@@ -991,7 +1155,10 @@ static HI_S32 OSD_Start(HI_S32 s32OsdIdx)
     HI_S32 s32Ret = HI_SUCCESS;
     OSD_PARAM_S* pstOsdParam = &s_stOSDParam[s32OsdIdx];
 
-    /* Time OSD: Update time string and bitmap */
+    /*
+     * 时间OSD：更新时间字符串和位图
+     * Time OSD: Update time string and bitmap
+     */
     if (HI_OSD_TYPE_TIME == pstOsdParam->stAttr.stContent.enType) {
         OSD_GetTimeStr(NULL, pstOsdParam->stAttr.stContent.szStr, HI_OSD_MAX_STR_LEN);
     }
@@ -1006,15 +1173,25 @@ static HI_S32 OSD_Start(HI_S32 s32OsdIdx)
 }
 
 /*
+ * @brief 按索引启动 osd
+ * @param[in] s32OsdIdx:osd 索引，范围[0,HI_OSD_MAX_CNT)
+ * @return 0 成功，非零错误码
+ *
  * @brief    start osd by index.
  * @param[in] s32OsdIdx:osd index, range[0,HI_OSD_MAX_CNT)
  * @return 0 success,non-zero error code.
  */
 HI_S32 HI_OSD_Start(HI_S32 s32OsdIdx)
 {
-    /* Check Module Init or not */
+    /*
+     * 检查模块是否初始化成功
+     * Check Module Init or not
+     */
     HI_ASSERT(HI_TRUE == s_bOSDInitFlg);
-    /* Check Input Param */
+    /*
+     * 检查输入的参数
+     * Check Input Param
+     */
     HI_ASSERT(s32OsdIdx >= 0);
     HI_ASSERT(HI_OSD_MAX_CNT > s32OsdIdx);
 
@@ -1023,14 +1200,20 @@ HI_S32 HI_OSD_Start(HI_S32 s32OsdIdx)
 
     pthread_mutex_lock(&pstOsdParam->mutexLock);
 
-    /* Check OSD Attrbute init or not */
+    /*
+     * 检查OSD属性是否初始化
+     * Check OSD Attrbute init or not
+     */
     if (!pstOsdParam->bInit) {
         pthread_mutex_unlock(&pstOsdParam->mutexLock);
         SAMPLE_PRT("OSD[%d] not init yet!\n", s32OsdIdx);
         return HI_EINVAL;
     }
 
-    /* Check OSD stop or not */
+    /*
+     * 检查OSD是否停止
+     * Check OSD stop or not
+     */
     if (pstOsdParam->bOn) {
         pthread_mutex_unlock(&pstOsdParam->mutexLock);
         SAMPLE_PRT("OSD[%d] has already started!\n", s32OsdIdx);
@@ -1042,7 +1225,10 @@ HI_S32 HI_OSD_Start(HI_S32 s32OsdIdx)
     return s32Ret;
 }
 
-/* Set attributes for the specified region in OsdSet */
+/*
+ * 在OsdSet中设置指定区域的属性
+ * Set attributes for the specified region in OsdSet
+ */
 int OsdsSetRgn(OsdSet* self, int rgnHnd, const HI_OSD_ATTR_S* rgnAttr)
 {
     HI_ASSERT(self);

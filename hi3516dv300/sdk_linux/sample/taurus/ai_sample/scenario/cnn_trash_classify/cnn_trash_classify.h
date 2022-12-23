@@ -33,7 +33,10 @@ extern "C" {
 #define LARGE_BUF_SIZE      1024 // normal buf size
 #define HUGE_BUF_SIZE       9120 // huge buf size
 
-/* ARGB1555 common colors */
+/*
+ * ARGB1555 common colors
+ * ARGB1555常用颜色
+ */
 #define ARGB1555_RED        0xFC00 // 1 11111 00000 00000
 #define ARGB1555_GREEN      0x83E0 // 1 00000 11111 00000
 #define ARGB1555_BLUE       0x801F // 1 00000 00000 11111
@@ -42,13 +45,24 @@ extern "C" {
 #define ARGB1555_WHITE      0xFFFF // 1 11111 11111 11111
 #define ARGB1555_BLACK      0x8000 // 1 00000 00000 00000
 
-/* cnn trash classify load model */
+/*
+ * 加载垃圾分类wk模型
+ * Load the trash classification wk model
+ */
 HI_S32 CnnTrashClassifyLoadModel(uintptr_t* model, OsdSet* osds);
 
-/* cnn trash classify unload model */
+/*
+ * 卸载垃圾分类wk模型
+ * Unload the trash classification wk model
+ */
 HI_S32 CnnTrashClassifyUnloadModel(uintptr_t model);
 
-/* cnn trash classify calculation */
+/*
+ * 先进行预处理，再使用NNIE进行硬件加速推理，不支持层通过AI CPU进行计算
+ *
+ * Perform preprocessing first, and then use NNIE for hardware accelerated inference,
+ * and do not support layers to be calculated by AI CPU
+ */
 HI_S32 CnnTrashClassifyCal(uintptr_t model, VIDEO_FRAME_INFO_S *srcFrm, VIDEO_FRAME_INFO_S *resFrm);
 
 #ifdef __cplusplus

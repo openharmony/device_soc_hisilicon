@@ -12,6 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -30,11 +31,13 @@ pthread_t hisignallingMsgHandleID;
 #define HISIGNALLING_HEAD_1 (0xaa)
 #define HISIGNALLING_HEAD_2 (0x55)
 
-/**
-    @berf GPIO enable of key
-    @param pin: gpio port
-*/
-
+/*
+ * @berf 用于将指定编号的引脚导出，作为GPIO使用
+ * @param pin:指定导出的引脚
+ *
+ * @berf It is used to export the pin with the specified number and use it as GPIO
+ * @param pin: Specify the exported pin
+ */
 static int GpioExport(int pin)
 {
     char buffer[64] = {0};
@@ -61,10 +64,14 @@ static int GpioExport(int pin)
     close(fd);
     return 0;
 }
-/**
-    @berf GPIO disable of key
-    @param pin: gpio port
-*/
+
+/*
+ * @berf 用于将导出的GPIO删除掉
+ * @param pin:指定删除的引脚
+ *
+ * @berf Used to delete the exported GPIO
+ * @param pin: Specifies the pin to delete
+ */
 static int GpioUnexport(int pin)
 {
     char buffer[64] = {0};
@@ -92,7 +99,10 @@ static int GpioUnexport(int pin)
     return 0;
 }
 
-// dir: 0-->IN, 1-->OUT
+/*
+ * direction设置输出还是输入模式，0-->IN为输入，1-->OUT为输出
+ * direction sets the output or input mode, 0-->IN is input, 1-->OUT is output
+ */
 static int GpioDirection(int pin, int dir)
 {
     static const char dirStr[] = "in\0out";
@@ -120,7 +130,15 @@ static int GpioDirection(int pin, int dir)
     return 0;
 }
 
-// value: 0-->LOW, 1-->HIGH
+/*
+ * @brief 设置输出值
+ * @param pin: 引脚
+ * @param value: 输出值
+ *
+ * @brief set output value
+ * @param pin: pin
+ * @param value: output value
+ */
 static int GpioWrite(int pin, int value)
 {
     static const char valuesStr[] = "01";
@@ -147,10 +165,14 @@ static int GpioWrite(int pin, int value)
     close(fd);
     return 0;
 }
-/**
-    @berf Read GPIO port level change
-    @param int pin: gpio port
-*/
+
+/*
+ * @brief 读取输入值
+ * @param pin: 引脚
+ *
+ * @brief reads the input value
+ * @param pin: pin
+ */
 static int GpioRead(int pin)
 {
     char path[64] = {0};
@@ -178,11 +200,18 @@ static int GpioRead(int pin)
     return (atoi(value_str));
 }
 
-// none表示引脚为输入，不是中断引脚
-// rising表示引脚为中断输入，上升沿触发
-// falling表示引脚为中断输入，下降沿触发
-// both表示引脚为中断输入，边沿触发
-// 0-->none, 1-->rising, 2-->falling, 3-->both
+/*
+ * none表示引脚为输入，不是中断引脚
+ * rising表示引脚为中断输入，上升沿触发
+ * falling表示引脚为中断输入，下降沿触发
+ * both表示引脚为中断输入，边沿触发
+ *
+ * none indicates that the pin is an input, not an interrupt pin
+ * rising indicates that the pin is an interrupt input and is triggered by a rising edge
+ * falling means that the pin is an interrupt input, triggered by a falling edge
+ * both indicates that the pin is an interrupt input, edge-triggered
+ * 0-->none, 1-->rising, 2-->falling, 3-->both
+ */
 static int GpioEdge(int pin, int edge)
 {
     const char dirStr[] = "none\0rising\0falling\0both";
@@ -228,7 +257,10 @@ static int GpioEdge(int pin, int edge)
     return 0;
 }
 
-// 初始化按键1
+/*
+ * 初始化按键1
+ * Initialize button 1
+ */
 void InitGpio1(void)
 {
     MSG("\n =============== InitGpio1 start ========== \n");
@@ -239,7 +271,10 @@ void InitGpio1(void)
     MSG("\n =============== InitGpio1 end ========== \n");
 }
 
-// 初始化按键2
+/*
+ * 初始化按键2
+ * Initialize button 2
+ */
 void InitGpio2(void)
 {
     MSG("\n =============== InitGpio2 start ========== \n");
@@ -250,34 +285,65 @@ void InitGpio2(void)
     MSG("\n =============== InitGpio2 end ========== \n");
 }
 
-/* 串口设置 */
+/*
+ * 串口设置
+ * Serial port settings
+ */
 int Uart1Config(int fd)
 {
     struct termios newtio = {0}, oldtio = {0};
-    /* 获取原有串口配置 */
+    /*
+     * 获取原有串口配置
+     * Get the original serial port configuration
+     */
     if (tcgetattr(fd, &oldtio) != 0) {
         perror("SetupSerial 1");
         return -1;
     }
     (void)memset_s(&newtio, sizeof(newtio), 0, sizeof(newtio));
-    /* CREAD 开启串行数据接收，CLOCAL并打开本地连接模式 */
+    /*
+     * CREAD开启串行数据接收，CLOCAL打开本地连接模式
+     * CREAD opens serial data reception, CLOCAL opens local connection mode
+     */
     newtio.c_cflag  |=  CLOCAL | CREAD;
 
-    /* 设置数据位8 */
+    /*
+     * 设置数据位
+     * set data bit
+     */
     newtio.c_cflag &= ~CSIZE;
     newtio.c_cflag |= CS8;
-    /* 设置奇偶校验位 */
+    /*
+     * 设置奇偶校验位
+     * set parity bit
+     */
     newtio.c_cflag &= ~PARENB; // 无奇偶校验
-    /* 设置波特率 115200 */
+    /*
+     * 设置波特率 115200
+     * set baud rate 115200
+     */
     cfsetispeed(&newtio, B115200);
     cfsetospeed(&newtio, B115200);
 
-    /* 设置停止位 */
+    /*
+     * 设置停止位
+     * set stop bit
+     */
     newtio.c_cflag &=  ~CSTOPB; /* 默认为一位停止位 */
-    /* 设置最少字符和等待时间，对于接收字符和等待时间没有特别的要求时 */
+    /*
+     * 设置最少字符和等待时间，对于接收字符和等待时间没有特别的要求时
+     *
+     * Set the minimum characters and waiting time,
+     * when there are no special requirements for receiving characters and waiting time
+     */
     newtio.c_cc[VTIME]  = 0; /* 非规范模式读取时的超时时间 */
     newtio.c_cc[VMIN] = 0; /* 非规范模式读取时的最小字符数 */
-    /* tcflush清空终端未完成的输入/输出请求及数据；TCIFLUSH表示清空正收到的数据，且不读取出来 */
+    /*
+     * tcflush清空终端未完成的输入/输出请求及数据；TCIFLUSH表示清空正收到的数据，且不读取出来
+     *
+     * tcflush clears the unfinished input/output requests and data of the terminal;
+     * TCIFLUSH means clearing the data being received and not reading it out
+     */
     tcflush(fd, TCIFLUSH);
     if ((tcsetattr(fd, TCSANOW, &newtio)) != 0) {
         perror("com set error");
@@ -286,12 +352,17 @@ int Uart1Config(int fd)
     return 0;
 }
 
-/**
-    @berf uart send
-    @param int fd: uart file descriptor
-    @param void *buf:send data buf
-    @param int len:data buf len
-*/
+/*
+ * @berf uart 发送数据
+ * @param int fd: 串口文件描述符
+ * @param void *buf:发送数据buffer
+ * @param int len:数据缓冲长度
+ *
+ * @berf uart send
+ * @param int fd: uart file descriptor
+ * @param void *buf:send data buf
+ * @param int len:data buf len
+ */
 int UartSend(int fd, char *buf, int len)
 {
     int ret = 0;
@@ -313,13 +384,20 @@ int UartSend(int fd, char *buf, int len)
 
     return count;
 }
-/**
-    @berf uart read
-    @param int uart_fd: uart file descriptor
-    @param void *buf:read data buf
-    @param int len:data buf len
-    @param int timeoutMs: read data time
-*/
+
+/*
+ * @berf uart 读取数据
+ * @param int uart_fd: 串口文件描述符
+ * @param void *buf: 读取数据buffer
+ * @param int len: 数据缓冲区长度
+ * @param int timeoutMs: 读取数据时间
+ *
+ * @berf uart read
+ * @param int uart_fd: uart file descriptor
+ * @param void *buf: read data buf
+ * @param int len: data buf len
+ * @param int timeoutMs: read data time
+ */
 int UartRead(int uartFd, char *buf, int len, int timeoutMs)
 {
     int ret = 0;
@@ -344,8 +422,7 @@ int UartRead(int uartFd, char *buf, int len, int timeoutMs)
             }
             if (ret == -1) {
                 printf("select error!\r\n");
-                // 信号中断
-                continue;
+                continue; // 信号中断
             }
             return -1;
         } else {
@@ -362,16 +439,21 @@ int UartRead(int uartFd, char *buf, int len, int timeoutMs)
 }
 
 /*
-* crc32 Verification implementation
-*/
+ * crc32校验
+ * crc32 Verification implementation
+ */
 static const unsigned int crc32table[] = {
 };
 
-/**
-    @berf CRC check
-    @param const unsigned char *buf: Data to be verified buff
-    @param unsigned int size: Data to be verified length
-*/
+/*
+ * @berf CRC校验
+ * @param const unsigned char *buf: 待校验数据buff
+ * @param unsigned int size: 待校验数据长度
+ *
+ * @berf CRC check
+ * @param const unsigned char *buf: Data to be verified buff
+ * @param unsigned int size: Data to be verified length
+ */
 static unsigned int crc32(const unsigned char *buf, unsigned int size)
 {
     unsigned int  i, crc = 0xFFFFFFFF;
@@ -385,7 +467,11 @@ static unsigned int crc32(const unsigned char *buf, unsigned int size)
 #define RIGHT_MOVE_8_BIT (8)
 #define RIGHT_MOVE_16_BIT (16)
 #define RIGHT_MOVE_24_BIT (24)
-/* hisignal Hi3516 message send */
+
+/*
+ * 对数据进行打包
+ * Pack the data
+ */
 static unsigned int HisignallingDataPackage(HisignallingProtocalType *buf,
     unsigned int len, unsigned char *hisignallingDataBuf)
 {
@@ -412,21 +498,30 @@ static unsigned int HisignallingDataPackage(HisignallingProtocalType *buf,
     return packageLen;
 }
 
-/* hisignalling Hi3561 message recevice */
+/*
+ * Hi3561DV300接收数据
+ * Hi3561DV300 message recevice
+ */
 static HisignallingErrorType HisignallingMsgReceive(int fd, unsigned char *buf, unsigned int len)
 {
     unsigned int crcCheckReceived = 0;
     int i = 0, readLen = 0;
     unsigned int RecvLen = len;
 
-    /* Hi3516dv300 uart read */
+    /*
+     * Hi3516dv300 uart串口读数据
+     * Hi3516dv300 uart read data
+     */
     readLen = UartRead(fd, buf, RecvLen, 1000); /* 1000 :time out */
     if (readLen <= 0) {
         printf("uart_read data failed\r\n");
         return HISIGNALLING_RET_VAL_ERROR;
     }
     printf("read_len=%d\r\n", readLen);
-    /* 输出收到的数据 */
+    /*
+     * 输出收到的数据
+     * output received data
+     */
     for (i = 0; i < RecvLen; i++) {
         printf("0x%x ", buf[i]);
     }
@@ -435,11 +530,15 @@ static HisignallingErrorType HisignallingMsgReceive(int fd, unsigned char *buf, 
     return HISIGNALLING_RET_VAL_CORRECT;
 }
 
-/**
-    @berf hisignalling protocol send msg
-    @param void *buf: send data buff
-    @param unsigned int data_len: send data length
-*/
+/*
+ * @berf hisignalling 协议发送消息
+ * @param void *buf: 发送数据缓冲区
+ * @param unsigned int data_len: 发送数据长度
+ *
+ * @berf hisignalling protocol send msg
+ * @param void *buf: send data buff
+ * @param unsigned int data_len: send data length
+ */
 static unsigned int HisignallingMsgSend(int fd, char *buf, unsigned int dataLen)
 {
     unsigned int ret = 0;
@@ -469,14 +568,13 @@ static unsigned int HisignallingMsgSend(int fd, char *buf, unsigned int dataLen)
         return -1;
     }
 
-    for (int i = 0; i < hisignallingPackageLen; i++) {
-        printf("send data = 0x%x \r\n", hisignallingSendBuf[i]);
-    }
-
     return 0;
 }
 
-/* hisignalling message handle */
+/*
+ * hisignalling消息句柄
+ * hisignalling message handle
+ */
 void *HisignallingMsgHandle(char *param)
 {
     unsigned int err = 0;
@@ -492,7 +590,11 @@ void *HisignallingMsgHandle(char *param)
 }
 
 #define HISIGNALLING_TASK_STACK_SIZE (2048)
-/* hisignalling message task */
+
+/*
+ * hisignalling消息任务
+ * hisignalling message task
+ */
 unsigned int HisignallingMsgTask(void)
 {
     unsigned int  ret = 0;
@@ -520,7 +622,10 @@ static void UartProcess(int uartFd, int Gpio1Fd, int Gpio2Fd, struct pollfd fdS1
 
     Uart1Config(uartFd);
     while (1) {
-        /* 按键操作 */
+        /*
+         * 按键操作
+         * key operation
+         */
         ret = read(Gpio1Fd, buff, 10); /* 10:read data lenght */
         if (ret == -1) {
             MSG("gpio1 read error\n");
@@ -535,7 +640,10 @@ static void UartProcess(int uartFd, int Gpio1Fd, int Gpio2Fd, struct pollfd fdS1
                 MSG("gpio1 lseek error\n");
             }
             MSG("sw2 Pressed \n");
-            /* 按键触发发送 */
+            /*
+             * 按键触发发送
+             * key trigger sending
+             */
             HisignallingMsgSend(uartFd, writeBuffer2, sizeof(writeBuffer2) / sizeof(writeBuffer2[0]));
         }
         ret = read(Gpio2Fd, buff, 10); /* 10:read data lenght */
@@ -552,14 +660,20 @@ static void UartProcess(int uartFd, int Gpio1Fd, int Gpio2Fd, struct pollfd fdS1
                 MSG("gpio1 lseek error\n");
             }
             MSG("sw1 Pressed \n");
-            /* 按键触发发送 */
+            /*
+             * 按键触发发送
+             * key trigger sending
+             */
 #ifdef  EXPANSION_BOARD
             HisignallingMsgSend(uartFd, writeBuffer3, sizeof(writeBuffer3) / sizeof(writeBuffer3[0]));
 #elif defined (ROBOT_BOARD)
             HisignallingMsgSend(uartFd, writeBuffer, sizeof(writeBuffer) / sizeof(writeBuffer[0]));
 #endif
         }
-        /* 串口读写操作 */
+        /*
+         * 串口读操作
+         * Serial read operation
+         */
         HisignallingMsgReceive(uartFd, readBuff, HISIGNALLING_MSG_MOTOR_ENGINE_LEN);
         usleep(HISGNALLING_FREE_TASK_TIME);
     }
@@ -581,7 +695,10 @@ unsigned int UartOpenInit(void)
 
 void UartSendRead(int fd, refuseClassification refuseType)
 {
-    /* test buffer */
+    /*
+     * 测试buffer
+     * Test buffer
+     */
     unsigned char writeBuffer2[4] = {0, 2, 0, 1};
     unsigned char writeBuffer3[4] = {0, 2, 0, 2};
     unsigned char writeBuffer4[4] = {0, 2, 0, 3};
@@ -628,7 +745,10 @@ void UartSendRead(int fd, refuseClassification refuseType)
             break;
     }
 #endif
-    /* 串口读操作 */
+    /*
+     * 串口读操作
+     * Serial read operation
+     */
     if (readBuff[0] == HISIGNALLING_HEAD_1 && readBuff[1] == HISIGNALLING_HEAD_2) {
         HisignallingMsgReceive(fd, readBuff, HISIGNALLING_MSG_MOTOR_ENGINE_LEN);
     }
@@ -636,19 +756,28 @@ void UartSendRead(int fd, refuseClassification refuseType)
 
 int AiUartTransmit(void)
 {
-    /* 按键初始化定义 */
+    /*
+     * 按键初始化定义
+     * Key initialization definition
+     */
     int gpio1Fd = -1;
     int gpio2Fd = -1;
     int ret1     = -1;
     int ret2     = -1;
     struct pollfd fds1;
     struct pollfd fds2;
-    /* 串口初始化定义 */
+    /*
+     * 串口初始化定义
+     * Serial port initialization definition
+     */
     int fd = 0;
     char *uart1 = "/dev/ttyAMA1";
 
     printf("hisignal task start\r\n");
-    /* 按键操作 */
+    /*
+     * 按键操作
+     * key operation
+     */
     InitGpio1();
     InitGpio2();
     gpio1Fd = open("/sys/class/gpio/gpio1/value", O_RDONLY);
@@ -666,7 +795,10 @@ int AiUartTransmit(void)
     }
     fds2.fd     = gpio2Fd;
     fds2.events = POLLPRI;
-    /* 串口读写 */
+    /*
+     * 串口读写
+     * Serial read and write
+     */
     if ((fd = open(uart1, O_RDWR | O_NOCTTY | O_NDELAY)) < 0) {
         printf("open %s is failed", uart1);
         return -1;

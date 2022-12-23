@@ -26,30 +26,45 @@
 extern "C" {
 #endif
 
-/*
- * usleep time length
- * The unit of usleep() is microseconds
- */
 #define HI_USLEEP_MS    1000
 
-/* Socketpair channel */
+/*
+ * Socketpair通道
+ * Socketpair channel
+ */
 typedef struct SkPair {
     int in; // in fd
     int out; // out fd
 } SkPair;
 
-/* SkPair create */
+/*
+ * 创建Socketpair
+ * Socketpair create
+ */
 int SkPairCreate(SkPair* chn);
 
-/* Read complete message */
+/*
+ * 读完整的消息
+ * Read complete message
+ */
 int FdReadMsg(int fd, HI_VOID* msgBuf, int msgSize);
 
-/* Write complete message */
+/*
+ * 写完整的消息
+ * Write complete message
+ */
 int FdWriteMsg(int fd, const HI_VOID* msgData, int msgLen);
 
-/* SkPair destroy */
+/*
+ * 销毁socketpair
+ * Socketpair destroy
+ */
 void SkPairDestroy(SkPair* chn);
 
+/*
+ * 初始化recursive pmutex
+ * Init recursive pmutex
+ */
 void RecurMutexInit(pthread_mutex_t* mutex);
 
 #ifdef __cplusplus

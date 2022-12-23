@@ -26,13 +26,22 @@
 extern "C" {
 #endif
 
-/* load hand detect and classify model */
+/*
+ * 加载手部检测和手势分类模型
+ * Load hand detect and classify model
+ */
 HI_S32 Yolo2HandDetectResnetClassifyLoad(uintptr_t* model);
 
-/* unload hand detect and classify model */
+/*
+ * 卸载手部检测和手势分类模型
+ * Unload hand detect and classify model
+ */
 HI_S32 Yolo2HandDetectResnetClassifyUnload(uintptr_t model);
 
-/* hand detect and classify calculation */
+/*
+ * 手部检测和手势分类推理
+ * Hand detect and classify calculation
+ */
 HI_S32 Yolo2HandDetectResnetClassifyCal(uintptr_t model, VIDEO_FRAME_INFO_S *srcFrm, VIDEO_FRAME_INFO_S *dstFrm);
 
 #ifdef __cplusplus

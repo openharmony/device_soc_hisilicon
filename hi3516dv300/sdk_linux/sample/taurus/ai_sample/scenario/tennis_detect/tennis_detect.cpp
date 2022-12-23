@@ -13,6 +13,19 @@
  * limitations under the License.
  */
 
+/*
+ * 该cpp文件基于OpenCV实现了网球检测功能。为了保证FPS的帧数，
+ * 我们设计的原则是IVE（Intelligent Video Engine）+AI CPU结合使用，即IVE不支持的算子
+ * 通过AI CPU进行计算，否则走IVE硬件加速模块进行处理。并将检测的结果通过VGS标记出来。
+ * 
+ * The cpp file implements the tennis ball detection function based on OpenCV.
+ * In order to ensure the number of FPS frames,
+ * The principle of our design is the combination of IVE (Intelligent Video Engine) + AI CPU,
+ * that is, operators not supported by IVE are calculated by AI CPU, otherwise,
+ * the IVE hardware acceleration module is used for processing.
+ * And the detection results are marked by VGS.
+ */
+
 #include <iostream>
 #include <opencv2/core.hpp>
 #include <opencv2/highgui.hpp>
@@ -142,6 +155,10 @@ HI_S32 tennis_detect::TennisDetectUnload(uintptr_t model)
     return HI_SUCCESS;
 }
 
+/*
+ * 网球检测推理
+ * Tennis detect calculation
+ */
 HI_S32 tennis_detect::TennisDetectCal(uintptr_t model, VIDEO_FRAME_INFO_S *srcFrm, VIDEO_FRAME_INFO_S *dstFrm)
 {
     (void)model;
@@ -162,16 +179,26 @@ HI_S32 tennis_detect::TennisDetectCal(uintptr_t model, VIDEO_FRAME_INFO_S *srcFr
 
     dst.create(src1.size(), src1.type()); // Create a matrix of the same type and size as src (dst)
 
-    // The cvtColor operator is used to convert an image from one color space to another color space
+    /*
+     * cvtColor运算符用于将图像从一个颜色空间转换到另一个颜色空间
+     * The cvtColor operator is used to convert an image from one color space to another color space
+     */
     cvtColor(src1, hsv, COLOR_BGR2HSV); // Convert original image to HSV image
 
-    // Binarize the hsv image, here is to binarize the green background,
-    // this parameter can be adjusted according to requirements
+    /*
+     * 二值化hsv图像，这里是对绿色背景进行二值化，
+     * 这个参数可以根据需要调整
+     * 
+     * Binarize the hsv image, here is to binarize the green background,
+     * this parameter can be adjusted according to requirements
+     */
     inRange(hsv, Scalar(31, 82, 68), Scalar(65, 248, 255), gray); // 31: B, 82: G, 68:R / 65: B, 248:G, 255:R
 
-    // Use canny operator for edge detection
-    // 3: threshold1, 9: threshold2, 3: apertureSize
-    Canny(gray, gray, 3, 9, 3);
+    /*
+     * 使用canny算子进行边缘检测
+     * Use canny operator for edge detection
+     */
+    Canny(gray, gray, 3, 9, 3); // 3: threshold1, 9: threshold2, 3: apertureSize
     vector<vector<Point>> contours;
     findContours(gray, contours, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE, Point());
     SAMPLE_PRT("contours.size():%d\n", contours.size());

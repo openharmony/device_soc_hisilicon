@@ -45,7 +45,10 @@ extern "C" {
 #define AICSTART_VI_OUTWIDTH    1920
 #define AICSTART_VI_OUTHEIGHT   1080
 
-/* bit constant */
+/*
+ * 比特常量
+ * Bit constant
+ */
 #define HI_BIT0             0x01U
 #define HI_BIT1             0x02U
 #define HI_BIT2             0x04U
@@ -63,7 +66,10 @@ extern "C" {
 #define HI_BIT14            0x4000U
 #define HI_BIT15            0x8000U
 
-/* Flags to mark whether the component is enabled */
+/*
+ * 标记组件，该组件是否启用
+ * Flags to mark whether the component is enabled
+ */
 #define MPP_VI      HI_BIT0
 #define MPP_VDEC    HI_BIT1
 #define MPP_VPSS    HI_BIT2
@@ -82,8 +88,8 @@ typedef SAMPLE_VO_CONFIG_S VoCfg;
 typedef VB_CONFIG_S VbCfg;
 
 /*
- * VPSS channel config.
- * Used to set the attributes of a channel.
+ * VPSS通道配置，用来设置一个通道的属性
+ * VPSS channel config. Used to set the attributes of a channel.
  */
 typedef struct VpssChnCfg {
     int id; // VpssChn ID
@@ -91,8 +97,8 @@ typedef struct VpssChnCfg {
 } VpssChnCfg;
 
 /*
- * VPSS config.
- * Each VpssCfg corresponds to 1 VPSS group and 1 or more VPSS channels.
+ * VPSS配置.每个VpssCfg对应1个VPSS组和1个或多个VPSS通道
+ * VPSS config. Each VpssCfg corresponds to 1 VPSS group and 1 or more VPSS channels.
  */
 typedef struct VpssCfg {
     VPSS_GRP grpId; // VpssGrp ID
@@ -103,11 +109,19 @@ typedef struct VpssCfg {
 } VpssCfg;
 
 /*
- * MppSess superset.
+ * MppSess集合.
+ * MppSess对应的create()函数会将需要的cfg值复制到对象中，并启动session
+ * MppSess未提供构造函数，user只能通过create()函数创建对象，并用MppSess_destroy()销毁对象
+ * MppSess中定义了当前MppSess使用的资源ID，viCfg, vpssCfg, vpssGrp, vpssChn0, vpssChn1,
+ * 这些值由create()设置，used未标识的组件的对应ID会被置为-1.这些资源ID从create()传入的
+ * 参数xxxCfg中获取，复制到对象中可简化APP使用
+ * 目前没有定义VI的channel ID，其总是会与VPSS绑定后使用，通过VPSS chn即可获得VI的数据
+ * 
+ * MppSess collection.
  * The create() function corresponding to MppSess will copy the required cfg value to the object and start the session.
  * MppSess does not provide a constructor. The user can only create an object through the create() function
  * and destroy the object with MppSess_destroy().
- * MppSess defines the resource ID, vpssGrp, vpssChn0, vpssChn1, vdecChn, vencChn currently used by MppSess.
+ * MppSess defines the resource ID, viCfg, vpssCfg, vpssGrp, vpssChn0, vpssChn1 currently used by MppSess.
  * These values are set by create(), and the corresponding IDs of components not identified by used will be set to -1.
  * These resource IDs are obtained from the parameter xxxCfg passed in by create()
  * and copied to the object to simplify APP use.
@@ -145,37 +159,67 @@ typedef struct LcdMediaInfo {
     HI_U32  u32BlkSize;
 } LcdMediaInfo;
 
-/* init ViCfg */
+/*
+ * 初始化VI配置
+ * Init ViCfg
+ */
 void ViCfgInit(ViCfg* self);
 
-/* Initialize VpssCfg */
+/*
+ * 初始化VPSS配置
+ * Init VpssCfg
+ */
 void VpssCfgInit(VpssCfg* self);
 
-/* Set up VPSS Group */
+/*
+ * 设置VPSS组
+ * Set up VPSS Group
+ */
 void VpssCfgSetGrp(VpssCfg* self,
     int grpId, const VPSS_GRP_ATTR_S* grpAttr, int maxWidth, int maxHeight);
 
-/* Add a VPSS channel */
+/*
+ * 增加一个VPSS通道
+ * Add a VPSS channel
+ */
 VPSS_CHN_ATTR_S* VpssCfgAddChn(VpssCfg* self,
     int chnId, const VPSS_CHN_ATTR_S* chnAttr, int width, int height);
 
-/* Set VI DEV information */
+/*
+ * 设置VI设备信息
+ * Set VI DEV information 
+ */
 void ViCfgSetDev(ViCfg* self, int devId, WDR_MODE_E wdrMode);
 
-/* Set the PIPE information of the VI */
+/*
+ * 设置VI的PIPE信息
+ * Set the PIPE information of the VI
+ */
 void ViCfgSetPipe(ViCfg* self, int pipe0Id, int pipe1Id, int pipe2Id, int pipe3Id);
 
-/* Set up the VI channel */
+/*
+ * 设置VI通道
+ * Set up the VI channel
+ */
 void ViCfgSetChn(ViCfg* self, int chnId, PIXEL_FORMAT_E pixFormat,
     VIDEO_FORMAT_E videoFormat, DYNAMIC_RANGE_E dynamicRange);
 
-/* Create and start {VI->VPSS}MppSess */
+/*
+ * 创建并启动{VI->VPSS}MppSess
+ * Create and start {VI->VPSS}MppSess
+ */
 int ViVpssCreate(MppSess** sess, const ViCfg* viCfg, const VpssCfg* vpssCfg);
 
-/* Terminate VPSS started with VpssCfg */
+/*
+ * 停止使用VpssCfg启动的VPSS
+ * Terminate VPSS started with VpssCfg
+ */
 int VpssStop(const VpssCfg* cfg);
 
-/* Terminate VIs started with ViCfg */
+/*
+ * 终止使用ViCfg启动的VI
+ * Terminate VI started with ViCfg
+ */
 int ViStop(const ViCfg* viCfg);
 
 int SampleVioVpssVoMipi(void);

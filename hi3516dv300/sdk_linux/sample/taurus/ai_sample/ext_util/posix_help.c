@@ -32,7 +32,10 @@ extern "C" {
 
 #define SKPAIR_FDS 2
 
-/* SkPair create */
+/*
+ * 创建Socketpair
+ * Socketpair create
+ */
 int SkPairCreate(SkPair* chn)
 {
     HI_ASSERT(chn);
@@ -46,7 +49,10 @@ int SkPairCreate(SkPair* chn)
     return 0;
 }
 
-/* Read complete message */
+/*
+ * 读完整的消息
+ * Read complete message
+ */
 int FdReadMsg(int fd, HI_VOID* msgBuf, int msgSize)
 {
     HI_ASSERT(msgBuf && msgSize > 0);
@@ -76,7 +82,10 @@ int FdReadMsg(int fd, HI_VOID* msgBuf, int msgSize)
     return msgSize;
 }
 
-/* Write complete message */
+/*
+ * 写完整的消息
+ * Write complete message
+ */
 int FdWriteMsg(int fd, const HI_VOID* msgData, int msgLen)
 {
     HI_ASSERT(msgData && msgLen > 0);
@@ -103,7 +112,10 @@ int FdWriteMsg(int fd, const HI_VOID* msgData, int msgLen)
     return msgLen;
 }
 
-/* SkPair destroy */
+/*
+ * 销毁socketpair
+ * Socketpair destroy
+ */
 void SkPairDestroy(SkPair* chn)
 {
     HI_ASSERT(chn);
@@ -122,7 +134,10 @@ void SkPairDestroy(SkPair* chn)
     }
 }
 
-/* init recursive pmutex replaced PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP */
+/*
+ * 初始化recursive pmutex
+ * Init recursive pmutex
+ */
 void RecurMutexInit(pthread_mutex_t* mutex)
 {
     HI_ASSERT(mutex);

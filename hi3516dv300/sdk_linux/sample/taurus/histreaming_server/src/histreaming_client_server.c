@@ -19,7 +19,6 @@
 #include <stdlib.h>
 #include <memory.h>
 
-/* Link Header Files */
 #include "status_code.h"
 #include "link_service.h"
 #include "link_platform.h"
@@ -38,9 +37,13 @@ char send_buff[SEND_BUFF_LEN] = {0};
 unsigned char light_on_off_buff[4] = {0, 2, 0, 3};
 unsigned int led_flag = 0;
 
-/**
+/*
+ * @berf hisignalling 协议发送消息
+ * @param void *buf: 发送数据缓存
+ * @param unsigned int data_len: 发送数据长度
+ *
  * @berf hisignalling protocol send msg
- * @param void *buf: send data buff
+ * @param void *buf: send data buffer
  * @param unsigned int data_len: send data length
  */
 unsigned int HisignallingMsgSend(char *buf, unsigned int dataLen)
@@ -66,15 +69,25 @@ unsigned int HisignallingMsgSend(char *buf, unsigned int dataLen)
     return 0;
 }
 
-/**
+/*
+ * @berf 接收信号句柄
+ * @param int sig: 信号
+ *
  * @berf Receive signal handle
  * @param int sig: signal
-*/
+ */
 static void SigIntHandler(int sig)
 {
     g_interrupted = 1;
 }
-/**
+
+/*
+ * @berf 客户端获取服务器状态和值
+ * @param struct LinkService* ar: 服务器结构
+ * @param const char* 属性：客户端属性
+ * @param char* value: 客户端值
+ * @param int len: 客户端值长度
+ *
  * @berf Client gets server status and value
  * @param struct LinkService* ar: server struct
  * @param const char* property: client property
@@ -87,14 +100,23 @@ static int DoGET(struct LinkService* ar, const char* property, char* value, int 
 
     if (strcmp(property, "Status") == 0) {
     }
-/*
- * if Ok return StatusOk,
- * Otherwise, any error, return StatusFailure
- */
+    /*
+     * 如果确定返回 StatusOk,
+     * 否则，任何错误，返回 StatusFailure
+     *
+     * if Ok return StatusOk,
+     * Otherwise, any error, return StatusFailure
+     */
     return StatusOk;
 }
 
-/**
+/*
+ * @berf Client 显示属性状态和值
+ * @param struct LinkService* ar: 服务器结构
+ * @param const char* 属性：客户端属性
+ * @param char* value: 客户端值
+ * @param int len: 客户端值长度
+ *
  * @berf Client puts property status and value
  * @param struct LinkService* ar: server struct
  * @param const char* property: client property
@@ -104,15 +126,19 @@ static int DoGET(struct LinkService* ar, const char* property, char* value, int 
 static int DoPUT(struct LinkService* ar, const char* property, char* value, int len)
 {
     printf("Receive property: %s(value=%s)\n", property, value);
-/*
- * if Ok return StatusOk,
- * Otherwise, any error, return StatusFailure
- */
+    /*
+     * 如果确定返回 StatusOk,
+     * 否则，任何错误，返回 StatusFailure
+     *
+     * if Ok return StatusOk,
+     * Otherwise, any error, return StatusFailure
+     */
     return StatusOk;
 }
 
 /*
- * It is a Doorbell device
+ * wifi sta模式设备类型是Taurus:Hi3516DV300
+ * The device type in wifi sta mode is "Taurus: Hi3516DV300"
  */
 static const char* g_wifista_type = "Taurus:Hi3516DV300";
 static const char* DoType(struct LinkService* ar)
@@ -120,10 +146,13 @@ static const char* DoType(struct LinkService* ar)
     return g_wifista_type;
 }
 
-/**
+/*
+ * @berf histreaming 发送消息
+ * @param unsigned char *write_buffer: 发送数据缓冲区
+ *
  * @berf histreaming send message
  * @param unsigned char *write_buffer: send data buff
-*/
+ */
 static unsigned int HistreamingMsgSendSwitch(unsigned char *write_buffer)
 {
     SwitchTriggerSendMsg(write_buffer);
@@ -132,7 +161,10 @@ static unsigned int HistreamingMsgSendSwitch(unsigned char *write_buffer)
 
 int HiSteramingServer(void)
 {
-    /* server start */
+    /*
+     * 启动服务端
+     * Server start
+     */
     if (signal(SIGINT, SigIntHandler) == 0) {
         return 0;
     }
@@ -161,7 +193,8 @@ char HiStreamingData(char *send_buff)
     return 0;
 }
 
-/**
+/*
+ * @berf main函数
  * @berf main function
  */
 int main(int argc, char** argv)
@@ -171,11 +204,16 @@ int main(int argc, char** argv)
     LinkService* doorbell = 0;
     int status = 0;
 
-    // /* server start */
+    /*
+     * 启动服务端
+     * Server start
+     */
     HiSteramingServer();
-/*
- * Construct doorbell
- */
+
+    /*
+     * 构造doorbell
+     * Construct doorbell
+     */
     doorbell = (LinkService*)malloc(sizeof(LinkService));
     if (!doorbell) {
         return NULL;
@@ -192,7 +230,10 @@ int main(int argc, char** argv)
     link->addLinkService(link, doorbell, HISIGNALLING_MSG_HEADER_LEN); // add histreaming server link service
     link->open(link);
 
-    /* client start */
+    /*
+     * 启动客户端
+     * Client start
+     */
     HiSteramingServer();
     link = LinkPlatformGet();
     if (!link) {
