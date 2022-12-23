@@ -1288,7 +1288,7 @@ static HI_VOID StLayerAttrCfg(SAMPLE_VO_CONFIG_S *pstVoConfig)
     stLayerAttr.enDstDynamicRange     = pstVoConfig->enDstDynamicRange;
 }
 
-/* 
+/*
  * 启动VO到MIPI lcd通路
  * Start VO to MIPI lcd
  */
@@ -1391,7 +1391,7 @@ void ViCfgInit(ViCfg* self)
 
 /*
  * 设置VI设备信息
- * Set VI device information 
+ * Set VI device information
  */
 void ViCfgSetDev(ViCfg* self, int devId, WDR_MODE_E wdrMode)
 {
@@ -2090,7 +2090,7 @@ HI_S32 SAMPLE_MEDIA_CNN_TRASH_CLASSIFY(HI_VOID)
      */
     StVoParamCfg(&g_aicMediaInfo.voCfg);
 
-    /* 
+    /*
      * 启动VO到MIPI lcd通路
      * Start VO to MIPI lcd
      */
@@ -2210,7 +2210,7 @@ HI_S32 SAMPLE_MEDIA_HAND_CLASSIFY(HI_VOID)
      */
     StVoParamCfg(&g_aicMediaInfo.voCfg);
 
-    /* 
+    /*
      * 启动VO到MIPI lcd通路
      * Start VO to MIPI lcd
      */

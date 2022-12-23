@@ -69,7 +69,7 @@ int MppFrmResize(
  */
 void MppFrmDestroy(VIDEO_FRAME_INFO_S* frm);
 
-/* 
+/*
  * 在框架中叠加一个或多个矩形框
  * Superimpose one or more rectangular boxes in the frame
  */

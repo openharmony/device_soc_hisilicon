@@ -91,7 +91,7 @@ typedef struct SampleVoModeMux {
 /*
  * VPSS通道配置
  * 用以设置一个通道的属性
- * 
+ *
  * VPSS channel config.
  * Used to set the attributes of a channel.
  */
@@ -123,7 +123,7 @@ typedef struct VpssCfg {
  * 这些值由create()设置，used未标识的组件的对应ID会被置为-1.这些资源ID从create()传入的
  * 参数xxxCfg中获取，复制到对象中可简化APP使用
  * 目前没有定义VI的channel ID，其总是会与VPSS绑定后使用，通过VPSS chn即可获得VI的数据
- * 
+ *
  * MppSess collection.
  * The create() function corresponding to MppSess will copy the required cfg value to the object and start the session.
  * MppSess does not provide a constructor. The user can only create an object through the create() function
@@ -200,7 +200,7 @@ VPSS_CHN_ATTR_S* VpssCfgAddChn(VpssCfg* self,
 
 /*
  * 设置VI设备信息
- * Set VI DEV information 
+ * Set VI DEV information
  */
 void ViCfgSetDev(ViCfg* self, int devId, WDR_MODE_E wdrMode);
 
@@ -235,7 +235,7 @@ int VpssStop(const VpssCfg* cfg);
  */
 int ViStop(const ViCfg* viCfg);
 
-/* 
+/*
  * 启动VO到MIPI lcd通路
  * Start VO to MIPI lcd
  */

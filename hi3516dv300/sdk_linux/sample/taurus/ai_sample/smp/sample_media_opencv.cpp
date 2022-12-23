@@ -48,7 +48,7 @@ static HI_CHAR tennisDetectThreadName[16] = {0};
 
 /*
  * 设置VI设备信息
- * Set VI device information 
+ * Set VI device information
  */
 static void TennisViCfgSetDev(ViCfg* self, int devId, WDR_MODE_E wdrMode)
 {
@@ -297,7 +297,7 @@ HI_S32 sample_media_opencv::SAMPLE_MEDIA_TENNIS_DETECT(HI_VOID)
      */
     TennisStVoParamCfg(&g_aicTennisMediaInfo.voCfg);
 
-    /* 
+    /*
      * 启动VO到MIPI lcd通路
      * Start VO to MIPI lcd
      */

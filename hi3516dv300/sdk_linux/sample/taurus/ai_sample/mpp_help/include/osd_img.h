@@ -182,7 +182,7 @@ typedef struct hiOSD_DISP_ATTR_S {
     HI_S32 s32Batch;
 } HI_OSD_DISP_ATTR_S;
 
-/* 
+/*
  * OSD内容
  * OSD Content
  */

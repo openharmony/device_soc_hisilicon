@@ -177,7 +177,7 @@ bool MppFrmValid(const VIDEO_FRAME_INFO_S* frm)
 }
 
 /*
- * 销毁frame 
+ * 销毁frame
  * Destory frame
  */
 void MppFrmDestroy(VIDEO_FRAME_INFO_S* frm)
@@ -207,7 +207,7 @@ void MppFrmDestroy(VIDEO_FRAME_INFO_S* frm)
  * 执行一次VGS缩放
  * 每一次VGS resize的缩放倍数是有限制的. VGS支持对一幅图像进行缩放，最大支持图像
  * 宽高均放大16倍，缩小30 倍。支持单分量（Y）缩放
- * 
+ *
  * Perform a VGS resize.
  * The zoom factor of each VGS resize is limited. VGS supports zooming of an image.
  * The width and height are both enlarged by 16 times and reduced by 30 times.Support single-component (Y) scaling.
@@ -272,7 +272,7 @@ static int VgsResizeOnce(const VIDEO_FRAME_INFO_S* src, VIDEO_FRAME_INFO_S* dst,
  * 为简化实现，约定每次缩放最大14倍，此时宽、高仅需2像素对齐
  * 当两个方向缩放方向不同时，例如一向(如X)放大，另一向缩小倍，无需特别处理
  * 此时某个方向或两个方向缩放比例均超标，也不需要特别处理
- * 
+ *
  * resize frame.
  * Call vgs_resize multiple times to achieve arbitrary scaling.
  * In order to simplify the implementation, it is agreed that each zoom is up to 14 times,

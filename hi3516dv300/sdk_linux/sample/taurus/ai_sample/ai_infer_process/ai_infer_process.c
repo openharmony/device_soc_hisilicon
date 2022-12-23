@@ -508,7 +508,7 @@ static HI_S32 SAMPLE_SVP_NNIE_Forward(SAMPLE_SVP_NNIE_PARAM_S *pstNnieParam,
         "Error,HI_MPI_SVP_NNIE_Forward failed!\n");
 
     if (bInstant) {
-        /* 
+        /*
          * 查询任务是否完成
          * Query whether the task is completed
          */

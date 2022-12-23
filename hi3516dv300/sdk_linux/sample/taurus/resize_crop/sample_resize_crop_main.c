@@ -60,7 +60,7 @@ void SampleSvpUsage(const char* pchPrgName)
 
 /*
  * 函数：缩放和裁剪示例
- * function : resize and crop sample 
+ * function : resize and crop sample
  */
 int main(int argc, char *argv[])
 {

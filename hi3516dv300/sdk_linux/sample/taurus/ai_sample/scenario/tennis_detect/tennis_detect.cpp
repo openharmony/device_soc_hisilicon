@@ -17,7 +17,7 @@
  * 该cpp文件基于OpenCV实现了网球检测功能。为了保证FPS的帧数，
  * 我们设计的原则是IVE（Intelligent Video Engine）+AI CPU结合使用，即IVE不支持的算子
  * 通过AI CPU进行计算，否则走IVE硬件加速模块进行处理。并将检测的结果通过VGS标记出来。
- * 
+ *
  * The cpp file implements the tennis ball detection function based on OpenCV.
  * In order to ensure the number of FPS frames,
  * The principle of our design is the combination of IVE (Intelligent Video Engine) + AI CPU,
@@ -188,7 +188,7 @@ HI_S32 tennis_detect::TennisDetectCal(uintptr_t model, VIDEO_FRAME_INFO_S *srcFr
     /*
      * 二值化hsv图像，这里是对绿色背景进行二值化，
      * 这个参数可以根据需要调整
-     * 
+     *
      * Binarize the hsv image, here is to binarize the green background,
      * this parameter can be adjusted according to requirements
      */

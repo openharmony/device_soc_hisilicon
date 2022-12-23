@@ -16,7 +16,7 @@
 /*
  * 本文件将垃圾分类wk模型部署到板端，通过NNIE硬件加速进行推理。该文件提供了垃圾分类场景的API接口，
  * 包括模型的加载、模型的卸载、模型的推理、AI flag业务处理接口。支持语音实时播放功能。
- * 
+ *
  * This file deploys the trash classification wk model to the board,
  * and performs inference through NNIE hardware acceleration.
  * This file provides API interfaces for trash classification scenarios,
