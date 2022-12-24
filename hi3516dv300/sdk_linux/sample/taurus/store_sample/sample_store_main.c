@@ -13,6 +13,13 @@
  * limitations under the License.
  */
 
+/*
+ * 该文件为存储示例主函数文件，该示例将sensor获得的视频流通过编码成.h264文件并保存下来
+ *
+ * This file is the main function file of the storage example,
+ * which encodes the video stream obtained by the sensor into a .h264 file and saves it
+ */
+
 #include "sample_store.h"
 #include "sdk.h"
 
@@ -23,8 +30,8 @@ extern "C" {
 #endif /* End of #ifdef __cplusplus */
 
 /*
- * function    : main()
- * Description : main
+ * 函数：main()
+ * function: main()
  */
 int main(void)
 {

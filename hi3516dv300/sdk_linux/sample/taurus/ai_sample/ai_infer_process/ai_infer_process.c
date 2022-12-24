@@ -62,17 +62,26 @@ extern "C" {
 
 #define THRESH_MIN         0.25
 
-/* cnn parameter */
+/*
+ * CNN 参数
+ * CNN parameter
+ */
 static SAMPLE_SVP_NNIE_MODEL_S g_stCnnModel = {0};
 static SAMPLE_SVP_NNIE_PARAM_S g_stCnnNnieParam = {0};
 static SAMPLE_SVP_NNIE_CNN_SOFTWARE_PARAM_S g_stCnnSoftwareParam = {0};
 
-/* yolov2 parameter */
+/*
+ * Yolov2 参数
+ * Yolov2 parameter
+ */
 static SAMPLE_SVP_NNIE_MODEL_S g_stYolov2Model = {0};
 static SAMPLE_SVP_NNIE_PARAM_S g_stYolov2NnieParam = {0};
 static SAMPLE_SVP_NNIE_YOLOV2_SOFTWARE_PARAM_S g_stYolov2SoftwareParam = {0};
 
-/* function : Cnn software parameter init */
+/*
+ * 函数：Cnn software参数初始化
+ * function : Cnn software parameter init
+ */
 static HI_S32 SampleSvpNnieCnnSoftwareParaInit(SAMPLE_SVP_NNIE_CFG_S* pstNnieCfg,
     SAMPLE_SVP_NNIE_PARAM_S *pstCnnPara, SAMPLE_SVP_NNIE_CNN_SOFTWARE_PARAM_S* pstCnnSoftWarePara)
 {
@@ -85,20 +94,29 @@ static HI_S32 SampleSvpNnieCnnSoftwareParaInit(SAMPLE_SVP_NNIE_CFG_S* pstNnieCfg
     HI_U8* pu8VirAddr = NULL;
     HI_S32 s32Ret;
 
-    /* get mem size */
+    /*
+     * 获取内存大小
+     * Get mem size
+     */
     u32GetTopFrameSize = pstCnnSoftWarePara->u32TopN*sizeof(SAMPLE_SVP_NNIE_CNN_GETTOPN_UNIT_S);
     u32GetTopNMemSize = SAMPLE_SVP_NNIE_ALIGN16(u32GetTopFrameSize)*pstNnieCfg->u32MaxInputNum;
     u32GetTopBufSize = u32ClassNum*sizeof(SAMPLE_SVP_NNIE_CNN_GETTOPN_UNIT_S);
     u32TotalSize = u32GetTopNMemSize + u32GetTopBufSize;
 
-    /* malloc mem */
+    /*
+     * 在用户态分配MMZ内存
+     * Malloc memory in user mode
+     */
     s32Ret = SAMPLE_COMM_SVP_MallocMem("SAMPLE_CNN_INIT", NULL, (HI_U64*)&u64PhyAddr,
         (void**)&pu8VirAddr, u32TotalSize);
     SAMPLE_SVP_CHECK_EXPR_RET(HI_SUCCESS != s32Ret, s32Ret, SAMPLE_SVP_ERR_LEVEL_ERROR,
         "Error,Malloc memory failed!\n");
     memset_s(pu8VirAddr, u32TotalSize, 0, u32TotalSize);
 
-    /* init GetTopn */
+    /*
+     * 初始化GetTopN参数
+     * Init GetTopN param
+     */
     pstCnnSoftWarePara->stGetTopN.u32Num = pstNnieCfg->u32MaxInputNum;
     pstCnnSoftWarePara->stGetTopN.unShape.stWhc.u32Chn = 1;
     pstCnnSoftWarePara->stGetTopN.unShape.stWhc.u32Height = 1;
@@ -107,7 +125,10 @@ static HI_S32 SampleSvpNnieCnnSoftwareParaInit(SAMPLE_SVP_NNIE_CFG_S* pstNnieCfg
     pstCnnSoftWarePara->stGetTopN.u64PhyAddr = u64PhyAddr;
     pstCnnSoftWarePara->stGetTopN.u64VirAddr = (HI_U64)(HI_UL)pu8VirAddr;
 
-    /* init AssistBuf */
+    /*
+     * 初始化AssistBuf参数
+     * Init AssistBuf
+     */
     pstCnnSoftWarePara->stAssistBuf.u32Size = u32GetTopBufSize;
     pstCnnSoftWarePara->stAssistBuf.u64PhyAddr = u64PhyAddr + u32GetTopNMemSize;
     pstCnnSoftWarePara->stAssistBuf.u64VirAddr = (HI_U64)(HI_UL)pu8VirAddr + u32GetTopNMemSize;
@@ -115,7 +136,10 @@ static HI_S32 SampleSvpNnieCnnSoftwareParaInit(SAMPLE_SVP_NNIE_CFG_S* pstNnieCfg
     return s32Ret;
 }
 
-/* function : Cnn software deinit */
+/*
+ * 函数：Cnn software参数去初始化
+ * function : Cnn software deinit
+ */
 static HI_S32 SampleSvpNnieCnnSoftwareDeinit(SAMPLE_SVP_NNIE_CNN_SOFTWARE_PARAM_S* pstCnnSoftWarePara)
 {
     HI_S32 s32Ret = HI_SUCCESS;
@@ -130,24 +154,36 @@ static HI_S32 SampleSvpNnieCnnSoftwareDeinit(SAMPLE_SVP_NNIE_CNN_SOFTWARE_PARAM_
     return s32Ret;
 }
 
-/* function : Cnn Deinit */
+/*
+ * 函数：Cnn去初始化
+ * function : Cnn Deinit
+ */
 static HI_S32 SampleSvpNnieCnnDeinit(SAMPLE_SVP_NNIE_PARAM_S *pstNnieParam,
     SAMPLE_SVP_NNIE_CNN_SOFTWARE_PARAM_S* pstSoftWareParam, SAMPLE_SVP_NNIE_MODEL_S* pstNnieModel)
 {
     HI_S32 s32Ret = HI_SUCCESS;
-    /* hardware para deinit */
+    /*
+     * SAMPLE_SVP_NNIE_PARAM_S参数去初始化
+     * Hardware param deinit
+     */
     if (pstNnieParam != NULL) {
         s32Ret = SAMPLE_COMM_SVP_NNIE_ParamDeinit(pstNnieParam);
         SAMPLE_SVP_CHECK_EXPR_TRACE(HI_SUCCESS != s32Ret, SAMPLE_SVP_ERR_LEVEL_ERROR,
             "Error,SAMPLE_COMM_SVP_NNIE_ParamDeinit failed!\n");
     }
-    /* software para deinit */
+    /*
+     * SAMPLE_SVP_NNIE_CNN_SOFTWARE_PARAM_S参数去初始化
+     * Software param deinit
+     */
     if (pstSoftWareParam != NULL) {
         s32Ret = SampleSvpNnieCnnSoftwareDeinit(pstSoftWareParam);
         SAMPLE_SVP_CHECK_EXPR_TRACE(HI_SUCCESS != s32Ret, SAMPLE_SVP_ERR_LEVEL_ERROR,
             "Error,SampleSvpNnieCnnSoftwareDeinit failed!\n");
     }
-    /* model deinit */
+    /*
+     * SAMPLE_SVP_NNIE_MODEL_S参数去初始化
+     * Model deinit
+     */
     if (pstNnieModel != NULL) {
         s32Ret = SAMPLE_COMM_SVP_NNIE_UnloadModel(pstNnieModel);
         SAMPLE_SVP_CHECK_EXPR_TRACE(HI_SUCCESS != s32Ret, SAMPLE_SVP_ERR_LEVEL_ERROR,
@@ -156,17 +192,26 @@ static HI_S32 SampleSvpNnieCnnDeinit(SAMPLE_SVP_NNIE_PARAM_S *pstNnieParam,
     return s32Ret;
 }
 
-/* function : Cnn init */
+/*
+ * 函数：Cnn参数初始化
+ * function : Cnn Param init
+ */
 static HI_S32 SampleSvpNnieCnnParamInit(SAMPLE_SVP_NNIE_CFG_S* pstNnieCfg,
     SAMPLE_SVP_NNIE_PARAM_S *pstCnnPara, SAMPLE_SVP_NNIE_CNN_SOFTWARE_PARAM_S* pstCnnSoftWarePara)
 {
     HI_S32 s32Ret;
-    /* init hardware para */
+    /*
+     * 初始化hardware参数
+     * Init hardware param
+     */
     s32Ret = SAMPLE_COMM_SVP_NNIE_ParamInit(pstNnieCfg, pstCnnPara);
     SAMPLE_SVP_CHECK_EXPR_GOTO(HI_SUCCESS != s32Ret, INIT_FAIL_0, SAMPLE_SVP_ERR_LEVEL_ERROR,
         "Error(%#x),SAMPLE_COMM_SVP_NNIE_ParamInit failed!\n", s32Ret);
 
-    /* init software para */
+    /*
+     * 初始化software参数
+     * Init software param
+     */
     if (pstCnnSoftWarePara != NULL) {
         s32Ret = SampleSvpNnieCnnSoftwareParaInit(pstNnieCfg, pstCnnPara, pstCnnSoftWarePara);
         SAMPLE_SVP_CHECK_EXPR_GOTO(HI_SUCCESS != s32Ret, INIT_FAIL_0, SAMPLE_SVP_ERR_LEVEL_ERROR,
@@ -181,7 +226,10 @@ INIT_FAIL_0:
     return HI_FAILURE;
 }
 
-/* create CNN model based mode file */
+/*
+ * 基于模型文件创建CNN模型
+ * Create CNN model based mode file
+ */
 int CnnCreate(SAMPLE_SVP_NNIE_CFG_S **model, const char* modelFile)
 {
     SAMPLE_SVP_NNIE_CFG_S *self;
@@ -193,32 +241,46 @@ int CnnCreate(SAMPLE_SVP_NNIE_CFG_S **model, const char* modelFile)
     if (memset_s(self, sizeof(*self), 0x00, sizeof(*self)) != EOK) {
         HI_ASSERT(0);
     }
-
-    // Set configuration parameter
+    /*
+     * 设置配置参数
+     * Set configuration parameter
+     */
     self->pszPic = NULL;
     self->u32MaxInputNum = u32PicNum; // max input image num in each batch
     self->u32MaxRoiNum = 0;
     self->aenNnieCoreId[0] = SVP_NNIE_ID_0; // set NNIE core
     g_stCnnSoftwareParam.u32TopN = 5; // 5: value of the u32TopN
 
-    // Sys init
-    // CNN Load model
+    /*
+     * 加载CNN模型
+     * Load cnn model
+     */
     SAMPLE_SVP_TRACE_INFO("Cnn Load model!\n");
     s32Ret = SAMPLE_COMM_SVP_NNIE_LoadModel((char*)modelFile, &g_stCnnModel);
     SAMPLE_SVP_CHECK_EXPR_GOTO(HI_SUCCESS != s32Ret, CNN_FAIL_0, SAMPLE_SVP_ERR_LEVEL_ERROR,
         "Error,SAMPLE_COMM_SVP_NNIE_LoadModel failed!\n");
 
-    // CNN parameter initialization
-    // Cnn software parameters are set in SampleSvpNnieCnnSoftwareParaInit,
-    // if user has changed net struct, please make sure the parameter settings in
-    // SampleSvpNnieCnnSoftwareParaInit function are correct
+    /*
+     * CNN参数初始化
+     * Cnn软件参数设置在SampleSvpNnieCnnSoftwareParaInit,
+     * 如果用户更改了网络结构，请确保
+     * SampleSvpNnieCnnSoftwareParaInit函数中的参数设置是正确的
+     *
+     * CNN parameter initialization
+     * Cnn software parameters are set in SampleSvpNnieCnnSoftwareParaInit,
+     * if user has changed net struct, please make sure the parameter settings in
+     * SampleSvpNnieCnnSoftwareParaInit function are correct
+     */
     SAMPLE_SVP_TRACE_INFO("Cnn parameter initialization!\n");
     g_stCnnNnieParam.pstModel = &g_stCnnModel.stModel;
     s32Ret = SampleSvpNnieCnnParamInit(self, &g_stCnnNnieParam, &g_stCnnSoftwareParam);
     SAMPLE_SVP_CHECK_EXPR_GOTO(HI_SUCCESS != s32Ret, CNN_FAIL_0, SAMPLE_SVP_ERR_LEVEL_ERROR,
         "Error,SampleSvpNnieCnnParamInit failed!\n");
 
-    // Model key information
+    /*
+     * 模型关键数据
+     * Model important information
+     */
     SAMPLE_PRT("model={ type=%x, frmNum=%u, chnNum=%u, w=%u, h=%u, stride=%u }\n",
         g_stCnnNnieParam.astSegData[0].astSrc[0].enType,
         g_stCnnNnieParam.astSegData[0].astSrc[0].u32Num,
@@ -227,7 +289,10 @@ int CnnCreate(SAMPLE_SVP_NNIE_CFG_S **model, const char* modelFile)
         g_stCnnNnieParam.astSegData[0].astSrc[0].unShape.stWhc.u32Height,
         g_stCnnNnieParam.astSegData[0].astSrc[0].u32Stride);
 
-    // record tskBuf
+    /*
+     * 记录TskBuf地址信息
+     * Record TskBuf address information
+     */
     s32Ret = HI_MPI_SVP_NNIE_AddTskBuf(&(g_stCnnNnieParam.astForwardCtrl[0].stTskBuf));
     SAMPLE_SVP_CHECK_EXPR_GOTO(HI_SUCCESS != s32Ret, CNN_FAIL_0, SAMPLE_SVP_ERR_LEVEL_ERROR,
         "Error,HI_MPI_SVP_NNIE_AddTskBuf failed!\n");
@@ -240,12 +305,18 @@ int CnnCreate(SAMPLE_SVP_NNIE_CFG_S **model, const char* modelFile)
         return -1;
 }
 
-/* destroy CNN model */
+/*
+ * 销毁CNN模型
+ * Destroy CNN model
+ */
 void CnnDestroy(SAMPLE_SVP_NNIE_CFG_S *self)
 {
     HI_S32 s32Ret;
 
-    /* Remove TskBuf */
+    /*
+     * 移除TskBuf地址信息
+     * Remove TskBuf address information
+     */
     s32Ret = HI_MPI_SVP_NNIE_RemoveTskBuf(&(g_stCnnNnieParam.astForwardCtrl[0].stTskBuf));
     SAMPLE_SVP_CHECK_EXPR_GOTO(HI_SUCCESS != s32Ret, CNN_FAIL_0, SAMPLE_SVP_ERR_LEVEL_ERROR,
         "Error,HI_MPI_SVP_NNIE_RemoveTskBuf failed!\n");
@@ -268,7 +339,10 @@ static HI_S32 FillNnieByImg(SAMPLE_SVP_NNIE_CFG_S* pstNnieCfg,
     HI_U32 u32VarSize;
     HI_U8 *pu8PicAddr = NULL;
 
-    /* get data size */
+    /*
+     * 获取数据大小
+     * Get data size
+     */
     if (SVP_BLOB_TYPE_U8 <= pstNnieParam->astSegData[segId].astSrc[nodeId].enType &&
         SVP_BLOB_TYPE_YVU422SP >= pstNnieParam->astSegData[segId].astSrc[nodeId].enType) {
         u32VarSize = sizeof(HI_U8);
@@ -276,7 +350,10 @@ static HI_S32 FillNnieByImg(SAMPLE_SVP_NNIE_CFG_S* pstNnieCfg,
         u32VarSize = sizeof(HI_U32);
     }
 
-    /* fill src data */
+    /*
+     * 填充源数据
+     * Fill src data
+     */
     if (SVP_BLOB_TYPE_SEQ_S32 == pstNnieParam->astSegData[segId].astSrc[nodeId].enType) {
         HI_ASSERT(0);
     } else {
@@ -357,7 +434,10 @@ void CnnFetchRes(SVP_BLOB_S *pstGetTopN, HI_U32 u32TopN, RecogNumInfo resBuf[], 
     *resLen = resId;
 }
 
-/* function : NNIE Forward */
+/*
+ * 函数：NNIE网络预测
+ * function : NNIE Forward
+ */
 static HI_S32 SAMPLE_SVP_NNIE_Forward(SAMPLE_SVP_NNIE_PARAM_S *pstNnieParam,
     SAMPLE_SVP_NNIE_INPUT_DATA_INDEX_S* pstInputDataIdx,
     SAMPLE_SVP_NNIE_PROCESS_SEG_INDEX_S* pstProcSegIdx, HI_BOOL bInstant)
@@ -395,7 +475,10 @@ static HI_S32 SAMPLE_SVP_NNIE_Forward(SAMPLE_SVP_NNIE_PARAM_S *pstNnieParam,
         }
     }
 
-    /* set input blob according to node name */
+    /*
+     * 根据节点名称设置输入blob
+     * Set input blob according to node name
+     */
     if (pstInputDataIdx->u32SegIdx != pstProcSegIdx->u32SegIdx) {
         for (i = 0; i < pstNnieParam->pstModel->astSeg[pstProcSegIdx->u32SegIdx].u16SrcNum; i++) {
             for (j = 0; j < pstNnieParam->pstModel->astSeg[pstInputDataIdx->u32SegIdx].u16DstNum; j++) {
@@ -413,7 +496,10 @@ static HI_S32 SAMPLE_SVP_NNIE_Forward(SAMPLE_SVP_NNIE_PARAM_S *pstNnieParam,
         }
     }
 
-    /* NNIE_Forward */
+    /*
+     * 多节点输入输出的CNN类型网络预测
+     * CNN-type network prediction with multi-node input and output
+     */
     s32Ret = HI_MPI_SVP_NNIE_Forward(&hSvpNnieHandle,
         pstNnieParam->astSegData[pstProcSegIdx->u32SegIdx].astSrc,
         pstNnieParam->pstModel, pstNnieParam->astSegData[pstProcSegIdx->u32SegIdx].astDst,
@@ -422,7 +508,10 @@ static HI_S32 SAMPLE_SVP_NNIE_Forward(SAMPLE_SVP_NNIE_PARAM_S *pstNnieParam,
         "Error,HI_MPI_SVP_NNIE_Forward failed!\n");
 
     if (bInstant) {
-        /* Wait NNIE finish */
+        /*
+         * 查询任务是否完成
+         * Query whether the task is completed
+         */
         while (HI_ERR_SVP_NNIE_QUERY_TIMEOUT == (s32Ret =
             HI_MPI_SVP_NNIE_Query(pstNnieParam->astForwardCtrl[pstProcSegIdx->u32SegIdx].enNnieId,
             hSvpNnieHandle, &bFinish, HI_TRUE))) {
@@ -457,15 +546,21 @@ static HI_S32 SAMPLE_SVP_NNIE_Forward(SAMPLE_SVP_NNIE_PARAM_S *pstNnieParam,
     return s32Ret;
 }
 
-/* Calculate a U8C1 image */
-int CnnCalU8c1Img(SAMPLE_SVP_NNIE_CFG_S* self,
+/*
+ * 对一帧图像进行推理
+ * Calculate a frame of image
+ */
+int CnnCalImg(SAMPLE_SVP_NNIE_CFG_S* self,
     const IVE_IMAGE_S *img, RecogNumInfo resBuf[], int resSize, int* resLen)
 {
     HI_S32 s32Ret;
     SAMPLE_SVP_NNIE_INPUT_DATA_INDEX_S stInputDataIdx = {0};
     SAMPLE_SVP_NNIE_PROCESS_SEG_INDEX_S stProcSegIdx = {0};
 
-    /* Fill src data */
+    /*
+     * 填充源数据
+     * Fill src data
+     */
     self->pszPic = NULL;
     stInputDataIdx.u32SegIdx = 0;
     stInputDataIdx.u32NodeIdx = 0;
@@ -473,20 +568,31 @@ int CnnCalU8c1Img(SAMPLE_SVP_NNIE_CFG_S* self,
     SAMPLE_SVP_CHECK_EXPR_GOTO(HI_SUCCESS != s32Ret, CNN_FAIL_1, SAMPLE_SVP_ERR_LEVEL_ERROR,
         "Error,SAMPLE_SVP_NNIE_FillSrcData failed!\n");
 
-    /* NNIE process(process the 0-th segment) */
+    /*
+     * NNIE推理(process the 0-th segment)
+     * NNIE process(process the 0-th segment)
+     */
     stProcSegIdx.u32SegIdx = 0;
     s32Ret = SAMPLE_SVP_NNIE_Forward(&g_stCnnNnieParam, &stInputDataIdx, &stProcSegIdx, HI_TRUE);
     SAMPLE_SVP_CHECK_EXPR_GOTO(HI_SUCCESS != s32Ret, CNN_FAIL_1, SAMPLE_SVP_ERR_LEVEL_ERROR,
         "Error,SAMPLE_SVP_NNIE_Forward failed!\n");
 
-    /* Software process */
-    /* if user has changed net struct, please make sure SAMPLE_SVP_NNIE_Cnn_GetTopN
-     function's input datas are correct */
+    /*
+     * CPU处理
+     * 如果用户更改了网络结构，请确保SAMPLE_SVP_NNIE_Cnn_GetTopN函数的输入数据是正确的
+     *
+     * Software process
+     * if user has changed net struct, please make sure SAMPLE_SVP_NNIE_Cnn_GetTopN
+     * function's input datas are correct
+     */
     s32Ret = SAMPLE_SVP_NNIE_Cnn_GetTopN(&g_stCnnNnieParam, &g_stCnnSoftwareParam);
     SAMPLE_SVP_CHECK_EXPR_GOTO(HI_SUCCESS != s32Ret, CNN_FAIL_1, SAMPLE_SVP_ERR_LEVEL_ERROR,
         "Error,SAMPLE_SVP_NNIE_CnnGetTopN failed!\n");
 
-    /* Print result */
+    /*
+     * 打印结果
+     * Print result
+     */
     CnnFetchRes(&g_stCnnSoftwareParam.stGetTopN, g_stCnnSoftwareParam.u32TopN, resBuf, resSize, resLen);
     return 0;
 
@@ -494,7 +600,10 @@ int CnnCalU8c1Img(SAMPLE_SVP_NNIE_CFG_S* self,
         return -1;
 }
 
-/* function : Yolov2 software para init */
+/*
+ * 函数：Yolov2 software参数初始化
+ * function : Yolov2 software param init
+ */
 static HI_S32 SampleSvpNnieYolov2SoftwareInit(SAMPLE_SVP_NNIE_CFG_S* pstCfg,
     SAMPLE_SVP_NNIE_PARAM_S *pstNnieParam, SAMPLE_SVP_NNIE_YOLOV2_SOFTWARE_PARAM_S* pstSoftWareParam)
 {
@@ -529,7 +638,10 @@ static HI_S32 SampleSvpNnieYolov2SoftwareInit(SAMPLE_SVP_NNIE_CFG_S* pstCfg,
     pstSoftWareParam->af32Bias[ARRAY_SUBSCRIPT_8] = 7.15; // 7.15: af32Bias[ARRAY_SUBSCRIPT_8] value
     pstSoftWareParam->af32Bias[ARRAY_SUBSCRIPT_9] = 7.56; // 7.56: af32Bias[ARRAY_SUBSCRIPT_9] value
 
-    /* Malloc assist buffer memory */
+    /*
+     * 申请辅助内存空间
+     * Malloc assist buffer memory
+     */
     u32ClassNum = pstSoftWareParam->u32ClassNum + 1;
     u32BboxNum = pstSoftWareParam->u32BboxNumEachGrid*pstSoftWareParam->u32GridNumHeight*
         pstSoftWareParam->u32GridNumWidth;
@@ -545,11 +657,17 @@ static HI_S32 SampleSvpNnieYolov2SoftwareInit(SAMPLE_SVP_NNIE_CFG_S* pstCfg,
     memset_s(pu8VirAddr, u32TotalSize, 0, u32TotalSize);
     SAMPLE_COMM_SVP_FlushCache(u64PhyAddr, (void*)pu8VirAddr, u32TotalSize);
 
-   /* set each tmp buffer addr */
+    /*
+     * 设置每个tmp buffer地址
+     * Set each tmp buffer addr
+     */
     pstSoftWareParam->stGetResultTmpBuf.u64PhyAddr = u64PhyAddr;
     pstSoftWareParam->stGetResultTmpBuf.u64VirAddr = (HI_U64)((HI_UL)pu8VirAddr);
 
-    /* set result blob */
+    /*
+     * 设置结果blob
+     * Set result blob
+     */
     pstSoftWareParam->stDstRoi.enType = SVP_BLOB_TYPE_S32;
     pstSoftWareParam->stDstRoi.u64PhyAddr = u64PhyAddr + u32TmpBufTotalSize;
     pstSoftWareParam->stDstRoi.u64VirAddr = (HI_U64)((HI_UL)pu8VirAddr + u32TmpBufTotalSize);
@@ -584,7 +702,10 @@ static HI_S32 SampleSvpNnieYolov2SoftwareInit(SAMPLE_SVP_NNIE_CFG_S* pstCfg,
     return s32Ret;
 }
 
-/* function : Yolov2 software deinit */
+/*
+ * 函数：Yolov2 software参数去初始化
+ * function : Yolov2 software param Deinit
+ */
 static HI_S32 SampleSvpNnieYolov2SoftwareDeinit(SAMPLE_SVP_NNIE_YOLOV2_SOFTWARE_PARAM_S* pstSoftWareParam)
 {
     HI_S32 s32Ret = HI_SUCCESS;
@@ -605,24 +726,37 @@ static HI_S32 SampleSvpNnieYolov2SoftwareDeinit(SAMPLE_SVP_NNIE_YOLOV2_SOFTWARE_
     return s32Ret;
 }
 
-/* function : Yolov2 Deinit */
+/*
+ * 函数：Yolov2去初始化
+ * function : Yolov2 Deinit
+ */
 static HI_S32 SampleSvpNnieYolov2Deinit(SAMPLE_SVP_NNIE_PARAM_S *pstNnieParam,
     SAMPLE_SVP_NNIE_YOLOV2_SOFTWARE_PARAM_S* pstSoftWareParam, SAMPLE_SVP_NNIE_MODEL_S *pstNnieModel)
 {
     HI_S32 s32Ret = HI_SUCCESS;
-    /* hardware deinit */
+    /*
+     * SAMPLE_SVP_NNIE_PARAM_S参数去初始化
+     * Hardware param deinit
+     */
     if (pstNnieParam != NULL) {
         s32Ret = SAMPLE_COMM_SVP_NNIE_ParamDeinit(pstNnieParam);
         SAMPLE_SVP_CHECK_EXPR_TRACE(HI_SUCCESS != s32Ret, SAMPLE_SVP_ERR_LEVEL_ERROR,
             "Error,SAMPLE_COMM_SVP_NNIE_ParamDeinit failed!\n");
     }
-    /* software deinit */
+    /*
+     * SAMPLE_SVP_NNIE_YOLOV2_SOFTWARE_PARAM_S参数去初始化
+     * Software deinit
+     */
     if (pstSoftWareParam != NULL) {
         s32Ret = SampleSvpNnieYolov2SoftwareDeinit(pstSoftWareParam);
         SAMPLE_SVP_CHECK_EXPR_TRACE(HI_SUCCESS != s32Ret, SAMPLE_SVP_ERR_LEVEL_ERROR,
             "Error,SampleSvpNnieYolov2SoftwareDeinit failed!\n");
     }
-    /* model deinit */
+
+    /*
+     * SAMPLE_SVP_NNIE_MODEL_S参数去初始化
+     * Model deinit
+     */
     if (pstNnieModel != NULL) {
         s32Ret = SAMPLE_COMM_SVP_NNIE_UnloadModel(pstNnieModel);
         SAMPLE_SVP_CHECK_EXPR_TRACE(HI_SUCCESS != s32Ret, SAMPLE_SVP_ERR_LEVEL_ERROR,
@@ -631,17 +765,26 @@ static HI_S32 SampleSvpNnieYolov2Deinit(SAMPLE_SVP_NNIE_PARAM_S *pstNnieParam,
     return s32Ret;
 }
 
-/* function : Yolov2 init */
+/*
+ * 函数：Yolov2参数初始化
+ * function : Yolov2 Param init
+ */
 static HI_S32 SampleSvpNnieYolov2ParamInit(SAMPLE_SVP_NNIE_CFG_S* pstCfg,
     SAMPLE_SVP_NNIE_PARAM_S *pstNnieParam, SAMPLE_SVP_NNIE_YOLOV2_SOFTWARE_PARAM_S* pstSoftWareParam)
 {
     HI_S32 s32Ret;
-    /* init hardware para */
+    /*
+     * 初始化hardware参数
+     * Init hardware param
+     */
     s32Ret = SAMPLE_COMM_SVP_NNIE_ParamInit(pstCfg, pstNnieParam);
     SAMPLE_SVP_CHECK_EXPR_GOTO(HI_SUCCESS != s32Ret, INIT_FAIL_0, SAMPLE_SVP_ERR_LEVEL_ERROR,
         "Error(%#x),SAMPLE_COMM_SVP_NNIE_ParamInit failed!\n", s32Ret);
 
-    /* init software para */
+    /*
+     * 初始化software参数
+     * Init software param
+     */
     s32Ret = SampleSvpNnieYolov2SoftwareInit(pstCfg, pstNnieParam,
         pstSoftWareParam);
     SAMPLE_SVP_CHECK_EXPR_GOTO(HI_SUCCESS != s32Ret, INIT_FAIL_0, SAMPLE_SVP_ERR_LEVEL_ERROR,
@@ -654,7 +797,10 @@ INIT_FAIL_0:
     return HI_FAILURE;
 }
 
-/* function : creat yolo2 model basad mode file */
+/*
+ * 函数：基于模型文件创建Yolov2模型
+ * function : Creat Yolov2 model basad mode file
+ */
 int Yolo2Create(SAMPLE_SVP_NNIE_CFG_S **model, const char* modelFile)
 {
     SAMPLE_SVP_NNIE_CFG_S *self;
@@ -665,29 +811,45 @@ int Yolo2Create(SAMPLE_SVP_NNIE_CFG_S **model, const char* modelFile)
     HI_ASSERT(self);
     memset_s(self, sizeof(*self), 0x00, sizeof(*self));
 
-    // Set configuration parameter
+    /*
+     * 设置配置参数
+     * Set configuration parameter
+     */
     self->pszPic = NULL;
     self->u32MaxInputNum = u32PicNum; // max input image num in each batch
     self->u32MaxRoiNum = 0;
     self->aenNnieCoreId[0] = SVP_NNIE_ID_0; // set NNIE core
 
-    // Yolov2 Load model
+    /*
+     * 加载Yolov2模型
+     * Load Yolov2 model
+     */
     SAMPLE_SVP_TRACE_INFO("Yolov2 Load model!\n");
     s32Ret = SAMPLE_COMM_SVP_NNIE_LoadModel((char*)modelFile, &g_stYolov2Model);
     SAMPLE_SVP_CHECK_EXPR_GOTO(HI_SUCCESS != s32Ret, YOLOV2_FAIL_0, SAMPLE_SVP_ERR_LEVEL_ERROR,
         "Error, SAMPLE_COMM_SVP_NNIE_LoadModel failed!\n");
 
-    /* Yolov2 parameter initialization */
-    /* Yolov2 software parameters are set in SampleSvpNnieYolov2SoftwareInit,
-      if user has changed net struct, please make sure the parameter settings in
-      SampleSvpNnieYolov2SoftwareInit function are correct */
+    /*
+     * Yolov2参数初始化
+     * Yolov2软件参数设置在SampleSvpNnieYolov2SoftwareInit,
+     * 如果用户更改了网络结构，请确保
+     * SampleSvpNnieYolov2SoftwareInit函数中的参数设置是正确的
+     *
+     * Yolov2 parameter initialization
+     * Yolov2 software parameters are set in SampleSvpNnieYolov2SoftwareInit,
+     * if user has changed net struct, please make sure the parameter settings in
+     * SampleSvpNnieYolov2SoftwareInit function are correct
+     */
     SAMPLE_SVP_TRACE_INFO("Yolov2 parameter initialization!\n");
     g_stYolov2NnieParam.pstModel = &g_stYolov2Model.stModel;
     s32Ret = SampleSvpNnieYolov2ParamInit(self, &g_stYolov2NnieParam, &g_stYolov2SoftwareParam);
     SAMPLE_SVP_CHECK_EXPR_GOTO(HI_SUCCESS != s32Ret, YOLOV2_FAIL_0, SAMPLE_SVP_ERR_LEVEL_ERROR,
         "Error,SampleSvpNnieYolov2ParamInit failed!\n");
 
-    // model important info
+    /*
+     * 模型关键数据
+     * Model important information
+     */
     SAMPLE_PRT("model.base={ type=%x, frmNum=%u, chnNum=%u, w=%u, h=%u, stride=%u }\n",
         g_stYolov2NnieParam.astSegData[0].astSrc[0].enType,
         g_stYolov2NnieParam.astSegData[0].astSrc[0].u32Num,
@@ -717,7 +879,10 @@ int Yolo2Create(SAMPLE_SVP_NNIE_CFG_S **model, const char* modelFile)
         return -1;
 }
 
-/* function : destory yolo2 model */
+/*
+ * 销毁Yolov2模型
+ * Destroy Yolov2 model
+ */
 void Yolo2Destory(SAMPLE_SVP_NNIE_CFG_S *self)
 {
     SampleSvpNnieYolov2Deinit(&g_stYolov2NnieParam, &g_stYolov2SoftwareParam, &g_stYolov2Model);
@@ -725,7 +890,10 @@ void Yolo2Destory(SAMPLE_SVP_NNIE_CFG_S *self)
     free(self);
 }
 
-/* function : fetch result */
+/*
+ * 获取结果
+ * Fetch result
+ */
 static void Yolo2FetchRes(SVP_BLOB_S *pstDstScore, SVP_BLOB_S *pstDstRoi, SVP_BLOB_S *pstClassRoiNum,
     DetectObjInfo resBuf[], int resSize, int* resLen)
 {
@@ -750,7 +918,10 @@ static void Yolo2FetchRes(SVP_BLOB_S *pstDstScore, SVP_BLOB_S *pstDstRoi, SVP_BL
     for (i = 1; i < u32ClassNum; i++) {
         u32ScoreBias = u32RoiNumBias;
         u32BboxBias = u32RoiNumBias * SAMPLE_SVP_NNIE_COORDI_NUM;
-        /* if the confidence score greater than result threshold, the result will be printed */
+        /*
+         * 如果置信度分数大于结果阈值，则打印结果
+         * If the confidence score greater than result threshold, the result will be printed
+         */
         if ((HI_FLOAT)ps32Score[u32ScoreBias] / SAMPLE_SVP_NNIE_QUANT_BASE >=
             THRESH_MIN && ps32ClassRoiNum[i] != 0) {
         }
@@ -785,7 +956,10 @@ static void Yolo2FetchRes(SVP_BLOB_S *pstDstScore, SVP_BLOB_S *pstDstRoi, SVP_BL
     *resLen = resId;
 }
 
-/* function : calculation yuv image */
+/*
+ * 对一帧yuv图片进行推理
+ * Calculation yuv image
+ */
 int Yolo2CalImg(SAMPLE_SVP_NNIE_CFG_S* self,
     const IVE_IMAGE_S *img, DetectObjInfo resBuf[], int resSize, int* resLen)
 {
@@ -793,7 +967,10 @@ int Yolo2CalImg(SAMPLE_SVP_NNIE_CFG_S* self,
     SAMPLE_SVP_NNIE_PROCESS_SEG_INDEX_S stProcSegIdx = {0};
     HI_S32 s32Ret;
 
-    // Fill src data
+    /*
+     * 填充源数据
+     * Fill src data
+     */
     self->pszPic = NULL;
     stInputDataIdx.u32SegIdx = 0;
     stInputDataIdx.u32NodeIdx = 0;
@@ -802,15 +979,23 @@ int Yolo2CalImg(SAMPLE_SVP_NNIE_CFG_S* self,
     SAMPLE_SVP_CHECK_EXPR_GOTO(HI_SUCCESS != s32Ret, YOLOV2_FAIL_0, SAMPLE_SVP_ERR_LEVEL_ERROR,
         "Error,SAMPLE_SVP_NNIE_FillSrcData failed!\n");
 
-    // NNIE process(process the 0-th segment)
+    /*
+     * NNIE推理(process the 0-th segment)
+     * NNIE process(process the 0-th segment)
+     */
     stProcSegIdx.u32SegIdx = 0;
     s32Ret = SAMPLE_SVP_NNIE_Forward(&g_stYolov2NnieParam, &stInputDataIdx, &stProcSegIdx, HI_TRUE);
     SAMPLE_SVP_CHECK_EXPR_GOTO(HI_SUCCESS != s32Ret, YOLOV2_FAIL_0, SAMPLE_SVP_ERR_LEVEL_ERROR,
         "Error,SAMPLE_SVP_NNIE_Forward failed!\n");
 
-    /* Software process */
-    /* if user has changed net struct, please make sure SAMPLE_SVP_NNIE_Yolov2_GetResult
-     function input datas are correct */
+    /*
+     * CPU处理
+     * 如果用户更改了网络结构，请确保SAMPLE_SVP_NNIE_Yolov2_GetResult函数的输入数据是正确的
+     *
+     * Software process
+     * if user has changed net struct, please make sure SAMPLE_SVP_NNIE_Yolov2_GetResult
+     * function's input datas are correct
+     */
     s32Ret = SAMPLE_SVP_NNIE_Yolov2_GetResult(&g_stYolov2NnieParam, &g_stYolov2SoftwareParam);
     SAMPLE_SVP_CHECK_EXPR_GOTO(HI_SUCCESS != s32Ret, YOLOV2_FAIL_0, SAMPLE_SVP_ERR_LEVEL_ERROR,
         "Error,SAMPLE_SVP_NNIE_Yolov2_GetResult failed!\n");

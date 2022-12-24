@@ -343,7 +343,10 @@ HI_S32 SAMPLE_VENC_VPSS_Init(VPSS_GRP VpssGrp, HI_BOOL* pabChnEnable, DYNAMIC_RA
     return s32Ret;
 }
 
-/* init ViCfg */
+/*
+ * 初始化Vi配置
+ * Init ViCfg
+ */
 HI_S32 ViCfgInit(ViCfg *self)
 {
     HI_S32 s32Ret;
@@ -413,12 +416,18 @@ int SAMPLE_VENC_H265_H264(void)
     s32Ret = SAMPLE_COMM_VI_Bind_VPSS(0, 0, 0);
     SAMPLE_CHECK_EXPR_GOTO(s32Ret != HI_SUCCESS, EXIT_VPSS_STOP, "VI Bind VPSS err for %#x!\n", s32Ret);
 
-    /* start stream venc */
+    /*
+     * 开启编码流
+     * Start stream venc
+     */
     EnRcModeGopModeCfg(&g_sampleStoreInfo);
     s32Ret = SAMPLE_COMM_VENC_GetGopAttr(g_sampleStoreInfo.enGopMode, &g_sampleStoreInfo.stGopAttr);
     SAMPLE_CHECK_EXPR_GOTO(s32Ret != HI_SUCCESS, EXIT_VI_VPSS_UNBIND, "Venc Get GopAttr for %#x!\n", s32Ret);
 
-    /* encode h.265 */
+    /*
+     * 编码h.265
+     * Encode h.265
+     */
     s32Ret = SAMPLE_COMM_VENC_Start(VencChn[0], enPayLoad[0], enSize[0],
         g_sampleStoreInfo.enRcMode, u32Profile[0], bRcnRefShareBuf, &g_sampleStoreInfo.stGopAttr);
     SAMPLE_CHECK_EXPR_GOTO(s32Ret != HI_SUCCESS, EXIT_VI_VPSS_UNBIND, "Venc Start failed for %#x!\n", s32Ret);
@@ -426,7 +435,10 @@ int SAMPLE_VENC_H265_H264(void)
     s32Ret = SAMPLE_COMM_VPSS_Bind_VENC(0, VpssChn[0], VencChn[0]);
     SAMPLE_CHECK_EXPR_GOTO(s32Ret != HI_SUCCESS, EXIT_VENC_H265_STOP, "Venc Get GopAttr failed for %#x!\n", s32Ret);
 
-    /* encode h.264 */
+    /*
+     * 编码h.264
+     * Encode h.264
+     */
     s32Ret = SAMPLE_COMM_VENC_Start(VencChn[1], enPayLoad[1], enSize[1],
         g_sampleStoreInfo.enRcMode, u32Profile[1], bRcnRefShareBuf, &g_sampleStoreInfo.stGopAttr);
     SAMPLE_CHECK_EXPR_GOTO(s32Ret != HI_SUCCESS, EXIT_VENC_H265_UnBind, "Venc Start failed for %#x!\n", s32Ret);
@@ -434,13 +446,19 @@ int SAMPLE_VENC_H265_H264(void)
     s32Ret = SAMPLE_COMM_VPSS_Bind_VENC(0, VpssChn[1], VencChn[1]);
     SAMPLE_CHECK_EXPR_GOTO(s32Ret != HI_SUCCESS, EXIT_VENC_H264_STOP, "Venc bind Vpss failed for %#x!\n", s32Ret);
 
-    /* stream save process */
+    /*
+     * 流保存过程
+     * Stream save process
+     */
     s32Ret = SAMPLE_COMM_VENC_StartGetStream(VencChn, 2); // 2: channel number
     SAMPLE_CHECK_EXPR_GOTO(s32Ret != HI_SUCCESS, EXIT_VENC_H264_UnBind, "Start Venc failed!\n", s32Ret);
 
     Pause();
 
-    /*  exit process */
+    /*
+     * 退出处理过程
+     * Exit process
+     */
     SAMPLE_COMM_VENC_StopGetStream();
 
 EXIT_VENC_H264_UnBind:

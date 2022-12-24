@@ -13,6 +13,19 @@
  * limitations under the License.
  */
 
+/*
+ * 该文件为预处理示例主函数文件，其分别介绍了对一帧图像的裁剪和缩放，
+ * 适用于AI推理之前对图片进行预处理。./可执行文件+index方式可以运行预处理API，
+ * index 0表示缩放，index 1表示裁剪。最后转换成功的结果保存在文件中。
+ *
+ * This file is the main function file of the preprocessing example,
+ * which respectively introduces the crop and resize of a frame of image,
+ * and is suitable for preprocessing the image before AI inference.
+ * ./executable file + index method can run the preprocessing API,
+ * index 0 means resize, and index 1 means crop.
+ * The result of successful conversion is finally saved in the file.
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -33,7 +46,10 @@ extern "C" {
 #endif
 #endif /* End of #ifdef __cplusplus */
 
-/* function : show usage */
+/*
+ * 函数：显示用法
+ * function: show usage
+ */
 void SampleSvpUsage(const char* pchPrgName)
 {
     printf("Usage : %s <index> \n", pchPrgName);
@@ -42,7 +58,10 @@ void SampleSvpUsage(const char* pchPrgName)
     printf("\t 1) crop.\n");
 }
 
-/* function : resize and crop sample */
+/*
+ * 函数：缩放和裁剪示例
+ * function : resize and crop sample
+ */
 int main(int argc, char *argv[])
 {
     int s32Ret = HI_SUCCESS;

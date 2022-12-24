@@ -41,7 +41,10 @@ static HI_BOOL gs_bUserGetMode = HI_FALSE;
 static HI_BOOL gs_bAoVolumeCtrl = HI_FALSE;
 static AUDIO_SAMPLE_RATE_E g_in_sample_rate = AUDIO_SAMPLE_RATE_BUTT;
 static AUDIO_SAMPLE_RATE_E g_out_sample_rate = AUDIO_SAMPLE_RATE_BUTT;
-/* 0: close, 1: record, 2:reserved, 3:talkv2 */
+/*
+ * 0：关闭，1：录音，2：保留，3：talkv2
+ * 0: close, 1: record, 2:reserved, 3:talkv2
+ */
 static HI_U32 g_ai_vqe_type = 1;
 static HI_BOOL g_sample_audio_exit = HI_FALSE;
 
@@ -57,7 +60,10 @@ static int audio_wait_quit(int quitFd)
     return 0;
 }
 
-/* function : PT Number to String */
+/*
+ * 函数：PT Number到字符串转换
+ * function : PT Number to String
+ */
 static char *SAMPLE_AUDIO_Pt2Str(PAYLOAD_TYPE_E enType)
 {
     if (enType == PT_G711A) {
@@ -79,7 +85,10 @@ static char *SAMPLE_AUDIO_Pt2Str(PAYLOAD_TYPE_E enType)
     }
 }
 
-/* function : Add dynamic load path */
+/*
+ * 函数：添加动态加载路径
+ * function : Add dynamic load path
+ */
 #ifndef HI_VQE_USE_STATIC_MODULE_REGISTER
 static HI_VOID SAMPLE_AUDIO_AddLibPath(HI_VOID)
 {
@@ -101,13 +110,19 @@ static HI_VOID SAMPLE_AUDIO_AddLibPath(HI_VOID)
 }
 #endif
 
-/* function : Open Adec File */
+/*
+ * 函数：打开Adec文件
+ * function : Open Adec File
+ */
 static FILE* SAMPLE_AUDIO_OpenAdecFile_AAC(int num, ADEC_CHN AdChn, PAYLOAD_TYPE_E enType)
 {
     FILE* pfd;
     HI_CHAR aszFileName[FILE_NAME_LEN] = {0};
 
-    /* create file for save stream */
+    /*
+     * 创建文件为了保存流
+     * Create file for save stream
+     */
 #ifdef __HuaweiLite__
     if (snprintf_s(aszFileName, FILE_NAME_LEN, FILE_NAME_LEN - 1, "/sharefs/audio_chn%d.%s",
         AdChn, SAMPLE_AUDIO_Pt2Str(enType)) < 0) {
@@ -206,7 +221,10 @@ ADECAO_ERR0:
     return;
 }
 
-/* function : file -> Adec -> Ao */
+/*
+ * 函数：文件 —> 音频解码 -> 音频输出
+ * function : file -> Adec -> Ao
+ */
 static HI_S32 SAMPLE_AUDIO_AdecAo(HI_S32 num, HI_S32 quitFd)
 {
     HI_S32 s32Ret, s32AoChnCnt;
@@ -318,13 +336,13 @@ static hi_void sample_audio_ai_ao_init_param(AIO_ATTR_S *attr)
     attr->enI2sType = AIO_I2STYPE_INNERCODEC;
 
     gs_bAioReSample = HI_FALSE;
-    /* config ao resample attr if needed */
+    /*
+     * 如果需要，配置ao resample
+     * Config ao resample attr if needed
+     */
     if (gs_bAioReSample == HI_TRUE) {
-        /* ai 48k -> 32k */
-        g_out_sample_rate = AUDIO_SAMPLE_RATE_32000;
-
-        /* ao 32k -> 48k */
-        g_in_sample_rate = AUDIO_SAMPLE_RATE_32000;
+        g_out_sample_rate = AUDIO_SAMPLE_RATE_32000; // ai 48k -> 32k
+        g_in_sample_rate = AUDIO_SAMPLE_RATE_32000; // ao 32k -> 48k
     } else {
         g_in_sample_rate = AUDIO_SAMPLE_RATE_BUTT;
         g_out_sample_rate = AUDIO_SAMPLE_RATE_BUTT;
@@ -337,7 +355,10 @@ static HI_VOID SAMPLE_AUDIO_AiAoInner(AUDIO_DEV AiDev, AI_CHN AiChn, AUDIO_DEV A
 {
     HI_S32 s32Ret;
 
-    /* bind AI to AO channel */
+    /*
+     * 绑定AI到AO通道
+     * Bind AI to AO channel
+     */
     if (gs_bUserGetMode == HI_TRUE) {
         s32Ret = SAMPLE_COMM_AUDIO_CreateTrdAiAo(AiDev, AiChn, AoDev, AoChn);
         if (s32Ret != HI_SUCCESS) {
@@ -386,7 +407,10 @@ AIAO_ERR0:
     return;
 }
 
-/* function : Ai -> Ao(with fade in/out and volume adjust) */
+/*
+ * 函数：音频输入到音频输出
+ * function : Ai -> Ao
+ */
 static HI_S32 SAMPLE_AUDIO_AiAo(HI_VOID)
 {
     HI_S32 s32Ret;
@@ -400,7 +424,10 @@ static HI_S32 SAMPLE_AUDIO_AiAo(HI_VOID)
 
     sample_audio_ai_ao_init_param(&stAioAttr);
 
-    /* enable AI channel */
+    /*
+     * 启用AI通道
+     * Enable AI channel
+     */
     s32AiChnCnt = stAioAttr.u32ChnCnt;
     s32Ret = SAMPLE_COMM_AUDIO_StartAi(AiDev, s32AiChnCnt, &stAioAttr, g_out_sample_rate, gs_bAioReSample, NULL, 0);
     if (s32Ret != HI_SUCCESS) {
@@ -409,7 +436,10 @@ static HI_S32 SAMPLE_AUDIO_AiAo(HI_VOID)
             "SAMPLE_COMM_AUDIO_StartAi FAIL. s32Ret: 0x%x\n", s32Ret);
     }
 
-    /* enable AO channel */
+    /*
+     * 启动AO通道
+     * Enable AO channel
+     */
     s32AoChnCnt = stAioAttr.u32ChnCnt;
     s32Ret = SAMPLE_COMM_AUDIO_StartAo(AoDev, s32AoChnCnt, &stAioAttr, g_in_sample_rate, gs_bAioReSample);
     if (s32Ret != HI_SUCCESS) {
@@ -418,7 +448,10 @@ static HI_S32 SAMPLE_AUDIO_AiAo(HI_VOID)
             "SAMPLE_COMM_AUDIO_StartAo FAIL. s32Ret: 0x%x\n", s32Ret);
     }
 
-    /* config internal audio codec */
+    /*
+     * 配置内置的acodec
+     * Config internal audio codec
+     */
     s32Ret = SAMPLE_COMM_AUDIO_CfgAcodec(&stAioAttr);
     SAMPLE_CHECK_EXPR_GOTO(s32Ret != HI_SUCCESS, AIAO_ERR1,
         "SAMPLE_COMM_AUDIO_CfgAcodec FAIL. s32Ret: 0x%x\n", s32Ret);
@@ -441,7 +474,10 @@ AIAO_ERR3:
     return s32Ret;
 }
 
-/* function : main */
+/*
+ * 函数：主入口
+ * function : main()
+ */
 HI_S32 AudioTest(HI_U32 num, HI_S32 quitFd)
 {
     HI_S32 s32Ret = HI_SUCCESS;

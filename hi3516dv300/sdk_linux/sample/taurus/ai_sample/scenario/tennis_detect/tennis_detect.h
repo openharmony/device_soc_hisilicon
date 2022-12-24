@@ -34,7 +34,10 @@ class tennis_detect {
 public:
     HI_S32 TennisDetectLoad(uintptr_t* model);
     HI_S32 TennisDetectUnload(uintptr_t model);
-    /* Tennis detect calculation */
+    /*
+     * 网球检测推理
+     * Tennis detect calculation
+     */
     HI_S32 TennisDetectCal(uintptr_t model, VIDEO_FRAME_INFO_S *srcFrm, VIDEO_FRAME_INFO_S *dstFrm);
 };
 

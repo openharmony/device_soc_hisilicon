@@ -46,7 +46,10 @@ extern "C" {
 #define AICSTART_VI_OUTWIDTH    1920
 #define AICSTART_VI_OUTHEIGHT   1080
 
-/* bit constant */
+/*
+ * 比特常量
+ * Bit constant
+ */
 #define HI_BIT0             0x01U
 #define HI_BIT1             0x02U
 #define HI_BIT2             0x04U
@@ -64,7 +67,10 @@ extern "C" {
 #define HI_BIT14            0x4000U
 #define HI_BIT15            0x8000U
 
-/* Flags to mark whether the component is enabled */
+/*
+ * 标记组件，该组件是否启用
+ * Flags to mark whether the component is enabled
+ */
 #define MPP_VI      HI_BIT0
 #define MPP_VDEC    HI_BIT1
 #define MPP_VPSS    HI_BIT2
@@ -83,6 +89,9 @@ typedef struct SampleVoModeMux {
 } SampleVoModeMux;
 
 /*
+ * VPSS通道配置
+ * 用以设置一个通道的属性
+ *
  * VPSS channel config.
  * Used to set the attributes of a channel.
  */
@@ -92,7 +101,10 @@ typedef struct VpssChnCfg {
 } VpssChnCfg;
 
 /*
- * VPSS config.
+ * VPSS参数配置
+ * 每个VpssCfg对应1个VPSS组，及1个或多个VPSS通道
+ *
+ * VPSS param config.
  * Each VpssCfg corresponds to 1 VPSS group and 1 or more VPSS channels.
  */
 typedef struct VpssCfg {
@@ -104,11 +116,19 @@ typedef struct VpssCfg {
 } VpssCfg;
 
 /*
- * MppSess superset.
+ * MppSess集合.
+ * MppSess对应的create()函数会将需要的cfg值复制到对象中，并启动session
+ * MppSess未提供构造函数，user只能通过create()函数创建对象，并用MppSess_destroy()销毁对象
+ * MppSess中定义了当前MppSess使用的资源ID，viCfg, vpssCfg, vpssGrp, vpssChn0, vpssChn1,
+ * 这些值由create()设置，used未标识的组件的对应ID会被置为-1.这些资源ID从create()传入的
+ * 参数xxxCfg中获取，复制到对象中可简化APP使用
+ * 目前没有定义VI的channel ID，其总是会与VPSS绑定后使用，通过VPSS chn即可获得VI的数据
+ *
+ * MppSess collection.
  * The create() function corresponding to MppSess will copy the required cfg value to the object and start the session.
  * MppSess does not provide a constructor. The user can only create an object through the create() function
  * and destroy the object with MppSess_destroy().
- * MppSess defines the resource ID, vpssGrp, vpssChn0, vpssChn1, vdecChn, vencChn currently used by MppSess.
+ * MppSess defines the resource ID, viCfg, vpssCfg, vpssGrp, vpssChn0, vpssChn1 currently used by MppSess.
  * These values are set by create(), and the corresponding IDs of components not identified by used will be set to -1.
  * These resource IDs are obtained from the parameter xxxCfg passed in by create()
  * and copied to the object to simplify APP use.
@@ -152,49 +172,91 @@ HI_S32 SAMPLE_MEDIA_CNN_TRASH_CLASSIFY(HI_VOID);
 HI_S32 SampleCommVoStartDevMipi(VO_DEV VoDev, VO_PUB_ATTR_S* pstPubAttr);
 HI_S32 SAMPLE_MEDIA_HAND_CLASSIFY(HI_VOID);
 
-/* init ViCfg */
+/*
+ * 初始化vi配置
+ * Init ViCfg
+ */
 void ViCfgInit(ViCfg* self);
 
-/* Initialize VpssCfg */
+/*
+ * 初始化VPSS配置
+ * Init VpssCfg
+ */
 void VpssCfgInit(VpssCfg* self);
 
-/* Set up VPSS Group */
+/*
+ * 设置VPSS组
+ * Set up VPSS Group
+ */
 void VpssCfgSetGrp(VpssCfg* self,
     int grpId, const VPSS_GRP_ATTR_S* grpAttr, int maxWidth, int maxHeight);
 
-/* Add a VPSS channel */
+/*
+ * 增加一个VPSS通道
+ * Add a VPSS channel
+ */
 VPSS_CHN_ATTR_S* VpssCfgAddChn(VpssCfg* self,
     int chnId, const VPSS_CHN_ATTR_S* chnAttr, int width, int height);
 
-/* Set VI DEV information */
+/*
+ * 设置VI设备信息
+ * Set VI DEV information
+ */
 void ViCfgSetDev(ViCfg* self, int devId, WDR_MODE_E wdrMode);
 
-/* Set the PIPE information of the VI */
+/*
+ * 设置VI的PIPE信息
+ * Set the PIPE information of the VI
+ */
 void ViCfgSetPipe(ViCfg* self, int pipe0Id, int pipe1Id, int pipe2Id, int pipe3Id);
 
-/* Set up the VI channel */
+/*
+ * 设置VI通道
+ * Set up the VI channel
+ */
 void ViCfgSetChn(ViCfg* self, int chnId, PIXEL_FORMAT_E pixFormat,
     VIDEO_FORMAT_E videoFormat, DYNAMIC_RANGE_E dynamicRange);
 
-/* Create and start {VI->VPSS}MppSess */
+/*
+ * 创建并启动{VI->VPSS}MppSess
+ * Create and start {VI->VPSS}MppSess
+ */
 int ViVpssCreate(MppSess** sess, const ViCfg* viCfg, const VpssCfg* vpssCfg);
 
-/* Terminate VPSS started with VpssCfg */
+/*
+ * 停止使用VpssCfg启动的VPSS
+ * Terminate VPSS started with VpssCfg
+ */
 int VpssStop(const VpssCfg* cfg);
 
-/* Terminate VIs started with ViCfg */
+/*
+ * 终止使用ViCfg启动的VI
+ * Terminate VI started with ViCfg
+ */
 int ViStop(const ViCfg* viCfg);
 
-/* start vo to mipi lcd */
+/*
+ * 启动VO到MIPI lcd通路
+ * Start VO to MIPI lcd
+ */
 HI_S32 SampleCommVoStartMipi(SAMPLE_VO_CONFIG_S *pstVoConfig);
 
-/* onfig mipi */
+/*
+ * 设置VO至MIPI通路，获取MIPI设备
+ * Set VO config to MIPI, get MIPI device
+ */
 HI_S32 SAMPLE_VO_CONFIG_MIPI(HI_S32* mipiFD);
 
-/* disable mipi tx */
+/*
+ * 禁用MIPI Tx设备
+ * Disable MIPI Tx device
+ */
 HI_S32 SAMPLE_VO_DISABLE_MIPITx(HI_S32 fd);
 
-/* close mipi_tx device */
+/*
+ * 关闭MIPI Tx设备
+ * Close MIPI Tx device
+ */
 HI_VOID SampleCloseMipiTxFd(HI_S32 fd);
 
 #ifdef __cplusplus

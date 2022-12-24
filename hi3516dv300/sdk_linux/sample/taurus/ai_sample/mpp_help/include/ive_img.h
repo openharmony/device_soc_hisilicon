@@ -31,37 +31,58 @@
 extern "C" {
 #endif
 
-/* consts */
+/*
+ * 常量
+ * Constant
+ */
 #define IMG_FULL_CHN    3 // Full channel / three channel, for YUV444, RGB888
 #define IMG_HALF_CHN    2 // Half channel, for YUV420/422
 #define THREE_TIMES     3
 #define TWO_TIMES       2
 
-/* Byte alignment calculation */
+/*
+ * 字节对齐计算
+ * Byte alignment calculation
+ */
 HI_U32 HiAlign16(HI_U32 num);
 HI_U32 HiAlign32(HI_U32 num);
 
-/* Alignment type */
+/*
+ * 对齐类型
+ * Alignment type
+ */
 typedef enum AlignType {
     ALIGN_TYPE_2 = 2, // Align by 2 bytes
     ALIGN_TYPE_16 = 16, // Align by 16 bytes
     ALIGN_TYPE_32 = 32, // Align by 32 bytes
 } AlignType;
 
-/* Create ive image buffer based on type and size */
+/*
+ * 根据类型和大小创建缓存
+ * Create ive image buffer based on type and size
+ */
 int IveImgCreate(IVE_IMAGE_S* img,
     IVE_IMAGE_TYPE_E enType, uint32_t width, uint32_t height);
 
 /*
+ * VIDEO_FRAME_INFO_S格式转换成IVE_IMAGE_S格式
+ * 复制数据指针，不复制数据
+ *
  * video frame to ive image.
  * Copy the data pointer, do not copy the data.
  */
 int FrmToOrigImg(const VIDEO_FRAME_INFO_S* frm, IVE_IMAGE_S *img);
 
-/* yuv file crop */
+/*
+ * 对yuv格式进行裁剪
+ * yuv file crop
+ */
 int ImgYuvCrop(const IVE_IMAGE_S *src, IVE_IMAGE_S *dst, const RectBox* origBox);
 
-/* Destory ive Image */
+/*
+ * 销毁ive image
+ * Destory ive image
+ */
 void IveImgDestroy(IVE_IMAGE_S* img);
 
 int OrigImgToFrm(const IVE_IMAGE_S *img, VIDEO_FRAME_INFO_S* frm);

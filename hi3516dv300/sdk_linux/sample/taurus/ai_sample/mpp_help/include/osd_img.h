@@ -26,19 +26,16 @@
 extern "C" {
 #endif
 
-/* Maximum OSD Count */
-#define HI_OSD_MAX_CNT  (16)
+#define HI_OSD_MAX_CNT  (16) // Maximum OSD Count
+#define HI_OSD_MAX_DISP_CNT (2) // Maximum Display Count for Each OSD
+#define HI_OSD_MAX_STR_LEN  (64) // String OSD Maximum Length
 
-/* Maximum Display Count for Each OSD */
-#define HI_OSD_MAX_DISP_CNT (2)
-
-/* String OSD Maximum Length */
-#define HI_OSD_MAX_STR_LEN  (64)
-
-/* typedef */
 typedef HI_S32 HI_ERRNO;
 
-/* common error code */
+/*
+ * 常见的错误码
+ * Common error code
+ */
 #define HI_ERRNO_COMMON_BASE  0
 #define HI_ERRNO_COMMON_COUNT 256
 
@@ -66,12 +63,18 @@ typedef HI_S32 HI_ERRNO;
 #define HI_EOVER               (HI_ERRNO)(HI_ERRNO_COMMON_BASE + 22)
 #define HI_ERRNO_COMMON_BOTTOM (HI_ERRNO)(HI_ERRNO_COMMON_BASE + 23)
 
-/* custom error code */
+/*
+ * 自定义错误码
+ * Custom error code
+ */
 #define HI_ERRNO_BASE          (HI_ERRNO)(HI_ERRNO_COMMON_BASE + HI_ERRNO_COMMON_COUNT)
 #define HI_EINITIALIZED        (HI_ERRNO)(HI_ERRNO_BASE + 1) // Repeated initialization
 #define HI_ERRNO_CUSTOM_BOTTOM (HI_ERRNO)(HI_ERRNO_BASE + 2) // Number of error numbers that have been defined
 
-/* pthread mutex lock */
+/*
+ * pthread互斥锁
+ * pthread mutex lock
+ */
 static inline void MutexLock(pthread_mutex_t* mutex)
 {
     if (pthread_mutex_lock(mutex) != 0) {
@@ -79,7 +82,10 @@ static inline void MutexLock(pthread_mutex_t* mutex)
     }
 }
 
-/* pthread mutex lock */
+/*
+ * 解除锁定mutex所指向的互斥锁
+ * pthread mutex unlock
+ */
 static inline void MutexUnlock(pthread_mutex_t* mutex)
 {
     if (pthread_mutex_unlock(mutex) != 0) {
@@ -89,7 +95,10 @@ static inline void MutexUnlock(pthread_mutex_t* mutex)
 
 typedef HI_S32 (*HI_OSD_GETFONTMOD_CALLBACK_FN_PTR)(HI_CHAR* Character, HI_U8** FontMod, HI_S32* FontModLen);
 
-/* OSD Fonts Lib */
+/*
+ * OSD字体库
+ * OSD Fonts Lib
+ */
 typedef struct hiOSD_FONTS_S {
     /* OSD Lib Font Size, in pixel */
     HI_U32 u32FontWidth;
@@ -97,13 +106,19 @@ typedef struct hiOSD_FONTS_S {
     HI_OSD_GETFONTMOD_CALLBACK_FN_PTR pfnGetFontMod;
 } HI_OSD_FONTS_S;
 
-/* osd pixel format enum */
+/*
+ * OSD像素格式枚举
+ * OSD pixel format enum
+ */
 typedef enum hiOSD_PIXEL_FMT_E {
     HI_OSD_PIXEL_FMT_RGB1555 = 0,
     HI_OSD_PIXEL_FMT_BUTT
 } HI_OSD_PIXEL_FMT_E;
 
-/* OSD Bitmap Attribute */
+/*
+ * OSD位图属性
+ * OSD Bitmap Attribute
+ */
 typedef struct hiOSD_BITMAP_ATTR_S {
     HI_OSD_PIXEL_FMT_E enPixelFormat;
     HI_U32             u32Width;
@@ -112,7 +127,10 @@ typedef struct hiOSD_BITMAP_ATTR_S {
     HI_VOID*           pvData;
 } HI_OSD_BITMAP_ATTR_S;
 
-/* OSD Type Enum */
+/*
+ * OSD类型枚举
+ * OSD Type Enum
+ */
 typedef enum hiOSD_TYPE_E {
     HI_OSD_TYPE_TIME = 0,
     HI_OSD_TYPE_STRING,
@@ -120,13 +138,19 @@ typedef enum hiOSD_TYPE_E {
     HI_OSD_TYPE_BUTT
 } HI_OSD_TYPE_E;
 
-/* OSD Time Format Enum */
+/*
+ * OSD时间格式枚举
+ * OSD Time Format Enum
+ */
 typedef enum hiOSD_TIMEFMT_E {
     HI_OSD_TIMEFMT_YMD24H = 0, // eg. 2017-03-10 23:00:59
     HI_OSD_TIMEFMT_BUTT
 } HI_OSD_TIMEFMT_E;
 
-/* OSD Binded Module enum */
+/*
+ * OSD绑定模块枚举
+ * OSD Binded Module enum
+ */
 typedef enum hiOSD_BIND_MOD_E {
     HI_OSD_BINDMOD_VI = 0,
     HI_OSD_BINDMOD_VPSS,
@@ -141,7 +165,10 @@ typedef enum hiOSD_COORDINATE_E {
     HI_OSD_COORDINATE_ABS_COOR
 } HI_OSD_COORDINATE_E;
 
-/** OSD Display Attribute */
+/*
+ * OSD显示属性
+ * OSD Display Attribute
+ */
 typedef struct hiOSD_DISP_ATTR_S {
     HI_BOOL bShow;
     HI_OSD_BIND_MOD_E enBindedMod;
@@ -155,7 +182,10 @@ typedef struct hiOSD_DISP_ATTR_S {
     HI_S32 s32Batch;
 } HI_OSD_DISP_ATTR_S;
 
-/* OSD Content */
+/*
+ * OSD内容
+ * OSD Content
+ */
 typedef struct hiOSD_CONTENT_S {
     HI_OSD_TYPE_E enType;
     HI_OSD_TIMEFMT_E enTimeFmt;
@@ -166,14 +196,20 @@ typedef struct hiOSD_CONTENT_S {
     HI_OSD_BITMAP_ATTR_S stBitmap; // Pixel Format: Only Support RGB1555 for now
 } HI_OSD_CONTENT_S;
 
-/* OSD Parameter */
+/*
+ * OSD属性
+ * OSD attribution
+ */
 typedef struct hiOSD_ATTR_S {
     HI_U32 u32DispNum; /* 1Binded Display Number for this OSD */
     HI_OSD_DISP_ATTR_S astDispAttr[HI_OSD_MAX_DISP_CNT];
     HI_OSD_CONTENT_S stContent;
 } HI_OSD_ATTR_S;
 
-/* OSD Parameter */
+/*
+ * OSD参数
+ * OSD Parameter
+ */
 typedef struct tagOSD_PARAM_S {
     HI_OSD_ATTR_S stAttr;
     SIZE_S stMaxSize;
@@ -188,7 +224,10 @@ typedef struct hiOSD_TEXTBITMAP_S {
     RGN_CANVAS_INFO_S stCanvasInfo;
 } HI_OSD_TEXTBITMAP_S;
 
-/* OSD region set */
+/*
+ * OSD区域设置
+ * OSD region set
+ */
 struct OsdSet {
     // OSD Binded Module: Static
     HI_OSD_BIND_MOD_E bindMod;
@@ -200,25 +239,46 @@ struct OsdSet {
 
 typedef struct OsdSet OsdSet;
 
-/* Create a region in OsdSet */
+/*
+ * 在OsdSet中创建区域
+ * Create a region in OsdSet
+ */
 int OsdsCreateRgn(OsdSet* self);
 
-/* Set the attribute value of the text region */
+/*
+ * 设置文本区域的属性值
+ * Set the attribute value of the text region
+ */
 int TxtRgnInit(HI_OSD_ATTR_S* rgnAttr, const char* str, uint32_t begX, uint32_t begY, uint32_t color);
 
-/* Destroy all regions in OsdSet */
+/*
+ * 销毁OsdSet中的所有区域
+ * Destroy all regions in OsdSet
+ */
 void OsdsClear(OsdSet* self);
 
-/* Set attributes for the specified region in OsdSet */
+/*
+ * 在OsdSet中设置指定区域的属性
+ * Set attributes for the specified region in OsdSet
+ */
 int OsdsSetRgn(OsdSet* self, int rgnHnd, const HI_OSD_ATTR_S* rgnAttr);
 
-/* Creat OsdSet */
+/*
+ * 创建OsdSet
+ * Creat OsdSet
+ */
 OsdSet* OsdsCreate(HI_OSD_BIND_MOD_E bindMod, HI_U32 modHnd, HI_U32 chnHnd);
 
-/* Destory OsdSet */
+/*
+ * 销毁OsdSet
+ * Destory OsdSet
+ */
 void OsdsDestroy(OsdSet* self);
 
-/* Initialize OsdSet lib */
+/*
+ * 初始化OsdSet库
+ * Initialize OsdSet lib
+ */
 int OsdLibInit(void);
 
 #ifdef __cplusplus

@@ -13,11 +13,24 @@
  * limitations under the License.
  */
 
+/*
+ * 该文件为色彩空间转换示例主函数文件，其提供典型的色彩空间转换API接口，
+ * ./可执行文件+index方式可以运行相关色彩空间转换API。总共五种典型的色彩空间转换场景。
+ *
+ * This file is the main function file of the color space conversion example,
+ * which provides a typical color space conversion API interface,
+ * and the ./executable file + index method can run the relevant color space conversion API.
+ * A total of five typical color space conversion scenarios.
+ */
+
 #include "hi_debug.h"
 #include "smp_color_space_convert.h"
 #include "sdk.h"
 
-/* function : show usage */
+/*
+ * 函数：显示用法
+ * function: show usage
+ */
 void SAMPLE_SVP_Usage(const char* pchPrgName)
 {
     printf("Usage : %s <index> \n", pchPrgName);
@@ -29,7 +42,10 @@ void SAMPLE_SVP_Usage(const char* pchPrgName)
     printf("\t 4) YUV video frame to RGB ive image - ive image RGB to BGR.\n");
 }
 
-/* function : color space convert sample */
+/*
+ * 函数：色彩空间转换sample
+ * function : color space convert sample
+ */
 int main(int argc, char *argv[])
 {
     int s32Ret = HI_SUCCESS;

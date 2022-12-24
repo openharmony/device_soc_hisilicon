@@ -46,7 +46,10 @@ static AicMediaInfo g_aicTennisMediaInfo = { 0 };
 static AiPlugLib g_tennisWorkPlug = {0};
 static HI_CHAR tennisDetectThreadName[16] = {0};
 
-/* Set VI DEV information */
+/*
+ * 设置VI设备信息
+ * Set VI device information
+ */
 static void TennisViCfgSetDev(ViCfg* self, int devId, WDR_MODE_E wdrMode)
 {
     HI_ASSERT(self);
@@ -56,7 +59,10 @@ static void TennisViCfgSetDev(ViCfg* self, int devId, WDR_MODE_E wdrMode)
     self->astViInfo[0].stDevInfo.enWDRMode = wdrMode;
 }
 
-/* Set up the VI channel */
+/*
+ * 设置VI通道
+ * Set up the VI channel
+ */
 static void TennisViCfgSetChn(ViCfg* self, int chnId, PIXEL_FORMAT_E pixFormat,
     VIDEO_FORMAT_E videoFormat, DYNAMIC_RANGE_E dynamicRange)
 {
@@ -88,14 +94,20 @@ static HI_VOID TennisStVbParamCfg(VbCfg *self)
     // 2: The number of buffer pools that can be accommodated in the entire system
     self->u32MaxPoolCnt              = 2;
 
-    /* get picture buffer size */
+    /*
+     * 获取一帧图片的buffer大小
+     * Get picture buffer size
+     */
     g_aicTennisMediaInfo.u32BlkSize = COMMON_GetPicBufferSize(g_aicTennisMediaInfo.stSize.u32Width,
         g_aicTennisMediaInfo.stSize.u32Height, SAMPLE_PIXEL_FORMAT, DATA_BITWIDTH_8, COMPRESS_MODE_SEG, DEFAULT_ALIGN);
     self->astCommPool[0].u64BlkSize  = g_aicTennisMediaInfo.u32BlkSize;
     // 10: Number of cache blocks per cache pool. Value range: (0, 10240]
     self->astCommPool[0].u32BlkCnt   = 10;
 
-    /* get raw buffer size */
+    /*
+     * 获取raw buffer的大小
+     * Get raw buffer size
+     */
     g_aicTennisMediaInfo.u32BlkSize = VI_GetRawBufferSize(g_aicTennisMediaInfo.stSize.u32Width,
         g_aicTennisMediaInfo.stSize.u32Height, PIXEL_FORMAT_RGB_BAYER_16BPP, COMPRESS_MODE_NONE, DEFAULT_ALIGN);
     self->astCommPool[1].u64BlkSize  = g_aicTennisMediaInfo.u32BlkSize;
@@ -215,7 +227,11 @@ static HI_S32 TennisDetectAiThreadProcess(HI_VOID)
 }
 
 /*
- * Display the data collected by sensor to LCD screen
+ * 将sensor采集到数据显示到液晶屏上，同时创建线程运行网球检测推理计算
+ * 视频输入->视频处理子系统->视频输出->显示屏
+ *
+ * Display the data collected by the sensor on the LCD screen,
+ * and at the same time create a thread to run tennis detect reasoning calculations
  * VI->VPSS->VO->MIPI
  */
 HI_S32 sample_media_opencv::SAMPLE_MEDIA_TENNIS_DETECT(HI_VOID)
@@ -223,56 +239,92 @@ HI_S32 sample_media_opencv::SAMPLE_MEDIA_TENNIS_DETECT(HI_VOID)
     HI_S32 s32Ret;
     HI_S32 fd = 0;
 
-    /* config vi */
+    /*
+     * 配置VI参数
+     * Config VI parameter
+     */
     TennisViPramCfg();
 
-    /* get picture size */
+    /*
+     * 通过Sensor型号获取enPicSize
+     * Obtain enPicSize through the Sensor type
+     */
     s32Ret = SAMPLE_COMM_VI_GetSizeBySensor(g_aicTennisMediaInfo.viCfg.astViInfo[0].stSnsInfo.enSnsType,
         &g_aicTennisMediaInfo.enPicSize);
     SAMPLE_CHECK_EXPR_RET(s32Ret != HI_SUCCESS, s32Ret, "get pic size by sensor fail, s32Ret=%#x\n", s32Ret);
 
-    /* get picture size(w*h), according enPicSize */
+    /*
+     * 根据enPicSize，得到图片的宽高
+     * Get picture size(w*h), according enPicSize
+     */
     s32Ret = SAMPLE_COMM_SYS_GetPicSize(g_aicTennisMediaInfo.enPicSize, &g_aicTennisMediaInfo.stSize);
     SAMPLE_PRT("AIC: snsMaxSize=%ux%u\n", g_aicTennisMediaInfo.stSize.u32Width, g_aicTennisMediaInfo.stSize.u32Height);
     SAMPLE_CHECK_EXPR_RET(s32Ret != HI_SUCCESS, s32Ret, "get picture size failed, s32Ret=%#x\n", s32Ret);
 
-    /* config vb */
+    /*
+     * 配置VB参数
+     * Config VB parameter
+     */
     TennisStVbParamCfg(&g_aicTennisMediaInfo.vbCfg);
 
-    /* vb init & MPI system init */
+    /*
+     * 视频缓存池初始化以及MPI系统初始化
+     * VB init & MPI system init
+     */
     s32Ret = SAMPLE_COMM_SYS_Init(&g_aicTennisMediaInfo.vbCfg);
     SAMPLE_CHECK_EXPR_RET(s32Ret != HI_SUCCESS, s32Ret, "system init failed, s32Ret=%#x\n", s32Ret);
 
-    /* set VO config to mipi, get mipi device */
+    /*
+     * 设置VO至MIPI通路，获取MIPI设备
+     * Set VO config to MIPI, get MIPI device
+     */
     s32Ret = SAMPLE_VO_CONFIG_MIPI(&fd);
     SAMPLE_CHECK_EXPR_GOTO(s32Ret != HI_SUCCESS, EXIT, "CONFIG MIPI FAIL.s32Ret:0x%x\n", s32Ret);
 
-    /* config vpss */
+    /*
+     * 配置VPSS参数
+     * Config VPSS parameter
+     */
     TennisVpssParamCfg();
     s32Ret = ViVpssCreate(&g_aicTennisMediaInfo.viSess, &g_aicTennisMediaInfo.viCfg, &g_aicTennisMediaInfo.vpssCfg);
     SAMPLE_CHECK_EXPR_GOTO(s32Ret != HI_SUCCESS, EXIT1, "ViVpss Sess create FAIL, ret=%#x\n", s32Ret);
     g_aicTennisMediaInfo.vpssGrp = 0;
     g_aicTennisMediaInfo.vpssChn0 = 1;
 
-    /* config vo */
+    /*
+     * 配置VO参数
+     * Config VO parameter
+     */
     TennisStVoParamCfg(&g_aicTennisMediaInfo.voCfg);
 
-    /* start vo */
+    /*
+     * 启动VO到MIPI lcd通路
+     * Start VO to MIPI lcd
+     */
     s32Ret = SampleCommVoStartMipi(&g_aicTennisMediaInfo.voCfg);
     SAMPLE_CHECK_EXPR_GOTO(s32Ret != HI_SUCCESS, EXIT1, "start vo FAIL. s32Ret: 0x%x\n", s32Ret);
 
-    /* vpss bind vo */
+    /*
+     * VPSS绑定VO
+     * VPSS bind VO
+     */
     s32Ret = SAMPLE_COMM_VPSS_Bind_VO(g_aicTennisMediaInfo.vpssGrp,
         g_aicTennisMediaInfo.vpssChn0, g_aicTennisMediaInfo.voCfg.VoDev, 0);
     SAMPLE_CHECK_EXPR_GOTO(s32Ret != HI_SUCCESS, EXIT2, "vo bind vpss FAIL. s32Ret: 0x%x\n", s32Ret);
     SAMPLE_PRT("vpssGrp:%d, vpssChn:%d\n", g_aicTennisMediaInfo.vpssGrp, g_aicTennisMediaInfo.vpssChn0);
 
-    /* create work thread to run ai */
+    /*
+     * 创建工作线程运行ai
+     * Create work thread to run ai
+     */
     s32Ret = TennisDetectAiThreadProcess();
     SAMPLE_CHECK_EXPR_RET(s32Ret != HI_SUCCESS, s32Ret, "ai proccess thread creat fail:%s\n", strerror(s32Ret));
-
     PAUSE();
     s_bOpenCVProcessStopSignal = HI_TRUE;
+    /*
+     * 等待一个线程结束，线程间同步的操作
+     * Waiting for the end of a thread, the operation of synchronization between threads
+     */
     pthread_join(g_openCVProcessThread, nullptr);
     g_openCVProcessThread = 0;
     PauseDoUnloadTennisModel();

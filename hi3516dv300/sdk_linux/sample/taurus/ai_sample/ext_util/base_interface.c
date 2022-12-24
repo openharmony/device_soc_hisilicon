@@ -38,7 +38,10 @@ static pthread_t g_mainThrdId = 0; // Main thread ID, the thread that called app
 
 HI_S32 ConfBaseInit(const char* cfgFilePath)
 {
-    // Do not allow repeated init
+    /*
+     * 不允许重复初始化
+     * Do not allow repeated init
+     */
     HI_ASSERT(!g_mainThrdId);
 
     g_mainThrdId = pthread_self();
@@ -68,28 +71,40 @@ void ConfBaseExt(void)
     SAMPLE_PRT("conf file exit success\n");
 }
 
-/* Get the int type configuration item corresponding to the key */
+/*
+ * 获取key对应的int类型配置项
+ * Get the int type configuration item corresponding to the key
+ */
 int GetCfgInt(const char* key, int defVal)
 {
     HI_ASSERT(key && *key);
     return g_appCfg ? iniparser_getint(g_appCfg, key, defVal) : defVal;
 }
 
-/* Get the double configuration item corresponding to the key */
+/*
+ * 获取key对应的double类型配置项
+ * Get the double configuration item corresponding to the key
+ */
 double GetCfgDouble(const char* key, double defVal)
 {
     HI_ASSERT(key && *key);
     return g_appCfg ? iniparser_getdouble(g_appCfg, key, defVal) : defVal;
 }
 
-/* Get the string configuration corresponding to the key */
+/*
+ * 获取key对应的string类型配置项
+ * Get the string configuration corresponding to the key
+ */
 const char* GetCfgStr(const char* key, const char* defVal)
 {
     HI_ASSERT(key && *key);
     return g_appCfg ? iniparser_getstring(g_appCfg, key, defVal) : defVal;
 }
 
-/* Get the bool type configuration item corresponding to the key */
+/*
+ * 获取key对应的bool类型配置项
+ * Get the bool type configuration item corresponding to the key
+ */
 bool GetCfgBool(const char* key, bool defVal)
 {
     static const size_t trueSize = 4;
@@ -114,7 +129,10 @@ bool GetCfgBool(const char* key, bool defVal)
     }
 }
 
-/* Get the int type configuration item corresponding to section+field */
+/*
+ * 获取section+field对应的int类型配置项
+ * Get the int type configuration item corresponding to section+field
+ */
 int SectGetCfgInt(const char* section, const char* field, int defVal)
 {
     HI_ASSERT(field && *field);
@@ -126,7 +144,10 @@ int SectGetCfgInt(const char* section, const char* field, int defVal)
     return GetCfgInt(key, defVal);
 }
 
-/* Get the double configuration item corresponding to section+field */
+/*
+ * 获取section+field对应的double类型配置项
+ * Get the double configuration item corresponding to section+field
+ */
 double SectGetCfgDouble(const char* section, const char* field, double defVal)
 {
     HI_ASSERT(field && *field);
@@ -138,7 +159,10 @@ double SectGetCfgDouble(const char* section, const char* field, double defVal)
     return GetCfgDouble(key, defVal);
 }
 
-/* Get the bool type configuration item corresponding to section+field */
+/*
+ * 获取section+field对应的bool类型配置项
+ * Get the bool type configuration item corresponding to section+field
+ */
 bool SectGetCfgBool(const char* section, const char* field, bool defVal)
 {
     HI_ASSERT(field && *field);
@@ -150,7 +174,10 @@ bool SectGetCfgBool(const char* section, const char* field, bool defVal)
     return GetCfgBool(key, defVal);
 }
 
-/* Get the string configuration item corresponding to section+field */
+/*
+ * 获取section+field对应的string类型配置项
+ * Get the string configuration item corresponding to section+field
+ */
 const char* SectGetCfgStr(const char* section, const char* field, const char* defVal)
 {
     HI_ASSERT(field && *field);
@@ -162,7 +189,10 @@ const char* SectGetCfgStr(const char* section, const char* field, const char* de
     return GetCfgStr(key, defVal);
 }
 
-/* strxfrm */
+/*
+ * 字符处理接口
+ * Character processing interface
+ */
 int HiStrxfrm(char *s1, char *s2, int n)
 {
     int i;

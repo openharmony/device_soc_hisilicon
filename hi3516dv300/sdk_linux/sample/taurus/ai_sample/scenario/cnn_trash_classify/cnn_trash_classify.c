@@ -13,6 +13,17 @@
  * limitations under the License.
  */
 
+/*
+ * 本文件将垃圾分类wk模型部署到板端，通过NNIE硬件加速进行推理。该文件提供了垃圾分类场景的API接口，
+ * 包括模型的加载、模型的卸载、模型的推理、AI flag业务处理接口。支持语音实时播放功能。
+ *
+ * This file deploys the trash classification wk model to the board,
+ * and performs inference through NNIE hardware acceleration.
+ * This file provides API interfaces for trash classification scenarios,
+ * including model loading, model unloading, model reasoning,
+ * and AI flag business processing interfaces. Support audio real-time playback function.
+ */
+
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
@@ -69,6 +80,10 @@ static SkPair g_stmChn = {
     .out = -1
 };
 
+/*
+ * 将识别的结果进行音频播放
+ * Audio playback of the recognition results
+ */
 static HI_VOID PlayAudio(const RecogNumInfo items)
 {
     if  (g_count < AUDIO_FRAME) {
@@ -102,6 +117,10 @@ static HI_VOID* GetAudioFileName(HI_VOID* arg)
     return NULL;
 }
 
+/*
+ * 加载垃圾分类wk模型
+ * Load the trash classification wk model
+ */
 HI_S32 CnnTrashClassifyLoadModel(uintptr_t* model, OsdSet* osds)
 {
     SAMPLE_SVP_NNIE_CFG_S *self = NULL;
@@ -137,6 +156,10 @@ HI_S32 CnnTrashClassifyLoadModel(uintptr_t* model, OsdSet* osds)
     return ret;
 }
 
+/*
+ * 卸载垃圾分类wk模型
+ * Unload the trash classification wk model
+ */
 HI_S32 CnnTrashClassifyUnloadModel(uintptr_t model)
 {
     CnnDestroy((SAMPLE_SVP_NNIE_CFG_S*)model);
@@ -154,6 +177,10 @@ HI_S32 CnnTrashClassifyUnloadModel(uintptr_t model)
     return HI_SUCCESS;
 }
 
+/*
+ * 根据推理结果进行业务处理
+ * Perform business processing based on inference results
+ */
 static HI_S32 CnnTrashClassifyFlag(const RecogNumInfo items[], HI_S32 itemNum, HI_CHAR* buf, HI_S32 size)
 {
     HI_S32 offset = 0;
@@ -209,6 +236,12 @@ static HI_S32 CnnTrashClassifyFlag(const RecogNumInfo items[], HI_S32 itemNum, H
     return HI_SUCCESS;
 }
 
+/*
+ * 先进行预处理，再使用NNIE进行硬件加速推理，不支持层通过AI CPU进行计算
+ *
+ * Perform preprocessing first, and then use NNIE for hardware accelerated inference,
+ * and do not support layers to be calculated by AI CPU
+ */
 HI_S32 CnnTrashClassifyCal(uintptr_t model, VIDEO_FRAME_INFO_S *srcFrm, VIDEO_FRAME_INFO_S *resFrm)
 {
     SAMPLE_PRT("begin CnnTrashClassifyCal\n");
@@ -250,8 +283,7 @@ HI_S32 CnnTrashClassifyCal(uintptr_t model, VIDEO_FRAME_INFO_S *srcFrm, VIDEO_FR
     ret = ImgYuvCrop(&img, &imgIn, &cnnBoxs[0]); // Crop the image to classfication network
     SAMPLE_CHECK_EXPR_RET(ret < 0, ret, "ImgYuvCrop FAIL, ret=%x\n", ret);
 
-    // Follow the reasoning logic
-    ret = CnnCalU8c1Img(self, &imgIn, resBuf, sizeof(resBuf) / sizeof((resBuf)[0]), &resLen);
+    ret = CnnCalImg(self, &imgIn, resBuf, sizeof(resBuf) / sizeof((resBuf)[0]), &resLen);
     SAMPLE_CHECK_EXPR_RET(ret < 0, ret, "cnn cal FAIL, ret=%x\n", ret);
 
     HI_ASSERT(resLen <= sizeof(resBuf) / sizeof(resBuf[0]));
@@ -264,13 +296,19 @@ HI_S32 CnnTrashClassifyCal(uintptr_t model, VIDEO_FRAME_INFO_S *srcFrm, VIDEO_FR
         }
     }
 
+    /*
+     * 仅当计算结果与之前计算发生变化时，才重新打OSD输出文字
+     * Only when the calculation result changes from the previous calculation, re-print the OSD output text
+     */
     if (strcmp(osdBuf, prevOsd) != 0) {
         HiStrxfrm(prevOsd, osdBuf, sizeof(prevOsd));
-
-        // Superimpose graphics into resFrm
         HI_OSD_ATTR_S rgn;
         TxtRgnInit(&rgn, osdBuf, TXT_BEGX, TXT_BEGY, ARGB1555_YELLOW2); // font width and heigt use default 40
         OsdsSetRgn(g_osdsTrash, g_osd0Trash, &rgn);
+        /*
+         * 用户向VPSS发送数据
+         * User sends data to VPSS
+         */
         ret = HI_MPI_VPSS_SendFrame(0, 0, srcFrm, 0);
         if (ret != HI_SUCCESS) {
             SAMPLE_PRT("Error(%#x), HI_MPI_VPSS_SendFrame failed!\n", ret);

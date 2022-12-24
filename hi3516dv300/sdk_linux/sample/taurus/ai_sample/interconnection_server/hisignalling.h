@@ -25,10 +25,15 @@
 #define HISIGNALLING_MSG_BUFF_LEN           (512)
 
 /*
- @brief Adapter plate selection
- 使用时选择打开宏，使用外设扩展板打开#define BOARD_SELECT_IS_EXPANSION_BOARD这个宏
- 使用Robot板打开#define BOARD_SELECT_IS_ROBOT_BOARD这个宏
-*/
+ * @brief 外设扩展板和Robot板的选择
+ * 使用时选择打开宏，使用外设扩展板打开#define BOARD_SELECT_IS_EXPANSION_BOARD这个宏
+ * 使用Robot板打开#define BOARD_SELECT_IS_ROBOT_BOARD这个宏
+ *
+ * @brief Selection of peripheral expansion board and Robot board
+ * Select to open the macro when using it,
+ * and use the peripheral expansion board to open the #define BOARD_SELECT_IS_EXPANSION_BOARD macro
+ * Use the Robot board to open the #define BOARD_SELECT_IS_ROBOT_BOARD macro
+ */
 #define BOARD_SELECT_IS_EXPANSION_BOARD
 #ifdef BOARD_SELECT_IS_EXPANSION_BOARD
 #define EXPANSION_BOARD
@@ -52,7 +57,7 @@ typedef enum {
     ForefingerAndThumbGesture,
     LittleFingerAndThumbGesture,
     InvalidGesture
-}refuseClassification;
+} refuseClassification;
 
 typedef struct {
     unsigned char frameHeader[HISGNALLING_MSG_FRAME_HEADER_LEN];
@@ -60,16 +65,18 @@ typedef struct {
     unsigned int hisigallingMsgLen;
     unsigned char endOfFrame;
     unsigned int hisignallingCrc32Check;
-}HisignallingProtocalType;
+} HisignallingProtocalType;
 
 typedef enum {
     HISIGNALLING_RET_VAL_CORRECT = 0,
     HISIGNALLING_RET_VAL_ERROR,
     HISGNALLING_RET_VAL_MAX
-}HisignallingErrorType;
+} HisignallingErrorType;
+
 /*
-* hisignalling protocal Function declaration
-*/
+ * hisignalling协议函数声明
+ * hisignalling protocal Function declaration
+ */
 unsigned int UartOpenInit(void);
 void UartSendRead(int fd, refuseClassification refuseType);
 static HisignallingErrorType HisignallingMsgReceive(int fd, unsigned char *buf, unsigned int len);

@@ -104,7 +104,10 @@ HI_VOID SAMPLE_VO_GetUserChnAttr(VO_CHN_ATTR_S *pstChnAttr, SIZE_S *pstDevSize, 
     return;
 }
 
-/* open mipi_tx device */
+/*
+ * 打开MIPI Tx设备
+ * Open MIPI Tx device
+ */
 HI_S32 SampleOpenMipiTxFd(HI_VOID)
 {
     HI_S32 fd;
@@ -116,17 +119,26 @@ HI_S32 SampleOpenMipiTxFd(HI_VOID)
     return fd;
 }
 
-/* close mipi_tx device */
+/*
+ * 关闭MIPI Tx设备
+ * Close MIPI Tx device
+ */
 HI_VOID SampleCloseMipiTxFd(HI_S32 fd)
 {
     close(fd);
     return;
 }
 
-/* get mipi tx config information */
+/*
+ * 获取MIPI Tx配置信息
+ * Get MIPI Tx config information
+ */
 HI_VOID SAMPLE_GetMipiTxConfig(combo_dev_cfg_t *pstMipiTxConfig)
 {
-    /* USER NEED SET MIPI DEV CONFIG */
+    /*
+     * 用户需要设置MIPI设备配置
+     * User need set MIPI device config
+     */
     pstMipiTxConfig->devno = 0;
     pstMipiTxConfig->lane_id[LANE_ID_SUBSCRIPT_0] = 0;
     pstMipiTxConfig->lane_id[LANE_ID_SUBSCRIPT_1] = 1;
@@ -152,7 +164,10 @@ HI_VOID SAMPLE_GetMipiTxConfig(combo_dev_cfg_t *pstMipiTxConfig)
     return;
 }
 
-/* set mipi tx config information */
+/*
+ * 设置MIPI Tx配置信息
+ * Set MIPI Tx config information
+ */
 HI_S32 SAMPLE_SetMipiTxConfig(HI_S32 fd, combo_dev_cfg_t *pstMipiTxConfig)
 {
     HI_S32 s32Ret = ioctl(fd, HI_MIPI_TX_SET_DEV_CFG, pstMipiTxConfig);
@@ -164,22 +179,25 @@ HI_S32 SAMPLE_SetMipiTxConfig(HI_S32 fd, combo_dev_cfg_t *pstMipiTxConfig)
     return s32Ret;
 }
 
-/* set mipi tx device config */
+/*
+ * 设置MIPI Tx设备属性
+ * Set MIPI Tx device attr
+ */
 HI_S32 SampleSetMipiTxDevAttr(HI_S32 fd)
 {
     HI_S32 s32Ret;
     combo_dev_cfg_t stMipiTxConfig;
 
-    /* USER SET MIPI DEV CONFIG */
-    SAMPLE_GetMipiTxConfig(&stMipiTxConfig);
-
-    /* USER SET MIPI DEV CONFIG */
-    s32Ret = SAMPLE_SetMipiTxConfig(fd, &stMipiTxConfig);
+    SAMPLE_GetMipiTxConfig(&stMipiTxConfig); // USER GET MIPI DEV CONFIG
+    s32Ret = SAMPLE_SetMipiTxConfig(fd, &stMipiTxConfig); // USER SET MIPI DEV CONFIG
 
     return s32Ret;
 }
 
-/* init mipi tx device */
+/*
+ * 初始化MIPI Tx设备
+ * Init MIPI Tx device
+ */
 HI_S32 SAMPLE_USER_INIT_MIPITx(HI_S32 fd, cmd_info_t *pcmd_info)
 {
     HI_S32 s32Ret = ioctl(fd, HI_MIPI_TX_SET_CMD, pcmd_info);
@@ -192,7 +210,10 @@ HI_S32 SAMPLE_USER_INIT_MIPITx(HI_S32 fd, cmd_info_t *pcmd_info)
     return HI_SUCCESS;
 }
 
-/* set mipi tx device init screen */
+/*
+ * 配置MIPI Tx初始化序列
+ * Config MIPI Tx initialization sequence
+ */
 HI_S32 SampleVoInitMipiTxScreen(HI_S32 fd)
 {
     HI_S32 s32Ret;
@@ -858,7 +879,10 @@ HI_S32 SampleVoInitMipiTxScreen(HI_S32 fd)
     return HI_SUCCESS;
 }
 
-/* enable mipi tx */
+/*
+ * 启用MIPI Tx设备
+ * Enable MIPI Tx device
+ */
 HI_S32 SAMPLE_VO_ENABLE_MIPITx(HI_S32 fd)
 {
     HI_S32 s32Ret = ioctl(fd, HI_MIPI_TX_ENABLE);
@@ -870,7 +894,10 @@ HI_S32 SAMPLE_VO_ENABLE_MIPITx(HI_S32 fd)
     return s32Ret;
 }
 
-/* disable mipi tx */
+/*
+ * 禁用MIPI Tx设备
+ * Disable MIPI Tx device
+ */
 HI_S32 SAMPLE_VO_DISABLE_MIPITx(HI_S32 fd)
 {
     HI_S32 s32Ret = ioctl(fd, HI_MIPI_TX_DISABLE);
@@ -882,23 +909,29 @@ HI_S32 SAMPLE_VO_DISABLE_MIPITx(HI_S32 fd)
     return s32Ret;
 }
 
-/* onfig mipi */
+/*
+ * 设置VO至MIPI通路，获取MIPI设备
+ * Set VO config to MIPI, get MIPI device
+ */
 HI_S32 SAMPLE_VO_CONFIG_MIPI(HI_S32* mipiFD)
 {
     HI_S32 s32Ret;
-    /* SET MIPI BAKCLIGHT */
     HI_S32  fd;
-    /* CONFIG MIPI PINUMX */
 
-    /* Reset MIPI */
-    /* OPEN MIPI FD */
+    /*
+     * 打开MIPI FD
+     * Open MIPI FD
+     */
     fd = SampleOpenMipiTxFd();
     if (fd < 0) {
         return HI_FAILURE;
     }
 	*mipiFD = fd;
 
-    /* SET MIPI Tx Dev ATTR */
+    /*
+     * 设置MIPI Tx设备属性
+     * Set MIPI Tx device attribution
+     */
     s32Ret = SampleSetMipiTxDevAttr(fd);
     if (s32Ret != HI_SUCCESS) {
         return s32Ret;
@@ -912,13 +945,19 @@ HI_S32 SAMPLE_VO_CONFIG_MIPI(HI_S32* mipiFD)
     system("echo 1 > /sys/class/gpio/gpio5/value");
     usleep(20000); // 20000: The process hangs for a period of time, in microseconds
 
-    /* CONFIG MIPI Tx INITIALIZATION SEQUENCE */
+    /*
+     * 配置MIPI Tx初始化序列
+     * Config MIPI Tx initialization sequence
+     */
     s32Ret = SampleVoInitMipiTxScreen(fd);
     if (s32Ret != HI_SUCCESS) {
         return s32Ret;
     }
 
-    /* ENABLE MIPI Tx DEV */
+    /*
+     * 启用MIPI Tx设备
+     * Enable MIPI Tx device
+     */
     s32Ret = SAMPLE_VO_ENABLE_MIPITx(fd);
     if (s32Ret != HI_SUCCESS) {
         return s32Ret;
@@ -927,7 +966,10 @@ HI_S32 SAMPLE_VO_CONFIG_MIPI(HI_S32* mipiFD)
     return s32Ret;
 }
 
-/* get mipi device Height and width */
+/*
+ * 获得mipi设备的宽和高
+ * Get mipi device Height and width
+ */
 HI_S32 SampleCommVoGetWhMipi(VO_INTF_SYNC_E enIntfSync, HI_U32* pu32W, HI_U32* pu32H, HI_U32* pu32Frm)
 {
     switch (enIntfSync) {
@@ -997,28 +1039,42 @@ HI_S32 SampleCommVoStartDevMipi(VO_DEV VoDev, VO_PUB_ATTR_S* pstPubAttr)
     stUserInfo.stUserIntfSyncAttr.stUserSyncPll.u32Postdiv2 = 7;
     HI_U32 u32Framerate = 60; // 60: device frame rate
 
-    /* Set the common properties of the video output device */
+    /*
+     * 配置视频输出设备的公共属性
+     * Set the common properties of the video output device
+     */
     s32Ret = HI_MPI_VO_SetPubAttr(VoDev, pstPubAttr);
     if (s32Ret != HI_SUCCESS) {
         SAMPLE_PRT("failed with %#x!\n", s32Ret);
         return HI_FAILURE;
     }
 
-    /* Set the device frame rate under the device user timing */
+    /*
+     * 设置设备用户时序下设备帧率
+     * Set the device frame rate under the device user timing
+     */
     s32Ret = HI_MPI_VO_SetDevFrameRate(VoDev, u32Framerate);
     if (s32Ret != HI_SUCCESS) {
         SAMPLE_PRT("failed with %#x!\n", s32Ret);
         return HI_FAILURE;
     }
 
-    /* Set user interface timing information */
+    /*
+     * 设置用户接口时序信息，用于配置时钟源、时钟大小和时钟分频比
+     *
+     * Set user interface timing information, used to configure clock source,
+     * clock size and clock frequency division ratio
+     */
     s32Ret = HI_MPI_VO_SetUserIntfSyncInfo(VoDev, &stUserInfo);
     if (s32Ret != HI_SUCCESS) {
         SAMPLE_PRT("failed with %#x!\n", s32Ret);
         return HI_FAILURE;
     }
 
-    /* Enable video output device */
+    /*
+     * 启用视频输出设备
+     * Enable video output device
+     */
     s32Ret = HI_MPI_VO_Enable(VoDev);
     if (s32Ret != HI_SUCCESS) {
         SAMPLE_PRT("failed with %#x!\n", s32Ret);
@@ -1094,7 +1150,10 @@ HI_S32 SampleCommVoStartChnMipi(VO_LAYER VoLayer, SAMPLE_VO_MODE_E enMode)
     s32Ret = SampleCommVoStartChnModeMux(enMode);
     SAMPLE_CHECK_EXPR_RET(s32Ret != HI_SUCCESS, s32Ret, "for SampleCommVoStartChnModeMux FAIL, s32Ret=%x\n", s32Ret);
 
-    /* Get video layer properties */
+    /*
+     * 获取视频层属性
+     * Get video layer properties
+     */
     s32Ret = HI_MPI_VO_GetVideoLayerAttr(VoLayer, &stLayerAttr);
     SAMPLE_CHECK_EXPR_RET(s32Ret != HI_SUCCESS, s32Ret, "for HI_MPI_VO_GetVideoLayerAttr FAIL, s32Ret=%x\n", s32Ret);
     u32Width  = stLayerAttr.stImageSize.u32Width;
@@ -1125,15 +1184,24 @@ HI_S32 SampleCommVoStartChnMipi(VO_LAYER VoLayer, SAMPLE_VO_MODE_E enMode)
             stChnAttr.bDeflicker        = HI_FALSE;
         }
 
-        /* Set properties for the specified video output channel */
+        /*
+         * 配置指定视频输出通道的属性
+         * Set properties for the specified video output channel
+         */
         s32Ret = HI_MPI_VO_SetChnAttr(VoLayer, i, &stChnAttr);
         SAMPLE_CHECK_EXPR_RET(s32Ret != HI_SUCCESS, s32Ret, "for HI_MPI_VO_SetChnAttr FAIL, s32Ret=%x\n", s32Ret);
 
-        /* Set video output channel rotation angle */
+        /*
+         * 设置指定视频输出通道的旋转角度
+         * Set video output channel rotation angle
+         */
         s32Ret = HI_MPI_VO_SetChnRotation(VoLayer, i, ROTATION_90);
         SAMPLE_CHECK_EXPR_RET(s32Ret != HI_SUCCESS, s32Ret, "for HI_MPI_VO_SetChnRotation FAIL, s32Ret=%x\n", s32Ret);
 
-        /* Enables the specified video output channel */
+        /*
+         * 启用指定的视频输出通道
+         * Enables the specified video output channel
+         */
         s32Ret = HI_MPI_VO_EnableChn(VoLayer, i);
         SAMPLE_CHECK_EXPR_RET(s32Ret != HI_SUCCESS, s32Ret, "for HI_MPI_VO_EnableChn FAIL, s32Ret=%x\n", s32Ret);
     }
@@ -1144,7 +1212,10 @@ HI_S32 SampleCommVoStartChnMipi(VO_LAYER VoLayer, SAMPLE_VO_MODE_E enMode)
 static HI_VOID StVoPubAttrCfg(SAMPLE_VO_CONFIG_S *pstVoConfig)
 {
     HI_ASSERT(pstVoConfig);
-    /* Set and start VO device VoDev */
+    /*
+     * 定义视频输出公共属性结构体
+     * Define the video output public attribute structure
+     */
     stVoPubAttr.enIntfType  = VO_INTF_MIPI;
     stVoPubAttr.enIntfSync  = VO_OUTPUT_USER;
     stVoPubAttr.stSyncInfo.bSynm = 0;
@@ -1183,7 +1254,10 @@ static HI_VOID StLayerAttrCfg(SAMPLE_VO_CONFIG_S *pstVoConfig)
     stLayerAttr.enDstDynamicRange     = pstVoConfig->enDstDynamicRange;
 }
 
-/* start vo to mipi lcd */
+/*
+ * 启动VO到MIPI lcd通路
+ * Start VO to MIPI lcd
+ */
 HI_S32 SampleCommVoStartMipi(SAMPLE_VO_CONFIG_S *pstVoConfig)
 {
     HI_S32 s32Ret;
@@ -1192,20 +1266,29 @@ HI_S32 SampleCommVoStartMipi(SAMPLE_VO_CONFIG_S *pstVoConfig)
     StVoPubAttrCfg(pstVoConfig);
     s32Ret = SampleCommVoStartDevMipi(pstVoConfig->VoDev, &stVoPubAttr);
     SAMPLE_CHECK_EXPR_RET(s32Ret != HI_SUCCESS, s32Ret, "StartDevMipi FAIL, ret=%x\n", s32Ret);
-    /* Set and start layer VoDev */
+    /*
+     * 获得MIPI设备的宽和高
+     * Get MIPI device Height and width
+     */
     s32Ret = SampleCommVoGetWhMipi(stVoPubAttr.enIntfSync,
         &stLayerAttr.stDispRect.u32Width, &stLayerAttr.stDispRect.u32Height, &stLayerAttr.u32DispFrmRt);
     SAMPLE_CHECK_EXPR_GOTO(s32Ret != HI_SUCCESS, FAIL, "VoGetWhMipi fail, err(%#x)\n", s32Ret);
 
     StLayerAttrCfg(pstVoConfig);
 
-    /* Set display rectangle if changed */
+    /*
+     * 如果存在变化，设置显示矩形框
+     * Set display rectangle if changed
+     */
     if (memcmp(&pstVoConfig->stDispRect, &stDefDispRect, sizeof(RECT_S)) != 0) {
         memcpy_s(&stLayerAttr.stDispRect, sizeof(stLayerAttr.stDispRect),
             &pstVoConfig->stDispRect, sizeof(RECT_S));
     }
 
-    /* Set image size if changed */
+    /*
+     * 如果存在变化，设置图片大小
+     * Set image size if changed
+     */
     if (memcmp(&pstVoConfig->stImageSize, &stDefImageSize, sizeof(SIZE_S)) != 0) {
         memcpy_s(&stLayerAttr.stImageSize, sizeof(stLayerAttr.stImageSize),
             &pstVoConfig->stImageSize, sizeof(SIZE_S));
@@ -1214,12 +1297,18 @@ HI_S32 SampleCommVoStartMipi(SAMPLE_VO_CONFIG_S *pstVoConfig)
     stLayerAttr.stImageSize.u32Height = stLayerAttr.stDispRect.u32Height = 800; // 800: video layer canvas Height
 
     if (pstVoConfig->u32DisBufLen) {
-        /* Set buffer length */
+        /*
+         * 设置显示缓冲的长度
+         * Set buffer length
+         */
         s32Ret = HI_MPI_VO_SetDisplayBufLen(pstVoConfig->VoDev, pstVoConfig->u32DisBufLen);
         SAMPLE_CHECK_EXPR_GOTO(s32Ret != HI_SUCCESS, FAIL, "HI_MPI_VO_SetDisplayBufLen fail, err(%#x)\n", s32Ret);
     }
     if (VO_PART_MODE_MULTI == pstVoConfig->enVoPartMode) {
-        /* Set the segmentation mode of the video layer */
+        /*
+         * 设置视频层的分割模式
+         * Set the segmentation mode of the video layer
+         */
         s32Ret = HI_MPI_VO_SetVideoLayerPartitionMode(pstVoConfig->VoDev, pstVoConfig->enVoPartMode);
         SAMPLE_CHECK_EXPR_GOTO(s32Ret != HI_SUCCESS, FAIL, "SetVideoLayerMode fail, err(%#x)\n", s32Ret);
     }
@@ -1252,7 +1341,10 @@ static HI_VOID Pause(HI_VOID)
     (void)getchar();
 }
 
-/* init ViCfg */
+/*
+ * 初始化VI配置
+ * Init ViCfg
+ */
 void ViCfgInit(ViCfg* self)
 {
     HI_ASSERT(self);
@@ -1269,7 +1361,10 @@ void ViCfgInit(ViCfg* self)
     self->astViInfo[0].stSnsInfo.s32BusId = 0;
 }
 
-/* Set VI DEV information */
+/*
+ * 设置VI设备信息
+ * Set VI device information
+ */
 void ViCfgSetDev(ViCfg* self, int devId, WDR_MODE_E wdrMode)
 {
     HI_ASSERT(self);
@@ -1279,7 +1374,10 @@ void ViCfgSetDev(ViCfg* self, int devId, WDR_MODE_E wdrMode)
     self->astViInfo[0].stDevInfo.enWDRMode = (int)wdrMode < 0 ? WDR_MODE_NONE : wdrMode;
 }
 
-/* Set the PIPE information of the VI */
+/*
+ * 设置VI的PIPE信息
+ * Set the PIPE information of the VI
+ */
 void ViCfgSetPipe(ViCfg* self, int pipe0Id, int pipe1Id, int pipe2Id, int pipe3Id)
 {
     HI_ASSERT(self);
@@ -1290,7 +1388,10 @@ void ViCfgSetPipe(ViCfg* self, int pipe0Id, int pipe1Id, int pipe2Id, int pipe3I
     self->astViInfo[0].stPipeInfo.aPipe[APIPE3] = pipe3Id;
 }
 
-/* Set up the VI channel */
+/*
+ * 设置VI通道
+ * Set up the VI channel
+ */
 void ViCfgSetChn(ViCfg* self, int chnId, PIXEL_FORMAT_E pixFormat,
     VIDEO_FORMAT_E videoFormat, DYNAMIC_RANGE_E dynamicRange)
 {
@@ -1308,7 +1409,10 @@ void ViCfgSetChn(ViCfg* self, int chnId, PIXEL_FORMAT_E pixFormat,
         (int)dynamicRange < 0 ? DYNAMIC_RANGE_SDR8 : dynamicRange;
 }
 
-/* Initialize VpssCfg */
+/*
+ * 初始化VPSS配置
+ * Init VpssCfg
+ */
 void VpssCfgInit(VpssCfg* self)
 {
     HI_ASSERT(self);
@@ -1319,7 +1423,10 @@ void VpssCfgInit(VpssCfg* self)
     self->chnNum = 0;
 }
 
-/* Set up VPSS Group */
+/*
+ * 设置VPSS组
+ * Set up VPSS Group
+ */
 void VpssCfgSetGrp(VpssCfg* self,
     int grpId, const VPSS_GRP_ATTR_S* grpAttr, int maxWidth, int maxHeight)
 {
@@ -1341,7 +1448,10 @@ void VpssCfgSetGrp(VpssCfg* self,
     }
 }
 
-/* Add a VPSS channel */
+/*
+ * 增加一个VPSS通道
+ * Add a VPSS channel
+ */
 VPSS_CHN_ATTR_S* VpssCfgAddChn(VpssCfg* self,
     int chnId, const VPSS_CHN_ATTR_S* chnAttr, int width, int height)
 {
@@ -1373,13 +1483,20 @@ VPSS_CHN_ATTR_S* VpssCfgAddChn(VpssCfg* self,
     return &chnCfg->attr;
 }
 
-/* Start VPSS according to VpssCfg */
+/*
+ * 根据VPSS配置来启动VPSS
+ * Start VPSS according to VPSS config
+ */
 int VpssStart(const VpssCfg* cfg)
 {
     HI_ASSERT(cfg);
     VPSS_GRP grpId = cfg->grpId;
     HI_S32 ret;
 
+    /*
+     * 创建一个VPSS GROUP
+     * Create a VPSS GROUP
+     */
     ret = HI_MPI_VPSS_CreateGrp(grpId, &cfg->grpAttr);
     if (ret != 0) {
         SAMPLE_PRT("HI_MPI_VPSS_CreateGrp(%d) FAIL, ret=%#x\n", grpId, ret);
@@ -1387,12 +1504,20 @@ int VpssStart(const VpssCfg* cfg)
     }
 
     for (int i = 0; i < cfg->chnNum; i++) {
+        /*
+         * 设置VPSS通道属性
+         * Set VPSS channel properties
+         */
         ret = HI_MPI_VPSS_SetChnAttr(grpId, cfg->chnCfgs[i].id, &cfg->chnCfgs[i].attr);
         if (ret != 0) {
             SAMPLE_PRT("HI_MPI_VPSS_SetChnAttr(%d) FAIL, ret=%#x\n", cfg->chnCfgs[i].id, ret);
             return ret;
         }
 
+        /*
+         * 启用VPSS通道
+         * Enable VPSS channel
+         */
         ret = HI_MPI_VPSS_EnableChn(grpId, cfg->chnCfgs[i].id);
         if (ret != 0) {
             SAMPLE_PRT("HI_MPI_VPSS_EnableChn(%d) FAIL, ret=%#x\n", cfg->chnCfgs[i].id, ret);
@@ -1400,6 +1525,10 @@ int VpssStart(const VpssCfg* cfg)
         }
     }
 
+    /*
+     * 启用VPSS GROUP
+     * Enable VPSS GROUP
+     */
     ret = HI_MPI_VPSS_StartGrp(grpId);
     if (ret != 0) {
         SAMPLE_PRT("HI_MPI_VPSS_StartGrp(%d) FAIL, ret=%#x\n", grpId, ret);
@@ -1408,13 +1537,19 @@ int VpssStart(const VpssCfg* cfg)
     return HI_SUCCESS;
 }
 
-/* Terminate VIs started with ViCfg */
+/*
+ * 终止使用ViCfg启动的VI
+ * Terminate VI started with ViCfg
+ */
 int ViStop(const ViCfg* viCfg)
 {
     return SAMPLE_COMM_VI_StopVi((ViCfg*)viCfg);
 }
 
-/* Terminate VPSS started with VpssCfg */
+/*
+ * 停止使用VpssCfg启动的VPSS
+ * Terminate VPSS started with VpssCfg
+ */
 int VpssStop(const VpssCfg* cfg)
 {
     HI_ASSERT(cfg);
@@ -1422,19 +1557,31 @@ int VpssStop(const VpssCfg* cfg)
     HI_S32 ret;
 
     for (int i = 0; i < cfg->chnNum; i++) {
+        /*
+         * 禁用VPSS通道
+         * Disable VPSS channel
+         */
         ret = HI_MPI_VPSS_DisableChn(grpId, cfg->chnCfgs[i].id);
         if (ret != 0) {
             SAMPLE_PRT("HI_MPI_VPSS_DisableChn(%d, %d) FAIL, ret=%#x\n", grpId, cfg->chnCfgs[i].id, ret);
             return ret;
         }
     }
-
+    
+    /*
+     * 禁用VPSS GROUP
+     * Stop VPSS GROUP
+     */
     ret = HI_MPI_VPSS_StopGrp(grpId);
     if (ret != 0) {
         SAMPLE_PRT("HI_MPI_VPSS_StopGrp(%d) FAIL, ret=%#x\n", grpId, ret);
         return ret;
     }
 
+    /*
+     * 销毁一个VPSS GROUP
+     * Destroy a VPSS GROUP
+     */
     ret = HI_MPI_VPSS_DestroyGrp(grpId);
     if (ret != 0) {
         SAMPLE_PRT("HI_MPI_VPSS_DestroyGrp(%d) FAIL, ret=%#x\n", grpId, ret);
@@ -1443,7 +1590,10 @@ int VpssStop(const VpssCfg* cfg)
     return HI_SUCCESS;
 }
 
-/* Start VI according to ViCfg */
+/*
+ * 根据VI配置来启动VI
+ * Start VI according to ViCfg
+ */
 int ViStart(const ViCfg* viCfg)
 {
     static const uint32_t frmRateDef = 30;
@@ -1458,7 +1608,10 @@ int ViStart(const ViCfg* viCfg)
         return ret;
     }
 
-    // Set ISP statistics interval, from histm.sample_enc
+    /*
+     * 通过Sensor型号来获取帧率
+     * Get the frame rate through the Sensor model
+     */
     SAMPLE_COMM_VI_GetFrameRateBySensor(snsType, &frmRate);
     ret = HI_MPI_ISP_GetCtrlParam(viCfg->astViInfo[0].stPipeInfo.aPipe[0], &ispCtrlParam);
     if (ret != 0) {
@@ -1482,7 +1635,10 @@ int ViStart(const ViCfg* viCfg)
     return HI_SUCCESS;
 }
 
-/* bind VI to VPSS */
+/*
+ * 将VI绑定到VPSS
+ * Bind VI to VPSS
+ */
 int ViBindVpss(VI_PIPE viPipe, VI_CHN viChn, VPSS_GRP vpssGrp)
 {
     MPP_CHN_S srcChn;
@@ -1505,7 +1661,10 @@ int ViBindVpss(VI_PIPE viPipe, VI_CHN viChn, VPSS_GRP vpssGrp)
     return ret;
 }
 
-/* new MppSess */
+/*
+ * 新的MppSess
+ * New MppSess
+ */
 static MppSess* MppSessNew(void)
 {
     MppSess *sess = (MppSess*)malloc(sizeof(*sess));
@@ -1525,7 +1684,10 @@ static MppSess* MppSessNew(void)
     return sess;
 }
 
-/* Create and start {VI->VPSS}MppSess */
+/*
+ * 创建并启动{VI->VPSS}MppSess
+ * Create and start {VI->VPSS}MppSess
+ */
 int ViVpssCreate(MppSess** sess, const ViCfg* viCfg, const VpssCfg* vpssCfg)
 {
     HI_ASSERT(sess && viCfg && vpssCfg);
@@ -1547,7 +1709,7 @@ int ViVpssCreate(MppSess** sess, const ViCfg* viCfg, const VpssCfg* vpssCfg)
     SAMPLE_CHECK_EXPR_GOTO(ret != HI_SUCCESS, FAIL3,
         "vi bind vpss fail, err(%#x)\n", ret);
 
-    MppSess *self = MppSessNew(); // todo:realease malloc
+    MppSess *self = MppSessNew();
     *sess = self;
     self->viCfg = *viCfg;
     self->vpssCfg = *vpssCfg;
@@ -1587,14 +1749,20 @@ HI_VOID StVbParamCfg(VbCfg *self)
     // 2: The number of buffer pools that can be accommodated in the entire system
     self->u32MaxPoolCnt              = 2;
 
-    /* get picture buffer size */
+    /*
+     * 获取一帧图片的buffer大小
+     * Get picture buffer size
+     */
     g_lcdMediaInfo.u32BlkSize = COMMON_GetPicBufferSize(g_lcdMediaInfo.stSize.u32Width, g_lcdMediaInfo.stSize.u32Height,
         SAMPLE_PIXEL_FORMAT, DATA_BITWIDTH_8, COMPRESS_MODE_SEG, DEFAULT_ALIGN);
     self->astCommPool[0].u64BlkSize  = g_lcdMediaInfo.u32BlkSize;
     // 10: Number of cache blocks per cache pool. Value range: (0, 10240]
     self->astCommPool[0].u32BlkCnt   = 10;
 
-    /* get raw buffer size */
+    /*
+     * 获取raw buffer的大小
+     * Get raw buffer size
+     */
     g_lcdMediaInfo.u32BlkSize = VI_GetRawBufferSize(g_lcdMediaInfo.stSize.u32Width, g_lcdMediaInfo.stSize.u32Height,
         PIXEL_FORMAT_RGB_BAYER_16BPP, COMPRESS_MODE_NONE, DEFAULT_ALIGN);
     self->astCommPool[1].u64BlkSize  = g_lcdMediaInfo.u32BlkSize;
@@ -1613,39 +1781,60 @@ HI_VOID ViPramCfg(HI_VOID)
 }
 
 /*
- * Display the data collected by sensor to LCD screen
- * VI->VPSS->VO->MIPI
+ * 将sensor采集的图像显示在LCD屏幕上，即视频输入->视频处理子系统->视频输出->显示屏
+ * Display the data collected by sensor to LCD screen, VI->VPSS->VO->MIPI
  */
 int SampleVioVpssVoMipi(void)
 {
     HI_S32             s32Ret;
     HI_S32             fd = 0;
 
-    /* config vi */
+    /*
+     * 配置VI参数
+     * Config VI parameter
+     */
     ViPramCfg();
 
-    /* get picture size */
+    /*
+     * 通过Sensor型号获取enPicSize
+     * Obtain enPicSize through the Sensor type
+     */
     s32Ret = SAMPLE_COMM_VI_GetSizeBySensor(g_lcdMediaInfo.viCfg.astViInfo[0].stSnsInfo.enSnsType,
         &g_lcdMediaInfo.enPicSize);
     SAMPLE_CHECK_EXPR_RET(s32Ret != HI_SUCCESS, s32Ret, "get picture size by sensor failed, s32Ret=%#x\n", s32Ret);
 
-    /* get picture size(w*h), according enPicSize */
+    /*
+     * 根据enPicSize，得到图片的宽高
+     * Get picture size(w*h), according enPicSize
+     */
     s32Ret = SAMPLE_COMM_SYS_GetPicSize(g_lcdMediaInfo.enPicSize, &g_lcdMediaInfo.stSize);
     SAMPLE_CHECK_EXPR_RET(s32Ret != HI_SUCCESS, s32Ret, "get picture size failed, s32Ret=%#x\n", s32Ret);
     SAMPLE_PRT("AIC: snsMaxSize=%ux%u\n", g_lcdMediaInfo.stSize.u32Width, g_lcdMediaInfo.stSize.u32Height);
 
-    /* config vb */
+    /*
+     * 配置VB参数
+     * Config VB parameter
+     */
     StVbParamCfg(&g_lcdMediaInfo.vbCfg);
 
-    /* vb init & MPI system init */
+    /*
+     * 视频缓存池初始化以及MPI系统初始化
+     * VB init & MPI system init
+     */
     s32Ret = SAMPLE_COMM_SYS_Init(&g_lcdMediaInfo.vbCfg);
     SAMPLE_CHECK_EXPR_RET(s32Ret != HI_SUCCESS, s32Ret, "system init FAIL, s32Ret=%#x\n", s32Ret);
 
-    /* set VO config to mipi, get mipi device */
+    /*
+     * 设置VO至MIPI通路，获取MIPI设备
+     * Set VO config to MIPI, get MIPI device
+     */
     s32Ret = SAMPLE_VO_CONFIG_MIPI(&fd);
     SAMPLE_CHECK_EXPR_GOTO(s32Ret != HI_SUCCESS, EXIT, "CONFIG MIPI FAIL.s32Ret:0x%x\n", s32Ret);
 
-    /* config vpss */
+    /*
+     * 配置VPSS参数
+     * Config VPSS parameter
+     */
     VpssCfgInit(&g_lcdMediaInfo.vpssCfg);
     VpssCfgSetGrp(&g_lcdMediaInfo.vpssCfg, AIC_VPSS_GRP, NULL,
         g_lcdMediaInfo.stSize.u32Width, g_lcdMediaInfo.stSize.u32Width);
@@ -1658,14 +1847,23 @@ int SampleVioVpssVoMipi(void)
     g_lcdMediaInfo.vpssGrp = AIC_VPSS_GRP;
     g_lcdMediaInfo.vpssChn0 = AIC_VPSS_ZOUT_CHN;
 
-    /* config vo */
+    /*
+     * 配置VO参数
+     * Config VO parameter
+     */
     StVoParamCfg(&g_lcdMediaInfo.voCfg);
 
-    /* start vo */
+    /*
+     * 启动VO到MIPI lcd通路
+     * Start VO to MIPI lcd
+     */
     s32Ret = SampleCommVoStartMipi(&g_lcdMediaInfo.voCfg);
     SAMPLE_CHECK_EXPR_GOTO(s32Ret != HI_SUCCESS, EXIT1, "start vo FAIL. s32Ret: 0x%x\n", s32Ret);
 
-    /* vpss bind vo */
+    /*
+     * VPSS绑定VO
+     * VPSS bind VO
+     */
     s32Ret = SAMPLE_COMM_VPSS_Bind_VO(g_lcdMediaInfo.vpssGrp, g_lcdMediaInfo.vpssChn0, g_lcdMediaInfo.voCfg.VoDev, 0);
     SAMPLE_CHECK_EXPR_GOTO(s32Ret != HI_SUCCESS, EXIT2, "vo bind vpss FAIL. s32Ret: 0x%x\n", s32Ret);
     SAMPLE_PRT("vpssGrp:%d, vpssChn:%d\n", g_lcdMediaInfo.vpssGrp, g_lcdMediaInfo.vpssChn0);
