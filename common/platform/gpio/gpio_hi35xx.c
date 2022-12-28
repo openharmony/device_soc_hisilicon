@@ -236,7 +236,6 @@ static uint32_t Pl061IrqHandleNoShare(uint32_t irq, void *data)
     unsigned int val;
     struct Pl061GpioGroup *group = (struct Pl061GpioGroup *)data;
 
-    HDF_LOGV("%s: >>>>>>>>>>>>enter irq-%u<<<<<<<<<<<<<<<", __func__, irq);
     if (data == NULL) {
         HDF_LOGW("%s: data is NULL!", __func__);
         return HDF_ERR_INVALID_PARAM;
