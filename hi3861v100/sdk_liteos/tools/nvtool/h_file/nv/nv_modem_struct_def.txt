@@ -221,5 +221,5 @@ typedef struct {
 } hi_nv_uart_port_alloc;
 
 typedef struct {
-    hi_u8 nv_dev_attest_net[256];
+    hi_u8 nv_dev_attest_net[164];
 } hi_nv_xts_dev_attest_net_cfg;
