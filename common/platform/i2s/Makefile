@@ -25,7 +25,6 @@ LOCAL_SRCS += i2s_hi35xx.c \
               i2s_codec_hi35xx.c \
 
 LOCAL_CFLAGS += -fstack-protector-strong -Wextra -Wall -Werror -fsigned-char -fno-strict-aliasing -fno-common
-LOCAL_CFLAGS += -Wno-unused-but-set-variable
 
 include $(HDF_DRIVER)
 
