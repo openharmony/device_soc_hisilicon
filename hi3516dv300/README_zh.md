@@ -67,7 +67,7 @@
 ## 编译构建<a name="section137768191623"></a>
 
 standard linux：
-./build.sh --product-name Hi3516DV300
+./build.sh --product-name hispark_taurus_standard
 
 small/mini：
 hb set
