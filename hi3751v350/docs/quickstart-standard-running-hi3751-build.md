@@ -49,4 +49,4 @@ OpenHarmony支持hb和build.sh两种编译方式。此处介绍hb方式，build.
    > ![icon-notice.gif](public_sys-resources/icon-notice.gif) **须知：**
    > 编译结果文件及编译日志文件获取路径：out/hispark_phoenix。
 
-[standard-reference]: https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-standard-reference.md
+[standard-reference]: https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-pkg-common-build.md

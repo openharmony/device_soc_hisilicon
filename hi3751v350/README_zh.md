@@ -97,9 +97,10 @@ Ubuntu: 编译构建
 IDE方式完全采用DevEco Device Tool进行一站式开发，编译依赖工具的<b>安装</b>及<b>编译</b>、<b>烧录</b>、<b>运行</b>都通过IDE可视化操作, 这种方式需要在Windows和Ubuntu系统上安装的DevEco Device Tool 3.0 Release版本以上。
 
    > ![icon-note.gif](docs/public_sys-resources/icon-note.gif) **说明：**
-   > 详细步骤请参考DOC仓[搭建IDE混合开发环境][ide_standard_envsetup]。
+   > 详细步骤请参考DOC仓[搭建Ubuntu环境][ide_standard_envsetup_ubuntu]和[搭建Windows环境][ide_standard_envsetup_win]。
 
-[ide_standard_envsetup]: https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-ide-standard-env-setup-win-ubuntu.md
+[ide_standard_envsetup_ubuntu]: https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-ide-env-ubuntu.md
+[ide_standard_envsetup_win]: https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-ide-env-win.md
 
 ### 安装包方式<a name = "section204672979943"></a>
 
@@ -109,7 +110,7 @@ IDE方式完全采用DevEco Device Tool进行一站式开发，编译依赖工�
    > 详细步骤请参考DOC仓[搭建标准系统环境][standard-env-setup], 若使用HiTool工具进行烧录，可不安装IDE，仅按照参考文档安装必要的库和工具。
 
 [OpenHarmony docker]: https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/get-code/gettools-acquire.md
-[standard-env-setup]: https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-standard-env-setup.md
+[standard-env-setup]: https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-overview.md
 
 ## 代码下载<a name="section119744591305"></a>
 
@@ -162,7 +163,7 @@ IDE方式编译请先按照[导入工程][create_project]导入源码工程到ID
 HiTool方式烧录直接选择分区配置文件//out/hispark_phoenix/packages/phone/images/Hi3751V350-slaveboot-emmc.xml后烧录，不做赘述。  
 通过IDE烧录请参考[IDE烧录](./docs/quickstart-ide-standard-running-hi3751-burning.md)；前面使用安装包方式编译，再使用IDE工具烧录请参考[烧录](./docs/quickstart-standard-running-hi3751-burning.md)， 与前者的主要差异是需要先导入工程，再进行同样的烧录步骤。
 
-[create_project]: https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-ide-standard-create-project.md
+[create_project]: https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-ide-import-project.md
 
 ## 调试<a name="section1312121216216"></a>
 
