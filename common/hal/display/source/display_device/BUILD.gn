@@ -74,8 +74,8 @@ ohos_shared_library("hisi_display_device") {
   external_deps = [
     "c_utils:utils",
     "hdf_core:libhdf_utils",
-    "hitrace_native:hitrace_meter",
-    "hiviewdfx_hilog_native:libhilog",
+    "hilog:libhilog",
+    "hitrace:hitrace_meter",
   ]
 
   symlink_target_name = [ "libdisplay_layer.z.so" ]

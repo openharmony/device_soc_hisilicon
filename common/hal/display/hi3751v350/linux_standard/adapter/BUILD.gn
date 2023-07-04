@@ -31,7 +31,7 @@ ohos_shared_library("display_adapter_impl") {
     "//device/soc/hisilicon/hi3751v350/sdk_linux:libfb_mpdi_adapter.z.so",
   ]
 
-  external_deps = [ "hiviewdfx_hilog_native:libhilog" ]
+  external_deps = [ "hilog:libhilog" ]
 
   install_images = [ "system" ]
   subsystem_name = "hdf"
