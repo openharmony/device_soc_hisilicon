@@ -44,7 +44,7 @@ ohos_shared_library("hisi_display_gralloc") {
     "src",
   ]
 
-  external_deps = [ "hiviewdfx_hilog_native:libhilog" ]
+  external_deps = [ "hilog:libhilog" ]
 
   deps = [
     "../utils:display_utils",
