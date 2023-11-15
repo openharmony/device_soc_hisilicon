@@ -31,11 +31,13 @@ HI_START_HEADER
 #define EOK 0
 #endif
 
-#ifndef errno_t
+#ifndef ERRNO_T
+#define ERRNO_T
 typedef int errno_t;
 #endif
 
-#ifndef size_t
+#ifndef SIZE_T
+#define SIZE_T
 typedef unsigned int size_t;
 #endif
 
