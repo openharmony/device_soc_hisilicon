@@ -17,13 +17,17 @@ function main(){
     echo "###### $BOARD_NAME:$OS_TYPE ######"
 
     FF_CONFIG_SH=disable_decoder_config.sh
-    FFMPEG_ORIGN_DIR=$ROOT_DIR/third_party/ffmpeg
+    FFMPEG_ORIGN=$ROOT_DIR/third_party/ffmpeg/old-version/ffmpeg-4.4.1.tar.gz
     FFMPEG_DIR=$CUR_DIR/ffmpeg
 
     ############################################
     # copy ffmpeg file to current path
     ############################################
-    cp -r $FFMPEG_ORIGN_DIR $CUR_DIR
+    mkdir -p ${FFMPEG_DIR}
+    cp $FFMPEG_ORIGN ${FFMPEG_DIR}
+    cd ${FFMPEG_DIR}
+    tar -xvf ffmpeg-4.4.1.tar.gz
+    cd -
 
     ############################################
     # copy sh to ffmpeg file patch
