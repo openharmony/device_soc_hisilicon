@@ -13,14 +13,6 @@
  * limitations under the License.
  */
 
-/**
-* @file hi_sal.h
-*
-* Copyright (c) Hisilicon Technologies Co., Ltd. 2019. All rights reserved.  \n
-*
-* Description: sal interfaces. \n
-*/
-
 #ifndef __HI_SAL_H__
 #define __HI_SAL_H__
 #include <hi_types.h>
