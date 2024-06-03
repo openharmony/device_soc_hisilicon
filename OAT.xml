@@ -213,6 +213,7 @@ Note:If the text contains special characters, please escape them according to th
 				<filteritem type="filepath" name="hi3751v350/sdk_linux/bin/ohos_drv_mgr" desc="Describe the reason for filtering scan results"/>
 				<filteritem type="filepath" name="hi3751v350/sdk_linux/source/device/board/hisilicon/hispark_phoenix/peripherals/bluetooth/bluetooth/rtkbt/Firmware/BT/rtl8723d_fw" desc="Describe the reason for filtering scan results"/>
 				<filteritem type="filepath" name="hi3751v350/sdk_linux/source/device/board/hisilicon/hispark_phoenix/peripherals/bluetooth/bluetooth/rtkbt/Firmware/BT/rtl8723d_config" desc="Describe the reason for filtering scan results"/>
+                <filteritem type="filename" name="*.jpg|*.gif" desc="demo pictures"/>
 			</filefilter>
  
 		</filefilterlist>
