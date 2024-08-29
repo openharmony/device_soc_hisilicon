@@ -1,0 +1,44 @@
+# Copyright (c) Huawei Technologies Co., Ltd. 2020. All rights reserved.
+
+import("//build/lite/config/component/lite_component.gni")
+
+declare_args() {
+  build_ws63_sdk_open = false
+  enable_hos_vendor_wifiiot_xts = false
+}
+
+group("nearllink_sdk") {
+  deps = [ ":sdk" ]
+}
+
+build_ext_component("run_sdk_build") {
+  exec_path = rebase_path(".", root_build_dir)
+  outdir = rebase_path(root_out_dir)
+  command = "sh hm_build.sh $outdir $build_ws63_sdk_open"
+#  command = "python3 build.py -c ws63-liteos-app"
+#  if (host_os == "win") {
+#    command = "sh hm_build.sh $outdir win"
+#  } else {
+#    command = "sh hm_build.sh $outdir linux"
+#  }
+  deps = [
+    ":sdk",
+    "//base/security/device_auth/frameworks/deviceauth_lite:hichainsdk",
+    "//build/lite:ohos",
+  ]
+  if (enable_hos_vendor_wifiiot_xts) {
+    deps += [ "//build/lite/config/subsystem/xts:xts" ]
+  }
+}
+
+lite_component("sdk") {
+  features = []
+
+  deps = [
+    "//build/lite/config/component/cJSON:cjson_static",
+    "//device/soc/hisilicon/ws63v100/adapter/hals/communication/wifi_lite/wifiservice",
+    "//device/soc/hisilicon/ws63v100/adapter/hals/communication/sle_lite",
+    "//device/soc/hisilicon/ws63v100/adapter/hals/communication/ble_lite",
+#   "//device/soc/hisilicon/ws63v100/adapter/kal",
+  ]
+}

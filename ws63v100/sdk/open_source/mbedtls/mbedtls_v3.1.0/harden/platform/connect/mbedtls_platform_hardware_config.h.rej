@@ -1,0 +1,23 @@
+--- connect/mbedtls_platform_hardware_config.h	2024-04-08 11:37:39.000000000 +0800
++++ open_source/mbedtls/mbedtls_v3.1.0/harden/platform/connect/mbedtls_platform_hardware_config.h	2024-08-08 08:56:02.775736463 +0800
+@@ -57,7 +57,7 @@
+ 
+ // #define MBEDTLS_ECDSA_SIGN_ALT
+ 
+-// #define MBEDTLS_ECC_GEN_KEY_ALT
++#define MBEDTLS_ECC_GEN_KEY_ALT
+ 
+ #define MBEDTLS_SHA1_ALT
+ 
+@@ -69,9 +69,9 @@
+ 
+ #define MBEDTLS_PBKDF2_HMAC_ALT
+ 
+-#define MBEDTLS_ECP_MUL_ALT
++//#define MBEDTLS_ECP_MUL_ALT
+ 
+-#define MBEDTLS_INNER_ECDSA_VERIFY_RESTARTABLE_ALT
++//#define MBEDTLS_INNER_ECDSA_VERIFY_RESTARTABLE_ALT
+ 
+ // #define MBEDTLS_ECDSA_GENKEY_ALT
+ #define MBEDTLS_ECP_RESTARTABLE

@@ -1,0 +1,10 @@
+import("//build/lite/config/component/lite_component.gni")
+
+static_library("hal_update_static") {
+ sources = [ "upg_xts_adapt.c" ]
+ include_dirs = [
+ "//base/update/sys_installer_lite/hals",
+ "//base/update/sys_installer_lite/interfaces/kits",
+ "//device/soc/hisilicon/ws63v100/sdk/include",
+ ]
+}

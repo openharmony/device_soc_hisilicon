@@ -1,0 +1,9 @@
+import("//build/lite/config/component/lite_component.gni")
+
+static_library("hal_file_static") {
+ sources = [ "src/littlefs_xts_adapt.c" ]
+ include_dirs = [
+ "//commonlibrary/utils_lite/hals/file",
+ "//device/soc/hisilicon/ws63v100/sdk/include",
+ ]
+}

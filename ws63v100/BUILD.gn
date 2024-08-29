@@ -1,0 +1,7 @@
+# Copyright (C) 2024 Hisilicon (Shanghai) Technologies Co., Ltd. All rights reserved.
+
+
+
+group("ws63v100") {
+    deps = [ "sdk:run_sdk_build"]
+}
