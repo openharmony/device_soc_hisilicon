@@ -25,7 +25,7 @@ static_library("sle_lite") {
     "//device/soc/hisilicon/ws63v100/sdk/kernel/osal/include/memory",
     "//device/soc/hisilicon/ws63v100/sdk/include",
     "//device/soc/hisilicon/ws63v100/sdk/include/middleware/services/bts/sle",
-    "//foundation/communication/sle",
+    "//device/soc/hisilicon/ws63v100/adapter/hals/communication/sle_lite/include",
   ]
 }
  if (ohos_kernel_type == "liteos_m") {
