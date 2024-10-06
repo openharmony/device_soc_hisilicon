@@ -3957,14 +3957,14 @@ static hi_u32 hmac_config_connect_dev(const mac_vap_stru *mac_vap, mac_cfg80211_
         mac_device_stru *mac_dev = mac_res_get_dev();
         if (mac_device_is_p2p_connected(mac_dev) == HI_SUCCESS) {
             oam_warning_log0(mac_vap->vap_id, OAM_SF_CFG, "{wapi connect failed for p2p having been connected!.}");
-            oal_spin_unlock(&(bss_mgmt->st_lock));
+            oal_spin_unlock_bh(&(bss_mgmt->st_lock));
             return HI_FAIL;
         }
     }
 #endif
 
     /* 解锁 */
-    oal_spin_unlock(&(bss_mgmt->st_lock));
+    oal_spin_unlock_bh(&(bss_mgmt->st_lock));
 
 #ifdef _PRE_WLAN_FEATURE_P2P
     /* 设置P2P/WPS IE 信息到 vap 结构体中 */
@@ -4008,21 +4008,21 @@ hi_u32 hmac_config_connect_hmac(mac_vap_stru *mac_vap, mac_cfg80211_connect_secu
     /* 获取管理扫描的bss结果的结构体 */
     hmac_bss_mgmt_stru *bss_mgmt = &(hmac_dev->scan_mgmt.scan_record_mgmt.bss_mgmt); /* 管理扫描的bss结果的结构体 */
     /* 对链表删操作前加锁 */
-    oal_spin_lock(&(bss_mgmt->st_lock));
+    oal_spin_lock_bh(&(bss_mgmt->st_lock));
     hmac_scanned_bss_info *scanned_bss_info = hmac_scan_find_scanned_bss_by_bssid(bss_mgmt, connect_param->puc_bssid);
     if (scanned_bss_info == HI_NULL) {
         oam_warning_log3(mac_vap->vap_id, OAM_SF_CFG, "{hmac_config_connect:find bss fail bssid::XX:XX:%02X:%02X:%02X}",
             connect_param->puc_bssid[3], connect_param->puc_bssid[4], connect_param->puc_bssid[5]); /* 3 4 5 元素索引 */
 
         /* 解锁 */
-        oal_spin_unlock(&(bss_mgmt->st_lock));
+        oal_spin_unlock_bh(&(bss_mgmt->st_lock));
         return HI_FAIL;
     }
 
     if (memcmp(connect_param->puc_ssid, scanned_bss_info->bss_dscr_info.ac_ssid, (hi_u32)connect_param->ssid_len)) {
         oam_warning_log0(mac_vap->vap_id, OAM_SF_CFG, "{hmac_config_connect::find the bss failed by ssid.}");
         /* 解锁 */
-        oal_spin_unlock(&(bss_mgmt->st_lock));
+        oal_spin_unlock_bh(&(bss_mgmt->st_lock));
         return HI_FAIL;
     }
 

@@ -93,14 +93,14 @@ hi_void hmac_scan_add_bss_to_list(hmac_scanned_bss_info *scanned_bss, hmac_devic
     scanned_bss->bss_dscr_info.new_scan_bss = HI_TRUE;
 
     /* 对链表写操作前加锁 */
-    oal_spin_lock(&(bss_mgmt->st_lock));
+    oal_spin_lock_bh(&(bss_mgmt->st_lock));
 
     /* 添加扫描结果到链表中，并更新扫描到的bss计数 */
     hi_list_tail_insert_optimize(&(scanned_bss->dlist_head), &(bss_mgmt->bss_list_head));
 
     bss_mgmt->bss_num++;
     /* 解锁 */
-    oal_spin_unlock(&(bss_mgmt->st_lock));
+    oal_spin_unlock_bh(&(bss_mgmt->st_lock));
 }
 
 /* ****************************************************************************
@@ -148,7 +148,7 @@ hi_void hmac_scan_clean_scan_record(hmac_scan_record_stru *scan_record)
     bss_mgmt = &(scan_record->bss_mgmt);
 
     /* 对链表写操作前加锁 */
-    oal_spin_lock(&(bss_mgmt->st_lock));
+    oal_spin_lock_bh(&(bss_mgmt->st_lock));
 
     /* 遍历链表，删除扫描到的bss信息 */
     while (HI_FALSE == hi_is_list_empty_optimize(&(bss_mgmt->bss_list_head))) {
@@ -162,7 +162,7 @@ hi_void hmac_scan_clean_scan_record(hmac_scan_record_stru *scan_record)
     }
 
     /* 对链表写操作前加锁 */
-    oal_spin_unlock(&(bss_mgmt->st_lock));
+    oal_spin_unlock_bh(&(bss_mgmt->st_lock));
 
     /* 2.其它信息清零 */
     if (memset_s(scan_record, sizeof(hmac_scan_record_stru), 0, sizeof(hmac_scan_record_stru)) != EOK) {
@@ -248,7 +248,7 @@ static hi_void hmac_scan_clean_expire_scanned_bss(hmac_scan_record_stru *scan_re
         curr_time_stamp = (hi_u32)hi_get_milli_seconds();
     }
     /* 对链表写操作前加锁 */
-    oal_spin_lock(&(bss_mgmt->st_lock));
+    oal_spin_lock_bh(&(bss_mgmt->st_lock));
 
     /* 遍历链表，删除上一次扫描结果中到期的bss信息 */
     hi_list_for_each_safe(entry, entry_tmp, &(bss_mgmt->bss_list_head)) {
@@ -271,7 +271,7 @@ static hi_void hmac_scan_clean_expire_scanned_bss(hmac_scan_record_stru *scan_re
         oal_free(scanned_bss);
     }
     /* 对链表写操作前加锁 */
-    oal_spin_unlock(&(bss_mgmt->st_lock));
+    oal_spin_unlock_bh(&(bss_mgmt->st_lock));
 
     return;
 }
@@ -298,14 +298,14 @@ mac_bss_dscr_stru *hmac_scan_find_scanned_bss_dscr_by_index(hi_u32 bss_index)
     bss_mgmt = &(hmac_dev->scan_mgmt.scan_record_mgmt.bss_mgmt);
 
     /* 对链表删操作前加锁 */
-    oal_spin_lock(&(bss_mgmt->st_lock));
+    oal_spin_lock_bh(&(bss_mgmt->st_lock));
 
     /* 如果索引大于总共扫描的bss个数，返回异常 */
     if (bss_index >= bss_mgmt->bss_num) {
         oam_warning_log0(0, OAM_SF_SCAN, "{hmac_scan_find_scanned_bss_by_index::no such bss in bss list!}");
 
         /* 解锁 */
-        oal_spin_unlock(&(bss_mgmt->st_lock));
+        oal_spin_unlock_bh(&(bss_mgmt->st_lock));
         return HI_NULL;
     }
 
@@ -317,14 +317,14 @@ mac_bss_dscr_stru *hmac_scan_find_scanned_bss_dscr_by_index(hi_u32 bss_index)
         /* 相同的bss index返回 */
         if (bss_index == loop) {
             /* 解锁 */
-            oal_spin_unlock(&(bss_mgmt->st_lock));
+            oal_spin_unlock_bh(&(bss_mgmt->st_lock));
             return &(scanned_bss->bss_dscr_info);
         }
 
         loop++;
     }
     /* 解锁 */
-    oal_spin_unlock(&(bss_mgmt->st_lock));
+    oal_spin_unlock_bh(&(bss_mgmt->st_lock));
 
     return HI_NULL;
 }
@@ -1126,14 +1126,14 @@ static hi_u32 hmac_scan_proc_scanned_bss_mgmt(hmac_device_stru *hmac_dev, hmac_s
     /* 获取管理扫描的bss结果的结构体 */
     hmac_bss_mgmt_stru *bss_mgmt = &(hmac_dev->scan_mgmt.scan_record_mgmt.bss_mgmt);
     /* 对链表删操作前加锁 */
-    oal_spin_lock(&(bss_mgmt->st_lock));
+    oal_spin_lock_bh(&(bss_mgmt->st_lock));
 
     /* 判断相同bssid的bss是否已经扫描到 */
     hmac_scanned_bss_info *old_scanned_bss =
         hmac_scan_find_scanned_bss_by_bssid(bss_mgmt, new_scanned_bss->bss_dscr_info.auc_bssid);
     if (old_scanned_bss == HI_NULL) {
         /* 解锁 */
-        oal_spin_unlock(&(bss_mgmt->st_lock));
+        oal_spin_unlock_bh(&(bss_mgmt->st_lock));
 
         goto add_bss; /* goto语句使用，lin_t e801告警屏蔽 */
     }
@@ -1156,7 +1156,7 @@ static hi_u32 hmac_scan_proc_scanned_bss_mgmt(hmac_device_stru *hmac_dev, hmac_s
         old_scanned_bss->bss_dscr_info.rssi = new_scanned_bss->bss_dscr_info.rssi;
 
         /* 解锁 */
-        oal_spin_unlock(&(bss_mgmt->st_lock));
+        oal_spin_unlock_bh(&(bss_mgmt->st_lock));
 
         /* 释放申请的存储bss信息的内存 */
         oal_free(new_scanned_bss);
@@ -1170,7 +1170,7 @@ static hi_u32 hmac_scan_proc_scanned_bss_mgmt(hmac_device_stru *hmac_dev, hmac_s
     /* 从链表中将原先扫描到的相同bssid的bss节点删除 */
     hmac_scan_del_bss_from_list_nolock(old_scanned_bss, hmac_dev);
     /* 解锁 */
-    oal_spin_unlock(&(bss_mgmt->st_lock));
+    oal_spin_unlock_bh(&(bss_mgmt->st_lock));
 
     /* 释放内存 */
     oal_free(old_scanned_bss);
