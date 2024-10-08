@@ -960,7 +960,7 @@ hi_void hmac_report_assoc_state_sta(const hmac_vap_stru *hmac_vap, const hi_u8 *
         /* 获取管理扫描的bss结果的结构体 */
         hmac_bss_mgmt_stru *bss_mgmt = &(hmac_dev->scan_mgmt.scan_record_mgmt.bss_mgmt);
         /* 对链表删操作前加锁 */
-        oal_spin_lock(&(bss_mgmt->st_lock));
+        oal_spin_lock_bh(&(bss_mgmt->st_lock));
 
         hmac_scanned_bss_info *scanned_bss_info = hmac_scan_find_scanned_bss_by_bssid(bss_mgmt, mac_addr);
         if (scanned_bss_info == HI_NULL) {
@@ -968,12 +968,12 @@ hi_void hmac_report_assoc_state_sta(const hmac_vap_stru *hmac_vap, const hi_u8 *
                 "{hmac_report_assoc_state_sta::find the bss failed by bssid:XX:XX:XX:%02X:%02X:%02X}",
                 mac_addr[3], mac_addr[4], mac_addr[5]); /* 3:4:5 元素索引 */
             /* 解锁 */
-            oal_spin_unlock(&(bss_mgmt->st_lock));
+            oal_spin_unlock_bh(&(bss_mgmt->st_lock));
             frw_event_free(event_mem);
             return;
         }
         /* 解锁 */
-        oal_spin_unlock(&(bss_mgmt->st_lock));
+        oal_spin_unlock_bh(&(bss_mgmt->st_lock));
 
         oam_info_log0(hmac_vap->base_vap->vap_id, OAM_SF_ASSOC, "{hmac_report_assoc_state_sta::Asoc Report!}");
 
