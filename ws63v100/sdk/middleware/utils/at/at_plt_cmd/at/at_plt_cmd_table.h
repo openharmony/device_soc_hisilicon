@@ -34,6 +34,7 @@ typedef struct {
 
 typedef struct {
     uint32_t                para_map;
+    const char           *delay_time;
 } reboot_args_t;
 
 typedef struct {
@@ -224,6 +225,7 @@ at_ret_t at_get_dump(void);
 
 /* AT+RST */
 at_ret_t at_exe_reset_cmd(void);
+at_ret_t at_set_reset_cmd(const reboot_args_t *args);
 
 /* AT+DATE */
 at_ret_t at_date_cmd(void);
@@ -518,6 +520,16 @@ const at_para_parse_syntax_t date_syntax[] = {
     },
 };
 
+const at_para_parse_syntax_t rst_syntax[] = {
+    {
+        .type = AT_SYNTAX_TYPE_STRING,
+        .last = true,
+        .attribute = AT_SYNTAX_ATTR_MAX_LENGTH,
+        .entry.string.max_length = 32,
+        .offset = offsetof(reboot_args_t,delay_time )
+    },
+};
+
 const at_para_parse_syntax_t customer_rsvd_efuse_syntax[] = {
     {
         .type = AT_SYNTAX_TYPE_STRING,
@@ -804,9 +816,9 @@ const at_cmd_entry_t at_plt_cmd_parse_table[] = {
         "RST",
         8,
         0,
-        NULL,
+        rst_syntax,
         at_exe_reset_cmd,
-        NULL,
+        (at_set_func_t)at_set_reset_cmd,
         NULL,
         NULL,
     },

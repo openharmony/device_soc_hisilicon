@@ -1035,6 +1035,20 @@ at_ret_t at_exe_reset_cmd(void)
     return AT_RET_OK;
 }
 
+at_ret_t at_set_reset_cmd(const reboot_args_t *args)
+{
+    UINT32 delay;
+
+    uapi_watchdog_disable();
+
+    delay = strtoul(args->delay_time,NULL, 10);
+    osal_printk("OK %d \r\n", delay);
+    LOS_TaskDelay(delay);
+
+    plt_reboot();
+    return AT_RET_OK;
+}
+
 static void at_copy_tm(struct tm *dest_tm, const struct tm *src_tm)
 {
     if (src_tm == NULL) {
