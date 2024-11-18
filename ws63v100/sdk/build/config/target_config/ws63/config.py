@@ -89,6 +89,7 @@ target = {
             "hal_iothardware",
             "sle_lite",
             "ble_lite",
+            'printf_adapt',
             'little_fs','littlefs_adapt_ws63',
             "begetutil"   ,"hilog_lite_static", "samgr_adapter", "bootstrap", "fsmanager_static" ,"hal_update_static", "hilog_static", "inithook",   "samgr_source",
             "broadcast", "hal_file_static"  ,"init_log" , "native_file", "udidcomm",
