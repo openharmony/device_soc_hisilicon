@@ -188,7 +188,7 @@ hi_void wal_inform_all_bss(const oal_net_device_stru *netdev, oal_wiphy_stru *wi
 #endif
 
     /* 获取锁 */
-    oal_spin_lock(&(bss_mgmt->st_lock));
+    oal_spin_lock_bh(&(bss_mgmt->st_lock));
 
     /* 遍历扫描到的bss信息 */
     hi_list_for_each(entry, &(bss_mgmt->bss_list_head)) {
@@ -242,7 +242,7 @@ hi_void wal_inform_all_bss(const oal_net_device_stru *netdev, oal_wiphy_stru *wi
     }
 
     /* 解除锁 */
-    oal_spin_unlock(&(bss_mgmt->st_lock));
+    oal_spin_unlock_bh(&(bss_mgmt->st_lock));
 
     oam_warning_log2(vap_id, OAM_SF_SCAN, "{wal_inform_all_bss::%d bss not in regdomain,inform kernal bss num=%d}",
         bss_num_not_in_regdomain, (bss_mgmt->bss_num - bss_num_not_in_regdomain));

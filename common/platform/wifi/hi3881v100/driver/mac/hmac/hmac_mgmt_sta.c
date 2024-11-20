@@ -1242,7 +1242,7 @@ hi_u8 *hmac_sta_find_ie_in_probe_rsp(const mac_vap_stru *mac_vap, hi_u8 eid, hi_
     /* 获取管理扫描的bss结果的结构体 */
     bss_mgmt = &(hmac_dev->scan_mgmt.scan_record_mgmt.bss_mgmt);
 
-    oal_spin_lock(&(bss_mgmt->st_lock));
+    oal_spin_lock_bh(&(bss_mgmt->st_lock));
 
     scanned_bss_info = hmac_scan_find_scanned_bss_by_bssid(bss_mgmt, mac_vap->auc_bssid);
     if (scanned_bss_info == HI_NULL) {
@@ -1250,13 +1250,13 @@ hi_u8 *hmac_sta_find_ie_in_probe_rsp(const mac_vap_stru *mac_vap, hi_u8 eid, hi_
             mac_vap->auc_bssid[3], mac_vap->auc_bssid[4], mac_vap->auc_bssid[5]); /* 3 4 5 元素索引 */
 
         /* 解锁 */
-        oal_spin_unlock(&(bss_mgmt->st_lock));
+        oal_spin_unlock_bh(&(bss_mgmt->st_lock));
         return HI_NULL;
     }
 
     bss_dscr = &(scanned_bss_info->bss_dscr_info);
     /* 解锁 */
-    oal_spin_unlock(&(bss_mgmt->st_lock));
+    oal_spin_unlock_bh(&(bss_mgmt->st_lock));
 
     /* 以IE开头的payload，返回供调用者使用 */
     us_offset = MAC_80211_FRAME_LEN + MAC_TIME_STAMP_LEN + MAC_BEACON_INTERVAL_LEN + MAC_CAP_INFO_LEN;
