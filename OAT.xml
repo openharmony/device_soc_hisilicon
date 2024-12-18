@@ -66,6 +66,7 @@ Note:If the text contains special characters, please escape them according to th
 				<policyitem type="license" name="BSD-3-Clause" path=".*" desc="HiSilicon copyright"/>
 				<policyitem type="copyright" name="HiSilicon (Shanghai) Technologies CO., LIMITED." path=".*" desc="HiSilicon copyright"/>
 				<policyitem type="copyright" name="Free Software Foundation, Inc." path=".*" desc="copyright"/>
+				<policyitem type="copyright" name="HiHope Open Source Organization ." path=".*" desc="copyright"/>
 				<policyitem type="copyright" name="Huawei Technologies Co., Ltd." path=".*" desc="copyright"/>
 				<policyitem type="copyright" name="Free Software Foundation, Inc." path=".*" desc="copyright"/>
 				<policyitem type="copyright" name="The GmSSL Project. All Rights Reserved." path=".*" desc="copyright"/>
