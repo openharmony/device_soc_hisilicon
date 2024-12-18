@@ -1,6 +1,6 @@
 #===============================================================================
 # @brief    cmake file
-# Copyright (c) HiSilicon (Shanghai) Technologies Co., Ltd. 2023-2023. All rights reserved.
+# Copyright (c) 2020 HiSilicon (Shanghai) Technologies CO., LIMITED.
 #===============================================================================
 if(DEFINED CONFIG_SAMPLE_SUPPORT_SPI_MASTER)
     set(SOURCES "${SOURCES}" "${CMAKE_CURRENT_SOURCE_DIR}/spi_master_demo.c" PARENT_SCOPE)

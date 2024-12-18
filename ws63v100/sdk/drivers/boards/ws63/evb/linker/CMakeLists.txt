@@ -1,6 +1,6 @@
 #===============================================================================
 # @brief    cmake file
-# Copyright (c) HiSilicon (Shanghai) Technologies Co., Ltd. 2022-2022. All rights reserved.
+# Copyright (c) 2020 HiSilicon (Shanghai) Technologies CO., LIMITED.
 #===============================================================================
 add_subdirectory_if_exist(ate_wifi_linker)
 add_subdirectory_if_exist(ate_bgle_linker)

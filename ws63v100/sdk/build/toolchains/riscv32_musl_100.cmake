@@ -1,6 +1,6 @@
 #===============================================================================
 # @brief    cmake toolchains
-# Copyright (c) HiSilicon (Shanghai) Technologies Co., Ltd. 2022-2022. All rights reserved.
+# Copyright (c) 2020 HiSilicon (Shanghai) Technologies CO., LIMITED.
 #===============================================================================
 
 function(find_env_exe var full_path exe)

@@ -26,12 +26,13 @@ build_ext_component("run_sdk_build") {
   exec_path = rebase_path(".", root_build_dir)
   outdir = rebase_path(root_out_dir)
   command = "sh hm_build.sh $outdir $build_ws63_sdk_open"
-#  command = "python3 build.py -c ws63-liteos-app"
-#  if (host_os == "win") {
-#    command = "sh hm_build.sh $outdir win"
-#  } else {
-#    command = "sh hm_build.sh $outdir linux"
-#  }
+
+  #  command = "python3 build.py -c ws63-liteos-app"
+  #  if (host_os == "win") {
+  #    command = "sh hm_build.sh $outdir win"
+  #  } else {
+  #    command = "sh hm_build.sh $outdir linux"
+  #  }
   deps = [
     ":sdk",
     "//base/security/device_auth/frameworks/deviceauth_lite:hichainsdk",
@@ -47,9 +48,10 @@ lite_component("sdk") {
 
   deps = [
     "//build/lite/config/component/cJSON:cjson_static",
-    "//device/soc/hisilicon/ws63v100/adapter/hals/communication/wifi_lite/wifiservice",
-    "//device/soc/hisilicon/ws63v100/adapter/hals/communication/sle_lite",
     "//device/soc/hisilicon/ws63v100/adapter/hals/communication/ble_lite",
-#   "//device/soc/hisilicon/ws63v100/adapter/kal",
+    "//device/soc/hisilicon/ws63v100/adapter/hals/communication/sle_lite",
+    "//device/soc/hisilicon/ws63v100/adapter/hals/communication/wifi_lite/wifiservice",
+
+    #   "//device/soc/hisilicon/ws63v100/adapter/kal",
   ]
 }

@@ -1,6 +1,6 @@
 #===============================================================================
 # @brief    cmake file
-# Copyright (c) HiSilicon (Shanghai) Technologies Co., Ltd. 2022-2022. All rights reserved.
+# Copyright (c) 2020 HiSilicon (Shanghai) Technologies CO., LIMITED.
 #===============================================================================
 set(MODULE_NAME "bth")
 if((${CHIP} MATCHES "bs25") AND (${CORE} MATCHES "bt_core"))

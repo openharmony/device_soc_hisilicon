@@ -1,6 +1,6 @@
 #===============================================================================
 # @brief    cmake file
-# Copyright (c) HiSilicon (Shanghai) Technologies Co., Ltd. 2022-2022. All rights reserved.
+# Copyright (c) 2020 HiSilicon (Shanghai) Technologies CO., LIMITED.
 #===============================================================================
 set(MODULE_NAME "bth")
 set(AUTO_DEF_FILE_ID False)

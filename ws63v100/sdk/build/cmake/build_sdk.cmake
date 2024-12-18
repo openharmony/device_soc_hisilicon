@@ -1,6 +1,6 @@
 #===============================================================================
 # @brief    cmake sdk build
-# Copyright (c) HiSilicon (Shanghai) Technologies Co., Ltd. 2022-2022. All rights reserved.
+# Copyright (c) 2020 HiSilicon (Shanghai) Technologies CO., LIMITED.
 #===============================================================================
 
 # copy file or dir to the dest path in sdk

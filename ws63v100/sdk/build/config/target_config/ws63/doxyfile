@@ -126,7 +126,7 @@ REPEAT_BRIEF           = YES
 # the entity):The $name class, The $name widget, The $name file, is, provides,
 # specifies, contains, represents, a, an and the.
 
-ABBREVIATE_BRIEF       = "Copyright (c) HiSilicon (Shanghai) Technologies Co., Ltd. 2022-2022. All rights reserved." \
+ABBREVIATE_BRIEF       = "Copyright (c) 2020 HiSilicon (Shanghai) Technologies CO., LIMITED." \
                          "The $name widget" \
                          "The $name file" \
                          is \

@@ -13,16 +13,14 @@
 import("//build/lite/ndk/ndk.gni")
 static_library("wifiservice") {
   sources = [
-    "source/wifi_device_util.c",
     "source/wifi_device.c",
+    "source/wifi_device_util.c",
     "source/wifi_hotspot.c",
   ]
-  defines = [
-     "LWIP_CONFIG_FILE=\"lwip/lwipopts_default.h\""
- ]
+  defines = [ "LWIP_CONFIG_FILE=\"lwip/lwipopts_default.h\"" ]
   include_dirs = [
     "//foundation/communication/wifi_lite/interfaces/wifiservice",
-    "//foundation/systemabilitymgr/samgr_lite/interfaces/kits/samgr", 
+    "//foundation/systemabilitymgr/samgr_lite/interfaces/kits/samgr",
     "//device/soc/hisilicon/ws63v100/sdk/include/middleware/services",
     "//device/soc/hisilicon/ws63v100/sdk/open_source/lwip/lwip_v2.1.3/src/include",
     "//device/soc/hisilicon/ws63v100/sdk/open_source/lwip/lwip_adapter/liteos_207/src/include",
@@ -33,8 +31,6 @@ static_library("wifiservice") {
     "//device/soc/hisilicon/ws63v100/sdk/include",
     "//device/soc/hisilicon/ws63v100/adapter/hals/communication/wifi_lite/wifiservice/include",
     "//kernel/liteos_m/kal",
-
-    
   ]
 }
 if (ohos_kernel_type == "liteos_m") {

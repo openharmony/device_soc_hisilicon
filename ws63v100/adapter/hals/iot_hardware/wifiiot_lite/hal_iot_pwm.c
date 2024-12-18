@@ -20,12 +20,11 @@
 #define IOT_PWM_MIN_DUTY           0
 #define IOT_PWM_MAX_DUTY           100
 #define IOT_PWM_DUTY_PART          10
-#define IOT_PWM_FREQ_PART          2
+#define IOT_PWM_FREQ_PART          6
 #define IOT_PWM_MAX_DIV_NUM_MAX    8
 #define IOT_PWM_CFG_OFFEST_TIME    0
-#define IOT_PWM_CFG_REPEAT_CYCLE   100
+#define IOT_PWM_CFG_REPEAT_CYCLE   0
 #define IOT_PWM_CFG_REPEAT_STATE   true
-
 static bool g_iot_pwm_inited = false;
 
 unsigned int IoTPwmInit(unsigned int port)
@@ -55,31 +54,24 @@ unsigned int IoTPwmStart(unsigned int port, unsigned short duty, unsigned int fr
     }
 
     uint32_t clk_freq = uapi_pwm_get_frequency((uint8_t)port);
-    uint32_t div_num = (clk_freq + freq / IOT_PWM_FREQ_PART) / freq;   // 计算分频数
-    if (div_num < IOT_PWM_MAX_DIV_NUM_MAX) {
-        return IOT_FAILURE;
-    }
-    uint32_t high_time = div_num * duty / IOT_PWM_MAX_DUTY;            // 计算高电平时钟个数（向下取整）
-    if (high_time * IOT_PWM_MAX_DUTY / div_num >= (uint32_t)(duty - duty * IOT_PWM_DUTY_PART / IOT_PWM_MAX_DUTY)) {
-    } else if ((high_time + 1) * IOT_PWM_MAX_DUTY / div_num <=
-                (uint32_t)(duty + duty * IOT_PWM_DUTY_PART / IOT_PWM_MAX_DUTY)) {
-        high_time++;
-    } else {
-        return IOT_FAILURE;
-    }
-    uint32_t low_time = div_num - high_time;
+    uint32_t period = clk_freq/freq/IOT_PWM_FREQ_PART;
+    uint32_t high_time  = period*duty/IOT_PWM_MAX_DUTY;
+    uint32_t low_time = period - high_time; 
     pwm_config_t cfg = {
-        .low_time = low_time,
-        .high_time = high_time,
-        .offset_time = IOT_PWM_CFG_OFFEST_TIME,
-        .cycles = IOT_PWM_CFG_REPEAT_CYCLE,
-        .repeat = IOT_PWM_CFG_REPEAT_STATE
-    };
-    if (uapi_pwm_open((uint8_t)port, &cfg) != ERRCODE_SUCC) {
+                            low_time,
+                            high_time, // 高电平持续tick 时间 = tick * (1/32000000)
+                            0,     // 相位偏移位
+                            0,     // 发多少个波形
+                            true
+                        }; // 是否循环
+    if (uapi_pwm_open(port, &cfg) != ERRCODE_SUCC) {
         return IOT_FAILURE;
     }
 
-    if (uapi_pwm_start((uint8_t)port) != ERRCODE_SUCC) {
+    if(uapi_pwm_set_group(port, 1 << port) != ERRCODE_SUCC){
+        return IOT_FAILURE;
+    }
+    if (uapi_pwm_start(port) != ERRCODE_SUCC) {
         return IOT_FAILURE;
     }
     return IOT_SUCCESS;

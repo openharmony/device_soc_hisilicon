@@ -13,9 +13,7 @@
 import("//build/lite/config/component/lite_component.gni")
 import("//build/lite/ndk/ndk.gni")
 static_library("sle_lite") {
-  sources = [
-    "sle_lite.c",
-  ]
+  sources = [ "sle_lite.c" ]
 
   include_dirs = [
     "//device/soc/hisilicon/ws63v100/sdk/include/middleware/services",
@@ -28,11 +26,10 @@ static_library("sle_lite") {
     "//device/soc/hisilicon/ws63v100/adapter/hals/communication/sle_lite/include",
   ]
 }
- if (ohos_kernel_type == "liteos_m") {
-   ndk_lib("sle_lite_ndk") {
-   deps = [ ":sle_lite" ]
+if (ohos_kernel_type == "liteos_m") {
+  ndk_lib("sle_lite_ndk") {
+    deps = [ ":sle_lite" ]
 
-   head_files =
-        [ "//foundation/communication/sle" ]
+    head_files = [ "//foundation/communication/sle" ]
   }
 }

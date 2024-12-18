@@ -13,9 +13,7 @@
 import("//build/lite/config/component/lite_component.gni")
 import("//build/lite/ndk/ndk.gni")
 static_library("ble_lite") {
-  sources = [
-    "ble_lite.c",
-  ]
+  sources = [ "ble_lite.c" ]
 
   include_dirs = [
     "//device/soc/hisilicon/ws63v100/sdk/include/middleware/services",
@@ -30,11 +28,10 @@ static_library("ble_lite") {
     "//device/soc/hisilicon/ws63v100/sdk/include/middleware/services/bts/common",
   ]
 }
- if (ohos_kernel_type == "liteos_m") {
-   ndk_lib("ble_lite_ndk") {
-   deps = [ ":ble_lite" ]
+if (ohos_kernel_type == "liteos_m") {
+  ndk_lib("ble_lite_ndk") {
+    deps = [ ":ble_lite" ]
 
-   head_files =
-        [ "//foundation/communication/sle" ]
+    head_files = [ "//foundation/communication/sle" ]
   }
 }

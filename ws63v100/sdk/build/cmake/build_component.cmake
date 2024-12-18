@@ -1,6 +1,6 @@
 #===============================================================================
 # @brief    cmake component build
-# Copyright (c) HiSilicon (Shanghai) Technologies Co., Ltd. 2022-2022. All rights reserved.
+# Copyright (c) 2020 HiSilicon (Shanghai) Technologies CO., LIMITED.
 #===============================================================================
 macro(get_obj_path output obj_root)
     set(ret)

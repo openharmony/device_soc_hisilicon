@@ -1,6 +1,17 @@
 #!/usr/bin/env python
 # coding:utf-8
-# Copyright (c) HiSilicon (Shanghai) Technologies Co., Ltd. 2021-2030. All rights reserved.
+# Copyright (c) 2020 HiSilicon (Shanghai) Technologies CO., LIMITED.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
 import sys
 import os
@@ -361,7 +372,7 @@ def undef_symbol_load():
 def rom_gen_arm32_assemfile():
     with open(argv_list[rom_file_str], "w+") as rom_file:
         print("/*", file=rom_file)
-        print(" * Copyright (c) HiSilicon (Shanghai) Technologies Co., Ltd. 2022-2022. All rights reserved.", file=rom_file)
+        print(" * Copyright (c) 2020 HiSilicon (Shanghai) Technologies CO., LIMITED.", file=rom_file)
         print(" * Description: Rom Callback Functions by Assemble(arm32), Auto Generate by Python.", file=rom_file)
         print(" * Author: Platform", file=rom_file)
         # print(" * Create: %s" % time.strftime("%Y-%m-%d", time.localtime()), file=rom_file)

@@ -1,6 +1,6 @@
 #===============================================================================
 # @brief    cmake script path
-# Copyright (c) HiSilicon (Shanghai) Technologies Co., Ltd. 2022-2022. All rights reserved.
+# Copyright (c) 2020 HiSilicon (Shanghai) Technologies CO., LIMITED.
 #===============================================================================
 
 set(SCRIPT_DIR "${ROOT_DIR}/build/script")

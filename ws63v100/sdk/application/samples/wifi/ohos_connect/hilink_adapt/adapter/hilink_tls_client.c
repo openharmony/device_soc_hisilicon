@@ -1,5 +1,16 @@
 ﻿/*
- * Copyright (c) HiSilicon (Shanghai) Technologies Co., Ltd. 2024-2024. All rights reserved.
+ * Copyright (c) 2020 HiSilicon (Shanghai) Technologies CO., LIMITED.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  * Description: TLS 客户端常用操作，包括会话的创建、销毁等（此文件为DEMO，需集成方适配修改）
  * Note: 由于此文件在采用外部mbedtls编译的时候会打包到外部，所以修改本函数代码的时候
  *       不应涉及引用hilink库编译要使用的宏以及非对外头文件函数

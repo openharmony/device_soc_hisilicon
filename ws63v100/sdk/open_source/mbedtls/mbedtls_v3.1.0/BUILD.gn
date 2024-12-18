@@ -3,20 +3,17 @@
 import("//build/lite/config/component/lite_component.gni")
 
 config("mbedtls_config") {
-    include_dirs = [
-        "include",
-        "harden/src/connect_src",
-        "harden/cipher_adapt_include",
-        "harden/src/internal_include",
-        "harden/platform/connect"
-    ]
-    defines = [
-        "MBEDTLS_USER_CONFIG_FILE=\"mbedtls_platform_hardware_config.h\""
-    ]
-
+  include_dirs = [
+    "include",
+    "harden/src/connect_src",
+    "harden/cipher_adapt_include",
+    "harden/src/internal_include",
+    "harden/platform/connect",
+  ]
+  defines =
+      [ "MBEDTLS_USER_CONFIG_FILE=\"mbedtls_platform_hardware_config.h\"" ]
 }
 
 group("mbedtls_v3.1.0") {
-    public_configs = [ ":mbedtls_config" ]
-
+  public_configs = [ ":mbedtls_config" ]
 }

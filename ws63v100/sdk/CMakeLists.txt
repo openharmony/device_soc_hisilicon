@@ -1,6 +1,6 @@
 #===============================================================================
 # @brief    cmake entry
-# Copyright (c) HiSilicon (Shanghai) Technologies Co., Ltd. 2022-2022. All rights reserved.
+# Copyright (c) 2020 HiSilicon (Shanghai) Technologies CO., LIMITED.
 #===============================================================================
 cmake_minimum_required(VERSION 3.14.1)
 set(CMAKE_SYSTEM_NAME "Generic")

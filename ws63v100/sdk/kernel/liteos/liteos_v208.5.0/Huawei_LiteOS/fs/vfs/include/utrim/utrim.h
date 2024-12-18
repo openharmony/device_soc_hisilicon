@@ -1,5 +1,5 @@
 /* ----------------------------------------------------------------------------
- * Copyright (c) Huawei Technologies Co., Ltd. 2021-2021. All rights reserved.
+ * Copyright (c) 2020 HiSilicon (Shanghai) Technologies CO., LIMITED.
  * Description: LiteOS Unite Trim Module Headfile
  * Author: Huawei LiteOS Team
  * Create: 2021-09-05

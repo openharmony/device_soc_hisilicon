@@ -30,88 +30,78 @@
 
 //设置本地设备地址，返回1设置成功，返回0设置失败
 bool  SetLocalSleAddress(SleAddr *addr){
-    ErrCodeType errcode = sle_set_local_addr(addr);
+    sle_addr_t sle_addr = {};
+    sle_addr.type  = 0;
+    memcpy(sle_addr.addr,addr->addr,OH_SLE_ADDR_LEN);
+    ErrCodeType errcode = sle_set_local_addr(&sle_addr);
 	  if(errcode == 0){
-      printf("%s SetLocalSleAddress_Error:%d\r\n", SLE_OH_LOG,errcode);
 		  return 1;
 	  }else{
-      printf("%s SetLocalSleAddress_Error:%d\r\n", SLE_OH_LOG,errcode);
-		  return 0 ;
+		  return 0;
 	  }	
 }
-
-//注册 SSAP client
-ErrCodeType  SsapcRegister(SleUuid *appUuid, uint8_t *clientId){
-  sle_uuid_t *sle_uuid = (sle_uuid_t *)malloc(sizeof(sle_uuid_t)); 
-  sle_uuid->len = appUuid->len;
-  memcpy(sle_uuid->uuid,appUuid->uuid,appUuid->len);
-  ErrCodeType errcode = ssapc_register_client(appUuid,clientId);
-  free(sle_uuid);
- 	return errcode;
-}	
 
 //注销 SSAP client
 ErrCodeType  SsapcRegisterUnregister(uint8_t clientId){
 	return ssapc_unregister_client(clientId);
 }
 
-//向对端发送写请求。明确下发数据的速率要大于连接间隔30%
+//客户端向对端发送写请求
 ErrCodeType SsapcWriteReq(uint8_t clientId, uint16_t connId, SsapcWriteParam *param){
-  ssapc_write_param_t *ssapc_write_param = (ssapc_write_param_t *)malloc(sizeof(ssapc_write_param_t)); 
-  ssapc_write_param->handle = param->handle;
-  ssapc_write_param->type = param->type;
-  ssapc_write_param->data_len = param->dataLen;
-  memcpy(ssapc_write_param->data,param->data,param->dataLen);
-  ErrCodeType errcode = ssapc_write_req(clientId,connId,param);
-  free(ssapc_write_param);
+  ssapc_write_param_t ssapc_write_param = {};
+  ssapc_write_param.handle = param->handle;
+  ssapc_write_param.type = param->type;
+  ssapc_write_param.data_len = param->dataLen;
+  ssapc_write_param.data = param->data;
+  ErrCodeType errcode = ssapc_write_req(clientId,connId,&ssapc_write_param);
  	return errcode;
 }
 
+
 //注册SSAP server
 ErrCodeType SsapsRegisterServer(SleUuid *appUuid, uint8_t *serverId){
-  sle_uuid_t *sle_uuid = (sle_uuid_t *)malloc(sizeof(sle_uuid_t)); 
-  sle_uuid->len = appUuid->len;
-  memcpy(sle_uuid->uuid,appUuid->uuid,appUuid->len);
-  ErrCodeType errcode = ssaps_register_server(appUuid,serverId);
-  free(sle_uuid);
+  sle_uuid_t sle_uuid = {}; 
+  sle_uuid.len = appUuid->len;
+  memcpy(sle_uuid.uuid,appUuid->uuid,appUuid->len);
+  ErrCodeType errcode = ssaps_register_server(&sle_uuid,serverId);
  	return errcode;
  }
 
 //添加SSAP server
 ErrCodeType SsapsAddService(uint8_t serviceId, SleUuid *serviceUuid, bool isPrimary, uint16_t *handle){
    (void)handle;
-   sle_uuid_t *sle_uuid = (sle_uuid_t *)malloc(sizeof(sle_uuid_t)); 
-   sle_uuid->len = serviceUuid->len;
-   memcpy(sle_uuid->uuid,serviceUuid->uuid,serviceUuid->len);
+   sle_uuid_t sle_uuid = {}; 
+   sle_uuid.len = serviceUuid->len;
+   memcpy(sle_uuid.uuid,serviceUuid->uuid,serviceUuid->len);
    ErrCodeType errcode = ssaps_add_service(serviceId, serviceUuid, isPrimary);
-   free(sle_uuid);
-  return errcode;
+   return errcode;
 }
 
+//添加属性
 ErrCodeType  SsapsAddProperty(uint8_t serviceId, uint16_t serviceHandle, SsapsPropertyInfo *property, uint16_t *handle){
   (void)handle;
-  ssaps_property_info_t *sle_property = (ssaps_property_info_t *)malloc(sizeof(ssaps_property_info_t)); 
-  sle_property->uuid.len = property->uuid.len;
-  memcpy(sle_property->uuid.uuid,property->uuid.uuid,property->uuid.len);
-  sle_property->permissions = property->permissions;
-  sle_property->operate_indication = property->operateIndication;
-  sle_property->value_len = property->valueLen;
-  sle_property->value = property->value;
-  ErrCodeType errcode = ssaps_add_property(serviceId, serviceHandle, property);
-  free(sle_property);
+  ssaps_property_info_t sle_property = {}; 
+  sle_property.uuid.len = property->uuid.len;
+  memcpy(sle_property.uuid.uuid,property->uuid.uuid,property->uuid.len);
+  sle_property.permissions = property->permissions;
+  sle_property.operate_indication = property->operateIndication;
+  sle_property.value_len = property->valueLen;
+  sle_property.value = property->value;
+  ErrCodeType errcode = ssaps_add_property(serviceId, serviceHandle, &sle_property);
   return errcode;
 }
 
+
+//添加描述符
 ErrCodeType SsapsAddDescriptor(uint8_t serviceId, uint16_t serviceHandle, uint16_t propertyHandle,
     SsapsDescInfo *descriptor){
-  ssaps_desc_info_t *ssaps_desc_info = (ssaps_desc_info_t *)malloc(sizeof(ssaps_desc_info_t)); 
-  ssaps_desc_info->uuid.len = descriptor->uuid.len;
-  memcpy(ssaps_desc_info->uuid.uuid,descriptor->uuid.uuid,descriptor->uuid.len);
-  ssaps_desc_info->permissions = descriptor->permissions;
-  ssaps_desc_info->operate_indication = descriptor->operateIndication;
-  ssaps_desc_info->value_len = descriptor->valueLen;
-  ssaps_desc_info->value = descriptor->value;
-  ErrCodeType errcode = ssaps_add_descriptor(serviceId, serviceHandle, propertyHandle,descriptor);
-  free(ssaps_desc_info);
+  ssaps_desc_info_t ssaps_desc_info = {}; 
+  ssaps_desc_info.uuid.len = descriptor->uuid.len;
+  memcpy(ssaps_desc_info.uuid.uuid,descriptor->uuid.uuid,descriptor->uuid.len);
+  ssaps_desc_info.permissions = descriptor->permissions;
+  ssaps_desc_info.operate_indication = descriptor->operateIndication;
+  ssaps_desc_info.value_len = descriptor->valueLen;
+  ssaps_desc_info.value = descriptor->value;
+  ErrCodeType errcode = ssaps_add_descriptor(serviceId, serviceHandle, propertyHandle,&ssaps_desc_info);
   return errcode;
 }

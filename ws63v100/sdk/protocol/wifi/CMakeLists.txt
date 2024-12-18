@@ -1,5 +1,5 @@
 #[[
-Copyright (c) HiSilicon (Shanghai) Technologies Co., Ltd. 2021-2021. All rights reserved.
+Copyright (c) 2020 HiSilicon (Shanghai) Technologies CO., LIMITED.
 Description: CMake entries of sub-directories.
 Create: 2021-03-17
 ]]

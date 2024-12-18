@@ -1,5 +1,16 @@
 /*
- * Copyright (c) HiSilicon (Shanghai) Technologies Co., Ltd. 2021-2022. All rights reserved.
+ *   Copyright (c) 2020 HiSilicon (Shanghai) Technologies CO., LIMITED.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  * Description: WAPI Implementation
  */
 
@@ -163,7 +174,7 @@ int wai_cipher_setkey(td_u32 *keyslot_chn_num, td_u8 *key, td_u32 key_len, keysl
     return 0;
 }
 
-/* ¶Ô³Æ¼Ó½âÃÜ£º¶ÔÊý¾Ý½øÐÐ¼ÓÃÜ»ò½âÃÜ */
+/* ï¿½Ô³Æ¼Ó½ï¿½ï¿½Ü£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý½ï¿½ï¿½Ð¼ï¿½ï¿½Ü»ï¿½ï¿½ï¿½ï¿½ */
 /**
  *  @brief Symmetric encryption and decryption
  */
@@ -187,7 +198,7 @@ static int wai_cipher_crypt(wai_operation_t operation, const unsigned char *iv, 
         return WAPI_FAILED;
     }
 
-    // µ÷ÓÃÖ÷Á÷³ÌÖ®Ç°£¬ÏÈÅäÖÃÃÜÔ¿
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö®Ç°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¿
     engine_alg = KEYSLOT_ENGINE_SM4;
     ret = wai_cipher_setkey(&keyslot_handle, (unsigned char *)key, keylen, engine_alg);
     if (ret != WAPI_SUCCESS) {
@@ -195,14 +206,14 @@ static int wai_cipher_crypt(wai_operation_t operation, const unsigned char *iv, 
         return ret;
     }
 
-    // 1. µ÷ÓÃuapi_drv_cipher_symc_init³õÊ¼»¯SYMCÄ£¿é
+    // 1. ï¿½ï¿½ï¿½ï¿½uapi_drv_cipher_symc_initï¿½ï¿½Ê¼ï¿½ï¿½SYMCÄ£ï¿½ï¿½
     ret = uapi_drv_cipher_symc_init();
     if (ret != WAPI_SUCCESS) {
         osal_printk(MSG_ERROR, "symc init failed!");
         return WAPI_FAILED;
     }
 
-    // 2. ½¨Ò»Â·symc£¬²¢»ñÈ¡symc¾ä±ú¡£µ÷ÓÃuapi_drv_cipher_symc_create½Ó¿ÚÍê³É¡£
+    // 2. ï¿½ï¿½Ò»Â·symcï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¡symcï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½uapi_drv_cipher_symc_createï¿½Ó¿ï¿½ï¿½ï¿½É¡ï¿½
     symc_attr.symc_alg = UAPI_DRV_CIPHER_SYMC_ALG_SM4;
     symc_attr.work_mode = UAPI_DRV_CIPHER_SYMC_WORK_MODE_OFB;
     symc_attr.is_long_term = TD_TRUE;
@@ -213,14 +224,14 @@ static int wai_cipher_crypt(wai_operation_t operation, const unsigned char *iv, 
         return WAPI_FAILED;
     }
 
-    // 3. °ó¶¨keyslotÍ¨µÀÓësymc¾ä±ú¡£µ÷ÓÃuapi_drv_cipher_symc_attach½Ó¿ÚÍê³É
+    // 3. ï¿½ï¿½keyslotÍ¨ï¿½ï¿½ï¿½ï¿½symcï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½uapi_drv_cipher_symc_attachï¿½Ó¿ï¿½ï¿½ï¿½ï¿½
     ret = uapi_drv_cipher_symc_attach(symc_handle, keyslot_handle);
     if (ret != WAPI_SUCCESS) {
         osal_printk(MSG_ERROR, "Attach keyslot handle to encryption handle failed!");
         return WAPI_FAILED;
     }
 
-    // 4. ÅäÖÃsymcËã·¨²ÎÊýÐÅÏ¢£¬°üº¬£ºÃÜÔ¿»ù±¾ÊôÐÔ£¬³õÊ¼ÏòÁ¿£¬¼Ó½âÃÜÎ»¿í£¬ÃÜÔ¿¸üÐÂ·½Ê½£¬GCM/CCMÄ£Ê½
+    // 4. ï¿½ï¿½ï¿½ï¿½symcï¿½ã·¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô£ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó½ï¿½ï¿½ï¿½Î»ï¿½ï¿½ï¿½ï¿½Ô¿ï¿½ï¿½ï¿½Â·ï¿½Ê½ï¿½ï¿½GCM/CCMÄ£Ê½
     symc_ctrl.symc_alg = UAPI_DRV_CIPHER_SYMC_ALG_SM4;
     symc_ctrl.work_mode = UAPI_DRV_CIPHER_SYMC_WORK_MODE_OFB;
     symc_ctrl.symc_key_length = UAPI_DRV_CIPHER_SYMC_KEY_128BIT;
@@ -237,11 +248,11 @@ static int wai_cipher_crypt(wai_operation_t operation, const unsigned char *iv, 
         return WAPI_FAILED;
     }
 
-    // 5. ¶ÔÊý¾Ý½øÐÐ¼Ó½âÃÜ
+    // 5. ï¿½ï¿½ï¿½ï¿½ï¿½Ý½ï¿½ï¿½Ð¼Ó½ï¿½ï¿½ï¿½
     src_buf.phys_addr = (uintptr_t)input;
     dst_buf.phys_addr = (uintptr_t)output;
     if (operation == WAI_ENCRYPT) {
-        // ¼ÓÃÜ
+        // ï¿½ï¿½ï¿½ï¿½
         ret = uapi_drv_cipher_symc_encrypt(symc_handle, &src_buf, &dst_buf, inlen);
         if (ret != WAPI_SUCCESS) {
             osal_printk(MSG_ERROR, "Symc encrypt failed!");
@@ -249,7 +260,7 @@ static int wai_cipher_crypt(wai_operation_t operation, const unsigned char *iv, 
             return WAPI_FAILED;
         }
     } else if (operation == WAI_DECRYPT) {
-        // ½âÃÜ
+        // ï¿½ï¿½ï¿½ï¿½
         ret = uapi_drv_cipher_symc_decrypt(symc_handle, &src_buf, &dst_buf, *outlen);
         if (ret != WAPI_SUCCESS) {
             osal_printk(MSG_ERROR, "Symc decrypt failed!");
@@ -261,21 +272,21 @@ static int wai_cipher_crypt(wai_operation_t operation, const unsigned char *iv, 
         return WAPI_FAILED;
     }
 
-    // 6. ½â°ókeyslotÍ¨µÀÓëcipher¾ä±ú£¬µ÷ÓÃuapi_drv_cipher_symc_detach½Ó¿ÚÍê³É
+    // 6. ï¿½ï¿½ï¿½keyslotÍ¨ï¿½ï¿½ï¿½ï¿½cipherï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½uapi_drv_cipher_symc_detachï¿½Ó¿ï¿½ï¿½ï¿½ï¿½
     ret = uapi_drv_cipher_symc_detach(symc_handle, keyslot_handle);
     if (ret != WAPI_SUCCESS) {
         osal_printk(MSG_ERROR, "Symc detach failed!");
         return WAPI_FAILED;
     }
 
-    // 7. Ïú»Ùsymc¾ä±ú£¬µ÷ÓÃuapi_drv_cipher_symc_destroy½Ó¿ÚÍê³É
+    // 7. ï¿½ï¿½ï¿½ï¿½symcï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½uapi_drv_cipher_symc_destroyï¿½Ó¿ï¿½ï¿½ï¿½ï¿½
     ret = uapi_drv_cipher_symc_destroy(symc_handle);
     if (ret != WAPI_SUCCESS) {
         osal_printk(MSG_ERROR, "Symc destroy failed!");
         return WAPI_FAILED;
     }
 
-    // 8. µ÷ÓÃuapi_drv_cipher_symc_deinitÈ¥³õÊ¼»¯SYMCÄ£¿é
+    // 8. ï¿½ï¿½ï¿½ï¿½uapi_drv_cipher_symc_deinitÈ¥ï¿½ï¿½Ê¼ï¿½ï¿½SYMCÄ£ï¿½ï¿½
     ret = uapi_drv_cipher_symc_deinit();
     if (ret != WAPI_SUCCESS) {
         osal_printk(MSG_ERROR, "Symc deinit failed!");

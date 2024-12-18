@@ -1,6 +1,6 @@
 #===============================================================================
 # @brief    cmake global variable init
-# Copyright (c) HiSilicon (Shanghai) Technologies Co., Ltd. 2022-2022. All rights reserved.
+# Copyright (c) 2020 HiSilicon (Shanghai) Technologies CO., LIMITED.
 #===============================================================================
 
 set(ALL_PUBLIC_HEADER "" CACHE INTERNAL "" FORCE)

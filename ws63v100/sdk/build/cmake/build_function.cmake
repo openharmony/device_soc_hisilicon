@@ -1,6 +1,6 @@
 #===============================================================================
 # @brief    cmake toolchains
-# Copyright (c) HiSilicon (Shanghai) Technologies Co., Ltd. 2022-2022. All rights reserved.
+# Copyright (c) 2020 HiSilicon (Shanghai) Technologies CO., LIMITED.
 #===============================================================================
 macro(return_if_not_build)
     if(NOT ${COMPONENT_NAME} IN_LIST TARGET_COMPONENT)
