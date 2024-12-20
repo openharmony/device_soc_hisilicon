@@ -91,6 +91,7 @@ Note:If the text contains special characters, please escape them according to th
 				<filteritem type="filename" name="BUILD.gn" desc="Compilation scripts do not declare license"/>
 				<filteritem type="filepath" name="ws63v100/sdk/tools/bin/compiler/.*" desc="Compilation scripts do not declare license"/>
 				<filteritem type="filepath" name="ws63v100/sdk/open_source/.*" desc="Compilation scripts do not declare license"/>
+				<filteritem type="filepath" name="ws63v100/sdk/bootloader/commonboot/libc/.*" desc="libec"/>
 				<filteritem type="filepath" name="hi3516dv300/sdk_linux/build.sh" desc="Compilation scripts do not declare license"/>
 				<filteritem type="filepath" name="hi3516dv300/sdk_linux/config.gni" desc="Compilation scripts do not declare license"/>
 				<filteritem type="filepath" name="hi3516dv300/sdk_linux/out/ko/load3516dv300_user" desc="load script"/>
@@ -123,6 +124,7 @@ Note:If the text contains special characters, please escape them according to th
 				<filteritem type="filepath" name="hi3516dv300/sdk_linux/build.sh" desc="HiSilicon copyright"/>
 				<filteritem type="filepath" name="ws63v100/sdk/tools/bin/compiler/.*" desc="Compilation scripts do not declare license"/>
 				<filteritem type="filepath" name="ws63v100/sdk/open_source/.*" desc="Compilation scripts do not declare license"/>
+				<filteritem type="filepath" name="ws63v100/sdk/bootloader/commonboot/libc/.*" desc="libec"/>
 				<filteritem type="filepath" name="hi3516dv300/sdk_linux/config.gni" desc="HiSilicon copyright"/>
 				<filteritem type="filepath" name="hi3516dv300/sdk_linux/out/ko/load3516dv300_user" desc="HiSilicon copyright"/>
 				<filteritem type="filepath" name="hi3861v100/sdk_liteos/platform/os/.*" desc="liteos"/>
