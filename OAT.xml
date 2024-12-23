@@ -64,6 +64,7 @@ Note:If the text contains special characters, please escape them according to th
 				<policyitem type="license" name="GPLStyleLicense" path="hi3751v350/.*" desc="LICENSE for all files within hi3751v350 which reside in kernel space"/>
 				<policyitem type="license" name="GPL-2.0" path=".*" desc="Kernel space code"/>
 				<policyitem type="license" name="BSD-3-Clause" path=".*" desc="HiSilicon copyright"/>
+				<policyitem type="license" name="MulanPSL-2.0" path="ws63v100/sdk/kernel/liteos/liteos_v208.5.0/Huawei_LiteOS/platform/libsec/include/.*" desc="libboundscheck"/>
 				<policyitem type="copyright" name="HiSilicon (Shanghai) Technologies CO., LIMITED." path=".*" desc="HiSilicon copyright"/>
 				<policyitem type="copyright" name="Free Software Foundation, Inc." path=".*" desc="copyright"/>
 				<policyitem type="copyright" name="HiHope Open Source Organization ." path=".*" desc="copyright"/>

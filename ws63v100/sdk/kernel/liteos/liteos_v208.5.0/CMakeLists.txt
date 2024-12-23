@@ -65,13 +65,6 @@ target_compile_options(${COMPONENT_NAME}_interface
 get_target_property(COM_HEADER ${COMPONENT_NAME}_interface INTERFACE_COMPILE_OPTIONS)
 MESSAGE(STATUS "COM_HEADER${COM_HEADER}")
 
-if (${build_ws63_sdk_open})
-    if (${TARGET_COMMAND} STREQUAL "ws63-liteos-app")
-        list(APPEND LITEOS_BASELIB "base"  "cmsis" "cpup" "csysdeps" "driverbase"  "init" "interrupt" "linux" "riscv" "targets")
-    elseif (${TARGET_COMMAND} STREQUAL "ws63-liteos-xts")
-        list(APPEND LITEOS_BASELIB "base"  "cmsis" "compat" "console" "cpup" "csysdeps" "driverbase"  "init" "interrupt" "linux" "riscv" "targets" "posix" "vfs")
-    endif()
-endif ()
 
 if (${build_ws63_sdk_open})
     list(APPEND LITEOS_BASELIB "base"  "cmsis" "compat" "console" "cpup" "csysdeps" "driverbase"  "init" "interrupt" "linux" "posix" "riscv" "targets" "vfs" )

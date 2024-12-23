@@ -254,8 +254,8 @@ def make_all_in_one_packet(pack_style_str, extr_defines):
             packet_post_agvs.append(efuse_bx)
 
         if "PACKET_MFG_BIN" in extr_defines:
-            mfg_sign_bin = os.path.join(SDK_DIR, "application", "ws63", "ws63_liteos_mfg", "ws63-liteos-mfg-sign.bin")
-            if os.path.exists(mfg_sign_bin):
+            mfg_sign_bin = os.path.join(SDK_DIR, "output", "ws63", "acore", "boot_bin", "ws63-liteos-mfg-sign.bin")
+        if os.path.exists(mfg_sign_bin):
                 mfg_bx = mfg_sign_bin + f"|0x470000|{hex(0x183000)}|1" # 0x183000为产测分区B区大小
                 packet_post_agvs.append(mfg_bx)
             else:
