@@ -1,0 +1,46 @@
+# Copyright (C) 2024 HiHope Open Source Organization .
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+static_library("hal_iothardware") {
+  sources = [
+    "hal_iot_gpio.c",
+    "hal_iot_i2c.c",
+    "hal_iot_pwm.c",
+    "hal_iot_sfc.c",
+    "hal_iot_uart.c",
+    "hal_iot_watchdog.c",
+    "hal_reset.c",
+  ]
+
+  defines = [
+    "CONFIG_UART_SUPPORT_TX",
+    "CONFIG_UART_SUPPORT_RX",
+  ]
+
+  include_dirs = [
+    "//commonlibrary/utils_lite/include",
+    "//device/soc/hisilicon/ws63v100/sdk/drivers/drivers/hal",
+    "//device/soc/hisilicon/ws63v100/sdk/drivers/drivers/hal/uart",
+    "//device/soc/hisilicon/ws63v100/sdk/drivers/drivers/hal/gpio",
+    "//device/soc/hisilicon/ws63v100/sdk/drivers/drivers/hal/i2c",
+    "//device/soc/hisilicon/ws63v100/sdk/drivers/chips/ws63/porting/gpio",
+    "//device/soc/hisilicon/ws63v100/sdk/drivers/chips/ws63/porting/i2c",
+    "//device/soc/hisilicon/ws63v100/sdk/drivers/chips/ws63/porting/uart",
+    "//device/soc/hisilicon/ws63v100/sdk/drivers/drivers/hal/gpio/v150",
+    "//base/iothardware/peripheral/interfaces/inner_api",
+    "//device/soc/hisilicon/ws63v100/sdk/include",
+    "//device/soc/hisilicon/ws63v100/sdk/middleware/utils/common_headers/native",
+    "//device/soc/hisilicon/ws63v100/sdk/middleware/utils/dfx/dfx_reboot/cpu_utils/public",
+    "//device/soc/hisilicon/ws63v100/sdk/middleware/utils/dfx/dfx_reboot/reboot/shared",
+  ]
+}

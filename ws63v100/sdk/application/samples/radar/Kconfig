@@ -1,0 +1,13 @@
+#===============================================================================
+# @brief    Kconfig file.
+# Copyright (c) 2020 HiSilicon (Shanghai) Technologies CO., LIMITED.
+#===============================================================================
+choice
+    prompt "Sample"
+
+config SUPPORT_RADAR_STA_SAMPLE
+    bool "Support RADAR STA Sample"
+
+config SUPPORT_RADAR_SOFTAP_SAMPLE
+    bool "Support RADAR SoftAP Sample."
+endchoice

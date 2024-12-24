@@ -1,0 +1,15 @@
+#===============================================================================
+# @brief    Kconfig file.
+# Copyright (c) 2020 HiSilicon (Shanghai) Technologies CO., LIMITED.
+#===============================================================================
+config WDT_TIMEOUT_SAMPLE
+    bool
+    prompt "Choose watchdog kick timeout."
+    depends on SAMPLE_SUPPORT_WDT
+    default n
+
+config WDT_KICK_SAMPLE
+    bool
+    prompt "Choose watchdog kick normally."
+    depends on SAMPLE_SUPPORT_WDT
+    default n

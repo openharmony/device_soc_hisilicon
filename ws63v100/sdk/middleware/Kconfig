@@ -1,0 +1,18 @@
+#===============================================================================
+# @brief    Kconfig file.
+# Copyright (c) 2020 HiSilicon (Shanghai) Technologies CO., LIMITED.
+#===============================================================================
+menu "Chips"
+    comment "Config the middleware of chips."
+    osource "middleware/chips/Kconfig"
+endmenu
+
+menu "Services"
+    comment "Config the middleware of service."
+    osource "middleware/services/Kconfig"
+endmenu
+
+menu "Utils"
+    comment "Config the middleware of utils."
+    osource "middleware/utils/Kconfig"
+endmenu

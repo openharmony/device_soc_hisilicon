@@ -1,0 +1,9 @@
+#===============================================================================
+# @brief    Kconfig file.
+# Copyright (c) 2020 HiSilicon (Shanghai) Technologies CO., LIMITED.
+#===============================================================================
+config DMA_MEMORY_LLI_TRANSFER_MODE
+    bool
+    prompt "Choose DMA memory to memory lli transfer mode."
+    depends on SAMPLE_SUPPORT_DMA
+    default n

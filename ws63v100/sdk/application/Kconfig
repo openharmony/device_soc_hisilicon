@@ -1,0 +1,15 @@
+#===============================================================================
+# @brief    Kconfig file.
+# Copyright (c) 2020 HiSilicon (Shanghai) Technologies CO., LIMITED.
+#===============================================================================
+
+config SAMPLE_ENABLE
+    bool
+    prompt "Enable Sample."
+    default n
+    help
+        This option means support Samples.
+
+if SAMPLE_ENABLE
+osource "application/samples/Kconfig"
+endif

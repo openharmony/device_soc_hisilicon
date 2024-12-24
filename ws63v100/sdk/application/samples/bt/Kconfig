@@ -1,0 +1,21 @@
+#===============================================================================
+# @brief    Kconfig file.
+# Copyright (c) 2020 HiSilicon (Shanghai) Technologies CO., LIMITED.
+#===============================================================================
+choice
+    prompt "Sample"
+
+config SAMPLE_SUPPORT_BLE_SAMPLE
+    bool "Support BLE Sample."
+
+if SAMPLE_SUPPORT_BLE_SAMPLE
+osource "application/samples/bt/ble/Kconfig"
+endif
+
+config SAMPLE_SUPPORT_SLE_SAMPLE
+    bool "Support SLE Sample."
+endchoice
+
+if SAMPLE_SUPPORT_SLE_SAMPLE
+osource "application/samples/bt/sle/Kconfig"
+endif

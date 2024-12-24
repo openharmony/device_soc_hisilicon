@@ -1,0 +1,10 @@
+#===============================================================================
+# @brief    Kconfig file.
+# Copyright (c) 2020 HiSilicon (Shanghai) Technologies CO., LIMITED.
+#===============================================================================
+config DRIVER_DISABLE_OSAL_LOG
+    bool
+    prompt "disable osal log"
+    default n
+    help
+        This option means turn off osal log.

@@ -1,0 +1,16 @@
+#===============================================================================
+# @brief    Kconfig file.
+# Copyright (c) 2020 HiSilicon (Shanghai) Technologies CO., LIMITED.
+#===============================================================================
+
+config MEMORY_CUSTOMIZE_SEC
+    bool "Customize sections"
+    default n
+    --help--
+        Turn on this option, a output section will be added
+
+config MEMORY_CUSTOMIZE_RSV
+    bool "Customize memory reserve"
+    default n
+    --help--
+        Memory recovery will be turned on

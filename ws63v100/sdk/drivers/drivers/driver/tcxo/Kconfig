@@ -1,0 +1,9 @@
+#===============================================================================
+# @brief    Kconfig file.
+# Copyright (c) 2020 HiSilicon (Shanghai) Technologies CO., LIMITED.
+#===============================================================================
+config TCXO_SUPPORT_LPM
+    bool
+    prompt "TCXO Support low power mode, supend and reusme"
+    default n
+    depends on DRIVER_SUPPORT_TCXO
