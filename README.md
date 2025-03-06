@@ -8,7 +8,7 @@
 | :-------------------------------------: | :----------------------------------------------------------: | :----------------: | :------: |
 | [Hi3518EV300](hi3518ev300/README_zh.md) | [HiSpark Aries](https://gitee.com/openharmony/device_board_hisilicon/tree/master/hispark_aries) |      小型系统      | 智慧视觉 |
 |  [Hi3861V100](hi3861v100/README_zh.md)  | [HiSpark Pegasus](https://gitee.com/openharmony/device_board_hisilicon/tree/master/hispark_pegasus) |      轻量系统      | 智慧IOT  |
-|                                         |                                                              |                    |          |
+|    [WS63V100](ws63v100/README_zh.md)    | [NearLink_DK_WS63](https://gitee.com/openharmony/vendor_hihope/tree/master/nearlink_dk_3863/ws63_sample) |      轻量系统      | 智慧IOT  |
 |  [Hi3751V351](hi3751v350/README_zh.md)  | [HiSpark Phoenix](https://gitee.com/openharmony/device_board_hisilicon/tree/master/hispark_phoenix) |      标准系统      | 智慧媒体 |
 | [Hi3516DV300](hi3516dv300/README_zh.md) | [HiSpark Taurus](https://gitee.com/openharmony/device_board_hisilicon/tree/master/hispark_taurus) | 小型系统、标准系统 | 智慧视觉 |
 
@@ -21,7 +21,7 @@
 ├── hi3518ev300    # hi3518ev300芯片相关内容
 ├── hi3751v350     # hi3751v350芯片相关内容
 ├── hi3861v100     # hi3861v100芯片相关内容
-
+├── ws63v100       # ws63v100芯片相关内容
 ```
 
 
