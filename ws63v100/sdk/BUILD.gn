@@ -25,13 +25,13 @@ group("nearllink_sdk") {
 build_ext_component("run_sdk_build") {
   exec_path = rebase_path(".", root_build_dir)
   outdir = rebase_path(root_out_dir)
-  command = "sh hm_build.sh $outdir $build_ws63_sdk_open"
+  command = "bash hm_build.sh $outdir $build_ws63_sdk_open"
 
   #  command = "python3 build.py -c ws63-liteos-app"
   #  if (host_os == "win") {
-  #    command = "sh hm_build.sh $outdir win"
+  #    command = "bash hm_build.sh $outdir win"
   #  } else {
-  #    command = "sh hm_build.sh $outdir linux"
+  #    command = "bash hm_build.sh $outdir linux"
   #  }
   deps = [
     ":sdk",
