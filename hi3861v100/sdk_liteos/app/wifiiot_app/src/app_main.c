@@ -400,9 +400,6 @@ hi_void app_main(hi_void)
 #ifdef CONFIG_FACTORY_TEST_MODE
         printf("factory test mode!\r\n");
 #endif
-
-    const hi_char* sdk_ver = hi_get_sdk_version();
-
     hi_flash_partition_table *ptable = HI_NULL;
 
     peripheral_init();
