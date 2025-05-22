@@ -402,7 +402,6 @@ hi_void app_main(hi_void)
 #endif
 
     const hi_char* sdk_ver = hi_get_sdk_version();
-    printf("sdk ver:%s\r\n", sdk_ver);
 
     hi_flash_partition_table *ptable = HI_NULL;
 
