@@ -65,6 +65,8 @@ Note:If the text contains special characters, please escape them according to th
 				<policyitem type="license" name="GPL-2.0" path=".*" desc="Kernel space code"/>
 				<policyitem type="license" name="BSD-3-Clause" path=".*" desc="HiSilicon copyright"/>
 				<policyitem type="license" name="MulanPSL-2.0" path="ws63v100/sdk/kernel/liteos/liteos_v208.5.0/Huawei_LiteOS/platform/libsec/include/.*" desc="libboundscheck"/>
+				<policyitem type="license" name="MulanPSL-2.0" path="ws63v100/sdk/drivers/chips/ws63/rom/open_source/libboundscheck/.*" desc="libboundscheck"/>
+				<policyitem type="license" name="MulanPSL-2.0" path="ws63v100/sdk/drivers/chips/ws63/rom/rom_boot/open_source/libboundscheck/.*" desc="libboundscheck"/>
 				<policyitem type="copyright" name="HiSilicon (Shanghai) Technologies CO., LIMITED." path=".*" desc="HiSilicon copyright"/>
 				<policyitem type="copyright" name="Free Software Foundation, Inc." path=".*" desc="copyright"/>
 				<policyitem type="copyright" name="HiHope Open Source Organization ." path=".*" desc="copyright"/>
@@ -116,7 +118,6 @@ Note:If the text contains special characters, please escape them according to th
 				<filteritem type="filepath" name="hi3751v350/sdk_linux/source/device/soc/hisilicon/common/platform/wifi/rtl/rtl/usb_rtl8723du/rtl8723DU_WiFi_linux_v5.6.5.3_35502.20191025_COEX20181130-2e2e/hal/phydm/rtl8723d/version_rtl8723d.h" desc="Describe the reason for filtering scan results"/>
 				<filteritem type="filepath" name="hi3751v350/sdk_linux/source/device/soc/hisilicon/common/platform/wifi/rtl/rtl/usb_rtl8723du/rtl8723DU_WiFi_linux_v5.6.5.3_35502.20191025_COEX20181130-2e2e/include/rtw_version.h" desc="Describe the reason for filtering scan results"/>
 				<filteritem type="filepath" name="ws63v100/sdk/kernel/liteos/liteos_v208.5.0/Huawei_LiteOS/open_source/.*" desc="Huawei LiteOS opensource file path"/>
-				<!--filteritem type="filepath" name="dir name underproject/.*" desc="Describe the reason for filtering scan results"/-->
 			</filefilter>
 			<filefilter name="copyrightPolicyFilter" desc="Filters for copyright header policies" >
 				<filteritem type="filename" name="README.OpenSource"/>
@@ -160,6 +161,7 @@ Note:If the text contains special characters, please escape them according to th
 				<filteritem type="filepath" name="hi3751v350/sdk_linux/source/device/board/hisilicon/hispark_phoenix/peripherals/bluetooth/bluetooth/rtkbt/driver/rtk_btusb.c" desc="Describe the reason for filtering scan results"/>
 				<filteritem type="filepath" name="hi3751v350/sdk_linux/source/device/board/hisilicon/hispark_phoenix/peripherals/bluetooth/bluetooth/rtkbt/driver/rtk_btusb.h" desc="Describe the reason for filtering scan results"/>
 				<filteritem type="filepath" name="ws63v100/sdk/kernel/liteos/liteos_v208.5.0/Huawei_LiteOS/open_source/.*" desc="Describe the reason for filtering scan results"/>
+				<filteritem type="filepath" name="ws63v100/sdk/middleware/services/wifi_service/hostapd/liteos_hostapd_src/.*" desc="hisilicon add in hostapd"/>
 			</filefilter>
 			<filefilter name="licenseFileNamePolicyFilter" desc="Filters for LICENSE file policies" >
 			</filefilter>

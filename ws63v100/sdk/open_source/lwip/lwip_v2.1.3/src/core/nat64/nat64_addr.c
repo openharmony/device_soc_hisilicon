@@ -1,16 +1,5 @@
 /*
  * Copyright (c) 2020 HiSilicon (Shanghai) Technologies CO., LIMITED.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
  * Description: according the rfc 6052, the prefix length could be 32/40/48/56/64/96.
  * but only 96 prefix length can be supported in our nat64 now.
  * when the rpl start, the prefix will be setted, now this prefix is used in nat64.
