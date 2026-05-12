@@ -77,6 +77,28 @@ int pbkdf2_hmac_harden( mbedtls_md_context_t *ctx,
     return( 0 );
 }
 
+int mbedtls_pkcs5_pbkdf2_hmac_ext(mbedtls_md_type_t type,
+    const unsigned char *password,
+    size_t plen,
+    const unsigned char *salt,
+    size_t slen,
+    unsigned int iterationCount,
+    uint32_t keyLength,
+    unsigned char *output)
+
+{
+    mbedtls_md_context_t ctx;
+    (void)memset_s(&ctx, sizeof(mbedtls_md_context_t), 0, sizeof(mbedtls_md_context_t));
+    mbedtls_md_init(&ctx);
+    int32_t ret;
+    const mbedtls_md_info_t *info = mbedtls_md_info_from_type(type);
+    ret = mbedtls_md_setup(&ctx, info, 1); /* 1 for using HMAC */
+
+    ret = mbedtls_pkcs5_pbkdf2_hmac(&ctx, password, plen, salt, slen, iterationCount, keyLength, output);
+    mbedtls_md_free(&ctx);
+    return ret;
+}
+
 int mbedtls_pkcs5_pbkdf2_hmac( mbedtls_md_context_t *ctx,
                        const unsigned char *password,
                        size_t plen, const unsigned char *salt, size_t slen,
