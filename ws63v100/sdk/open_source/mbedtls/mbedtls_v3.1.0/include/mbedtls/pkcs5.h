@@ -88,6 +88,15 @@ int mbedtls_pkcs5_pbkdf2_hmac( mbedtls_md_context_t *ctx, const unsigned char *p
                        size_t plen, const unsigned char *salt, size_t slen,
                        unsigned int iteration_count,
                        uint32_t key_length, unsigned char *output );
+int mbedtls_pkcs5_pbkdf2_hmac_ext(mbedtls_md_type_t type,
+    const unsigned char *password,
+    size_t plen,
+    const unsigned char *salt,
+    size_t slen,
+    unsigned int iterationCount,
+    uint32_t keyLength,
+    unsigned char *output);
+
 
 #if defined(MBEDTLS_SELF_TEST)
 
