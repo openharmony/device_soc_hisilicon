@@ -67,6 +67,8 @@ Note:If the text contains special characters, please escape them according to th
 				<policyitem type="license" name="MulanPSL-2.0" path="ws63v100/sdk/kernel/liteos/liteos_v208.5.0/Huawei_LiteOS/platform/libsec/include/.*" desc="libboundscheck"/>
 				<policyitem type="license" name="MulanPSL-2.0" path="ws63v100/sdk/drivers/chips/ws63/rom/open_source/libboundscheck/.*" desc="libboundscheck"/>
 				<policyitem type="license" name="MulanPSL-2.0" path="ws63v100/sdk/drivers/chips/ws63/rom/rom_boot/open_source/libboundscheck/.*" desc="libboundscheck"/>
+				<policyitem type="license" name="MulanPSL-2.0" path="hi3403v100/sdk_linux/smp/a55_linux/mpp/component/securec/*" desc="LICENSE for securec"/>
+				<policyitem type="copyright" name="HiSilicon (Shanghai) Technologies Co., Ltd." path=".*" desc="HiSilicon copyright"/>
 				<policyitem type="copyright" name="HiSilicon (Shanghai) Technologies CO., LIMITED." path=".*" desc="HiSilicon copyright"/>
 				<policyitem type="copyright" name="Free Software Foundation, Inc." path=".*" desc="copyright"/>
 				<policyitem type="copyright" name="HiHope Open Source Organization ." path=".*" desc="copyright"/>
@@ -87,6 +89,7 @@ Note:If the text contains special characters, please escape them according to th
 			<filefilter name="defaultFilter" desc="Files not to check">
 				<filteritem type="filepath" name="common/hal/middleware/ffmpeg_adapt/.*" desc="ffmpeg compile scripts"/>
 				<filteritem type="filename" name="*.code-workspace" desc="Vscode IDEA config file"/>
+				<filteritem type="filename" name="*.tar.gz|*.tgz|*.tar.gz*|*.zip" desc="Software tools"/>
 			</filefilter>
 			<filefilter name="defaultPolicyFilter" desc="Filters for compatibility，license header policies">
 				<filteritem type="filename" name="README.OpenSource"/>
@@ -102,8 +105,10 @@ Note:If the text contains special characters, please escape them according to th
 				<filteritem type="filepath" name="hi3861v100/sdk_liteos/third_party/.*" desc="Describe the reason for filtering scan results"/>
 				<filteritem type="filepath" name="hi3861v100/hi3861_adapter/.*" desc="Describe the reason for filtering scan results"/>
 				<filteritem type="filepath" name="hi3861v100/sdk_liteos/components/iperf2/include/iperf.h" desc="Describe the reason for filtering scan results"/>
-				<filteritem type="filename" name="*.mk|*.sh|*.gni|*.xml|*.cfg|*.csv|*.S|*.gn" desc="Describe the reason for filtering scan results"/>
+				<filteritem type="filename" name="*.mk|*.sh|*.gni|*.xml|*.cfg|*.csv|*.S|*.gn|*.mak|Makefile.*|Make.linux" desc="Describe the reason for filtering scan results"/>
 				<filteritem type="filename" name="*.txt" desc="Temp files"/>
+				<filteritem type="filename" name="*.yuv|*.bgr|*.symvers|*.h265|*.h264|*.om" desc="Resource file of media platform"/>
+				<filteritem type="filename" name="*.dts|*.dtsi" desc="device tree config file"/>
 				<filteritem type="filepath" name="hi3751v350/sdk_linux/bin/ohos_drv_mgr" desc="Describe the reason for filtering scan results"/>
 				<filteritem type="filepath" name="hi3516dv300/uboot/u-boot-hi3516dv300_emmc.bin" desc="Describe the reason for filtering scan results"/>
 				<filteritem type="filepath" name="hi3751v350/sdk_linux/source/device/soc/hisilicon/common/platform/wifi/rtl/rtl/usb_rtl8723du/rtl8723DU_WiFi_linux_v5.6.5.3_35502.20191025_COEX20181130-2e2e/clean" desc="Describe the reason for filtering scan results"/>
@@ -133,7 +138,7 @@ Note:If the text contains special characters, please escape them according to th
 				<filteritem type="filepath" name="hi3861v100/sdk_liteos/third_party/.*" desc="Describe the reason for filtering scan results"/>
 				<filteritem type="filepath" name="hi3861v100/hi3861_adapter/.*" desc="Describe the reason for filtering scan results"/>
 				<filteritem type="filepath" name="hi3861v100/sdk_liteos/components/iperf2/include/iperf.h" desc="Describe the reason for filtering scan results"/>
-				<filteritem type="filename" name="*.mk" desc="Describe the reason for filtering scan results"/>
+				<filteritem type="filename" name="*.mk|*.mak|Makefile.*|Make.linux" desc="Makefile Configuration file"/>
 				<filteritem type="filename" name="*.sh" desc="Describe the reason for filtering scan results"/>
 				<filteritem type="filename" name="*.gni" desc="Describe the reason for filtering scan results"/>
 				<filteritem type="filename" name="*.xml" desc="Describe the reason for filtering scan results"/>
@@ -142,6 +147,8 @@ Note:If the text contains special characters, please escape them according to th
 				<filteritem type="filename" name="*.csv" desc="Describe the reason for filtering scan results"/>
 				<filteritem type="filename" name="*.S|*.gn" desc="Describe the reason for filtering scan results"/>
 				<filteritem type="filename" name="*.txt" desc="Temp files"/>
+				<filteritem type="filename" name="*.yuv|*.bgr|*.symvers|*.h265|*.h264|*.om" desc="Resource file of media platform"/>
+				<filteritem type="filename" name="*.dts|*.dtsi" desc="device tree config file"/>
 				<filteritem type="filepath" name="hi3751v350/sdk_linux/bin/ohos_drv_mgr" desc="Describe the reason for filtering scan results"/>
 				<filteritem type="filepath" name="hi3516dv300/uboot/u-boot-hi3516dv300_emmc.bin" desc="Describe the reason for filtering scan results"/>
 				<filteritem type="filepath" name="hi3751v350/sdk_linux/source/common/drv/include/osal_ioctl.h" desc="Describe the reason for filtering scan results"/>
@@ -172,6 +179,11 @@ Note:If the text contains special characters, please escape them according to th
 				<!--filteritem type="filepath" name="dir name underproject/.*" desc="Describe the reason for filtering scan results"/-->
 			</filefilter>
 			<filefilter name="binaryFileTypePolicyFilter" desc="Filters for binary file policies" >
+				<filteritem type="filename" name="LICENSE"/>
+				<filteritem type="filename" name="*.pdf|*.xlsm|*.xlsx" desc="Development Documentation"/>
+				<filteritem type="filename" name="*.tar.gz|*.tgz|*.tar.gz*|*.zip" desc="Software tools"/>
+				<filteritem type="filename" name="*.a|*.so|*.bin|*.so.1" desc="Shared libraries of Hisilicon self-developed platform"/>
+				<filteritem type="filename" name="*.bmp|*.png|*.h265|*.gif|*.bits|*.heic|*.h264|*.yuv|*.om|*.vec|*.jpg|*.seq|*.pcm|*.dat" desc="Resource file of Hi3403V100 SOC MPP"/>
 				<filteritem type="filename" name="*.a|*.so|*.png|*.bin" desc="Shared libraries of Hisilicon self-developed multimedia processing platform, those libraries are under End User License Agreement declared in hi3516dv300/sdk_linux/out/lib/LICENSE"/>
 				<filteritem type="filepath" name="hi3861v100/sdk_liteos/build/libs/.*.a" desc="Describe the reason for filtering scan results"/>
 				<filteritem type="filepath" name="hi3861v100/sdk_liteos/build/libs/.*.o" desc="Describe the reason for filtering scan results"/>

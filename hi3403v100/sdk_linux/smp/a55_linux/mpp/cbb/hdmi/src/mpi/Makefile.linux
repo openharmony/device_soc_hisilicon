@@ -1,0 +1,22 @@
+
+BUILD_DIR = $(TEMP_PATH)/$(subst $(SDK_PATH)/,,$(CURDIR))
+HDMI_OBJ := $(BUILD_DIR)/ot_mpi_hdmi.o
+HDMI_OBJ += $(BUILD_DIR)/mpi_hdmi_com.o
+
+all:
+	@mkdir -p $(REL_LIB)
+	@mkdir -p $(REL_INC)
+	@mkdir -p $(BUILD_DIR)
+	@$(CC) -o $(BUILD_DIR)/ot_mpi_hdmi.o  ot_mpi_hdmi.c $(FLAGS)
+	@$(CC) -o $(BUILD_DIR)/mpi_hdmi_com.o  mpi_hdmi_com.c $(FLAGS)
+	@$(CC) $(LIBS_LD_CFLAGS) -shared -o $(BUILD_DIR)/$(LIB_SO) $(HDMI_OBJ)
+	@$(AR) -rsv $(BUILD_DIR)/$(LIB) $(HDMI_OBJ)
+	@cp $(BUILD_DIR)/$(LIB_SO) $(BUILD_DIR)/$(LIB) $(REL_LIB)/
+	@$(call maco_cp_file,$(INC_FILE),$(REL_INC))
+
+clean:
+	@rm -f *.o $(LIB_SO) $(LIB) $(REL_LIB)/libot_hdmi.a $(REL_LIB)/libot_hdmi.so
+	@rm -f $(REL_INC)/ot_common_hdmi.h $(REL_INC)/mpi_hdmi.h  $(REL_INC)/ot_mpi_hdmi.h
+	@rm -f $(PWD)/*.o
+
+

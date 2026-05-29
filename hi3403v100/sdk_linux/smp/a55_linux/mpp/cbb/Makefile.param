@@ -1,0 +1,60 @@
+ifeq ($(PARAM_FILE), ) 
+    PARAM_FILE:=../Makefile.param
+    include $(PARAM_FILE)
+endif
+
+export CBB_ROOT := $(SDK_PATH)/mpp/cbb
+export TDE_ROOT := $(CBB_ROOT)tde/tde
+COMM_INC := -I$(CBB_ROOT)/include
+COMM_INC += -I$(CBB_ROOT)/based/arch/$(OT_ARCH)/include
+COMM_INC += -I$(CBB_ROOT)/based/arch/$(OT_ARCH)/include/$(OT_SUBARCH)
+PUB_INC  += $(CBB_ROOT)/based/arch/$(OT_ARCH)/include
+# osal include
+COMM_INC += -I$(OSAL_ROOT)/include
+# cbb include
+COMM_INC += -I$(CBB_ROOT)/based/include/inner
+COMM_INC += -I$(CBB_ROOT)/based/include
+COMM_INC += -I$(CBB_ROOT)/based/include/adapt
+COMM_INC += -I$(CBB_ROOT)/sysd/include
+COMM_INC += -I$(CBB_ROOT)/sysd/include/adapt
+COMM_INC += -I$(CBB_ROOT)/sysd/include/inner
+COMM_INC += -I$(CBB_ROOT)/sysd/arch/include
+COMM_INC += -I$(CBB_ROOT)/sysd/arch/$(OT_ARCH)/include
+COMM_INC += -I$(REL_DIR)/include
+COMM_INC += -I$(REL_DIR)/include/adapt
+COMM_INC += -I$(CBB_ROOT)/based/ext_inc
+COMM_INC += -I$(CBB_ROOT)/sysd/ext_inc
+COMM_INC += -I$(CBB_ROOT)/sysd/mkp/include
+MKP_CFLAGS += -Wall -D$(OT_ARCH) -D$(OT_RLS_MODE) -D$(OT_FPGA)
+MKP_CFLAGS += -D_USE_LLI_
+MKP_CFLAGS += $(COMM_INC)
+MKP_CFLAGS += -Wno-date-time
+
+#*******************************************************************************
+MPI_CFLAGS += -I$(CBB_ROOT)/based/mkp/include
+MPI_CFLAGS += -I$(CBB_ROOT)/sysd/mkp/include
+define maco_ln
+    $(foreach file,$(1), $(shell mkdir -p "$(2)";ln -sf $(file) "$(2)/$(notdir $(file))"))
+endef
+
+define maco_rm
+    $(foreach file,$(1), $(shell rm -f $(2)/$(notdir $(file))))
+endef
+
+define maco_cp
+    $(foreach file,$(1), $(shell mkdir -p "$(2)";cp -f $(file) "$(2)/$(notdir $(file))"))
+endef
+
+define maco_cp_file
+    if [ ! -z "$(1)" ];then cp -rf $(1) "$(2)"; fi
+endef
+
+define maco_rmemptydir
+    if [ -e $(1) ];then rmdir --ignore-fail-on-non-empty "$(1)"; fi
+endef
+
+#*******************************************************************************
+
+export CBB_PARAM_FILE
+export MKP_CFLAGS
+

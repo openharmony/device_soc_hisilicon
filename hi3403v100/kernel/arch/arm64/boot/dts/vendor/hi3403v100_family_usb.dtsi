@@ -1,0 +1,111 @@
+#include <dt-bindings/clock/basedrv-clock.h>
+
+/ {
+		ups_clock:ups_clock {
+			compatible = "basedrv-ip,clock";
+			reg = <0x0 0x11010000 0x0 0x10000>,<0x0 0x11020000 0x0 0x10000>;
+			reg-names = "peri_crg","peri_ctrl";
+			#clock-cells = <1>;
+			status = "okay";
+		};
+
+		usb2phy0:usb2phy@10310000 {
+			compatible = "usb2phy,xvpphy";
+			reg = <0x0 0x10310000 0x0 0x1000>,<0x0 0x11020000 0x0 0x10000>;
+			reg-names = "u2_phy","peri_ctrl";
+			clocks = <&ups_clock PERI_CRG3632_USB2_PHY0>;
+			clock-names = "phy-clk";
+			u2phy-trim = <0x0A33CC2B 0x00260F0F>;
+			#phy-cells = <0>;
+			status = "okay";
+		};
+		
+		usb2phy1:usb2phy@10330000 {
+			compatible = "usb2phy,xvpphy";
+			reg = <0x0 0x10330000 0x0 0x1000>,<0x0 0x11020000 0x0 0x10000>;
+			reg-names = "u2_phy","peri_ctrl";
+			clocks = <&ups_clock PERI_CRG3640_USB2_PHY1>;
+			clock-names = "phy-clk";
+			u2phy-trim = <0x0A33CC2B 0x00260F0F>;
+			#phy-cells = <0>;
+			status = "okay";
+		};
+
+		combophy0:combophy0@10220004 {
+			compatible = "combophy,common";
+			reg = <0x0 0x10220004 0x0 0x1000>,<0x0 0x11020000 0x0 0x10000>;
+			reg-names = "combophy","peri_ctrl";
+			clocks = <&ups_clock PERI_CRG3665_COMBPHY0_CLK>;
+			clock-names = "phy-clk";
+			#phy-cells = <0>;
+			status = "okay";
+		};
+
+		combophy1:combophy1@10220008 {
+			compatible = "combophy,common";
+			reg = <0x0 0x10220008 0x0 0x1000>,<0x0 0x11020000 0x0 0x10000>;
+			reg-names = "combophy","peri_ctrl";
+			clocks = <&ups_clock PERI_CRG3673_COMBPHY1_CLK>;
+			clock-names = "phy-clk";
+			#phy-cells = <0>;
+			status = "okay";
+		};
+
+		usbctr0:usbctrl@10300000 {
+			compatible = "wing-usb,host";
+			reg = <0x0 0x10300000 0x0 0x10000>;
+			host-mode;
+			tx-thrcfg = <0x22080000>;
+			rx-thrcfg = <0x22800000>;
+			disable-suspend;
+			phys = <&usb2phy0>,<&combophy0>;
+			phy-names = "usb2-phy", "usb3-phy";
+			clocks = <&ups_clock PERI_CRG3664_USB30_CTRL0>;
+			clock-names = "ctrl-clk";
+			status = "okay";
+			ranges;
+			#address-cells = <2>;
+			#size-cells = <2>;
+			xhci0:xhci@10300000 {
+				compatible = "generic-xhci";
+				reg = <0x0 0x10300000 0x0 0x10000>;
+				interrupts = <GIC_SPI 120 IRQ_TYPE_LEVEL_HIGH>;
+				usb2-lpm-disable;
+			};
+		};
+
+		usb30drd:usb30drd@0x10320000 {
+			compatible = "wing-usb,drd";
+			reg = <0x0 0x10320000 0x0 0x10000>;
+			controller_id = <0>;
+			support-drd;
+			tx-thrcfg = <0x22080000>;
+			rx-thrcfg = <0x22200000>;
+			phys = <&usb2phy1>,<&combophy1>;
+			phy-names = "usb2-phy", "usb3-phy";
+			clocks = <&ups_clock PERI_CRG3672_USB30_CTRL1>;
+			clock-names = "ctrl-clk";
+			init_mode="device";
+			status = "okay";
+			ranges;
+			#address-cells = <2>;
+			#size-cells = <2>;
+			dwc3@10320000{
+				compatible = "snps,dwc3";
+				reg = <0x0 0x10320000 0x0 0x10000>;
+				interrupts = <GIC_SPI 121 IRQ_TYPE_LEVEL_HIGH>;
+				interrupt-names = "peripheral";
+				maximum-speed = "super-speed";
+				dr_mode = "otg";
+				usb-role-switch;
+				snps,usb2-lpm-disable;
+				snps,usb2-gadget-lpm-disable;
+				snps,dis-u1-entry-quirk;
+				snps,dis-u2-entry-quirk;
+				snps,dis_u2_susphy_quirk;
+				snps,dis_u3_susphy_quirk;
+				linux,sysdev_is_parent;
+				extcon = <&usb30drd>;
+			};
+		};
+};

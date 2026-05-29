@@ -1,0 +1,26 @@
+{
+    "Security_Mode": "Non-Secure",
+    "GSL": {
+        "GSL_Key_Area": {
+            "GSL_Code_Enc_Flag": "0x3C7896E1"
+        },
+        "GSL_Code_Area": {
+            "GSL_Image_Info": "0x00",
+            "GSL_Code": "gsl.bin"
+        }
+    },
+    "Boot": {
+        "Boot_Params_Area": {
+            "Boot_Entry_Point": "0x0000000041800000",
+            "Boot_Enc_Flag": "0x3C7896E1",
+            "Cfg_Param": ".reg"
+        },
+        "Unchecked_Area_for_Vendor": {
+            "SCS_simulate_flag": "0x69875AB4"
+        },
+        "Boot_Area": {
+            "Unchecked_Area": "0x0000000000000000",
+            "Boot_Code": "u-boot-original.bin"
+        }
+    }
+}

@@ -1,0 +1,67 @@
+# use C01 to indicate uclibc, C02 to indicate glibc, C05 to indicate LiteOS.
+ifeq ($(FPGA),n)
+    ifeq ($(LIBC),glibc)
+        export CVER?=.C$(ASIC_FLAG)2
+    else
+        export CVER?=.C$(ASIC_FLAG)1
+    endif
+else
+    ifeq ($(LIBC),glibc)
+    export CVER?=.C$(FPGA_FLAG)2
+else
+    export CVER?=.C$(FPGA_FLAG)1
+    endif
+endif
+
+##############################################################################
+# Allocated the kernel position
+ifeq ($(MPP_BUILD), y)
+    export KERNEL_ROOT?=$(WORK_PATH)/osdrv$(OT_SUBARCH)$(CVER)/open_source/linux/$(KERNEL_NAME)
+else
+    export KERNEL_ROOT?=$(OPEN_SOURCE_PATH)/linux/$(KERNEL_NAME)
+endif
+
+export OSDRV_PATH:=$(KERNEL_ROOT)/../../..
+
+##############################################################################
+
+# Define cross compiler
+export CC:=$(CROSS)gcc
+ifeq ($(CONFIG_OT_CROSS), llvm-)
+CLANG_DIR := $(shell dirname $$(which clang))
+CLANG_VER := $(shell clang -v 2>&1 | awk '/clang version/ {print $$3}')
+MPP_SYSROOT := $(CLANG_DIR)/../sysroot/
+SYSROOT_PATH ?= $(MPP_SYSROOT)
+COMPILER_PATH ?= $(CLANG_DIR)
+export CC:=$(COMPILER_PATH)/clang --target=aarch64-linux-ohos -Wno-unused-command-line-argument --sysroot $(SYSROOT_PATH) -isystem $(SYSROOT_PATH)/usr/include/aarch64-linux-ohos
+export LLVM_KERNEL_TOOLCHAIN_ARGS:=LLVM=1 KBUILD_MODPOST_WARN=1 CROSS_COMPILE=$(CROSS_COMPILE) CC="$(CC)"
+CC += -fuse-ld=lld -rtlib=compiler-rt
+else
+export LLVM_KERNEL_TOOLCHAIN_ARGS:=KBUILD_MODPOST_WARN=1
+GCC_DIR := $(shell dirname $$(which $(CC)))
+GCC_VER := $(shell $(CC) -v 2>&1 | awk '/gcc version/ {print $$3}')
+MPP_CFLAGS += -isystem $(GCC_DIR)/../lib64/gcc/aarch64-openeuler-linux-gnu/$(GCC_VER)/include/ --sysroot $(GCC_DIR)/../aarch64-openeuler-linux-gnu/sysroot/ -Wno-unused-command-line-argument
+endif
+export AR:=$(CROSS)ar
+
+export REL_INC := $(REL_DIR)/include
+export REL_LIB := $(REL_DIR)/lib
+export REL_KO  := $(REL_DIR)/ko
+export REL_OBJ := $(REL_DIR)/obj
+export REL_INI := $(REL_DIR)/init
+
+
+LIBS_LD_CFLAGS += -ldl -rdynamic
+MPP_CFLAGS += -Wno-date-time
+DRV_CFLAGS += -Wno-date-time
+
+#ifeq ($(OT_SUBARCH), ss626v100)
+ifeq ($(OT_SUBARCH),$(filter $(OT_SUBARCH), ss928v100 ss626v100))
+ifeq ($(MPP_BUILD), y)
+    export KBUILD_EXTRA_SYMBOLS += $(TEMP_PATH)/Module_5_10.symvers
+else
+    export KBUILD_EXTRA_SYMBOLS += $(REL_OBJ)/Module_5_10.symvers
+endif
+else
+export KBUILD_EXTRA_SYMBOLS += $(TEMP_PATH)/Module.symvers
+endif

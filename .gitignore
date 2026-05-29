@@ -1,1 +1,5 @@
 ws63v100/sdk/interim_binary/ws63/libs/**
+common/hal/media/audio/hi3403v100
+common/hal/media/codec/hi3403v100
+common/hal/media/common/hi3403v100
+common/hal/media/format/hi3403v100

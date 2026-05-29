@@ -1,0 +1,15 @@
+{
+    "secure_boot_en"             : "0x42",
+    "soc_tee_enable"             : "0x42",
+    "gsl_dec_en"                 : "0xa",
+    "bload_dec_en"               : "0x0",
+    "tee_owner_sel"              : "0x0",
+    "oem_rk_deob_en"             : "0x0",
+    "oem_root_public_key_sha256" : "0x00000000000000000000000000000000",
+    "oem_root_symc_key0"         : "0x00000000000000000000000000000000",
+    "oem_msid"                   : "0x00000000",
+    "oem_version"                : "0x00000000",
+    "tee_msid"                   : "0x00000000",
+    "tee_sec_version"            : "0x0000000000000000"
+}
+

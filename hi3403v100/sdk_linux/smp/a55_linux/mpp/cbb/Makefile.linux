@@ -1,0 +1,82 @@
+# SPDX-License-Identifier: GPL-2.0
+# Copyright (c) 2025 HiSilicon (Shanghai) Technologies Co., Ltd.
+#*******************************************************************************
+#The rule of make Linux kernel module
+#*******************************************************************************
+
+$(TARGET)-objs = $(SRCS:%.c=%.o)
+$(MOD_NAME)-objs = $(SRCS_O:%.c=%.o)
+
+ifneq ($(KERNELRELEASE),)
+    obj-m += $(TARGET).o
+ifneq ($(CONFIG_DRIVER_SPACE_TYPE),user_space)
+    obj-m += $(MOD_NAME).o
+endif
+endif
+
+EXTRA_CFLAGS += $(MKP_CFLAGS)
+KBUILD_EXTRA_SYMBOLS += $(OT_KBUILD_EXTRA_SYMBOLS)
+BUILD_DIR = $(TEMP_PATH)/$(subst $(SDK_PATH)/,,$(CURDIR))
+BUILD_DIR_MAKEFILE := $(BUILD_DIR)/Makefile
+
+#*******************************************************************************
+#The file need tobe clean, when make clean
+CLEAN_FILE := $(SRCS:%.c=%.o)
+CLEAN_FILE += $(SRCS:%.c=%.o.cmd)
+CLEAN_FILE += $(join $(dir $(SRCS)), $(patsubst %.c, .%.o.cmd, $(notdir $(SRCS))))
+CLEAN_FILE += $(TARGET).mod.c \
+                         $(TARGET).ko.cmd \
+                         $(TARGET).ko \
+                         $(TARGET).o \
+                         $(TARGET).mod.o \
+                         .$(TARGET).ko.cmd \
+                         .$(TARGET).o.cmd \
+                         .$(TARGET).mod.o.cmd
+CLEAN_FILE += $(MOD_NAME).mod.c \
+                         $(MOD_NAME).ko.cmd \
+                         $(MOD_NAME).ko \
+                         $(MOD_NAME).o \
+                         $(MOD_NAME).mod.o \
+                         .$(MOD_NAME).ko.cmd \
+                         .$(MOD_NAME).o.cmd \
+                         .$(MOD_NAME).mod.o.cmd
+
+#*******************************************************************************
+.PHONY: default clean
+default:
+	@echo -e "\e[0;32;1m--Compiling '$(TARGET)'... Configs as follow:\e[0;36;1m"
+	@echo "---- USER_CROSS=$(CROSS)      KERNEL_CROSS=$(CROSS_COMPILE)"
+	@echo ---- OT_ARCH=$(OT_ARCH), ARCH=$(ARCH), OT_CHIP=$(OT_CHIP), CVER=$(CVER), DBG=$(OT_DBG), OT_FPGA=$(OT_FPGA)
+	@echo ---- CPU_TYPE=$(CPU_TYPE)
+	@echo ---- MPP_CFLAGS=$(MPP_CFLAGS)
+	@echo ---- MKP_CFLAGS=$(MKP_CFLAGS)
+	@echo ---- SDK_PATH=$(SDK_PATH) , PARAM_FILE=$(PARAM_FILE)
+	@echo ---- KERNEL_ROOT=$(KERNEL_ROOT)
+	@echo ---- ARCH_ROOT=$(ARCH_ROOT), ARCH_HAL=$(ARCH_HAL)
+	@echo ---- OT_GDB=$(OT_GDB)
+	@@echo -e "\e[0m"
+	@mkdir -p $(BUILD_DIR)
+	@touch $(BUILD_DIR_MAKEFILE)
+	@$(MAKE) -C $(KERNEL_ROOT) $(LLVM_KERNEL_TOOLCHAIN_ARGS) M=$(BUILD_DIR) src=$(CURDIR) O=$(KERNEL_ROOT) V=10 modules -j 24
+ifeq ($(OT_GDB), n)
+	@$(CROSS)strip --strip-unneeded $(BUILD_DIR)/$(TARGET).ko
+ifneq ($(CONFIG_DRIVER_SPACE_TYPE),user_space)
+	@$(CROSS)strip --strip-unneeded $(BUILD_DIR)/$(MOD_NAME).o
+endif
+endif
+	@mkdir -p $(REL_KO)  && cp -rf $(BUILD_DIR)/$(TARGET).ko $(REL_KO) && chmod 755 $(REL_KO)/load*
+ifneq ($(CONFIG_DRIVER_SPACE_TYPE),user_space)
+	@mkdir -p $(REL_OBJ) && cp -rf $(BUILD_DIR)/$(MOD_NAME).o $(REL_OBJ)
+endif
+	@mkdir -p $(REL_INI)/src && cp -rf $(INIT_FILE) $(REL_INI)/src
+	@mkdir -p $(REL_INI)/include && cp -rf $(INIT_INC) $(REL_INI)/include
+	@mkdir -p $(REL_INC) && $(call maco_cp_file,$(INC_FILE),$(REL_INC))
+
+clean:
+	@rm -f $(REL_KO)/$(TARGET).ko
+ifneq ($(CONFIG_DRIVER_SPACE_TYPE),user_space)
+	@rm -f $(REL_OBJ)/$(MOD_NAME).o
+endif
+	@rm -f $(REL_INI)/src/$(shell basename $(INIT_FILE))
+	@rm -f $(REL_INI)/include/$(shell basename $(INIT_INC))
+	@rm -rf $(addprefix $(BUILD_DIR)/,$(CLEAN_FILE) .tmp_versions Module.symvers modules.order)

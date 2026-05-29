@@ -21,6 +21,9 @@ function main(){
     #cp -rf $CUR_DIR/audio/$BOARD_NAME/$OS_TYPE/libs/libaudio_input_port.so $OUT_DIR/
     #cp -rf $CUR_DIR/audio/$BOARD_NAME/$OS_TYPE/libs/libaudio_output_port.so $OUT_DIR/
     cp -rf $CUR_DIR/audio/$BOARD_NAME/$OS_TYPE/libs/libaudio_primary_port.so $OUT_DIR/
+    if [ -f "$CUR_DIR/audio/$BOARD_NAME/$OS_TYPE/libs/libaudio_usb_port.so" ]; then
+        cp -rf $CUR_DIR/audio/$BOARD_NAME/$OS_TYPE/libs/libaudio_usb_port.so $OUT_DIR/
+    fi
 
     cp -rf $CUR_DIR/codec/$BOARD_NAME/$OS_TYPE/libs/libcodec.so $OUT_DIR/
     cp -rf $CUR_DIR/codec/$BOARD_NAME/$OS_TYPE/libs/libhiaacdec.so $OUT_DIR/

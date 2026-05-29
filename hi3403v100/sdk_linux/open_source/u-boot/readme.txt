@@ -1,0 +1,1 @@
+1、需要下载源码包放入当前的目录：https://ftp.denx.de/pub/u-boot/u-boot-2020.01.tar.bz2

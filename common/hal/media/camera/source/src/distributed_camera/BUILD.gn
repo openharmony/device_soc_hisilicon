@@ -1,0 +1,77 @@
+# Copyright (c) 2025 HiSilicon (Shanghai) Technologies Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//build/lite/config/component/lite_component.gni")
+import("//foundation/multimedia/media_utils_lite/config.gni")
+if (board_name == "hispark_taurus" || board_name == "hispark_aries") {
+  group("hdi_virtual_camera") {
+  }
+} else {
+  shared_library("hdi_virtual_camera") {
+    include_dirs = [
+    "include/dcamera_device",
+    "include/dcamera_provider",
+    "include/dstream_operator",
+    "include/dcamera_decoder",
+    "include/utils",
+    "//drivers/peripheral/codec/interfaces/include",
+    "//drivers/peripheral/display/interfaces/include",
+    "//foundation/multimedia/media_utils_lite/hals",
+    "//drivers/peripheral/base",
+    "//drivers/interface/distributed_camera",
+    "//third_party/jsoncpp/include",
+    "//foundation/multimedia/media_utils_lite/interfaces/kits"
+    ]
+    sources = [
+    "src/dcamera_provider/dcamera_provider.cpp",
+    "src/dcamera_device/distributed_camera_hal.cpp",
+    "src/dstream_operator/dbuffer_manager.cpp",
+    "src/dcamera_decoder/dcamera_decoder.cpp",
+    "src/utils/anonymous_string.cpp",
+    "src/utils/dcamera.cpp",
+    "src/utils/dh_log.cpp",
+    ]
+
+    deps = [
+    "//device/soc/hisilicon/common/hal/display:display_layer",
+    "//third_party/bounds_checking_function:libsec_shared",
+    "//base/hiviewdfx/hilog_lite/frameworks/featured:hilog_shared",
+    "//drivers/interface/camera/metadata:metadata_lite",
+    "//foundation/multimedia/media_utils_lite:media_common",
+    ]
+  
+    public_configs = [ ":virtual_camera_external_config" ]
+
+    defines = [
+    "HI_LOG_ENABLE",
+    "DH_LOG_TAG=\"distributedcamerahdf\"",
+    "LOG_DOMAIN=0xD004100",
+    "SUPPORT_NAMESPACE_MEDATA",
+    ]
+    if (enable_distributed_dfx == true) {
+    defines += ["ENABLE_DFX"]
+    }
+  }
+}
+
+config("virtual_camera_external_config") {
+  include_dirs = [
+    "include/dcamera_provider",
+  ]
+}
+
+group("hdi_distributed_camera") {
+  deps = [
+    ":hdi_virtual_camera",
+  ]
+}

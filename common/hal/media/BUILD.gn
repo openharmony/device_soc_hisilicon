@@ -2,6 +2,7 @@
 
 if (defined(ohos_lite)) {
   import("//build/lite/config/component/lite_component.gni")
+  import("../display/config.gni")
 } else {
   import("//build/ohos.gni")
 }
@@ -12,12 +13,40 @@ if (defined(ohos_lite)) {
     board = "hi3516dv300"
   } else if (board_name == "hispark_aries") {
     board = "hi3518ev300"
+  } else if (board_name == "hispark_aiflylite") {
+    board = "hi3403v100"
+  } else if (board_name == "hispark_aifly") {
+    board = "hi3403v100"
   }
 
-  build_ext_component("hardware_media_sdk") {
-    exec_path = rebase_path(".", root_build_dir)
-    outdir = rebase_path("$root_out_dir")
-    command = "./build.sh ${outdir} ${board} ${ohos_kernel_type} ${ohos_build_compiler} ${storage_type}"
+  if (board == "hi3403v100") {
+      build_ext_component("hardware_media_sdk") {
+        exec_path = rebase_path(".", root_build_dir)
+        outdir = rebase_path("$root_out_dir")
+        compile_dir = ""
+        if (ohos_build_compiler == "clang") {
+          if (ohos_build_compiler_dir != "") {
+            compile_dir = rebase_path("${ohos_build_compiler_dir}/bin")
+          }
+        } else if (ohos_build_compiler == "gcc"){
+          compile_dir = board_toolchain_path
+        }
+        command = "./build/build_media_source_L1.sh ${outdir} ${board} ${ohos_kernel_type} ${ohos_build_compiler} ${compile_dir} ${graphic_utils_lite_enable_drm_display_hal}"
+        deps = [
+          "//third_party/alsa-lib:libasound",
+          "//device/soc/hisilicon/hi3403v100/sdk_linux:hispark_aifly_sdk",
+        ]
+      }
+
+    group("hid_camera") {
+      deps = [ "//device/soc/hisilicon/common/hal/media/camera/source:hdi_camera" ]
+    }
+  } else {
+    build_ext_component("hardware_media_sdk") {
+      exec_path = rebase_path(".", root_build_dir)
+      outdir = rebase_path("$root_out_dir")
+      command = "./build.sh ${outdir} ${board} ${ohos_kernel_type} ${ohos_build_compiler} ${storage_type}"
+    }
   }
 } else {
   group("hardware_group") {

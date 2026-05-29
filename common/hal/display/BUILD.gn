@@ -11,54 +11,321 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import("config.gni")
+
 if (defined(ohos_lite)) {
   import("//build/lite/config/component/lite_component.gni")
   import("//build/lite/ndk/ndk.gni")
-  board = board_name
-  if (board_name == "hispark_taurus" || board_name == "aegis_hi3516dv300") {
-    board = "hi3516dv300"
-  } else if (board_name == "hispark_aries") {
-    board = "hi3518ev300"
-  }
+  if (board_name == "hispark_aifly" || board_name == "hispark_aiflylite" || board_name == "hispark_hi3516cv610" ||
+    board_name == "hispark_hi3519dv500") {
+    mpp_arch = ""
+    sdk_include_dir = ""
+    sdk_lib_dir = ""
+    bt1120_support = false
+    hdmi_support = true
+    disenalbe_disp = true
+    vpss_grp_start_id = 100
+    display_layer_lib = []
+    vqe_lib = []
+    tde_lib = []
+    display_gralloc_lib = []
+    if (board_name == "hispark_hi3516cv610") {
+      mpp_arch = "h9"
+      sdk_include_dir = "//device/soc/hisilicon/hi3516cv610/sdk_linux/smp/a7_linux/source/out/include"
+      sdk_lib_dir = "//device/soc/hisilicon/hi3516cv610/sdk_linux:${board_name}_sdk"
+      disenalbe_disp = false
+      hdmi_support = false
+      vpss_grp_start_id = 1
+      display_layer_lib = [
+        "-lmpi",
+        "-lVoiceEngine"
+      ]
+      vqe_lib = [
+        "-ldnvqe",
+        "-lupvqe"
+      ]
+      tde_lib = [ "-ltde" ]
+      display_gralloc_lib = display_layer_lib
+    } else if (board_name == "hispark_hi3519dv500") {
+      mpp_arch = "h9"
+      sdk_include_dir = "//device/soc/hisilicon/hi3519dv500/sdk_linux/smp/a55_linux/source/out/include"
+      sdk_lib_dir = "//device/soc/hisilicon/hi3519dv500/sdk_linux:${board_name}_sdk"
+      vpss_grp_start_id = 1
+      bt1120_support = true
+      hdmi_support = false
+      display_layer_lib = [
+        "-ldehaze",
+        "-lbnr",
+        "-lacs",
+        "-lcalcflicker",
+        "-ldrc",
+        "-lextend_stats",
+        "-lir_auto",
+        "-lldci",
+        "-lot_mpi_isp",
+        "-lss_mpi",
+        "-lss_mpi_sysmem",
+        "-lss_mpi_audio",
+        "-lvoice_engine",
+        "-lss_mpi_sysbind"
+      ]
+      vqe_lib = [
+        "-ldnvqe",
+        "-lupvqe"
+      ]
+      display_gralloc_lib = [
+        "-lss_mpi",
+        "-lss_mpi_sysmem",
+        "-lss_mpi_audio",
+        "-lvoice_engine",
+        "-lss_mpi_sysbind"
+      ]
+    } else {
+      mpp_arch = "h8"
+      sdk_include_dir = "${root_out_dir}/sdk_linux/src_tmp/smp/a55_linux/mpp/out/include"
+      sdk_lib_dir = "//device/soc/hisilicon/hi3403v100/sdk_linux:hispark_aifly_sdk"
+      sdk_lib_path = rebase_path("${root_out_dir}/sdk_linux/src_tmp/smp/a55_linux/mpp/out/lib")
+      display_layer_lib = [
+        "-L${sdk_lib_path}",
+        "-lss_mpi",
+        "-lss_voice_engine",
+        "-lss_hdmi",
+        "-lot_osal",
+        "-lot_base",
+        "-lot_sys",
+        "-lot_vo",
+        "-lot_rgn",
+        "-lot_irq",
+      ]
+      vqe_lib = [
+        "-lss_dnvqe",
+        "-lss_upvqe"
+      ]
+      tde_lib = [
+        "-L${sdk_lib_path}",
+        "-lss_tde"
+      ]
+      display_gralloc_lib = [
+        "-L${sdk_lib_path}",
+        "-lss_mpi",
+        "-lss_voice_engine",
+      ]
+    }
+    shared_library("display_layer") {
+      output_name = "display_layer"
+      if(graphic_utils_lite_enable_drm_display_hal) {
+      sources = [
+        "//drivers/peripheral/display/hal/disp_hal.c",
+        "drm/src/display_layer.c",
+        "drm/src/display_overlay_layer.c",
+      ]
+      } else {
+      sources = [
+        "//drivers/peripheral/display/hal/disp_hal.c",
+        "common/src/display_layer.c",
+        "common/src/${mpp_arch}/display_overlay_layer_vpss.c",
+        "common/src/display_overlay_layer.c",
+        "common/src/${mpp_arch}/vpss_resmng_config.c",
+        "common/src/vpss_resmng.c",
+        "common/src/hdmi.c",
+        "common/src/vo_parameter_calc.c",
+        "common/src/bt1120.c"
+      ]
+      }
+      include_dirs = [
+        "//drivers/peripheral/base",
+        "//drivers/peripheral/display/hal",
+        "//drivers/peripheral/display/interfaces/include",
+        "//base/hiviewdfx/hilog_lite/interfaces/native/innerkits",
+      ]
 
-  if (ohos_build_compiler == "clang" && ohos_kernel_type == "liteos_a") {
-    copy("display_layer") {
-      sources = [ "${board}/liteos_a/lib/libdisplay_layer.so" ]
-      outputs = [ "$root_out_dir/libdisplay_layer.so" ]
+      deps = [
+        "//third_party/bounds_checking_function:libsec_shared",
+        "//drivers/hdf_core/adapter/uhdf2/utils:libhdf_utils"
+      ]
+
+      if(graphic_utils_lite_enable_drm_display_hal) {
+      include_dirs += [
+        "./drm/include",
+        "./common/include",
+        "./common/include/adapt",
+        "./common/include/adapt/${mpp_arch}",
+        "//third_party/libdrm",
+        "//third_party/libdrm/include/drm",
+      ]
+      deps += [
+        "//third_party/libdrm:libdrm",
+      ]
+      } else {
+      include_dirs += [
+        "./common/include",
+        "./common/include/adapt",
+        "./common/include/adapt/${mpp_arch}",
+      ]
+      }
+
+      defines = ["__USER__"]
+      cflags = [
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fsigned-char",
+        "-fno-common",
+        "-fno-strict-aliasing",
+        "-Wno-format",
+        "-Wno-format-extra-args",
+        "-Wno-error=implicit-function-declaration",
+      ]
+
+      if (ohos_kernel_type == "linux") {
+        include_dirs += [ sdk_include_dir ]
+        deps += [ sdk_lib_dir ]
+      }
+
+      if (disenalbe_disp) {
+        defines += [ "DISENABLE_DISP" ]
+      }
+      if (bt1120_support) {
+        defines += [ "__BT1120_SUPPORT__" ]
+      }
+      if (hdmi_support) {
+        defines += [ "__HDMI_SUPPORT__" ]
+      }
+      ldflags = display_layer_lib
+      defines += [ "VPSS_GRP_START_ID=${vpss_grp_start_id}" ]
+      ldflags += vqe_lib
     }
 
-    copy("display_gfx") {
-      sources = [ "${board}/liteos_a/lib/libdisplay_gfx.so" ]
-      outputs = [ "$root_out_dir/libdisplay_gfx.so" ]
+    shared_library("display_gfx") {
+      output_name = "display_gfx"
+      sources = [ "common/src/display_gfx.c" ]
+      include_dirs = [
+        "./common/include",
+        "./common/include/adapt",
+        "./common/include/adapt/${mpp_arch}",
+        "//drivers/peripheral/base",
+        "//drivers/peripheral/display/hal",
+        "//drivers/peripheral/display/interfaces/include",
+        "//base/hiviewdfx/hilog_lite/interfaces/native/innerkits",
+      ]
+
+      defines = [ "__USER__" ]
+      deps = [
+        "//third_party/bounds_checking_function:libsec_shared",
+        "//drivers/hdf_core/adapter/uhdf2/utils:libhdf_utils"
+      ]
+      cflags = [
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fsigned-char",
+        "-fno-common",
+        "-fno-strict-aliasing",
+        "-Wno-format",
+        "-Wno-format-extra-args",
+      ]
+
+      include_dirs += [ sdk_include_dir ]
+      deps += [ sdk_lib_dir ]
+
+      ldflags = tde_lib
     }
 
-    copy("display_gralloc") {
-      sources = [ "${board}/liteos_a/lib/libdisplay_gralloc.so" ]
-      outputs = [ "$root_out_dir/libdisplay_gralloc.so" ]
-    }
-  } else if (ohos_build_compiler == "clang" && ohos_kernel_type == "linux") {
-    copy("display_layer") {
-      sources = [ "${board}/linux_small/lib/libdisplay_layer.so" ]
-      outputs = [ "$root_out_dir/libdisplay_layer.so" ]
+    shared_library("display_gralloc") {
+      output_name = "display_gralloc"
+      sources = [
+        "common/src/${mpp_arch}/display_gralloc_mem.c",
+        "common/src/display_gralloc.c" 
+      ]
+
+      include_dirs = [
+        "./common/include",
+        "./common/include/adapt",
+        "./common/include/adapt/${mpp_arch}",
+        "//drivers/peripheral/base",
+        "//drivers/peripheral/display/hal",
+        "//drivers/peripheral/display/interfaces/include",
+        "//base/hiviewdfx/hilog_lite/interfaces/native/innerkits",
+      ]
+
+      defines = [ "__USER__" ]
+      deps = [
+        "//third_party/bounds_checking_function:libsec_shared",
+        "//drivers/hdf_core/adapter/uhdf2/utils:libhdf_utils"
+      ]
+      cflags = [
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fsigned-char",
+        "-fno-common",
+        "-fno-strict-aliasing",
+        "-Wno-format",
+        "-Wno-format-extra-args",
+      ]
+
+      include_dirs += [ sdk_include_dir ]
+      deps += [ sdk_lib_dir ]
+
+      ldflags = display_gralloc_lib
+
+      ldflags += vqe_lib
     }
 
-    copy("display_gfx") {
-      sources = [ "${board}/linux_small/lib/libdisplay_gfx.so" ]
-      outputs = [ "$root_out_dir/libdisplay_gfx.so" ]
+    lite_component("hdi_display") {
+      features = [
+        ":display_layer",
+        ":display_gfx",
+        ":display_gralloc"
+      ]
+    }
+  } else {
+    board = board_name
+    if (board_name == "hispark_taurus" || board_name == "aegis_hi3516dv300") {
+      board = "hi3516dv300"
+    } else if (board_name == "hispark_aries") {
+      board = "hi3518ev300"
     }
 
-    copy("display_gralloc") {
-      sources = [ "${board}/linux_small/lib/libdisplay_gralloc.so" ]
-      outputs = [ "$root_out_dir/libdisplay_gralloc.so" ]
-    }
-  }
+    if (ohos_build_compiler == "clang" && ohos_kernel_type == "liteos_a") {
+      copy("display_layer") {
+        sources = [ "${board}/liteos_a/lib/libdisplay_layer.so" ]
+        outputs = [ "$root_out_dir/libdisplay_layer.so" ]
+      }
 
-  group("hdi_display") {
-    deps = [
-      ":display_gfx",
-      ":display_gralloc",
-      ":display_layer",
-    ]
+      copy("display_gfx") {
+        sources = [ "${board}/liteos_a/lib/libdisplay_gfx.so" ]
+        outputs = [ "$root_out_dir/libdisplay_gfx.so" ]
+      }
+
+      copy("display_gralloc") {
+        sources = [ "${board}/liteos_a/lib/libdisplay_gralloc.so" ]
+        outputs = [ "$root_out_dir/libdisplay_gralloc.so" ]
+      }
+    } else if (ohos_build_compiler == "clang" && ohos_kernel_type == "linux") {
+      copy("display_layer") {
+        sources = [ "${board}/linux_small/lib/libdisplay_layer.so" ]
+        outputs = [ "$root_out_dir/libdisplay_layer.so" ]
+      }
+
+      copy("display_gfx") {
+        sources = [ "${board}/linux_small/lib/libdisplay_gfx.so" ]
+        outputs = [ "$root_out_dir/libdisplay_gfx.so" ]
+      }
+
+      copy("display_gralloc") {
+        sources = [ "${board}/linux_small/lib/libdisplay_gralloc.so" ]
+        outputs = [ "$root_out_dir/libdisplay_gralloc.so" ]
+      }
+    }
+
+    group("hdi_display") {
+      deps = [
+        ":display_gfx",
+        ":display_gralloc",
+        ":display_layer",
+      ]
+    }
   }
 } else {
   import("//build/ohos.gni")

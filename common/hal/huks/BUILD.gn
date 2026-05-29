@@ -1,0 +1,70 @@
+# Copyright (c) 2026 HiSilicon (Shanghai) Technologies Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#     http://www.apache.org/licenses/LICENSE-2.0
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+if (defined(ohos_lite)) {
+  import("//build/lite/config/component/lite_component.gni")
+
+  shared_library("huks_cipher_adapter") {
+    output_name = "huks_cipher_adapter"
+    sources = []
+
+    include_dirs = [ 
+      "//drivers/peripheral/huks/interfaces/include",
+      "//base/security/huks/interfaces/inner_api/huks_standard/main/include",
+      "//drivers/hdf_core/interfaces/inner_api/utils",
+      "//drivers/hdf_core/interfaces/inner_api/osal/uhdf",
+      "//base/hiviewdfx/hilog_lite/interfaces/native/kits"
+      ]
+
+    deps = []
+
+    cflags = [
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-fsigned-char",
+      "-fno-common",
+      "-fno-strict-aliasing",
+      "-Wno-format",
+      "-Wno-format-extra-args",
+    ]
+
+    if (board_name == "hispark_aifly" || board_name == "hispark_aiflylite") {
+        sdk_lib_path = rebase_path("${root_out_dir}/sdk_linux/src_tmp/smp/a55_linux/mpp/out/lib")
+        include_dirs += [
+          "${root_out_dir}/sdk_linux/src_tmp/smp/a55_linux/mpp/out/include",
+          "hi3403v100/include",
+        ]
+
+        sources += [ "hi3403v100/src/huks_hdi_cipher_adapter.c" ]
+
+        deps += [ "//device/soc/hisilicon/hi3403v100/sdk_linux:hispark_aifly_sdk" ]
+        ldflags = [
+            "-L${sdk_lib_path}",
+            "-lss_cipher",
+            "-lss_klad",
+            "-lss_otp",
+            "-lss_voice_engine",
+            "-lss_upvqe",
+            "-lss_dnvqe",
+            "-lss_mpi",
+            "-lot_osal",
+            "-lot_irq",
+            ]
+    }
+  }
+
+  lite_component("hdi_huks") {
+    features = [
+      ":huks_cipher_adapter",
+    ]
+  }
+}

@@ -1,0 +1,21 @@
+export PARAM_FILE := ../../../Makefile.param
+include $(PARAM_FILE)
+
+COMMON_DIR:=$(PWD)/../../common
+AUDIO_ADP_DIR:=$(PWD)/../../audio/adp
+include ../../Makefile.param
+
+MPI_LIBS += $(REL_LIB)/libss_ive.so
+MPI_LIBS += $(REL_LIB)/libss_md.so
+MPI_LIBS += $(REL_LIB)/libss_mau.so
+MPI_LIBS += $(REL_LIB)/libss_dpu_rect.so
+MPI_LIBS += $(REL_LIB)/libss_dpu_match.so
+ifneq ($(CONFIG_DRIVER_SPACE_TYPE),user_space)
+    MPI_LIBS += $(REL_LIB)/libss_dsp.so
+endif
+MPI_LIBS += $(REL_LIB)/svp_npu/libsvp_acl.so
+MPI_LIBS += -L$(REL_LIB)/svp_npu -lprotobuf-c
+CFLAGS += -I$(PWD)/../common
+CFLAGS += -I$(REL_INC)/svp_npu
+CFLAGS += -fstack-protector-strong
+

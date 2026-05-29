@@ -1,0 +1,86 @@
+# SPDX-License-Identifier: GPL-2.0
+# Copyright (c) 2025 HiSilicon (Shanghai) Technologies Co., Ltd.
+#*******************************************************************************
+#The rule of make Linux kernel module
+#*******************************************************************************
+$(GFBG_MOD_NAME)-objs = $(GFBG_SRC:%.c=%.o)
+$(MOD_NAME)-objs = $(GFBG_SRC_O:%.c=%.o)
+
+ifneq ($(KERNELRELEASE),)
+    obj-m += gfbg.o
+ifneq ($(CONFIG_DRIVER_SPACE_TYPE),user_space)
+    #obj-m += $(MOD_NAME).o
+endif
+endif
+
+TDE_ROOT    := tde/tde
+
+BUILD_DIR = $(TEMP_PATH)/$(subst $(SDK_PATH)/,,$(CURDIR))
+BUILD_DIR_MAKEFILE := $(BUILD_DIR)/Makefile
+
+#*******************************************************************************
+.PHONY: default clean
+default:
+
+ifeq ($(MPP_BUILD), y)
+	@-pushd $(MPP_PATH)/component/gfbg/include        > /dev/null; rm -f $(BASE_MKP_HEADER);                 popd > /dev/null
+	@-pushd $(MPP_PATH)/component/gfbg/include        > /dev/null; rm -f $(SYS_EXT_HEADER);                  popd > /dev/null
+	@-pushd $(MPP_PATH)/component/gfbg/include        > /dev/null; rm -f $(TDE_EXT_HEADER);                  popd > /dev/null
+	@-pushd $(MPP_PATH)/component/gfbg/include        > /dev/null; rm -f $(TDE_MKP_HEADER);                  popd > /dev/null
+	@-pushd $(MPP_PATH)/component/gfbg/include        > /dev/null; rm -f $(OSAL_HEADER);                     popd > /dev/null
+	@-pushd $(MPP_PATH)/component/gfbg/include        > /dev/null; rm -f $(VO_HEADER);                       popd > /dev/null
+	@-pushd $(MPP_PATH)/component/gfbg/include        > /dev/null; rm -f $(VGS_HEADER);                       popd > /dev/null
+ifeq ($(CONFIG_DRIVER_SPACE_TYPE),user_space)
+	@-pushd $(MPP_PATH)/cbb/based/ext_inc					> /dev/null; cp $(BASE_MKP_HEADER) $(INC_DIR); popd > /dev/null
+	@-pushd $(MPP_PATH)/cbb/sysd/ext_inc					> /dev/null; cp $(SYS_EXT_HEADER)  $(INC_DIR); popd > /dev/null
+else
+	@-pushd $(MPP_PATH)/cbb/base/ext_inc                      > /dev/null; cp $(BASE_MKP_HEADER) $(INC_DIR); popd > /dev/null
+	@-pushd $(MPP_PATH)/cbb/sys/ext_inc                       > /dev/null; cp $(SYS_EXT_HEADER)  $(INC_DIR); popd > /dev/null
+endif
+	@-pushd $(MPP_PATH)/cbb/$(TDE_ROOT)/drv/include  > /dev/null; cp $(TDE_EXT_HEADER)  $(INC_DIR); popd > /dev/null
+	@-pushd $(MPP_PATH)/cbb/$(TDE_ROOT)/api/tde/include         > /dev/null; cp $(TDE_MKP_HEADER)  $(INC_DIR); popd > /dev/null
+	@-pushd $(SDK_PATH)/osal/include                          > /dev/null; cp $(OSAL_HEADER)     $(INC_DIR); popd > /dev/null
+	@-pushd $(MPP_PATH)/cbb/vo/ext_inc                        > /dev/null; cp $(VO_HEADER)       $(INC_DIR); popd > /dev/null
+	@-pushd $(MPP_PATH)/cbb/vgs/ext_inc                        > /dev/null; cp $(VGS_HEADER)       $(INC_DIR); popd > /dev/null
+	@-pushd $(MPP_PATH)/cbb/vgs/include              > /dev/null; cp $(VGS_COMM_HEADER)  $(INC_DIR); popd > /dev/null
+	@-pushd $(MPP_PATH)/cbb/include              > /dev/null; cp $(COMMON_HEADER)  $(INC_DIR); popd > /dev/null
+endif
+
+	@echo -e "\e[0;32;1m--Compiling 'gfbg'... Configs as follow:\e[0;36;1m"
+	@echo ---- CROSS=$(CROSS)
+	@echo ---- OT_ARCH=$(OT_ARCH), OT_CHIP=$(OT_CHIP), CVER=$(CVER), DBG=$(OT_DBG)
+	@echo ---- SDK_PATH=$(SDK_PATH) , PARAM_FILE=$(PARAM_FILE)
+	@echo ---- KERNEL_ROOT=$(KERNEL_ROOT)
+	@@echo -e "\e[0m"
+	@mkdir -p $(BUILD_DIR)
+	@touch $(BUILD_DIR_MAKEFILE)
+	@$(MAKE) -C $(KERNEL_ROOT) $(LLVM_KERNEL_TOOLCHAIN_ARGS) M=$(BUILD_DIR) src=$(CURDIR) O=$(KERNEL_ROOT) V=10 modules
+	@mkdir -p $(REL_KO) && cp -rf $(BUILD_DIR)/$(GFBG_MOD_NAME).ko $(REL_KO)
+	@mkdir -p $(REL_INC) && cp $(PWD)/include/$(GFBG_HEADER) $(REL_INC)
+
+clean:
+	@mkdir -p $(BUILD_DIR)
+	@for x in `find $(BUILD_DIR) -name "*.o"`;do rm -rf $$x;done
+	@for x in `find $(BUILD_DIR) -name ".*.o.cmd"`;do rm -rf $$x;done
+	@for x in `find $(BUILD_DIR) -name "*.ko"`;do rm -rf $$x;done
+	@for x in `find $(BUILD_DIR) -name "*.mod.c"`;do rm -rf $$x;done
+	@for x in `find $(BUILD_DIR) -name ".*.ko.cmd"`;do rm -rf $$x;done
+	@rm $(BUILD_DIR)/.tmp_versions  -fr
+	@rm $(BUILD_DIR)/Module.symvers -f
+	@rm $(BUILD_DIR)/modules.order  -f
+	@rm -rf $(REL_KO)/$(GFBG_MOD_NAME).ko
+	@rm -rf $(REL_INC)/$(GFBG_MOD_NAME)*.h
+	@rm -f $(REL_OBJ)/$(MOD_NAME).o
+	@cd $(INC_DIR);rm -rf $(BASE_MKP_HEADER)
+	@rm -rf $(INC_DIR)/$(SYS_EXT_HEADER)
+	@rm -rf $(INC_DIR)/$(TDE_EXT_HEADER)
+	@rm -rf $(INC_DIR)/$(TDE_MKP_HEADER)
+	@rm -rf $(INC_DIR)/$(VGS_COMM_HEADER)
+	@rm -rf $(INC_DIR)/ot_type.h
+	@rm -rf $(INC_DIR)/ot_common.h
+	@rm -rf $(INC_DIR)/autoconf.h
+	@rm -rf $(INC_DIR)/ot_debug.h
+	@rm -rf $(INC_DIR)/ot_math.h
+	@rm -rf $(INC_DIR)/ot_errno.h
+	@rm -rf $(INC_DIR)/ot_common_video.h
+	@cd $(INC_DIR);rm -rf $(OSAL_HEADER)

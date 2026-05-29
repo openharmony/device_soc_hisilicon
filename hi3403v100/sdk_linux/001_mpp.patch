@@ -1,0 +1,39 @@
+diff --git a/a55_linux/mpp/Makefile.linux.param b/a55_linux/mpp/Makefile.linux.param
+index 70f3955..933c5e9 100644
+--- a/a55_linux/mpp/Makefile.linux.param
++++ b/a55_linux/mpp/Makefile.linux.param
+@@ -17,11 +17,19 @@ endif
+ # Allocated the kernel position
+ ifeq ($(MPP_BUILD), y)
+     export KERNEL_ROOT?=$(WORK_PATH)/osdrv$(OT_SUBARCH)$(CVER)/open_source/linux/$(KERNEL_NAME)
++else
++ifeq ($(OHOS_LITE), y)
++    export KERNEL_ROOT?=$(OHOS_OUTDIR)/kernel/$(KERNEL_VERSION)
+ else
+     export KERNEL_ROOT?=$(OPEN_SOURCE_PATH)/linux/$(KERNEL_NAME)
+ endif
++endif
+ 
+-export OSDRV_PATH:=$(KERNEL_ROOT)/../../..
++ifeq ($(OHOS_LITE), y)
++    export OSDRV_PATH:=$(OHOS_OUTDIR)/obj/device/soc/hisilicon/hi3403v100/sdk_linux
++else
++    export OSDRV_PATH:=$(KERNEL_ROOT)/../../..
++endif
+ 
+ ##############################################################################
+ 
+diff --git a/a55_linux/mpp/component/security_subsys/cipher/v3/src/Makefile b/a55_linux/mpp/component/security_subsys/cipher/v3/src/Makefile
+index 408fe0c..80e0c1a 100644
+--- a/a55_linux/mpp/component/security_subsys/cipher/v3/src/Makefile
++++ b/a55_linux/mpp/component/security_subsys/cipher/v3/src/Makefile
+@@ -40,6 +40,9 @@ ifeq ($(MPP_BUILD), n)
+ MPP_CFLAGS += -I$(REL_INC)
+ endif
+ 
++# Add the header file path for dependencies
++MPP_CFLAGS += -I$(SYSROOT_PATH)/usr/include/aarch64-linux-ohos
++
+ MPP_CFLAGS :=$(subst /base/,/based/,$(MPP_CFLAGS))
+ MPP_CFLAGS :=$(subst /sys/,/sysd/,$(MPP_CFLAGS))
+ 
