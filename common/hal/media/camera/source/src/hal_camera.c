@@ -142,6 +142,9 @@ typedef struct {
     CameraType type;
     int32_t vpssGrp;
     uint32_t layerId;
+    uint32_t previewStreamId;
+    pthread_t previewThreadId;
+    bool previewThreadRunning;
 } CameraInfo;
 
 typedef struct {
@@ -1016,37 +1019,113 @@ static void DeleteStream(CameraInfo *cameraInfo, uint32_t streamIndex)
     }
 }
 
-static int32_t EnablePreview(ot_vpss_chn vpssChn, uint32_t cameraId, PosInfo *pos, const StreamAttr *streamAttr)
+static void SetChnDepth(InternalStreamInfo *internalInfo, ImageFormat format);
+
+#ifdef GRAPHIC_UTILS_LITE_ENABLE_DRM_DISPLAY_HAL
+static void *PreviewFlushThread(void *arg)
 {
+    uint32_t cameraId = *(uint32_t *)arg;
+    free(arg);
+    CameraInfo *cameraInfo = &g_cameraInfo[cameraId];
+    uint32_t streamId = cameraInfo->previewStreamId;
+    ot_vpss_grp vpssGrp = cameraInfo->vpssGrp;
+    ot_vpss_chn vpssChn = cameraInfo->internalStreamInfo[streamId].vpssChn;
+    uint32_t layerId = cameraInfo->layerId;
+    uint32_t fps = cameraInfo->streamAttr[streamId].fps;
+    if (fps == 0) {
+        fps = 30; // 30: default fps
+    }
+    uint32_t frameInterval = 1000000 / fps; // us
+    int32_t ret;
+
+    SetChnDepth(&cameraInfo->internalStreamInfo[streamId], FORMAT_YVU420);
+
+    prctl(PR_SET_NAME, "PreviewFlush", 0, 0, 0);
+
+    while (cameraInfo->previewThreadRunning) {
+        ot_video_frame_info videoFrame;
+        (void)memset_s(&videoFrame, sizeof(ot_video_frame_info), 0, sizeof(ot_video_frame_info));
+
+        ret = ss_mpi_vpss_get_chn_frame(vpssGrp, vpssChn, &videoFrame, FRAME_TIME_OUT);
+        if (ret != TD_SUCCESS) {
+            usleep(frameInterval);
+            continue;
+        }
+
+        LayerBuffer buffer = {0};
+        buffer.data.virAddr = &videoFrame;
+
+        if (g_layerInterface != NULL && g_layerInterface->Flush != NULL) {
+            g_layerInterface->Flush(DISPLAY_DEVID, layerId, &buffer);
+        }
+
+        ss_mpi_vpss_release_chn_frame(vpssGrp, vpssChn, &videoFrame);
+        usleep(frameInterval);
+    }
+
+    return NULL;
+}
+#endif
+
+static int32_t EnablePreview(ot_vpss_chn vpssChn, uint32_t cameraId, PosInfo *pos,
+    const StreamAttr *streamAttr, uint32_t streamId)
+{
+    const int ycrcb420Bpp = 8;
     IRect displayRect;
     displayRect.x = pos->x;
     displayRect.y = pos->y;
     displayRect.w = streamAttr->width;
     displayRect.h = streamAttr->height;
     CameraInfo* cameraInfo = &g_cameraInfo[cameraId];
-    int32_t vpssGrp = cameraInfo->vpssGrp;
     LayerInfo layerInfo = {0};
     layerInfo.width = streamAttr->width;
     layerInfo.height = streamAttr->height;
     layerInfo.type = LAYER_TYPE_OVERLAY;
-    layerInfo.bpp = 8;  // 8: Number of bits occupied by each pixel
+    layerInfo.bpp = ycrcb420Bpp;
     layerInfo.pixFormat = PIXEL_FMT_YCRCB_420_SP;
     layerInfo.fps = streamAttr->fps;
     LOG_CHK_RETURN_ERR(g_layerInterface == NULL, TD_FAILURE);
     HAL_LOG_DOFUNC_RETURN(g_layerInterface->CreateLayer(DISPLAY_DEVID, &layerInfo, &cameraInfo->layerId));
     HAL_LOG_DOFUNC_RETURN(g_layerInterface->SetLayerSize(DISPLAY_DEVID, cameraInfo->layerId, &displayRect));
+
+#ifdef GRAPHIC_UTILS_LITE_ENABLE_DRM_DISPLAY_HAL
+    cameraInfo->previewStreamId = streamId;
+    cameraInfo->previewThreadRunning = true;
+    uint32_t *threadArg = (uint32_t *)malloc(sizeof(uint32_t));
+    if (threadArg == NULL) {
+        HAL_LOGE("malloc thread arg failed\n");
+        cameraInfo->previewThreadRunning = false;
+        return TD_FAILURE;
+    }
+    *threadArg = cameraId;
+    int32_t ret = pthread_create(&cameraInfo->previewThreadId, NULL, PreviewFlushThread, threadArg);
+    if (ret != 0) {
+        HAL_LOGE("pthread_create PreviewFlushThread failed: %d\n", ret);
+        free(threadArg);
+        cameraInfo->previewThreadRunning = false;
+        return TD_FAILURE;
+    }
+#else
+    (void)streamId;
     HAL_LOG_DOFUNC_RETURN(g_layerInterface->InvokeLayerCmd(DISPLAY_DEVID, cameraInfo->layerId,
-        OVERLAYER_CMD_VO_BIND_VPSS, vpssChn, vpssGrp));
+        OVERLAYER_CMD_VO_BIND_VPSS, vpssChn, cameraInfo->vpssGrp));
+#endif
+
     return TD_SUCCESS;
 }
 
 static void DisablePreview(ot_vpss_chn vpssChn, uint32_t cameraId)
 {
     CameraInfo* cameraInfo = &g_cameraInfo[cameraId];
-    int32_t vpssGrp = cameraInfo->vpssGrp;
     LOG_CHK_RETURN(g_layerInterface == NULL);
+#ifdef GRAPHIC_UTILS_LITE_ENABLE_DRM_DISPLAY_HAL
+    (void)vpssChn;
+    cameraInfo->previewThreadRunning = false;
+    pthread_join(cameraInfo->previewThreadId, NULL);
+#else
     g_layerInterface->InvokeLayerCmd(DISPLAY_DEVID, cameraInfo->layerId,
-        OVERLAYER_CMD_VO_UNBIND_VPSS, vpssChn, vpssGrp);
+        OVERLAYER_CMD_VO_UNBIND_VPSS, vpssChn, cameraInfo->vpssGrp);
+#endif
     g_layerInterface->CloseLayer(DISPLAY_DEVID, cameraInfo->layerId);
     cameraInfo->layerId = -1;
 }
@@ -1176,7 +1255,11 @@ static void UpdateVpssAttr(ot_vpss_chn vpssChn, const StreamAttr *stream, const 
         }
         vpssChnAttr->frame_rate.src_frame_rate = FPS_60;
         vpssChnAttr->frame_rate.dst_frame_rate = FPS_60;
+#ifdef GRAPHIC_UTILS_LITE_ENABLE_DRM_DISPLAY_HAL
+        vpssChnAttr->pixel_format = OT_PIXEL_FORMAT_YVU_SEMIPLANAR_420;
+#else
         vpssChnAttr->pixel_format = OT_PIXEL_FORMAT_YUV_SEMIPLANAR_420;
+#endif
         HI_PRINTF("chnn attr: chnn = %d w = %u h = %u\n", vpssChn, vpssChnAttr->width, vpssChnAttr->height);
     }
     vpssChnAttr->chn_mode = OT_VPSS_CHN_MODE_USER;
@@ -1630,7 +1713,7 @@ int32_t HalCameraStreamOn(const char *camera, uint32_t streamId)
         HAL_LOG_DOFUNC_RETURN(EnablePreview(cameraInfo->internalStreamInfo[streamId].vpssChn,
             cameraId,
             &cameraInfo->internalStreamInfo[streamId].pos,
-            &cameraInfo->streamAttr[streamId]));
+            &cameraInfo->streamAttr[streamId], streamId));
     }
     HAL_EXIT();
     return TD_SUCCESS;

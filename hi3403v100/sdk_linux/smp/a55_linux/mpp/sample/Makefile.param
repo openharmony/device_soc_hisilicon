@@ -19,37 +19,37 @@ SENSOR1_TYPE ?= OV_OS08A20_MIPI_8M_30FPS_12BIT
 SENSOR2_TYPE ?= OV_OS08A20_MIPI_8M_30FPS_12BIT
 SENSOR3_TYPE ?= OV_OS08A20_MIPI_8M_30FPS_12BIT
 
-MPI_LIBS := $(REL_LIB)/libss_mpi.so
+MPI_LIBS := -L$(REL_LIB) -lss_mpi
 
 ifeq ($(CONFIG_OT_ISP_SUPPORT), y)
-MPI_LIBS += $(REL_LIB)/libss_ae.so
-MPI_LIBS += $(REL_LIB)/libss_isp.so
-MPI_LIBS += $(REL_LIB)/libot_isp.so
-MPI_LIBS += $(REL_LIB)/libss_awb.so
-MPI_LIBS += $(REL_LIB)/libss_dehaze.so
-MPI_LIBS += $(REL_LIB)/libss_extend_stats.so
-MPI_LIBS += $(REL_LIB)/libss_drc.so
-MPI_LIBS += $(REL_LIB)/libss_ldci.so
-MPI_LIBS += $(REL_LIB)/libss_crb.so
-MPI_LIBS += $(REL_LIB)/libss_bnr.so
-MPI_LIBS += $(REL_LIB)/libss_calcflicker.so
-MPI_LIBS += $(REL_LIB)/libss_ir_auto.so
-MPI_LIBS += $(REL_LIB)/libss_acs.so
-MPI_LIBS += $(REL_LIB)/libsns_hy_s0603.so
-MPI_LIBS += $(REL_LIB)/libsns_os08a20.so
-
+MPI_LIBS += -lss_ae
+MPI_LIBS += -lss_isp
+MPI_LIBS += -lot_isp
+MPI_LIBS += -lss_awb
+MPI_LIBS += -lss_dehaze
+MPI_LIBS += -lss_extend_stats
+MPI_LIBS += -lss_drc
+MPI_LIBS += -lss_ldci
+MPI_LIBS += -lss_crb
+MPI_LIBS += -lss_bnr
+MPI_LIBS += -lss_calcflicker
+MPI_LIBS += -lss_ir_auto
+MPI_LIBS += -lss_acs
+MPI_LIBS += -lss_acs
+MPI_LIBS += -lsns_hy_s0603
+MPI_LIBS += -lsns_os08a20
 endif
 
 
 ifeq ($(CONFIG_OT_AUDIO_SUPPORT), y)
-AUDIO_LIBA := $(REL_LIB)/libss_voice_engine.so
-AUDIO_LIBA += $(REL_LIB)/libss_upvqe.so
-AUDIO_LIBA += $(REL_LIB)/libss_dnvqe.so
-AUDIO_LIBA += $(REL_LIB)/libaac_comm.so
-AUDIO_LIBA += $(REL_LIB)/libaac_enc.so
-AUDIO_LIBA += $(REL_LIB)/libaac_dec.so
-AUDIO_LIBA += $(REL_LIB)/libaac_sbr_enc.so
-AUDIO_LIBA += $(REL_LIB)/libaac_sbr_dec.so
+AUDIO_LIBA := -lss_voice_engine
+AUDIO_LIBA += -lss_upvqe
+AUDIO_LIBA += -lss_dnvqe
+AUDIO_LIBA += -laac_comm
+AUDIO_LIBA += -laac_enc
+AUDIO_LIBA += -laac_dec
+AUDIO_LIBA += -laac_sbr_enc
+AUDIO_LIBA += -laac_sbr_dec
 endif
 
 COMMON_DIR ?= $(PWD)/../common
@@ -108,22 +108,22 @@ AUDIO_MODULE_LIB_TYPE ?= AUDIO_LIB_TYPE_STATIC
 ifeq ($(AUDIO_MODULE_LIB_TYPE), AUDIO_LIB_TYPE_STATIC)
 ##### VQE #####
 	CFLAGS += -DOT_VQE_USE_STATIC_MODULE_REGISTER
-	AUDIO_LIBA += $(REL_LIB)/libvqe_res.so
-	AUDIO_LIBA += $(REL_LIB)/libvqe_record.so
-	AUDIO_LIBA += $(REL_LIB)/libvqe_hpf.so
-	AUDIO_LIBA += $(REL_LIB)/libvqe_anr.so
-	AUDIO_LIBA += $(REL_LIB)/libvqe_aec.so
-	AUDIO_LIBA += $(REL_LIB)/libvqe_agc.so
-	AUDIO_LIBA += $(REL_LIB)/libvqe_eq.so
-	AUDIO_LIBA += $(REL_LIB)/libvqe_talkv2.so
+	AUDIO_LIBA += -lvqe_res
+	AUDIO_LIBA += -lvqe_record
+	AUDIO_LIBA += -lvqe_hpf
+	AUDIO_LIBA += -lvqe_anr
+	AUDIO_LIBA += -lvqe_aec
+	AUDIO_LIBA += -lvqe_agc
+	AUDIO_LIBA += -lvqe_eq
+	AUDIO_LIBA += -lvqe_talkv2
 ##### AAC #####
 	CFLAGS += -DOT_AAC_USE_STATIC_MODULE_REGISTER
-	AUDIO_LIBA += $(REL_LIB)/libaac_dec.so
-	AUDIO_LIBA += $(REL_LIB)/libaac_enc.so
-	AUDIO_LIBA += $(REL_LIB)/libaac_comm.so
+	AUDIO_LIBA += -laac_dec
+	AUDIO_LIBA += -laac_enc
+	AUDIO_LIBA += -laac_comm
 	CFLAGS += -DOT_AAC_HAVE_SBR_LIB
-	AUDIO_LIBA += $(REL_LIB)/libaac_sbr_dec.so
-	AUDIO_LIBA += $(REL_LIB)/libaac_sbr_enc.so
+	AUDIO_LIBA += -laac_sbr_dec
+	AUDIO_LIBA += -laac_sbr_enc
 endif
 endif
 
@@ -132,7 +132,7 @@ GYRO_DIS ?= n
 
 ifeq ($(GYRO_DIS), y)
 	CFLAGS += -DOT_GYRODIS_SUPPORT
-	MPI_LIBS += $(REL_LIB)/libss_motionfusion.so
+	MPI_LIBS += -lss_motionfusion
 endif
 
 #########################################################################
@@ -172,7 +172,7 @@ MEDIA_MSG_INC += -I$(SDK_PATH)/ot_syslink/ipcmsg/include
 MEDIA_MSG_INC += -I$(SDK_PATH)/ot_syslink/datafifo/include
 
 ifeq ($(CONFIG_DRIVER_SPACE_TYPE),user_space)
-MPI_LIBS += $(REL_LIB)/svp_npu/libsvp_acl.so
+MPI_LIBS +=  -L$(REL_LIB)/svp_npu -lsvp_acl
 MPI_LIBS += -L$(REL_LIB)/svp_npu -lprotobuf-c
 SDK_LIB_PATH := -L$(REL_LIB) -L$(REL_LIB)/extdrv
 SDK_LIB := $(SDK_LIB_PATH)
@@ -197,16 +197,16 @@ SDK_LIB += -l$(KO_PREFIX)_vi
 SDK_LIB += -l$(KO_PREFIX)_mpi_isp
 SDK_LIB += -l$(KO_PREFIX)_rc
 SDK_LIB += -l$(KO_PREFIX)_jpegd
-SDK_LIB += $(REL_LIB)/libss_hdmi.so
+SDK_LIB += -lss_hdmi
 SDK_LIB += -l$(KO_PREFIX)_vfmw
 SDK_LIB += -l$(KO_PREFIX)_gdc
 SDK_LIB += -l$(KO_PREFIX)_dis
 SDK_LIB += -l$(KO_PREFIX)_irq
-SDK_LIB += $(REL_LIB)/libss_dpu_match.so
-SDK_LIB += $(REL_LIB)/libss_dpu_rect.so
-SDK_LIB += $(REL_LIB)/libss_mau.so
-SDK_LIB += $(REL_LIB)/libss_ive.so
-SDK_LIB += $(REL_LIB)/libss_pqp.so
+SDK_LIB += -lss_dpu_match
+SDK_LIB += -lss_dpu_rect
+SDK_LIB += -lss_mau
+SDK_LIB += -lss_ive
+SDK_LIB += -lss_pqp
 #SDK_LIB += -l$(KO_PREFIX)_avs
 # SDK_LIB += -l$(KO_PREFIX)_mcf
 # SDK_LIB += -l$(KO_PREFIX)_mcf_vi

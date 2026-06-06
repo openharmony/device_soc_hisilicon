@@ -4,7 +4,7 @@ OBJS  := $(SMP_SRCS:%.c=%.o)
 
 CFLAGS += $(COMM_INC)
 
-MPI_LIBS += $(REL_LIB)/libss_hdmi.so
+MPI_LIBS += -lss_hdmi
 MPI_LIBS += $(LIBS_LD_CFLAGS)
 
 .PHONY : clean all
@@ -12,7 +12,7 @@ MPI_LIBS += $(LIBS_LD_CFLAGS)
 all: $(TARGET)
 
 $(TARGET):$(COMM_OBJ) $(OBJS)
-	$(CC) $(CFLAGS) -lpthread -lm -o $(TARGET_PATH)/$@ $^ -Wl,--start-group $(MPI_LIBS) $(SDK_LIB) $(SENSOR_LIBS) $(INIPARSER_LIB) $(REL_LIB)/libsecurec.so -Wl,--end-group
+	$(CC) $(CFLAGS) -lpthread -lm -o $(TARGET_PATH)/$@ $^ -Wl,--start-group $(MPI_LIBS) $(SDK_LIB) $(SENSOR_LIBS) $(INIPARSER_LIB) -lsecurec -Wl,--end-group
 
 clean:
 	@rm -f $(TARGET_PATH)/$(TARGET)

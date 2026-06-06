@@ -40,7 +40,6 @@ default:
 	@cd $(SDK_PATH)/mpp/cbb/tde/tde/drv; make -j
 	@cd $(SDK_PATH)/mpp/cbb/vo/vo_dev; make -j
 	@cd $(SDK_PATH)/mpp/component/svp/pico/svp_npu_dev/mkp; make -j
-	@cd $(SDK_PATH)/mpp/sample/hy_s0603; make -j
 	@cd $(SDK_PATH)/mpp/sample/omnivision_os08a20; make -j
 	@cd $(SDK_PATH)/mpp/sample/hy_s0603; make -j
 

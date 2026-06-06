@@ -88,12 +88,11 @@ else
     exit 1
 fi
 
-# flatten svp_npu libs to lib directory
+# copy lib to out/lib for fs.yml packaging
 SDK_LIB_PATH=${SDK_LINUX_SMP_PATH}/a55_linux/mpp/out/lib
-if [ -d "${SDK_LIB_PATH}/svp_npu" ]; then
-    cp -f ${SDK_LIB_PATH}/svp_npu/*.so ${SDK_LIB_PATH}/
-    rm -rf ${SDK_LIB_PATH}/svp_npu
-fi
+OUT_LIB_PATH=${SDK_LINUX_TMP_PATH}/out/lib
+mkdir -p ${OUT_LIB_PATH}
+find ${SDK_LIB_PATH} -name "*.so" -exec cp -f {} ${OUT_LIB_PATH}/ \;
 
 # copy uboot file
 cp -rf ${SDK_LINUX_SRC_PATH}/../uboot/* ${OHOS_OUTDIR}

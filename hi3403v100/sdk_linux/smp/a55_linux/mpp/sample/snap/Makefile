@@ -3,7 +3,7 @@ include ../Makefile.param
 ########### SRCS & INC ############
 SMP_SRCS := $(wildcard $(PWD)/*.c)
 
-MPI_LIBS += $(REL_LIB)/libss_snap.so
+MPI_LIBS += -lss_snap
 
 TARGET := sample_snap
 

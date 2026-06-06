@@ -14,6 +14,7 @@
 import("//build/lite/config/component/lite_component.gni")
 import("//build/lite/config/subsystem/aafwk/path.gni")
 import("//build/lite/ndk/ndk.gni")
+import("//device/soc/hisilicon/common/hal/display/config.gni")
 
 if (board_name == "hispark_taurus" || board_name == "hispark_aries") {
   group("hdi_camera") {}
@@ -94,6 +95,9 @@ if (board_name == "hispark_taurus" || board_name == "hispark_aries") {
 
   #To enable low latency for distributed cameras, add the macro "ENABLE_DISTRIBUTED_CAMERA_LOW_DELAY " after the [defines] variable.
   defines = [ "HAVE_DISPLAY" ]
+    if (graphic_utils_lite_enable_drm_display_hal) {
+      defines += [ "GRAPHIC_UTILS_LITE_ENABLE_DRM_DISPLAY_HAL" ]
+    }
     if ((board_name == "hispark_aiflylite" || board_name == "hispark_aifly") && ohos_kernel_type == "linux") {
     sdk_lib_path = rebase_path("${root_out_dir}/sdk_linux/src_tmp/smp/a55_linux/mpp/out/lib")
     ldflags += [ "-pthread" ]

@@ -5,15 +5,15 @@ COMMON_DIR:=$(PWD)/../../common
 AUDIO_ADP_DIR:=$(PWD)/../../audio/adp
 include ../../Makefile.param
 
-MPI_LIBS += $(REL_LIB)/libss_ive.so
-MPI_LIBS += $(REL_LIB)/libss_md.so
-MPI_LIBS += $(REL_LIB)/libss_mau.so
-MPI_LIBS += $(REL_LIB)/libss_dpu_rect.so
-MPI_LIBS += $(REL_LIB)/libss_dpu_match.so
+MPI_LIBS += -lss_ive
+MPI_LIBS += -lss_md
+MPI_LIBS += -lss_mau
+MPI_LIBS += -lss_dpu_rect
+MPI_LIBS += -lss_dpu_match
 ifneq ($(CONFIG_DRIVER_SPACE_TYPE),user_space)
-    MPI_LIBS += $(REL_LIB)/libss_dsp.so
+    MPI_LIBS += -lss_dsp
 endif
-MPI_LIBS += $(REL_LIB)/svp_npu/libsvp_acl.so
+MPI_LIBS += -L$(REL_LIB)/svp_npu -lsvp_acl
 MPI_LIBS += -L$(REL_LIB)/svp_npu -lprotobuf-c
 CFLAGS += -I$(PWD)/../common
 CFLAGS += -I$(REL_INC)/svp_npu

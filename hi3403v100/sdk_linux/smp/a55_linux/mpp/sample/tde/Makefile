@@ -3,7 +3,7 @@ include ../Makefile.param
 SMP_SRCS := $(wildcard *.c)
 TARGET := $(SMP_SRCS:%.c=%)
 
-MPI_LIBS += $(REL_LIB)/libss_tde.so
+MPI_LIBS += -lss_tde
 
 TARGET_PATH := $(PWD)
 
