@@ -83,6 +83,8 @@ Note:If the text contains special characters, please escape them according to th
 				<policyitem type="copyright" name="Realtek Corporation." path=".*" desc="copyright"/>
 				<policyitem type="copyright" name="ARM Limited. All rights reserved." path=".*" desc="copyright"/>
 				<policyitem type="copyright" name="Aleph One Ltd." path="ws63v100/sdk/kernel/liteos/liteos_v208.5.0/Huawei_LiteOS/fs/yaffs2/yaffs/include/yaffs_tagscompat.h" desc="copyright"/>
+				<policyitem type="copyright" name="Copyright (c) 2026 RKH Corp." path="common/hal/media/audio/source/plugins/.*" desc="RKH copyright"/>
+				<policyitem type="copyright" name="Copyright (c) 2026 Nanjing Qinuo Information Technology Co., Ltd." path=".*" desc="copyright"/>
 			</policy>
 		</policylist>
 		<filefilterlist>
