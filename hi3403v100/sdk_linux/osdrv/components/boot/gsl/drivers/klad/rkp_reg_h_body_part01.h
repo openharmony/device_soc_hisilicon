@@ -34,10 +34,10 @@ typedef union {
         uint32_t    hpp_jtag_kdf_finish  : 1; /* [18]  */
         uint32_t    tee_priv_jtag_finish : 1; /* [19]  */
         uint32_t    reserved_1            : 12; /* [31..20]  */
-    } bits;
+	} bits;
 
-    /* define an unsigned member */
-    uint32_t    u32;
+	/* define an unsigned member */
+	uint32_t    u32;
 } rkp_debug_info_0;
 
 /* define the union u_rkp_debug_info_1 */
@@ -55,28 +55,28 @@ typedef union {
         uint32_t    eff_rk_busy_flag      : 1; /* [8]  */
         uint32_t    fixed_rk_busy_flag    : 1; /* [9]  */
         uint32_t    reserved_0            : 22; /* [31..10]  */
-    } bits;
+	} bits;
 
-    /* define an unsigned member */
-    uint32_t    u32;
+	/* define an unsigned member */
+	uint32_t    u32;
 } rkp_debug_info_1;
 
 /* define the union u_rkp_debug_info_3 */
 typedef union {
-    /* define the struct bits */
-    struct {
+	/* define the struct bits */
+	struct {
         uint32_t    rkp_init_finish       : 1; /* [0]  */
         uint32_t    reserved_0            : 31; /* [31..1]  */
     } bits;
 
-    /* define an unsigned member */
-    uint32_t    u32;
+	/* define an unsigned member */
+	uint32_t    u32;
 } rkp_debug_info_3;
 
 /* define the union u_rkp_inte_info */
 typedef union {
-    /* define the struct bits */
-    struct {
+	/* define the struct bits */
+	struct {
         uint32_t    reserved_0            : 8; /* [7..0]  */
         uint32_t    slot0_inte_once_vld   : 1; /* [8]  */
         uint32_t    slot1_inte_once_vld   : 1; /* [9]  */
@@ -100,30 +100,30 @@ typedef union {
         uint32_t    boot_deob_inte_once_vld : 1; /* [27]  */
         uint32_t    deob_inte_once_vld : 1; /* [28]  */
         uint32_t    reserved_1            : 3; /* [31..29]  */
-    } bits;
+	} bits;
 
-    /* define an unsigned member */
-    uint32_t    u32;
+	/* define an unsigned member */
+	uint32_t    u32;
 } rkp_inte_info;
 
 /* define the union u_rkp_crc_info */
 typedef union {
-    /* define the struct bits */
-    struct {
+	/* define the struct bits */
+	struct {
         uint32_t    reserved_0            : 16; /* [15..0]  */
         uint32_t    boot_crc_once         : 1; /* [16]  */
         uint32_t    stbm_crc_once         : 1; /* [17]  */
         uint32_t    reserved_1            : 14; /* [31..18]  */
-    } bits;
+	} bits;
 
-    /* define an unsigned member */
-    uint32_t    u32;
+	/* define an unsigned member */
+	uint32_t    u32;
 } rkp_crc_info;
 
 /* define the union u_rkp_otp_rk_vld */
 typedef union {
-    /* define the struct bits */
-    struct {
+	/* define the struct bits */
+	struct {
         uint32_t    slot0_vld             : 1; /* [0]  */
         uint32_t    slot1_vld             : 1; /* [1]  */
         uint32_t    slot2_vld             : 1; /* [2]  */
@@ -136,10 +136,10 @@ typedef union {
         uint32_t    vld              : 1; /* [9]  */
         uint32_t    stbm_vld              : 1; /* [10]  */
         uint32_t    reserved_0            : 21; /* [31..11]  */
-    } bits;
+	} bits;
 
-    /* define an unsigned member */
-    uint32_t    u32;
+	/* define an unsigned member */
+	uint32_t    u32;
 } rkp_otp_rk_vld;
 
 /* define the union u_rkp_robust_alarm */
@@ -159,8 +159,8 @@ typedef union {
 
 /* define the union u_rkp_slotx_crc_rst */
 typedef union {
-    /* define the struct bits */
-    struct {
+	/* define the struct bits */
+	struct {
         uint32_t    slotx_crc_ok          : 1; /* [0]  */
         uint32_t    slotx_rk_all_zero     : 1; /* [1]  */
         uint32_t    slotx_rk_all_one      : 1; /* [2]  */
@@ -170,14 +170,14 @@ typedef union {
         uint32_t    reserved_0            : 26; /* [31..6]  */
     } bits;
 
-    /* define an unsigned member */
-    uint32_t    u32;
+	/* define an unsigned member */
+	uint32_t    u32;
 } rkp_slotx_crc_rst;
 
 /* define the union u_rkp_slot0_crc_rst */
 typedef union {
-    /* define the struct bits */
-    struct {
+	/* define the struct bits */
+	struct {
         uint32_t    slot0_crc_ok          : 1; /* [0]  */
         uint32_t    slot0_rk_all_zero     : 1; /* [1]  */
         uint32_t    slot0_rk_all_one      : 1; /* [2]  */
@@ -193,8 +193,8 @@ typedef union {
 
 /* define the union u_rkp_slot1_crc_rst */
 typedef union {
-    /* define the struct bits */
-    struct {
+	/* define the struct bits */
+	struct {
         uint32_t    slot1_crc_ok          : 1; /* [0]  */
         uint32_t    slot1_rk_all_zero     : 1; /* [1]  */
         uint32_t    slot1_rk_all_one      : 1; /* [2]  */
@@ -204,8 +204,8 @@ typedef union {
         uint32_t    reserved_0            : 26; /* [31..6]  */
     } bits;
 
-    /* define an unsigned member */
-    uint32_t    u32;
+	/* define an unsigned member */
+	uint32_t    u32;
 } rkp_slot1_crc_rst;
 
 /* define the union u_rkp_slot2_crc_rst */
@@ -329,7 +329,7 @@ typedef union {
 
 /* define the union u_rkp_crc_rst */
 typedef union {
-    /* define the struct bits */
+	/* define the struct bits */
     struct {
         uint32_t    crc_ok           : 1; /* [0]  */
         uint32_t    rk_all_zero      : 1; /* [1]  */
@@ -337,13 +337,13 @@ typedef union {
         uint32_t    reserved_0            : 29; /* [31..3]  */
     } bits;
 
-    /* define an unsigned member */
+	/* define an unsigned member */
     uint32_t    u32;
 } rkp_crc_rst;
 
 /* define the union u_rkp_stbm_crc_rst */
 typedef union {
-    /* define the struct bits */
+	/* define the struct bits */
     struct {
         uint32_t    stbm_crc_ok           : 1; /* [0]  */
         uint32_t    stbm_rk_all_zero      : 1; /* [1]  */
@@ -351,7 +351,7 @@ typedef union {
         uint32_t    reserved_0            : 29; /* [31..3]  */
     } bits;
 
-    /* define an unsigned member */
+	/* define an unsigned member */
     uint32_t    u32;
 } rkp_stbm_crc_rst;
 
@@ -432,13 +432,13 @@ typedef union {
         uint32_t    reserved_0            : 28; /* [31..4]  */
     } bits;
 
-    /* define an unsigned member */
+	/* define an unsigned member */
     uint32_t    u32;
 } rkp_slot_choose_tpp;
 
 /* define the union u_rkp_klad_choose_tpp */
 typedef union {
-    /* define the struct bits */
+	/* define the struct bits */
     struct {
         uint32_t    tpp_klad_type_sel   : 1; /* [0]  */
         uint32_t    reserved_0            : 3; /* [3..1]  */
@@ -446,7 +446,7 @@ typedef union {
         uint32_t    reserved_1            : 24; /* [31..8]  */
     } bits;
 
-    /* define an unsigned member */
+	/* define an unsigned member */
 
 
 #endif /* SDK_LINUX_OSDRV_COMPONENTS_BOOT_GSL_DRIVERS_KLAD_RKP_REG_H_BODY_PART01_H_ */

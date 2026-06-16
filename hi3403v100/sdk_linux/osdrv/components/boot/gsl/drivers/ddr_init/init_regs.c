@@ -137,11 +137,11 @@ static void part_read_write(struct regentry *reg_table, unsigned int pm)
 {
     unsigned int i;
 
-    for (i = 0;; i++) {
-        if ((!reg_table[i].reg_addr) && (!reg_table[i].value) &&
-             (!reg_table[i].delay) && (!reg_table[i].attr)) {
-            goto main_end;
-        }
+	for (i = 0;; i++) {
+		if ((!reg_table[i].reg_addr) && (!reg_table[i].value) &&
+			 (!reg_table[i].delay) && (!reg_table[i].attr)) {
+			goto main_end;
+		}
 
         read_write(&reg_table[i], pm);
     }

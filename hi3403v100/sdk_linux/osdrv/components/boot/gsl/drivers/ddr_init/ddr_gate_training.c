@@ -76,10 +76,10 @@ static int ddr_gate_find_bdl(const struct ddr_cfg_st *cfg, struct ddr_delay_st *
 {
     int i;
     int j;
-    unsigned int gate_result;
-    unsigned int base_phy = cfg->cur_phy;
-    unsigned int byte_num = get_byte_num(cfg);
-    unsigned int swtmode = reg_read(base_phy + DDR_PHY_SWTMODE);
+	unsigned int gate_result;
+	unsigned int base_phy = cfg->cur_phy;
+	unsigned int byte_num = get_byte_num(cfg);
+	unsigned int swtmode = reg_read(base_phy + DDR_PHY_SWTMODE);
 
     for (i = 0; i < byte_num; i++)
         rdqsg->bdl[i] = 0;
@@ -117,11 +117,11 @@ static int ddr_gate_training(const struct ddr_cfg_st *cfg)
 {
     unsigned int i;
     unsigned int tmp;
-    unsigned int byte_num;
-    struct ddr_delay_st rdqsg;
-    unsigned int def_delay[DDR_PHY_BYTE_MAX];
-    int result;
-    unsigned int base_phy = cfg->cur_phy;
+	unsigned int byte_num;
+	struct ddr_delay_st rdqsg;
+	unsigned int def_delay[DDR_PHY_BYTE_MAX];
+	int result;
+	unsigned int base_phy = cfg->cur_phy;
 
     ddr_debug("DDR Gate training");
 

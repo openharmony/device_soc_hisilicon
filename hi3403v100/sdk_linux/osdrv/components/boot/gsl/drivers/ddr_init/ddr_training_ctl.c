@@ -81,8 +81,8 @@ int ddr_sw_training_func(void)
 
     ddr_training_start();
 
-    ddrtr_set_data(&reg, 0, sizeof(struct tr_custom_reg));
-    /* save customer reg */
+	ddrtr_set_data(&reg, 0, sizeof(struct tr_custom_reg));
+	/* save customer reg */
     if (ddr_boot_cmd_save(&reg) != 0) {
         return -1;
     }
@@ -95,8 +95,8 @@ int ddr_sw_training_func(void)
     ddr_training_cfg_init(cfg);
     cfg->cmd_st = 0;
 
-    result = ddr_training_all(cfg);
-    result += ddr_dcc_training_func(cfg);
+	result = ddr_training_all(cfg);
+	result += ddr_dcc_training_func(cfg);
     if (!result) {
         ddr_training_suc();
     } else {

@@ -118,7 +118,7 @@ static void ddr_lpca_set_bdl(unsigned int base_phy, unsigned int bdl)
 /* Update address bdl value with training result */
 static void ddr_lpca_update_bdl(struct ca_data_st *data)
 {
-    unsigned int index;
+	unsigned int index;
     unsigned int addr0;
     unsigned int addr1;
 

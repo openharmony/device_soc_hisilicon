@@ -120,20 +120,20 @@ static int sd_check_int_status(uint32_t mask, uint32_t timeout)
     unsigned int reg;
     unsigned int wait_time =  timeout * timer_get_divider();
 
-    timer_start();
-    reg = sd_readl(SDHCI_INT_STATUS);
+	timer_start();
+	reg = sd_readl(SDHCI_INT_STATUS);
     while ((reg & mask) == 0) {
-        if (timer_get_val() > wait_time) {
-            debug_printf("wait int status time out, reg = 0x%x, mask = 0x%x\n",
-                     reg, mask);
-            return -1;
-        }
-        if (reg & SDHCI_INT_ERROR_MASK) {
-            debug_printf("int err: reg = 0x%x\n", reg);
-            return -1;
-        }
-        reg = sd_readl(SDHCI_INT_STATUS);
-    }
+		if (timer_get_val() > wait_time) {
+			debug_printf("wait int status time out, reg = 0x%x, mask = 0x%x\n",
+				     reg, mask);
+			return -1;
+		}
+		if (reg & SDHCI_INT_ERROR_MASK) {
+			debug_printf("int err: reg = 0x%x\n", reg);
+			return -1;
+		}
+		reg = sd_readl(SDHCI_INT_STATUS);
+	}
 
     return 0;
 }
@@ -326,22 +326,22 @@ int sdio_init()
 
     mmc_buf = gsl_malloc(MMC_BLOCK_SIZE);
     if (!mmc_buf) {
-        return -1;
-    }
+		return -1;
+	}
 
     return 0;
 }
 
 void sdio_deinit()
 {
-    if (mmc_buf) {
+	if (mmc_buf) {
         gsl_free(mmc_buf);
-        mmc_buf = NULL;
-    }
-    if (mmc_dev) {
+		mmc_buf = NULL;
+	}
+	if (mmc_dev) {
         gsl_free(mmc_dev);
-        mmc_dev = NULL;
-    }
+		mmc_dev = NULL;
+	}
 
     sd_reset(SDHCI_RESET_ALL);
 
@@ -444,8 +444,8 @@ static int mmc_copy_block_data(uint8_t *buf, size_t size)
 
 size_t mmc_block_read(void *dst, uint32_t src, size_t size)
 {
-    uint8_t *buf = (uint8_t *)dst;
-    uint32_t cmd;
+	uint8_t *buf = (uint8_t *)dst;
+	uint32_t cmd;
 
     cmd = sdhci_make_cmd_fun(MMC_CMD_SET_BLOCKLEN,
         SDHCI_CMD_CRC | SDHCI_CMD_RESP_SHORT);
@@ -575,13 +575,13 @@ int self_sdio_check()
     sdio_init();
 
     mmc_dev = gsl_malloc(sizeof(block_dev_desc_t));
-    if (!mmc_dev) {
-        sdio_deinit();
-        return 0;
-    }
+	if (!mmc_dev) {
+		sdio_deinit();
+		return 0;
+	}
 
-    err = memset_s(mmc_dev, sizeof(block_dev_desc_t), 0, sizeof(block_dev_desc_t));
-    if (err != EOK) {
+	err = memset_s(mmc_dev, sizeof(block_dev_desc_t), 0, sizeof(block_dev_desc_t));
+	if (err != EOK) {
         sdio_deinit();
         gsl_free(mmc_dev);
         mmc_dev = NULL;
@@ -595,14 +595,14 @@ int self_sdio_check()
     mmc_dev->removable = 1;
     mmc_dev->blksz = MMC_BLOCK_SIZE;
 
-    ret = fat_register_device(mmc_dev);
+	ret = fat_register_device(mmc_dev);
     if (ret == 0x3) {
-        return 1;
-    }
+		return 1;
+	}
 
-    sdio_deinit();
+	sdio_deinit();
     gsl_free(mmc_dev);
-    mmc_dev = NULL;
+	mmc_dev = NULL;
 
     return 0;
 }

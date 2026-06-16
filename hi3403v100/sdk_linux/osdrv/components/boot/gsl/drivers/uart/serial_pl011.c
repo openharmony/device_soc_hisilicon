@@ -76,19 +76,19 @@ int serial_init(void)
      */
     io_write(uart_port[CONSOLE_PORT] + UART_PL011_CR, 0x0);
 
-    /*
-     ** Set baud rate
-     **
-     ** IBRD = UART_CLK / (16 * BAUD_RATE)
-     ** FBRD = ROUND((64 * MOD(UART_CLK,(16 * BAUD_RATE))) / (16 * BAUD_RATE))
-     */
-    temp = 16 * BAUDRATE;
-    divider = CONFIG_PL011_CLOCK / temp;
-    remainder = CONFIG_PL011_CLOCK % temp;
+	/*
+	 ** Set baud rate
+	 **
+	 ** IBRD = UART_CLK / (16 * BAUD_RATE)
+	 ** FBRD = ROUND((64 * MOD(UART_CLK,(16 * BAUD_RATE))) / (16 * BAUD_RATE))
+	 */
+	temp = 16 * BAUDRATE;
+	divider = CONFIG_PL011_CLOCK / temp;
+	remainder = CONFIG_PL011_CLOCK % temp;
     temp = (SERIAL_PL011_VALUE_8 * remainder) / BAUDRATE;
-    fraction = (temp >> 1) + (temp & 1);
-    io_write(uart_port[CONSOLE_PORT] + UART_PL011_IBRD, divider);
-    io_write(uart_port[CONSOLE_PORT] + UART_PL011_FBRD, fraction);
+	fraction = (temp >> 1) + (temp & 1);
+	io_write(uart_port[CONSOLE_PORT] + UART_PL011_IBRD, divider);
+	io_write(uart_port[CONSOLE_PORT] + UART_PL011_FBRD, fraction);
 
     /*
      ** Set the UART to be 8 bits, 1 stop bit, no parity, fifo enabled.

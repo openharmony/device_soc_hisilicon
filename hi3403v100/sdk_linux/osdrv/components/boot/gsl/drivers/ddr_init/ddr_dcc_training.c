@@ -33,10 +33,10 @@ static void ddr_save_two_rank_bdl(const struct ddr_cfg_st *cfg, struct dcc_data_
         dcc_data->rank[rank_idx].rdm[byte_idx] = reg_read(base_phy + ddr_phy_dxnrdqnbdl2(rank_idx, byte_idx));
         dcc_data->rank[rank_idx].rdqs[byte_idx] = reg_read(base_phy + ddr_phy_dxnrdqsdly(byte_idx));
 
-        ddr_debug("rank[%x] dq03[%x] dq47[%x] rdm[%x] rdqs[%x]", rank_idx,
+		ddr_debug("rank[%x] dq03[%x] dq47[%x] rdm[%x] rdqs[%x]", rank_idx,
       dcc_data->rank[rank_idx].dq03[byte_idx], dcc_data->rank[rank_idx].dq47[byte_idx],
       dcc_data->rank[rank_idx].rdm[byte_idx], dcc_data->rank[rank_idx].rdqs[byte_idx]);
-    }
+	}
 }
 
 /* Restore two rank RDET result */
@@ -132,14 +132,14 @@ static unsigned int ddr_dcc_get_min_win(const struct dcc_data_st *dcc_data, int 
     unsigned int win_min;
     unsigned int cur_win;
 
-    win_min = ddr_dcc_get_win(dcc_data, ck_index, 0);
-    for (i = 0; i < DDR_CK_RESULT_MAX; i++) {
-        cur_win = ddr_dcc_get_win(dcc_data, ck_index, i);
-        ddr_debug("CK win[%x] = [%x]", i, cur_win);
+	win_min = ddr_dcc_get_win(dcc_data, ck_index, 0);
+	for (i = 0; i < DDR_CK_RESULT_MAX; i++) {
+		cur_win = ddr_dcc_get_win(dcc_data, ck_index, i);
+		ddr_debug("CK win[%x] = [%x]", i, cur_win);
         if (cur_win < win_min) {
-            win_min = cur_win;
-        }
-    }
+			win_min = cur_win;
+		}
+	}
 
     return win_min;
 }
@@ -163,10 +163,10 @@ static unsigned int ddr_dcc_get_ck0_win(const struct ddr_cfg_st *cfg, struct dcc
     for (byte_index = 0; byte_index < (byte_num / 2); byte_index++) /* byte_num/2:ck0 value include byte0 and byte1 */
         dcc_data->ck[0].val[byte_index] = reg_read(cfg->cur_phy + ddr_phy_dxnrdbound(byte_index));
 
-    ck0_win = ddr_dcc_get_min_win(dcc_data, 0);
+	ck0_win = ddr_dcc_get_min_win(dcc_data, 0);
     if (ck0_win < ck0_win_min) {
-        ck0_win_min = ck0_win;
-    }
+		ck0_win_min = ck0_win;
+	}
 
     return ck0_win_min;
 }
@@ -182,9 +182,9 @@ static unsigned int ddr_dcc_get_ck1_win(const struct ddr_cfg_st *cfg, struct dcc
         dcc_data->ck[1].val[byte_index - 2] = /* store value from byte_idex-2 */
             reg_read(cfg->cur_phy + ddr_phy_dxnrdbound(byte_index)); /* one ck include two value */
 
-    ck1_win = ddr_dcc_get_min_win(dcc_data, 1);
+	ck1_win = ddr_dcc_get_min_win(dcc_data, 1);
     if (ck1_win < ck1_win_min) {
-        ck1_win_min = ck1_win;
+		ck1_win_min = ck1_win;
     }
 
     return ck1_win_min;
@@ -286,24 +286,24 @@ static void ddr_dcc_get_duty(struct dcc_data_st *dcc_data, int ck_num, unsigned 
 {
     int ck_idx;
 
-    if (ck_num > DDR_CK_MAX_NUM) {
-        ddr_error("ck number out of range");
-        return;
-    }
-    for (ck_idx = 0; ck_idx < ck_num; ck_idx++) {
+	if (ck_num > DDR_CK_MAX_NUM) {
+		ddr_error("ck number out of range");
+		return;
+	}
+	for (ck_idx = 0; ck_idx < ck_num; ck_idx++) {
         if (dcc_data->ck[ck_idx].win < dcc_data->ck[ck_idx].win_min_duty) {
-            dcc_data->ck[ck_idx].win_min_duty = dcc_data->ck[ck_idx].win;
-        }
+			dcc_data->ck[ck_idx].win_min_duty = dcc_data->ck[ck_idx].win;
+		}
 
-        if (dcc_data->ck[ck_idx].win > dcc_data->ck[ck_idx].win_max_duty) {
-            dcc_data->ck[ck_idx].win_max_duty = dcc_data->ck[ck_idx].win;
-            dcc_data->ck[ck_idx].idx_duty = cur_duty;
-        }
-        ddr_debug("ck[%x] duty_win_min[%x] duty_win_max[%x] duty_index[%x]", ck_idx,
+		if (dcc_data->ck[ck_idx].win > dcc_data->ck[ck_idx].win_max_duty) {
+			dcc_data->ck[ck_idx].win_max_duty = dcc_data->ck[ck_idx].win;
+			dcc_data->ck[ck_idx].idx_duty = cur_duty;
+		}
+		ddr_debug("ck[%x] duty_win_min[%x] duty_win_max[%x] duty_index[%x]", ck_idx,
       dcc_data->ck[ck_idx].win_min_duty,
       dcc_data->ck[ck_idx].win_max_duty,
       dcc_data->ck[ck_idx].idx_duty);
-    }
+	}
 }
 
 /* Get ck0/ck1 duty_win_min/duty_win_max/duty_index */
@@ -311,26 +311,26 @@ static void ddr_dcc_get_ctrl(struct dcc_data_st *dcc_data, int ck_num, unsigned 
 {
     int ck_idx;
 
-    if (ck_num > DDR_CK_MAX_NUM) {
-        ddr_error("ck number out of range");
-        return;
-    }
-    for (ck_idx = 0; ck_idx < ck_num; ck_idx++) {
+	if (ck_num > DDR_CK_MAX_NUM) {
+		ddr_error("ck number out of range");
+		return;
+	}
+	for (ck_idx = 0; ck_idx < ck_num; ck_idx++) {
         if (dcc_data->ck[ck_idx].win_min_duty < dcc_data->ck[ck_idx].win_min_ctl) {
-            dcc_data->ck[ck_idx].win_min_ctl = dcc_data->ck[ck_idx].win_min_duty;
-        }
+			dcc_data->ck[ck_idx].win_min_ctl = dcc_data->ck[ck_idx].win_min_duty;
+		}
 
-        if (dcc_data->ck[ck_idx].win_max_duty > dcc_data->ck[ck_idx].win_max_ctl) {
-            dcc_data->ck[ck_idx].win_max_ctl = dcc_data->ck[ck_idx].win_max_duty;
-            dcc_data->ck[ck_idx].idx_duty_ctl = dcc_data->ck[ck_idx].idx_duty;
-            dcc_data->ck[ck_idx].idx_ctl = cur_ctl;
-        }
-        ddr_debug("ck[%x] win_min_ctl[%x] win_max_ctl[%x] ctl_index0[%x] duty_ctl_idx0[%x]", ck_idx,
+		if (dcc_data->ck[ck_idx].win_max_duty > dcc_data->ck[ck_idx].win_max_ctl) {
+			dcc_data->ck[ck_idx].win_max_ctl = dcc_data->ck[ck_idx].win_max_duty;
+			dcc_data->ck[ck_idx].idx_duty_ctl = dcc_data->ck[ck_idx].idx_duty;
+			dcc_data->ck[ck_idx].idx_ctl = cur_ctl;
+		}
+		ddr_debug("ck[%x] win_min_ctl[%x] win_max_ctl[%x] ctl_index0[%x] duty_ctl_idx0[%x]", ck_idx,
       dcc_data->ck[ck_idx].win_min_ctl,
       dcc_data->ck[ck_idx].win_max_ctl,
       dcc_data->ck[ck_idx].idx_ctl,
       dcc_data->ck[ck_idx].idx_duty_ctl);
-    }
+	}
 }
 
 static int ddr_dcc_process(struct ddr_cfg_st *cfg, struct dcc_data_st *dcc_data,
@@ -360,19 +360,19 @@ static int ddr_dcc_process(struct ddr_cfg_st *cfg, struct dcc_data_st *dcc_data,
             return -1;
         }
 
-        for (cur_duty = 0; cur_duty < DDR_DUTY_NUM; cur_duty += PHY_AC_IOCTL21_STEP) {
-            dcc_data->ck[0].win = 0xffffffff;
-            if (ck_num > 1) {
-                dcc_data->ck[1].win = 0xffffffff;
-            }
+		for (cur_duty = 0; cur_duty < DDR_DUTY_NUM; cur_duty += PHY_AC_IOCTL21_STEP) {
+			dcc_data->ck[0].win = 0xffffffff;
+			if (ck_num > 1) {
+				dcc_data->ck[1].win = 0xffffffff;
+			}
 
-            ddr_debug("cur_duty = [%x]", cur_duty);
-            /* Correct ck0 and ck1 duty */
+			ddr_debug("cur_duty = [%x]", cur_duty);
+			/* Correct ck0 and ck1 duty */
             if (ddr_training_ctrl_easr(cfg, DDR_ENTER_SREF)) {
                 return -1;
             }
 
-            dcc_data->ioctl21_tmp = ddr_dcc_correct_duty(cfg, cur_duty, dcc_data->ioctl21_tmp);
+			dcc_data->ioctl21_tmp = ddr_dcc_correct_duty(cfg, cur_duty, dcc_data->ioctl21_tmp);
             if (ddr_training_ctrl_easr(cfg, DDR_EXIT_SREF)) {
                 return -1;
             }
@@ -391,17 +391,17 @@ static int ddr_dcc_process(struct ddr_cfg_st *cfg, struct dcc_data_st *dcc_data,
 static int ddr_dcc_get_best_duty(struct ddr_cfg_st *cfg,
     struct dmc_cfg_sref_st *cfg_sref, struct dcc_data_st *dcc_data)
 {
-    int ck_num;
-    unsigned int base_phy = cfg->cur_phy;
-    unsigned int ioctl21_def;
+	int ck_num;
+	unsigned int base_phy = cfg->cur_phy;
+	unsigned int ioctl21_def;
     unsigned int gated_bypass_def;
     unsigned int gated_bypass_temp;
 
-    if (cfg->phy[cfg->phy_idx].dram_type == PHY_DRAMCFG_TYPE_LPDDR4) {
-        ck_num = DDR_CK_NUM_LPDDR4; /* lpddr4: 2 ck */
-    } else {
+	if (cfg->phy[cfg->phy_idx].dram_type == PHY_DRAMCFG_TYPE_LPDDR4) {
+		ck_num = DDR_CK_NUM_LPDDR4; /* lpddr4: 2 ck */
+	} else {
         ck_num = DDR_CK_NUM_NONLPDDR4; /* other: 1 ck */
-    }
+	}
 
     dcc_data_init(dcc_data);
 
@@ -413,12 +413,12 @@ static int ddr_dcc_get_best_duty(struct ddr_cfg_st *cfg,
 
     ddr_debug("gated_bypass_def[%x] ioctl21_def[%x]", gated_bypass_def, ioctl21_def);
 
-    /* DCC training exit self-refresa enter powerdown. */
-    if (cfg->phy[cfg->phy_idx].dram_type == PHY_DRAMCFG_TYPE_LPDDR4) {
-        ddr_sref_cfg(cfg, cfg_sref, DMC_CFG_INIT_XSREF | DMC_CFG_SREF_PD);
-    }
+	/* DCC training exit self-refresa enter powerdown. */
+	if (cfg->phy[cfg->phy_idx].dram_type == PHY_DRAMCFG_TYPE_LPDDR4) {
+		ddr_sref_cfg(cfg, cfg_sref, DMC_CFG_INIT_XSREF | DMC_CFG_SREF_PD);
+	}
 
-    /* DDR dcc training enter auto self-refresh. */
+	/* DDR dcc training enter auto self-refresh. */
     if (ddr_training_ctrl_easr(cfg, DDR_ENTER_SREF)) {
         return -1;
     }
@@ -438,27 +438,27 @@ static int ddr_dcc_get_best_duty(struct ddr_cfg_st *cfg,
     }
 
     if (ddr_dcc_process(cfg, dcc_data, ck_num, ioctl21_def)) {
-        return -1;
-    }
+		return -1;
+	}
 
-    /* Config ck duty */
-    /* DCC training exit self-refresa enter powerdown. */
-    if (cfg->phy[cfg->phy_idx].dram_type == PHY_DRAMCFG_TYPE_LPDDR4) {
-        ddr_sref_cfg(cfg, cfg_sref, DMC_CFG_INIT_XSREF | DMC_CFG_SREF_PD);
-    }
+	/* Config ck duty */
+	/* DCC training exit self-refresa enter powerdown. */
+	if (cfg->phy[cfg->phy_idx].dram_type == PHY_DRAMCFG_TYPE_LPDDR4) {
+		ddr_sref_cfg(cfg, cfg_sref, DMC_CFG_INIT_XSREF | DMC_CFG_SREF_PD);
+	}
 
-    /* DDR dcc training enter auto self-refresh. */
+	/* DDR dcc training enter auto self-refresh. */
     if (ddr_training_ctrl_easr(cfg, DDR_ENTER_SREF)) {
-        return -1;
-    }
+		return -1;
+	}
 
     /* DDR dcc training compare result. */
     ddr_dcc_compare_result(dcc_data, ck_num, base_phy, gated_bypass_def, ioctl21_def);
 
-    /* DDR dcc training exit auto self-refresh. */
+	/* DDR dcc training exit auto self-refresh. */
     if (ddr_training_ctrl_easr(cfg, DDR_EXIT_SREF)) {
-        return -1;
-    }
+		return -1;
+	}
 
     return 0;
 }
@@ -510,9 +510,9 @@ static int ddr_dcc_training(struct ddr_cfg_st *cfg)
     ddr_training_restore_timing(cfg, &timing_st);
 
     if (cfg->phy[cfg->phy_idx].dram_type == PHY_DRAMCFG_TYPE_LPDDR4) {
-        /* DCC restore DMC_CFG_SREF config. */
-        ddr_sref_cfg_restore(cfg, &cfg_sref);
-    }
+		/* DCC restore DMC_CFG_SREF config. */
+		ddr_sref_cfg_restore(cfg, &cfg_sref);
+	}
 
     return result;
 }
@@ -533,14 +533,14 @@ int ddr_dcc_training_func(struct ddr_cfg_st *cfg)
         cfg->cur_item = cfg->phy[i].rank[0].item;
 
         if (ddr_training_check_bypass(cfg, 1 << (cfg->phy_idx)) != DDR_FALSE) {
-            continue;
-        }
-        /* dpmc training disable */
+			continue;
+		}
+		/* dpmc training disable */
         if (ddr_training_check_bypass(cfg, DDR_BYPASS_DCC_MASK) == DDR_FALSE) {
-            result += ddr_dcc_training(cfg);
-        }
-    }
-    return result;
+			result += ddr_dcc_training(cfg);
+		}
+	}
+	return result;
 }
 
 #else

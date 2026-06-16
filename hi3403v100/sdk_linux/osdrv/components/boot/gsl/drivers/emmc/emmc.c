@@ -182,13 +182,13 @@ static int mmc_card_init(void)
 {
     mmc_hw_reset();
     if (mmc_wait_op_cond() != 0) {
-        return -1;
-    }
+		return -1;
+	}
 
     mmc_select_card();
     mmc_config_bus_width();
     mmc_wait_dat0_ready();
-    return 0;
+	return 0;
 }
 
 void mmc_change_clock(void)
@@ -259,10 +259,10 @@ int mmc_init(void)
 
     mmc_muxctrl_config();
 
-    ret = sdhci_init();
-    if (ret) {
-        return ret;
-    }
+	ret = sdhci_init();
+	if (ret) {
+		return ret;
+	}
 
     bootmode = is_bootmode();
     if (bootmode) {
@@ -289,26 +289,26 @@ static void mmc_prepare_multi_read(size_t src, size_t cnt)
     uint32_t cmd;
     uint16_t mode;
 
-    /* set host block size 512 */
+	/* set host block size 512 */
     sdhci_writew(EMMC_BLOCK_SIZE, SDHCI_BLOCK_SIZE);
 
-    /* Send CMD16 to set blocksize */
+	/* Send CMD16 to set blocksize */
     cmd = sdhci_make_cmd_fun(MMC_CMD_SET_BLOCKLEN,
         SDHCI_CMD_CRC | SDHCI_CMD_RESP_SHORT);
     mmc_send_cmd(cmd, EMMC_BLOCK_SIZE);
 
-    /* set data timeout */
+	/* set data timeout */
     sdhci_writeb(0xE, SDHCI_TIMEOUT_CONTROL);
 
-    /* set host block count */
+	/* set host block count */
     sdhci_writew(cnt, SDHCI_BLOCK_COUNT);
 
-    /* Send CMD23 to set blockcount */
+	/* Send CMD23 to set blockcount */
     cmd = sdhci_make_cmd_fun(MMC_CMD_SET_BLOCK_COUNT,
         SDHCI_CMD_CRC | SDHCI_CMD_RESP_SHORT);
     mmc_send_cmd(cmd, cnt);
 
-    /* set transfer mode */
+	/* set transfer mode */
     mode = SDHCI_TRNS_BLK_CNT_EN | SDHCI_TRNS_MULTI | SDHCI_TRNS_READ;
     sdhci_writew(mode, SDHCI_TRANSFER_MODE);
 
@@ -327,15 +327,15 @@ static void mmc_read_block_by_cpu(uint8_t **buf)
     size_t size = EMMC_BLOCK_SIZE;
 
     while (size) {
-        *(uint32_t *)(*buf) = sdhci_readl(SDHCI_BUFFER);
-        *buf += 0x4;
+		*(uint32_t *)(*buf) = sdhci_readl(SDHCI_BUFFER);
+		*buf += 0x4;
         size -= 0x4;
     }
 }
 
 static int mmc_read_block_by_dma(uint8_t **buf)
 {
-    spacc_decrypt_params decrypt_params = {0};
+	spacc_decrypt_params decrypt_params = {0};
 
     decrypt_params.chn = 1;
     decrypt_params.dst_addr = (uint32_t)(uintptr_t)(*buf);
@@ -343,16 +343,16 @@ static int mmc_read_block_by_dma(uint8_t **buf)
     decrypt_params.length = EMMC_BLOCK_SIZE;
     decrypt_params.alg = SYMC_ALG_DMA;
     decrypt_params.mode = SYMC_MODE_CBC;
-    if (drv_spacc_decrypt(decrypt_params) != TD_SUCCESS)
+	if (drv_spacc_decrypt(decrypt_params) != TD_SUCCESS)
         return TD_FAILURE;
 
-    *buf += EMMC_BLOCK_SIZE;
+	*buf += EMMC_BLOCK_SIZE;
     return TD_SUCCESS;
 }
 
 int mmc_mb_read_pio(void const *dst, size_t src, size_t cnt, size_t read_type)
 {
-    uint8_t *buf = (uint8_t *)dst;
+	uint8_t *buf = (uint8_t *)dst;
 
     mmc_prepare_multi_read(src, cnt);
 
@@ -360,12 +360,12 @@ int mmc_mb_read_pio(void const *dst, size_t src, size_t cnt, size_t read_type)
         if (sdhci_check_int_status(SDHCI_INT_DATA_AVAIL, 3000)) /* timeout 3000ms */
             return TD_FAILURE;
 
-        sdhci_writel(SDHCI_INT_DATA_AVAIL, SDHCI_INT_STATUS);
-        if (read_type == READ_DATA_BY_CPU) {
+		sdhci_writel(SDHCI_INT_DATA_AVAIL, SDHCI_INT_STATUS);
+		if (read_type == READ_DATA_BY_CPU) {
             mmc_read_block_by_cpu(&buf);
         } else if (mmc_read_block_by_dma(&buf) != TD_SUCCESS) {
-            return TD_FAILURE;
-        }
+			return TD_FAILURE;
+		}
 
         cnt--;
     }

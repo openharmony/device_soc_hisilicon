@@ -30,7 +30,7 @@
 unsigned int ddr_winding_identification(unsigned int step, unsigned int max_capat, unsigned int bit_mask)
 {
 #define DDR_10_BIT  10 /* Move 10 bits */
-    int cnt = 0;
+	int cnt = 0;
     unsigned int ddr_size;
     unsigned int status;
 
@@ -233,8 +233,8 @@ unsigned int ddr_capat_adapt(void)
     (void)memset_s((char *)&capat_phy_all, sizeof(struct ddr_capat_phy_all), 0, sizeof(struct ddr_capat_phy_all));
 
     if (ddr_boot_cmd_save(&reg) != 0) {
-        return -1;
-    }
+		return -1;
+	}
 
     for (i = 0; i < phy_num; i++) {
         uint8_t status = (i == 0) ? ctx->phy0_status : ctx->phy1_status;

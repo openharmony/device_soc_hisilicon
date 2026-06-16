@@ -664,34 +664,34 @@ static void ddr_wait_self_refresh(const unsigned int *ddrc_isvalid, unsigned int
 
 static void ddr_scrambling(void)
 {
-    unsigned int i;
-    unsigned int random_num[RANDOM_SIZE];
-    unsigned int ddrc_isvalid[SS928_BOOT_DDRC_CHANNEL_NUM] = {0, 0, 0, 0};
+	unsigned int i;
+	unsigned int random_num[RANDOM_SIZE];
+	unsigned int ddrc_isvalid[SS928_BOOT_DDRC_CHANNEL_NUM] = {0, 0, 0, 0};
 
-    /* read ddrc_cfg_ddrmode register,
-     * if value[3:0] is not 0x0 ,the channel is valid.
-     */
+	/* read ddrc_cfg_ddrmode register,
+	 * if value[3:0] is not 0x0 ,the channel is valid.
+	 */
     ddr_get_valid_channels(ddrc_isvalid);
 
-    /* set ddrc to do self-refurbish */
+	/* set ddrc to do self-refurbish */
     ddr_set_self_refresh(ddrc_isvalid, SS928_BOOT_DDRC_ENABLE);
     ddr_wait_self_refresh(ddrc_isvalid, SS928_BOOT_DDRC_ENABLE);
 
-    /* get random number */
-    for (i = 0; i < RANDOM_SIZE; i++)
-        random_num[i] = get_random_num();
+	/* get random number */
+	for (i = 0; i < RANDOM_SIZE; i++)
+		random_num[i] = get_random_num();
 
     /* start ddr scrambling */
     ddr_scramb_start(random_num, RANDOM_SIZE);
 
-    /* clear random number */
-    for (i = 0; i < SS928_BOOT_DDRC_CHANNEL_NUM; i++)
-        random_num[i] = get_random_num();
+	/* clear random number */
+	for (i = 0; i < SS928_BOOT_DDRC_CHANNEL_NUM; i++)
+		random_num[i] = get_random_num();
 
-    /* set ddrc to exit self-refurbish */
+	/* set ddrc to exit self-refurbish */
     ddr_set_self_refresh(ddrc_isvalid, (SS928_BOOT_DDRC_ENABLE << SS928_BOOT_SHIFT_1));
 
-    /* wait the status of ddrc to be normal */
+	/* wait the status of ddrc to be normal */
     ddr_wait_self_refresh(ddrc_isvalid, SS928_BOOT_DDRC_DISABLE);
 
     return;
