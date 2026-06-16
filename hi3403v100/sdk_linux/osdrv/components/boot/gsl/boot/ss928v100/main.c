@@ -121,14 +121,12 @@ void stack_chk_guard_setup()
 
 #pragma GCC pop_options
 #else
-__attribute__((no_stack_protector))
-void __stack_chk_fail(void)
+__attribute__((no_stack_protector)) void __stack_chk_fail(void)
 {
     err_print(STACK_CHK_FAIL);
     call_reset();
 }
-__attribute__((no_stack_protector))
-void stack_chk_guard_setup()
+__attribute__((no_stack_protector)) void stack_chk_guard_setup()
 {
     unsigned random = 0;
     random = get_random_num();
@@ -250,7 +248,7 @@ static unsigned hpm_value_avg(const unsigned int *val, unsigned int num)
 }
 
 static void get_hpm_value(unsigned int *hpm_core, unsigned int *hpm_npu,
-               unsigned int *hpm_mda)
+    unsigned int *hpm_mda)
 {
     int i;
     unsigned int temp;
@@ -292,20 +290,20 @@ static void get_hpm_value(unsigned int *hpm_core, unsigned int *hpm_npu,
 }
 
 static void start_hpm(unsigned int *hpm_core, unsigned int *hpm_npu,
-               unsigned int *hpm_mda)
+    unsigned int *hpm_mda)
 {
     get_hpm_value(hpm_core, hpm_npu, hpm_mda);
 }
 
 static void save_hpm(unsigned int hpm_core, unsigned int hpm_npu,
-              unsigned int hpm_mda)
+    unsigned int hpm_mda)
 {
     writel(hpm_mda, REG_SYSCTRL_BASE + HPM_MDA_STORAGE_REG);
     writel(hpm_npu, REG_SYSCTRL_BASE + HPM_NPU_STORAGE_REG);
     writel(hpm_core, REG_SYSCTRL_BASE + HPM_CORE_STORAGE_REG);
 }
 static unsigned int calc_volt_regval(unsigned int volt_val, unsigned int volt_max,
-                     unsigned int volt_min)
+    unsigned int volt_min)
 {
     unsigned int duty;
 
@@ -400,7 +398,7 @@ static void get_delta_v(int *core_delta_v, int *npu_delta_v,  int *mda_delta_v)
 }
 
 static void set_volt(unsigned int hpm_core, unsigned int hpm_npu,
-        unsigned int hpm_mda)
+    unsigned int hpm_mda)
 {
     int  core_delta_v = 0;
     int  npu_delta_v = 0;
@@ -666,34 +664,34 @@ static void ddr_wait_self_refresh(const unsigned int *ddrc_isvalid, unsigned int
 
 static void ddr_scrambling(void)
 {
-	unsigned int i;
-	unsigned int random_num[RANDOM_SIZE];
-	unsigned int ddrc_isvalid[SS928_BOOT_DDRC_CHANNEL_NUM] = {0, 0, 0, 0};
+    unsigned int i;
+    unsigned int random_num[RANDOM_SIZE];
+    unsigned int ddrc_isvalid[SS928_BOOT_DDRC_CHANNEL_NUM] = {0, 0, 0, 0};
 
-	/* read ddrc_cfg_ddrmode register,
-	 * if value[3:0] is not 0x0 ,the channel is valid.
-	 */
+    /* read ddrc_cfg_ddrmode register,
+     * if value[3:0] is not 0x0 ,the channel is valid.
+     */
     ddr_get_valid_channels(ddrc_isvalid);
 
-	/* set ddrc to do self-refurbish */
+    /* set ddrc to do self-refurbish */
     ddr_set_self_refresh(ddrc_isvalid, SS928_BOOT_DDRC_ENABLE);
     ddr_wait_self_refresh(ddrc_isvalid, SS928_BOOT_DDRC_ENABLE);
 
-	/* get random number */
-	for (i = 0; i < RANDOM_SIZE; i++)
-		random_num[i] = get_random_num();
+    /* get random number */
+    for (i = 0; i < RANDOM_SIZE; i++)
+        random_num[i] = get_random_num();
 
     /* start ddr scrambling */
     ddr_scramb_start(random_num, RANDOM_SIZE);
 
-	/* clear random number */
-	for (i = 0; i < SS928_BOOT_DDRC_CHANNEL_NUM; i++)
-		random_num[i] = get_random_num();
+    /* clear random number */
+    for (i = 0; i < SS928_BOOT_DDRC_CHANNEL_NUM; i++)
+        random_num[i] = get_random_num();
 
-	/* set ddrc to exit self-refurbish */
+    /* set ddrc to exit self-refurbish */
     ddr_set_self_refresh(ddrc_isvalid, (SS928_BOOT_DDRC_ENABLE << SS928_BOOT_SHIFT_1));
 
-	/* wait the status of ddrc to be normal */
+    /* wait the status of ddrc to be normal */
     ddr_wait_self_refresh(ddrc_isvalid, SS928_BOOT_DDRC_DISABLE);
 
     return;
@@ -826,14 +824,14 @@ static uint32_t get_data_channel_type(void)
 
     channel_type = reg_get(REG_BASE_SCTL + DATA_CHANNEL_TYPE_REG);
     switch (channel_type) {
-    case BOOT_SEL_PCIE:
-    case BOOT_SEL_UART:
-    case BOOT_SEL_SDIO:
-    case BOOT_SEL_USB:
-    case BOOT_SEL_FLASH:
-    case BOOT_SEL_EMMC:
+        case BOOT_SEL_PCIE:
+        case BOOT_SEL_UART:
+        case BOOT_SEL_SDIO:
+        case BOOT_SEL_USB:
+        case BOOT_SEL_FLASH:
+        case BOOT_SEL_EMMC:
         break;
-    default:
+        default:
         err_print('3', '1');
         channel_type = BOOT_SEL_UNKNOW;
         break;
@@ -1053,7 +1051,7 @@ static int get_head_area_data_from_emmc(backup_image_params_s *backup_params)
 
         /* get data from emmc by cipher dma */
         ret = mmc_read((void *)(uintptr_t)tmp_addr, data_addr,
-                   data_len, READ_DATA_BY_DMA);
+            data_len, READ_DATA_BY_DMA);
         if (ret != TD_SUCCESS) {
             err_print('4', '9');
             return TD_FAILURE;
@@ -1062,15 +1060,15 @@ static int get_head_area_data_from_emmc(backup_image_params_s *backup_params)
     }
 
     ret = mmc_read((void *)(uintptr_t)tmp_addr, data_addr,
-               align_params_size, READ_DATA_BY_DMA);
+        align_params_size, READ_DATA_BY_DMA);
     if (ret != TD_SUCCESS) {
         err_print('4', 'a');
         return TD_FAILURE;
     }
     ret = memmove_s((void *)(uintptr_t)bootloader_key_area_addr,
-            BOOTLOADER_KEY_PARAMS_AREA_SIZE,
-            (void *)(uintptr_t)(tmp_addr + align_len),
-            BOOTLOADER_KEY_PARAMS_AREA_SIZE);
+        BOOTLOADER_KEY_PARAMS_AREA_SIZE,
+        (void *)(uintptr_t)(tmp_addr + align_len),
+        BOOTLOADER_KEY_PARAMS_AREA_SIZE);
     if (ret != EOK) {
         err_print('4', 'b');
         return TD_FAILURE;
@@ -1084,7 +1082,7 @@ static int get_head_area_data(uint32_t channel_type, backup_image_params_s *back
     int ret;
 
     switch (channel_type) {
-    case BOOT_SEL_PCIE:
+        case BOOT_SEL_PCIE:
         ret = get_head_area_data_form_pcie();
         if (ret != TD_SUCCESS) {
             err_print('4', '1');
@@ -1093,16 +1091,16 @@ static int get_head_area_data(uint32_t channel_type, backup_image_params_s *back
 
         break;
 
-    case BOOT_SEL_UART:
+        case BOOT_SEL_UART:
         ret = copy_from_uart((void *)(VENDOR_ROOT_PUBLIC_KEY_ADDR + SECURE_IMAGE_STEP1_SIZE),
-                     SECURE_IMAGE_STEP2_SIZE);
+            SECURE_IMAGE_STEP2_SIZE);
         if (ret != TD_SUCCESS) {
             err_print('4', '2');
             return TD_FAILURE;
         }
         break;
 
-    case BOOT_SEL_SDIO:
+        case BOOT_SEL_SDIO:
         ret = get_head_area_data_form_sdio();
         if (ret != TD_SUCCESS) {
             err_print('4', '3');
@@ -1111,7 +1109,7 @@ static int get_head_area_data(uint32_t channel_type, backup_image_params_s *back
 
         break;
 
-    case BOOT_SEL_USB:
+        case BOOT_SEL_USB:
         ret = get_head_area_data_form_usb();
         if (ret != TD_SUCCESS) {
             err_print('4', '4');
@@ -1120,7 +1118,7 @@ static int get_head_area_data(uint32_t channel_type, backup_image_params_s *back
 
         break;
 
-    case BOOT_SEL_FLASH:
+        case BOOT_SEL_FLASH:
         ret = get_head_area_data_from_flash(backup_params);
         if (ret != TD_SUCCESS) {
             err_print('4', '5');
@@ -1129,7 +1127,7 @@ static int get_head_area_data(uint32_t channel_type, backup_image_params_s *back
 
         break;
 
-    case BOOT_SEL_EMMC:
+        case BOOT_SEL_EMMC:
         ret = get_head_area_data_from_emmc(backup_params);
         if (ret != TD_SUCCESS) {
             err_print('4', '6');
@@ -1138,7 +1136,7 @@ static int get_head_area_data(uint32_t channel_type, backup_image_params_s *back
 
         break;
 
-    default:
+        default:
         break;
     }
 
@@ -1260,7 +1258,7 @@ static int get_bootloader_code_area_from_emmc(const backup_image_params_s *backu
         /* Here tmp_addr is used as the temporary storage address. */
         tmp_addr = image_int_ddr_addr;
         ret = mmc_read((void *)(uintptr_t)tmp_addr, 0,
-                   backup_params->offset_addr, READ_DATA_BY_DMA);
+            backup_params->offset_addr, READ_DATA_BY_DMA);
         if (ret != TD_SUCCESS) {
             err_print('8', '8');
             return TD_FAILURE;
@@ -1269,7 +1267,7 @@ static int get_bootloader_code_area_from_emmc(const backup_image_params_s *backu
 
     /* get data from emmc by cipher dma */
     ret = mmc_read((void *)(uintptr_t)image_int_ddr_addr, backup_params->offset_addr,
-               image_total_len, READ_DATA_BY_DMA);
+        image_total_len, READ_DATA_BY_DMA);
     if (ret != TD_SUCCESS) {
         err_print('8', '9');
         return TD_FAILURE;
@@ -1279,12 +1277,12 @@ static int get_bootloader_code_area_from_emmc(const backup_image_params_s *backu
 }
 
 static int get_bootloader_code_area_data(uint32_t channel_type,
-        const backup_image_params_s *backup_params)
+    const backup_image_params_s *backup_params)
 {
     int ret;
 
     switch (channel_type) {
-    case BOOT_SEL_PCIE:
+        case BOOT_SEL_PCIE:
         ret = get_bootloader_code_area_from_pcie();
         if (ret != TD_SUCCESS) {
             err_print('8', '1');
@@ -1292,7 +1290,7 @@ static int get_bootloader_code_area_data(uint32_t channel_type,
         }
         break;
 
-    case BOOT_SEL_UART:
+        case BOOT_SEL_UART:
         ret = get_bootloader_code_area_from_uart();
         if (ret != TD_SUCCESS) {
             err_print('8', '2');
@@ -1300,7 +1298,7 @@ static int get_bootloader_code_area_data(uint32_t channel_type,
         }
         break;
 
-    case BOOT_SEL_SDIO:
+        case BOOT_SEL_SDIO:
         ret = get_bootloader_code_area_from_sdio();
         if (ret != TD_SUCCESS) {
             err_print('8', '3');
@@ -1309,7 +1307,7 @@ static int get_bootloader_code_area_data(uint32_t channel_type,
 
         break;
 
-    case BOOT_SEL_USB:
+        case BOOT_SEL_USB:
         ret = get_bootloader_code_area_from_usb();
         if (ret != TD_SUCCESS) {
             err_print('8', '4');
@@ -1318,7 +1316,7 @@ static int get_bootloader_code_area_data(uint32_t channel_type,
 
         break;
 
-    case BOOT_SEL_FLASH:
+        case BOOT_SEL_FLASH:
         ret = get_bootloader_code_area_from_flash(backup_params);
         if (ret != TD_SUCCESS) {
             err_print('8', '5');
@@ -1326,7 +1324,7 @@ static int get_bootloader_code_area_data(uint32_t channel_type,
         }
         break;
 
-    case BOOT_SEL_EMMC:
+        case BOOT_SEL_EMMC:
         ret = get_bootloader_code_area_from_emmc(backup_params);
         if (ret != TD_SUCCESS) {
             err_print('8', '6');
@@ -1334,7 +1332,7 @@ static int get_bootloader_code_area_data(uint32_t channel_type,
         }
         break;
 
-    default:
+        default:
         break;
     }
 

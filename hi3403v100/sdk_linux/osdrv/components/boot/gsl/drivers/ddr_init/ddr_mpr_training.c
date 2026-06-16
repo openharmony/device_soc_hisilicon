@@ -70,8 +70,8 @@ static int ddr_mpr_extract(struct ddr_cfg_st *cfg,
     unsigned int data2;
     unsigned int data3;
     unsigned int data4;
-	unsigned int base_dmc = cfg->cur_dmc;
-	unsigned int byte_index = cfg->cur_byte;
+    unsigned int base_dmc = cfg->cur_dmc;
+    unsigned int byte_index = cfg->cur_byte;
 
     data1 = reg_read(base_dmc + offset0);  /* SFC read data [127:96] or [255:224] */
     data2 = reg_read(base_dmc + offset1);  /* SFC read data [95:64] or [223:192] */
@@ -121,9 +121,9 @@ static int ddr_mpr_extract(struct ddr_cfg_st *cfg,
 /* Find RDQ via MPR */
 static int ddr_mpr_find_rdq(struct ddr_cfg_st *cfg)
 {
-	struct training_data training;
-	unsigned int dq_num;
-	unsigned int win_num;
+    struct training_data training;
+    unsigned int dq_num;
+    unsigned int win_num;
     unsigned int def_dq;
     unsigned int best_dq;
     unsigned int byte_index;
@@ -164,13 +164,13 @@ static int ddr_mpr_find_rdq(struct ddr_cfg_st *cfg)
 /* Find RDQS via MPR */
 static int ddr_mpr_find_rdqs(struct ddr_cfg_st *cfg)
 {
-	unsigned int rdqs_start = 0;
-	unsigned int rdqs_end   = PHY_RDQS_BDL_MASK;
-	unsigned int rdqs_mid;
+    unsigned int rdqs_start = 0;
+    unsigned int rdqs_end   = PHY_RDQS_BDL_MASK;
+    unsigned int rdqs_mid;
     unsigned int val;
     unsigned int delay;
-	unsigned int count = 0;
-	int found = DDR_FALSE;
+    unsigned int count = 0;
+    int found = DDR_FALSE;
 
     /* set rdq to middle value */
     reg_write(PHY_DQ_MIDDLE_VAL << PHY_BDL_DQ_BIT,

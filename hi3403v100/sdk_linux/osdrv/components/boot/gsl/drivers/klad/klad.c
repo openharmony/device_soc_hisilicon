@@ -59,7 +59,7 @@ static ALWAYS_INLINE int32_t _klad_func_start(const rkp_deob_kdf *deob_kdf,
 }
 
 int32_t klad_com_process(const rkp_deob_kdf *deob_kdf, common_hkl *com_klad,
-             const uint32_t check_wd)
+    const uint32_t check_wd)
 {
     volatile int32_t ret;
 
