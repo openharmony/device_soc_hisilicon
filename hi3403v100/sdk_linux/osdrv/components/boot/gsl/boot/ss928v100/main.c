@@ -248,7 +248,7 @@ static unsigned hpm_value_avg(const unsigned int *val, unsigned int num)
 }
 
 static void get_hpm_value(unsigned int *hpm_core, unsigned int *hpm_npu,
-               unsigned int *hpm_mda)
+    unsigned int *hpm_mda)
 {
     int i;
     unsigned int temp;
@@ -290,20 +290,20 @@ static void get_hpm_value(unsigned int *hpm_core, unsigned int *hpm_npu,
 }
 
 static void start_hpm(unsigned int *hpm_core, unsigned int *hpm_npu,
-               unsigned int *hpm_mda)
+    unsigned int *hpm_mda)
 {
     get_hpm_value(hpm_core, hpm_npu, hpm_mda);
 }
 
 static void save_hpm(unsigned int hpm_core, unsigned int hpm_npu,
-              unsigned int hpm_mda)
+    unsigned int hpm_mda)
 {
     writel(hpm_mda, REG_SYSCTRL_BASE + HPM_MDA_STORAGE_REG);
     writel(hpm_npu, REG_SYSCTRL_BASE + HPM_NPU_STORAGE_REG);
     writel(hpm_core, REG_SYSCTRL_BASE + HPM_CORE_STORAGE_REG);
 }
 static unsigned int calc_volt_regval(unsigned int volt_val, unsigned int volt_max,
-                     unsigned int volt_min)
+    unsigned int volt_min)
 {
     unsigned int duty;
 
@@ -398,7 +398,7 @@ static void get_delta_v(int *core_delta_v, int *npu_delta_v,  int *mda_delta_v)
 }
 
 static void set_volt(unsigned int hpm_core, unsigned int hpm_npu,
-        unsigned int hpm_mda)
+    unsigned int hpm_mda)
 {
     int  core_delta_v = 0;
     int  npu_delta_v = 0;
@@ -1277,7 +1277,7 @@ static int get_bootloader_code_area_from_emmc(const backup_image_params_s *backu
 }
 
 static int get_bootloader_code_area_data(uint32_t channel_type,
-        const backup_image_params_s *backup_params)
+    const backup_image_params_s *backup_params)
 {
     int ret;
 

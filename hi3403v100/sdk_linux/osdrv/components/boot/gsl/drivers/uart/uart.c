@@ -181,7 +181,7 @@ static void parse_file_frame_len_or_addr(data_handle_t *data_handle, uint32_t po
 }
 
 static int parse_file_frame(data_handle_t *data_handle, frame_info *frame,
-            uint32_t pos, uint8_t cr)
+    uint32_t pos, uint8_t cr)
 {
     switch (pos) {
      case PROC_BYTE_HEAD:
@@ -246,7 +246,7 @@ static uint16_t calc_frame_len(data_handle_t *data_handle)
 }
 
 static bool parse_data_frame(data_handle_t *data_handle, frame_info *frame, uint32_t pos,
-                 uint8_t cr)
+    uint8_t cr)
 {
     switch (pos) {
      case PROC_BYTE_HEAD:
@@ -356,7 +356,7 @@ static int uart_wait_data(int status)
 }
 
 uint8_t uart_hand_head_frame(IN data_handle_t *data_handle, uint8_t  *frame_type,
-            uint32_t pos, int *status)
+    uint32_t pos, int *status)
 {
     errno_t err;
     uint8_t  cr;

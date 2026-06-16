@@ -234,7 +234,7 @@ typedef struct {
 void usb3_fill_desc(const usb3_desc_param_t *param);
 void usb3_dep_startnewcfg(const usb3_pcd_t *pcd, usb3_dev_ep_regs_t *ep_reg, uint32_t rsrcidx);
 void usb3_dep_cfg(const usb3_pcd_t *pcd, usb3_dev_ep_regs_t *ep_reg, uint32_t depcfg0, uint32_t depcfg1,
-          uint32_t depcfg2);
+    uint32_t depcfg2);
 void usb3_dep_xfercfg(const usb3_pcd_t *pcd, usb3_dev_ep_regs_t *ep_reg, uint32_t depstrmcfg);
 uint8_t usb3_dep_startxfer(const usb3_pcd_t *pcd, usb3_dev_ep_regs_t *ep_reg, uint32_t dma_addr,
     uint32_t stream_or_uf);

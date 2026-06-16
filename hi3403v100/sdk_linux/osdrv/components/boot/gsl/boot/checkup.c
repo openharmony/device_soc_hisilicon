@@ -317,7 +317,7 @@ static uint32_t is_scs_enable()
 }
 
 static int confirm_sha256_value(uint32_t data_addr, uint32_t data_len,
-                const uint8_t *data_sha_embed)
+    const uint8_t *data_sha_embed)
 {
     uint8_t data_sha[SHA_256_LEN];
     uint8_t data_sha_b[SHA_256_LEN];
