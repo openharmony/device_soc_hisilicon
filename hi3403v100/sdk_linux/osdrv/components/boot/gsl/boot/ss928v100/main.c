@@ -824,14 +824,14 @@ static uint32_t get_data_channel_type(void)
 
     channel_type = reg_get(REG_BASE_SCTL + DATA_CHANNEL_TYPE_REG);
     switch (channel_type) {
-        case BOOT_SEL_PCIE:
-        case BOOT_SEL_UART:
-        case BOOT_SEL_SDIO:
-        case BOOT_SEL_USB:
-        case BOOT_SEL_FLASH:
-        case BOOT_SEL_EMMC:
+    case BOOT_SEL_PCIE:
+    case BOOT_SEL_UART:
+    case BOOT_SEL_SDIO:
+    case BOOT_SEL_USB:
+    case BOOT_SEL_FLASH:
+    case BOOT_SEL_EMMC:
         break;
-        default:
+    default:
         err_print('3', '1');
         channel_type = BOOT_SEL_UNKNOW;
         break;
@@ -1082,7 +1082,7 @@ static int get_head_area_data(uint32_t channel_type, backup_image_params_s *back
     int ret;
 
     switch (channel_type) {
-        case BOOT_SEL_PCIE:
+    case BOOT_SEL_PCIE:
         ret = get_head_area_data_form_pcie();
         if (ret != TD_SUCCESS) {
             err_print('4', '1');
@@ -1091,7 +1091,7 @@ static int get_head_area_data(uint32_t channel_type, backup_image_params_s *back
 
         break;
 
-        case BOOT_SEL_UART:
+    case BOOT_SEL_UART:
         ret = copy_from_uart((void *)(VENDOR_ROOT_PUBLIC_KEY_ADDR + SECURE_IMAGE_STEP1_SIZE),
             SECURE_IMAGE_STEP2_SIZE);
         if (ret != TD_SUCCESS) {
@@ -1100,7 +1100,7 @@ static int get_head_area_data(uint32_t channel_type, backup_image_params_s *back
         }
         break;
 
-        case BOOT_SEL_SDIO:
+    case BOOT_SEL_SDIO:
         ret = get_head_area_data_form_sdio();
         if (ret != TD_SUCCESS) {
             err_print('4', '3');
@@ -1109,7 +1109,7 @@ static int get_head_area_data(uint32_t channel_type, backup_image_params_s *back
 
         break;
 
-        case BOOT_SEL_USB:
+    case BOOT_SEL_USB:
         ret = get_head_area_data_form_usb();
         if (ret != TD_SUCCESS) {
             err_print('4', '4');
@@ -1118,7 +1118,7 @@ static int get_head_area_data(uint32_t channel_type, backup_image_params_s *back
 
         break;
 
-        case BOOT_SEL_FLASH:
+    case BOOT_SEL_FLASH:
         ret = get_head_area_data_from_flash(backup_params);
         if (ret != TD_SUCCESS) {
             err_print('4', '5');
@@ -1127,7 +1127,7 @@ static int get_head_area_data(uint32_t channel_type, backup_image_params_s *back
 
         break;
 
-        case BOOT_SEL_EMMC:
+    case BOOT_SEL_EMMC:
         ret = get_head_area_data_from_emmc(backup_params);
         if (ret != TD_SUCCESS) {
             err_print('4', '6');
@@ -1136,7 +1136,7 @@ static int get_head_area_data(uint32_t channel_type, backup_image_params_s *back
 
         break;
 
-        default:
+    default:
         break;
     }
 
@@ -1282,7 +1282,7 @@ static int get_bootloader_code_area_data(uint32_t channel_type,
     int ret;
 
     switch (channel_type) {
-        case BOOT_SEL_PCIE:
+    case BOOT_SEL_PCIE:
         ret = get_bootloader_code_area_from_pcie();
         if (ret != TD_SUCCESS) {
             err_print('8', '1');
@@ -1290,7 +1290,7 @@ static int get_bootloader_code_area_data(uint32_t channel_type,
         }
         break;
 
-        case BOOT_SEL_UART:
+    case BOOT_SEL_UART:
         ret = get_bootloader_code_area_from_uart();
         if (ret != TD_SUCCESS) {
             err_print('8', '2');
@@ -1298,7 +1298,7 @@ static int get_bootloader_code_area_data(uint32_t channel_type,
         }
         break;
 
-        case BOOT_SEL_SDIO:
+    case BOOT_SEL_SDIO:
         ret = get_bootloader_code_area_from_sdio();
         if (ret != TD_SUCCESS) {
             err_print('8', '3');
@@ -1307,7 +1307,7 @@ static int get_bootloader_code_area_data(uint32_t channel_type,
 
         break;
 
-        case BOOT_SEL_USB:
+    case BOOT_SEL_USB:
         ret = get_bootloader_code_area_from_usb();
         if (ret != TD_SUCCESS) {
             err_print('8', '4');
@@ -1316,7 +1316,7 @@ static int get_bootloader_code_area_data(uint32_t channel_type,
 
         break;
 
-        case BOOT_SEL_FLASH:
+    case BOOT_SEL_FLASH:
         ret = get_bootloader_code_area_from_flash(backup_params);
         if (ret != TD_SUCCESS) {
             err_print('8', '5');
@@ -1324,7 +1324,7 @@ static int get_bootloader_code_area_data(uint32_t channel_type,
         }
         break;
 
-        case BOOT_SEL_EMMC:
+    case BOOT_SEL_EMMC:
         ret = get_bootloader_code_area_from_emmc(backup_params);
         if (ret != TD_SUCCESS) {
             err_print('8', '6');
@@ -1332,7 +1332,7 @@ static int get_bootloader_code_area_data(uint32_t channel_type,
         }
         break;
 
-        default:
+    default:
         break;
     }
 
