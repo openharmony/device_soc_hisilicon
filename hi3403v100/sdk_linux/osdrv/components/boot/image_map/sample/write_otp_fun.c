@@ -464,7 +464,7 @@ static td_s32 do_write_otp(cmd_tbl_t *cmdtp, int flag, int argc, char * const ar
     printf("\n write otp end\n");
     return 0;
 }
-U_BOOT_CMD (
+U_BOOT_CMD(
     write_otp, CONFIG_SYS_MAXARGS, 0, do_write_otp,
     "write otp operation",
     "write otp\n"

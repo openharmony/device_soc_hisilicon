@@ -132,8 +132,7 @@ static void ddr_rdqs_sync(struct ddr_cfg_st *cfg, int val)
 
 static void ddr_set_rdqs(struct ddr_cfg_st *cfg, int val)
 {
-    unsigned int delay;
-    delay = reg_read(cfg->cur_phy + ddr_phy_dxnrdqsdly(cfg->cur_byte));
+    unsigned int delay = reg_read(cfg->cur_phy + ddr_phy_dxnrdqsdly(cfg->cur_byte));
 
     ddr_phy_rdqs_sync_rdm(cfg, val);
 

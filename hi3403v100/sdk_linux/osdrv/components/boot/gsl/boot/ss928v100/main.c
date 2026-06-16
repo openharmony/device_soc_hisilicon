@@ -501,7 +501,6 @@ void init_hpm(void)
     writel(HPM_MONITOR_CFG, SYSCTRL_REG + HPM_MDA_OFFSET);
     /* core  */
     writel(HPM_MONITOR_CFG, SYSCTRL_REG + HPM_CORE_OFFSET);
-
 }
 
 static void svb_voltage_change(void)

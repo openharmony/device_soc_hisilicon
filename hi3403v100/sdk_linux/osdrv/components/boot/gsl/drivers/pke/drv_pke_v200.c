@@ -139,7 +139,8 @@ static uint16_t crc_table(uint8_t byte)
 
 static uint16_t drv_pke_crc16_key(uint16_t initial, const uint8_t *key, uint32_t klen)
 {
-    uint32_t i, j;
+    uint32_t i;
+    uint32_t j;
     uint16_t crc16;
     const uint8_t *p = NULL;
 
