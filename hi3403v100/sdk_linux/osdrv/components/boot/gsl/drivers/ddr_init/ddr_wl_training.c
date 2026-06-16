@@ -210,13 +210,13 @@ static void ddr_wl_wdq_adjust(const struct ddr_cfg_st *cfg,
 static void ddr_wl_bdl_sync(const struct ddr_cfg_st *cfg,
     const struct ddr_delay_st *wdqs_new, const struct ddr_delay_st *wdqs_old)
 {
-	int i;
-	unsigned int val;
+    int i;
+    unsigned int val;
     unsigned int oen_bdl;
     unsigned int wdqsoe_bdl;
     unsigned int wdm_bdl;
-	unsigned int wdq_phase;
-	unsigned int base_phy = cfg->cur_phy;
+    unsigned int wdq_phase;
+    unsigned int base_phy = cfg->cur_phy;
 
     /* sync wdq phase, wdq bdl, wdm bdl, oen bdl, wdq soe bdl */
     for (i = 0; i < get_byte_num(cfg); i++) {
@@ -292,10 +292,10 @@ static int ddr_wl_process(const struct ddr_cfg_st *cfg, unsigned int type, struc
 {
     int i;
     int j;
-	unsigned int wl_result;
-	unsigned int length;
-	unsigned int base_phy = cfg->cur_phy;
-	unsigned int byte_num = get_byte_num(cfg);
+    unsigned int wl_result;
+    unsigned int length;
+    unsigned int base_phy = cfg->cur_phy;
+    unsigned int byte_num = get_byte_num(cfg);
 
     if (type == DDR_DELAY_PHASE)
         length = PHY_WDQS_PHASE_MASK;
@@ -344,13 +344,13 @@ static int ddr_wl_process(const struct ddr_cfg_st *cfg, unsigned int type, struc
  */
 static int ddr_write_leveling(const struct ddr_cfg_st *cfg)
 {
-	int result;
+    int result;
     unsigned int i;
     unsigned int tmp;
-	unsigned int base_phy = cfg->cur_phy;
-	unsigned int base_dmc = cfg->cur_dmc;
-	struct ddr_delay_st wdqs_old;
-	struct ddr_delay_st wdqs_new;
+    unsigned int base_phy = cfg->cur_phy;
+    unsigned int base_dmc = cfg->cur_dmc;
+    struct ddr_delay_st wdqs_old;
+    struct ddr_delay_st wdqs_new;
 
     ddr_debug("DDR Write Leveling training");
 

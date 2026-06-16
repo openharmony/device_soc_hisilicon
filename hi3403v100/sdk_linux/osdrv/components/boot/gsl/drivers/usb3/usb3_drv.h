@@ -66,8 +66,8 @@ typedef enum ep0_state {
 } ep0state_e;
 
 typedef union usb_setup_pkt {
-	usb_device_request_t req;
-	uint32_t d32[2];
+    usb_device_request_t req;
+    uint32_t d32[2];
     uint8_t data8[8];
 } usb_setup_pkt_t;
 
