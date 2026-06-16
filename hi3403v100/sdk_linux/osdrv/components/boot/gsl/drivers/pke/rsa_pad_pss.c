@@ -201,7 +201,7 @@ int32_t rsa_padding_check_pkcs1_pss(rsa_padding_s *pad, const uint8_t *mhash)
 
     /* formula: maskedDB = DB xor dbMask, DB = PS || 0x01 || salt */
     ret = rsa_pkcs1_mgf1(pss.masked_seed,
-                 pad->hlen, pss.masked_db, pss.key_len - pad->hlen - 1);
+        pad->hlen, pss.masked_db, pss.key_len - pad->hlen - 1);
     if (ret != TD_SUCCESS)
         return TD_FAILURE;
 

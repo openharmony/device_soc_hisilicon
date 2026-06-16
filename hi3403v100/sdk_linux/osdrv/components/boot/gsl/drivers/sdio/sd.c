@@ -286,7 +286,7 @@ static int sd_card_init(void)
 
     /* Send CMD8 to make sure if voltage is ok */
     cmd = sdhci_make_cmd_fun(SD_CMD_SEND_IF_COND,
-                 SDHCI_CMD_CRC | SDHCI_CMD_RESP_SHORT);
+        SDHCI_CMD_CRC | SDHCI_CMD_RESP_SHORT);
     arg = (MMC_VDD_32_33 | MMC_VDD_33_34) & 0x00ff8000;
     sd_send_cmd(cmd, ((arg != 0) << 0x8) | 0xaa);
 
@@ -448,7 +448,7 @@ size_t mmc_block_read(void *dst, uint32_t src, size_t size)
 	uint32_t cmd;
 
     cmd = sdhci_make_cmd_fun(MMC_CMD_SET_BLOCKLEN,
-                 SDHCI_CMD_CRC | SDHCI_CMD_RESP_SHORT);
+        SDHCI_CMD_CRC | SDHCI_CMD_RESP_SHORT);
     sd_send_cmd(cmd, MMC_BLOCK_SIZE);
 
     mmc_prepare_single_read();

@@ -23,7 +23,7 @@ int copy_from_sdio(void *buffer, unsigned long maxsize)
     int size;
 
     size = do_fat_read_at(FILE_NAME,
-                  (unsigned char *)buffer, maxsize);
+        (unsigned char *)buffer, maxsize);
     if (size <= 0)
         return TD_FAILURE;
 

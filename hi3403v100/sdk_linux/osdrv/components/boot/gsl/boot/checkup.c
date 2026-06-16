@@ -145,7 +145,7 @@ static int copy_boot_image_to_decrypt_addr()
     boot_image_total_len = get_boot_image_total_len();
 
     err = memcpy_s((void *)(uintptr_t)decrypt_bootloader_addr, boot_image_total_len,
-         (void *)(uintptr_t)boot_image_int_ddr_addr, boot_image_total_len);
+        (void *)(uintptr_t)boot_image_int_ddr_addr, boot_image_total_len);
     if (err != EOK)
         return TD_FAILURE;
 
@@ -404,7 +404,7 @@ int handle_bootloader_key_area()
 
     oem_root_public_key = (root_public_key_s *)(uintptr_t)OEM_ROOT_PUBLIC_KEY_ADDR;
     ret = confirm_sha256_value((uintptr_t)oem_root_public_key, RSA_4096_LEN + RSA_E_LEN,
-                   oem_root_public_key->checksum_root_public_key);
+        oem_root_public_key->checksum_root_public_key);
     if ((ret != TD_SUCCESS) && (is_scs_enable() == AUTH_SUCCESS)) {
         err_print('5', '1');
         failure_process();
@@ -790,7 +790,7 @@ int handle_tee_key_area()
     tee_key_area_s *tee_key_area = (tee_key_area_s *)g_tee_img_sec_addr;
 
     err = memcpy_s((void *)tee_key_area, TEE_KEY_AREA_SIZE,
-         (void *)TEE_KEY_AREA_LOAD_ADDR, TEE_KEY_AREA_SIZE);
+        (void *)TEE_KEY_AREA_LOAD_ADDR, TEE_KEY_AREA_SIZE);
     if (err != EOK) {
         err_print('a', '0');
         return TD_FAILURE;
@@ -855,9 +855,9 @@ int handle_atf_area()
     }
 
     ret = confirm_signature_value(((gsl_third_party_key_s *)GSL_THIRD_PARTY_KEY_ADDR)->modulus,
-            ((gsl_third_party_key_s *)GSL_THIRD_PARTY_KEY_ADDR)->exponent,
-            (uint32_t)TEE_DEC_ADDR, (uint32_t)(area_len - (RSA_4096_LEN + RSA_4096_LEN)),
-            (uint8_t *)(TEE_DEC_ADDR + area_len - RSA_4096_LEN));
+        ((gsl_third_party_key_s *)GSL_THIRD_PARTY_KEY_ADDR)->exponent,
+        (uint32_t)TEE_DEC_ADDR, (uint32_t)(area_len - (RSA_4096_LEN + RSA_4096_LEN)),
+        (uint8_t *)(TEE_DEC_ADDR + area_len - RSA_4096_LEN));
     if ((ret != TD_SUCCESS) && (is_double_sign_en_enable() == AUTH_SUCCESS)) {
         err_print('b', '2');
         return TD_FAILURE;
@@ -870,9 +870,9 @@ int handle_atf_area()
     decrypt_field(TEE_DEC_ADDR + TEE_CODE_AREA_HEAD_SIZE, code_len, KLAD_ATF, iv_key_info);
 
     ret = confirm_signature_value(tee_key_area->modulus, tee_key_area->exponent,
-            (uint32_t)TEE_DEC_ADDR,
-            (uint32_t)(area_len - (RSA_4096_LEN + RSA_4096_LEN)),
-            (uint8_t *)(TEE_DEC_ADDR + area_len - (RSA_4096_LEN + RSA_4096_LEN)));
+        (uint32_t)TEE_DEC_ADDR,
+        (uint32_t)(area_len - (RSA_4096_LEN + RSA_4096_LEN)),
+        (uint8_t *)(TEE_DEC_ADDR + area_len - (RSA_4096_LEN + RSA_4096_LEN)));
     if (ret != TD_SUCCESS) {
         err_print('b', '3');
         return TD_FAILURE;

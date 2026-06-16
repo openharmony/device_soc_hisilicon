@@ -118,13 +118,13 @@ void usb3_set_tx_fifo_size(usb3_device_t *dev)
     uint32_t prev_start = 0;
     /* Set 1K for tx fifo0 */
     usb3_wr32(&global_regs->gtxfifosiz[0],
-          ((RAM_TX0_DEPTH / RAM_WIDTH) << USB3_FIFOSZ_DEPTH_SHIFT) | (prev_start <<
+        ((RAM_TX0_DEPTH / RAM_WIDTH) << USB3_FIFOSZ_DEPTH_SHIFT) | (prev_start <<
                   USB3_FIFOSZ_STARTADDR_SHIFT));
 
     prev_start += RAM_TX0_DEPTH / RAM_WIDTH;
     /* Set 2K for tx fifo1 */
     usb3_wr32(&global_regs->gtxfifosiz[1],
-          ((RAM_TX1_DEPTH / RAM_WIDTH) << USB3_FIFOSZ_DEPTH_SHIFT) | (prev_start <<
+        ((RAM_TX1_DEPTH / RAM_WIDTH) << USB3_FIFOSZ_DEPTH_SHIFT) | (prev_start <<
                   USB3_FIFOSZ_STARTADDR_SHIFT));
 }
 
@@ -245,7 +245,7 @@ void usb3_dep_startnewcfg(const usb3_pcd_t *pcd, usb3_dev_ep_regs_t *ep_reg, uin
 {
     /* Start the command */
     usb3_wr32(&ep_reg->depcmd,
-          (rsrcidx << USB3_EPCMD_XFER_RSRC_IDX_SHIFT) | USB3_EPCMD_START_NEW_CFG | USB3_EPCMD_ACT_BIT);
+        (rsrcidx << USB3_EPCMD_XFER_RSRC_IDX_SHIFT) | USB3_EPCMD_START_NEW_CFG | USB3_EPCMD_ACT_BIT);
 
     /* Wait for command completion */
     handshake(pcd->usb3_dev, &ep_reg->depcmd, USB3_EPCMD_ACT_BIT, 0);
@@ -296,7 +296,7 @@ uint8_t usb3_dep_startxfer(const usb3_pcd_t *pcd, usb3_dev_ep_regs_t *ep_reg, ui
     usb3_wr32(&ep_reg->depcmdpar0, 0);
 
     usb3_wr32(&ep_reg->depcmd,
-          (stream_or_uf << USB3_EPCMD_STR_NUM_OR_UF_SHIFT) | USB3_EPCMD_START_XFER | USB3_EPCMD_ACT_BIT);
+        (stream_or_uf << USB3_EPCMD_STR_NUM_OR_UF_SHIFT) | USB3_EPCMD_START_XFER | USB3_EPCMD_ACT_BIT);
 
     /* Wait for command completion */
     handshake(pcd->usb3_dev, &ep_reg->depcmd, USB3_EPCMD_ACT_BIT, 0);

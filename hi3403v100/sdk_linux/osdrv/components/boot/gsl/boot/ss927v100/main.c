@@ -757,7 +757,7 @@ static void wait_pcie_slave_flag(int print_enable, uint32_t flag_val)
 static void pcie_slave_set_ddr_init_done_flag(int print_enable)
 {
     reg_set(REG_BASE_SCTL + PCIE_SLAVE_BOOT_CTL_REG,
-     DDR_INIT_EXCUTE_OK_FLAG);
+        DDR_INIT_EXCUTE_OK_FLAG);
 
     if (print_enable) {
         serial_putc('\n');
@@ -894,7 +894,7 @@ static void get_image_backup_params(uint32_t channel_type, backup_image_params_s
 static void pcie_slave_ready_for_head_area_flag(int print_enable)
 {
     reg_set(REG_BASE_SCTL + PCIE_SLAVE_BOOT_CTL_REG,
-     READ_FOR_HEAD_AREA_FLAG);
+        READ_FOR_HEAD_AREA_FLAG);
 
     if (print_enable) {
         serial_putc('\n');
