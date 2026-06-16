@@ -121,14 +121,12 @@ void stack_chk_guard_setup()
 
 #pragma GCC pop_options
 #else
-__attribute__((no_stack_protector))
-void __stack_chk_fail(void)
+__attribute__((no_stack_protector)) void __stack_chk_fail(void)
 {
     err_print(STACK_CHK_FAIL);
     call_reset();
 }
-__attribute__((no_stack_protector))
-void stack_chk_guard_setup()
+__attribute__((no_stack_protector)) void stack_chk_guard_setup()
 {
     unsigned random = 0;
     random = get_random_num();
