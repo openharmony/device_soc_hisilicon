@@ -73,9 +73,9 @@ uint32_t get_eventbuf_event(usb3_device_t *dev, int size)
     event = *dev->event_ptr++;
 
     if (dev->event_ptr >= dev->event_buf + size) {
-        dev->event_ptr = dev->event_buf;
+		dev->event_ptr = dev->event_buf;
     }
-    return event;
+	return event;
 }
 
 void usb3_init_eventbuf(const usb3_device_t *dev, int size, uint32_t dma_addr)
@@ -110,23 +110,23 @@ void usb3_enable_device_interrupts(usb3_device_t *dev)
 
 void usb3_handle_event(usb3_device_t *dev)
 {
-    usb3_pcd_t *pcd = &dev->pcd;
-    uint32_t event;
+	usb3_pcd_t *pcd = &dev->pcd;
+	uint32_t event;
     int count;
     int intr;
     int physep;
     int i;
 
-    count = get_eventbuf_count(dev);
+	count = get_eventbuf_count(dev);
     if ((count & USB3_EVENTCNT_CNT_BITS) == USB3_EVENTCNT_CNT_BITS ||
-        count >= USB3_EVENT_BUF_SIZE * 4) { // 4 bytes per event
-        update_eventbuf_count(dev, count);
-        count = 0;
-    }
+	    count >= USB3_EVENT_BUF_SIZE * 4) { // 4 bytes per event
+		update_eventbuf_count(dev, count);
+		count = 0;
+	}
 
     if (count < 0) {
-        count = 0;
-    }
+		count = 0;
+	}
 
     for (i = 0; i < count; i += 4) { // 4 bytes per event
         event = get_eventbuf_event(dev, USB3_EVENT_BUF_SIZE);

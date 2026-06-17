@@ -92,9 +92,9 @@ void tzasc_bypass_disable()
 
 void tzasc_rgn_enable(uint8_t rgn)
 {
-    volatile sec_rgn_map *map_reg = get_sec_rgn_map_reg(rgn);
+	volatile sec_rgn_map *map_reg = get_sec_rgn_map_reg(rgn);
     if (map_reg == NULL) {
-        return;
+		return;
     }
 
     map_reg->bits.rgn_en = TZASC_RNG_EN;
@@ -102,10 +102,10 @@ void tzasc_rgn_enable(uint8_t rgn)
 
 void tzasc_set_rgn_map(uint8_t rgn, uint64_t addr, size_t size)
 {
-    volatile sec_rgn_map *map_reg = get_sec_rgn_map_reg(rgn);
-    volatile sec_rgn_map_ext *map_ext_reg = get_sec_rgn_map_ext_reg(rgn);
+	volatile sec_rgn_map *map_reg = get_sec_rgn_map_reg(rgn);
+	volatile sec_rgn_map_ext *map_ext_reg = get_sec_rgn_map_ext_reg(rgn);
     if ((map_reg == NULL) || (map_ext_reg == NULL)) {
-        return;
+		return;
     }
 
     map_reg->bits.rgn_base_addr = addr >> TZASC_ALGIN_BITS;

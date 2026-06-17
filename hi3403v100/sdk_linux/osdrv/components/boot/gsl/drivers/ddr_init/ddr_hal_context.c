@@ -69,8 +69,8 @@ DDR_AO_FUNC static void ddr_hal_training_cfg_set_rank(struct ddr_hal_phy_all *ph
     phy_all->phy[1].rank[1].item_hw = ddr_reg_read(DDR_REG_BASE_SYSCTRL + SYSCTRL_DDR_HW_PHY1_RANK1);
 
     if (ddr_reg_read(DDR_REG_BASE_SYSCTRL + SYSCTRL_DDR_HW_PHY1_RANK1)) {
-        /* rank number equal 2 if SYSCTRL_DDR_HW_PHY1_RANK1 has bean define in boot table */
-        phy_all->phy[1].rank_num = 2; /* 2 rank */
+		/* rank number equal 2 if SYSCTRL_DDR_HW_PHY1_RANK1 has bean define in boot table */
+		phy_all->phy[1].rank_num = 2; /* 2 rank */
     }
 #endif
 #ifdef DDR_REG_BASE_PHY2

@@ -215,7 +215,7 @@ uint32_t get_tee_sec_version(uint32_t mask_ext)
             security_version += word & 1;
             word >>= 1;
             mask_ext--;
-            count --;
+            count--;
         }
         addr++;
     }

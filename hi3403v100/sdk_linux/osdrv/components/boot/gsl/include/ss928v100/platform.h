@@ -37,11 +37,11 @@
 
 /* Vendor_Root_Public_Key\OEM_Root_Public_Key\Third_Party_Root_Public_Key\GSL_Third_Party_Key\GSL_Key */
 
-#define VENDOR_ROOT_PUBLIC_KEY_ADDR	CP_STEP1_ADDR		/* The start address of vendor_Root_Public_Key */
+#define VENDOR_ROOT_PUBLIC_KEY_ADDR	CP_STEP1_ADDR /* The start address of vendor_Root_Public_Key */
 #define SECURE_IMAGE_STEP1_SIZE 0x10000 /* copy 64KB to bootram */
 #define SECURE_IMAGE_STEP2_SIZE 0x3c00  /* copy 15KB to bootram */
 
-#define OEM_ROOT_PUBLIC_KEY_ADDR	(VENDOR_ROOT_PUBLIC_KEY_ADDR + 0x400)	/* The start address of vendor_Root_Public_Key */
+#define OEM_ROOT_PUBLIC_KEY_ADDR	(VENDOR_ROOT_PUBLIC_KEY_ADDR + 0x400) /* The start address of vendor_Root_Public_Key */
 #define GSL_THIRD_PARTY_KEY_ADDR  (VENDOR_ROOT_PUBLIC_KEY_ADDR + 0xc00)
 #define GSL_KEY_AREA_ADDR  (VENDOR_ROOT_PUBLIC_KEY_ADDR + 0x1200)
 #define GSL_CODE_AREA_ADDR  (VENDOR_ROOT_PUBLIC_KEY_ADDR + 0x1800)
@@ -113,8 +113,8 @@
  *serial base address and clock
  ------------------------------------------------------------------ */
 #define REG_BASE_SERIAL0	0x11040000
-#define CONFIG_PL011_CLOCK	24000000	/* Serial need 24M clock input */
-#define CONFIG_CONS_INDEX	0		/* select the default console */
+#define CONFIG_PL011_CLOCK	24000000 /* Serial need 24M clock input */
+#define CONFIG_CONS_INDEX	0 /* select the default console */
 
 /*-----------------------------------------------------------------
  * timer0 register
@@ -212,7 +212,7 @@
 #define SEC_COM_TRNG_FIFO_DATA    (REG_BASE_TRNG + 0x204)
 #define SEC_COM_TRNG_DATA_ST      (REG_BASE_TRNG + 0x208)
 
-#define SECURE_BOOT_OVER_TIME       200	/* 200 ms */
+#define SECURE_BOOT_OVER_TIME       200 /* 200 ms */
 
 /*-----------------------------------------------------------------------------------
  * usb register

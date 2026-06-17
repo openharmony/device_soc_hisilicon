@@ -136,12 +136,12 @@ static int ddr_ac_check_cs(unsigned int base_phy, unsigned int def_cs, unsigned 
 static int ddr_ac_check_clk(const struct ddr_cfg_st *cfg, unsigned int def_clk,
     struct ddr_delay_st *def_phase, unsigned int step)
 {
-    int i;
+	int i;
     unsigned int wdqs_phase_range;
     unsigned int wdq_phase_range;
     unsigned int phase_range;
-    unsigned int base_phy = cfg->cur_phy;
-    unsigned int byte_num = get_byte_num(cfg);
+	unsigned int base_phy = cfg->cur_phy;
+	unsigned int byte_num = get_byte_num(cfg);
 
     /* set new value */
     ddr_ac_set_clk(base_phy, def_clk + step);
@@ -196,12 +196,12 @@ static int ddr_ac_find_cs(unsigned int base_phy)
 /* Find CLK difference */
 static int ddr_ac_find_clk(const struct ddr_cfg_st *cfg)
 {
-    int i;
+	int i;
     unsigned int def_clk;
     unsigned int step;
-    struct ddr_delay_st def_phase;
-    unsigned int base_phy = cfg->cur_phy;
-    unsigned int byte_num = get_byte_num(cfg);
+	struct ddr_delay_st def_phase;
+	unsigned int base_phy = cfg->cur_phy;
+	unsigned int byte_num = get_byte_num(cfg);
 
     def_clk = ddr_ac_get_clk(base_phy);
     for (i = 0; i < byte_num; i++) {
@@ -224,8 +224,8 @@ static int ddr_ac_find_clk(const struct ddr_cfg_st *cfg)
 static void ddr_ac_set_phase_range(unsigned int base_phy, unsigned int def_clk,
     unsigned int diff_clk, unsigned int phase_tmp, const struct ddr_cfg_st *cfg)
 {
-    unsigned int i;
-    unsigned int clk_phase;
+	unsigned int i;
+	unsigned int clk_phase;
     unsigned int wdqs_phase;
     unsigned int wdq_phase;
     unsigned int wdqs_phase_range;
@@ -263,7 +263,7 @@ static int ddr_ac_training(const struct ddr_cfg_st *cfg)
     unsigned int phase_tmp;
     unsigned int def_clk;
     unsigned int def_cs;
-    unsigned int base_phy = cfg->cur_phy;
+	unsigned int base_phy = cfg->cur_phy;
 
     ddr_debug("DDR AC training");
     def_clk = ddr_ac_get_clk(base_phy);

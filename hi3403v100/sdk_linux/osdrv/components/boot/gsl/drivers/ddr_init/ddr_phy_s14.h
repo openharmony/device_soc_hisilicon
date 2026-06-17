@@ -386,7 +386,7 @@ phase shift of the Read DQS to create 90 degree delays */
 #endif
 
 #define ddr_variable_declare(var) \
-    unsigned int var
+	unsigned int var
 
 #define ddr_vref_get_host_max(rank, val) do { \
     if ((rank) == 0) \
@@ -521,7 +521,7 @@ phase shift of the Read DQS to create 90 degree delays */
 #define ddr_dqsswap_restore_func(swapdfibyte_en, base_phy) \
     do { \
         reg_write(swapdfibyte_en, (base_phy) + DDR_PHY_DMSEL); \
-    } while (0)
+	} while (0)
 
 #define ddr_phy_switch_rank(base_phy, val) do { \
     reg_write((reg_read((base_phy) + DDR_PHY_TRAINCTRL0) & (~PHY_TRAINCTRL0_MASK)) | (val), \
