@@ -623,7 +623,7 @@ int32_t CodecQueueInput(CODEC_HANDLETYPE handle, const InputInfo *inputData, uin
     return ret;
 }
 
-int32_t CodecDequeInput(CODEC_HANDLETYPE handle, uint32_t timeoutMs, InputInfo *inputData)
+int32_t CodecDequeueInput(CODEC_HANDLETYPE handle, uint32_t timeoutMs, InputInfo *inputData)
 {
     MEDIA_HAL_UNUSED(timeoutMs);
     if (!CheckValidHandle(handle)) {

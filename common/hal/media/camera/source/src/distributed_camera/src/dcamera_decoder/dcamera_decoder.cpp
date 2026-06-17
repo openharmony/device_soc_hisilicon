@@ -204,7 +204,7 @@ int32_t DCameraDecoder::QueueInputBuffer(InputInfo &inputData, uint32_t timeoutM
 
 int32_t DCameraDecoder::DequeInputBuffer(InputInfo &inputData, uint32_t timeoutMs)
 {
-    int32_t ret = CodecDequeInput(codecHandle_, timeoutMs, &inputData);
+    int32_t ret = CodecDequeueInput(codecHandle_, timeoutMs, &inputData);
     if (ret != CODEC_SUCCESS) {
         return CODEC_FAILURE;
     }
