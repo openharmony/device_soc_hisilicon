@@ -402,6 +402,22 @@ SECTIONS
 #endif
        . = ALIGN(0x20);
         __data_start = .;
+        /* .xts_registry removed - CTestCase now const in .rodata */ 
+        __start__xts_init_ActsBootstrapTest = .; 
+        KEEP(*(.xts_init.ActsBootstrapTest)) 
+        __stop__xts_init_ActsBootstrapTest = .; 
+        __start__xts_init_ActsDfxFuncTest = .; 
+        KEEP(*(.xts_init.ActsDfxFuncTest)) 
+        __stop__xts_init_ActsDfxFuncTest = .; 
+        __start__xts_init_ActsHieventLiteTest = .; 
+        KEEP(*(.xts_init.ActsHieventLiteTest)) 
+        __stop__xts_init_ActsHieventLiteTest = .; 
+        __start__xts_init_ActsParameterTest = .; 
+        KEEP(*(.xts_init.ActsParameterTest)) 
+        __stop__xts_init_ActsParameterTest = .; 
+        __start__xts_init_ActsSamgrTest = .; 
+        KEEP(*(.xts_init.ActsSamgrTest)) 
+        __stop__xts_init_ActsSamgrTest = .;
         #if defined(ROM_BIN_TEST)
         . += TEST_OFFSET;
         #endif
@@ -462,7 +478,7 @@ SECTIONS
         KEEP(SORT(*)(.wifi.rom.bss*))
         . = ALIGN(4);
         __rom_bss_end__ = .;
-        /* Ô­rom_bssÎ´×°Âú£¬¶îÍâÌí¼Ó·Çrom bss(1568 byte:1.53K) */
+        /* Ô­rom_bssÎ´×°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó·ï¿½rom bss(1568 byte:1.53K) */
         SORT(*)(.extern.rom.bss*)
         . = ALIGN(4);
         __extern_rom_bss_end__ = .;
@@ -511,7 +527,7 @@ SECTIONS
         #if defined(ROM_BIN_TEST)
         . += TEST_OFFSET;
         #endif
-        SORT(*)(.bss*)
+        SORT(*)(EXCLUDE_FILE(*libmodule_ActsDfxFuncTest.a *libmodule_ActsHieventLiteTest.a *libmodule_ActsBootstrapTest.a *libmodule_ActsParameterTest.a *libmodule_ActsSamgrTest.a) .bss*)
         SORT(*)(.rom.bss.patch)
         SORT(*)(.sbss*)
         . = ALIGN(0x20);
@@ -522,6 +538,19 @@ SECTIONS
 
     /* End of uninitialized data segment */
     _end = .;
+      /* ================================================================
+       * Phase 2: XTS MAX overlay - 5 modules share same VMA
+       * ================================================================ */
+      __xts_overlay_start = .;
+      OVERLAY . :
+      {
+          .xts_bss_ActsDfxFuncTest { *libmodule_ActsDfxFuncTest.a:*(.bss*) }
+          .xts_bss_ActsHieventLiteTest { *libmodule_ActsHieventLiteTest.a:*(.bss*) }
+          .xts_bss_ActsBootstrapTest { *libmodule_ActsBootstrapTest.a:*(.bss*) }
+          .xts_bss_ActsParameterTest { *libmodule_ActsParameterTest.a:*(.bss*) }
+          .xts_bss_ActsSamgrTest { *libmodule_ActsSamgrTest.a:*(.bss*) }
+      } > RAM
+      __xts_overlay_end = .;
 #if (defined HI_BOARD_ASIC) || (!defined HI_ON_FLASH)
     .heap (NOLOAD) :
     {
