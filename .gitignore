@@ -1,1 +1,11 @@
 ws63v100/sdk/interim_binary/ws63/libs/**
+hi3861v100/sdk_liteos/build/build_tmp/**
+hi3861v100/sdk_liteos/third_party/u-boot-v2019.07/**
+**.pyc
+hi3861v100/sdk_liteos/tools/nvtool/out_nv_bin/**
+hi3861v100/sdk_liteos/ohos/libs/**
+hi3861v100/sdk_liteos/output/**
+hi3861v100/sdk_liteos/.sconsign.dblite
+hi3861v100/sdk_liteos/build/libs/**
+ws63v100/sdk/output/**
+ws63v100/sdk/application/ws63/ws63_liteos_mfg/**/*.bin
