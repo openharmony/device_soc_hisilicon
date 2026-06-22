@@ -239,7 +239,7 @@ class SconsEnvCfg:
         for module_lib in [self.get_module_libs(module, True) for module in self.get_build_modules()]:
             libs.extend(module_lib)
         if scons_usr_bool_option('CONFIG_I2S_SUPPORT') == 'n':
-            libs.remove('i2s') if 'i2s' in libs else None
+            libs.remove('i2s')
         if scons_usr_bool_option('CONFIG_HILINK') == 'y':
             libs.extend(['hilinkdevicesdk', 'hilinkota'])
         return libs
@@ -249,9 +249,8 @@ class SconsEnvCfg:
         Get library name to be inclouded. Linker option -l follows the lib name without
         prefix "lib" and surffix ".a", has to remove those parts from a library file name.
         """
-        # XTS minimum set: exclude modules not in the 5-module set
-        _xts_excluded = ['module_ActsDeviceAttestTest', 'module_ActsHuksHalFunctionTest', 'module_ActsKvStoreTest', 'module_ActsLwipTest', 'module_ActsUpdaterFuncTest', 'module_ActsUtilsFileTest', 'module_ActsWifiIotTest']
-        libs = [lib[3:-2] for lib in os.listdir(os.path.join(self.root, 'ohos', 'libs')) if lib.startswith('lib') and lib.endswith('.a') and lib[3:-2] not in _xts_excluded]
+        libs = [lib[3:-2] for lib in os.listdir(os.path.join(self.root, 'ohos', 'libs')) \
+                if lib.startswith('lib') and lib.endswith('.a')]
         return libs
 
     def del_tmp_files(self, file_path):

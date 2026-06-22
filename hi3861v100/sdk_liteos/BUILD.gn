@@ -1,6 +1,7 @@
 # Copyright (c) Huawei Technologies Co., Ltd. 2020. All rights reserved.
 
 import("//build/lite/config/component/lite_component.gni")
+import("//test/xts/tools/lite/hctest/hctest_opt_args.gni")
 
 declare_args() {
   enable_hos_vendor_wifiiot_xts = false
@@ -15,10 +16,29 @@ build_ext_component("run_wifiiot_scons") {
   exec_path = rebase_path(".", root_build_dir)
   outdir = rebase_path(root_out_dir)
 
-  if (host_os == "win") {
-    command = "sh hm_build.sh $outdir win"
+  # Forward the overlay flag to hm_build.sh as the 3rd arg so the scons-side
+  # link.ld.S preprocessing receives the matching -DXTS_OVERLAY_ENABLE.
+  if (xts_overlay) {
+    overlay_arg = "xts_overlay"
   } else {
-    command = "sh hm_build.sh $outdir linux"
+    overlay_arg = "no_xts_overlay"
+  }
+
+  # Forward the hctest_rodata_opt flag to hm_build.sh as the 4th arg. Together
+  # with overlay_arg it drives CONFIG_HCTEST_NEW_RUNNER (= xts_overlay OR
+  # hctest_rodata_opt), which gates the .xts_init KEEP blocks in link.ld.S so
+  # the per-module init pointer tables survive --gc-sections iff the new runner
+  # path is active.
+  if (hctest_rodata_opt) {
+    rodata_arg = "hctest_rodata_opt"
+  } else {
+    rodata_arg = "no_hctest_rodata_opt"
+  }
+
+  if (host_os == "win") {
+    command = "sh hm_build.sh $outdir win $overlay_arg $rodata_arg"
+  } else {
+    command = "sh hm_build.sh $outdir linux $overlay_arg $rodata_arg"
   }
   deps = [
     ":sdk",
