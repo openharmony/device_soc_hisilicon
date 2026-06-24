@@ -21,6 +21,8 @@
 #include "display_layer_internal.h"
 #include "display_overlay_layer.h"
 #include "ot_math.h"
+#include "ss_mpi_vb.h"
+#include "ss_mpi_vgs.h"
 #define ALIGN_DOWN OT_ALIGN_DOWN
 #ifndef DISENABLE_DISP
 #include "disp_common.h"
@@ -215,7 +217,7 @@ int32_t OverlayLayerFlush(uint32_t devId, uint32_t layerId, LayerBuffer *buffer)
     vgs_task_attr.img_out.video_frame.virt_addr[PLANE_INDEX_Y] = vgs_task_attr.img_out.video_frame.header_virt_addr[PLANE_INDEX_Y] + head_size;
     vgs_task_attr.img_out.video_frame.virt_addr[PLANE_INDEX_UV] = vgs_task_attr.img_out.video_frame.virt_addr[PLANE_INDEX_Y] + size_y;
 
-    ret = ss_mpi_vgs_add_scale_task(h_handle, vgs_task_attr, vgs_scl_coef_mode);
+    ret = ss_mpi_vgs_add_scale_task(h_handle, &vgs_task_attr, vgs_scl_coef_mode);
     if (ret != TD_SUCCESS) {
         HDF_LOGE("mpi_vgs_add_scale_task failed, ret:0x%x", ret);
         goto release_munmap;

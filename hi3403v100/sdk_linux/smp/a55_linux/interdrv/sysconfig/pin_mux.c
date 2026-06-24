@@ -739,6 +739,16 @@ static void uart_pin_mux(int uart_index)
 }
 
 #endif
+
+/* mux with GPIO11_2/UART4_RXD/SPI1_SDI/UART5_RTSN/GPIO11_3/UART4_TXD/SPI1_SCLK/UART5_CTSN */
+static void gpio11_2_3_pin_mux(void)
+{
+    void *iocfg2_base = sys_config_get_reg_iocfg2();
+
+    sys_writel(iocfg2_base + 0x0134, 0x1200); /* GPIO11_2 */
+    sys_writel(iocfg2_base + 0x0138, 0x1200); /* GPIO11_3 */
+}
+
 void pin_mux(void)
 {
     int vo_intf_type = sys_config_get_vo_intf_type();
@@ -746,6 +756,7 @@ void pin_mux(void)
     int i2c_en       = sys_config_get_i2c_en();
     int hdmi_en      = sys_config_get_hdmi_en();
     int audio_en     = sys_config_get_audio_en();
+    int gpio11_2_3_en = sys_config_get_gpio11_2_3_en();
 
     if (vi_intf_type != VI_NONE_MODE) {
         sensor_pin_mux(PIN_MUX_SENSOR_0);
@@ -774,5 +785,9 @@ void pin_mux(void)
 
     if (audio_en != 0) {
         amp_unmute_pin_mux();
+    }
+
+    if (gpio11_2_3_en != 0) {
+        gpio11_2_3_pin_mux();
     }
 }

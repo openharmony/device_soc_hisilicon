@@ -46,11 +46,11 @@ all:$(TARGETLIB_SO)
 $(TARGETLIB_SO):$(OBJS)
 	@mkdir -p $(LIBPATH)
 	@$(CC) $(ARFLAGS_SO) $(TARGETLIB_SO) $(OBJS)
-	@cp -f $(TARGETLIB_SO) $(REL_LIB)/
 	@patchelf --add-needed libss_awb.so $(TARGETLIB_SO)
 	@patchelf --add-needed libss_ae.so $(TARGETLIB_SO)
 	@patchelf --add-needed libot_mpi_isp.so $(TARGETLIB_SO)
 	@patchelf --add-needed libsecurec.so $(TARGETLIB_SO)
+	@cp -f $(TARGETLIB_SO) $(REL_LIB)/
 
 clean:
 	@$(RM) -rf $(TARGETLIB_SO) $(OBJS)

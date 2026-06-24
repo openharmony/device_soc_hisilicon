@@ -504,6 +504,11 @@ td_s32 main(td_s32 argc, td_char *argv[])
 {
     td_s32 ret;
     td_u32 index;
+    
+#ifdef DRM_OPTION_ENABLE
+    sample_print("sample DONOT support DRM!\n");
+    return 0;
+#endif
 
     if (argc != 2) { /* 2:arg num */
         sample_snap_usage(argv[0]);

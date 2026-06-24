@@ -877,6 +877,11 @@ int main(int argc, char *argv[])
     td_slong result = 0;
     struct sigaction sa;
 
+#ifdef DRM_OPTION_ENABLE
+    sample_print("sample DONOT support DRM!\n");
+    return 0;
+#endif
+
     if (argc != 2) { /* 2: arg num */
         sample_region_usage(argv[0]);
         return TD_FAILURE;

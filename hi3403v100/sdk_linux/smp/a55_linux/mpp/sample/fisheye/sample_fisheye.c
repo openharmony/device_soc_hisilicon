@@ -1304,6 +1304,11 @@ int main(int argc, char *argv[])
 #endif
 {
     td_s32 ret;
+    
+#ifdef DRM_OPTION_ENABLE
+    sample_print("sample DONOT support DRM!\n");
+    return 0;
+#endif
 
     if ((argc < 2) || (argc > 4) || (strlen(argv[1]) != 1)) { /* 2,4:arg num */
         goto arg_error;

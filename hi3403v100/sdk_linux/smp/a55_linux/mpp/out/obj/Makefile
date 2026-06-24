@@ -71,4 +71,3 @@ clean:
 	@cd $(SDK_PATH)/mpp/component/svp/pico/svp_npu_dev/mkp; make clean
 	@cd $(SDK_PATH)/mpp/sample/hy_s0603; make clean
 	@cd $(SDK_PATH)/mpp/sample/omnivision_os08a20; make clean
-	@cd $(SDK_PATH)/mpp/sample/hy_s0603; make clean

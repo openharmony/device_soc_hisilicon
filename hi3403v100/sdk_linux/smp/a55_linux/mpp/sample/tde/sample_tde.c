@@ -633,6 +633,12 @@ int main(int argc, char *argv[])
     ot_vo_pub_attr pub_attr = {0};
     ot_vb_cfg vb_conf = {0};
     sample_vo_cfg vo_config = {0};
+
+#ifdef DRM_OPTION_ENABLE
+    TDE_PRINT("sample DONOT support DRM!\n");
+    return 0;
+#endif
+
     if ((argc != 2) || (strlen(argv[1]) != 1)) { /* 2 varm nums */
         sample_tde_usage(argv[0]);
         return TD_FAILURE;

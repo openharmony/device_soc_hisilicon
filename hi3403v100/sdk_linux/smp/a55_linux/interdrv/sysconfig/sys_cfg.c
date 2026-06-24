@@ -110,6 +110,7 @@ static char g_vo_intf[VO_INTF_NAME_LEN] = VO_INTF_NAME_MIPI_TX;
 static int g_hdmi_en = 1;
 static int g_i2c_en = 1;
 static int g_audio_en = 1;
+static int g_gpio11_2_3_en = 1;
 
 module_param_string(sensors, g_sensor_list, SENSOR_LIST_CMDLINE_LEN, 0600);
 MODULE_PARM_DESC(sensors, "sns0=hy_s0603,sns1=hy_s0603,sns2=hy_s0603,sns3=hy_s0603,sns4=hy_s0603");
@@ -117,6 +118,7 @@ module_param_string(vo_intf, g_vo_intf, VO_INTF_NAME_LEN, 0600);
 module_param(g_hdmi_en, int, 0600);
 module_param(g_i2c_en, int, 0600);
 module_param(g_audio_en, int, 0600);
+module_param(g_gpio11_2_3_en, int, 0600);
 
 int sys_config_get_chip_type(void)
 {
@@ -146,6 +148,11 @@ int sys_config_get_i2c_en(void)
 int sys_config_get_audio_en(void)
 {
     return g_audio_en;
+}
+
+int sys_config_get_gpio11_2_3_en(void)
+{
+    return g_gpio11_2_3_en;
 }
 
 #define sys_config_ioremap_return(reg_name, addr, reg_len) \

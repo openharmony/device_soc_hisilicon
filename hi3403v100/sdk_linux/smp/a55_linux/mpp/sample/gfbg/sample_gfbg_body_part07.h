@@ -111,6 +111,10 @@ int main(int argc, char *argv[])
     vo_device_info vo_dev_info;
     vo_dev_info.vo_dev = SAMPLE_VO_DEV_DHD0;
     vo_dev_info.vo_intf_type = OT_VO_INTF_HDMI; /* default:HDMI or BT1120 */
+#ifdef DRM_OPTION_ENABLE
+    sample_print("sample DONOT support DRM!\n");
+    return 0;
+#endif
     /* 4 2 3 for alg */
     if ((argc != 4) || (strlen(argv[1]) != 1) || (strlen(argv[2]) != 1) || (strlen(argv[3]) != 1)) {
         printf("index invalid! please try again.\n");

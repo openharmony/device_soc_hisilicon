@@ -54,6 +54,7 @@ int sys_config_get_vi_intf_type(void);
 int sys_config_get_hdmi_en(void);
 int sys_config_get_i2c_en(void);
 int sys_config_get_audio_en(void);
+int sys_config_get_gpio11_2_3_en(void);
 
 #ifdef __cplusplus
 #if __cplusplus

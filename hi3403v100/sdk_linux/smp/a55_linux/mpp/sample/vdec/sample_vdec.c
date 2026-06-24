@@ -1321,6 +1321,11 @@ static td_s32 sample_choose_case(const char argv1, const char *argv0)
 {
     td_s32 ret;
 
+#ifdef DRM_OPTION_ENABLE
+    sample_print("sample DONOT support DRM!\n");
+    return 0;
+#endif
+
     ret = sample_check_parameter(argc, argv[0], argv[1]);
     if (ret != TD_SUCCESS) {
         return ret;
