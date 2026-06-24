@@ -32,9 +32,9 @@ extern "C" {
 #endif
 #endif /* __cplusplus */
 
-typedef struct tafListNode {
-    struct tafListNode *prev;
-    struct tafListNode *next;
+typedef struct TafListNode {
+    struct TafListNode *prev;
+    struct TafListNode *next;
 } ListNode;
 
 typedef struct {

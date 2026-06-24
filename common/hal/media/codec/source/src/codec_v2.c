@@ -72,7 +72,7 @@ typedef struct {
     CodecType type;
 } PluginConfig;
 
-static const PluginConfig g_plugCfgs[] = {
+static const PluginConfig PLUG_CFGS[] = {
     {"/usr/lib/", "VDecoderGetImpl", VIDEO_DECODER},
     {"/usr/lib/", "ADecoderGetImpl", AUDIO_DECODER},
     {"/usr/lib/", "AEncoderGetImpl", AUDIO_ENCODER},
@@ -206,11 +206,11 @@ int32_t CodecInit(void)
         MEDIA_HAL_LOGE(MODULE_NAME, "MediaSystemInit failed ret:%d", ret);
     }
     gettimeofday(&g_timeInitStart, NULL);
-    size_t cfgSize = sizeof(g_plugCfgs) / sizeof(g_plugCfgs[0]);
+    size_t cfgSize = sizeof(PLUG_CFGS) / sizeof(PLUG_CFGS[0]);
     for (size_t i = 0; i < cfgSize; i++) {
-        ret = SearchLoadValidPlugin(g_plugCfgs[i].dirPath, g_plugCfgs[i].getImplSymbol, g_plugCfgs[i].type);
+        ret = SearchLoadValidPlugin(PLUG_CFGS[i].dirPath, PLUG_CFGS[i].getImplSymbol, PLUG_CFGS[i].type);
         if (ret != TD_SUCCESS) {
-            MEDIA_HAL_LOGE(MODULE_NAME, "search and load plugin type[%d] failed", g_plugCfgs[i].type);
+            MEDIA_HAL_LOGE(MODULE_NAME, "search and load plugin type[%d] failed", PLUG_CFGS[i].type);
             pthread_mutex_unlock(&g_mutex);
             return TD_FAILURE;
         }
@@ -230,11 +230,11 @@ int32_t CodecDeinit(void)
     pthread_mutex_lock(&g_mutex);
     gettimeofday(&g_timeDeinitStart, NULL);
     if (g_inited) {
-        size_t cfgSize = sizeof(g_plugCfgs) / sizeof(g_plugCfgs[0]);
+        size_t cfgSize = sizeof(PLUG_CFGS) / sizeof(PLUG_CFGS[0]);
         for (size_t i = 0; i < cfgSize; i++) {
-            int ret = UnLoadPlugin(g_plugCfgs[i].type);
+            int ret = UnLoadPlugin(PLUG_CFGS[i].type);
             if (ret != TD_SUCCESS) {
-                MEDIA_HAL_LOGE(MODULE_NAME, "unload plugin type[%d] failed", g_plugCfgs[i].type);
+                MEDIA_HAL_LOGE(MODULE_NAME, "unload plugin type[%d] failed", PLUG_CFGS[i].type);
                 pthread_mutex_unlock(&g_mutex);
                 return TD_FAILURE;
             }

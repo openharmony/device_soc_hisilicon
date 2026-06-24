@@ -39,19 +39,19 @@ static const int RETRY_SLEEP_IN_US = 1000000;
 #define BPP 32
 
 typedef struct {
-    int drm_fd;
-    uint32_t crtc_id;
+    int drmFd;
+    uint32_t crtcId;
     drmModeConnector *connector;
     drmModeModeInfo mode;
-    uint32_t fb_id;
-    uint32_t fb_handle;
-    uint32_t fb_size;
+    uint32_t fbId;
+    uint32_t fbHandle;
+    uint32_t fbSize;
     uint32_t pitch;
-    uint8_t *fb_map;
+    uint8_t *fbMap;
     bool setMode;
-} drm_display_t;
+} DrmDisplayT;
 
-drm_display_t primary_display;
+DrmDisplayT g_primaryDisplay;
 
 
 
@@ -166,34 +166,35 @@ static int32_t DeinitDisplay(uint32_t devId)
     return DISPLAY_SUCCESS;
 }
 
-static int open_drm(drm_display_t *display) {
-    uint64_t has_dumb;
+static int OpenDrm(DrmDisplayT *display)
+{
+    uint64_t hasDumb;
     int ret = 0;
     CHECK_NULLPOINTER_RETURN_VALUE(display, DISPLAY_NULL_PTR);
-    display->drm_fd = open(DRM_DEVICE, O_RDWR | O_CLOEXEC);
-    if (display->drm_fd < 0) {
+    display->drmFd = open(DRM_DEVICE, O_RDWR | O_CLOEXEC);
+    if (display->drmFd < 0) {
         HDF_LOGE("Cannot open DRM device\n");
         return DISPLAY_FAILURE;
     }
-    if (drmGetCap(display->drm_fd, DRM_CAP_DUMB_BUFFER, &has_dumb) < 0) {
-        HDF_LOGE("%s,%d failed to get DRM capabilities\n",__func__,__LINE__);
+    if (drmGetCap(display->drmFd, DRM_CAP_DUMB_BUFFER, &hasDumb) < 0) {
+        HDF_LOGE("%s, %d failed to get DRM capabilities\n", __func__, __LINE__);
         return DISPLAY_FAILURE;
     }
 
-    if (!has_dumb) {
-        HDF_LOGE("%s,%d DRM device does not support dumb buffers\n",__func__,__LINE__);
+    if (!hasDumb) {
+        HDF_LOGE("%s, %d DRM device does not support dumb buffers\n", __func__, __LINE__);
         return DISPLAY_FAILURE;
     }
-    ret = drmSetMaster(display->drm_fd);
+    ret = drmSetMaster(display->drmFd);
     if (ret < 0) {
         HDF_LOGE("Cannot  drmSetMaster\n");
     }
     return DISPLAY_SUCCESS;
 }
 
-static int InitDrmConnector(drm_display_t *display)
+static int InitDrmConnector(DrmDisplayT *display)
 {
-    drmModeRes *resources = drmModeGetResources(display->drm_fd);
+    drmModeRes *resources = drmModeGetResources(display->drmFd);
     if (!resources) {
         HDF_LOGE("Cannot get DRM resources\n");
         return DISPLAY_FAILURE;
@@ -201,7 +202,7 @@ static int InitDrmConnector(drm_display_t *display)
 
     // Find connected connector
     for (int i = 0; i < resources->count_connectors; i++) {
-        display->connector = drmModeGetConnector(display->drm_fd, resources->connectors[i]);
+        display->connector = drmModeGetConnector(display->drmFd, resources->connectors[i]);
         if (display->connector && display->connector->connection == DRM_MODE_CONNECTED) {
             break;
         }
@@ -215,12 +216,12 @@ static int InitDrmConnector(drm_display_t *display)
         return DISPLAY_FAILURE;
     }
 
-    display->crtc_id = resources->crtcs[0];
+    display->crtcId = resources->crtcs[0];
     drmModeFreeResources(resources);
     return DISPLAY_SUCCESS;
 }
 
-static int SelectDrmMode(drm_display_t *display)
+static int SelectDrmMode(DrmDisplayT *display)
 {
     for (int i = 0; i < display->connector->count_modes; i++) {
         drmModeModeInfo *mode = &display->connector->modes[i];
@@ -239,7 +240,7 @@ static int SelectDrmMode(drm_display_t *display)
     return DISPLAY_SUCCESS;
 }
 
-static int CreateDrmFramebuffer(drm_display_t *display)
+static int CreateDrmFramebuffer(DrmDisplayT *display)
 {
     struct drm_mode_create_dumb create = {0};
     struct drm_mode_map_dumb map = {0};
@@ -253,37 +254,37 @@ static int CreateDrmFramebuffer(drm_display_t *display)
     create.height = DEFAULT_HEIGHT;
     create.bpp = BPP;
     create.flags = 0;
-    ret = drmIoctl(display->drm_fd, DRM_IOCTL_MODE_CREATE_DUMB, &create);
+    ret = drmIoctl(display->drmFd, DRM_IOCTL_MODE_CREATE_DUMB, &create);
     if (ret < 0) {
         HDF_LOGE("%s,DRM_IOCTL_MODE_CREATE_DUMB ret:%d\n", __func__, ret);
         return -1;
     }
     /* bind the dumb-buffer to an FB object */
 
-    display->fb_handle = create.handle;
-    display->fb_size = create.size;
+    display->fbHandle = create.handle;
+    display->fbSize = create.size;
     display->pitch = create.pitch;
 
-    handles[0] = display->fb_handle;
+    handles[0] = display->fbHandle;
     pitches[0] = display->pitch;
     offsets[0] = 0;
-    ret = drmModeAddFB2(display->drm_fd, DEFAULT_WIDTH, DEFAULT_HEIGHT, DRM_FORMAT_ABGR8888, handles, pitches,
-        offsets, &display->fb_id, 0);
+    ret = drmModeAddFB2(display->drmFd, DEFAULT_WIDTH, DEFAULT_HEIGHT, DRM_FORMAT_ABGR8888, handles, pitches,
+        offsets, &display->fbId, 0);
     if (ret) {
         HDF_LOGE("%s,drmModeAddFB2 ret:%d\n", __func__, ret);
         return -1;
     }
 
     /* map the dumb-buffer to userspace */
-    map.handle = display->fb_handle;
-    ret = drmIoctl(display->drm_fd, DRM_IOCTL_MODE_MAP_DUMB, &map);
+    map.handle = display->fbHandle;
+    ret = drmIoctl(display->drmFd, DRM_IOCTL_MODE_MAP_DUMB, &map);
     if (ret < 0) {
         HDF_LOGE("%s,DRM_IOCTL_MODE_MAP_DUMB ret:%d\n", __func__, ret);
         return DISPLAY_FAILURE;
     }
 
-    display->fb_map = mmap(0, create.size, PROT_READ | PROT_WRITE, MAP_SHARED, display->drm_fd, map.offset);
-    if (display->fb_map == MAP_FAILED) {
+    display->fbMap = mmap(0, create.size, PROT_READ | PROT_WRITE, MAP_SHARED, display->drmFd, map.offset);
+    if (display->fbMap == MAP_FAILED) {
         HDF_LOGE("Cannot mmap framebuffer\n");
         return DISPLAY_FAILURE;
     }
@@ -291,7 +292,8 @@ static int CreateDrmFramebuffer(drm_display_t *display)
     return DISPLAY_SUCCESS;
 }
 
-static int init_drm(drm_display_t *display) {
+static int InitDrm(DrmDisplayT *display)
+{
     int ret;
 
     CHECK_NULLPOINTER_RETURN_VALUE(display, DISPLAY_NULL_PTR);
@@ -338,13 +340,17 @@ static int32_t InitDisplay(uint32_t devId)
     }
 
     if (devId == 0) {
-        memset(&primary_display, 0, sizeof(primary_display));
-        primary_display.setMode = false;
-        if (open_drm(&primary_display) < 0) {
+        errno_t eok = memset_s(&g_primaryDisplay, sizeof(g_primaryDisplay), 0, sizeof(g_primaryDisplay));
+        if (eok != EOK) {
+            HDF_LOGE("%s: memset_s failed\n", __func__);
+            return DISPLAY_FAILURE;
+        }
+        g_primaryDisplay.setMode = false;
+        if (OpenDrm(&g_primaryDisplay) < 0) {
             HDF_LOGE("Failed to initialize DRM\n");
             return DISPLAY_FAILURE;
         }
-        init_drm(&primary_display);
+        InitDrm(&g_primaryDisplay);
 
     }
 
@@ -445,10 +451,10 @@ static int32_t Flush(uint32_t devId, uint32_t layerId, LayerBuffer *buffer)
     CHECK_DEVID_VALID(devId, DISPLAY_FAILURE);
     CHECK_GRAPHIC_LAYERID_VALID(layerId, DISPLAY_FAILURE);
 
-    ret = drmModeSetCrtc(primary_display.drm_fd, primary_display.crtc_id, primary_display.fb_id, 0, 0,
-                       &primary_display.connector->connector_id, 1, &primary_display.mode);
+    ret = drmModeSetCrtc(g_primaryDisplay.drmFd, g_primaryDisplay.crtcId, g_primaryDisplay.fbId, 0, 0,
+                       &g_primaryDisplay.connector->connector_id, 1, &g_primaryDisplay.mode);
     if (ret < 0) {
-        HDF_LOGE("%s:Failed to drmModeSetCrtc. ret:%d\n",__func__,ret);
+        HDF_LOGE("%s: Failed to drmModeSetCrtc. ret: %d\n", __func__, ret);
     }
     return DISPLAY_SUCCESS;
 }
@@ -459,15 +465,15 @@ static int32_t GetLayerBuffer(uint32_t devId, uint32_t layerId, LayerBuffer *buf
     CHECK_GRAPHIC_LAYERID_VALID(layerId, DISPLAY_FAILURE);
     CHECK_NULLPOINTER_RETURN_VALUE(buffer, DISPLAY_NULL_PTR);
 
-    if (!primary_display.setMode) {
-        init_drm(&primary_display);
+    if (!g_primaryDisplay.setMode) {
+        InitDrm(&g_primaryDisplay);
     }
 
-    buffer->data.virAddr = primary_display.fb_map;
+    buffer->data.virAddr = g_primaryDisplay.fbMap;
     buffer->data.phyAddr = 0;
     buffer->width = DEFAULT_WIDTH;
     buffer->height = DEFAULT_HEIGHT;
-    buffer->pitch = primary_display.pitch;
+    buffer->pitch = g_primaryDisplay.pitch;
     buffer->pixFormat = PIXEL_FMT_RGBA_8888;
     return DISPLAY_SUCCESS;
 }

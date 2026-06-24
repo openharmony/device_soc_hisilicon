@@ -348,7 +348,7 @@ int cipher_get_random(uint8_t *data, uint32_t size)
     HDF_LOGI("[huks_hdi] %s:called.\n", __func__);
     uint32_t count = size / CIPHER_RANDOM_LEN;
     uint32_t tail_len = size % CIPHER_RANDOM_LEN;
-    int out_len = 0;
+    int outLen = 0;
     uint32_t random_num = 0;
     uint32_t cur_len = 0;
     td_s32 ret = TD_SUCCESS;
@@ -374,14 +374,14 @@ int cipher_get_random(uint8_t *data, uint32_t size)
         cur_len = tail_len;
     }
 
-    ret = memcpy_s(data + out_len, size - out_len, &random_num, cur_len);
+    ret = memcpy_s(data + outLen, size - outLen, &random_num, cur_len);
         if (ret != EOK) {
             HDF_LOGE("[huks_hdi] %s:Memcpy random failed! \n", __func__);
             ret = TD_FAILURE;
             goto errExit;
         }
 
-        out_len += cur_len;
+        outLen += cur_len;
     }
 
     HDF_LOGI("[huks_hdi] %s:end.\n", __func__);

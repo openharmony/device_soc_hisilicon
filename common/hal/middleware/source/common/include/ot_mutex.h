@@ -13,8 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef _MUTEX_H
-#define _MUTEX_H
+#ifndef MUTEX_H
+#define MUTEX_H
 
 #include <stdint.h>
 #include <sys/types.h>
@@ -85,4 +85,4 @@ inline int32_t OtMutex::tryLock()
 
 typedef OtMutex::OtAutolock AutoMutex;
 
-#endif // _MUTEX_H
+#endif // MUTEX_H

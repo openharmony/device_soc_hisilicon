@@ -106,9 +106,9 @@ typedef struct {
  * @ingroup rawlist
  * 链表头
  */
-typedef struct tagRawListNode {
-    struct tagRawListNode *next;     /* 指向下一个节点 */
-    struct tagRawListNode *prev;     /* 指向前一个节点 */
+typedef struct TagRawListNode {
+    struct TagRawListNode *next;     /* 指向下一个节点 */
+    struct TagRawListNode *prev;     /* 指向前一个节点 */
 } RawListNode;
 
 /**

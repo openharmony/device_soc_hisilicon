@@ -83,19 +83,19 @@ typedef struct {
     InternalStreamInfo internalStreamInfo[CAEMRA_MAX_STREAM_NUM];
     DCameraDecoder decoder;
     DBufferManager bufferManager;
-    bool isStreamConfigured_ = false;
-    bool isCapturing_ = false;
+    bool isStreamConfigured = false;
+    bool isCapturing = false;
     DCameraProvider *provider = nullptr;
     IDCameraProviderCallback *providerCallback = nullptr;
     bool isDevOpened = false;
     CameraType type;
     string abilityInfo;
     DHBase dhBase_;
-    std::mutex openSesslock_;
-    std::condition_variable openSessCV_;
-    bool isOpenSessFailed_ = false;
-    bool isSessOpened_ = false;
-    std::mutex isOpenSessFailedlock_;
+    std::mutex openSessLock;
+    std::condition_variable openSessCv;
+    bool isOpenSessFailed = false;
+    bool isSessOpened = false;
+    std::mutex isOpenSessFailedLock;
 } CameraDevice;
 
 typedef struct {
@@ -423,30 +423,30 @@ static int32_t ParamCheck(const StreamAttr *stream, const ControlInfo *config)
 
 static int32_t DistributedOpenSession(CameraDevice *cameraDev)
 {
-    if (cameraDev->isSessOpened_) {
-        DHLOGI("isSessOpened_");
+    if (cameraDev->isSessOpened) {
+        DHLOGI("isSessOpened");
         return HAL_SUCCESS;
     }
     int32_t ret = cameraDev->provider->OpenSession(cameraDev->dhBase_);
     if (ret != DCamRetCode::SUCCESS) {
-       DHLOGE("Open distributed camera control session failed, ret = %d.", ret);
-       return ret;
+        DHLOGE("Open distributed camera control session failed, ret = %d.", ret);
+        return ret;
     }
 
-    std::unique_lock<std::mutex> lock(cameraDev->openSesslock_);
-    auto st = cameraDev->openSessCV_.wait_for(lock, chrono::seconds(WAIT_OPEN_TIMEOUT_SEC));
+    std::unique_lock<std::mutex> lock(cameraDev->openSessLock);
+    auto st = cameraDev->openSessCv.wait_for(lock, chrono::seconds(WAIT_OPEN_TIMEOUT_SEC));
     if (st == std::cv_status::timeout) {
-       DHLOGE("Wait for distributed camera session open timeout.");
-       return DCamRetCode::FAILED;
+        DHLOGE("Wait for distributed camera session open timeout.");
+        return DCamRetCode::FAILED;
     }
     {
-       std::unique_lock<std::mutex> openStateLock(cameraDev->isOpenSessFailedlock_);
-       if (cameraDev->isOpenSessFailed_) {
-           DHLOGE("Open distributed camera session failed.");
-           return DCamRetCode::FAILED;
-       }
+        std::unique_lock<std::mutex> openStateLock(cameraDev->isOpenSessFailedLock);
+        if (cameraDev->isOpenSessFailed) {
+            DHLOGE("Open distributed camera session failed.");
+            return DCamRetCode::FAILED;
+        }
     }
-    cameraDev->isSessOpened_ = true;
+    cameraDev->isSessOpened = true;
     return HAL_SUCCESS;
 }
 
@@ -466,8 +466,8 @@ int32_t DistributedHalCameraStreamCreate(const char *camera, const StreamAttr *s
     // start
     int32_t ret = DistributedOpenSession(cameraDev);
     if (ret != HAL_SUCCESS) {
-       DHLOGE("Open distributed camera control session failed, ret = %d.", ret);
-       return ret;
+        DHLOGE("Open distributed camera control session failed, ret = %d.", ret);
+        return ret;
     }
     AddStream(cameraDev, streamIndex, stream);
     *streamId = streamIndex;
@@ -489,8 +489,8 @@ int32_t DistributedHalCameraGetDeviceId(const char *camera, uint32_t streamId, u
 
 static int32_t DistributedDoCapture(CameraDevice *cameraDev)
 {
-    if (cameraDev->isCapturing_) {
-        DHLOGI("isCapturing_");
+    if (cameraDev->isCapturing) {
+        DHLOGI("isCapturing");
         return HAL_SUCCESS;
     }
     std::vector<int32_t> streamIds = GetStreamIds(cameraDev);
@@ -523,7 +523,7 @@ static int32_t DistributedDoCapture(CameraDevice *cameraDev)
         DHLOGE("ConfigureStreams Failed:%d", ret);
         return ret;
     }
-    cameraDev->isCapturing_ = true;
+    cameraDev->isCapturing = true;
     return HAL_SUCCESS;
 }
 
@@ -645,8 +645,8 @@ int32_t DistributedHalCameraStreamOn(const char *camera, uint32_t streamId)
 
 static int32_t DistributedCancelCapture(CameraDevice *cameraDev)
 {
-    if (!cameraDev->isCapturing_) {
-        DHLOGI("not isCapturing_");
+    if (!cameraDev->isCapturing) {
+        DHLOGI("not isCapturing");
         return HAL_SUCCESS;
     }
     std::vector<int32_t> streamIds = GetStreamIds(cameraDev);
@@ -659,7 +659,7 @@ static int32_t DistributedCancelCapture(CameraDevice *cameraDev)
         DHLOGE("StopCapture Failed:%d", ret);
         return ret;
     }
-    cameraDev->isCapturing_ = false;
+    cameraDev->isCapturing = false;
     return HAL_SUCCESS;
 }
 
@@ -703,8 +703,8 @@ static int32_t DistributedProcForStreamOff(CameraDevice *cameraDev, uint32_t str
 
 static int32_t DistributedReleaseStreams(CameraDevice *cameraDev)
 {
-    if (!cameraDev->isStreamConfigured_) {
-        DHLOGI("isStreamConfigured_ fasle");
+    if (!cameraDev->isStreamConfigured) {
+        DHLOGI("isStreamConfigured fasle");
         return HAL_SUCCESS;
     }
     std::vector<int32_t> streamIds = GetStreamIds(cameraDev);
@@ -712,7 +712,7 @@ static int32_t DistributedReleaseStreams(CameraDevice *cameraDev)
     if (ret != HAL_SUCCESS) {
         DHLOGE("ReleaseStreams Failed:%d", ret);
     }
-    cameraDev->isStreamConfigured_ = false;
+    cameraDev->isStreamConfigured = false;
     return HAL_SUCCESS;
 }
 
@@ -744,16 +744,16 @@ int32_t DistributedHalCameraStreamOff(const char *camera, uint32_t streamId)
 
 static int32_t DistributedCloseSession(CameraDevice *cameraDev)
 {
-    if (!cameraDev->isSessOpened_) {
-        DHLOGI("isSessOpened_");
+    if (!cameraDev->isSessOpened) {
+        DHLOGI("isSessOpened");
         return HAL_SUCCESS;
     }
     int32_t ret = cameraDev->provider->CloseSession(cameraDev->dhBase_);
     if (ret != HAL_SUCCESS) {
         DHLOGE("CloseSession failed:%d", ret);
     }
-    cameraDev->isOpenSessFailed_ = false;
-    cameraDev->isSessOpened_ = false;
+    cameraDev->isOpenSessFailed = false;
+    cameraDev->isSessOpened = false;
     return HAL_SUCCESS;
 }
 
@@ -824,8 +824,8 @@ int32_t DistributedHalCameraSetBufferCallback(const char *camera, const BufferAv
 
 static int32_t DistributedConfigureStreams(CameraDevice *cameraDev, uint32_t streamId)
 {
-    if (cameraDev->isStreamConfigured_) {
-        DHLOGI("isStreamConfigured_");
+    if (cameraDev->isStreamConfigured) {
+        DHLOGI("isStreamConfigured");
         return HAL_SUCCESS;
     }
     constexpr uint32_t dataspace = 8;
@@ -846,7 +846,7 @@ static int32_t DistributedConfigureStreams(CameraDevice *cameraDev, uint32_t str
         DHLOGE("ConfigureStreams Failed:%d", ret);
         return ret;
     }
-    cameraDev->isStreamConfigured_ = true;
+    cameraDev->isStreamConfigured = true;
     return HAL_SUCCESS;
 }
 
@@ -1088,10 +1088,10 @@ int32_t DistributedHalCameraOnSettingsResult(const char *deviceId, const char *d
 static void IsOpenSessFailedState(CameraDevice *cameraDev, bool state)
 {
     {
-        std::unique_lock<std::mutex> lock(cameraDev->isOpenSessFailedlock_);
-        cameraDev->isOpenSessFailed_ = state;
+        std::unique_lock<std::mutex> lock(cameraDev->isOpenSessFailedLock);
+        cameraDev->isOpenSessFailed = state;
     }
-    cameraDev->openSessCV_.notify_one();
+    cameraDev->openSessCv.notify_one();
 }
 
 static void NotifyStartCaptureError(CameraDevice *cameraDev)

@@ -730,8 +730,8 @@ static int32_t AudioPrimarySubPortOutTrackSetVolume(AudioHandle trackHandle, flo
                        VOLUME_PERCENT_MIN, VOLUME_PERCENT_MAX);
         return MEDIA_HAL_INVALID_PARAM;
     }
-    const float EPSINON = 0.00001;
-    if ((volume >= -EPSINON) && (volume <= EPSINON)) {
+    const float epsinon = 0.00001;
+    if ((volume >= -epsinon) && (volume <= epsinon)) {
         ot_audio_fade fade = {};
         hwOutputPortTrack->volume = volume;
         ret = ss_mpi_ao_set_mute(hwOutputPortTrack->aoDeviceId, true, &fade);
@@ -739,7 +739,7 @@ static int32_t AudioPrimarySubPortOutTrackSetVolume(AudioHandle trackHandle, flo
     }
 
     AudioRenderVolumePercentToDb(volume, &tmpValume);
-    if ((hwOutputPortTrack->volume >= -EPSINON) && (hwOutputPortTrack->volume <= EPSINON)) {
+    if ((hwOutputPortTrack->volume >= -epsinon) && (hwOutputPortTrack->volume <= epsinon)) {
         ss_mpi_ao_set_mute(hwOutputPortTrack->aoDeviceId, false, NULL);
     }
     hwOutputPortTrack->volume = volume;
