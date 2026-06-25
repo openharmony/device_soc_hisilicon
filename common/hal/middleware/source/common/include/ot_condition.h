@@ -13,8 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef _CONDITION_H
-#define _CONDITION_H
+#ifndef CONDITION_H
+#define CONDITION_H
 
 #include <stdint.h>
 #include <sys/types.h>
@@ -65,21 +65,26 @@ inline int32_t OtCondition::wait(OtMutex& mutex)
     return -pthread_cond_wait(&mCond, &mutex.mMutex);
 }
 
+static inline void CalcAbsTimeFromRelative(long reltime, struct timespec *ts)
+{
+#ifndef __HuaweiLite__
+    (void)clock_gettime(CLOCK_REALTIME, ts);
+#else
+    ts->tv_sec = 0;
+    ts->tv_nsec = 0;
+#endif
+    ts->tv_sec += reltime / SEC_TO_NSEC;
+    ts->tv_nsec += reltime % SEC_TO_NSEC;
+    if (ts->tv_nsec >= SEC_TO_NSEC) {
+        ts->tv_nsec -= SEC_TO_NSEC;
+        ts->tv_sec += 1;
+    }
+}
+
 inline int32_t OtCondition::waitRelative(OtMutex& mutex, long reltime)
 {
     struct timespec ts;
-#ifndef __HuaweiLite__
-    (void)clock_gettime(CLOCK_REALTIME, &ts);
-#else
-    ts.tv_sec = 0;
-    ts.tv_nsec = 0;
-#endif
-    ts.tv_sec += reltime / SEC_TO_NSEC;
-    ts.tv_nsec += reltime % SEC_TO_NSEC;
-    if (ts.tv_nsec >= SEC_TO_NSEC) {
-        ts.tv_nsec -= SEC_TO_NSEC;
-        ts.tv_sec += 1;
-    }
+    CalcAbsTimeFromRelative(reltime, &ts);
     return -pthread_cond_timedwait(&mCond, &mutex.mMutex, &ts);
 }
 
@@ -93,4 +98,4 @@ inline void OtCondition::broadcast()
     (void)pthread_cond_broadcast(&mCond);
 }
 
-#endif // _CONDITION_H
+#endif // CONDITION_H

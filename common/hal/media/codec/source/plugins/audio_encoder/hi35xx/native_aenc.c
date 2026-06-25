@@ -134,7 +134,7 @@ typedef struct {
 
 typedef struct {
     AudioBitRate audioBitrate;
-    AacBsp AACBitrate;
+    AacBsp aacBitrate;
 } AACBpsPairs;
 
 static MimePair g_mimePairs[] = {
@@ -144,7 +144,7 @@ static MimePair g_mimePairs[] = {
     { MEDIA_MIMETYPE_AUDIO_G726, OT_PT_G726 },
 };
 
-static const ConstraintTable g_constraintsTable[] = {
+static const ConstraintTable CONSTRAINTS_TABLE[] = {
     /* OT_AUDIO_SOUND_MODE_BUTT means no constraint in sound mode */
     {OT_PT_AAC, AAC_PROFILE_AACLC, 1024, OT_AUDIO_SOUND_MODE_BUTT},
     /* OT_AUDIO_SOUND_MODE_BUTT means no constraint in sound mode */
@@ -153,7 +153,7 @@ static const ConstraintTable g_constraintsTable[] = {
     {OT_PT_AAC, AAC_PROFILE_EAACPLUS, 2048, OT_AUDIO_SOUND_MODE_STEREO},
 };
 
-static AACBpsPairs g_AACBpsPairs[] = {
+static AACBpsPairs g_aacBpsPairs[] = {
     { AUD_BITRATE_8K, AAC_BPS_8K },
     { AUD_BITRATE_16K, AAC_BPS_16K },
     { AUD_BITRATE_22K, AAC_BPS_22K },
@@ -363,12 +363,12 @@ static ot_audio_sample_rate ConvertSampleRate(uint32_t sampleRate)
 static bool ConvertAACBitRate(uint32_t inBitrate, ot_aac_bps *outBitrate)
 {
     MEDIA_HAL_LOGI(MODULE_NAME, "ConvertAACBitRate bit_rate: %u", inBitrate);
-    size_t len = sizeof(g_AACBpsPairs) / sizeof(g_AACBpsPairs[0]);
+    size_t len = sizeof(g_aacBpsPairs) / sizeof(g_aacBpsPairs[0]);
     bool isFound = false;
     for (size_t i = 0; i < len; i++) {
-        if (inBitrate == g_AACBpsPairs[i].audioBitrate) {
+        if (inBitrate == g_aacBpsPairs[i].audioBitrate) {
             isFound = TD_TRUE;
-            *outBitrate = (ot_aac_bps)g_AACBpsPairs[i].AACBitrate;
+            *outBitrate = (ot_aac_bps)g_aacBpsPairs[i].aacBitrate;
             break;
         }
     }
@@ -409,7 +409,7 @@ static bool ConvertBitRate(ot_payload_type encType, uint32_t inBitrate, void *ou
     }
 
     if (encType == OT_PT_AAC) {
-        return ConvertAACBitRate(inBitrate, (ot_aac_bps *)outBitrate);
+        return ConvertaacBitrate(inBitrate, (ot_aac_bps *)outBitrate);
     } else if (encType == OT_PT_G726) {
         return ConvertG726BitRate(inBitrate, (ot_g726_bps *)outBitrate);
     }
@@ -537,11 +537,11 @@ static NativeProfile ConvertAACType(AacType aacType)
 
 static td_s32 CheckAencConfig(const AvAenAttr *aencAttr)
 {
-    size_t num = sizeof(g_constraintsTable) / sizeof(g_constraintsTable[0]);
+    size_t num = sizeof(CONSTRAINTS_TABLE) / sizeof(CONSTRAINTS_TABLE[0]);
     bool configBad = false;
     for (size_t i = 0; i < num; i++) {
-        bool isMatch = g_constraintsTable[i].codecType == aencAttr->encType &&
-            g_constraintsTable[i].profile == ConvertAACType(aencAttr->enAACType);
+        bool isMatch = CONSTRAINTS_TABLE[i].codecType == aencAttr->encType &&
+            CONSTRAINTS_TABLE[i].profile == ConvertAACType(aencAttr->enAACType);
         if (!isMatch) {
             continue;
         }
@@ -550,10 +550,10 @@ static td_s32 CheckAencConfig(const AvAenAttr *aencAttr)
             MEDIA_HAL_LOGE(MODULE_NAME, " not support OT_AACLD or OT_AACELD");
             configBad = true;
         }
-        if (g_constraintsTable[i].soundMode != OT_AUDIO_SOUND_MODE_BUTT &&
-            g_constraintsTable[i].soundMode != aencAttr->enSoundMode) {
+        if (CONSTRAINTS_TABLE[i].soundMode != OT_AUDIO_SOUND_MODE_BUTT &&
+            CONSTRAINTS_TABLE[i].soundMode != aencAttr->enSoundMode) {
             MEDIA_HAL_LOGE(MODULE_NAME, " [err]:%s now is:%d should be:%d", "invalid sound mode",
-                aencAttr->enSoundMode, g_constraintsTable[i].soundMode);
+                aencAttr->enSoundMode, CONSTRAINTS_TABLE[i].soundMode);
             configBad = true;
             break;
         }

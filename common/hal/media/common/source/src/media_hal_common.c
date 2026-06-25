@@ -52,8 +52,8 @@ static void LogTime(void)
     gettimeofday(&tv, NULL);
     struct tm tm;
     localtime_r(&tv.tv_sec, &tm);
-    const int64_t USEC_TO_MSEC = 1000;
-    printf("[%02d:%02d:%02d:%03ld]", tm.tm_hour, tm.tm_min, tm.tm_sec, tv.tv_usec / USEC_TO_MSEC);
+    const int64_t usecToMsec = 1000;
+    printf("[%02d:%02d:%02d:%03ld]", tm.tm_hour, tm.tm_min, tm.tm_sec, tv.tv_usec / usecToMsec);
 }
 
 int32_t MediaHalLogPrintf(const char *modName, MEDIA_HAL_LOG_LEVEL level, const char *fmt, ...)

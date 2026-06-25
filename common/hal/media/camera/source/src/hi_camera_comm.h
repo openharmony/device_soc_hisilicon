@@ -89,22 +89,22 @@ extern "C" {
 
 #define CHECK_CHN_RET(express, Chn, name)                                                                  \
     do {                                                                                                   \
-        int32_t Ret = (express);                                                                           \
-        if (TD_SUCCESS != Ret) {                                                                           \
+        int32_t ret = (express);                                                                           \
+        if (TD_SUCCESS != ret) {                                                                           \
             printf("\033[0;31m%s chn %d failed at %s: LINE: %d with %#x!\033[0;39m\n", (name), (Chn),      \
-                __FUNCTION__, __LINE__, Ret);                                                              \
+                __FUNCTION__, __LINE__, ret);                                                              \
             (void)fflush(stdout);                                                                          \
-            return Ret;                                                                                    \
+            return ret;                                                                                    \
         }                                                                                                  \
     } while (0)
 
 #define CHECK_RET(express, name)                                                                                    \
     do {                                                                                                            \
-        int32_t Ret;                                                                                                 \
-        Ret = express;                                                                                              \
-        if (TD_SUCCESS != Ret) {                                                                                    \
-            printf("\033[0;31m%s failed at %s: LINE: %d with %#x!\033[0;39m\n", name, __FUNCTION__, __LINE__, Ret); \
-            return Ret;                                                                                             \
+        int32_t ret;                                                                                                 \
+        ret = express;                                                                                              \
+        if (TD_SUCCESS != ret) {                                                                                    \
+            printf("\033[0;31m%s failed at %s: LINE: %d with %#x!\033[0;39m\n", name, __FUNCTION__, __LINE__, ret); \
+            return ret;                                                                                             \
         }                                                                                                           \
     } while (0)
 #define HISI_PIXEL_FORMAT OT_PIXEL_FORMAT_YVU_SEMIPLANAR_420
