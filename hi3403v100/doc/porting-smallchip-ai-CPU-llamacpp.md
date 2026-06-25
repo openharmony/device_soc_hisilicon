@@ -164,7 +164,7 @@ build_ohos/bin/llama-simple-chat
 ## 7. 注意事项
 
 1. **交叉编译环境**：确保使用OpenHarmony提供的工具链，不要使用系统默认的gcc/clang
-2. **Sysroot路径**：根据实际鸿蒙SDK路径修改 `OHOS_SDK_ROOT`
+2. **Sysroot路径**：根据实际ohos-sdk路径修改 `OHOS_SDK_ROOT`
 3. **静态链接**：建议使用静态链接(`BUILD_SHARED_LIBS=OFF`)，避免运行时库依赖问题
 4. **模型格式**：llama.cpp使用GGUF格式模型，需要使用转换工具将HuggingFace模型转换为GGUF格式
 
@@ -177,7 +177,7 @@ build_ohos/bin/llama-simple-chat
 ## 9. 常见问题
 
 ### Q1: 编译时找不到sysroot目录
-**A:** 确保已经编译过鸿蒙系统，并且 `OHOS_SDK_ROOT` 路径设置正确。sysroot目录通常在：
+**A:** 确保已经编译过OpenHarmony小型系统，并且 `OHOS_SDK_ROOT` 路径设置正确。sysroot目录通常在：
 ```
 {OHOS_SDK_ROOT}/out/hispark_aifly/ipcamera_hispark_aifly_linux/sysroot
 ```
@@ -200,4 +200,4 @@ Error loading shared library libomp.so: No such file or directory (needed by ./l
 Error relocating ./llama-cli: __kmpc_global_thread_num: symbol not found
 ```
 
-***A:** 当编译llamacpp时，如果源码的目录下无法搜索到这个文件，可能是在hispark_aifly鸿蒙系统源码目录下，也就是{OHOS_SDK_ROOT}目录，因为我们交叉编译的时候用到了里面的一些文件。找到之后，放到开发板的`/lib64`目录下即可。
+***A:** 当编译llamacpp时，如果源码的目录下无法搜索到这个文件，可能是在hispark_aifly的小型系统源码目录下，也就是{OHOS_SDK_ROOT}目录，因为在交叉编译的时候用到了里面的一些文件。找到之后，放到开发板的`/lib64`目录下即可。
