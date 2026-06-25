@@ -21,6 +21,8 @@
 #include "display_layer_internal.h"
 #include "display_overlay_layer.h"
 #include "ot_math.h"
+#include "ss_mpi_vb.h"
+#include "ss_mpi_vgs.h"
 #define ALIGN_DOWN OT_ALIGN_DOWN
 #ifndef DISENABLE_DISP
 #include "disp_common.h"

@@ -241,3 +241,5 @@ SDK_LIB += -lfileformat
 endif
 
 endif
+
+CFLAGS += -DDRM_OPTION_ENABLE

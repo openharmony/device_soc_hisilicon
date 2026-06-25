@@ -126,7 +126,7 @@
     ```
 ###  特别说明
 
-L2标准系统在启动hdcd进程之后，hdcd进程会向写入sys.usb.ffs.ready.hdc为1，触发init进程执行写入UDC控制器的脚本，但L1系统不支持param功能，需要在hdcd进程里面添加代码写入UDC控制器，代替上面代码
+标准系统在启动hdcd进程之后，hdcd进程将名称sys.usb.ffs.ready.hdc的环境变量赋值为1，触发init进程执行写入UDC控制器的脚本，但小型系统不支持param功能，需要在hdcd进程里面添加代码写入UDC控制器，代替上面代码
 
     ```shell
     int HdcDaemonUSB::WriteUdc()

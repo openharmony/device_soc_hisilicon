@@ -48,6 +48,12 @@ td_s32 main(td_s32 argc, td_char *argv[])
 
     ot_unused(argc);
     ot_unused(argv);
+
+#ifdef DRM_OPTION_ENABLE
+    printf("sample DONOT support DRM!\n");
+    return 0;
+#endif
+
 #ifndef __LITEOS__
     sample_sys_signal(hdmi_test_handle_sig);
 #endif
