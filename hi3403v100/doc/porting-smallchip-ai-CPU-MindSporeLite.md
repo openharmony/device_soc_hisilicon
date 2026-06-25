@@ -1,6 +1,6 @@
 # MindSpore Lite 运行在OpenHarmony small系统的开发指南
 
-本文档介绍如何编译一个能够在Hi3403V100芯片配套的hispark_aifly开发板的鸿蒙系统上运行的MindSpore Lite应用，它将用于在设备上运行推理任务。
+本文档介绍如何编译一个能够在Hi3403V100芯片配套的hispark_aifly开发板的OpenHarmony小型系统上运行的MindSpore Lite应用，它将用于在设备上运行推理任务。
 
 ## 1. 下载代码
 
@@ -17,7 +17,13 @@ git clone -b r2.9 https://atomgit.com/mindspore/mindspore-lite.git
 
 ## 2. 准备编译环境
 
-> **前置条件**：需要确保**已经编译过Hi3403V100的鸿蒙系统**，需要用到`ohos-sdk`目录下的文件。
+> **前置条件**：需要确保**已经编译过Hi3403V100的小型系统**，需要用到`ohos-sdk`目录下的文件。
+> 
+> 如果`out/preloader` 目录下没有`ohos-sdk`文件夹，需要使用下面的命令编译出ohos-sdk
+> ```bash
+> ./build.sh --product-name ipcamera_hispark_aifly_linux --ccache --prebuilt-sdk sdk_platform=default
+> ```
+> 或者从[每日构建](https://ci.openharmony.cn/workbench/cicd/dailybuild/dailylist)中下载对应的`ohos-sdk-full_6.1-LTS`
 
 设置环境变量：
 
@@ -79,12 +85,31 @@ sudo systemctl restart nfs-server
 
 ### 5.2 部署文件
 
-将编译产物解压到共享目录：
+1. 将编译产物解压到共享目录：
 
-```bash
-# 解压到共享目录
-tar -xzf output/mindspore-lite-2.9.0-ohos-aarch64.tar.gz -C /data/share/
-```
+	```bash
+	# 解压到共享目录
+	tar -xzf output/mindspore-lite-2.9.0-ohos-aarch64.tar.gz -C /data/share/
+	```
+
+2. 还需要复制`libhilog_ndk.z.so`到共享目录，这个库的获取方式有两种:
+	```bash
+    # 使用ohos-sdk内的库
+    cd $OHOS_NDK
+    cp ./sysroot/usr/lib/aarch64-linux-ohos/libhilog_ndk.z.so /data/share/
+
+    # 使用ohos-sdk内的库
+    cd /data/oh5.1.0-3403
+    cp ./prebuilts/ohos-sdk/linux/18/native/sysroot/usr/lib/aarch64-linux-ohos/libhilog_ndk.z.so /data/share/
+    ```
+
+3. 下载测试模型和输入输出文件
+    ```bash
+    cd /data/share
+	wget https://download.mindspore.cn/model_zoo/official/lite/quick_start/mobilenetv2.ms
+	wget https://download.mindspore.cn/model_zoo/official/lite/quick_start/input.bin
+	wget https://download.mindspore.cn/model_zoo/official/lite/quick_start/output.txt
+    ```
 
 ### 5.3 在开发板上挂载并测试
 
@@ -92,19 +117,21 @@ tar -xzf output/mindspore-lite-2.9.0-ohos-aarch64.tar.gz -C /data/share/
 # 创建挂载点
 mkdir -p /share
 
+# 设置ip地址（根据实际情况设置）
+ifconfig eth0 192.168.31.3
+
 # 挂载共享目录（根据实际IP修改）
 mount -t nfs -o nolock,addr=192.168.31.2 192.168.31.2:/data/share /share
 
 # 设置库路径
 export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/share/mindspore-lite-2.9.0-ohos-aarch64/runtime/lib
 
+# 添加libhilog_ndk.z.so库到系统里面
+mkdir /lib64
+cp /share/libhilog_ndk.z.so /lib64
+
 # 进入benchmark工具目录
 cd /share/tools/benchmark
-
-# 下载测试模型和输入输出文件
-wget https://download.mindspore.cn/model_zoo/official/lite/quick_start/mobilenetv2.ms
-wget https://download.mindspore.cn/model_zoo/official/lite/quick_start/input.bin
-wget https://download.mindspore.cn/model_zoo/official/lite/quick_start/output.txt
 
 # 运行benchmark测试
 ./benchmark --modelFile=/share/mobilenetv2.ms
@@ -119,7 +146,7 @@ Run Benchmark mobilenetv2.ms Success.
 
 ## 6. 注意事项
 
-1. **交叉编译环境**：确保使用鸿蒙提供的工具链，环境变量 `OHOS_NDK` 需要正确设置
+1. **交叉编译环境**：确保使用OpenHarmony提供的工具链，环境变量 `OHOS_NDK` 需要正确设置
 2. **训练代码关闭**：板端只进行推理，设置 `MSLITE_ENABLE_TRAIN=off` 可以加快编译速度
 3. **库路径设置**：在开发板上运行时，需要通过 `LD_LIBRARY_PATH` 指定运行时库的路径
 4. **网络挂载**：开发板需要通过网络NFS挂载共享目录，确保网络连通性
@@ -128,7 +155,7 @@ Run Benchmark mobilenetv2.ms Success.
 
 MindSpore Lite 使用 `.ms` 格式的模型文件，可以通过以下方式获取：
 
-**转换现有模型**：使用MindSpore Lite提供的转换工具将其他格式的模型转换为.ms格式
+**转换现有模型**：使用MindSpore Lite提供的转换工具将其它格式的模型转换为.ms格式
    - 参考文档：https://www.mindspore.cn/lite/docs/zh-CN/stable/converter/converter_tool.html
 
 ## 8. Benchmark工具使用说明
@@ -149,7 +176,7 @@ Benchmark工具是MindSpore Lite提供的性能测试工具，用于对MindSpore
 
 ### Q1: 编译时提示找不到ohos-sdk
 
-**A:** 确保环境变量 `OHOS_NDK` 设置正确，路径应该指向鸿蒙SDK的native目录：
+**A:** 确保环境变量 `OHOS_NDK` 设置正确，路径应该指向ohos-sdk的native目录：
 ```bash
 echo $OHOS_NDK
 # 应该输出：/data/ohos-sdk/linux/native

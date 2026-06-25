@@ -111,7 +111,7 @@ device/board/hisilicon/hispark_aifly/
 
 ### OpenHarmony的内核编译<a name="ZH-CN_TOPIC_0000002524435066"></a>
 
-OpenHarmony的Linux内核是基于开源Linux内核LTS 5.10y/6.6.y分支上，回合CVE补丁和OpenHarmony特性。若要支持芯片的内核特性，则需要从开源Linux内核LTS上对应分支上，选取同一个版本或者版本号相近的内核源码。本系统芯片的内核选型和OpenHarmony的Linux内核相同的linux-6.6.86版本，可以直接将SDK提供的linux-6.6.86.patch补丁文件直接应用于鸿蒙内核源码上，解决代码冲突即可。
+OpenHarmony的Linux内核是基于开源Linux内核LTS 5.10y/6.6.y分支上，回合CVE补丁和OpenHarmony特性。若要支持芯片的内核特性，则需要从开源Linux内核LTS上对应分支上，选取同一个版本或者版本号相近的内核源码。本系统芯片的内核选型和OpenHarmony的Linux内核相同的linux-6.6.86版本，可以直接将SDK提供的linux-6.6.86.patch补丁文件直接应用于OpenHarmony内核源码上，解决代码冲突即可。
 
 kernel的编译入口在device/board/hisilicon/hispark_aifly/kernel/BUILD.gn。为提高调试kernel的效率，可将command命令打印出来、在当前目录下执行可单独编译内核。
 
@@ -403,7 +403,7 @@ kernel/linux/config/linux-6.6
 ├── arch
 ├── hispark_aifly    
 │   ├── arm64_defconfig         #芯片单板arm64特性的内核配置文件，为SDK提供的defconfig文件重命名
-│   └── support_defconfig       #适配鸿蒙内核linux-6.6编译和鼠标等外设配置文件
+│   └── support_defconfig       #适配OpenHarmony内核linux-6.6编译和鼠标等外设配置文件
 ├── type
 │   ├── small_defconfig         #小型系统常用配置文件
 │   └── standard_defconfig      #标准系统常用配置文件
@@ -436,7 +436,7 @@ kernel/linux/patches/linux-6.6
      └── patch_hispark_aifly.sh                  #hispark_aifly内核打补丁的shell文件
 ```
 
-前置步骤已将开源鸿蒙源码拷贝至`$(OUT_DIR)/kernel/${KERNEL_VERSION}`，接着说明内核补丁如何应用。
+前置步骤已将开源OpenHarmony内核源码拷贝至`$(OUT_DIR)/kernel/${KERNEL_VERSION}`，接着说明内核补丁如何应用。
 
 1.  合入HDF补丁
 
@@ -452,7 +452,7 @@ kernel/linux/patches/linux-6.6
     endif
     ```
 
-3.  合入芯片平台适配鸿蒙内核基线的补丁
+3.  合入芯片平台适配OpenHarmony内核基线的补丁
 
     ```
         $(hide) echo "apply kernel patch..."
@@ -638,7 +638,7 @@ static void SigHandler(int sig)
 
 ### third_party_openssl适配<a name="ZH-CN_TOPIC_0000002524280794"></a>
 
-由于Hi3403V100为arm64架构，不同于社区上L1的Hi3516DV300的arm32，在适配编译时遇到异常报错../../../third_party/openssl/crypto/modes/ctr128.c:166:13: warning: call to undeclared function 'asm'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+由于Hi3403V100为arm64架构，不同于社区上小型系统的Hi3516DV300的arm32，在适配编译时遇到异常报错../../../third_party/openssl/crypto/modes/ctr128.c:166:13: warning: call to undeclared function 'asm'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
 
 **图 1**  openssl编译报错<a name="fig8458101819159"></a>  
 ![](figures/openssl编译报错.png "openssl编译报错")
@@ -687,7 +687,7 @@ command += " PREBUILTLINUXHDRDIR=" + rebase_path(
 
 OpenHarmony子系统适配只需要在vendor/hisilicon/hispark_aifly_linux/config.json中增加对应子系统和部件，这样编译系统会将该部件纳入编译目标中。
 
-本章节主要介绍hispark_aifly适配L1（不带屏）设备满足XTS认证的依赖的子系统集，如下仅提供参考。
+本章节主要介绍hispark_aifly适配小型系统（不带屏）设备满足XTS认证的依赖的子系统集，如下仅提供参考。
 
 
 

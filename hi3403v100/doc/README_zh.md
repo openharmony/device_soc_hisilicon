@@ -16,7 +16,7 @@
 
 | 序号 | 文档 | 说明 |
 |------|------|------|
-| 2 | [OpenHarmony 小型系统集成 Hi3403V100 移植案例](./porting-hispark_aifly-on_small-demo.md) | 介绍 OpenHarmony 小型系统在 Hi3403V100 芯片上的完整移植适配过程，包括解决方案集成、产品配置、内核移植、编译配置、XTS 认证、HUKS/图形/媒体增强特性等 |
+| 2 | [OpenHarmony 小型系统集成 Hi3403V100 移植案例](./porting-hispark_aifly-on_small-demo.md) | 介绍 OpenHarmony 小型系统在 Hi3403V100 芯片上的完整移植适配过程，包括解决方案集成、产品配置、内核移植、编译配置、XTS、HUKS/图形/媒体增强特性等 |
 | 3 | [U-Boot 技术服务文档](./porting-smallchip-uboot.md) | U-Boot 引导加载程序相关技术服务文档 |
 
 ### 媒体处理

@@ -14,6 +14,7 @@
 import("//build/ohos.gni")
 import("//drivers/hdf_core/adapter/uhdf2/uhdf.gni")
 import("//foundation/distributedhardware/distributed_audio/distributedaudio.gni")
+import("../../../../../distributed_audio.gni")
 
 shared_library("libdaudio_manager_daudio_ext_service_1.0") {
   include_dirs = [
@@ -22,8 +23,8 @@ shared_library("libdaudio_manager_daudio_ext_service_1.0") {
     "${hdf_service_path}/hdi_service/common/include",
     "${hdf_service_path}/hdi_service/common/log/include",
     "${hdf_service_path}/hdi_service/common/utils/include",
-    "${distributed_audio_hdf_path}/hdf_interfaces/distributed_audio/audio/v1_0",
-    "${distributed_audio_hdf_path}/hdf_interfaces/distributed_audio/audioext/v1_0",
+    hdf_interfaces_audio_path_lite,
+    hdf_interfaces_audioext_path_lite,
     "//drivers/hdf_core/interfaces/inner_api/utils",
     "//drivers/hdf_core/interfaces/inner_api/osal/uhdf",
     "//third_party/cJSON",

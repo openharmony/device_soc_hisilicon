@@ -23,7 +23,7 @@
 
 #### HDC组件新增宏定义
 
-编译hdcd进程时，因该进程需要用到系统SystemParameter功能，但L1系统不具有该功能，后续待L1实现系统param功能之后，可以去掉该宏定义，使用init进程监听cfg脚本方式来实现hdc功能的配置
+编译hdcd进程时，因该进程需要用到系统SystemParameter功能，但小型系统不具有该功能，后续待小型系统实现param功能之后，可以去掉该宏定义，使用init进程监听cfg脚本方式来实现hdc功能的配置
 
    ```shell
     if (is_standard_system) {
@@ -51,7 +51,7 @@
     ```
 #### HDC开机初始化
 
-新增L1系统，hdc开始初始化脚本文件init_hdc,开机时执行init_hdc，主要流程为：挂载configfs -> 创建gadget -> 设置设备描述符 -> 创建配置 -> 添加FunctionFS函数 -> 链接到配置 -> 创建挂载点并挂载functionfs，该脚本将一个Linux USB设备配置为一个 USB 复合设备，后续需结合hdcd进程，把USB描述符写给内核，并将UDC控制器10320000.dwc3写入/config/usb_gadget/g1/UDC来绑定UDC，激活USB设备
+在小型系统上新增HDC开机初始化，hdc开始初始化脚本文件init_hdc,开机时执行init_hdc，主要流程为：挂载configfs -> 创建gadget -> 设置设备描述符 -> 创建配置 -> 添加FunctionFS函数 -> 链接到配置 -> 创建挂载点并挂载functionfs，该脚本将一个Linux USB设备配置为一个 USB 复合设备，后续需结合hdcd进程，把USB描述符写给内核，并将UDC控制器10320000.dwc3写入/config/usb_gadget/g1/UDC来绑定UDC，激活USB设备
   
     ```shell
     #!/bin/sh

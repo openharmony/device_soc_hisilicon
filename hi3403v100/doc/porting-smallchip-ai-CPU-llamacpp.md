@@ -4,7 +4,7 @@
 
 ## 1. 下载代码
 
-注：当前只测试到这个版本，后续版本可能会有一些变化
+注：当前只测试了这个版本，其它版本的步骤可能会有一些不同，请自行适配。
 
 ```bash
 git clone https://gitcode.com/GitHub_Trending/ll/llama.cpp.git -b b8816
@@ -23,7 +23,7 @@ git clone https://gitcode.com/GitHub_Trending/ll/llama.cpp.git -b b8816
 set(CMAKE_SYSTEM_NAME Linux)
 set(CMAKE_SYSTEM_PROCESSOR aarch64)
 
-# 2. 定义 SDK 根目录 (根据你的实际路径修改)
+# 2. 定义 SDK 根目录 (根据实际路径来修改)
 set(OHOS_SDK_ROOT "/data/oh5.1.0-3403")
 
 # 3.指定编译器(OpenHarmony 预置的 Clang)
@@ -93,11 +93,25 @@ make -j$(nproc)
 - `llama-simple` (3.9MB) - 最简单的推理示例
 - `llama-simple-chat` (3.9MB) - 简单的对话示例
 
-## 5. 部署到开发板
+## 5. 获取模型
 
-编译完成后，需要将可执行文件部署到hispark_aifly开发板：
+llama.cpp 需要GGUF格式的模型文件，可以通过以下方式获取：
 
-### 5.1 需要部署的文件
+1. **直接下载GGUF模型**：从 Hugging Face 下载已转换的GGUF模型
+   - 搜索关键词：`gguf` 或访问 https://huggingface.co/models?library=gguf
+
+2. **转换现有模型**：在电脑上拉取llamacpp源码，然后使用llama.cpp提供的转换脚本处理，示例如下：
+   ```bash
+   # 将HuggingFace模型转换为GGUF格式
+   pip install -r requirements.txt
+   python3 convert_hf_to_gguf.py /models/Qwen3-30B-A3B
+   ```
+
+## 6. 部署到开发板
+
+按照下面的步骤将可执行文件部署到hispark_aifly开发板：
+
+### 6.1 需要部署的文件
 ```bash
 # 主要工具（根据需要选择）
 build_ohos/bin/llama-cli        # 命令行推理工具
@@ -111,30 +125,34 @@ build_ohos/bin/llama-simple-chat
 {OHOS_SDK_ROOT}/prebuilts/clang/ohos/ohos-arm64/llvm/lib/aarch64-linux-ohos/libomp.so
 ```
 
-### 5.2 部署方式
+### 6.2 部署方式
 可以通过以下方式将文件传输到开发板：
 - 通过HDC推送到设备
 - 通过网络传输
 - 通过U盘等设备传输
 - 打包到系统镜像中
 
-### 5.3 部署示例
+### 6.3 部署示例
 1. 需要先在pc端通过`nfs-kernel-server`工具创建共享文件夹。
     ```bash
-    sudo apt install nfs-kernel-server -y
-    sudo vim /etc/exports
-    # 写入以下内容
-    /share *(rw,sync,no_root_squash,no_subtree_check,insecure)
+	# 安装nfs服务
+	sudo apt install nfs-kernel-server -y
 
-    sudo exportfs -arv
-    sudo systemctl restart nfs-server
+	# 配置共享目录
+	sudo vim /etc/exports
+	# 写入以下内容
+	/share *(rw,sync,no_root_squash,no_subtree_check,insecure)
+
+	# 重启nfs服务
+	sudo exportfs -arv
+	sudo systemctl restart nfs-server
     ```
 
 2. 把要共享的内容放到共享目录后，就可以切换到开发板的环境中了。
     ```bash
     mkdir /share
     mount -t nfs -o nolock,addr=192.168.31.100 192.168.31.100:/share /share
-    ls /sahre
+    ls /share
     llama-cli libomp.so Qwen3.5-0.8B-Q8_0.gguf
 
     cp /share/libomp.so /lib64
@@ -143,26 +161,12 @@ build_ohos/bin/llama-simple-chat
 3. 效果如下：
     ![image](./figures/llamacpp-pic1.png)
 
-## 6. 注意事项
+## 7. 注意事项
 
 1. **交叉编译环境**：确保使用OpenHarmony提供的工具链，不要使用系统默认的gcc/clang
 2. **Sysroot路径**：根据实际鸿蒙SDK路径修改 `OHOS_SDK_ROOT`
 3. **静态链接**：建议使用静态链接(`BUILD_SHARED_LIBS=OFF`)，避免运行时库依赖问题
 4. **模型格式**：llama.cpp使用GGUF格式模型，需要使用转换工具将HuggingFace模型转换为GGUF格式
-
-## 7. 获取模型
-
-llama.cpp 需要GGUF格式的模型文件，可以通过以下方式获取：
-
-1. **直接下载GGUF模型**：从 Hugging Face 下载已转换的GGUF模型
-   - 搜索关键词：`gguf` 或访问 https://huggingface.co/models?library=gguf
-
-2. **转换现有模型**：在电脑上拉取llamacpp源码，然后使用llama.cpp提供的转换脚本处理，示例如下：
-   ```bash
-   # 将HuggingFace模型转换为GGUF格式
-   pip install -r requirements.txt
-   python3 convert_hf_to_gguf.py /models/Qwen3-30B-A3B
-   ```
 
 ## 8. 性能优化建议
 
@@ -196,4 +200,4 @@ Error loading shared library libomp.so: No such file or directory (needed by ./l
 Error relocating ./llama-cli: __kmpc_global_thread_num: symbol not found
 ```
 
-***A:** 我们在编译llamacpp源码的目录下搜索这个文件，如果没有，也可能是在hispark_aifly鸿蒙系统源码目录下，也就是{OHOS_SDK_ROOT}目录，因为我们交叉编译的时候用到了里面的一些文件。找到之后，放到开发板的`/lib64`目录下即可。
+***A:** 当编译llamacpp时，如果源码的目录下无法搜索到这个文件，可能是在hispark_aifly鸿蒙系统源码目录下，也就是{OHOS_SDK_ROOT}目录，因为我们交叉编译的时候用到了里面的一些文件。找到之后，放到开发板的`/lib64`目录下即可。
