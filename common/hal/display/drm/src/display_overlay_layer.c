@@ -187,10 +187,7 @@ static int32_t OverlayLayerAllocVbBuffer(td_u32 vbSize, ot_vb_blk *vbHandle,
     return DISPLAY_SUCCESS;
 }
 
-static void OverlayLayerSetOutputFrameAttr(ot_vgs_task_attr *vgsTaskAttr,
-    ot_vb_blk vbHandle, td_phys_addr_t physAddr, td_void *virtAddr,
-    td_u32 headStride, td_u32 mainStride, td_u32 headSize,
-    size_t sizeY, td_u32 headYSize)
+static void OverlayLayerSetFrameBasicAttr(ot_vgs_task_attr *vgsTaskAttr, ot_vb_blk vbHandle)
 {
     vgsTaskAttr->img_out.mod_id  = OT_ID_VGS;
     vgsTaskAttr->img_out.pool_id = ss_mpi_vb_handle_to_pool_id(vbHandle);
@@ -201,6 +198,11 @@ static void OverlayLayerSetOutputFrameAttr(ot_vgs_task_attr *vgsTaskAttr,
     vgsTaskAttr->img_out.video_frame.compress_mode = OT_COMPRESS_MODE_NONE;
     vgsTaskAttr->img_out.video_frame.dynamic_range = OT_DYNAMIC_RANGE_SDR8;
     vgsTaskAttr->img_out.video_frame.color_gamut   = OT_COLOR_GAMUT_BT601;
+}
+
+static void OverlayLayerSetFrameHeaderAttr(ot_vgs_task_attr *vgsTaskAttr,
+    td_phys_addr_t physAddr, td_void *virtAddr, td_u32 headStride, td_u32 headYSize)
+{
     vgsTaskAttr->img_out.video_frame.header_stride[PLANE_INDEX_Y]  = headStride;
     vgsTaskAttr->img_out.video_frame.header_stride[PLANE_INDEX_UV]  = headStride;
     vgsTaskAttr->img_out.video_frame.header_phys_addr[PLANE_INDEX_Y] = physAddr;
@@ -209,6 +211,11 @@ static void OverlayLayerSetOutputFrameAttr(ot_vgs_task_attr *vgsTaskAttr,
     vgsTaskAttr->img_out.video_frame.header_virt_addr[PLANE_INDEX_Y] = virtAddr;
     vgsTaskAttr->img_out.video_frame.header_virt_addr[PLANE_INDEX_UV] =
         vgsTaskAttr->img_out.video_frame.header_virt_addr[PLANE_INDEX_Y] + headYSize;
+}
+
+static void OverlayLayerSetFrameMainAttr(ot_vgs_task_attr *vgsTaskAttr,
+    td_u32 mainStride, td_u32 headSize, size_t sizeY)
+{
     vgsTaskAttr->img_out.video_frame.stride[PLANE_INDEX_Y]  = mainStride;
     vgsTaskAttr->img_out.video_frame.stride[PLANE_INDEX_UV]  = mainStride;
     vgsTaskAttr->img_out.video_frame.phys_addr[PLANE_INDEX_Y] =
@@ -259,9 +266,9 @@ int32_t OverlayLayerFlush(uint32_t devId, uint32_t layerId, LayerBuffer *buffer)
         return ret;
     }
 
-    OverlayLayerSetOutputFrameAttr(&vgsTaskAttr, vbHandle, physAddr, virtAddr,
-        headStride, mainStride, headSize,
-        g_overlayDisplay.width * g_overlayDisplay.height, headYSize);
+    OverlayLayerSetFrameBasicAttr(vgsTaskAttr, vbHandle);
+    OverlayLayerSetFrameHeaderAttr(vgsTaskAttr, physAddr, virtAddr, headStride, headYSize);
+    OverlayLayerSetFrameMainAttr(vgsTaskAttr, mainStride, headSize, sizeY);
 
     ret = ss_mpi_vgs_add_scale_task(hHandle, vgsTaskAttr, vgsSclCoefMode);
     if (ret != TD_SUCCESS) {
