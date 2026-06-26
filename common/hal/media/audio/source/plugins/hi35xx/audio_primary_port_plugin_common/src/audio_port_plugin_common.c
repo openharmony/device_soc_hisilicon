@@ -55,7 +55,7 @@ typedef struct {
     ot_acodec_fs acodecFs;
 } FsSelect;
 
-static const FsSelect g_fsSelectTable[] = {
+static const FsSelect FS_SELECT_TABLE[] = {
     {OT_AUDIO_SAMPLE_RATE_8000, OT_ACODEC_FS_8000},
     {OT_AUDIO_SAMPLE_RATE_11025, OT_ACODEC_FS_11025},
     {OT_AUDIO_SAMPLE_RATE_12000, OT_ACODEC_FS_12000},
@@ -69,7 +69,7 @@ static const FsSelect g_fsSelectTable[] = {
     {OT_AUDIO_SAMPLE_RATE_96000, OT_ACODEC_FS_96000},
 };
 
-static const ot_audio_sample_rate g_audioSampleRateTable[] = {
+static const ot_audio_sample_rate AUDIO_SAMPLE_RATE_TABLE[] = {
     OT_AUDIO_SAMPLE_RATE_8000,
     OT_AUDIO_SAMPLE_RATE_11025,
     OT_AUDIO_SAMPLE_RATE_12000,
@@ -85,13 +85,13 @@ static const ot_audio_sample_rate g_audioSampleRateTable[] = {
 
 static int32_t I2sFsSel(const ot_audio_sample_rate enSampleRate, ot_acodec_fs *i2sFsSel)
 {
-    size_t num = sizeof(g_fsSelectTable) / sizeof(g_fsSelectTable[0]);
+    size_t num = sizeof(FS_SELECT_TABLE) / sizeof(FS_SELECT_TABLE[0]);
     bool isMatch = false;
     ot_acodec_fs i2sFs = OT_ACODEC_FS_BUTT;
     for (size_t i = 0; i < num; i++) {
-        if (enSampleRate == g_fsSelectTable[i].audioSampleRate) {
+        if (enSampleRate == FS_SELECT_TABLE[i].audioSampleRate) {
             isMatch = true;
-            i2sFs = g_fsSelectTable[i].acodecFs;
+            i2sFs = FS_SELECT_TABLE[i].acodecFs;
             break;
         }
     }
@@ -230,13 +230,13 @@ int32_t AudioAcodecUnMute(void)
 
 bool AudioConvertSampleRateToHAL(int32_t sampleRate, ot_audio_sample_rate *enSamplerate)
 {
-    size_t num = sizeof(g_audioSampleRateTable) / sizeof(g_audioSampleRateTable[0]);
+    size_t num = sizeof(AUDIO_SAMPLE_RATE_TABLE) / sizeof(AUDIO_SAMPLE_RATE_TABLE[0]);
     bool isMatch = false;
     ot_audio_sample_rate audioSampleRate = OT_AUDIO_SAMPLE_RATE_BUTT;
     for (size_t i = 0; i < num; i++) {
-        if (sampleRate == (int32_t)g_audioSampleRateTable[i]) {
+        if (sampleRate == (int32_t)AUDIO_SAMPLE_RATE_TABLE[i]) {
             isMatch = true;
-            audioSampleRate = g_audioSampleRateTable[i];
+            audioSampleRate = AUDIO_SAMPLE_RATE_TABLE[i];
             break;
         }
     }
