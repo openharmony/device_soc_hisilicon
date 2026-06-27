@@ -270,7 +270,9 @@ td_s32 hal_hdmi_scdc_deinit(hdmi_device_id hdmi_id)
 td_s32 hal_hdmi_scdc_attr_set(hdmi_device_id hdmi_id, scdc_attr *attr)
 {
     td_s32 ret;
-    td_u32 scdc_timestart, scdc_time_cur, timeout;
+    td_u32 scdc_timestart;
+    td_u32 scdc_time_cur;
+    td_u32 timeout;
     scdc_scramble scramble = {0};
     scdc_infomation *scdc_info = scdc_info_ptr_get(hdmi_id);
 

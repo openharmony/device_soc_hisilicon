@@ -1086,7 +1086,7 @@ static int get_head_area_data_from_emmc(backup_image_params_s *backup_params)
 
         /* get data from emmc by cipher dma */
         ret = mmc_read((void *)(uintptr_t)tmp_addr, data_addr,
-      data_len, READ_DATA_BY_DMA);
+            data_len, READ_DATA_BY_DMA);
         if (ret != TD_SUCCESS) {
             err_print('4', '9');
             return TD_FAILURE;
@@ -1095,15 +1095,15 @@ static int get_head_area_data_from_emmc(backup_image_params_s *backup_params)
     }
 
     ret = mmc_read((void *)(uintptr_t)tmp_addr, data_addr,
-     align_params_size, READ_DATA_BY_DMA);
+        align_params_size, READ_DATA_BY_DMA);
     if (ret != TD_SUCCESS) {
         err_print('4', 'a');
         return TD_FAILURE;
     }
     ret = memmove_s((void *)(uintptr_t)bootloader_key_area_addr,
-     BOOTLOADER_KEY_PARAMS_AREA_SIZE,
-     (void *)(uintptr_t)(tmp_addr + align_len),
-     BOOTLOADER_KEY_PARAMS_AREA_SIZE);
+        BOOTLOADER_KEY_PARAMS_AREA_SIZE,
+        (void *)(uintptr_t)(tmp_addr + align_len),
+        BOOTLOADER_KEY_PARAMS_AREA_SIZE);
     if (ret != EOK) {
         err_print('4', 'b');
         return TD_FAILURE;
@@ -1295,7 +1295,7 @@ static int get_bootloader_code_area_from_emmc(const backup_image_params_s *backu
         /* Here tmp_addr is used as the temporary storage address. */
         tmp_addr = image_int_ddr_addr;
         ret = mmc_read((void *)(uintptr_t)tmp_addr, 0,
-      backup_params->offset_addr, READ_DATA_BY_DMA);
+            backup_params->offset_addr, READ_DATA_BY_DMA);
         if (ret != TD_SUCCESS) {
             err_print('8', '8');
             return TD_FAILURE;
@@ -1304,7 +1304,7 @@ static int get_bootloader_code_area_from_emmc(const backup_image_params_s *backu
 
     /* get data from emmc by cipher dma */
     ret = mmc_read((void *)(uintptr_t)image_int_ddr_addr, backup_params->offset_addr,
-     image_total_len, READ_DATA_BY_DMA);
+        image_total_len, READ_DATA_BY_DMA);
     if (ret != TD_SUCCESS) {
         err_print('8', '9');
         return TD_FAILURE;
@@ -1314,7 +1314,7 @@ static int get_bootloader_code_area_from_emmc(const backup_image_params_s *backu
 }
 
 static int get_bootloader_code_area_data(uint32_t channel_type,
-        const backup_image_params_s *backup_params)
+    const backup_image_params_s *backup_params)
 {
     int ret;
 

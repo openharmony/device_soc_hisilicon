@@ -222,7 +222,8 @@ static td_u32 ctrl_i2s_rate_org_reg_get(td_u32 rate_value)
 static td_u32 ctrl_i2s_rate_value_get(td_u32 id)
 {
     td_u32 i = 0;
-    td_u32 rate_reg, rate_org_reg;
+    td_u32 rate_reg;
+    td_u32 rate_org_reg;
     hdmi_i2s_samp_rate *i2s_rate = TD_NULL;
 
     rate_reg = hdmi_reg_chst_byte3_fs_get(id);
@@ -891,7 +892,8 @@ static td_s32 ctrl_video_path_quantization_get(td_u32 id,
 
 static td_s32 ctrl_tmds_mode_get(td_u32 id, hdmi_tmds_mode *tmds_mode)
 {
-    td_bool hdmi_mode, hdmi2x_enable;
+    td_bool hdmi_mode;
+    td_bool hdmi2x_enable;
 
     hdmi_mode = hdmi_reg_hdmi_mode_get(id);
     hdmi2x_enable = hdmi_reg_enc_hdmi2_on_get(id);
@@ -1528,15 +1530,15 @@ td_s32 hal_hdmi_ctrl_csc_set(hdmi_device_id hdmi, const hdmi_video_config *video
 td_s32 hal_hdmi_ctrl_video_path_set(hdmi_device_id hdmi, hdmi_video_path *video_path)
 {
     td_s32 ret;
-    errno_t errno;
+    errno_t err_num;
     hdmi_ctrl_info *ctrl_info = ctrl_info_ptr_get(hdmi);
 
     hdmi_if_null_return(video_path, OT_ERR_HDMI_NULL_PTR);
     hdmi_if_null_return(ctrl_info, OT_ERR_HDMI_NULL_PTR);
     hdmi_if_false_return(ctrl_info->init, TD_FAILURE);
 
-    errno = memcpy_s(&ctrl_info->video_path, sizeof(ctrl_info->video_path), video_path, sizeof(hdmi_video_path));
-    hdmi_unequal_eok_return(errno, OT_ERR_HDMI_INVALID_PARA);
+    err_num = memcpy_s(&ctrl_info->video_path, sizeof(ctrl_info->video_path), video_path, sizeof(hdmi_video_path));
+    hdmi_unequal_eok_return(err_num, OT_ERR_HDMI_INVALID_PARA);
 
     /* dither */
     ctrl_video_dither_set(hdmi, video_path);
