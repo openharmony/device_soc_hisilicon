@@ -101,7 +101,7 @@ static int create_overlayer_drm(DrmOverlayDisplayT *display, const LayerInfo *la
     }
     display->drmFd = open(DRM_DEVICE, O_RDWR | O_CLOEXEC);
     if (display->drmFd == INVALID_FD) {
-        HDF_LOGE("%s, Cannot open DRM device\n", __func__);
+        HDF_LOGE("%s,Cannot open DRM device\n", __func__);
         return DISPLAY_FAILURE;
     }
     display->width = layerInfo->width;

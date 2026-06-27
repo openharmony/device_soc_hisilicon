@@ -942,7 +942,7 @@ int32_t AudioPrimarySubPortInAcquireFrame(AudioHandle trackHandle, uint8_t *buff
     if (portTrackInCtx->aiAttr.snd_mode == OT_AUDIO_SOUND_MODE_STEREO) {
         // The hardware does not support dual channels, so the mono data is copied to dual channels.
         DualMono2Stereo(buffer, (char *)stAudioFrm.virt_addr[0],
-            (char *)stAudioFrm.virt_addr[1], *replyBytes);
+                (char *)stAudioFrm.virt_addr[1], *replyBytes);
     } else if (portTrackInCtx->aiAttr.snd_mode == OT_AUDIO_SOUND_MODE_MONO) {
         if (memcpy_s(buffer, requestBytes, stAudioFrm.virt_addr[0], stAudioFrm.len) != EOK) {
             MEDIA_HAL_LOGE(MODULE_NAME, "memcpy_s ot_audio_frame failed");
