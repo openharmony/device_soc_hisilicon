@@ -97,8 +97,9 @@ td_s32 hal_hdmi_mach_invoke(td_void)
 td_s32 hal_hdmi_mach_register(const hdmi_mach_ctrl *mach_ctrl, td_u32 *mach_id)
 {
     td_u32 i;
-    errno_t errno;
-    td_s32 name_len, ret;
+    errno_t err_num;
+    td_s32 name_len;
+    td_s32 ret;
     hdmi_mach_elem *tmp_elem  = TD_NULL;
     hdmi_mach_info *mach_info = &g_machine_info;
 

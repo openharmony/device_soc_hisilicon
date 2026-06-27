@@ -211,8 +211,11 @@ static td_s32 ddc_read(hdmi_device_id id, const ddc_cfg *cfg)
     td_u32 len;
     ddc_func_type type;
     td_u8 *data = TD_NULL;
-    td_u32 i, retry, data_size;
-    td_u32 time_start, time_curr;
+    td_u32 i;
+    td_u32 retry;
+    td_u32 data_size;
+    td_u32 time_start;
+    td_u32 time_curr;
 
     data  = cfg->data;
     type  = cfg->func_type;
@@ -269,8 +272,11 @@ static td_s32 ddc_write(hdmi_device_id hdmi, const ddc_cfg *cfg)
     td_u32 len;
     ddc_func_type type;
     td_u8 *data = TD_NULL;
-    td_u32 i, retry, data_size;
-    td_u32 time_start, time_curr;
+    td_u32 i;
+    td_u32 retry;
+    td_u32 data_size;
+    td_u32 time_start;
+    td_u32 time_curr;
 
     data  = cfg->data;
     type  = cfg->func_type;
@@ -575,7 +581,8 @@ td_void hal_hdmi_ddc_default_cfg_get(hdmi_device_id hdmi, ddc_cfg *cfg)
 
 td_s32 hal_hdmi_ddc_edid_raw_get(hdmi_device_id hdmi, td_s32 size, td_u8 *data)
 {
-    td_u8 ext_block_num, des_block_num;
+    td_u8 ext_block_num;
+    td_u8 des_block_num;
     td_s32 ret;
     ddc_cfg cfg = {0};
 

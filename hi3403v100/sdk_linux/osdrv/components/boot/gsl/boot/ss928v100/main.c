@@ -438,7 +438,7 @@ static void get_temperature(int *temperature)
 }
 
 static void adjust_hpm(unsigned int *hpm_core, unsigned int *hpm_mda,
-        unsigned int *hpm_npu, int temperature)
+    unsigned int *hpm_npu, int temperature)
 {
     unsigned int otp_hpm_core = readl(REG_SYSCTRL_BASE + OTP_HPM_CORE_OFFSET);
     unsigned int otp_hpm_npu  = readl(REG_SYSCTRL_BASE + OTP_HPM_NPU_OFFSET);
@@ -946,7 +946,7 @@ static int get_head_area_data_form_sdio()
     /* Read the data from 64K to 79K(lenght is 15K) in the image */
     set_sdio_pos(SECURE_IMAGE_STEP1_SIZE);
     ret = copy_from_sdio((void *)(VENDOR_ROOT_PUBLIC_KEY_ADDR +
-                      SECURE_IMAGE_STEP1_SIZE), SECURE_IMAGE_STEP2_SIZE);
+        SECURE_IMAGE_STEP1_SIZE), SECURE_IMAGE_STEP2_SIZE);
     if (ret != TD_SUCCESS)
         return TD_FAILURE;
 

@@ -212,10 +212,12 @@ static td_void *sample_ive_od_proc(td_void *arg)
 {
     td_s32 ret;
     ot_sample_ive_od_info *od_ptr = TD_NULL;
-    ot_video_frame_info base_frm_info, ext_frm_info;
+    ot_video_frame_info base_frm_info;
+    ot_video_frame_info ext_frm_info;
     const td_s32 vpss_grp = 0;
     td_s32 vpss_chn[] = { OT_VPSS_CHN0, OT_VPSS_CHN1 };
-    ot_svp_data src_data, dst_data;
+    ot_svp_data src_data;
+    ot_svp_data dst_data;
     ot_ive_handle handle;
     ot_point points[OT_SAMPLE_IVE_OD_POINT_NUM] = {{ 0, 0 }};
 

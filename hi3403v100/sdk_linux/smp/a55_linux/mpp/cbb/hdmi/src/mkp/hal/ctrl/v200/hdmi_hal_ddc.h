@@ -15,8 +15,8 @@
  * along with this program; if not, see
  * <https://www.gnu.org/licenses/>.
  */
-#ifndef HDMI_HAL_DDC_H
-#define HDMI_HAL_DDC_H
+#ifndef HDMI_HAL_DDC_V200_H
+#define HDMI_HAL_DDC_V200_H
 
 #include "drv_hdmi_common.h"
 #include "hdmi_reg_aon.h"

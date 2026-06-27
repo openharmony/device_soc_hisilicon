@@ -186,7 +186,7 @@ int osal_wait_timeout_uninterruptible(osal_wait_t *wait, osal_wait_cond_func_t f
             __ret = 1;                                                             \
         }                                                                          \
                                                                                    \
-        for (;;) {                                                                 \
+        for (; ;) {                                                                \
             if (func(param) != 0) {                                                \
                 __ret = (int)osal_msecs_to_jiffies(__ret);                         \
                 break;                                                             \

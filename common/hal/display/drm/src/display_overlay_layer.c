@@ -66,7 +66,8 @@ typedef struct {
 DrmOverlayDisplayT  g_overlayDisplay;
 
 #define DRM_HI3403V100_OVERLAY_FLUSH      1
-#define DRM_IOCTL_HI3403V100_OVERLAY_FLUSH	DRM_IOWR(DRM_COMMAND_BASE + DRM_HI3403V100_OVERLAY_FLUSH, ot_video_frame_info)
+#define DRM_IOCTL_HI3403V100_OVERLAY_FLUSH \
+    DRM_IOWR(DRM_COMMAND_BASE + DRM_HI3403V100_OVERLAY_FLUSH, ot_video_frame_info)
 
 static bool CheckTypeIsOverlayLayer(uint32_t layerId)
 {
@@ -82,7 +83,7 @@ static int create_overlayer_drm(DrmOverlayDisplayT *display, const LayerInfo *la
     }
     display->drmFd = open(DRM_DEVICE, O_RDWR | O_CLOEXEC);
     if (display->drmFd == INVALID_FD) {
-        HDF_LOGE("%s,Cannot open DRM device\n",__func__);
+        HDF_LOGE("%s, Cannot open DRM device\n", __func__);
         return DISPLAY_FAILURE;
     }
     display->width = layerInfo->width;

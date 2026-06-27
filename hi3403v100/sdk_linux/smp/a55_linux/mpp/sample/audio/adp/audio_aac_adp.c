@@ -1128,7 +1128,8 @@ static td_s32 encode_frm_check_and_init(aenc_aac_encoder *aac_encoder, const ot_
     td_s16 *in_data, td_s16 in_len)
 {
     td_s32 i;
-    td_u32 pt_nums, water_line;
+    td_u32 pt_nums;
+    td_u32 water_line;
 
     if (aac_encoder->aac_attr.snd_mode == OT_AUDIO_SOUND_MODE_STEREO) {
         /* whether the sound mode of frame and channel is match */
@@ -1375,7 +1376,9 @@ td_s32 decode_aac_frm(td_void *decoder, td_u8 **inbuf, td_s32 *left_byte,
 {
     td_s32 ret;
     adec_aac_decoder *decoder_tmp = NULL;
-    td_s32 samples, frm_len, sample_bytes;
+    td_s32 samples;
+    td_s32 frm_len;
+    td_s32 sample_bytes;
     ot_aacdec_frame_info aac_frame_info = { 0 };
 
     aac_check_false_return(decoder != NULL);
@@ -1515,7 +1518,8 @@ td_s32 reset_aac_decoder(td_void *decoder)
 
 td_s32 ss_mpi_aenc_aac_init(td_void)
 {
-    td_s32 handle, ret;
+    td_s32 handle;
+    td_s32 ret;
     ot_aenc_encoder aac;
     ret = aac_init_enc_lib();
     if (ret) {
@@ -1556,7 +1560,8 @@ td_s32 ss_mpi_aenc_aac_deinit(td_void)
 
 td_s32 ss_mpi_adec_aac_init(td_void)
 {
-    td_s32 handle, ret;
+    td_s32 handle;
+    td_s32 ret;
     ot_adec_decoder aac;
 
     ret = aac_init_dec_lib();

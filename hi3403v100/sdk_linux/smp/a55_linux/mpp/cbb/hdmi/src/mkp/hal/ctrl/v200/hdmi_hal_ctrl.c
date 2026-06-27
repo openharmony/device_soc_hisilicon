@@ -222,7 +222,8 @@ static td_u32 ctrl_i2s_rate_org_reg_get(td_u32 rate_value)
 static td_u32 ctrl_i2s_rate_value_get(td_u32 id)
 {
     td_u32 i = 0;
-    td_u32 rate_reg, rate_org_reg;
+    td_u32 rate_reg;
+    td_u32 rate_org_reg;
     hdmi_i2s_samp_rate *i2s_rate = TD_NULL;
 
     rate_reg = hdmi_reg_chst_byte3_fs_get(id);
@@ -891,7 +892,8 @@ static td_s32 ctrl_video_path_quantization_get(td_u32 id,
 
 static td_s32 ctrl_tmds_mode_get(td_u32 id, hdmi_tmds_mode *tmds_mode)
 {
-    td_bool hdmi_mode, hdmi2x_enable;
+    td_bool hdmi_mode;
+    td_bool hdmi2x_enable;
 
     hdmi_mode = hdmi_reg_hdmi_mode_get(id);
     hdmi2x_enable = hdmi_reg_enc_hdmi2_on_get(id);
