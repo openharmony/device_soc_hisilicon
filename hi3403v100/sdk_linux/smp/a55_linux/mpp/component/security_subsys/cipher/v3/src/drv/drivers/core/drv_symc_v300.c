@@ -1121,7 +1121,10 @@ static td_s32 drv_symc_chn_resume(td_u32 chn_num)
 td_s32 drv_symc_alloc_chn(td_u32 *chn_num, ot_cipher_type type)
 {
     td_s32 ret;
-    td_u32 i, used, chnn_who_used, my_cpu;
+    td_u32 i;
+    td_u32 used;
+    td_u32 chnn_who_used;
+    td_u32 my_cpu;
 
     crypto_unused(type);
 

@@ -37,11 +37,11 @@ typedef struct _Toolkit__Dumpdata__DumpData Toolkit__Dumpdata__DumpData;
 /* --- enums --- */
 
 typedef enum _Toolkit__Dumpdata__OutputDataType {
-  TOOLKIT__DUMPDATA__OUTPUT_DATA_TYPE__DT_UNDEFINED = 0,
-  TOOLKIT__DUMPDATA__OUTPUT_DATA_TYPE__DT_FLOAT = 1,
-  TOOLKIT__DUMPDATA__OUTPUT_DATA_TYPE__DT_FLOAT16 = 2,
-  TOOLKIT__DUMPDATA__OUTPUT_DATA_TYPE__DT_INT8 = 3,
-  TOOLKIT__DUMPDATA__OUTPUT_DATA_TYPE__DT_UINT8 = 4,
+    TOOLKIT__DUMPDATA__OUTPUT_DATA_TYPE__DT_UNDEFINED = 0,
+    TOOLKIT__DUMPDATA__OUTPUT_DATA_TYPE__DT_FLOAT = 1,
+    TOOLKIT__DUMPDATA__OUTPUT_DATA_TYPE__DT_FLOAT16 = 2,
+    TOOLKIT__DUMPDATA__OUTPUT_DATA_TYPE__DT_INT8 = 3,
+    TOOLKIT__DUMPDATA__OUTPUT_DATA_TYPE__DT_UINT8 = 4,
   TOOLKIT__DUMPDATA__OUTPUT_DATA_TYPE__DT_INT16 = 5,
   TOOLKIT__DUMPDATA__OUTPUT_DATA_TYPE__DT_UINT16 = 6,
   TOOLKIT__DUMPDATA__OUTPUT_DATA_TYPE__DT_INT32 = 7,
@@ -66,11 +66,11 @@ typedef enum _Toolkit__Dumpdata__OutputDataType {
     PROTOBUF_C__FORCE_ENUM_TO_BE_INT_SIZE(TOOLKIT__DUMPDATA__OUTPUT_DATA_TYPE)
 } Toolkit__Dumpdata__OutputDataType;
 typedef enum _Toolkit__Dumpdata__OutputFormat {
-  TOOLKIT__DUMPDATA__OUTPUT_FORMAT__FORMAT_NCHW = 0,
-  TOOLKIT__DUMPDATA__OUTPUT_FORMAT__FORMAT_NHWC = 1,
-  TOOLKIT__DUMPDATA__OUTPUT_FORMAT__FORMAT_ND = 2,
-  TOOLKIT__DUMPDATA__OUTPUT_FORMAT__FORMAT_NC1HWC0 = 3,
-  TOOLKIT__DUMPDATA__OUTPUT_FORMAT__FORMAT_FRACTAL_Z = 4,
+    TOOLKIT__DUMPDATA__OUTPUT_FORMAT__FORMAT_NCHW = 0,
+    TOOLKIT__DUMPDATA__OUTPUT_FORMAT__FORMAT_NHWC = 1,
+    TOOLKIT__DUMPDATA__OUTPUT_FORMAT__FORMAT_ND = 2,
+    TOOLKIT__DUMPDATA__OUTPUT_FORMAT__FORMAT_NC1HWC0 = 3,
+    TOOLKIT__DUMPDATA__OUTPUT_FORMAT__FORMAT_FRACTAL_Z = 4,
   TOOLKIT__DUMPDATA__OUTPUT_FORMAT__FORMAT_NC1C0HWPAD = 5,
   TOOLKIT__DUMPDATA__OUTPUT_FORMAT__FORMAT_NHWC1C0 = 6,
   TOOLKIT__DUMPDATA__OUTPUT_FORMAT__FORMAT_FSR_NCHW = 7,
@@ -103,11 +103,11 @@ typedef enum _Toolkit__Dumpdata__OutputFormat {
 /* --- messages --- */
 
 struct  _Toolkit__Dumpdata__OriginalOp {
-  ProtobufCMessage base;
-  char *name;
-  uint32_t output_index;
-  Toolkit__Dumpdata__OutputDataType data_type;
-  Toolkit__Dumpdata__OutputFormat format;
+    ProtobufCMessage base;
+    char *name;
+    uint32_t output_index;
+    Toolkit__Dumpdata__OutputDataType data_type;
+    Toolkit__Dumpdata__OutputFormat format;
 };
 #define TOOLKIT__DUMPDATA__ORIGINAL_OP__INIT \
  { PROTOBUF_C_MESSAGE_INIT (&toolkit__dumpdata__original_op__descriptor), \
@@ -117,9 +117,9 @@ struct  _Toolkit__Dumpdata__OriginalOp {
 
 
 struct  _Toolkit__Dumpdata__Shape {
-  ProtobufCMessage base;
-  size_t n_dim;
-  uint64_t *dim;
+    ProtobufCMessage base;
+    size_t n_dim;
+    uint64_t *dim;
 };
 #define TOOLKIT__DUMPDATA__SHAPE__INIT \
  { PROTOBUF_C_MESSAGE_INIT (&toolkit__dumpdata__shape__descriptor), \
@@ -127,11 +127,11 @@ struct  _Toolkit__Dumpdata__Shape {
 
 
 struct  _Toolkit__Dumpdata__OpOutput {
-  ProtobufCMessage base;
-  Toolkit__Dumpdata__OutputDataType data_type;
-  Toolkit__Dumpdata__OutputFormat format;
-  Toolkit__Dumpdata__Shape *shape;
-  /*
+    ProtobufCMessage base;
+    Toolkit__Dumpdata__OutputDataType data_type;
+    Toolkit__Dumpdata__OutputFormat format;
+    Toolkit__Dumpdata__Shape *shape;
+    /*
    * the original op corresponding to the output
    */
   Toolkit__Dumpdata__OriginalOp *original_op;
@@ -145,11 +145,11 @@ struct  _Toolkit__Dumpdata__OpOutput {
 
 
 struct  _Toolkit__Dumpdata__DumpData {
-  ProtobufCMessage base;
-  char *version;
-  uint64_t dump_time;
-  size_t n_output;
-  Toolkit__Dumpdata__OpOutput **output;
+    ProtobufCMessage base;
+    char *version;
+    uint64_t dump_time;
+    size_t n_output;
+    Toolkit__Dumpdata__OpOutput **output;
 };
 #define TOOLKIT__DUMPDATA__DUMP_DATA__INIT \
  { PROTOBUF_C_MESSAGE_INIT (&toolkit__dumpdata__dump_data__descriptor), \

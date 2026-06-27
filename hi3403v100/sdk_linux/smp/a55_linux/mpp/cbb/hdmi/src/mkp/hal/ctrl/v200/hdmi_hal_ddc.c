@@ -211,8 +211,11 @@ static td_s32 ddc_read(hdmi_device_id id, const ddc_cfg *cfg)
     td_u32 len;
     ddc_func_type type;
     td_u8 *data = TD_NULL;
-    td_u32 i, retry, data_size;
-    td_u32 time_start, time_curr;
+    td_u32 i;
+    td_u32 retry;
+    td_u32 data_size;
+    td_u32 time_start;
+    td_u32 time_curr;
 
     data  = cfg->data;
     type  = cfg->func_type;
@@ -269,8 +272,11 @@ static td_s32 ddc_write(hdmi_device_id hdmi, const ddc_cfg *cfg)
     td_u32 len;
     ddc_func_type type;
     td_u8 *data = TD_NULL;
-    td_u32 i, retry, data_size;
-    td_u32 time_start, time_curr;
+    td_u32 i;
+    td_u32 retry;
+    td_u32 data_size;
+    td_u32 time_start;
+    td_u32 time_curr;
 
     data  = cfg->data;
     type  = cfg->func_type;
@@ -500,7 +506,7 @@ td_s32 hal_hdmi_ddc_deinit(hdmi_device_id hdmi)
 td_s32 hal_hdmi_ddc_issue(hdmi_device_id hdmi, const ddc_cfg *cfg)
 {
     td_s32 ret;
-    errno_t errno;
+    errno_t err_num;
     ddc_record_elem *tmp_elem = TD_NULL;
     ddc_info *tmp = ddc_info_ptr_get(hdmi);
 
@@ -514,8 +520,8 @@ td_s32 hal_hdmi_ddc_issue(hdmi_device_id hdmi, const ddc_cfg *cfg)
     }
     tmp_elem = &tmp->ddc_record[tmp->run.elem_ptr];
     (td_void)memset_s(tmp_elem, sizeof(tmp->ddc_record[tmp->run.elem_ptr]), 0, sizeof(ddc_record_elem));
-    errno = memcpy_s(&tmp_elem->cfg, sizeof(tmp_elem->cfg), cfg, sizeof(ddc_cfg));
-    hdmi_unequal_eok_return(errno, OT_ERR_HDMI_INVALID_PARA);
+    err_num = memcpy_s(&tmp_elem->cfg, sizeof(tmp_elem->cfg), cfg, sizeof(ddc_cfg));
+    hdmi_unequal_eok_return(err_num, OT_ERR_HDMI_INVALID_PARA);
     tmp_elem->start_time = hal_hdmi_mach_ms_get();
 
     hdmi_mutex_lock(tmp->ddc_wr_mutex);
@@ -575,7 +581,8 @@ td_void hal_hdmi_ddc_default_cfg_get(hdmi_device_id hdmi, ddc_cfg *cfg)
 
 td_s32 hal_hdmi_ddc_edid_raw_get(hdmi_device_id hdmi, td_s32 size, td_u8 *data)
 {
-    td_u8 ext_block_num, des_block_num;
+    td_u8 ext_block_num;
+    td_u8 des_block_num;
     td_s32 ret;
     ddc_cfg cfg = {0};
 

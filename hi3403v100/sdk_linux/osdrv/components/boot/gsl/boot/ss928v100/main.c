@@ -137,7 +137,7 @@ __attribute__((no_stack_protector)) void stack_chk_guard_setup()
 
 void call_reset(void)
 {
-    mdelay(500);
+    mdelay(500); /* delay 500 ms */
     timer_deinit();
     reg_set((uint32_t *)(REG_BASE_SCTL + REG_SC_SYSRES), 0x1);
 }
@@ -150,14 +150,14 @@ void err_print(uint8_t err_type, uint8_t err_idx)
     if (uart_inited == 0) {
         uart_init();
         uart_reset();
-        mdelay(10);
+        mdelay(10); /* delay 10 ms */
     }
     serial_putc('\n');
     serial_putc('G');
     serial_putc(err_type);
     serial_putc('S');
     serial_putc(err_idx);
-    mdelay(10);
+    mdelay(10); /* delay 10 ms */
 }
 
 static void check_and_set_backup_image_flag(uint32_t offset_times)
@@ -438,7 +438,7 @@ static void get_temperature(int *temperature)
 }
 
 static void adjust_hpm(unsigned int *hpm_core, unsigned int *hpm_mda,
-        unsigned int *hpm_npu, int temperature)
+    unsigned int *hpm_npu, int temperature)
 {
     unsigned int otp_hpm_core = readl(REG_SYSCTRL_BASE + OTP_HPM_CORE_OFFSET);
     unsigned int otp_hpm_npu  = readl(REG_SYSCTRL_BASE + OTP_HPM_NPU_OFFSET);
@@ -512,7 +512,7 @@ static void svb_voltage_change(void)
     /* init temperature and hpm*/
     init_temperature();
     init_hpm();
-    mdelay(20);
+    mdelay(20); /* delay 20 ms */
     start_hpm(&hpm_core, &hpm_npu, &hpm_mda);
 
     /*get temperature */
@@ -607,8 +607,8 @@ void ddr_scramb_start(const unsigned int *random, int size)
 
     reg_set((unsigned int *)(REG_SYSCTRL_BASE + DDRCA_REE_RANDOM_L), random[0]);
     reg_set((unsigned int *)(REG_SYSCTRL_BASE + DDRCA_REE_RANDOM_H), random[1]);
-    reg_set((unsigned int *)(REG_SYSCTRL_BASE + DDRCA_TEE_RANDOM_L), random[2]);
-    reg_set((unsigned int *)(REG_SYSCTRL_BASE + DDRCA_TEE_RANDOM_H), random[3]);
+    reg_set((unsigned int *)(REG_SYSCTRL_BASE + DDRCA_TEE_RANDOM_L), random[2]); /* random arr index 2 */
+    reg_set((unsigned int *)(REG_SYSCTRL_BASE + DDRCA_TEE_RANDOM_H), random[3]); /* random arr index 3 */
 
     reg_set((unsigned int *)(REG_SYSCTRL_BASE + DDRCA_EN), SS928_BOOT_DDRCA_ENABLE);
     reg_set((unsigned int *)(REG_SYSCTRL_BASE + DDRCA_REE_UPDATE), 1);
@@ -946,7 +946,7 @@ static int get_head_area_data_form_sdio()
     /* Read the data from 64K to 79K(lenght is 15K) in the image */
     set_sdio_pos(SECURE_IMAGE_STEP1_SIZE);
     ret = copy_from_sdio((void *)(VENDOR_ROOT_PUBLIC_KEY_ADDR +
-                      SECURE_IMAGE_STEP1_SIZE), SECURE_IMAGE_STEP2_SIZE);
+        SECURE_IMAGE_STEP1_SIZE), SECURE_IMAGE_STEP2_SIZE);
     if (ret != TD_SUCCESS)
         return TD_FAILURE;
 

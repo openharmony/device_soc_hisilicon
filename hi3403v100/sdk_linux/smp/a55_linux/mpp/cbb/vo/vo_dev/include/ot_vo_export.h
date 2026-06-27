@@ -16,10 +16,10 @@
  * <https://www.gnu.org/licenses/>.
  */
 
-#include "ot_common.h"
-
 #ifndef OT_VO_EXPORT_H
 #define OT_VO_EXPORT_H
+
+#include "ot_common.h"
 
 typedef struct {
     void (*vo_notify)(int mod_id, int dev);
