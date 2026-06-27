@@ -53,9 +53,6 @@ typedef struct {
 
 DrmDisplayT g_primaryDisplay;
 
-
-
-
 #ifndef DISENABLE_DISP
 static struct DispInfo *GetDispInfo(uint32_t devId)
 {
@@ -410,8 +407,6 @@ static int32_t CreateLayer(uint32_t devId, const LayerInfo *layerInfo, uint32_t 
 
 static int32_t CloseLayer(uint32_t devId, uint32_t layerId)
 {
-
-
     CHECK_DEVID_VALID(devId, DISPLAY_FAILURE);
 
     if ((layerId & LAYER_ID_VO_LAYER_TYPE_MARK) != 0) {
@@ -451,8 +446,10 @@ static int32_t Flush(uint32_t devId, uint32_t layerId, LayerBuffer *buffer)
     CHECK_DEVID_VALID(devId, DISPLAY_FAILURE);
     CHECK_GRAPHIC_LAYERID_VALID(layerId, DISPLAY_FAILURE);
 
-    ret = drmModeSetCrtc(g_primaryDisplay.drmFd, g_primaryDisplay.crtcId, g_primaryDisplay.fbId, 0, 0,
-                       &g_primaryDisplay.connector->connector_id, 1, &g_primaryDisplay.mode);
+    ret = drmModeSetCrtc(g_primaryDisplay.drmFd, g_primaryDisplay.crtcId,
+        g_primaryDisplay.fbId, 0, 0,
+        &g_primaryDisplay.connector->connector_id, 1,
+        &g_primaryDisplay.mode);
     if (ret < 0) {
         HDF_LOGE("%s: Failed to drmModeSetCrtc. ret: %d\n", __func__, ret);
     }
