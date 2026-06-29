@@ -348,7 +348,6 @@ static int32_t InitDisplay(uint32_t devId)
             return DISPLAY_FAILURE;
         }
         InitDrm(&g_primaryDisplay);
-
     }
 
     return DISPLAY_SUCCESS;
