@@ -111,7 +111,7 @@ static td_s32 CipherRootKeyInitCtx(CipherRootKeyCtx *ctx, const td_u8 *key)
     ctx->sessionKey.level = OT_KLAD_LEVEL1;
     ctx->sessionKey.alg = OT_KLAD_ALG_TYPE_AES;
     ctx->sessionKey.key_size = SESSION_KEY_LEN;
-33    ctx->contentKey.alg = OT_KLAD_ALG_TYPE_AES;
+    ctx->contentKey.alg = OT_KLAD_ALG_TYPE_AES;
     ctx->contentKey.crypto_alg = OT_KLAD_CRYPTO_ALG_AES;
     ctx->contentKey.key_size = CONTENT_KEY_LEN;
 

@@ -73,7 +73,6 @@ fi
         mkdir -p $OHOS_OUT_DIR/libs
     fi
 
-    cp $ROOT_DIR/../middleware/source/component/fileformat/heif/lib/$CHIP_TYPE/$COMPILE_TYPE/libheif.so $OHOS_OUT_DIR/
     cp $ROOT_DIR/../middleware/source/component/fileformat/mp4/lib/$CHIP_TYPE/$COMPILE_TYPE/libmp4.so $OHOS_OUT_DIR/
     cp $ROOT_DIR/../middleware/source/component/fileformat/ts/lib/$CHIP_TYPE/$COMPILE_TYPE/libts.so $OHOS_OUT_DIR/
     cp $ROOT_DIR/../middleware/source/component/fileformat/common/lib/$CHIP_TYPE/$COMPILE_TYPE/libfileformat.so $OHOS_OUT_DIR/
