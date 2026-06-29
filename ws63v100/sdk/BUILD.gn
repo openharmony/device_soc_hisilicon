@@ -12,6 +12,7 @@
 # limitations under the License.
 
 import("//build/lite/config/component/lite_component.gni")
+import("//test/xts/tools/lite/hctest/hctest_opt_args.gni")
 
 declare_args() {
   build_ws63_sdk_open = false
@@ -25,6 +26,7 @@ build_env = "BUILD_WS63_MODE=${build_ws63_mode} ENABLE_PRODUCT_CONFIG_PATCH=${en
 if (build_xts) {
   build_env += " BUILD_XTS=1"
 }
+build_env += " XTS_OVERLAY_ARG=${xts_overlay} HCTEST_RODATA_OPT_ARG=${hctest_rodata_opt}"
 group("nearllink_sdk") {
   deps = [ ":sdk" ]
 }

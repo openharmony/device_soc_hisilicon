@@ -2,6 +2,20 @@
 set -e
 product_out_dir="$1"
 build_ws63_sdk_open="$2"
+# XTS overlay isolation (mirrors hi3861 sdk_liteos/hm_build.sh): turn the
+# GN-forwarded env vars (XTS_OVERLAY_ARG / HCTEST_RODATA_OPT_ARG) into the
+# link-script preprocessor defines consumed by build_linker.cmake.
+# XTS_OVERLAY_ENABLE gates the OVERLAY block + .bss EXCLUDE_FILE in linker.prelds;
+# HCTEST_NEW_RUNNER gates the .xts_init KEEP blocks (active when either overlay
+# or rodata_opt is on, since the shared hctest.c RunAllXtsTests + .xts_init
+# mechanism needs them in both cases). Exported so the python3 build.py / cmake
+# subprocess inherits them.
+if [ "$XTS_OVERLAY_ARG" = "true" ]; then
+    export XTS_OVERLAY_ENABLE=true
+fi
+if [ "$XTS_OVERLAY_ARG" = "true" ] || [ "$HCTEST_RODATA_OPT_ARG" = "true" ]; then
+    export HCTEST_NEW_RUNNER=true
+fi
 # prebuild #
 CROOT=$(pwd)
 

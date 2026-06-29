@@ -56,6 +56,17 @@ if(${ROM_CHECK})
     list(APPEND LDS_DEFINES "-DROM_CHECK")
 endif()
 
+# XTS overlay / hctest new-runner: forward the GN-driven flags (exported as env
+# vars by hm_build.sh) into the linker.prelds preprocessor, mirroring the
+# ROM_CHECK pattern above. OFF (env unset / != "true") keeps linker.prelds
+# pristine so the preprocessed linker.lds is identical to the un-patched build.
+if("$ENV{XTS_OVERLAY_ENABLE}" STREQUAL "true")
+    list(APPEND LDS_DEFINES "-DXTS_OVERLAY_ENABLE")
+endif()
+if("$ENV{HCTEST_NEW_RUNNER}" STREQUAL "true")
+    list(APPEND LDS_DEFINES "-DHCTEST_NEW_RUNNER")
+endif()
+
 add_custom_command(TARGET ${TARGET_NAME} PRE_BUILD
     COMMAND ${CMAKE_C_COMPILER} -P -xc -E -o linker.lds @${CMAKE_CURRENT_BINARY_DIR}/linker_header.srp ${LDS_DEFINES} ${LINK_SCRIPT}
     COMMENT "Generating ${LINK_SCRIPT} -> ${CMAKE_BINARY_DIR}/linker.lds"
