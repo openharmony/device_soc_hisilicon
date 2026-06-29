@@ -66,6 +66,10 @@
 #include "log_oml_exception.h"
 #endif
 
+#ifdef BUILD_WS63_MINIMAL
+#include "log_common.h"
+#endif
+
 #include <los_memory.h>
 #include "share_mem_config.h"
 #include "pmp_cfg.h"
@@ -131,6 +135,44 @@
 #define TASK_PRIORITY_BTH_RECV  10
 #define TASK_PRIORITY_SRV       12
 
+#ifdef BUILD_WS63_MINIMAL
+#ifndef STACK_SIZE_BASELINE
+#define STACK_SIZE_BASELINE     0x200
+#endif
+#ifndef FS_EXTEND_STACK
+#define FS_EXTEND_STACK         (STACK_SIZE_BASELINE * 3)
+#endif
+#ifndef APP_STACK_SIZE
+#define APP_STACK_SIZE          0x800
+#endif
+#ifndef TESTSUITE_STACK_SIZE
+#define TESTSUITE_STACK_SIZE    0x1000
+#endif
+#ifndef HSO_STACK_SIZE
+#define HSO_STACK_SIZE          0x400
+#endif
+#ifndef BT_STACK_SIZE
+#define BT_STACK_SIZE           (0x800)
+#endif
+#ifndef BT_SDK_STACK_SIZE
+#define BT_SDK_STACK_SIZE       0x400
+#endif
+#ifndef BTH_SDK_STACK_SIZE
+#define BTH_SDK_STACK_SIZE      0x400
+#endif
+#ifndef BTH_RECV_STACK_SIZE
+#define BTH_RECV_STACK_SIZE     0x400
+#endif
+#ifndef BTH_SERVICE_STACK_SIZE
+#define BTH_SERVICE_STACK_SIZE (0x800)
+#endif
+#ifndef AT_STACK_SIZE
+#define AT_STACK_SIZE           0x800
+#endif
+#ifndef WIFI_STACK_SIZE
+#define WIFI_STACK_SIZE         0x2000
+#endif
+#else
 #define STACK_SIZE_BASELINE     0x200
 #define FS_EXTEND_STACK         (STACK_SIZE_BASELINE * 3)
 #define APP_STACK_SIZE          0x800
@@ -143,7 +185,7 @@
 #define BTH_SERVICE_STACK_SIZE (STACK_SIZE_BASELINE * 8)
 #define AT_STACK_SIZE           0x2000
 #define WIFI_STACK_SIZE         0x2000
-
+#endif
 #ifdef CONFIG_RADAR_SERVICE
 #define TASK_PRIORITY_RD_D        23
 #define TASK_PRIORITY_RD_F        24
@@ -766,7 +808,7 @@ __attribute__((section(".text.runtime.init"))) void runtime_init(void)
     dyn_mem_cfg();
 #ifndef CHIP_EDA
     do_relocation();
-#endif
+    #endif
     /* Jump to main */
     main();
 }

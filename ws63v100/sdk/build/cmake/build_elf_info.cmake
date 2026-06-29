@@ -154,11 +154,15 @@ else()
 
 if(((DEFINED ROM_COMPONENT AND ${PATCH}) AND NOT ${ROM_CHECK}) OR DEFINED ROM_SYM_PATH)
     set(PATCH_CONFIG ${ROOT_DIR}/build/config/target_config/${CHIP}/patch_config)
+if (DEFINED SKIP_ROM_PATCH)
+# skip patch
+else()
     add_custom_target(GENERAT_ROM_PATCH ALL
         COMMAND ${Python3_EXECUTABLE} ${GEN_PATCH} ${BIN_NAME}.bin ${BIN_NAME}_rom.bin ${BIN_NAME}.nm ${PATCH_CONFIG} ${CORE} ${TARGET_COMMAND} ${PROJECT_BINARY_DIR}
         WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
 		DEPENDS GENERAT_BIN GENERAT_NM
     )
+endif()
 endif()
 
 endif()

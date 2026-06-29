@@ -16,8 +16,15 @@ import("//build/lite/config/component/lite_component.gni")
 declare_args() {
   build_ws63_sdk_open = false
   enable_hos_vendor_wifiiot_xts = false
+  enable_oh_device_lite_auth = true
+  build_ws63_mode = "normal"
+  enable_product_config_patch = false
 }
 
+build_env = "BUILD_WS63_MODE=${build_ws63_mode} ENABLE_PRODUCT_CONFIG_PATCH=${enable_product_config_patch}"
+if (build_xts) {
+  build_env += " BUILD_XTS=1"
+}
 group("nearllink_sdk") {
   deps = [ ":sdk" ]
 }
@@ -25,7 +32,7 @@ group("nearllink_sdk") {
 build_ext_component("run_sdk_build") {
   exec_path = rebase_path(".", root_build_dir)
   outdir = rebase_path(root_out_dir)
-  command = "bash hm_build.sh $outdir $build_ws63_sdk_open"
+  command ="env $build_env bash hm_build.sh $outdir $build_ws63_sdk_open"
 
   #  command = "python3 build.py -c ws63-liteos-app"
   #  if (host_os == "win") {
@@ -35,9 +42,11 @@ build_ext_component("run_sdk_build") {
   #  }
   deps = [
     ":sdk",
-    "//base/security/device_auth/frameworks/deviceauth_lite:hichainsdk",
-    "//build/lite:ohos",
+    "//build/lite:ohos"
   ]
+  if (enable_oh_device_lite_auth) {
+    deps += ["//base/security/device_auth/frameworks/deviceauth_lite:hichainsdk"]
+  }
   if (enable_hos_vendor_wifiiot_xts) {
     deps += [ "//build/lite/config/subsystem/xts:xts" ]
   }
