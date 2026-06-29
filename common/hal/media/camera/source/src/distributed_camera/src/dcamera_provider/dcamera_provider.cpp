@@ -99,10 +99,10 @@ int32_t DCameraProvider::DisableDCameraDevice(const DHBase& dhBase)
 
 static void ConvertToDCameraBuffer(const HalBuffer &halBuffer, DCameraBuffer &buffer)
 {
-     buffer.bufferHandle_.virAddr = halBuffer.virAddr;
-     buffer.bufferHandle_.size = halBuffer.size;
-     buffer.size_ = halBuffer.size;
-     buffer.index_ = halBuffer.flag;
+    buffer.bufferHandle_.virAddr = halBuffer.virAddr;
+    buffer.bufferHandle_.size = halBuffer.size;
+    buffer.size_ = halBuffer.size;
+    buffer.index_ = halBuffer.flag;
 }
 
 int32_t DCameraProvider::AcquireBuffer(const DHBase& dhBase, int32_t streamId, DCameraBuffer&buffer)

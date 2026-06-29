@@ -287,7 +287,6 @@ int32_t OverlayLayerFlush(uint32_t devId, uint32_t layerId, LayerBuffer *buffer)
 
 int32_t SetOverlayLayerSize(uint32_t devId, uint32_t layerId, const IRect *rect)
 {
-
     CHECK_DEVID_VALID(devId, DISPLAY_FAILURE);
     CHECK_NULLPOINTER_RETURN_VALUE(rect, DISPLAY_NULL_PTR);
     if (!CheckTypeIsOverlayLayer(layerId)) {
