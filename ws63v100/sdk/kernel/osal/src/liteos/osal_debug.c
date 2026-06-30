@@ -44,6 +44,12 @@ void osal_printk(const char *fmt, ...)
         return;
     }
 
+#ifndef LOG_SUPPORT
+    va_start(args, fmt);
+    UartVprintf(fmt, args);  // 直接输出到 UART，不经过缓冲区
+    va_end(args);
+    return;
+#endif
     va_start(args, fmt);
 #ifdef HW_LITEOS_OPEN_VERSION_NUM
     ConsoleVprintf(fmt, args);
