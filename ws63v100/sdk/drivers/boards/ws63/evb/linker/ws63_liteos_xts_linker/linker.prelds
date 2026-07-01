@@ -589,6 +589,62 @@ SECTIONS
         *(.rodata*)
         *(.srodata)
         *(.srodata*)
+        /* XTS per-module init pointer tables (read-only function pointers in
+         * Flash/PROGRAM, read via XIP by RunAllXtsTests at test runtime).
+         * Gated by HCTEST_NEW_RUNNER (= xts_overlay OR hctest_rodata_opt):
+         * OFF these KEEP blocks are omitted so the preprocessed linker.lds
+         * matches pristine. Symbol names must match the XTS_MODULE_LINKER_SYMS
+         * list in shared hctest.c. Mirrors hi3861 link.ld.S. */
+#if defined(HCTEST_NEW_RUNNER)
+        . = ALIGN(4);
+        xts_init_ActsBootstrapTest_start = .;
+        KEEP(*(.xts_init.ActsBootstrapTest))
+        xts_init_ActsBootstrapTest_stop = .;
+        . = ALIGN(4);
+        xts_init_ActsDfxFuncTest_start = .;
+        KEEP(*(.xts_init.ActsDfxFuncTest))
+        xts_init_ActsDfxFuncTest_stop = .;
+        . = ALIGN(4);
+        xts_init_ActsHieventLiteTest_start = .;
+        KEEP(*(.xts_init.ActsHieventLiteTest))
+        xts_init_ActsHieventLiteTest_stop = .;
+        . = ALIGN(4);
+        xts_init_ActsParameterTest_start = .;
+        KEEP(*(.xts_init.ActsParameterTest))
+        xts_init_ActsParameterTest_stop = .;
+        . = ALIGN(4);
+        xts_init_ActsSamgrTest_start = .;
+        KEEP(*(.xts_init.ActsSamgrTest))
+        xts_init_ActsSamgrTest_stop = .;
+        . = ALIGN(4);
+        xts_init_ActsKvStoreTest_start = .;
+        KEEP(*(.xts_init.ActsKvStoreTest))
+        xts_init_ActsKvStoreTest_stop = .;
+        . = ALIGN(4);
+        xts_init_ActsLwipTest_start = .;
+        KEEP(*(.xts_init.ActsLwipTest))
+        xts_init_ActsLwipTest_stop = .;
+        . = ALIGN(4);
+        xts_init_ActsHuksHalFunctionTest_start = .;
+        KEEP(*(.xts_init.ActsHuksHalFunctionTest))
+        xts_init_ActsHuksHalFunctionTest_stop = .;
+        . = ALIGN(4);
+        xts_init_ActsDeviceAttestTest_start = .;
+        KEEP(*(.xts_init.ActsDeviceAttestTest))
+        xts_init_ActsDeviceAttestTest_stop = .;
+        . = ALIGN(4);
+        xts_init_ActsUpdaterFuncTest_start = .;
+        KEEP(*(.xts_init.ActsUpdaterFuncTest))
+        xts_init_ActsUpdaterFuncTest_stop = .;
+        . = ALIGN(4);
+        xts_init_ActsWifiIotTest_start = .;
+        KEEP(*(.xts_init.ActsWifiIotTest))
+        xts_init_ActsWifiIotTest_stop = .;
+        . = ALIGN(4);
+        xts_init_ActsUtilsFileTest_start = .;
+        KEEP(*(.xts_init.ActsUtilsFileTest))
+        xts_init_ActsUtilsFileTest_stop = .;
+#endif  /* HCTEST_NEW_RUNNER */
         KEEP (*(.flashtext))
         KEEP (*(.flashtext*))
         . = ALIGN(4);
@@ -740,8 +796,17 @@ SECTIONS
         . = ALIGN(16);
         PROVIDE (__int_stack_end = .);
         . = ALIGN(8);
+#if defined(XTS_OVERLAY_ENABLE)
+        /* Redirect the 5 minimal-set modules' .bss into the shared OVERLAY
+         * region below so they share one VMA. .sbss* / COMMON stay here:
+         * RISC-V gp-relative small data must remain near _gp_ (set in .data),
+         * and COMMON is empty under -fno-common. Mirrors hi3861 link.ld.S. */
+        *(EXCLUDE_FILE(*libmodule_ActsDfxFuncTest.a *libmodule_ActsHieventLiteTest.a *libmodule_ActsBootstrapTest.a *libmodule_ActsParameterTest.a *libmodule_ActsSamgrTest.a) .bss)
+        *(EXCLUDE_FILE(*libmodule_ActsDfxFuncTest.a *libmodule_ActsHieventLiteTest.a *libmodule_ActsBootstrapTest.a *libmodule_ActsParameterTest.a *libmodule_ActsSamgrTest.a) .bss*)
+#else
         *(.bss)
         *(.bss*)
+#endif
         *(.sbss)
         *(.sbss*)
         *(COMMON)
@@ -750,6 +815,30 @@ SECTIONS
         CHECK_ALIGN_4(__bss_end__);
     } > SRAM
     __bss_size__ = __bss_end__ - __bss_begin__;
+
+#if defined(XTS_OVERLAY_ENABLE)
+      /* XTS MAX overlay: the 5 minimal-set modules share one VMA here.
+       * RunAllXtsTests() zeroes this region between modules so each gets a
+       * fresh zero-initialized .bss. Region size = max module; the ASSERTs
+       * guard that the largest module is not bigger than the region (if so,
+       * reorder the OVERLAY block so the largest sub-section is last).
+       * xts_overlay_start/end are referenced by shared hctest.c. */
+      xts_overlay_start = .;
+      OVERLAY . :
+      {
+          .xts_bss_ActsDfxFuncTest { *libmodule_ActsDfxFuncTest.a:*(.bss*) }
+          .xts_bss_ActsHieventLiteTest { *libmodule_ActsHieventLiteTest.a:*(.bss*) }
+          .xts_bss_ActsBootstrapTest { *libmodule_ActsBootstrapTest.a:*(.bss*) }
+          .xts_bss_ActsParameterTest { *libmodule_ActsParameterTest.a:*(.bss*) }
+          .xts_bss_ActsSamgrTest { *libmodule_ActsSamgrTest.a:*(.bss*) }
+      } > SRAM
+      xts_overlay_end = .;
+      ASSERT(xts_overlay_end - xts_overlay_start >= SIZEOF(.xts_bss_ActsDfxFuncTest), "XTS overlay error: ActsDfxFuncTest > last module, reorder OVERLAY block")
+      ASSERT(xts_overlay_end - xts_overlay_start >= SIZEOF(.xts_bss_ActsHieventLiteTest), "XTS overlay error: ActsHieventLiteTest > last module, reorder OVERLAY block")
+      ASSERT(xts_overlay_end - xts_overlay_start >= SIZEOF(.xts_bss_ActsBootstrapTest), "XTS overlay error: ActsBootstrapTest > last module, reorder OVERLAY block")
+      ASSERT(xts_overlay_end - xts_overlay_start >= SIZEOF(.xts_bss_ActsParameterTest), "XTS overlay error: ActsParameterTest > last module, reorder OVERLAY block")
+      ASSERT(xts_overlay_end - xts_overlay_start >= SIZEOF(.xts_bss_ActsSamgrTest), "XTS overlay error: ActsSamgrTest > last module, reorder OVERLAY block")
+#endif  /* XTS_OVERLAY_ENABLE */
 
 #ifdef CONFIG_MEMORY_CUSTOMIZE_RSV
     .user_reserved  (NOLOAD) : ALIGN(8) {
