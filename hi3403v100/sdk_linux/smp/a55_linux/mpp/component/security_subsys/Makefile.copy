@@ -1,0 +1,42 @@
+# copy some files to COPY_INC_PATH
+CBB_PATH        := $(MPP_PATH)/cbb
+SYS_PATH        := $(CBB_PATH)/sysd
+BASE_PATH       := $(CBB_PATH)/based
+CIPHER_PATH     := $(MPP_PATH)/component/security_subsys/cipher
+
+CIPHER_HEADER   := cipher_ext.h
+ifneq ($(filter $(OT_ARCH), ss528v100 ss524v100), )
+SYS_HEADER      :=
+BASE_HEADER     := mkp_ioctl.h dev_ext.h
+else
+SYS_HEADER      := sys_ext.h
+BASE_HEADER     := mkp_ioctl.h dev_ext.h proc_ext.h mod_ext.h
+endif
+
+COPY_INC_PATH   := $(PWD)/copy_inc
+
+# release sdk build
+CLEAN_COPY_FILE  :=
+
+# develop sdk build
+CLEAN_BUILD_FILE := $(BASE_HEADER) $(SYS_HEADER) $(CIPHER_HEADER)
+
+copy:
+	@mkdir -p $(COPY_INC_PATH)
+ifeq ($(MPP_BUILD), y)
+	@-pushd $(CIPHER_PATH)/ext_inc > /dev/null;     cp $(CIPHER_HEADER)    $(COPY_INC_PATH); popd > /dev/null
+ifneq ($(SYS_HEADER), )
+	@-pushd $(SYS_PATH)/ext_inc > /dev/null;        cp $(SYS_HEADER)       $(COPY_INC_PATH); popd > /dev/null
+endif
+ifneq ($(BASE_HEADER), )
+	@-pushd $(BASE_PATH)/ext_inc > /dev/null;       cp $(BASE_HEADER)      $(COPY_INC_PATH); popd > /dev/null
+endif
+endif
+
+copy_clean:
+	@mkdir -p $(COPY_INC_PATH)
+ifeq ($(MPP_BUILD), y)
+	@-cd $(COPY_INC_PATH) && rm -f $(CLEAN_BUILD_FILE)
+else
+	@-cd $(COPY_INC_PATH) && rm -f $(CLEAN_COPY_FILE)
+endif

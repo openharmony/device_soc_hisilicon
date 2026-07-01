@@ -1,0 +1,21 @@
+diff --git a/Makefile b/Makefile
+index fdea475..d7c1674 100644
+--- a/Makefile
++++ b/Makefile
+@@ -24,7 +24,6 @@ ATF_VER:=trusted-firmware-a-2.2
+ ATF_TAR:=trusted-firmware-a-2.2.tar.gz
+ 
+ OSDRV_CROSS ?= aarch64-v01c01-linux-gnu
+-export LDFLAGS = --no-warn-rwx-segments
+ 
+ GREEN = "\e[32;1m"
+ DONE    = "\033[0m"
+@@ -52,7 +51,7 @@ ifneq ($(BUILD_DIR)/$(ATF_VER), $(wildcard $(BUILD_DIR)/$(ATF_VER)))
+ 	pushd $(BUILD_DIR)/$(ATF_VER);patch -p1 < ../trusted-firmware-a-2.2.patch;popd
+ endif
+ 	find $(BUILD_DIR)/$(ATF_VER) | xargs touch
+-	$(MAKE) -C $(BUILD_DIR)/$(ATF_VER) PLAT=$(BUILD_CHIP) SPD=none BL33=$(BUILD_DIR)/../linux/$(KERNEL_VER)/arch/arm64/boot/uImage \
++	$(MAKE) -C $(BUILD_DIR)/$(ATF_VER) PLAT=$(BUILD_CHIP) SPD=none BL33=$(BUILD_DIR)/../../../../kernel/$(KERNEL_VER)/arch/arm64/boot/uImage \
+ 		CCI_UP=0 DEBUG=0 BL33_SEC=0 fip CROSS_COMPILE=$(OSDRV_CROSS)-
+ 
+ clean:

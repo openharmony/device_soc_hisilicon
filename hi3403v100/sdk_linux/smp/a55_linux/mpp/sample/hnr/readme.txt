@@ -1,0 +1,5 @@
+编译sample_hnr方法：
+1.修改sample/common/sdk_module_init.h头文件中的宏定义INIT_PQP为1
+2.到hnr文件夹下编译sample_hnr
+备注：
+运行sample_hnr抓拍模式开启hnr，在启动阶段会存在画面闪烁，启动完成后画面会稳定。

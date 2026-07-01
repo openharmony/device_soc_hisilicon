@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="GB2312" ?>
+<Partition_Info ProgrammerFile="">
+<Part Sel="1" PartitionName="fastboot" FlashType="emmc" FileSystem="none" Start="0" Length="512K" SelectFile="./boot_image_4GB.bin"/>
+<Part Sel="1" PartitionName="env" FlashType="emmc" FileSystem="none" Start="512K" Length="512K" SelectFile="./uboot_env_4GB.bin"/>
+<Part Sel="1" PartitionName="fip" FlashType="emmc" FileSystem="none" Start="1M" Length="512K" SelectFile="./fip.bin"/>
+<Part Sel="1" PartitionName="kernel" FlashType="emmc" FileSystem="none" Start="1536K" Length="19968K" SelectFile="./uImage"/>
+<Part Sel="1" PartitionName="rootfs" FlashType="emmc" FileSystem="ext3/4" Start="21M" Length="200M" SelectFile="./rootfs_ext4.img"/>
+<Part Sel="1" PartitionName="userfs" FlashType="emmc" FileSystem="ext3/4" Start="221M" Length="200M" SelectFile="./userfs_ext4.img"/>
+<Part Sel="1" PartitionName="userdata" FlashType="emmc" FileSystem="ext3/4" Start="421M" Length="-" SelectFile="./userdata_ext4.img"/>
+</Partition_Info>

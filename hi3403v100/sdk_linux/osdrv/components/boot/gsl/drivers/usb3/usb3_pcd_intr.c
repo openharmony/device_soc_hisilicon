@@ -1,0 +1,180 @@
+/*
+ * Copyright (c) 2025 HiSilicon (Shanghai) Technologies Co., Ltd.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#include "usb3_drv.h"
+#include "usb3_pcd.h"
+
+static void handle_usb_reset_intr(usb3_pcd_t *pcd)
+{
+    usb3_pcd_ep_t *ep;
+
+    /* Clear stall on each EP */
+    ep = &pcd->in_ep;
+    if (ep->stopped) {
+        usb3_ep_clear_stall(pcd, ep);
+    }
+
+    ep = &pcd->out_ep;
+    if (ep->stopped) {
+        usb3_ep_clear_stall(pcd, ep);
+    }
+
+    /* Set Device Address to 0 */
+    usb3_set_address(pcd, 0);
+
+    pcd->ltm_enable = 0;
+}
+
+static void handle_connect_done_intr(usb3_pcd_t *pcd)
+{
+    usb3_pcd_ep_t *ep0 = &pcd->ep0;
+    uint32_t diepcfg0;
+    uint32_t doepcfg0;
+    uint32_t diepcfg1;
+    uint32_t doepcfg1;
+    usb3_dev_ep_regs_t *ep_reg;
+    int speed;
+    unsigned int reg;
+
+    ep0->stopped = 0;
+    speed = usb3_get_device_speed(pcd);
+    pcd->speed = speed;
+
+    usb3_pcd_set_speed(pcd, speed);
+
+    /* FIXED ME:
+     * ram clock selection for usb update fuction ,
+     * each write register IO, need some delay ,to fixed
+     * this case, SNPS recommend used this method to fixed it.
+     * ref dwc3 8.1.3 Initialization on Connect Done chapter,
+     * we update DCTL RAMCLKSEL when connect done interrupt generated.
+     */
+    if (usb2_otg_ram_clk_sel()) {
+        reg = usb3_rd32(&pcd->usb3_dev->core_global_regs->gctl);
+        reg &= ~USB3_GCTL_RAM_CLK_SEL_BITS;
+        reg |= (0x3 << USB3_GCTL_RAM_CLK_SEL_SHIFT);
+        usb3_wr32(&pcd->usb3_dev->core_global_regs->gctl, reg);
+    }
+
+    /*
+     * Set the MPS of EP0 based on the connection speed
+     */
+    diepcfg0 = USB3_EP_TYPE_CONTROL << USB3_EPCFG0_EPTYPE_SHIFT;
+    diepcfg0 |= USB3_CFG_ACTION_MODIFY << USB3_EPCFG0_CFG_ACTION_SHIFT;
+    diepcfg1 =
+        USB3_EPCFG1_XFER_CMPL_BIT | USB3_EPCFG1_XFER_IN_PROG_BIT | USB3_EPCFG1_XFER_NRDY_BIT |
+        USB3_EPCFG1_EP_DIR_BIT;
+
+    doepcfg0 = USB3_EP_TYPE_CONTROL << USB3_EPCFG0_EPTYPE_SHIFT;
+    doepcfg0 |= USB3_CFG_ACTION_MODIFY << USB3_EPCFG0_CFG_ACTION_SHIFT;
+    doepcfg1 = USB3_EPCFG1_XFER_CMPL_BIT | USB3_EPCFG1_XFER_IN_PROG_BIT | USB3_EPCFG1_XFER_NRDY_BIT;
+
+    switch (speed) {
+        case USB_SPEED_HIGH:
+        case USB_SPEED_FULL:
+            diepcfg0 |= 64 << USB3_EPCFG0_MPS_SHIFT; // 64 is max packet size of ep
+            doepcfg0 |= 64 << USB3_EPCFG0_MPS_SHIFT; // 64 is max packet size of ep
+            break;
+
+        case USB_SPEED_LOW:
+            diepcfg0 |= 8 << USB3_EPCFG0_MPS_SHIFT; // 8 is max packet size of ep
+            doepcfg0 |= 8 << USB3_EPCFG0_MPS_SHIFT; // 8 is max packet size of ep
+            break;
+
+        default:
+            break;
+    }
+
+    diepcfg0 |= ep0->tx_fifo_num << USB3_EPCFG0_TXFNUM_SHIFT;
+
+    /* Issue "DEPCFG" command to EP0-OUT */
+    ep_reg = &pcd->out_ep_regs[0];
+    usb3_dep_cfg(pcd, ep_reg, doepcfg0, doepcfg1, 0);
+
+    /* Issue "DEPCFG" command to EP0-IN */
+    ep_reg = &pcd->in_ep_regs[0];
+    usb3_dep_cfg(pcd, ep_reg, diepcfg0, diepcfg1, 0);
+
+    pcd->state = USB3_STATE_DEFAULT;
+}
+
+static void usb3_handle_ep0_nrdy(usb3_pcd_t *pcd, int is_in, uint32_t event)
+{
+    if ((pcd->ep0state == EP0_IN_WAIT_NRDY && is_in) ||
+        (pcd->ep0state == EP0_OUT_WAIT_NRDY && !is_in)) {
+        usb3_os_handle_ep0(pcd, event);
+    }
+}
+
+int usb3_handle_ep_intr(usb3_pcd_t *pcd, int physep, uint32_t event)
+{
+    usb3_pcd_ep_t *ep;
+    int epnum;
+    int is_in;
+    int error = USB_NO_ERR;
+
+    /* Physical Out EPs are even, physical In EPs are odd */
+    is_in = physep & 1;
+    epnum = (physep >> 1) & 0xf;
+
+    /* Get EP pointer */
+    if (is_in) {
+        ep = usb3_get_in_ep(pcd, epnum);
+    } else {
+        ep = usb3_get_out_ep(pcd, epnum);
+    }
+    switch (event & USB3_DEPEVT_INTTYPE_BITS) {
+        case USB3_DEPEVT_XFER_CMPL << USB3_DEPEVT_INTTYPE_SHIFT:
+            ep->xfer_started = 0;
+
+            /* Complete the transfer */
+            if (epnum == 0) {
+                usb3_os_handle_ep0(pcd, event);
+            } else {
+                error = usb3_ep_complete_request(pcd, ep, event);
+            }
+            break;
+
+        case USB3_DEPEVT_XFER_NRDY << USB3_DEPEVT_INTTYPE_SHIFT:
+            if (epnum == 0) {
+                usb3_handle_ep0_nrdy(pcd, is_in, event);
+            }
+            break;
+
+        default:
+            break;
+    }
+
+    return error;
+}
+
+void usb3_handle_dev_intr(usb3_pcd_t *pcd, uint32_t event)
+{
+    uint32_t dint = (event >> USB3_DEVT_SHIFT) & (USB3_DEVT_BITS >> USB3_DEVT_SHIFT);
+
+    switch (dint) {
+        case USB3_DEVT_USBRESET:
+            handle_usb_reset_intr(pcd);
+            break;
+
+        case USB3_DEVT_CONNDONE:
+            handle_connect_done_intr(pcd);
+            break;
+
+        default:
+            break;
+    }
+}

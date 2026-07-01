@@ -1,0 +1,98 @@
+#*******************************************************************************
+# The rule of make Linux kernel module
+#*******************************************************************************
+CBB_ROOT := $(SDK_PATH)/mpp/cbb
+BASE_ARCH_ROOT := $(CBB_ROOT)/base/arch
+KBUILD_EXTRA_SYMBOLS += $(OT_KBUILD_EXTRA_SYMBOLS)
+SVP_NPU_NAME = svp_npu
+#*************************************************************************
+# external header include
+CFG_INC += -I$(CBB_ROOT)/include      \
+           -I$(CBB_ROOT)/sys/ext_inc      \
+           -I$(CBB_ROOT)/sys/include      \
+           -I$(CBB_ROOT)/sys/include/adapt \
+           -I$(CBB_ROOT)/sys/include/inner      \
+	   -I$(BASE_ARCH_ROOT)/$(ARCH_DIR)/include      \
+	   -I$(BASE_ARCH_ROOT)/../ext_inc     \
+	   -I$(BASE_ARCH_ROOT)/../include   \
+	   -I$(BASE_ARCH_ROOT)/../include/inner   \
+	   -I$(SDK_PATH)/osal/include	\
+	   -I$(REL_DIR)/include
+
+#*************************************************************************
+#npu header include
+CFG_INC  += -I$(PWD)/../arch/$(ARCH_DIR)/include \
+            -I$(PWD)/../init/$(ARCH_DIR)/$(OSTYPE)/include
+#npu ext header include
+CFG_INC  += -I$(PWD)/../mpi/include/ext/arch/$(ARCH_DIR)/acl
+CFG_INC  += -I$(PWD)/../mpi/include/int/common
+
+#*************************************************************************
+# local header include
+CFG_INC += -I$(PWD)/include
+
+#********************* List all the release file *******************************
+
+ifeq ($(OT_GDB),y)
+	EXTRA_CFLAGS += -g
+endif
+
+ifeq ($(CONFIG_DRIVER_SPACE_TYPE),user_space)
+CFG_INC :=$(subst base/,based/,$(CFG_INC))
+CFG_INC :=$(subst sys/,sysd/,$(CFG_INC))
+endif
+
+EXTRA_CFLAGS += $(CFG_INC)
+
+TARGET:=$(KO_PREFIX)_svp_npu
+MOD_NAME := mod_svp_npu
+INIT_NAME := npu_init
+
+EXTRA_CFLAGS += -Wall -O3 -D$(OT_ARCH) -DOT_CHIP=$(OT_CHIP) -D$(OT_FPGA)
+EXTRA_CFLAGS += $(MPP_CFLAGS)
+
+#********** SVP driver src****************
+NPU_DRV_SRC += src/npu.c
+NPU_DRV_SRC += ../arch/$(ARCH_DIR)/hal/npu_hal.c
+
+INIT_FILE := ../init/$(OT_ARCH)/$(OSTYPE)/src/svp_npu_init.c
+INIT_INC := ../init/$(OT_ARCH)/$(OSTYPE)/include/ot_svp_npu_mod_init.h
+
+NPU_DRV_SRC_O := $(NPU_DRV_SRC)
+NPU_DRV_SRC += $(INIT_FILE)
+
+$(TARGET)-objs = $(NPU_DRV_SRC:%.c=%.o)
+
+ifneq ($(KERNELRELEASE),)
+	obj-m += $(TARGET).o
+endif
+
+#*******************************************************************************
+#The file need tobe clean, when make clean
+BUILD_DIR = $(TEMP_PATH)/$(subst $(SDK_PATH)/,,$(CURDIR))
+BUILD_DIR_MAKEFILE := $(BUILD_DIR)/Makefile
+
+.PHONY: default clean
+default:
+	@echo -e "\e[0;32;1m--Compiling '$(OT_ARCH)_npu'... Configs as follow:\e[0;36;1m"
+	@echo ---- CROSS=$(CROSS)
+	@echo ---- OT_ARCH=$(OT_ARCH), OT_CHIP=$(OT_CHIP), CVER=$(CVER), DBG=$(OT_DBG)
+	@echo ---- SDK_PATH=$(SDK_PATH) , PARAM_FILE=$(PARAM_FILE)
+	@echo ---- KERNEL_ROOT=$(KERNEL_ROOT)
+	@echo -e "\e[0m"
+	echo NPU_DRV_SRC=$(NPU_DRV_SRC) CFG_INC=$(CFG_INC)
+	@mkdir -p $(BUILD_DIR)
+	@touch $(BUILD_DIR_MAKEFILE)
+	$(MAKE) -C $(KERNEL_ROOT) $(LLVM_KERNEL_TOOLCHAIN_ARGS) M=$(BUILD_DIR) src=$(CURDIR) O=$(KERNEL_ROOT) V=10 modules -j 24
+	@mkdir -p $(REL_KO)/$(SVP_NPU_NAME)  && cp -rf $(BUILD_DIR)/$(TARGET).ko $(REL_KO)/$(SVP_NPU_NAME)
+
+clean:
+	@rm -rf $(REL_KO)/$(SVP_NPU_NAME)/$(TARGET).ko
+	@rm -f $(REL_INI)/src/$(SVP_NPU_NAME)/$(shell basename $(INIT_FILE))
+	@rm -f $(REL_INI)/include/$(SVP_NPU_NAME)/$(shell basename $(INIT_INC))
+	@rm -rf $(REL_KO)/$(SVP_NPU_NAME)
+	@rm -rf $(REL_OBJ)/$(SVP_NPU_NAME)
+	@rm -rf $(REL_INI)/src/$(SVP_NPU_NAME)
+	@rm -rf $(REL_INI)/include/$(SVP_NPU_NAME)
+	@rm -rf $(BUILD_DIR)/../arch
+	@rm -rf $(BUILD_DIR)

@@ -1,0 +1,43 @@
+#*******************************************************************************
+#The rule of make user_space lib
+#*******************************************************************************
+
+CFLAGS += $(MKP_CFLAGS)
+CFLAGS += -fPIC -O
+CFLAGS += $(LIBS_CFLAGS)
+
+OBJS = $(patsubst %.c,%.o,$(SRCS))
+
+LIB_A := lib$(TARGET).a
+LIB_S := lib$(TARGET).so
+
+.PHONY: all clean
+
+all: $(OBJS) $(LIB_A) $(LIB_S)
+	@echo ----- TYPE=$(CONFIG_DRIVER_SPACE_TYPE) -----
+	@echo -e "\e[0;32;1m--Compiling '$(TARGET)'...\e[0;36;1m"
+	@echo -e "\e[0m"
+	@mkdir -p $(REL_INI)/include
+	@mkdir -p $(REL_INC)
+	@$(call maco_cp_file,$(INIT_INC),$(REL_INI)/include)
+	@$(call maco_cp_file,$(INC_FILE),$(REL_INC))
+
+$(OBJS): %.o : %.c
+	@$(CC) $(CFLAGS) -c $< -o $@
+ifeq ($(HIGDB), n)
+	@$(CROSS)strip --strip-unneeded $@
+endif
+
+$(LIB_A): $(OBJS)
+	@$(AR) $(ARFLAGS) $@ $(OBJS)
+	@mkdir -p $(REL_LIB) && mv $@ $(REL_LIB)
+
+$(LIB_S): $(OBJS)
+	@$(CC) $(LIBS_LD_CFLAGS) -shared $(OBJS) -o $@
+	@mkdir -p $(REL_LIB) && mv $@ $(REL_LIB)
+
+clean:
+	@rm -f $(OBJS) $(LIB_A) $(LIB_S)
+	@rm -f $(REL_LIB)/$(LIB_A) $(REL_LIB)/$(LIB_S)
+	@$(call maco_rm, $(INIT_INC), $(REL_INI)/include)
+	@$(call maco_rm, $(INC_FILE), $(REL_INC))

@@ -1,0 +1,245 @@
+
+ifeq ($(PARAM_FILE), )
+     PARAM_FILE := ../../Makefile.param
+     include $(PARAM_FILE)
+endif
+
+################# select sensor type for your sample ###############################
+####    HY_S0603_MIPI_8M_30FPS_12BIT               #################
+####    HY_S0603_MIPI_8M_30FPS_10BIT_WDR2TO1       #################
+####    OV_OS08A20_MIPI_8M_30FPS_12BIT             #################
+####    OV_OS08A20_MIPI_8M_30FPS_12BIT_WDR2TO1     #################
+####    SC450AI_MIPI_4M_30FPS_10BIT                #################
+####    SC450AI_MIPI_4M_30FPS_10BIT_WDR2TO1        #################
+
+## change sensor type here. default: hy_s0603
+
+SENSOR0_TYPE ?= OV_OS08A20_MIPI_8M_30FPS_12BIT
+SENSOR1_TYPE ?= OV_OS08A20_MIPI_8M_30FPS_12BIT
+SENSOR2_TYPE ?= OV_OS08A20_MIPI_8M_30FPS_12BIT
+SENSOR3_TYPE ?= OV_OS08A20_MIPI_8M_30FPS_12BIT
+
+MPI_LIBS := -L$(REL_LIB) -lss_mpi
+
+ifeq ($(CONFIG_OT_ISP_SUPPORT), y)
+MPI_LIBS += -lss_ae
+MPI_LIBS += -lss_isp
+MPI_LIBS += -lot_isp
+MPI_LIBS += -lss_awb
+MPI_LIBS += -lss_dehaze
+MPI_LIBS += -lss_extend_stats
+MPI_LIBS += -lss_drc
+MPI_LIBS += -lss_ldci
+MPI_LIBS += -lss_crb
+MPI_LIBS += -lss_bnr
+MPI_LIBS += -lss_calcflicker
+MPI_LIBS += -lss_ir_auto
+MPI_LIBS += -lss_acs
+MPI_LIBS += -lss_acs
+MPI_LIBS += -lsns_hy_s0603
+MPI_LIBS += -lsns_os08a20
+endif
+
+
+ifeq ($(CONFIG_OT_AUDIO_SUPPORT), y)
+AUDIO_LIBA := -lss_voice_engine
+AUDIO_LIBA += -lss_upvqe
+AUDIO_LIBA += -lss_dnvqe
+AUDIO_LIBA += -laac_comm
+AUDIO_LIBA += -laac_enc
+AUDIO_LIBA += -laac_dec
+AUDIO_LIBA += -laac_sbr_enc
+AUDIO_LIBA += -laac_sbr_dec
+endif
+
+COMMON_DIR ?= $(PWD)/../common
+ifeq ($(CONFIG_OT_AUDIO_SUPPORT), y)
+AUDIO_ADP_DIR ?= $(PWD)/../audio/adp
+endif
+
+INC_FLAGS := -I$(REL_INC)
+INC_FLAGS += -I$(REL_INC)
+INC_FLAGS += -I$(SDK_PATH)/$(EXTDRV)/es8388
+INC_FLAGS += -I$(SDK_PATH)/$(EXTDRV)/lt8618sx
+
+ISP_VERSION := ISP_V2
+
+CFLAGS += -Wall -g $(INC_FLAGS) -D$(OT_ARCH) -D$(OT_FPGA) -lpthread -lm -ldl -D$(ISP_VERSION)
+ifeq ($(CONFIG_LIBC_TYPE),glibc)
+CFLAGS += -lstdc++
+else
+CFLAGS += -lc++ -lc
+endif
+
+CFLAGS += $(LIBS_CFLAGS)
+CFLAGS += $(LIBS_EXEC_CFLAGS)
+CFLAGS += $(MPP_CFLAGS)
+CFLAGS += -DSENSOR0_TYPE=$(SENSOR0_TYPE)
+CFLAGS += -DSENSOR1_TYPE=$(SENSOR1_TYPE)
+CFLAGS += -DSENSOR2_TYPE=$(SENSOR2_TYPE)
+CFLAGS += -DSENSOR3_TYPE=$(SENSOR3_TYPE)
+
+ifeq ($(MEM_SHARE), y)
+	CFLAGS += -DSAMPLE_MEM_SHARE_ENABLE
+endif
+
+################ select audio codec type for your sample ################
+#external acodec
+#ACODEC_TYPE ?= ACODEC_TYPE_ES8388
+ACODEC_TYPE ?= ACODEC_TYPE_INNER
+INNER_HDMI ?= y
+
+ifeq ($(ACODEC_TYPE), ACODEC_TYPE_ES8388)
+	CFLAGS += -DOT_ACODEC_TYPE_ES8388
+endif
+
+ifeq ($(INNER_HDMI), y)
+	CFLAGS += -DOT_ACODEC_TYPE_HDMI
+endif
+
+ifeq ($(ACODEC_TYPE), ACODEC_TYPE_INNER)
+	CFLAGS += -DOT_ACODEC_TYPE_INNER
+endif
+
+ifeq ($(CONFIG_OT_AUDIO_SUPPORT), y)
+################ select audio module library type for your sample ################
+AUDIO_MODULE_LIB_TYPE ?= AUDIO_LIB_TYPE_STATIC
+#AUDIO_MODULE_LIB_TYPE ?= AUDIO_LIB_TYPE_SHARE
+ifeq ($(AUDIO_MODULE_LIB_TYPE), AUDIO_LIB_TYPE_STATIC)
+##### VQE #####
+	CFLAGS += -DOT_VQE_USE_STATIC_MODULE_REGISTER
+	AUDIO_LIBA += -lvqe_res
+	AUDIO_LIBA += -lvqe_record
+	AUDIO_LIBA += -lvqe_hpf
+	AUDIO_LIBA += -lvqe_anr
+	AUDIO_LIBA += -lvqe_aec
+	AUDIO_LIBA += -lvqe_agc
+	AUDIO_LIBA += -lvqe_eq
+	AUDIO_LIBA += -lvqe_talkv2
+##### AAC #####
+	CFLAGS += -DOT_AAC_USE_STATIC_MODULE_REGISTER
+	AUDIO_LIBA += -laac_dec
+	AUDIO_LIBA += -laac_enc
+	AUDIO_LIBA += -laac_comm
+	CFLAGS += -DOT_AAC_HAVE_SBR_LIB
+	AUDIO_LIBA += -laac_sbr_dec
+	AUDIO_LIBA += -laac_sbr_enc
+endif
+endif
+
+################ config gyro dis for your sample ################
+GYRO_DIS ?= n
+
+ifeq ($(GYRO_DIS), y)
+	CFLAGS += -DOT_GYRODIS_SUPPORT
+	MPI_LIBS += -lss_motionfusion
+endif
+
+#########################################################################
+#COMM_SRC := $(wildcard $(COMMON_DIR)/*.c)
+COMM_SRC := $(wildcard $(COMMON_DIR)/sample_comm_sys.c)
+COMM_SRC += $(wildcard $(COMMON_DIR)/sample_comm_isp.c)
+COMM_SRC += $(wildcard $(COMMON_DIR)/sample_comm_vi.c)
+COMM_SRC += $(wildcard $(COMMON_DIR)/sample_comm_vo.c)
+COMM_SRC += $(wildcard $(COMMON_DIR)/sample_comm_mipi_tx.c)
+COMM_SRC += $(wildcard $(COMMON_DIR)/sample_comm_vpss.c)
+COMM_SRC += $(wildcard $(COMMON_DIR)/loadbmp.c)
+COMM_SRC += $(wildcard $(COMMON_DIR)/sample_comm_vdec.c)
+ifeq ($(CONFIG_OT_AUDIO_SUPPORT), y)
+COMM_SRC += $(wildcard $(COMMON_DIR)/sample_comm_audio.c)
+endif
+COMM_SRC += $(wildcard $(COMMON_DIR)/sample_comm_venc.c)
+COMM_SRC += $(wildcard $(COMMON_DIR)/sample_comm_region.c)
+COMM_SRC += $(wildcard $(COMMON_DIR)/sample_ipc.c)
+ifeq ($(CONFIG_DRIVER_SPACE_TYPE),user_space)
+COMM_SRC += $(wildcard $(COMMON_DIR)/sdk_exit.c)
+COMM_SRC += $(wildcard $(COMMON_DIR)/sdk_init.c)
+endif
+COMM_OBJ := $(COMM_SRC:%.c=%.o)
+COMM_INC := -I$(COMMON_DIR)
+ifeq ($(CONFIG_OT_AUDIO_SUPPORT), y)
+COMM_INC += -I$(AUDIO_ADP_DIR)
+endif
+
+MEDIA_MSG_CLIENT_SRC := $(wildcard $(COMMON_DIR)/media_msg/client/*.c)
+MEDIA_MSG_CLIENT_OBJ := $(MEDIA_MSG_CLIENT_SRC:%.c=%.o)
+
+MEDIA_MSG_SERVER_SRC := $(wildcard $(COMMON_DIR)/media_msg/server/*.c)
+MEDIA_MSG_SERVER_OBJ := $(MEDIA_MSG_SERVER_SRC:%.c=%.o)
+
+MEDIA_MSG_INC := -I$(COMMON_DIR)/media_msg/include
+MEDIA_MSG_INC += -I$(SDK_PATH)/ot_syslink/ipcmsg/include
+MEDIA_MSG_INC += -I$(SDK_PATH)/ot_syslink/datafifo/include
+
+ifeq ($(CONFIG_DRIVER_SPACE_TYPE),user_space)
+MPI_LIBS +=  -L$(REL_LIB)/svp_npu -lsvp_acl
+MPI_LIBS += -L$(REL_LIB)/svp_npu -lprotobuf-c
+SDK_LIB_PATH := -L$(REL_LIB) -L$(REL_LIB)/extdrv
+SDK_LIB := $(SDK_LIB_PATH)
+SDK_LIB += -l$(KO_PREFIX)_osal
+SDK_LIB += -l$(KO_PREFIX)_base
+SDK_LIB += -l$(KO_PREFIX)_sys
+#SDK_LIB += -l$(KO_PREFIX)_vb
+SDK_LIB += -l$(KO_PREFIX)_chnl
+SDK_LIB += -l$(KO_PREFIX)_rgn
+SDK_LIB += -l$(KO_PREFIX)_vpp
+SDK_LIB += -l$(KO_PREFIX)_vo
+SDK_LIB += -l$(KO_PREFIX)_vgs
+SDK_LIB += -l$(KO_PREFIX)_vpss
+SDK_LIB += -l$(KO_PREFIX)_vdec
+SDK_LIB += -l$(KO_PREFIX)_h265e
+SDK_LIB += -l$(KO_PREFIX)_h264e
+SDK_LIB += -l$(KO_PREFIX)_jpege
+SDK_LIB += -l$(KO_PREFIX)_venc
+#SDK_LIB += -l$(KO_PREFIX)_venc_svr
+SDK_LIB += -l$(KO_PREFIX)_vedu
+SDK_LIB += -l$(KO_PREFIX)_vi
+SDK_LIB += -l$(KO_PREFIX)_mpi_isp
+SDK_LIB += -l$(KO_PREFIX)_rc
+SDK_LIB += -l$(KO_PREFIX)_jpegd
+SDK_LIB += -lss_hdmi
+SDK_LIB += -l$(KO_PREFIX)_vfmw
+SDK_LIB += -l$(KO_PREFIX)_gdc
+SDK_LIB += -l$(KO_PREFIX)_dis
+SDK_LIB += -l$(KO_PREFIX)_irq
+SDK_LIB += -lss_dpu_match
+SDK_LIB += -lss_dpu_rect
+SDK_LIB += -lss_mau
+SDK_LIB += -lss_ive
+SDK_LIB += -lss_pqp
+#SDK_LIB += -l$(KO_PREFIX)_avs
+# SDK_LIB += -l$(KO_PREFIX)_mcf
+# SDK_LIB += -l$(KO_PREFIX)_mcf_vi
+SDK_LIB += -l$(KO_PREFIX)_sensor_i2c
+SDK_LIB += -l$(KO_PREFIX)_sensor_spi
+SDK_LIB += -l$(KO_PREFIX)_pwm
+SDK_LIB += -l$(KO_PREFIX)_piris
+#SDK_LIB += -ltde
+
+ifeq ($(CONFIG_OT_AUDIO_SUPPORT),y)
+SDK_LIB += -l$(KO_PREFIX)_aio
+SDK_LIB += -l$(KO_PREFIX)_ai
+SDK_LIB += -l$(KO_PREFIX)_ao
+SDK_LIB += -l$(KO_PREFIX)_aenc
+SDK_LIB += -l$(KO_PREFIX)_adec
+SDK_LIB += -l$(KO_PREFIX)_acodec
+
+MPI_LIBS += $(AUDIO_LIBA)
+endif
+
+ifeq ($(GYRO_DIS),y)
+SDK_LIB +=	-l$(KO_PREFIX)_motionfusion_user
+SDK_LIB +=	-l$(KO_PREFIX)_gyrodis
+SDK_LIB +=	-l$(KO_PREFIX)_spi
+SDK_LIB +=	-lmotionsensor_mng
+SDK_LIB +=	-lmotionsensor_chip
+endif
+
+ifeq ($(CONFIG_OT_HEIF_SUPPORT),y)
+SDK_LIB += -lheif
+SDK_LIB += -lfileformat
+endif
+
+endif
+
+CFLAGS += -DDRM_OPTION_ENABLE

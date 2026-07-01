@@ -1,0 +1,136 @@
+# Copyright (c) 2020 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//build/lite/config/component/lite_component.gni")
+import("//build/lite/config/subsystem/aafwk/path.gni")
+import("//build/lite/ndk/ndk.gni")
+import("//device/soc/hisilicon/common/hal/display/config.gni")
+
+if (board_name == "hispark_taurus" || board_name == "hispark_aries") {
+  group("hdi_camera") {}
+} else {
+  shared_library("hdi_camera") {
+    output_name = "hdi_camera"
+    sources = [
+      "./src/hal_camera.c",
+      "./src/hi_camera_vi.c",
+    ]
+    include_dirs = [
+    "src",
+    "../../common/source/include",
+    "//drivers/peripheral/display/interfaces/include",
+    "//drivers/peripheral/base",
+    "//foundation/multimedia/media_utils_lite/hals",
+    "//device/soc/hisilicon/common/hal/middleware/source/component/otconfaccess/include/",
+    "//device/soc/hisilicon/common/hal/middleware/source/common/include/"
+    ]
+    ldflags = [ "-lss_mpi" ]
+    ldflags += [ "-lotconfaccess" ]
+    if (board_name == "hispark_aifly" || board_name == "hispark_aiflylite") {
+      ldflags += [ "-lot_osal" ]
+      ldflags += [ "-lot_irq" ]
+      ldflags += [ "-lss_isp" ]
+      ldflags += [ "-lot_mpi_isp" ]
+      ldflags += [ "-lot_isp" ]
+      ldflags += [ "-lot_base" ]
+      ldflags += [ "-lss_crb" ]
+      ldflags += [ "-lss_ir_auto" ]
+      ldflags += [ "-lss_awb" ]
+      ldflags += [ "-lss_ive" ]
+      ldflags += [ "-lss_dnvqe" ]
+      ldflags += [ "-lss_drc" ]
+      ldflags += [ "-lss_ldci" ]
+      ldflags += [ "-lss_upvqe" ]
+      ldflags += [ "-lss_dehaze" ]
+      ldflags += [ "-lss_voice_engine" ]
+      ldflags += [ "-lss_ae" ]
+      ldflags += [ "-lss_bnr" ]
+      ldflags += [ "-lss_acs" ]
+      ldflags += [ "-lss_extend_stats" ]
+      ldflags += [ "-lss_calcflicker" ]
+      ldflags += [ "-lss_hdmi" ]
+      ldflags += [ "-lot_sys" ]
+      ldflags += [ "-lot_chnl" ]
+      ldflags += [ "-lot_rgn" ]
+      ldflags += [ "-lot_dis" ]
+      ldflags += [ "-lot_vpp" ]
+      ldflags += [ "-lot_vi" ]
+      ldflags += [ "-lot_vpss" ]
+      ldflags += [ "-lot_vo" ]
+      ldflags += [ "-lot_vedu" ]
+      ldflags += [ "-lot_rc" ]
+      ldflags += [ "-lot_venc" ]
+      ldflags += [ "-lot_h264e" ]
+      ldflags += [ "-lot_h265e" ]
+      ldflags += [ "-lot_jpege" ]
+      ldflags += [ "-lot_jpegd" ]
+      ldflags += [ "-lot_vfmw" ]
+      ldflags += [ "-lot_vdec" ]
+      ldflags += [ "-lot_aio" ]
+      ldflags += [ "-lot_ai" ]
+      ldflags += [ "-lot_ao" ]
+      ldflags += [ "-lot_aenc" ]
+      ldflags += [ "-lot_adec" ]
+      ldflags += [ "-lot_acodec" ]
+      ldflags += [ "-lot_sensor_i2c" ]
+      ldflags += [ "-lot_gdc" ]
+      ldflags += [ "-lot_vgs" ]
+    }
+
+  deps = [
+    "//third_party/bounds_checking_function:libsec_shared",
+    "//device/soc/hisilicon/common/hal/display:display_layer",
+    "//device/soc/hisilicon/common/hal/media:hardware_media_sdk"
+  ]
+
+  #To enable low latency for distributed cameras, add the macro "ENABLE_DISTRIBUTED_CAMERA_LOW_DELAY " after the [defines] variable.
+  defines = [ "HAVE_DISPLAY" ]
+    if (graphic_utils_lite_enable_drm_display_hal) {
+      defines += [ "GRAPHIC_UTILS_LITE_ENABLE_DRM_DISPLAY_HAL" ]
+    }
+    if ((board_name == "hispark_aiflylite" || board_name == "hispark_aifly") && ohos_kernel_type == "linux") {
+    sdk_lib_path = rebase_path("${root_out_dir}/sdk_linux/src_tmp/smp/a55_linux/mpp/out/lib")
+    ldflags += [ "-pthread" ]
+    ldflags += [ "-rdynamic" ]
+    defines += [ "__SS928V100__" ]
+    CHIP_TYPE = "ss928v100"
+    COMPILE_TYPE = "clang_musl"
+    ldflags += [ "-L${ohos_root_path}/device/soc/hisilicon/common/hal/middleware/source/component/otconfaccess/lib/$CHIP_TYPE/$COMPILE_TYPE/" ]
+    ldflags += [ "-L${sdk_lib_path}" ]
+    include_dirs +=
+          [ "${root_out_dir}/sdk_linux/src_tmp/smp/a55_linux/mpp/out/include" ]
+    include_dirs +=
+          [ "${root_out_dir}/sdk_linux/src_tmp/smp/a55_linux/mpp/cbb/isp/include" ]
+    }
+  }
+}
+
+executable("hal_sample_camera") {
+  sources = [
+    "src/sample_camera.c",
+  ]
+  cflags = [ "-Wall" ]
+  cflags_cc = cflags
+  include_dirs = ["//foundation/multimedia/media_utils_lite/hals"]
+
+  ldflags = [ "-lpthread" ]
+  ldflags += [ "-Wl,-rpath-link=$ohos_root_path/$root_out_dir" ]
+  ldflags += [ "-lhdi_camera" ]
+  ldflags += [ "-lhdi_videodisplayer" ]
+
+  deps = [
+    ":hdi_camera",
+    "//device/soc/hisilicon/common/hal/display:display_layer",
+  ]
+  output_dir = "$root_out_dir/dev_tools"
+}

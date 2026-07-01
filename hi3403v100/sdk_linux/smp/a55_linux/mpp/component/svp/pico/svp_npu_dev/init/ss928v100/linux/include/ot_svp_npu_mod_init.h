@@ -1,0 +1,32 @@
+/*
+ * Copyright (c) 2025 HiSilicon (Shanghai) Technologies Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, see
+ * <https://www.gnu.org/licenses/>.
+ */
+#ifndef OT_SVP_NPU_MOD_INIT_H
+#define OT_SVP_NPU_MOD_INIT_H
+#include "ot_type.h"
+
+typedef struct {
+    td_u16 max_task_node_num;
+    td_u8 power_save_en;
+    td_u8 reserved;
+} ot_svp_npu_mod_param;
+
+td_s32 svp_npu_set_init_reg(td_u32 *svp_npu_reg[], td_u32 num);
+td_void svp_npu_set_mod_param(ot_svp_npu_mod_param *param);
+td_s32 svp_npu_mod_init(td_void);
+td_void svp_npu_mod_exit(td_void);
+#endif

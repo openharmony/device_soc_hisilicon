@@ -1,0 +1,4125 @@
+diff --git a/Makefile b/Makefile
+index 721246d..8b6756d 100644
+--- a/Makefile
++++ b/Makefile
+@@ -104,6 +104,8 @@ else
+         LOG_LEVEL	:=	20
+ endif
+ 
++BUILD_STRING := $(PLAT)
++
+ # Default build string (git branch and commit)
+ ifeq (${BUILD_STRING},)
+         BUILD_STRING	:=	$(shell git describe --always --dirty --tags 2> /dev/null)
+diff --git a/README.md b/README.md
+new file mode 100644
+index 0000000..59599da
+--- /dev/null
++++ b/README.md
+@@ -0,0 +1,2 @@
++# arm-trusted-firmware
++
+diff --git a/bl31/aarch64/bl31_entrypoint.S b/bl31/aarch64/bl31_entrypoint.S
+index 1ad26e4..0bc5d37 100644
+--- a/bl31/aarch64/bl31_entrypoint.S
++++ b/bl31/aarch64/bl31_entrypoint.S
+@@ -27,10 +27,23 @@ func bl31_entrypoint
+ 	 * Stash the previous bootloader arguments x0 - x3 for later use.
+ 	 * ---------------------------------------------------------------
+ 	 */
++#if (defined(PLAT_ss928v100) || defined(PLAT_ss927v100))
++	ldr x0,  =OS_SYS_CTRL_REG2
++	ldr x1,  =OS_SYS_CTRL_REG4
++#elif defined(PLAT_ss528v100)
++	mov x0, 8
++	mov x1, 16
++#endif
++	ldr x20, [x0]
++	ldr x21, [x1]
++	mov x22, #0
++	mov x23, #0
++/*
+ 	mov	x20, x0
+ 	mov	x21, x1
+ 	mov	x22, x2
+ 	mov	x23, x3
++*/
+ 
+ 	/* --------------------------------------------------------------------
+ 	 * If PIE is enabled, fixup the Global descriptor Table and dynamic
+diff --git a/drivers/auth/auth_mod.c b/drivers/auth/auth_mod.c
+index a6538c4..10913c4 100644
+--- a/drivers/auth/auth_mod.c
++++ b/drivers/auth/auth_mod.c
+@@ -233,7 +233,7 @@ static int auth_nvctr(const auth_method_param_nv_ctr_t *param,
+ 		      const auth_img_desc_t *img_desc,
+ 		      void *img, unsigned int img_len)
+ {
+-	char *p;
++	unsigned char *p;
+ 	void *data_ptr = NULL;
+ 	unsigned int data_len, len, i;
+ 	unsigned int cert_nv_ctr, plat_nv_ctr;
+@@ -247,16 +247,24 @@ static int auth_nvctr(const auth_method_param_nv_ctr_t *param,
+ 
+ 	/* Parse the DER encoded integer */
+ 	assert(data_ptr);
+-	p = (char *)data_ptr;
+-	if (*p != ASN1_INTEGER) {
++	p = (unsigned char *)data_ptr;
++
++	/*
++	 * Integers must be at least 3 bytes: 1 for tag, 1 for length, and 1
++	 * for value.  The first byte (tag) must be ASN1_INTEGER.
++	 */
++	if ((data_len < 3) || (*p != ASN1_INTEGER)) {
+ 		/* Invalid ASN.1 integer */
+ 		return 1;
+ 	}
+ 	p++;
+ 
+-	/* NV-counters are unsigned integers up to 32-bit */
+-	len = (unsigned int)(*p & 0x7f);
+-	if ((*p & 0x80) || (len > 4)) {
++	/*
++	 * NV-counters are unsigned integers up to 31 bits.  Trailing
++	 * padding is not allowed.
++	 */
++	len = (unsigned int)*p;
++	if ((len > 4) || (data_len - 2 != len)) {
+ 		return 1;
+ 	}
+ 	p++;
+diff --git a/drivers/auth/mbedtls/mbedtls_x509_parser.c b/drivers/auth/mbedtls/mbedtls_x509_parser.c
+index 129566b..30d2d01 100644
+--- a/drivers/auth/mbedtls/mbedtls_x509_parser.c
++++ b/drivers/auth/mbedtls/mbedtls_x509_parser.c
+@@ -290,57 +290,79 @@ static int cert_parse(void *img, unsigned int img_len)
+ 
+ 	/*
+ 	 * extensions      [3]  EXPLICIT Extensions OPTIONAL
++	 * }
++	 *
++	 * X.509 and RFC5280 allow omitting the extensions entirely.
++	 * However, in TF-A, a certificate with no extensions would
++	 * always fail later on, as the extensions contain the
++	 * information needed to authenticate the next stage in the
++	 * boot chain.  Furthermore, get_ext() assumes that the
++	 * extensions have been parsed into v3_ext, and allowing
++	 * there to be no extensions would pointlessly complicate
++	 * the code.  Therefore, just reject certificates without
++	 * extensions.  This is also why version 1 and 2 certificates
++	 * are rejected above.
+ 	 */
+ 	ret = mbedtls_asn1_get_tag(&p, end, &len,
+ 				   MBEDTLS_ASN1_CONTEXT_SPECIFIC |
+ 				   MBEDTLS_ASN1_CONSTRUCTED | 3);
+-	if (ret != 0) {
++	if ((ret != 0) || (len != (size_t)(end - p))) {
+ 		return IMG_PARSER_ERR_FORMAT;
+ 	}
+ 
+ 	/*
+ 	 * Extensions  ::=  SEQUENCE SIZE (1..MAX) OF Extension
++	 * -- must use all remaining bytes in TBSCertificate
+ 	 */
+ 	v3_ext.p = p;
+ 	ret = mbedtls_asn1_get_tag(&p, end, &len, MBEDTLS_ASN1_CONSTRUCTED |
+ 				   MBEDTLS_ASN1_SEQUENCE);
+-	if (ret != 0) {
++	if ((ret != 0) || (len != (size_t)(end - p))) {
+ 		return IMG_PARSER_ERR_FORMAT;
+ 	}
+-	v3_ext.len = (p + len) - v3_ext.p;
++	v3_ext.len = end - v3_ext.p;
+ 
+ 	/*
+-	 * Check extensions integrity
++	 * Check extensions integrity.  At least one extension is
++	 * required: the ASN.1 specifies a minimum size of 1, and at
++	 * least one extension is needed to authenticate the next stage
++	 * in the boot chain.
+ 	 */
+-	while (p < end) {
++	do {
++		unsigned char *end_ext_data;
++
+ 		ret = mbedtls_asn1_get_tag(&p, end, &len,
+ 					   MBEDTLS_ASN1_CONSTRUCTED |
+ 					   MBEDTLS_ASN1_SEQUENCE);
+ 		if (ret != 0) {
+ 			return IMG_PARSER_ERR_FORMAT;
+ 		}
++		end_ext_data = p + len;
+ 
+ 		/* Get extension ID */
+-		ret = mbedtls_asn1_get_tag(&p, end, &len, MBEDTLS_ASN1_OID);
++		ret = mbedtls_asn1_get_tag(&p, end_ext_data, &len, MBEDTLS_ASN1_OID);
+ 		if (ret != 0) {
+ 			return IMG_PARSER_ERR_FORMAT;
+ 		}
+ 		p += len;
+ 
+ 		/* Get optional critical */
+-		ret = mbedtls_asn1_get_bool(&p, end, &is_critical);
++		ret = mbedtls_asn1_get_bool(&p, end_ext_data, &is_critical);
+ 		if ((ret != 0) && (ret != MBEDTLS_ERR_ASN1_UNEXPECTED_TAG)) {
+ 			return IMG_PARSER_ERR_FORMAT;
+ 		}
+ 
+-		/* Data should be octet string type */
+-		ret = mbedtls_asn1_get_tag(&p, end, &len,
++		/*
++		 * Data should be octet string type and must use all bytes in
++		 * the Extension.
++		 */
++		ret = mbedtls_asn1_get_tag(&p, end_ext_data, &len,
+ 					   MBEDTLS_ASN1_OCTET_STRING);
+-		if (ret != 0) {
++		if ((ret != 0) || ((p + len) != end_ext_data)) {
+ 			return IMG_PARSER_ERR_FORMAT;
+ 		}
+-		p += len;
+-	}
++		p = end_ext_data;
++	} while (p < end);
+ 
+ 	if (p != end) {
+ 		return IMG_PARSER_ERR_FORMAT;
+diff --git a/lib/cpus/aarch64/cortex_a55.S b/lib/cpus/aarch64/cortex_a55.S
+index 8e13824..e2c5eca 100644
+--- a/lib/cpus/aarch64/cortex_a55.S
++++ b/lib/cpus/aarch64/cortex_a55.S
+@@ -1,5 +1,5 @@
+ /*
+- * Copyright (c) 2017-2019, ARM Limited and Contributors. All rights reserved.
++ * Copyright (c) 2017-2022, ARM Limited and Contributors. All rights reserved.
+  *
+  * SPDX-License-Identifier: BSD-3-Clause
+  */
+@@ -11,10 +11,17 @@
+ #include <cpu_macros.S>
+ #include <plat_macros.S>
+ 
+-/* Hardware handled coherency */
+-#if HW_ASSISTED_COHERENCY == 0
+-#error "Cortex-A55 must be compiled with HW_ASSISTED_COHERENCY enabled"
+-#endif
++/* ---------------------------------------------
++ * Disable L1 data cache and unified L2 cache
++ * ---------------------------------------------
++ */
++func cortex_a55_disable_dcache
++	mrs     x1, sctlr_el3
++	bic     x1, x1, #SCTLR_C_BIT
++	msr     sctlr_el3, x1
++	isb
++	ret
++endfunc cortex_a55_disable_dcache
+ 
+ 	/* --------------------------------------------------
+ 	 * Errata Workaround for Cortex A55 Errata #768277.
+@@ -278,12 +285,52 @@ func cortex_a55_core_pwr_dwn
+ 	 * Enable CPU power down bit in power control register
+ 	 * ---------------------------------------------
+ 	 */
++	mrs     x0, mpidr_el1
++	and     x1, x0, #MPIDR_CPU_MASK
++	and     x0, x0, #MPIDR_CLUSTER_MASK
++	add     x0, x1, x0, LSR #8
++	mov     w1, #CPU_CTRL_RANGE
++	mul	w1, w1, w0
++	ldr     w2, =MISC_REG_ENABLE_CPU0
++	add     w1, w1, w2
++	ldr     w0, [x1]
++	orr     w0, w0, #CPU_HW_STATE_MACHINE
++	str     w0, [x1]
++	isb
+ 	mrs	x0, CORTEX_A55_CPUPWRCTLR_EL1
+ 	orr	x0, x0, #CORTEX_A55_CORE_PWRDN_EN_MASK
+ 	msr	CORTEX_A55_CPUPWRCTLR_EL1, x0
+ 	isb
+ 	ret
+ endfunc cortex_a55_core_pwr_dwn
++func cortex_a55_cluster_pwr_dwn
++	mov	x18, x30
++	/* ---------------------------------------------
++	 * Turn off caches.
++	 * ---------------------------------------------
++	 */
++	bl	cortex_a55_disable_dcache
++	/* ---------------------------------------------
++	 * Flush L1 caches.
++	 * ---------------------------------------------
++	 */
++	mov	x0, #DCCISW
++	bl	dcsw_op_level1
++	/* ---------------------------------------------
++	 * Disable the optional ACP.
++	 * ---------------------------------------------
++	 */
++	bl	plat_disable_acp
++	/* ---------------------------------------------
++	 * Flush L2 caches.
++	 * ---------------------------------------------
++	 */
++	mov	x0, #DCCISW
++	bl	dcsw_op_level2
++	mov	x30, x18
++	isb
++	ret
++endfunc cortex_a55_cluster_pwr_dwn
+ 
+ #if REPORT_ERRATA
+ /*
+@@ -333,4 +380,5 @@ endfunc cortex_a55_cpu_reg_dump
+ 
+ declare_cpu_ops cortex_a55, CORTEX_A55_MIDR, \
+ 	cortex_a55_reset_func, \
+-	cortex_a55_core_pwr_dwn
++	cortex_a55_core_pwr_dwn, \
++	cortex_a55_cluster_pwr_dwn
+diff --git a/plat/vendor/common/vendor_gicv2.c b/plat/vendor/common/vendor_gicv2.c
+new file mode 100644
+index 0000000..bd32006
+--- /dev/null
++++ b/plat/vendor/common/vendor_gicv2.c
+@@ -0,0 +1,90 @@
++/*
++ * Copyright (c) 2025 HiSilicon (Shanghai) Technologies Co., Ltd.
++ *
++ * This program is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU General Public License
++ * as published by the Free Software Foundation; either version 2
++ * of the License, or (at your option) any later version.
++ * 
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ * 
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, see
++ * <https://www.gnu.org/licenses/>.
++ */
++
++#include <common/bl_common.h>
++#include <drivers/arm/gicv2.h>
++#include <platform_def.h>
++
++/******************************************************************************
++ * The following functions are defined as weak to allow a platform to override
++ * the way the GICv2 driver is initialised and used.
++ *****************************************************************************/
++#pragma weak plat_gic_driver_init
++#pragma weak plat_gic_init
++#pragma weak plat_gic_cpuif_enable
++#pragma weak plat_gic_cpuif_disable
++#pragma weak plat_gic_pcpu_init
++
++/******************************************************************************
++ * On a GICv2 system, the Group 1 secure interrupts are treated as Group 0
++ * interrupts.
++ *****************************************************************************/
++const unsigned int g0_interrupt_array[] = {
++	PLAT_VENDOR_G1S_IRQS,
++};
++/*
++ * Ideally `gic_data` structure definition should be a `const` but it
++ * is kept as modifiable for overwriting with different GICD and GICC base when
++ * running on FVP with VE memory map.
++ */
++gicv2_driver_data_t gic_data = {
++	.gicd_base = PLAT_VENDOR_GICD_BASE,
++	.gicc_base = PLAT_VENDOR_GICC_BASE,
++	.g0_interrupt_num = ARRAY_SIZE(g0_interrupt_array),
++	.g0_interrupt_array = g0_interrupt_array,
++};
++
++/******************************************************************************
++ * common helper to initialize the GICv2 only driver.
++ *****************************************************************************/
++void plat_gic_driver_init(void)
++{
++	gicv2_driver_init(&gic_data);
++}
++
++void plat_gic_init(void)
++{
++	gicv2_distif_init();
++	gicv2_pcpu_distif_init();
++	gicv2_cpuif_enable();
++}
++
++/******************************************************************************
++ * common helper to enable the GICv2 CPU interface
++ *****************************************************************************/
++void plat_gic_cpuif_enable(void)
++{
++	gicv2_cpuif_enable();
++}
++
++/******************************************************************************
++ * common helper to disable the GICv2 CPU interface
++ *****************************************************************************/
++void plat_gic_cpuif_disable(void)
++{
++	gicv2_cpuif_disable();
++}
++
++/******************************************************************************
++ * common helper to initialize the per cpu distributor interface
++ * in GICv2
++ *****************************************************************************/
++void plat_gic_pcpu_init(void)
++{
++	gicv2_pcpu_distif_init();
++}
+diff --git a/plat/vendor/common/vendor_gicv3.c b/plat/vendor/common/vendor_gicv3.c
+new file mode 100644
+index 0000000..f13340e
+--- /dev/null
++++ b/plat/vendor/common/vendor_gicv3.c
+@@ -0,0 +1,132 @@
++/*
++ * Copyright (c) 2025 HiSilicon (Shanghai) Technologies Co., Ltd.
++ *
++ * This program is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU General Public License
++ * as published by the Free Software Foundation; either version 2
++ * of the License, or (at your option) any later version.
++ * 
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ * 
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, see
++ * <https://www.gnu.org/licenses/>.
++ */
++
++#include <lib/mmio.h>
++#include <drivers/arm/gicv3.h>
++#include <plat/common/platform.h>
++#include <platform_def.h>
++#include <common/debug.h>
++
++
++/* GIC600-specific register offsets */
++#define GICR_PWRR	0x24
++
++/* GICR_PWRR fields */
++#define PWRR_RDPD_SHIFT		0
++#define PWRR_RDGPD_SHIFT	2
++#define PWRR_RDGPO_SHIFT	3
++
++#define PWRR_RDGPD	(1 << PWRR_RDGPD_SHIFT)
++#define PWRR_RDGPO	(1 << PWRR_RDGPO_SHIFT)
++
++/* Values to write to GICR_PWRR register to power redistributor */
++#define PWRR_ON		(0 << PWRR_RDPD_SHIFT)
++#define PWRR_OFF	(1 << PWRR_RDPD_SHIFT)
++
++/* GIC600-specific accessor functions */
++static void gicr_write_pwrr(uintptr_t base, unsigned int val)
++{
++	mmio_write_32(base + GICR_PWRR, val);
++}
++
++static uint32_t gicr_read_pwrr(uintptr_t base)
++{
++	return mmio_read_32(base + GICR_PWRR);
++}
++
++/******************************************************************************
++ * The following functions are defined as weak to allow a platform to override
++ * the way the GICv3 driver is initialised and used.
++ *****************************************************************************/
++#pragma weak plat_gic_driver_init
++#pragma weak plat_gic_init
++#pragma weak plat_gic_cpuif_enable
++#pragma weak plat_gic_cpuif_disable
++#pragma weak plat_gic_pcpu_init
++
++/* The GICv3 driver only needs to be initialized in EL3 */
++uintptr_t rdistif_base_addrs[PLATFORM_CORE_COUNT];
++
++const gicv3_driver_data_t gic_data = {
++	.gicd_base = PLAT_VENDOR_GICD_BASE,
++	.gicr_base = PLAT_VENDOR_GICR_BASE,
++	.interrupt_props_num = 0,
++	.rdistif_num = PLATFORM_CORE_COUNT,
++	.rdistif_base_addrs = rdistif_base_addrs,
++};
++
++void plat_gic_driver_init(void)
++{
++	/*
++	 * The GICv3 driver is initialized in EL3 and does not need
++	 * to be initialized again in SEL1. This is because the S-EL1
++	 * can use GIC system registers to manage interrupts and does
++	 * not need GIC interface base addresses to be configured.
++	 */
++#if IMAGE_BL31
++	gicv3_driver_init(&gic_data);
++#endif
++}
++
++/******************************************************************************
++ * ARM common helper to initialize the GIC. Only invoked by BL31
++ *****************************************************************************/
++void plat_gic_init(void)
++{
++	int cpu = plat_my_core_pos();
++	/* Power on redistributor */
++	gicr_write_pwrr(PLAT_VENDOR_GICR_BASE + 0x20000 * cpu, PWRR_ON);
++
++	/* Wait until the power on state is reflected */
++	while (gicr_read_pwrr(PLAT_VENDOR_GICR_BASE + 0x20000 * cpu) & PWRR_RDGPO);
++
++	gicv3_distif_init();
++	gicv3_rdistif_init(plat_my_core_pos());
++	gicv3_cpuif_enable(plat_my_core_pos());
++}
++
++/******************************************************************************
++ * ARM common helper to enable the GIC CPU interface
++ *****************************************************************************/
++void plat_gic_cpuif_enable(void)
++{
++	int cpu = plat_my_core_pos();
++	/* Power on redistributor */
++	gicr_write_pwrr(PLAT_VENDOR_GICR_BASE + 0x20000 * cpu, PWRR_ON);
++
++	/* Wait until the power on state is reflected */
++	while (gicr_read_pwrr(PLAT_VENDOR_GICR_BASE + 0x20000 * cpu) & PWRR_RDGPO);
++
++	gicv3_cpuif_enable(plat_my_core_pos());
++}
++
++/******************************************************************************
++ * ARM common helper to disable the GIC CPU interface
++ *****************************************************************************/
++void plat_gic_cpuif_disable(void)
++{
++	gicv3_cpuif_disable(plat_my_core_pos());
++}
++
++/******************************************************************************
++ * ARM common helper to initialize the per-cpu redistributor interface in GICv3
++ *****************************************************************************/
++void plat_gic_pcpu_init(void)
++{
++	gicv3_rdistif_init(plat_my_core_pos());
++}
+diff --git a/plat/vendor/ss927v100/aarch64/plat_helpers.S b/plat/vendor/ss927v100/aarch64/plat_helpers.S
+new file mode 100644
+index 0000000..ee75964
+--- /dev/null
++++ b/plat/vendor/ss927v100/aarch64/plat_helpers.S
+@@ -0,0 +1,403 @@
++/*
++ * Copyright (c) 2025 HiSilicon (Shanghai) Technologies Co., Ltd.
++ *
++ * This program is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU General Public License
++ * as published by the Free Software Foundation; either version 2
++ * of the License, or (at your option) any later version.
++ * 
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ * 
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, see
++ * <https://www.gnu.org/licenses/>.
++ */
++#include <arch.h>
++#include <asm_macros.S>
++#include <assert_macros.S>
++#include <cpu_macros.S>
++#include <cortex_a53.h>
++#include <platform_def.h>
++
++	/* Global functions */
++	.globl	plat_is_my_cpu_primary
++	.globl	plat_my_core_pos
++	.globl	plat_get_my_entrypoint
++	.globl	plat_secondary_cold_boot_setup
++	.globl	platform_mem_init
++	.globl	plat_crash_console_init
++	.globl	plat_crash_console_putc
++	.globl	plat_crash_console_flush
++	.globl	plat_reset_handler
++	.globl	plat_cci_enable
++
++	/* Global variables */
++	.globl	sec_entry_point
++	.globl	ns_image_entrypoint
++	.globl	bl31_phys_base
++
++	/* ---------------------
++	 * Common CPU init code
++	 * ---------------------
++	 */
++.macro	cpu_init_common
++
++#if ENABLE_L2_DYNAMIC_RETENTION
++	/* ---------------------------
++	 * Enable processor retention
++	 * ---------------------------
++	*/
++	mrs	x0, L2ECTLR_EL1
++	mov	x1, #RETENTION_ENTRY_TICKS_512 << L2ECTLR_RET_CTRL_SHIFT
++	bic	x0, x0, #L2ECTLR_RET_CTRL_MASK
++	orr	x0, x0, x1
++	msr	L2ECTLR_EL1, x0
++	isb
++#endif
++
++#if ENABLE_CPU_DYNAMIC_RETENTION
++	mrs	x0, CPUECTLR_EL1
++	mov	x1, #RETENTION_ENTRY_TICKS_512 << CPUECTLR_CPU_RET_CTRL_SHIFT
++	bic	x0, x0, #CPUECTLR_CPU_RET_CTRL_MASK
++	orr	x0, x0, x1
++	msr	CPUECTLR_EL1, x0
++	isb
++#endif
++
++#if ENABLE_NS_L2_CPUECTRL_RW_ACCESS
++	/* -------------------------------------------------------
++	 * Enable L2 and CPU ECTLR RW access from non-secure world
++	 * -------------------------------------------------------
++	*/
++	mov	x0, #ACTLR_EL3_ENABLE_ALL_ACCESS
++	msr	actlr_el3, x0
++	msr	actlr_el2, x0
++	isb
++#endif
++
++	/* --------------------------------
++	 * Enable the cycle count register
++	 * --------------------------------
++	 */
++	mrs	x0, pmcr_el0
++	ubfx	x0, x0, #11, #5		// read PMCR.N field
++	mov	x1, #1
++	lsl	x0, x1, x0
++	sub	x0, x0, #1		// mask of event counters
++	orr	x0, x0, #0x80000000	// disable overflow intrs
++	msr	pmintenclr_el1, x0
++	msr	pmuserenr_el0, x1	// enable user mode access
++
++	/* ----------------------------------------------------------------
++	 * Allow non-privileged access to CNTVCT: Set CNTKCTL (Kernel Count
++	 * register), bit 1 (EL0VCTEN) to enable access to CNTVCT/CNTFRQ
++	 * registers from EL0.
++	 * ----------------------------------------------------------------
++	 */
++	mrs	x0, cntkctl_el1
++	orr	x0, x0, #EL0VCTEN_BIT
++	msr	cntkctl_el1, x0
++.endm
++
++	/* -----------------------------------------------------
++	 * unsigned int plat_is_my_cpu_primary(void);
++	 *
++	 * This function checks if this is the Primary CPU
++	 * -----------------------------------------------------
++	 */
++func plat_is_my_cpu_primary
++	mrs	x0, mpidr_el1
++	and	x0, x0, #(MPIDR_CLUSTER_MASK | MPIDR_CPU_MASK)
++	cmp	x0, #PLAT_VENDOR_PRIMARY_CPU
++	cset	x0, eq
++	ret
++endfunc plat_is_my_cpu_primary
++
++	/* -----------------------------------------------------
++	 * unsigned int plat_my_core_pos(void);
++	 *
++	 * result: CorePos = CoreId + (ClusterId << 1)
++	 * -----------------------------------------------------
++	 */
++func plat_my_core_pos
++	mrs	x0, mpidr_el1
++	and	x1, x0, #MPIDR_CPU_MASK
++	and	x0, x0, #MPIDR_CLUSTER_MASK
++	add	x0, x1, x0, LSR #PLAT_VENDOR_MPIDR_CPU_BIT
++	ret
++endfunc plat_my_core_pos
++
++	/* -----------------------------------------------------
++	 * unsigned long plat_get_my_entrypoint (void);
++	 *
++	 * Main job of this routine is to distinguish between
++	 * a cold and warm boot. If the tegra_sec_entry_point for
++	 * this CPU is present, then it's a warm boot.
++	 *
++	 * -----------------------------------------------------
++	 */
++func plat_get_my_entrypoint
++	adr	x1, sec_entry_point
++	ldr	x0, [x1]
++	ret
++endfunc plat_get_my_entrypoint
++
++	/* -----------------------------------------------------
++	 * void plat_secondary_cold_boot_setup (void);
++	 *
++	 * This function performs any platform specific actions
++	 * needed for a secondary cpu after a cold reset. Right
++	 * now this is a stub function.
++	 * -----------------------------------------------------
++	 */
++func plat_secondary_cold_boot_setup
++	mov	x0, #0
++	ret
++endfunc plat_secondary_cold_boot_setup
++
++	/* --------------------------------------------------------
++	 * void platform_mem_init (void);
++	 *
++	 * Any memory init, relocation to be done before the
++	 * platform boots. Called very early in the boot process.
++	 * --------------------------------------------------------
++	 */
++func platform_mem_init
++	mov	x0, #0
++	ret
++endfunc platform_mem_init
++
++	/* ---------------------------------------------
++	 * int plat_crash_console_init(void)
++	 * Function to initialize the crash console
++	 * without a C Runtime to print crash report.
++	 * Clobber list : x0, x1, x2
++	 * ---------------------------------------------
++	 */
++func plat_crash_console_init
++	mov_imm	x0, PLAT_VENDOR_UART_BASE
++	mov_imm	x1, PLAT_VENDOR_UART_CLOCK
++	mov_imm	x2, PLAT_VENDOR_UART_BAUDRATE
++	b	console_pl011_core_init
++endfunc plat_crash_console_init
++
++	/* ---------------------------------------------
++	 * int plat_crash_console_putc(void)
++	 * Function to print a character on the crash
++	 * console without a C Runtime.
++	 * Clobber list : x1, x2
++	 * ---------------------------------------------
++	 */
++func plat_crash_console_putc
++	mov_imm	x1, PLAT_VENDOR_UART_BASE
++	b	console_pl011_core_putc
++endfunc plat_crash_console_putc
++
++	/* ---------------------------------------------
++	 * int plat_crash_console_flush()
++	 * Function to force a write of all buffered
++	 * data that hasn't been output.
++	 * Out : return -1 on error else return 0.
++	 * Clobber list : x0, x1
++	 * ---------------------------------------------
++	 */
++func plat_crash_console_flush
++	mov_imm	x0, PLAT_VENDOR_UART_BASE
++	b	console_pl011_core_flush
++endfunc plat_crash_console_flush
++	/* ---------------------------------------------------
++	 * Function to handle a platform reset and store
++	 * input parameters passed by BL2.
++	 * ---------------------------------------------------
++	 */
++func plat_reset_handler
++	
++	/* Multiplexing the RAM of the VGS module into VGS */
++	ldr x0, =MISC_REG_SEC_BASE 
++	ldr x1, [x0, #SEC_BOOTRAM_CTRL]
++	and x1, x1, 0xfffffffe
++	str x1, [x0, #SEC_BOOTRAM_CTRL]
++	ret
++
++endfunc plat_reset_handler
++
++func plat_cci_enable
++	/* check cluster */
++	mrs 	x0, mpidr_el1
++	lsr 	x0, x0, #0x8
++	and 	x0, x0, #0xff  /* bit[8] 0: cluster0 1:cluster1 */
++	cmp 	x0, #0x0
++	bne 	cci_cluster1
++	ldr 	x0, =(CLUSTER0_CPU_CTRL)
++	b	enable_cci
++cci_cluster1:
++	ldr 	x0, =(CLUSTER1_CPU_CTRL)
++
++	/*
++	 *	enable cci snoop
++	 */
++enable_cci:
++	ldr 	w2, [x0]
++	mov 	w3, w2
++	lsr 	w3, w3, #8		/* bit[8] 0: cci disabled; 1: cci enabled */
++	and	w3, w3, #0x1
++	cmp 	w3, #0x1
++	beq 	exit_enable_cci
++	and 	w2, w2, #0xfffffdff	/* bit[9]:acinactive should be zero */
++	orr	w2, w2, #0x80		/* bit[7]=1 to enable cci */
++	str 	w2, [x0]
++
++	isb
++	dsb 	sy
++
++wait_cci_status:
++	ldr 	w2, [x0]
++	lsr 	w2, w2, #8		/* bit[8] 0: cci disabled; 1: cci enabled */
++	and	w2, w2, #0x1
++	cmp 	w2, #0x1
++	bne 	wait_cci_status
++
++exit_enable_cci:
++	ret
++
++endfunc plat_cci_enable
++
++	/* ----------------------------------------
++	 * Secure entrypoint function for CPU boot
++	 * ----------------------------------------
++	 */
++	.align 6
++func secure_entrypoint
++
++#if ERRATA_TEGRA_INVALIDATE_BTB_AT_BOOT
++
++	/* -------------------------------------------------------
++	 * Invalidate BTB along with I$ to remove any stale
++	 * entries from the branch predictor array.
++	 * -------------------------------------------------------
++	 */
++	mrs	x0, CPUACTLR_EL1
++	orr	x0, x0, #1
++	msr	CPUACTLR_EL1, x0	/* invalidate BTB and I$ together */
++	dsb	sy
++	isb
++	ic	iallu			/* actual invalidate */
++	dsb	sy
++	isb
++
++	mrs	x0, CPUACTLR_EL1
++	bic	x0, x0, #1
++	msr	CPUACTLR_EL1, X0	/* restore original CPUACTLR_EL1 */
++	dsb	sy
++	isb
++
++	.rept	7
++	nop				/* wait */
++	.endr
++
++	/* -----------------------------------------------
++	 * Extract OSLK bit and check if it is '1'. This
++	 * bit remains '0' for A53 on warm-resets. If '1',
++	 * turn off regional clock gating and request warm
++	 * reset.
++	 * -----------------------------------------------
++	 */
++	mrs	x0, oslsr_el1
++	and	x0, x0, #2
++	mrs	x1, mpidr_el1
++	bics	xzr, x0, x1, lsr #7	/* 0 = slow cluster or warm reset */
++	b.eq	restore_oslock
++	mov	x0, xzr
++	msr	oslar_el1, x0		/* os lock stays 0 across warm reset */
++	mov	x3, #3
++	movz	x4, #0x8000, lsl #48
++	msr	CPUACTLR_EL1, x4	/* turn off RCG */
++	isb
++	msr	rmr_el3, x3		/* request warm reset */
++	isb
++	dsb	sy
++1:	wfi
++	b	1b
++
++	/* --------------------------------------------------
++	 * These nops are here so that speculative execution
++	 * won't harm us before we are done with warm reset.
++	 * --------------------------------------------------
++	 */
++	.rept	65
++	nop
++	.endr
++
++	/* --------------------------------------------------
++	 * Do not insert instructions here
++	 * --------------------------------------------------
++	 */
++#endif
++
++	/* --------------------------------------------------
++	 * Restore OS Lock bit
++	 * --------------------------------------------------
++	 */
++restore_oslock:
++	mov	x0, #1
++	msr	oslar_el1, x0
++
++	cpu_init_common
++
++	/* ---------------------------------------------------------------------
++	 * The initial state of the Architectural feature trap register
++	 * (CPTR_EL3) is unknown and it must be set to a known state. All
++	 * feature traps are disabled. Some bits in this register are marked as
++	 * Reserved and should not be modified.
++	 *
++	 * CPTR_EL3.TCPAC: This causes a direct access to the CPACR_EL1 from EL1
++	 *  or the CPTR_EL2 from EL2 to trap to EL3 unless it is trapped at EL2.
++	 * CPTR_EL3.TTA: This causes access to the Trace functionality to trap
++	 *  to EL3 when executed from EL0, EL1, EL2, or EL3. If system register
++	 *  access to trace functionality is not supported, this bit is RES0.
++	 * CPTR_EL3.TFP: This causes instructions that access the registers
++	 *  associated with Floating Point and Advanced SIMD execution to trap
++	 *  to EL3 when executed from any exception level, unless trapped to EL1
++	 *  or EL2.
++	 * ---------------------------------------------------------------------
++	 */
++	mrs	x1, cptr_el3
++	bic	w1, w1, #TCPAC_BIT
++	bic	w1, w1, #TTA_BIT
++	bic	w1, w1, #TFP_BIT
++	msr	cptr_el3, x1
++
++	/* --------------------------------------------------
++	 * Get secure world's entry point and jump to it
++	 * --------------------------------------------------
++	 */
++	bl	plat_get_my_entrypoint
++	br	x0
++endfunc secure_entrypoint
++
++	.data
++	.align 3
++
++	/* --------------------------------------------------
++	 * CPU Secure entry point - resume from suspend
++	 * --------------------------------------------------
++	 */
++sec_entry_point:
++	.quad	0
++
++	/* --------------------------------------------------
++	 * NS world's cold boot entry point
++	 * --------------------------------------------------
++	 */
++ns_image_entrypoint:
++	.quad	0
++
++	/* --------------------------------------------------
++	 * BL31's physical base address
++	 * --------------------------------------------------
++	 */
++bl31_phys_base:
++	.quad	0
+diff --git a/plat/vendor/ss927v100/aarch64/platform_common.c b/plat/vendor/ss927v100/aarch64/platform_common.c
+new file mode 100644
+index 0000000..0303071
+--- /dev/null
++++ b/plat/vendor/ss927v100/aarch64/platform_common.c
+@@ -0,0 +1,112 @@
++/*
++ * Copyright (c) 2025 HiSilicon (Shanghai) Technologies Co., Ltd.
++ *
++ * This program is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU General Public License
++ * as published by the Free Software Foundation; either version 2
++ * of the License, or (at your option) any later version.
++ * 
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ * 
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, see
++ * <https://www.gnu.org/licenses/>.
++ */
++#include <arch_helpers.h>
++#include <common/bl_common.h>
++#include <common/debug.h>
++#include <platform_def.h>
++#include <lib/xlat_tables/xlat_tables_v2.h>
++#include <lib/mmio.h>
++
++#define writel(val, addr)	mmio_write_32((uintptr_t)addr, (uint32_t)val)
++#define readl(addr)		mmio_read_32((uintptr_t)addr)
++
++/* Table of regions to map using the MMU.  */
++const mmap_region_t plat_mmap[] = {
++	/* for TF text, RO, RW */
++	MAP_REGION_FLAT(DRAM_NS_BASE, DRAM_NS_SIZE,
++			MT_MEMORY | MT_RW | MT_NS),
++	MAP_REGION_FLAT(TEE_SEC_MEM_BASE, TEE_SEC_MEM_SIZE,
++			MT_MEMORY | MT_RW | MT_SECURE),
++	MAP_REGION_FLAT(DEVICE_BASE, DEVICE_SIZE,
++			MT_DEVICE | MT_RW | MT_SECURE),
++	{ 0 }
++
++};
++
++/*******************************************************************************
++ * Macro generating the code for the function setting up the pagetables as per
++ * the platform memory map & initialize the mmu, for the given exception level
++ ******************************************************************************/
++#define DEFINE_CONFIGURE_MMU_EL(_el)					\
++	void configure_mmu_el ## _el(unsigned long total_base,		\
++					  unsigned long total_size,	\
++					  unsigned long ro_start,	\
++					  unsigned long ro_limit,	\
++					  unsigned long coh_start,	\
++					  unsigned long coh_limit)	\
++	{								\
++		mmap_add_region(total_base, total_base,			\
++				total_size,				\
++				MT_MEMORY | MT_RW | MT_SECURE);		\
++		mmap_add_region(ro_start, ro_start,			\
++				ro_limit - ro_start,			\
++				MT_MEMORY | MT_RO | MT_SECURE);		\
++		mmap_add_region(coh_start, coh_start,			\
++				coh_limit - coh_start,			\
++				MT_DEVICE | MT_RW | MT_SECURE);		\
++		mmap_add(plat_mmap);					\
++		init_xlat_tables();					\
++									\
++		enable_mmu_el ## _el(0);				\
++	}
++
++/* Define EL3 variants of the function initialising the MMU */
++DEFINE_CONFIGURE_MMU_EL(3)
++
++enum sec_attr_ctrl0 {
++	SEC_FLAG_GPU    = BIT(0),
++	SEC_FLAG_DSP    = BIT(1),
++	SEC_FLAG_TDE    = BIT(2),
++	SEC_FLAG_GPIO   = BIT(3) | BIT(4) | BIT(5) | BIT(6),
++	SEC_FLAG_JPGD   = BIT(7),
++	SEC_FLAG_PGD    = BIT(8),
++	SEC_FLAG_VEDU   = BIT(10),
++	SEC_FLAG_AIAO   = BIT(12),
++	SEC_FLAG_GEN    = BIT(13) | BIT(14),
++	SEC_FLAG_SHA1   = BIT(15),
++	SEC_FLAG_TIMER  = BIT(17) | BIT(18),
++	SEC_FLAG_I2C    = BIT(20),
++	SEC_FLAG_IR     = BIT(21),
++	SEC_FLAG_USB    = BIT(23),
++	SEC_FLAG_DEGI2C = BIT(25),
++	SEC_FLAG_MCU    = BIT(26) | BIT(27),
++	SEC_FLAG_DDRT   = BIT(28),
++	SEC_FLAG_VICAP  = BIT(29),
++};
++
++#if  DISABLE_TEE == 1
++
++#define VENDOR_SEC_CTRL0_FLAG (SEC_FLAG_DSP  | SEC_FLAG_TDE    | SEC_FLAG_GPIO | SEC_FLAG_JPGD |	\
++			     SEC_FLAG_PGD  | SEC_FLAG_VEDU   | SEC_FLAG_AIAO | SEC_FLAG_GEN  |	\
++			     SEC_FLAG_SHA1 | SEC_FLAG_TIMER  | SEC_FLAG_I2C  | SEC_FLAG_IR   |	\
++			     SEC_FLAG_USB  | SEC_FLAG_DEGI2C | SEC_FLAG_MCU  | SEC_FLAG_DDRT |	\
++			     SEC_FLAG_VICAP)
++#else
++
++#define VENDOR_SEC_CTRL0_FLAG (SEC_FLAG_DSP | SEC_FLAG_TDE  | SEC_FLAG_GPIO | SEC_FLAG_JPGD   |	\
++			     SEC_FLAG_PGD | SEC_FLAG_VEDU | SEC_FLAG_AIAO | SEC_FLAG_SHA1   |	\
++			     SEC_FLAG_I2C | SEC_FLAG_IR   |  SEC_FLAG_USB | SEC_FLAG_DEGI2C |	\
++			     SEC_FLAG_VICAP)
++#endif
++
++
++unsigned int plat_get_syscnt_freq2(void)
++{
++	return SYS_COUNTER_FREQ_IN_TICKS;
++}
++
+diff --git a/plat/vendor/ss927v100/bl31_plat_setup.c b/plat/vendor/ss927v100/bl31_plat_setup.c
+new file mode 100644
+index 0000000..675c7a1
+--- /dev/null
++++ b/plat/vendor/ss927v100/bl31_plat_setup.c
+@@ -0,0 +1,220 @@
++/*
++ * Copyright (c) 2025 HiSilicon (Shanghai) Technologies Co., Ltd.
++ *
++ * This program is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU General Public License
++ * as published by the Free Software Foundation; either version 2
++ * of the License, or (at your option) any later version.
++ * 
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ * 
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, see
++ * <https://www.gnu.org/licenses/>.
++ */
++
++#include <assert.h>
++#include <common/bl_common.h>
++#include <plat/common/common_def.h>
++#include <drivers/console.h>
++#include <common/debug.h>
++#include <drivers/generic_delay_timer.h>
++#include <lib/mmio.h>
++#include <drivers/arm/pl011.h>
++#include <plat_private.h>
++#include <plat/common/platform.h>
++
++
++struct bl31_params {
++	param_header_t h;
++	image_info_t *bl31_image_info;
++	entry_point_info_t *bl32_ep_info;
++	image_info_t *bl32_image_info;
++	entry_point_info_t *bl33_ep_info;
++	image_info_t *bl33_image_info;
++};
++
++static entry_point_info_t bl33_image_ep_info, bl32_image_ep_info;
++
++/*******************************************************************************
++ * Return a pointer to the 'entry_point_info' structure of the next image for
++ * security state specified. BL33 corresponds to the non-secure image type
++ * while BL32 corresponds to the secure image type.
++ ******************************************************************************/
++#if DISABLE_TEE == 1
++entry_point_info_t *bl31_plat_get_next_image_ep_info(uint32_t type)
++{
++	return &bl33_image_ep_info;
++}
++#else
++entry_point_info_t *bl31_plat_get_next_image_ep_info(uint32_t type)
++{
++	if (type == NON_SECURE)
++		return &bl33_image_ep_info;
++
++	if (type == SECURE)
++		return &bl32_image_ep_info;
++
++	return NULL;
++}
++#endif
++
++#define readl(addr) (*(volatile unsigned int *)(long)(addr))
++#define writel(val, addr) (*(volatile unsigned *) (long)(addr)) = (val)
++
++/* Set System security attribute control register 0 */
++static void set_sec_ctrl0_reg(void)
++{
++	unsigned int val;
++	val = readl(MISC_REG_SEC_BASE + SEC_CTRL0);
++	val |= SEC_TIMER01_SLV_SEC_ACC_DISABLE;
++	val &= ~SEC_TIMER01_SLV_SEC_ACC_CTRL;
++	val |= SEC_TIMER23_SLV_SEC_ACC_DISABLE;
++	val &= ~SEC_TIMER23_SLV_SEC_ACC_CTRL;
++	val |= SEC_IPC_SLV_SEC_ACC_DISABLE;
++	val &= ~SEC_IPC_SLV_SEC_ACC_CTRL;
++	val |= SVB_PWM_SLV_SEC_ACC_DISABLE;
++	val &= ~SVB_PWM_SLV_SEC_ACC_CTRL;
++	val |= HPM_CTRL_SLV_SEC_ACC_DISABLE;
++	val &= ~HPM_CTRL_SLV_SEC_ACC_CTRL;
++	val |= EDMA_SLV_SEC_ACC_DISABLE;
++	val &= ~EDMA_SLV_SEC_ACC_CTRL;
++	val |= VEDU_SLV_SEC_ACC_DISABLE;
++	val &= ~VEDU_SLV_SEC_ACC_CTRL;
++	writel(val, MISC_REG_SEC_BASE + SEC_CTRL0);
++}
++
++/* Set System security attribute control register 1 */
++static void set_sec_ctrl1_reg(void)
++{
++	unsigned int val;
++	val = readl(MISC_REG_SEC_BASE + SEC_CTRL1);
++	val |= VICAP_SLV_SEC_ACC_DISABLE;
++	val &= ~VICAP_SLV_SEC_ACC_CTRL;
++	val |= VIPROC_PRE_SLV_SEC_ACC_DISABLE;
++	val &= ~VIPROC_PRE_SLV_SEC_ACC_CTRL;
++	val |= VIPROC_POST_SLV_SEC_ACC_DISABLE;
++	val &= ~VIPROC_POST_SLV_SEC_ACC_CTRL;
++	val |= VDP_SLV_SEC_ACC_DISABLE;
++	val &= ~VDP_SLV_SEC_ACC_CTRL;
++	val |= DSP0_SLV_SEC_AR_MODE;
++	val |= DSP0_SLV_SEC_AW_MODE;
++	val |= DSP1_SLV_SEC_AR_MODE;
++	val |= DSP1_SLV_SEC_AW_MODE;
++	val |= IVE_SLV_SEC_ACC_DISABLE;
++	val &= ~IVE_SLV_SEC_ACC_CTRL;
++	writel(val, MISC_REG_SEC_BASE + SEC_CTRL1);
++}
++
++/* Set System security attribute control register 2 */
++static void set_sec_ctrl2_reg(void)
++{
++	unsigned int val;
++	val = readl(MISC_REG_SEC_BASE + SEC_CTRL2);
++	val |= DPU_SLV_SEC_ACC_DISABLE;
++	val &= ~DPU_SLV_SEC_ACC_CTRL;
++	val |= JPGE_SLV_SEC_ACC_DISABLE;
++	val &= ~JPGE_SLV_SEC_ACC_CTRL;
++	val |= JPGD_SLV_SEC_ACC_DISABLE;
++	val &= ~JPGD_SLV_SEC_ACC_CTRL;
++	val |= VGS0_SLV_SEC_ACC_DISABLE;
++	val &= ~VGS0_SLV_SEC_ACC_CTRL;
++	val |= VGS1_SLV_SEC_ACC_DISABLE;
++	val &= ~VGS1_SLV_SEC_ACC_CTRL;
++	val |= GDC_SLV_SEC_ACC_DISABLE;
++	val &= ~GDC_SLV_SEC_ACC_CTRL;
++	val |= VDH_SLV_SEC_ACC_DISABLE;
++	val &= ~VDH_SLV_SEC_ACC_CTRL;
++	writel(val, MISC_REG_SEC_BASE + SEC_CTRL2);
++}
++
++/* Set System security attribute control register 3 */
++static void set_sec_ctrl3_reg(void)
++{
++	unsigned int val;
++	val = readl(MISC_REG_SEC_BASE + SEC_CTRL3);
++	val |= VPSS_SLV_SEC_ACC_DISABLE;
++	val &= ~VPSS_SLV_SEC_ACC_CTRL;
++	val |= AVSP_SLV_SEC_ACC_DISABLE;
++	val &= ~AVSP_SLV_SEC_ACC_CTRL;
++	val |= ANR_SLV_SEC_ACC_DISABLE;
++	val &= ~ANR_SLV_SEC_ACC_CTRL;
++	val |= DDRC_SLV_SEC_ACC_DISABLE;
++	val &= ~DDRC_SLV_SEC_ACC_CTRL;
++	writel(val, MISC_REG_SEC_BASE + SEC_CTRL3);
++}
++
++static void confiure_system_security_control_reg(void)
++{
++	set_sec_ctrl0_reg();
++	set_sec_ctrl1_reg();
++	set_sec_ctrl2_reg();
++	set_sec_ctrl3_reg();
++}
++
++/*******************************************************************************
++ * Perform any BL31 specific platform actions. Populate the BL33 and BL32 image
++ * info.
++ ******************************************************************************/
++void bl31_early_platform_setup2(u_register_t arg0, u_register_t arg1,
++				u_register_t arg2, u_register_t arg3)
++{
++	struct bl31_params *from_bl2 = (struct bl31_params *)arg0;
++	static console_pl011_t console;
++	/*
++	 * Configure the UART port to be used as the console
++	 */
++	(void)console_pl011_register(PLAT_VENDOR_UART_BASE,
++				     PLAT_VENDOR_UART_CLOCK,
++				     PLAT_VENDOR_UART_BAUDRATE, &console);
++	/* Initialise crash console */
++	plat_crash_console_init();
++	/*
++	 * Copy BL3-3, BL3-2 entry point information.
++	 * They are stored in Secure RAM, in BL2's address space.
++	 */
++	bl33_image_ep_info = *from_bl2->bl33_ep_info;
++	bl32_image_ep_info = *from_bl2->bl32_ep_info;
++	confiure_system_security_control_reg();
++	SET_SECURITY_STATE(bl33_image_ep_info.h.attr, NON_SECURE);
++}
++
++/*******************************************************************************
++ * Initialize the gic, configure the SCR.
++ ******************************************************************************/
++#if DISABLE_TEE == 1
++void bl31_platform_setup(void)
++{
++	plat_pmc_init();
++	plat_gic_driver_init();
++	plat_gic_init();
++	plat_delay_timer_init();
++}
++#else
++void bl31_platform_setup(void)
++{
++	plat_delay_timer_init();
++	/* Initialize the gic cpu and distributor interfaces */
++	plat_gic_driver_init();
++	plat_gic_init();
++	plat_pmc_init();
++}
++#endif
++
++/*******************************************************************************
++ * Perform the very early platform specific architectural setup here. At the
++ * moment this only intializes the mmu in a quick and dirty way.
++ ******************************************************************************/
++void bl31_plat_arch_setup(void)
++{
++	configure_mmu_el3(BL_CODE_BASE,
++			  (BL_COHERENT_RAM_END - BL_CODE_BASE),
++			  BL_CODE_BASE,
++			  BL_CODE_END,
++			  BL_COHERENT_RAM_BASE,
++			  BL_COHERENT_RAM_END);
++}
++
+diff --git a/plat/vendor/ss927v100/drivers/pmc/pmc.c b/plat/vendor/ss927v100/drivers/pmc/pmc.c
+new file mode 100644
+index 0000000..f6c4655
+--- /dev/null
++++ b/plat/vendor/ss927v100/drivers/pmc/pmc.c
+@@ -0,0 +1,120 @@
++/*
++ * Copyright (c) 2025 HiSilicon (Shanghai) Technologies Co., Ltd.
++ *
++ * This program is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU General Public License
++ * as published by the Free Software Foundation; either version 2
++ * of the License, or (at your option) any later version.
++ * 
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ * 
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, see
++ * <https://www.gnu.org/licenses/>.
++ */
++
++#include <arch_helpers.h>
++#include <assert.h>
++#include <common/debug.h>
++#include <drivers/delay_timer.h>
++#include <errno.h>
++#include <lib/mmio.h>
++#include <plat/common/platform.h>
++#include <platform_def.h>
++#include <plat_private.h>
++#include <lib/psci/psci.h>
++
++static const uintptr_t cpu_crg[PLATFORM_MAX_CPUS_PER_CLUSTER] = {
++	CPU_CLST0_CORE0_SET,
++	CPU_CLST0_CORE1_SET,
++	CPU_CLST0_CORE2_SET,
++	CPU_CLST0_CORE3_SET,
++};
++
++static inline void set_core_pwr_domain(uintptr_t addr, bool status)
++{
++	unsigned long val = mmio_read_32(addr);
++	if (status) {
++		val |= (0x1 << 4);
++		val &= (~0x3);
++	} else {
++		val &= ~(0x1 << 4);
++		val |= 0x3;
++	}
++	mmio_write_32(addr, val);
++}
++
++static void wait_core_pstate_ready(uint32_t cpu, uint32_t max_times)
++{
++	uint32_t i = 0;
++	do {
++		volatile uint32_t pchn1_sys_corepstate = mmio_read_32(MISC_REG_CPU_CTRL4 + cpu * CPU_CTRL_RANGE);
++		pchn1_sys_corepstate &= CPU_PSTATE_MASK;
++
++		if (pchn1_sys_corepstate != 0) {
++			WARN("[%s, %d]warn: core%u pstate not ready\r\n", __func__, __LINE__, cpu);
++		} else {
++			INFO("[%s, %d]core%u pstate is ready, i=%u\r\n", __func__, __LINE__, cpu, i);
++			break;
++		}
++		i ++;
++	} while (i < max_times);
++}
++
++static int cores_pwr_domain_on(unsigned long mpidr, uint64_t entrypoint)
++{
++	uint32_t cpu = plat_core_pos_by_mpidr(mpidr);
++	if (cpu > PLATFORM_MAX_CPUS_PER_CLUSTER) {
++		ERROR("invalid cpu(%u)\n", cpu);
++		return -1;
++	}
++	INFO("[%s, %d]cpu=%u, entrypoint=0x%llx\n", __func__, __LINE__, cpu, entrypoint);
++	wait_core_pstate_ready(cpu, 100);	/* 100 for the max retry times */
++	set_core_pwr_domain(cpu_crg[cpu], false);		/* offline */
++	mmio_write_32(REG_PERI_CPU_RVBARADDR, entrypoint >> 2);	/* psci_entrypoint */
++	set_core_pwr_domain(cpu_crg[cpu], true);		/* online */
++	return 0;
++}
++
++static int cores_pwr_domain_on_finish(void)
++{
++	INFO("[%s][%d]\n", __func__, __LINE__);
++	return 0;
++}
++
++static int sys_pwr_domain_resume(void)
++{
++	INFO("[%s][%d]\n", __func__, __LINE__);
++	return 0;
++}
++
++static int sys_pwr_domain_suspend(void)
++{
++	INFO("[%s][%d]\n", __func__, __LINE__);
++	return 0;
++}
++
++static void __dead2 sys_system_reset(void)
++{
++	/* Any value to this reg will reset the cpu */
++	mmio_write_32(SYS_CTRL_BASE + REG_SC_SYSRES, 0x12345678);
++
++	/* we shouldn't get to this point */
++	panic();
++}
++
++static struct pm_ops_cb pm_ops = {
++	.cores_pwr_dm_on = cores_pwr_domain_on,
++	.cores_pwr_dm_on_finish = cores_pwr_domain_on_finish,
++	.sys_pwr_dm_suspend = sys_pwr_domain_suspend,
++	.sys_pwr_dm_resume = sys_pwr_domain_resume,
++	.sys_gbl_soft_reset = sys_system_reset,
++};
++
++void plat_pmc_init(void)
++{
++	plat_setup_pm_ops(&pm_ops);
++}
+diff --git a/plat/vendor/ss927v100/include/plat_macros.S b/plat/vendor/ss927v100/include/plat_macros.S
+new file mode 100644
+index 0000000..33f9452
+--- /dev/null
++++ b/plat/vendor/ss927v100/include/plat_macros.S
+@@ -0,0 +1,116 @@
++/*
++ * Copyright (c) 2025 HiSilicon (Shanghai) Technologies Co., Ltd.
++ *
++ * This program is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU General Public License
++ * as published by the Free Software Foundation; either version 2
++ * of the License, or (at your option) any later version.
++ * 
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ * 
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, see
++ * <https://www.gnu.org/licenses/>.
++ */
++
++#include <drivers/arm/gic_common.h>
++#include <drivers/arm/gicv2.h>
++#include <drivers/arm/gicv3.h>
++#include <platform_def.h>
++
++
++.section .rodata.gic_reg_name, "aS"
++/* Applicable only to GICv2 and GICv3 with SRE disabled (legacy mode) */
++gicc_regs:
++	.asciz "gicc_hppir", "gicc_ahppir", "gicc_ctlr", ""
++
++/* Applicable only to GICv3 with SRE enabled */
++icc_regs:
++	.asciz "icc_hppir0_el1", "icc_hppir1_el1", "icc_ctlr_el3", ""
++
++/* Registers common to both GICv2 and GICv3 */
++gicd_pend_reg:
++	.asciz "gicd_ispendr regs (Offsets 0x200 - 0x278)\n"	\
++		" Offset:\t\t\tvalue\n"
++newline:
++	.asciz "\n"
++spacer:
++	.asciz ":\t\t0x"
++
++	/* ---------------------------------------------
++	 * The below utility macro prints out relevant GIC
++	 * registers whenever an unhandled exception is
++	 * taken in BL31 on ARM standard platforms.
++	 * Expects: GICD base in x16, GICC base in x17
++	 * Clobbers: x0 - x10, sp
++	 * ---------------------------------------------
++	 */
++
++.macro plat_crash_print_regs
++
++	mov_imm	x16, PLAT_VENDOR_GICD_BASE
++
++#if 0
++	mov_imm	x17, PLAT_VENDOR_GICC_BASE
++
++	/* Check for GICv3 system register access */
++	mrs	x7, id_aa64pfr0_el1
++	ubfx	x7, x7, #ID_AA64PFR0_GIC_SHIFT, #ID_AA64PFR0_GIC_WIDTH
++	cmp	x7, #1
++	b.ne	print_gicv2
++
++	/* Check for SRE enable */
++	mrs	x8, ICC_SRE_EL3
++	tst	x8, #ICC_SRE_SRE_BIT
++	b.eq	print_gicv2
++#endif
++	/* Load the icc reg list to x6 */
++	adr	x6, icc_regs
++	/* Load the icc regs to gp regs used by str_in_crash_buf_print */
++	mrs	x8, ICC_HPPIR0_EL1
++	mrs	x9, ICC_HPPIR1_EL1
++	mrs	x10, ICC_CTLR_EL3
++	/* Store to the crash buf and print to console */
++	bl	str_in_crash_buf_print
++	b	print_gic_common
++#if 0
++print_gicv2:
++	/* Load the gicc reg list to x6 */
++	adr	x6, gicc_regs
++	/* Load the gicc regs to gp regs used by str_in_crash_buf_print */
++	ldr	w8, [x17, #GICC_HPPIR]
++	ldr	w9, [x17, #GICC_AHPPIR]
++	ldr	w10, [x17, #GICC_CTLR]
++	/* Store to the crash buf and print to console */
++	bl	str_in_crash_buf_print
++#endif
++
++print_gic_common:
++	/* Print the GICD_ISPENDR regs */
++	add	x7, x16, #GICD_ISPENDR
++	adr	x4, gicd_pend_reg
++	bl	asm_print_str
++gicd_ispendr_loop:
++	sub	x4, x7, x16
++	cmp	x4, #0x280
++	b.eq	exit_print_gic_regs
++	bl	asm_print_hex
++
++	adr	x4, spacer
++	bl	asm_print_str
++
++	ldr	x4, [x7], #8
++	bl	asm_print_hex
++
++	adr	x4, newline
++	bl	asm_print_str
++	b	gicd_ispendr_loop
++exit_print_gic_regs:
++	.endm
++
++	.macro plat_print_interconnect_regs
++	nop
++	.endm
+diff --git a/plat/vendor/ss927v100/include/platform_def.h b/plat/vendor/ss927v100/include/platform_def.h
+new file mode 100644
+index 0000000..30c0e9c
+--- /dev/null
++++ b/plat/vendor/ss927v100/include/platform_def.h
+@@ -0,0 +1,119 @@
++/*
++ * Copyright (c) 2025 HiSilicon (Shanghai) Technologies Co., Ltd.
++ *
++ * This program is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU General Public License
++ * as published by the Free Software Foundation; either version 2
++ * of the License, or (at your option) any later version.
++ * 
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ * 
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, see
++ * <https://www.gnu.org/licenses/>.
++ */
++
++#ifndef __PLATFORM_DEF_H__
++#define __PLATFORM_DEF_H__
++
++#include <plat/common/common_def.h>
++#include <arch.h>
++#include <vendor_def.h>
++
++#define DEBUG_XLAT_TABLE 0
++
++/*******************************************************************************
++ * Platform binary types for linking
++ ******************************************************************************/
++#define PLATFORM_LINKER_FORMAT		"elf64-littleaarch64"
++#define PLATFORM_LINKER_ARCH		aarch64
++
++/* Size of cacheable stacks, May need fix */
++#if DEBUG_XLAT_TABLE
++#define PLATFORM_STACK_SIZE 0x800
++#elif IMAGE_BL1
++#define PLATFORM_STACK_SIZE 0x440
++#elif IMAGE_BL2
++#define PLATFORM_STACK_SIZE 0x400
++#elif IMAGE_BL31
++#define PLATFORM_STACK_SIZE 0x800
++#elif IMAGE_BL32
++#define PLATFORM_STACK_SIZE 0x440
++#endif
++
++/*******************************************************************************
++ * Declarations and constants to access the mailboxes safely. Each mailbox is
++ * aligned on the biggest cache line size in the platform. This is known only
++ * to the platform as it might have a combination of integrated and external
++ * caches. Such alignment ensures that two maiboxes do not sit on the same cache
++ * line at any cache level. They could belong to different cpus/clusters &
++ * get written while being protected by different locks causing corruption of
++ * a valid mailbox address.
++ ******************************************************************************/
++#define CACHE_WRITEBACK_SHIFT		6
++#define CACHE_WRITEBACK_GRANULE		(1 << CACHE_WRITEBACK_SHIFT)
++
++#define FIRMWARE_WELCOME_STR		"Booting Trusted Firmware\n"
++
++#define PLATFORM_CLUSTER_COUNT		1
++#define PLATFORM_MAX_CPUS_PER_CLUSTER	4
++
++#define PLAT_CLUSTER_PWR_LVL		MPIDR_AFFLVL1
++#define PLAT_MAX_PWR_LVL		MPIDR_AFFLVL1
++#define PLATFORM_CORE_COUNT		(PLATFORM_CLUSTER_COUNT * PLATFORM_MAX_CPUS_PER_CLUSTER)
++#define PLAT_NUM_PWR_DOMAINS		(PLATFORM_CORE_COUNT + PLATFORM_CLUSTER_COUNT + 1)
++/*******************************************************************************
++ * Platform power states
++ ******************************************************************************/
++#define PLAT_MAX_OFF_STATE	2
++#define PLAT_MAX_RET_STATE	1
++
++/*******************************************************************************
++ * BL31 specific defines.
++ ******************************************************************************/
++#define BL31_SIZE			0x20000
++
++//
++//Modify this configuration according to the system framework
++#define BL31_BASE 			0x53000000
++
++#define BL31_LIMIT			(BL31_BASE + BL31_SIZE - 1)
++
++#define ADDR_SPACE_SIZE			(1ull << 34)
++#define PLAT_PHY_ADDR_SPACE_SIZE	(1ULL << 34)
++#define PLAT_VIRT_ADDR_SPACE_SIZE	(1ULL << 34)
++#define MAX_XLAT_TABLES			4
++#define MAX_MMAP_REGIONS		16
++
++
++/*
++ * Define GICD and GICC and GICR base
++ */
++#define PLAT_VENDOR_GICD_BASE	VENDOR_GICD_BASE
++#define PLAT_VENDOR_GICR_BASE	VENDOR_GICR_BASE
++
++/*
++ * Define a list of Group 1 Secure and Group 0 interrupts as per GICv3
++ * terminology. On a GICv2 system or mode, the lists will be merged and treated
++ * as Group 0 interrupts.
++ */
++#define PLAT_VENDOR_G1S_IRQS	VENDOR_G1S_IRQS
++#define PLAT_VENDOR_G0_IRQS	VENDOR_G0_IRQS
++
++#define PLAT_VENDOR_UART_BASE	VENDOR_UART0_BASE
++#define PLAT_VENDOR_UART_CLOCK	VENDOR_UART_CLOCK
++#define PLAT_VENDOR_UART_BAUDRATE	VENDOR_BAUDRATE
++
++#define PLAT_VENDOR_PRIMARY_CPU		0x0
++#define PLAT_VENDOR_MPIDR_CPU_BIT		0x8
++
++#define REG_SYS_CNT_BASE		(0x11050000)
++#define REG_SYS_CNT_FREQ		0x20
++
++#define OS_SYS_CTRL_REG2  (0x11020000 + 0x308)
++#define OS_SYS_CTRL_REG4  (0x11020000 + 0x310)
++
++#endif /* __PLATFORM_DEF_H__ */
+diff --git a/plat/vendor/ss927v100/plat_delay_timer.c b/plat/vendor/ss927v100/plat_delay_timer.c
+new file mode 100644
+index 0000000..55cbf58
+--- /dev/null
++++ b/plat/vendor/ss927v100/plat_delay_timer.c
+@@ -0,0 +1,40 @@
++/*
++ * Copyright (c) 2025 HiSilicon (Shanghai) Technologies Co., Ltd.
++ *
++ * This program is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU General Public License
++ * as published by the Free Software Foundation; either version 2
++ * of the License, or (at your option) any later version.
++ * 
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ * 
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, see
++ * <https://www.gnu.org/licenses/>.
++ */
++
++#include <arch_helpers.h>
++#include <drivers/delay_timer.h>
++#include <platform_def.h>
++
++static uint32_t plat_get_timer_value(void)
++{
++	/* Generic delay timer implementation expects the timer to be a down
++	 * counter. We apply bitwise NOT operator to the tick values returned
++	 * by read_cntpct_el0() to simulate the down counter. */
++	return (uint32_t)(~read_cntpct_el0());
++}
++
++static const timer_ops_t plat_timer_ops = {
++	.get_timer_value	= plat_get_timer_value,
++	.clk_mult		= 1,
++	.clk_div		= SYS_COUNTER_FREQ_IN_MHZ,
++};
++
++void plat_delay_timer_init(void)
++{
++	timer_init(&plat_timer_ops);
++}
+diff --git a/plat/vendor/ss927v100/plat_pm.c b/plat/vendor/ss927v100/plat_pm.c
+new file mode 100644
+index 0000000..e073985
+--- /dev/null
++++ b/plat/vendor/ss927v100/plat_pm.c
+@@ -0,0 +1,227 @@
++/*
++ * Copyright (c) 2025 HiSilicon (Shanghai) Technologies Co., Ltd.
++ *
++ * This program is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU General Public License
++ * as published by the Free Software Foundation; either version 2
++ * of the License, or (at your option) any later version.
++ * 
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ * 
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, see
++ * <https://www.gnu.org/licenses/>.
++ */
++
++#include <arch_helpers.h>
++#include <assert.h>
++#include <common/bl_common.h>
++#include <context.h>
++#include <lib/el3_runtime/context_mgmt.h>
++#include <common/debug.h>
++#include <lib/mmio.h>
++#include <plat/common/platform.h>
++#include <platform_def.h>
++#include <lib/psci/psci.h>
++#include <plat_private.h>
++
++extern uint64_t sec_entry_point;
++
++static struct pm_ops_cb *pm_ops;
++
++#define writel(val, addr)	mmio_write_32((uintptr_t)addr, (uint32_t)val)
++#define readl(addr)		mmio_read_32((uintptr_t)addr)
++
++/*******************************************************************************
++ * Handler called when a power domain is about to be turned off. The
++ * target_state encodes the power state that each level should transition to.
++ ******************************************************************************/
++static void cluster_pwrdwn_common(void)
++{
++}
++
++/*******************************************************************************
++ * This handler is called by the PSCI implementation during the `SYSTEM_SUSPEND`
++ * call to get the `power_state` parameter. This allows the platform to encode
++ * the appropriate State-ID field within the `power_state` parameter which can
++ * be utilized in `pwr_domain_suspend()` to suspend to system affinity level.
++******************************************************************************/
++void get_sys_suspend_power_state(psci_power_state_t *req_state)
++{
++	/* lower affinities use PLAT_MAX_OFF_STATE */
++	for (int i = MPIDR_AFFLVL0; i <= PLAT_MAX_PWR_LVL; i++)
++		req_state->pwr_domain_state[i] = PLAT_MAX_OFF_STATE;
++}
++
++/*******************************************************************************
++ * Handler called when an affinity instance is about to enter standby.
++ ******************************************************************************/
++void cpu_standby(plat_local_state_t cpu_state)
++{
++	/*
++	 * Enter standby state
++	 * dsb is good practice before using wfi to enter low power states
++	 */
++	dsb();
++	wfi();
++}
++
++/*******************************************************************************
++ * Handler called when an affinity instance is about to be turned on. The
++ * level and mpidr determine the affinity instance.
++ ******************************************************************************/
++int pwr_domain_on(u_register_t mpidr)
++{
++	if (pm_ops && pm_ops->cores_pwr_dm_on)
++		pm_ops->cores_pwr_dm_on(mpidr, sec_entry_point);
++
++	return PSCI_E_SUCCESS;
++}
++
++/*******************************************************************************
++ * Handler called when a power domain is about to be turned off. The
++ * target_state encodes the power state that each level should transition to.
++ ******************************************************************************/
++void pwr_domain_off(const psci_power_state_t *target_state)
++{
++	plat_gic_cpuif_disable();
++	if (target_state->pwr_domain_state[PLAT_CLUSTER_PWR_LVL] == PLAT_MAX_OFF_STATE)
++		cluster_pwrdwn_common();
++}
++
++/*******************************************************************************
++ * Handler called when called when a power domain is about to be suspended. The
++ * target_state encodes the power state that each level should transition to.
++ ******************************************************************************/
++void pwr_domain_suspend(const psci_power_state_t *target_state)
++{
++	plat_gic_driver_init();
++	plat_gic_cpuif_disable();
++}
++
++/*******************************************************************************
++ * Handler called when a power domain has just been powered on after
++ * being turned off earlier. The target_state encodes the low power state that
++ * each level has woken up from.
++ ******************************************************************************/
++void pwr_domain_on_finish(const psci_power_state_t *target_state)
++{
++	/* Enable the gic cpu interface */
++	plat_gic_pcpu_init();
++	/* Program the gic per-cpu distributor or re-distributor interface */
++	plat_gic_cpuif_enable();
++}
++
++/*******************************************************************************
++ * Handler called when a power domain has just been powered on after
++ * having been suspended earlier. The target_state encodes the low power state
++ * that each level has woken up from.
++ ******************************************************************************/
++void pwr_domain_suspend_finish(const psci_power_state_t *target_state)
++{
++}
++
++void __dead2 pwr_domain_pwr_down_wfi(const psci_power_state_t *target_state)
++{
++	while (1)
++		wfi();
++}
++
++/*******************************************************************************
++ * Handler called when the system wants to be powered off
++ ******************************************************************************/
++void __dead2 system_off(void)
++{
++	if (pm_ops && pm_ops->sys_gbl_soft_reset)
++		(void)pm_ops->sys_gbl_soft_reset();
++
++	panic();
++}
++
++/*******************************************************************************
++ * Handler called when the system wants to be restarted.
++ ******************************************************************************/
++void __dead2 system_reset(void)
++{
++	if (pm_ops && pm_ops->sys_gbl_soft_reset)
++		(void)pm_ops->sys_gbl_soft_reset();
++
++	panic();
++}
++
++/*******************************************************************************
++ * Handler called to check the validity of the power state parameter.
++ ******************************************************************************/
++int32_t validate_power_state(unsigned int power_state,
++				  psci_power_state_t *req_state)
++{
++	int pwr_lvl = psci_get_pstate_pwrlvl(power_state);
++	int i;
++	assert(req_state);
++
++	if (pwr_lvl > PLAT_MAX_PWR_LVL)
++		return PSCI_E_INVALID_PARAMS;
++
++	for (i = 0; i <= pwr_lvl; i++)
++		req_state->pwr_domain_state[i] =
++			PLAT_MAX_OFF_STATE;
++
++	return PSCI_E_SUCCESS;
++}
++
++/*******************************************************************************
++ * Platform handler called to check the validity of the non secure entrypoint.
++ ******************************************************************************/
++int validate_ns_entrypoint(uintptr_t entrypoint)
++{
++	/*
++	 * Check if the non secure entrypoint lies within the non
++	 * secure DRAM.
++	 */
++	return PSCI_E_SUCCESS;
++}
++
++/*******************************************************************************
++ * Export the platform handlers to enable psci to invoke them
++ ******************************************************************************/
++static const plat_psci_ops_t plat_psci_ops = {
++	.cpu_standby			= cpu_standby,
++	.pwr_domain_on			= pwr_domain_on,
++	.pwr_domain_off			= pwr_domain_off,
++	.pwr_domain_suspend		= pwr_domain_suspend,
++	.pwr_domain_on_finish		= pwr_domain_on_finish,
++	.pwr_domain_suspend_finish	= pwr_domain_suspend_finish,
++	.pwr_domain_pwr_down_wfi        = pwr_domain_pwr_down_wfi,
++	.system_off			= system_off,
++	.system_reset			= system_reset,
++	.validate_power_state		= validate_power_state,
++	.validate_ns_entrypoint		= validate_ns_entrypoint,
++	.get_sys_suspend_power_state	= get_sys_suspend_power_state,
++};
++
++/*******************************************************************************
++ * Export the platform specific power ops and initialize Power Controller
++ ******************************************************************************/
++int plat_setup_psci_ops(uintptr_t sec_entrypoint,
++			const plat_psci_ops_t **psci_ops)
++{
++	/*
++	 * Flush entrypoint variable to PoC since it will be
++	 * accessed after a reset with the caches turned off.
++	 */
++	sec_entry_point = sec_entrypoint;
++	flush_dcache_range((uint64_t)&sec_entry_point, sizeof(uint64_t));
++	/*
++	 * Initialize PSCI ops struct
++	 */
++	*psci_ops = &plat_psci_ops;
++	return 0;
++}
++
++void plat_setup_pm_ops(struct pm_ops_cb *ops)
++{
++	pm_ops = ops;
++}
+diff --git a/plat/vendor/ss927v100/plat_private.h b/plat/vendor/ss927v100/plat_private.h
+new file mode 100644
+index 0000000..c371a71
+--- /dev/null
++++ b/plat/vendor/ss927v100/plat_private.h
+@@ -0,0 +1,59 @@
++/*
++ * Copyright (c) 2025 HiSilicon (Shanghai) Technologies Co., Ltd.
++ *
++ * This program is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU General Public License
++ * as published by the Free Software Foundation; either version 2
++ * of the License, or (at your option) any later version.
++ * 
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ * 
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, see
++ * <https://www.gnu.org/licenses/>.
++ */
++
++#ifndef __PLAT_PRIVATE_H__
++#define __PLAT_PRIVATE_H__
++
++/*******************************************************************************
++ * For socs pm ops
++ ******************************************************************************/
++struct pm_ops_cb {
++	int (*cores_pwr_dm_on)(unsigned long mpidr, uint64_t entrypoint);
++	int (*cores_pwr_dm_off)(void);
++	int (*cores_pwr_dm_on_finish)(void);
++	int (*cores_pwr_dm_suspend)(void);
++	int (*cores_pwr_dm_resume)(void);
++	int (*sys_pwr_dm_suspend)(void);
++	int (*sys_pwr_dm_resume)(void);
++	void __dead2 (*sys_gbl_soft_reset)(void);
++};
++
++/*******************************************************************************
++ * Function and variable prototypes
++ ******************************************************************************/
++void configure_mmu_el3(unsigned long total_base,
++			    unsigned long total_size,
++			    unsigned long,
++			    unsigned long,
++			    unsigned long,
++			    unsigned long);
++
++
++void plat_delay_timer_init(void);
++
++void plat_gic_driver_init(void);
++void plat_gic_init(void);
++void plat_gic_cpuif_enable(void);
++void plat_gic_cpuif_disable(void);
++void plat_gic_pcpu_init(void);
++
++void plat_pmc_init(void);
++void plat_setup_pm_ops(struct pm_ops_cb *ops);
++void plat_cci_enable(void);
++
++#endif /* __PLAT_PRIVATE_H__ */
+diff --git a/plat/vendor/ss927v100/plat_topology.c b/plat/vendor/ss927v100/plat_topology.c
+new file mode 100644
+index 0000000..d95dde1
+--- /dev/null
++++ b/plat/vendor/ss927v100/plat_topology.c
+@@ -0,0 +1,69 @@
++/*
++ * Copyright (c) 2025 HiSilicon (Shanghai) Technologies Co., Ltd.
++ *
++ * This program is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU General Public License
++ * as published by the Free Software Foundation; either version 2
++ * of the License, or (at your option) any later version.
++ * 
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ * 
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, see
++ * <https://www.gnu.org/licenses/>.
++ */
++
++#include <arch.h>
++#include <platform_def.h>
++#include <lib/psci/psci.h>
++
++const unsigned char power_domain_tree_desc[] = {
++	/* No of root nodes */
++	1,
++	/* No of clusters */
++	/* PLATFORM_CLUSTER_COUNT, */
++	/* No of CPU cores */
++	PLATFORM_CORE_COUNT,
++};
++
++/*******************************************************************************
++ * This function returns the Tegra default topology tree information.
++ ******************************************************************************/
++const unsigned char *plat_get_power_domain_tree_desc(void)
++{
++	return power_domain_tree_desc;
++}
++
++/*******************************************************************************
++ * This function implements a part of the critical interface between the psci
++ * generic layer and the platform that allows the former to query the platform
++ * to convert an MPIDR to a unique linear index. An error code (-1) is returned
++ * in case the MPIDR is invalid.
++ ******************************************************************************/
++int plat_core_pos_by_mpidr(u_register_t mpidr)
++{
++	unsigned int cluster_id, cpu_id;
++
++	mpidr &= MPIDR_AFFINITY_MASK;
++
++	if (mpidr & ~(MPIDR_CLUSTER_MASK | MPIDR_CPU_MASK))
++		return -1;
++
++	cluster_id = (mpidr >> MPIDR_AFF2_SHIFT) & MPIDR_AFFLVL_MASK;
++	cpu_id = (mpidr >> MPIDR_AFF1_SHIFT) & MPIDR_AFFLVL_MASK;
++
++	if (cluster_id >= PLATFORM_CLUSTER_COUNT)
++		return -1;
++
++	/*
++	 * Validate cpu_id by checking whether it represents a CPU in
++	 * one of the two clusters present on the platform.
++	 */
++	if (cpu_id >= PLATFORM_MAX_CPUS_PER_CLUSTER)
++		return -1;
++
++	return (cpu_id + (cluster_id * PLATFORM_MAX_CPUS_PER_CLUSTER));
++}
+diff --git a/plat/vendor/ss927v100/platform.mk b/plat/vendor/ss927v100/platform.mk
+new file mode 100644
+index 0000000..cc0f548
+--- /dev/null
++++ b/plat/vendor/ss927v100/platform.mk
+@@ -0,0 +1,77 @@
++#
++# Copyright (c) 2015, ARM Limited and Contributors. All rights reserved.
++#
++# Redistribution and use in source and binary forms, with or without
++# modification, are permitted provided that the following conditions are met:
++#
++# Redistributions of source code must retain the above copyright notice, this
++# list of conditions and the following disclaimer.
++#
++# Redistributions in binary form must reproduce the above copyright notice,
++# this list of conditions and the following disclaimer in the documentation
++# and/or other materials provided with the distribution.
++#
++# Neither the name of ARM nor the names of its contributors may be used
++# to endorse or promote products derived from this software without specific
++# prior written permission.
++#
++# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
++# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++# ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
++# LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
++# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
++# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
++# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
++# CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
++# ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
++# POSSIBILITY OF SUCH DAMAGE.
++#
++
++$(eval $(call add_define,CONFIG_BL31_BASE))
++$(eval $(call add_define,CONFIG_FPGA))
++
++VENDOR_PLAT		:=	plat/vendor
++VENDOR_PLAT_SOC		:=	${VENDOR_PLAT}/${PLAT}
++
++PLAT_INCLUDES		:=	-I${VENDOR_PLAT}/				\
++				-I${VENDOR_PLAT_SOC}/				\
++				-I${VENDOR_PLAT_SOC}/include/
++
++VENDOR_GIC_SOURCES	:= 	drivers/arm/gic/common/gic_common.c		\
++				drivers/arm/gic/v3/gicv3_main.c			\
++				drivers/arm/gic/v3/gic600.c			\
++				drivers/arm/gic/v3/gicv3_helpers.c		\
++				plat/common/plat_gicv3.c			\
++				$(VENDOR_PLAT)/common/vendor_gicv3.c
++
++PLAT_BL_COMMON_SOURCES	:=	lib/xlat_tables_v2/xlat_tables_context.c	\
++				lib/xlat_tables_v2/xlat_tables_utils.c		\
++				lib/xlat_tables_v2/xlat_tables_core.c		\
++				lib/xlat_tables_v2/aarch64/enable_mmu.S	\
++				lib/xlat_tables_v2/aarch64/xlat_tables_arch.c	\
++				plat/common/plat_psci_common.c
++
++BL31_SOURCES		+=	$(VENDOR_GIC_SOURCES)				\
++				drivers/arm/pl011/aarch64/pl011_console.S		\
++				drivers/delay_timer/delay_timer.c		\
++				lib/cpus/aarch64/aem_generic.S			\
++				lib/cpus/aarch64/cortex_a55.S			\
++				${VENDOR_PLAT_SOC}/aarch64/plat_helpers.S		\
++				${VENDOR_PLAT_SOC}/aarch64/platform_common.c	\
++				${VENDOR_PLAT_SOC}/drivers/pmc/pmc.c		\
++				${VENDOR_PLAT_SOC}/bl31_plat_setup.c		\
++				${VENDOR_PLAT_SOC}/plat_pm.c			\
++				${VENDOR_PLAT_SOC}/plat_topology.c		\
++				${VENDOR_PLAT_SOC}/plat_delay_timer.c
++
++
++ENABLE_PLAT_COMPAT      := 0
++CTX_INCLUDE_FPREGS	:= 1
++NEED_BL33		:= yes
++MULTI_CONSOLE_API   := 1
++#ERRATA_A53_855873 := 1
++PROGRAMMABLE_RESET_ADDRESS := 1
++
++# Do not enable SVE
++ENABLE_SVE_FOR_NS		:=	0
+diff --git a/plat/vendor/ss927v100/vendor_def.h b/plat/vendor/ss927v100/vendor_def.h
+new file mode 100644
+index 0000000..8b6d799
+--- /dev/null
++++ b/plat/vendor/ss927v100/vendor_def.h
+@@ -0,0 +1,171 @@
++/*
++ * Copyright (c) 2025 HiSilicon (Shanghai) Technologies Co., Ltd.
++ *
++ * This program is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU General Public License
++ * as published by the Free Software Foundation; either version 2
++ * of the License, or (at your option) any later version.
++ * 
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ * 
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, see
++ * <https://www.gnu.org/licenses/>.
++ */
++
++#ifndef __PLAT_DEF_H__
++#define __PLAT_DEF_H__
++
++/* Special value used to verify platform parameters from BL2 to BL3-1 */
++#define VENDOR_BL31_PLAT_PARAM_VAL	0x0f1e2d3c4b5a6978ULL
++
++/*******************************************************************************
++ * Platform memory map related constants
++ ******************************************************************************/
++#define DEVICE_BASE             0x00000000
++#define DEVICE_SIZE             0x40000000
++
++#define DRAM_NS_BASE            0x40000000
++#define DRAM_NS_SIZE            0x40000000
++
++#define TEE_SEC_MEM_BASE	0x90000000
++#define TEE_SEC_MEM_SIZE	0x10000000
++
++#define FCM_CLUSTER_REG_BASE    0x11020000
++#define	CPU_CTRL_RANGE			0x10
++#define	CPU_CTRL2			    0x4248
++#define	CPU_CTRL4			    0x4250
++#define	MISC_REG_CPU_CTRL2	    (FCM_CLUSTER_REG_BASE + CPU_CTRL2)
++#define	MISC_REG_CPU_CTRL4		(FCM_CLUSTER_REG_BASE + CPU_CTRL4)
++#define	MISC_REG_ENABLE_CPU0	MISC_REG_CPU_CTRL2
++#define CPU_HW_STATE_MACHINE	(1 << 6)
++#define	CPU_PSTATE_MASK			(CPU_HW_STATE_MACHINE - 1)
++/*******************************************************************************
++ * UART related constants
++ ******************************************************************************/
++#define VENDOR_UART0_BASE		(0x11040000)
++#define VENDOR_BAUDRATE		(115200)
++#define VENDOR_UART_CLOCK		(24000000)
++
++/*******************************************************************************
++ * System counter frequency related constants
++ ******************************************************************************/
++#define SYS_COUNTER_FREQ_IN_TICKS	25000000
++#define SYS_COUNTER_FREQ_IN_MHZ		25
++
++/* Base MTK_platform compatible GIC memory map */
++#define VENDOR_GICD_BASE		(0x12400000) /*  */
++#define VENDOR_GICR_BASE		(0x12440000) /*  */
++
++/* VENDOR no secure IRQS */
++#define VENDOR_IRQ_RESERVED	(156 + 32)
++/*
++ * Define a list of Group 1 Secure and Group 0 interrupts as per GICv3
++ * terminology. On a GICv2 system or mode, the lists will be merged and treated
++ * as Group 0 interrupts.
++ */
++#define VENDOR_IRQ_SEC_PHY_TIMER           29
++#define VENDOR_IRQ_NS_PHY_TIMER		30
++
++#define VENDOR_IRQ_SEC_SGI_0               8
++#define VENDOR_IRQ_SEC_SGI_1               9
++#define VENDOR_IRQ_SEC_SGI_2               10
++#define VENDOR_IRQ_SEC_SGI_3               11
++#define VENDOR_IRQ_SEC_SGI_4               12
++#define VENDOR_IRQ_SEC_SGI_5               13
++#define VENDOR_IRQ_SEC_SGI_6               14
++#define VENDOR_IRQ_SEC_SGI_7               15
++
++/* Priority levels for ARM platforms */
++#define PLAT_RAS_PRI                    0x10
++#define PLAT_SDEI_CRITICAL_PRI          0x60
++#define PLAT_SDEI_NORMAL_PRI            0x70
++
++#define MISC_REG_BASE	        0x11024000
++#define MISC_CTRL0              (MISC_REG_BASE + 0x0)
++
++#define REG_PERI_CPU_RVBARADDR		0x11024004
++
++/* cci registers */
++#define CLUSTER0_CPU_CTRL		0x1102411C
++#define CLUSTER1_CPU_CTRL		0x11024120
++
++#define SYS_CTRL_BASE	0x11020000
++#define REG_SC_SYSRES	0x0004
++#define REG_SYSSTAT	0x008c
++
++#define CPU_CLST0_CORE0_SET		0x11012048
++#define CPU_CLST0_CORE1_SET		0x1101204c
++#define CPU_CLST0_CORE2_SET		0x11012050
++#define CPU_CLST0_CORE3_SET		0x11012054
++
++/* Slave system security attribute control register */
++#define MISC_REG_SEC_BASE    0x11020000
++#define SEC_CTRL0            0x6000
++#define SEC_CTRL1            0x6004
++#define SEC_CTRL2            0x6008
++#define SEC_CTRL3            0x600c
++#define SEC_BOOTRAM_CTRL     0x6080
++/* SEC_CTRL0 register */
++#define SEC_TIMER01_SLV_SEC_ACC_DISABLE  (0x1 << 0)
++#define SEC_TIMER01_SLV_SEC_ACC_CTRL     (0x1 << 1)
++#define SEC_TIMER23_SLV_SEC_ACC_DISABLE  (0x1 << 4)
++#define SEC_TIMER23_SLV_SEC_ACC_CTRL     (0x1 << 5)
++#define SEC_IPC_SLV_SEC_ACC_DISABLE      (0x1 << 8)
++#define SEC_IPC_SLV_SEC_ACC_CTRL         (0x1 << 9)
++#define SVB_PWM_SLV_SEC_ACC_DISABLE      (0x1 << 12)
++#define SVB_PWM_SLV_SEC_ACC_CTRL         (0x1 << 13)
++#define HPM_CTRL_SLV_SEC_ACC_DISABLE     (0x1 << 16)
++#define HPM_CTRL_SLV_SEC_ACC_CTRL        (0x1 << 17)
++#define EDMA_SLV_SEC_ACC_DISABLE         (0x1 << 24)
++#define EDMA_SLV_SEC_ACC_CTRL            (0x1 << 25)
++#define VEDU_SLV_SEC_ACC_DISABLE         (0x1 << 28)
++#define VEDU_SLV_SEC_ACC_CTRL            (0x1 << 29)
++
++/* SEC_CTRL1 register */
++#define VICAP_SLV_SEC_ACC_DISABLE       (0x1 << 0)
++#define VICAP_SLV_SEC_ACC_CTRL          (0x1 << 1)
++#define VIPROC_PRE_SLV_SEC_ACC_DISABLE  (0x1 << 4)
++#define VIPROC_PRE_SLV_SEC_ACC_CTRL     (0x1 << 5)
++#define VIPROC_POST_SLV_SEC_ACC_DISABLE (0x1 << 8)
++#define VIPROC_POST_SLV_SEC_ACC_CTRL    (0x1 << 9)
++#define VDP_SLV_SEC_ACC_DISABLE         (0x1 << 12)
++#define VDP_SLV_SEC_ACC_CTRL            (0x1 << 13)
++#define DSP0_SLV_SEC_AR_MODE            (0x1 << 20)
++#define DSP0_SLV_SEC_AW_MODE            (0x1 << 21)
++#define DSP1_SLV_SEC_AR_MODE            (0x1 << 24)
++#define DSP1_SLV_SEC_AW_MODE            (0x1 << 25)
++#define IVE_SLV_SEC_ACC_DISABLE         (0x1 << 28)
++#define IVE_SLV_SEC_ACC_CTRL            (0x1 << 29)
++
++/* SEC_CTRL2 register */
++#define DPU_SLV_SEC_ACC_DISABLE         (0x1 << 0)
++#define DPU_SLV_SEC_ACC_CTRL            (0x1 << 1)
++#define JPGE_SLV_SEC_ACC_DISABLE        (0x1 << 4)
++#define JPGE_SLV_SEC_ACC_CTRL           (0x1 << 5)
++#define JPGD_SLV_SEC_ACC_DISABLE        (0x1 << 8)
++#define JPGD_SLV_SEC_ACC_CTRL           (0x1 << 9)
++#define VGS0_SLV_SEC_ACC_DISABLE        (0x1 << 12)
++#define VGS0_SLV_SEC_ACC_CTRL           (0x1 << 13)
++#define VGS1_SLV_SEC_ACC_DISABLE        (0x1 << 16)
++#define VGS1_SLV_SEC_ACC_CTRL           (0x1 << 17)
++#define GDC_SLV_SEC_ACC_DISABLE         (0x1 << 24)
++#define GDC_SLV_SEC_ACC_CTRL            (0x1 << 25)
++#define VDH_SLV_SEC_ACC_DISABLE         (0x1 << 28)
++#define VDH_SLV_SEC_ACC_CTRL            (0x1 << 29)
++
++/* SEC_CTRL3 register */
++#define VPSS_SLV_SEC_ACC_DISABLE        (0x1 << 0)
++#define VPSS_SLV_SEC_ACC_CTRL           (0x1 << 1)
++#define AVSP_SLV_SEC_ACC_DISABLE        (0x1 << 4)
++#define AVSP_SLV_SEC_ACC_CTRL           (0x1 << 5)
++#define ANR_SLV_SEC_ACC_DISABLE         (0x1 << 8)
++#define ANR_SLV_SEC_ACC_CTRL            (0x1 << 9)
++#define DDRC_SLV_SEC_ACC_DISABLE        (0x1 << 11)
++#define DDRC_SLV_SEC_ACC_CTRL           (0x1 << 12)
++
++#define BOOTRAM_RAM_SEL                 (0x1 << 0)
++#endif /* __PLAT_DEF_H__ */
+diff --git a/plat/vendor/ss928v100/aarch64/plat_helpers.S b/plat/vendor/ss928v100/aarch64/plat_helpers.S
+new file mode 100644
+index 0000000..ee75964
+--- /dev/null
++++ b/plat/vendor/ss928v100/aarch64/plat_helpers.S
+@@ -0,0 +1,403 @@
++/*
++ * Copyright (c) 2025 HiSilicon (Shanghai) Technologies Co., Ltd.
++ *
++ * This program is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU General Public License
++ * as published by the Free Software Foundation; either version 2
++ * of the License, or (at your option) any later version.
++ * 
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ * 
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, see
++ * <https://www.gnu.org/licenses/>.
++ */
++#include <arch.h>
++#include <asm_macros.S>
++#include <assert_macros.S>
++#include <cpu_macros.S>
++#include <cortex_a53.h>
++#include <platform_def.h>
++
++	/* Global functions */
++	.globl	plat_is_my_cpu_primary
++	.globl	plat_my_core_pos
++	.globl	plat_get_my_entrypoint
++	.globl	plat_secondary_cold_boot_setup
++	.globl	platform_mem_init
++	.globl	plat_crash_console_init
++	.globl	plat_crash_console_putc
++	.globl	plat_crash_console_flush
++	.globl	plat_reset_handler
++	.globl	plat_cci_enable
++
++	/* Global variables */
++	.globl	sec_entry_point
++	.globl	ns_image_entrypoint
++	.globl	bl31_phys_base
++
++	/* ---------------------
++	 * Common CPU init code
++	 * ---------------------
++	 */
++.macro	cpu_init_common
++
++#if ENABLE_L2_DYNAMIC_RETENTION
++	/* ---------------------------
++	 * Enable processor retention
++	 * ---------------------------
++	*/
++	mrs	x0, L2ECTLR_EL1
++	mov	x1, #RETENTION_ENTRY_TICKS_512 << L2ECTLR_RET_CTRL_SHIFT
++	bic	x0, x0, #L2ECTLR_RET_CTRL_MASK
++	orr	x0, x0, x1
++	msr	L2ECTLR_EL1, x0
++	isb
++#endif
++
++#if ENABLE_CPU_DYNAMIC_RETENTION
++	mrs	x0, CPUECTLR_EL1
++	mov	x1, #RETENTION_ENTRY_TICKS_512 << CPUECTLR_CPU_RET_CTRL_SHIFT
++	bic	x0, x0, #CPUECTLR_CPU_RET_CTRL_MASK
++	orr	x0, x0, x1
++	msr	CPUECTLR_EL1, x0
++	isb
++#endif
++
++#if ENABLE_NS_L2_CPUECTRL_RW_ACCESS
++	/* -------------------------------------------------------
++	 * Enable L2 and CPU ECTLR RW access from non-secure world
++	 * -------------------------------------------------------
++	*/
++	mov	x0, #ACTLR_EL3_ENABLE_ALL_ACCESS
++	msr	actlr_el3, x0
++	msr	actlr_el2, x0
++	isb
++#endif
++
++	/* --------------------------------
++	 * Enable the cycle count register
++	 * --------------------------------
++	 */
++	mrs	x0, pmcr_el0
++	ubfx	x0, x0, #11, #5		// read PMCR.N field
++	mov	x1, #1
++	lsl	x0, x1, x0
++	sub	x0, x0, #1		// mask of event counters
++	orr	x0, x0, #0x80000000	// disable overflow intrs
++	msr	pmintenclr_el1, x0
++	msr	pmuserenr_el0, x1	// enable user mode access
++
++	/* ----------------------------------------------------------------
++	 * Allow non-privileged access to CNTVCT: Set CNTKCTL (Kernel Count
++	 * register), bit 1 (EL0VCTEN) to enable access to CNTVCT/CNTFRQ
++	 * registers from EL0.
++	 * ----------------------------------------------------------------
++	 */
++	mrs	x0, cntkctl_el1
++	orr	x0, x0, #EL0VCTEN_BIT
++	msr	cntkctl_el1, x0
++.endm
++
++	/* -----------------------------------------------------
++	 * unsigned int plat_is_my_cpu_primary(void);
++	 *
++	 * This function checks if this is the Primary CPU
++	 * -----------------------------------------------------
++	 */
++func plat_is_my_cpu_primary
++	mrs	x0, mpidr_el1
++	and	x0, x0, #(MPIDR_CLUSTER_MASK | MPIDR_CPU_MASK)
++	cmp	x0, #PLAT_VENDOR_PRIMARY_CPU
++	cset	x0, eq
++	ret
++endfunc plat_is_my_cpu_primary
++
++	/* -----------------------------------------------------
++	 * unsigned int plat_my_core_pos(void);
++	 *
++	 * result: CorePos = CoreId + (ClusterId << 1)
++	 * -----------------------------------------------------
++	 */
++func plat_my_core_pos
++	mrs	x0, mpidr_el1
++	and	x1, x0, #MPIDR_CPU_MASK
++	and	x0, x0, #MPIDR_CLUSTER_MASK
++	add	x0, x1, x0, LSR #PLAT_VENDOR_MPIDR_CPU_BIT
++	ret
++endfunc plat_my_core_pos
++
++	/* -----------------------------------------------------
++	 * unsigned long plat_get_my_entrypoint (void);
++	 *
++	 * Main job of this routine is to distinguish between
++	 * a cold and warm boot. If the tegra_sec_entry_point for
++	 * this CPU is present, then it's a warm boot.
++	 *
++	 * -----------------------------------------------------
++	 */
++func plat_get_my_entrypoint
++	adr	x1, sec_entry_point
++	ldr	x0, [x1]
++	ret
++endfunc plat_get_my_entrypoint
++
++	/* -----------------------------------------------------
++	 * void plat_secondary_cold_boot_setup (void);
++	 *
++	 * This function performs any platform specific actions
++	 * needed for a secondary cpu after a cold reset. Right
++	 * now this is a stub function.
++	 * -----------------------------------------------------
++	 */
++func plat_secondary_cold_boot_setup
++	mov	x0, #0
++	ret
++endfunc plat_secondary_cold_boot_setup
++
++	/* --------------------------------------------------------
++	 * void platform_mem_init (void);
++	 *
++	 * Any memory init, relocation to be done before the
++	 * platform boots. Called very early in the boot process.
++	 * --------------------------------------------------------
++	 */
++func platform_mem_init
++	mov	x0, #0
++	ret
++endfunc platform_mem_init
++
++	/* ---------------------------------------------
++	 * int plat_crash_console_init(void)
++	 * Function to initialize the crash console
++	 * without a C Runtime to print crash report.
++	 * Clobber list : x0, x1, x2
++	 * ---------------------------------------------
++	 */
++func plat_crash_console_init
++	mov_imm	x0, PLAT_VENDOR_UART_BASE
++	mov_imm	x1, PLAT_VENDOR_UART_CLOCK
++	mov_imm	x2, PLAT_VENDOR_UART_BAUDRATE
++	b	console_pl011_core_init
++endfunc plat_crash_console_init
++
++	/* ---------------------------------------------
++	 * int plat_crash_console_putc(void)
++	 * Function to print a character on the crash
++	 * console without a C Runtime.
++	 * Clobber list : x1, x2
++	 * ---------------------------------------------
++	 */
++func plat_crash_console_putc
++	mov_imm	x1, PLAT_VENDOR_UART_BASE
++	b	console_pl011_core_putc
++endfunc plat_crash_console_putc
++
++	/* ---------------------------------------------
++	 * int plat_crash_console_flush()
++	 * Function to force a write of all buffered
++	 * data that hasn't been output.
++	 * Out : return -1 on error else return 0.
++	 * Clobber list : x0, x1
++	 * ---------------------------------------------
++	 */
++func plat_crash_console_flush
++	mov_imm	x0, PLAT_VENDOR_UART_BASE
++	b	console_pl011_core_flush
++endfunc plat_crash_console_flush
++	/* ---------------------------------------------------
++	 * Function to handle a platform reset and store
++	 * input parameters passed by BL2.
++	 * ---------------------------------------------------
++	 */
++func plat_reset_handler
++	
++	/* Multiplexing the RAM of the VGS module into VGS */
++	ldr x0, =MISC_REG_SEC_BASE 
++	ldr x1, [x0, #SEC_BOOTRAM_CTRL]
++	and x1, x1, 0xfffffffe
++	str x1, [x0, #SEC_BOOTRAM_CTRL]
++	ret
++
++endfunc plat_reset_handler
++
++func plat_cci_enable
++	/* check cluster */
++	mrs 	x0, mpidr_el1
++	lsr 	x0, x0, #0x8
++	and 	x0, x0, #0xff  /* bit[8] 0: cluster0 1:cluster1 */
++	cmp 	x0, #0x0
++	bne 	cci_cluster1
++	ldr 	x0, =(CLUSTER0_CPU_CTRL)
++	b	enable_cci
++cci_cluster1:
++	ldr 	x0, =(CLUSTER1_CPU_CTRL)
++
++	/*
++	 *	enable cci snoop
++	 */
++enable_cci:
++	ldr 	w2, [x0]
++	mov 	w3, w2
++	lsr 	w3, w3, #8		/* bit[8] 0: cci disabled; 1: cci enabled */
++	and	w3, w3, #0x1
++	cmp 	w3, #0x1
++	beq 	exit_enable_cci
++	and 	w2, w2, #0xfffffdff	/* bit[9]:acinactive should be zero */
++	orr	w2, w2, #0x80		/* bit[7]=1 to enable cci */
++	str 	w2, [x0]
++
++	isb
++	dsb 	sy
++
++wait_cci_status:
++	ldr 	w2, [x0]
++	lsr 	w2, w2, #8		/* bit[8] 0: cci disabled; 1: cci enabled */
++	and	w2, w2, #0x1
++	cmp 	w2, #0x1
++	bne 	wait_cci_status
++
++exit_enable_cci:
++	ret
++
++endfunc plat_cci_enable
++
++	/* ----------------------------------------
++	 * Secure entrypoint function for CPU boot
++	 * ----------------------------------------
++	 */
++	.align 6
++func secure_entrypoint
++
++#if ERRATA_TEGRA_INVALIDATE_BTB_AT_BOOT
++
++	/* -------------------------------------------------------
++	 * Invalidate BTB along with I$ to remove any stale
++	 * entries from the branch predictor array.
++	 * -------------------------------------------------------
++	 */
++	mrs	x0, CPUACTLR_EL1
++	orr	x0, x0, #1
++	msr	CPUACTLR_EL1, x0	/* invalidate BTB and I$ together */
++	dsb	sy
++	isb
++	ic	iallu			/* actual invalidate */
++	dsb	sy
++	isb
++
++	mrs	x0, CPUACTLR_EL1
++	bic	x0, x0, #1
++	msr	CPUACTLR_EL1, X0	/* restore original CPUACTLR_EL1 */
++	dsb	sy
++	isb
++
++	.rept	7
++	nop				/* wait */
++	.endr
++
++	/* -----------------------------------------------
++	 * Extract OSLK bit and check if it is '1'. This
++	 * bit remains '0' for A53 on warm-resets. If '1',
++	 * turn off regional clock gating and request warm
++	 * reset.
++	 * -----------------------------------------------
++	 */
++	mrs	x0, oslsr_el1
++	and	x0, x0, #2
++	mrs	x1, mpidr_el1
++	bics	xzr, x0, x1, lsr #7	/* 0 = slow cluster or warm reset */
++	b.eq	restore_oslock
++	mov	x0, xzr
++	msr	oslar_el1, x0		/* os lock stays 0 across warm reset */
++	mov	x3, #3
++	movz	x4, #0x8000, lsl #48
++	msr	CPUACTLR_EL1, x4	/* turn off RCG */
++	isb
++	msr	rmr_el3, x3		/* request warm reset */
++	isb
++	dsb	sy
++1:	wfi
++	b	1b
++
++	/* --------------------------------------------------
++	 * These nops are here so that speculative execution
++	 * won't harm us before we are done with warm reset.
++	 * --------------------------------------------------
++	 */
++	.rept	65
++	nop
++	.endr
++
++	/* --------------------------------------------------
++	 * Do not insert instructions here
++	 * --------------------------------------------------
++	 */
++#endif
++
++	/* --------------------------------------------------
++	 * Restore OS Lock bit
++	 * --------------------------------------------------
++	 */
++restore_oslock:
++	mov	x0, #1
++	msr	oslar_el1, x0
++
++	cpu_init_common
++
++	/* ---------------------------------------------------------------------
++	 * The initial state of the Architectural feature trap register
++	 * (CPTR_EL3) is unknown and it must be set to a known state. All
++	 * feature traps are disabled. Some bits in this register are marked as
++	 * Reserved and should not be modified.
++	 *
++	 * CPTR_EL3.TCPAC: This causes a direct access to the CPACR_EL1 from EL1
++	 *  or the CPTR_EL2 from EL2 to trap to EL3 unless it is trapped at EL2.
++	 * CPTR_EL3.TTA: This causes access to the Trace functionality to trap
++	 *  to EL3 when executed from EL0, EL1, EL2, or EL3. If system register
++	 *  access to trace functionality is not supported, this bit is RES0.
++	 * CPTR_EL3.TFP: This causes instructions that access the registers
++	 *  associated with Floating Point and Advanced SIMD execution to trap
++	 *  to EL3 when executed from any exception level, unless trapped to EL1
++	 *  or EL2.
++	 * ---------------------------------------------------------------------
++	 */
++	mrs	x1, cptr_el3
++	bic	w1, w1, #TCPAC_BIT
++	bic	w1, w1, #TTA_BIT
++	bic	w1, w1, #TFP_BIT
++	msr	cptr_el3, x1
++
++	/* --------------------------------------------------
++	 * Get secure world's entry point and jump to it
++	 * --------------------------------------------------
++	 */
++	bl	plat_get_my_entrypoint
++	br	x0
++endfunc secure_entrypoint
++
++	.data
++	.align 3
++
++	/* --------------------------------------------------
++	 * CPU Secure entry point - resume from suspend
++	 * --------------------------------------------------
++	 */
++sec_entry_point:
++	.quad	0
++
++	/* --------------------------------------------------
++	 * NS world's cold boot entry point
++	 * --------------------------------------------------
++	 */
++ns_image_entrypoint:
++	.quad	0
++
++	/* --------------------------------------------------
++	 * BL31's physical base address
++	 * --------------------------------------------------
++	 */
++bl31_phys_base:
++	.quad	0
+diff --git a/plat/vendor/ss928v100/aarch64/platform_common.c b/plat/vendor/ss928v100/aarch64/platform_common.c
+new file mode 100644
+index 0000000..0303071
+--- /dev/null
++++ b/plat/vendor/ss928v100/aarch64/platform_common.c
+@@ -0,0 +1,112 @@
++/*
++ * Copyright (c) 2025 HiSilicon (Shanghai) Technologies Co., Ltd.
++ *
++ * This program is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU General Public License
++ * as published by the Free Software Foundation; either version 2
++ * of the License, or (at your option) any later version.
++ * 
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ * 
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, see
++ * <https://www.gnu.org/licenses/>.
++ */
++#include <arch_helpers.h>
++#include <common/bl_common.h>
++#include <common/debug.h>
++#include <platform_def.h>
++#include <lib/xlat_tables/xlat_tables_v2.h>
++#include <lib/mmio.h>
++
++#define writel(val, addr)	mmio_write_32((uintptr_t)addr, (uint32_t)val)
++#define readl(addr)		mmio_read_32((uintptr_t)addr)
++
++/* Table of regions to map using the MMU.  */
++const mmap_region_t plat_mmap[] = {
++	/* for TF text, RO, RW */
++	MAP_REGION_FLAT(DRAM_NS_BASE, DRAM_NS_SIZE,
++			MT_MEMORY | MT_RW | MT_NS),
++	MAP_REGION_FLAT(TEE_SEC_MEM_BASE, TEE_SEC_MEM_SIZE,
++			MT_MEMORY | MT_RW | MT_SECURE),
++	MAP_REGION_FLAT(DEVICE_BASE, DEVICE_SIZE,
++			MT_DEVICE | MT_RW | MT_SECURE),
++	{ 0 }
++
++};
++
++/*******************************************************************************
++ * Macro generating the code for the function setting up the pagetables as per
++ * the platform memory map & initialize the mmu, for the given exception level
++ ******************************************************************************/
++#define DEFINE_CONFIGURE_MMU_EL(_el)					\
++	void configure_mmu_el ## _el(unsigned long total_base,		\
++					  unsigned long total_size,	\
++					  unsigned long ro_start,	\
++					  unsigned long ro_limit,	\
++					  unsigned long coh_start,	\
++					  unsigned long coh_limit)	\
++	{								\
++		mmap_add_region(total_base, total_base,			\
++				total_size,				\
++				MT_MEMORY | MT_RW | MT_SECURE);		\
++		mmap_add_region(ro_start, ro_start,			\
++				ro_limit - ro_start,			\
++				MT_MEMORY | MT_RO | MT_SECURE);		\
++		mmap_add_region(coh_start, coh_start,			\
++				coh_limit - coh_start,			\
++				MT_DEVICE | MT_RW | MT_SECURE);		\
++		mmap_add(plat_mmap);					\
++		init_xlat_tables();					\
++									\
++		enable_mmu_el ## _el(0);				\
++	}
++
++/* Define EL3 variants of the function initialising the MMU */
++DEFINE_CONFIGURE_MMU_EL(3)
++
++enum sec_attr_ctrl0 {
++	SEC_FLAG_GPU    = BIT(0),
++	SEC_FLAG_DSP    = BIT(1),
++	SEC_FLAG_TDE    = BIT(2),
++	SEC_FLAG_GPIO   = BIT(3) | BIT(4) | BIT(5) | BIT(6),
++	SEC_FLAG_JPGD   = BIT(7),
++	SEC_FLAG_PGD    = BIT(8),
++	SEC_FLAG_VEDU   = BIT(10),
++	SEC_FLAG_AIAO   = BIT(12),
++	SEC_FLAG_GEN    = BIT(13) | BIT(14),
++	SEC_FLAG_SHA1   = BIT(15),
++	SEC_FLAG_TIMER  = BIT(17) | BIT(18),
++	SEC_FLAG_I2C    = BIT(20),
++	SEC_FLAG_IR     = BIT(21),
++	SEC_FLAG_USB    = BIT(23),
++	SEC_FLAG_DEGI2C = BIT(25),
++	SEC_FLAG_MCU    = BIT(26) | BIT(27),
++	SEC_FLAG_DDRT   = BIT(28),
++	SEC_FLAG_VICAP  = BIT(29),
++};
++
++#if  DISABLE_TEE == 1
++
++#define VENDOR_SEC_CTRL0_FLAG (SEC_FLAG_DSP  | SEC_FLAG_TDE    | SEC_FLAG_GPIO | SEC_FLAG_JPGD |	\
++			     SEC_FLAG_PGD  | SEC_FLAG_VEDU   | SEC_FLAG_AIAO | SEC_FLAG_GEN  |	\
++			     SEC_FLAG_SHA1 | SEC_FLAG_TIMER  | SEC_FLAG_I2C  | SEC_FLAG_IR   |	\
++			     SEC_FLAG_USB  | SEC_FLAG_DEGI2C | SEC_FLAG_MCU  | SEC_FLAG_DDRT |	\
++			     SEC_FLAG_VICAP)
++#else
++
++#define VENDOR_SEC_CTRL0_FLAG (SEC_FLAG_DSP | SEC_FLAG_TDE  | SEC_FLAG_GPIO | SEC_FLAG_JPGD   |	\
++			     SEC_FLAG_PGD | SEC_FLAG_VEDU | SEC_FLAG_AIAO | SEC_FLAG_SHA1   |	\
++			     SEC_FLAG_I2C | SEC_FLAG_IR   |  SEC_FLAG_USB | SEC_FLAG_DEGI2C |	\
++			     SEC_FLAG_VICAP)
++#endif
++
++
++unsigned int plat_get_syscnt_freq2(void)
++{
++	return SYS_COUNTER_FREQ_IN_TICKS;
++}
++
+diff --git a/plat/vendor/ss928v100/bl31_plat_setup.c b/plat/vendor/ss928v100/bl31_plat_setup.c
+new file mode 100644
+index 0000000..675c7a1
+--- /dev/null
++++ b/plat/vendor/ss928v100/bl31_plat_setup.c
+@@ -0,0 +1,220 @@
++/*
++ * Copyright (c) 2025 HiSilicon (Shanghai) Technologies Co., Ltd.
++ *
++ * This program is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU General Public License
++ * as published by the Free Software Foundation; either version 2
++ * of the License, or (at your option) any later version.
++ * 
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ * 
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, see
++ * <https://www.gnu.org/licenses/>.
++ */
++
++#include <assert.h>
++#include <common/bl_common.h>
++#include <plat/common/common_def.h>
++#include <drivers/console.h>
++#include <common/debug.h>
++#include <drivers/generic_delay_timer.h>
++#include <lib/mmio.h>
++#include <drivers/arm/pl011.h>
++#include <plat_private.h>
++#include <plat/common/platform.h>
++
++
++struct bl31_params {
++	param_header_t h;
++	image_info_t *bl31_image_info;
++	entry_point_info_t *bl32_ep_info;
++	image_info_t *bl32_image_info;
++	entry_point_info_t *bl33_ep_info;
++	image_info_t *bl33_image_info;
++};
++
++static entry_point_info_t bl33_image_ep_info, bl32_image_ep_info;
++
++/*******************************************************************************
++ * Return a pointer to the 'entry_point_info' structure of the next image for
++ * security state specified. BL33 corresponds to the non-secure image type
++ * while BL32 corresponds to the secure image type.
++ ******************************************************************************/
++#if DISABLE_TEE == 1
++entry_point_info_t *bl31_plat_get_next_image_ep_info(uint32_t type)
++{
++	return &bl33_image_ep_info;
++}
++#else
++entry_point_info_t *bl31_plat_get_next_image_ep_info(uint32_t type)
++{
++	if (type == NON_SECURE)
++		return &bl33_image_ep_info;
++
++	if (type == SECURE)
++		return &bl32_image_ep_info;
++
++	return NULL;
++}
++#endif
++
++#define readl(addr) (*(volatile unsigned int *)(long)(addr))
++#define writel(val, addr) (*(volatile unsigned *) (long)(addr)) = (val)
++
++/* Set System security attribute control register 0 */
++static void set_sec_ctrl0_reg(void)
++{
++	unsigned int val;
++	val = readl(MISC_REG_SEC_BASE + SEC_CTRL0);
++	val |= SEC_TIMER01_SLV_SEC_ACC_DISABLE;
++	val &= ~SEC_TIMER01_SLV_SEC_ACC_CTRL;
++	val |= SEC_TIMER23_SLV_SEC_ACC_DISABLE;
++	val &= ~SEC_TIMER23_SLV_SEC_ACC_CTRL;
++	val |= SEC_IPC_SLV_SEC_ACC_DISABLE;
++	val &= ~SEC_IPC_SLV_SEC_ACC_CTRL;
++	val |= SVB_PWM_SLV_SEC_ACC_DISABLE;
++	val &= ~SVB_PWM_SLV_SEC_ACC_CTRL;
++	val |= HPM_CTRL_SLV_SEC_ACC_DISABLE;
++	val &= ~HPM_CTRL_SLV_SEC_ACC_CTRL;
++	val |= EDMA_SLV_SEC_ACC_DISABLE;
++	val &= ~EDMA_SLV_SEC_ACC_CTRL;
++	val |= VEDU_SLV_SEC_ACC_DISABLE;
++	val &= ~VEDU_SLV_SEC_ACC_CTRL;
++	writel(val, MISC_REG_SEC_BASE + SEC_CTRL0);
++}
++
++/* Set System security attribute control register 1 */
++static void set_sec_ctrl1_reg(void)
++{
++	unsigned int val;
++	val = readl(MISC_REG_SEC_BASE + SEC_CTRL1);
++	val |= VICAP_SLV_SEC_ACC_DISABLE;
++	val &= ~VICAP_SLV_SEC_ACC_CTRL;
++	val |= VIPROC_PRE_SLV_SEC_ACC_DISABLE;
++	val &= ~VIPROC_PRE_SLV_SEC_ACC_CTRL;
++	val |= VIPROC_POST_SLV_SEC_ACC_DISABLE;
++	val &= ~VIPROC_POST_SLV_SEC_ACC_CTRL;
++	val |= VDP_SLV_SEC_ACC_DISABLE;
++	val &= ~VDP_SLV_SEC_ACC_CTRL;
++	val |= DSP0_SLV_SEC_AR_MODE;
++	val |= DSP0_SLV_SEC_AW_MODE;
++	val |= DSP1_SLV_SEC_AR_MODE;
++	val |= DSP1_SLV_SEC_AW_MODE;
++	val |= IVE_SLV_SEC_ACC_DISABLE;
++	val &= ~IVE_SLV_SEC_ACC_CTRL;
++	writel(val, MISC_REG_SEC_BASE + SEC_CTRL1);
++}
++
++/* Set System security attribute control register 2 */
++static void set_sec_ctrl2_reg(void)
++{
++	unsigned int val;
++	val = readl(MISC_REG_SEC_BASE + SEC_CTRL2);
++	val |= DPU_SLV_SEC_ACC_DISABLE;
++	val &= ~DPU_SLV_SEC_ACC_CTRL;
++	val |= JPGE_SLV_SEC_ACC_DISABLE;
++	val &= ~JPGE_SLV_SEC_ACC_CTRL;
++	val |= JPGD_SLV_SEC_ACC_DISABLE;
++	val &= ~JPGD_SLV_SEC_ACC_CTRL;
++	val |= VGS0_SLV_SEC_ACC_DISABLE;
++	val &= ~VGS0_SLV_SEC_ACC_CTRL;
++	val |= VGS1_SLV_SEC_ACC_DISABLE;
++	val &= ~VGS1_SLV_SEC_ACC_CTRL;
++	val |= GDC_SLV_SEC_ACC_DISABLE;
++	val &= ~GDC_SLV_SEC_ACC_CTRL;
++	val |= VDH_SLV_SEC_ACC_DISABLE;
++	val &= ~VDH_SLV_SEC_ACC_CTRL;
++	writel(val, MISC_REG_SEC_BASE + SEC_CTRL2);
++}
++
++/* Set System security attribute control register 3 */
++static void set_sec_ctrl3_reg(void)
++{
++	unsigned int val;
++	val = readl(MISC_REG_SEC_BASE + SEC_CTRL3);
++	val |= VPSS_SLV_SEC_ACC_DISABLE;
++	val &= ~VPSS_SLV_SEC_ACC_CTRL;
++	val |= AVSP_SLV_SEC_ACC_DISABLE;
++	val &= ~AVSP_SLV_SEC_ACC_CTRL;
++	val |= ANR_SLV_SEC_ACC_DISABLE;
++	val &= ~ANR_SLV_SEC_ACC_CTRL;
++	val |= DDRC_SLV_SEC_ACC_DISABLE;
++	val &= ~DDRC_SLV_SEC_ACC_CTRL;
++	writel(val, MISC_REG_SEC_BASE + SEC_CTRL3);
++}
++
++static void confiure_system_security_control_reg(void)
++{
++	set_sec_ctrl0_reg();
++	set_sec_ctrl1_reg();
++	set_sec_ctrl2_reg();
++	set_sec_ctrl3_reg();
++}
++
++/*******************************************************************************
++ * Perform any BL31 specific platform actions. Populate the BL33 and BL32 image
++ * info.
++ ******************************************************************************/
++void bl31_early_platform_setup2(u_register_t arg0, u_register_t arg1,
++				u_register_t arg2, u_register_t arg3)
++{
++	struct bl31_params *from_bl2 = (struct bl31_params *)arg0;
++	static console_pl011_t console;
++	/*
++	 * Configure the UART port to be used as the console
++	 */
++	(void)console_pl011_register(PLAT_VENDOR_UART_BASE,
++				     PLAT_VENDOR_UART_CLOCK,
++				     PLAT_VENDOR_UART_BAUDRATE, &console);
++	/* Initialise crash console */
++	plat_crash_console_init();
++	/*
++	 * Copy BL3-3, BL3-2 entry point information.
++	 * They are stored in Secure RAM, in BL2's address space.
++	 */
++	bl33_image_ep_info = *from_bl2->bl33_ep_info;
++	bl32_image_ep_info = *from_bl2->bl32_ep_info;
++	confiure_system_security_control_reg();
++	SET_SECURITY_STATE(bl33_image_ep_info.h.attr, NON_SECURE);
++}
++
++/*******************************************************************************
++ * Initialize the gic, configure the SCR.
++ ******************************************************************************/
++#if DISABLE_TEE == 1
++void bl31_platform_setup(void)
++{
++	plat_pmc_init();
++	plat_gic_driver_init();
++	plat_gic_init();
++	plat_delay_timer_init();
++}
++#else
++void bl31_platform_setup(void)
++{
++	plat_delay_timer_init();
++	/* Initialize the gic cpu and distributor interfaces */
++	plat_gic_driver_init();
++	plat_gic_init();
++	plat_pmc_init();
++}
++#endif
++
++/*******************************************************************************
++ * Perform the very early platform specific architectural setup here. At the
++ * moment this only intializes the mmu in a quick and dirty way.
++ ******************************************************************************/
++void bl31_plat_arch_setup(void)
++{
++	configure_mmu_el3(BL_CODE_BASE,
++			  (BL_COHERENT_RAM_END - BL_CODE_BASE),
++			  BL_CODE_BASE,
++			  BL_CODE_END,
++			  BL_COHERENT_RAM_BASE,
++			  BL_COHERENT_RAM_END);
++}
++
+diff --git a/plat/vendor/ss928v100/drivers/pmc/pmc.c b/plat/vendor/ss928v100/drivers/pmc/pmc.c
+new file mode 100644
+index 0000000..f6c4655
+--- /dev/null
++++ b/plat/vendor/ss928v100/drivers/pmc/pmc.c
+@@ -0,0 +1,120 @@
++/*
++ * Copyright (c) 2025 HiSilicon (Shanghai) Technologies Co., Ltd.
++ *
++ * This program is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU General Public License
++ * as published by the Free Software Foundation; either version 2
++ * of the License, or (at your option) any later version.
++ * 
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ * 
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, see
++ * <https://www.gnu.org/licenses/>.
++ */
++
++#include <arch_helpers.h>
++#include <assert.h>
++#include <common/debug.h>
++#include <drivers/delay_timer.h>
++#include <errno.h>
++#include <lib/mmio.h>
++#include <plat/common/platform.h>
++#include <platform_def.h>
++#include <plat_private.h>
++#include <lib/psci/psci.h>
++
++static const uintptr_t cpu_crg[PLATFORM_MAX_CPUS_PER_CLUSTER] = {
++	CPU_CLST0_CORE0_SET,
++	CPU_CLST0_CORE1_SET,
++	CPU_CLST0_CORE2_SET,
++	CPU_CLST0_CORE3_SET,
++};
++
++static inline void set_core_pwr_domain(uintptr_t addr, bool status)
++{
++	unsigned long val = mmio_read_32(addr);
++	if (status) {
++		val |= (0x1 << 4);
++		val &= (~0x3);
++	} else {
++		val &= ~(0x1 << 4);
++		val |= 0x3;
++	}
++	mmio_write_32(addr, val);
++}
++
++static void wait_core_pstate_ready(uint32_t cpu, uint32_t max_times)
++{
++	uint32_t i = 0;
++	do {
++		volatile uint32_t pchn1_sys_corepstate = mmio_read_32(MISC_REG_CPU_CTRL4 + cpu * CPU_CTRL_RANGE);
++		pchn1_sys_corepstate &= CPU_PSTATE_MASK;
++
++		if (pchn1_sys_corepstate != 0) {
++			WARN("[%s, %d]warn: core%u pstate not ready\r\n", __func__, __LINE__, cpu);
++		} else {
++			INFO("[%s, %d]core%u pstate is ready, i=%u\r\n", __func__, __LINE__, cpu, i);
++			break;
++		}
++		i ++;
++	} while (i < max_times);
++}
++
++static int cores_pwr_domain_on(unsigned long mpidr, uint64_t entrypoint)
++{
++	uint32_t cpu = plat_core_pos_by_mpidr(mpidr);
++	if (cpu > PLATFORM_MAX_CPUS_PER_CLUSTER) {
++		ERROR("invalid cpu(%u)\n", cpu);
++		return -1;
++	}
++	INFO("[%s, %d]cpu=%u, entrypoint=0x%llx\n", __func__, __LINE__, cpu, entrypoint);
++	wait_core_pstate_ready(cpu, 100);	/* 100 for the max retry times */
++	set_core_pwr_domain(cpu_crg[cpu], false);		/* offline */
++	mmio_write_32(REG_PERI_CPU_RVBARADDR, entrypoint >> 2);	/* psci_entrypoint */
++	set_core_pwr_domain(cpu_crg[cpu], true);		/* online */
++	return 0;
++}
++
++static int cores_pwr_domain_on_finish(void)
++{
++	INFO("[%s][%d]\n", __func__, __LINE__);
++	return 0;
++}
++
++static int sys_pwr_domain_resume(void)
++{
++	INFO("[%s][%d]\n", __func__, __LINE__);
++	return 0;
++}
++
++static int sys_pwr_domain_suspend(void)
++{
++	INFO("[%s][%d]\n", __func__, __LINE__);
++	return 0;
++}
++
++static void __dead2 sys_system_reset(void)
++{
++	/* Any value to this reg will reset the cpu */
++	mmio_write_32(SYS_CTRL_BASE + REG_SC_SYSRES, 0x12345678);
++
++	/* we shouldn't get to this point */
++	panic();
++}
++
++static struct pm_ops_cb pm_ops = {
++	.cores_pwr_dm_on = cores_pwr_domain_on,
++	.cores_pwr_dm_on_finish = cores_pwr_domain_on_finish,
++	.sys_pwr_dm_suspend = sys_pwr_domain_suspend,
++	.sys_pwr_dm_resume = sys_pwr_domain_resume,
++	.sys_gbl_soft_reset = sys_system_reset,
++};
++
++void plat_pmc_init(void)
++{
++	plat_setup_pm_ops(&pm_ops);
++}
+diff --git a/plat/vendor/ss928v100/include/plat_macros.S b/plat/vendor/ss928v100/include/plat_macros.S
+new file mode 100644
+index 0000000..33f9452
+--- /dev/null
++++ b/plat/vendor/ss928v100/include/plat_macros.S
+@@ -0,0 +1,116 @@
++/*
++ * Copyright (c) 2025 HiSilicon (Shanghai) Technologies Co., Ltd.
++ *
++ * This program is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU General Public License
++ * as published by the Free Software Foundation; either version 2
++ * of the License, or (at your option) any later version.
++ * 
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ * 
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, see
++ * <https://www.gnu.org/licenses/>.
++ */
++
++#include <drivers/arm/gic_common.h>
++#include <drivers/arm/gicv2.h>
++#include <drivers/arm/gicv3.h>
++#include <platform_def.h>
++
++
++.section .rodata.gic_reg_name, "aS"
++/* Applicable only to GICv2 and GICv3 with SRE disabled (legacy mode) */
++gicc_regs:
++	.asciz "gicc_hppir", "gicc_ahppir", "gicc_ctlr", ""
++
++/* Applicable only to GICv3 with SRE enabled */
++icc_regs:
++	.asciz "icc_hppir0_el1", "icc_hppir1_el1", "icc_ctlr_el3", ""
++
++/* Registers common to both GICv2 and GICv3 */
++gicd_pend_reg:
++	.asciz "gicd_ispendr regs (Offsets 0x200 - 0x278)\n"	\
++		" Offset:\t\t\tvalue\n"
++newline:
++	.asciz "\n"
++spacer:
++	.asciz ":\t\t0x"
++
++	/* ---------------------------------------------
++	 * The below utility macro prints out relevant GIC
++	 * registers whenever an unhandled exception is
++	 * taken in BL31 on ARM standard platforms.
++	 * Expects: GICD base in x16, GICC base in x17
++	 * Clobbers: x0 - x10, sp
++	 * ---------------------------------------------
++	 */
++
++.macro plat_crash_print_regs
++
++	mov_imm	x16, PLAT_VENDOR_GICD_BASE
++
++#if 0
++	mov_imm	x17, PLAT_VENDOR_GICC_BASE
++
++	/* Check for GICv3 system register access */
++	mrs	x7, id_aa64pfr0_el1
++	ubfx	x7, x7, #ID_AA64PFR0_GIC_SHIFT, #ID_AA64PFR0_GIC_WIDTH
++	cmp	x7, #1
++	b.ne	print_gicv2
++
++	/* Check for SRE enable */
++	mrs	x8, ICC_SRE_EL3
++	tst	x8, #ICC_SRE_SRE_BIT
++	b.eq	print_gicv2
++#endif
++	/* Load the icc reg list to x6 */
++	adr	x6, icc_regs
++	/* Load the icc regs to gp regs used by str_in_crash_buf_print */
++	mrs	x8, ICC_HPPIR0_EL1
++	mrs	x9, ICC_HPPIR1_EL1
++	mrs	x10, ICC_CTLR_EL3
++	/* Store to the crash buf and print to console */
++	bl	str_in_crash_buf_print
++	b	print_gic_common
++#if 0
++print_gicv2:
++	/* Load the gicc reg list to x6 */
++	adr	x6, gicc_regs
++	/* Load the gicc regs to gp regs used by str_in_crash_buf_print */
++	ldr	w8, [x17, #GICC_HPPIR]
++	ldr	w9, [x17, #GICC_AHPPIR]
++	ldr	w10, [x17, #GICC_CTLR]
++	/* Store to the crash buf and print to console */
++	bl	str_in_crash_buf_print
++#endif
++
++print_gic_common:
++	/* Print the GICD_ISPENDR regs */
++	add	x7, x16, #GICD_ISPENDR
++	adr	x4, gicd_pend_reg
++	bl	asm_print_str
++gicd_ispendr_loop:
++	sub	x4, x7, x16
++	cmp	x4, #0x280
++	b.eq	exit_print_gic_regs
++	bl	asm_print_hex
++
++	adr	x4, spacer
++	bl	asm_print_str
++
++	ldr	x4, [x7], #8
++	bl	asm_print_hex
++
++	adr	x4, newline
++	bl	asm_print_str
++	b	gicd_ispendr_loop
++exit_print_gic_regs:
++	.endm
++
++	.macro plat_print_interconnect_regs
++	nop
++	.endm
+diff --git a/plat/vendor/ss928v100/include/platform_def.h b/plat/vendor/ss928v100/include/platform_def.h
+new file mode 100644
+index 0000000..30c0e9c
+--- /dev/null
++++ b/plat/vendor/ss928v100/include/platform_def.h
+@@ -0,0 +1,119 @@
++/*
++ * Copyright (c) 2025 HiSilicon (Shanghai) Technologies Co., Ltd.
++ *
++ * This program is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU General Public License
++ * as published by the Free Software Foundation; either version 2
++ * of the License, or (at your option) any later version.
++ * 
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ * 
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, see
++ * <https://www.gnu.org/licenses/>.
++ */
++
++#ifndef __PLATFORM_DEF_H__
++#define __PLATFORM_DEF_H__
++
++#include <plat/common/common_def.h>
++#include <arch.h>
++#include <vendor_def.h>
++
++#define DEBUG_XLAT_TABLE 0
++
++/*******************************************************************************
++ * Platform binary types for linking
++ ******************************************************************************/
++#define PLATFORM_LINKER_FORMAT		"elf64-littleaarch64"
++#define PLATFORM_LINKER_ARCH		aarch64
++
++/* Size of cacheable stacks, May need fix */
++#if DEBUG_XLAT_TABLE
++#define PLATFORM_STACK_SIZE 0x800
++#elif IMAGE_BL1
++#define PLATFORM_STACK_SIZE 0x440
++#elif IMAGE_BL2
++#define PLATFORM_STACK_SIZE 0x400
++#elif IMAGE_BL31
++#define PLATFORM_STACK_SIZE 0x800
++#elif IMAGE_BL32
++#define PLATFORM_STACK_SIZE 0x440
++#endif
++
++/*******************************************************************************
++ * Declarations and constants to access the mailboxes safely. Each mailbox is
++ * aligned on the biggest cache line size in the platform. This is known only
++ * to the platform as it might have a combination of integrated and external
++ * caches. Such alignment ensures that two maiboxes do not sit on the same cache
++ * line at any cache level. They could belong to different cpus/clusters &
++ * get written while being protected by different locks causing corruption of
++ * a valid mailbox address.
++ ******************************************************************************/
++#define CACHE_WRITEBACK_SHIFT		6
++#define CACHE_WRITEBACK_GRANULE		(1 << CACHE_WRITEBACK_SHIFT)
++
++#define FIRMWARE_WELCOME_STR		"Booting Trusted Firmware\n"
++
++#define PLATFORM_CLUSTER_COUNT		1
++#define PLATFORM_MAX_CPUS_PER_CLUSTER	4
++
++#define PLAT_CLUSTER_PWR_LVL		MPIDR_AFFLVL1
++#define PLAT_MAX_PWR_LVL		MPIDR_AFFLVL1
++#define PLATFORM_CORE_COUNT		(PLATFORM_CLUSTER_COUNT * PLATFORM_MAX_CPUS_PER_CLUSTER)
++#define PLAT_NUM_PWR_DOMAINS		(PLATFORM_CORE_COUNT + PLATFORM_CLUSTER_COUNT + 1)
++/*******************************************************************************
++ * Platform power states
++ ******************************************************************************/
++#define PLAT_MAX_OFF_STATE	2
++#define PLAT_MAX_RET_STATE	1
++
++/*******************************************************************************
++ * BL31 specific defines.
++ ******************************************************************************/
++#define BL31_SIZE			0x20000
++
++//
++//Modify this configuration according to the system framework
++#define BL31_BASE 			0x53000000
++
++#define BL31_LIMIT			(BL31_BASE + BL31_SIZE - 1)
++
++#define ADDR_SPACE_SIZE			(1ull << 34)
++#define PLAT_PHY_ADDR_SPACE_SIZE	(1ULL << 34)
++#define PLAT_VIRT_ADDR_SPACE_SIZE	(1ULL << 34)
++#define MAX_XLAT_TABLES			4
++#define MAX_MMAP_REGIONS		16
++
++
++/*
++ * Define GICD and GICC and GICR base
++ */
++#define PLAT_VENDOR_GICD_BASE	VENDOR_GICD_BASE
++#define PLAT_VENDOR_GICR_BASE	VENDOR_GICR_BASE
++
++/*
++ * Define a list of Group 1 Secure and Group 0 interrupts as per GICv3
++ * terminology. On a GICv2 system or mode, the lists will be merged and treated
++ * as Group 0 interrupts.
++ */
++#define PLAT_VENDOR_G1S_IRQS	VENDOR_G1S_IRQS
++#define PLAT_VENDOR_G0_IRQS	VENDOR_G0_IRQS
++
++#define PLAT_VENDOR_UART_BASE	VENDOR_UART0_BASE
++#define PLAT_VENDOR_UART_CLOCK	VENDOR_UART_CLOCK
++#define PLAT_VENDOR_UART_BAUDRATE	VENDOR_BAUDRATE
++
++#define PLAT_VENDOR_PRIMARY_CPU		0x0
++#define PLAT_VENDOR_MPIDR_CPU_BIT		0x8
++
++#define REG_SYS_CNT_BASE		(0x11050000)
++#define REG_SYS_CNT_FREQ		0x20
++
++#define OS_SYS_CTRL_REG2  (0x11020000 + 0x308)
++#define OS_SYS_CTRL_REG4  (0x11020000 + 0x310)
++
++#endif /* __PLATFORM_DEF_H__ */
+diff --git a/plat/vendor/ss928v100/plat_delay_timer.c b/plat/vendor/ss928v100/plat_delay_timer.c
+new file mode 100644
+index 0000000..55cbf58
+--- /dev/null
++++ b/plat/vendor/ss928v100/plat_delay_timer.c
+@@ -0,0 +1,40 @@
++/*
++ * Copyright (c) 2025 HiSilicon (Shanghai) Technologies Co., Ltd.
++ *
++ * This program is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU General Public License
++ * as published by the Free Software Foundation; either version 2
++ * of the License, or (at your option) any later version.
++ * 
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ * 
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, see
++ * <https://www.gnu.org/licenses/>.
++ */
++
++#include <arch_helpers.h>
++#include <drivers/delay_timer.h>
++#include <platform_def.h>
++
++static uint32_t plat_get_timer_value(void)
++{
++	/* Generic delay timer implementation expects the timer to be a down
++	 * counter. We apply bitwise NOT operator to the tick values returned
++	 * by read_cntpct_el0() to simulate the down counter. */
++	return (uint32_t)(~read_cntpct_el0());
++}
++
++static const timer_ops_t plat_timer_ops = {
++	.get_timer_value	= plat_get_timer_value,
++	.clk_mult		= 1,
++	.clk_div		= SYS_COUNTER_FREQ_IN_MHZ,
++};
++
++void plat_delay_timer_init(void)
++{
++	timer_init(&plat_timer_ops);
++}
+diff --git a/plat/vendor/ss928v100/plat_pm.c b/plat/vendor/ss928v100/plat_pm.c
+new file mode 100644
+index 0000000..e073985
+--- /dev/null
++++ b/plat/vendor/ss928v100/plat_pm.c
+@@ -0,0 +1,227 @@
++/*
++ * Copyright (c) 2025 HiSilicon (Shanghai) Technologies Co., Ltd.
++ *
++ * This program is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU General Public License
++ * as published by the Free Software Foundation; either version 2
++ * of the License, or (at your option) any later version.
++ * 
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ * 
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, see
++ * <https://www.gnu.org/licenses/>.
++ */
++
++#include <arch_helpers.h>
++#include <assert.h>
++#include <common/bl_common.h>
++#include <context.h>
++#include <lib/el3_runtime/context_mgmt.h>
++#include <common/debug.h>
++#include <lib/mmio.h>
++#include <plat/common/platform.h>
++#include <platform_def.h>
++#include <lib/psci/psci.h>
++#include <plat_private.h>
++
++extern uint64_t sec_entry_point;
++
++static struct pm_ops_cb *pm_ops;
++
++#define writel(val, addr)	mmio_write_32((uintptr_t)addr, (uint32_t)val)
++#define readl(addr)		mmio_read_32((uintptr_t)addr)
++
++/*******************************************************************************
++ * Handler called when a power domain is about to be turned off. The
++ * target_state encodes the power state that each level should transition to.
++ ******************************************************************************/
++static void cluster_pwrdwn_common(void)
++{
++}
++
++/*******************************************************************************
++ * This handler is called by the PSCI implementation during the `SYSTEM_SUSPEND`
++ * call to get the `power_state` parameter. This allows the platform to encode
++ * the appropriate State-ID field within the `power_state` parameter which can
++ * be utilized in `pwr_domain_suspend()` to suspend to system affinity level.
++******************************************************************************/
++void get_sys_suspend_power_state(psci_power_state_t *req_state)
++{
++	/* lower affinities use PLAT_MAX_OFF_STATE */
++	for (int i = MPIDR_AFFLVL0; i <= PLAT_MAX_PWR_LVL; i++)
++		req_state->pwr_domain_state[i] = PLAT_MAX_OFF_STATE;
++}
++
++/*******************************************************************************
++ * Handler called when an affinity instance is about to enter standby.
++ ******************************************************************************/
++void cpu_standby(plat_local_state_t cpu_state)
++{
++	/*
++	 * Enter standby state
++	 * dsb is good practice before using wfi to enter low power states
++	 */
++	dsb();
++	wfi();
++}
++
++/*******************************************************************************
++ * Handler called when an affinity instance is about to be turned on. The
++ * level and mpidr determine the affinity instance.
++ ******************************************************************************/
++int pwr_domain_on(u_register_t mpidr)
++{
++	if (pm_ops && pm_ops->cores_pwr_dm_on)
++		pm_ops->cores_pwr_dm_on(mpidr, sec_entry_point);
++
++	return PSCI_E_SUCCESS;
++}
++
++/*******************************************************************************
++ * Handler called when a power domain is about to be turned off. The
++ * target_state encodes the power state that each level should transition to.
++ ******************************************************************************/
++void pwr_domain_off(const psci_power_state_t *target_state)
++{
++	plat_gic_cpuif_disable();
++	if (target_state->pwr_domain_state[PLAT_CLUSTER_PWR_LVL] == PLAT_MAX_OFF_STATE)
++		cluster_pwrdwn_common();
++}
++
++/*******************************************************************************
++ * Handler called when called when a power domain is about to be suspended. The
++ * target_state encodes the power state that each level should transition to.
++ ******************************************************************************/
++void pwr_domain_suspend(const psci_power_state_t *target_state)
++{
++	plat_gic_driver_init();
++	plat_gic_cpuif_disable();
++}
++
++/*******************************************************************************
++ * Handler called when a power domain has just been powered on after
++ * being turned off earlier. The target_state encodes the low power state that
++ * each level has woken up from.
++ ******************************************************************************/
++void pwr_domain_on_finish(const psci_power_state_t *target_state)
++{
++	/* Enable the gic cpu interface */
++	plat_gic_pcpu_init();
++	/* Program the gic per-cpu distributor or re-distributor interface */
++	plat_gic_cpuif_enable();
++}
++
++/*******************************************************************************
++ * Handler called when a power domain has just been powered on after
++ * having been suspended earlier. The target_state encodes the low power state
++ * that each level has woken up from.
++ ******************************************************************************/
++void pwr_domain_suspend_finish(const psci_power_state_t *target_state)
++{
++}
++
++void __dead2 pwr_domain_pwr_down_wfi(const psci_power_state_t *target_state)
++{
++	while (1)
++		wfi();
++}
++
++/*******************************************************************************
++ * Handler called when the system wants to be powered off
++ ******************************************************************************/
++void __dead2 system_off(void)
++{
++	if (pm_ops && pm_ops->sys_gbl_soft_reset)
++		(void)pm_ops->sys_gbl_soft_reset();
++
++	panic();
++}
++
++/*******************************************************************************
++ * Handler called when the system wants to be restarted.
++ ******************************************************************************/
++void __dead2 system_reset(void)
++{
++	if (pm_ops && pm_ops->sys_gbl_soft_reset)
++		(void)pm_ops->sys_gbl_soft_reset();
++
++	panic();
++}
++
++/*******************************************************************************
++ * Handler called to check the validity of the power state parameter.
++ ******************************************************************************/
++int32_t validate_power_state(unsigned int power_state,
++				  psci_power_state_t *req_state)
++{
++	int pwr_lvl = psci_get_pstate_pwrlvl(power_state);
++	int i;
++	assert(req_state);
++
++	if (pwr_lvl > PLAT_MAX_PWR_LVL)
++		return PSCI_E_INVALID_PARAMS;
++
++	for (i = 0; i <= pwr_lvl; i++)
++		req_state->pwr_domain_state[i] =
++			PLAT_MAX_OFF_STATE;
++
++	return PSCI_E_SUCCESS;
++}
++
++/*******************************************************************************
++ * Platform handler called to check the validity of the non secure entrypoint.
++ ******************************************************************************/
++int validate_ns_entrypoint(uintptr_t entrypoint)
++{
++	/*
++	 * Check if the non secure entrypoint lies within the non
++	 * secure DRAM.
++	 */
++	return PSCI_E_SUCCESS;
++}
++
++/*******************************************************************************
++ * Export the platform handlers to enable psci to invoke them
++ ******************************************************************************/
++static const plat_psci_ops_t plat_psci_ops = {
++	.cpu_standby			= cpu_standby,
++	.pwr_domain_on			= pwr_domain_on,
++	.pwr_domain_off			= pwr_domain_off,
++	.pwr_domain_suspend		= pwr_domain_suspend,
++	.pwr_domain_on_finish		= pwr_domain_on_finish,
++	.pwr_domain_suspend_finish	= pwr_domain_suspend_finish,
++	.pwr_domain_pwr_down_wfi        = pwr_domain_pwr_down_wfi,
++	.system_off			= system_off,
++	.system_reset			= system_reset,
++	.validate_power_state		= validate_power_state,
++	.validate_ns_entrypoint		= validate_ns_entrypoint,
++	.get_sys_suspend_power_state	= get_sys_suspend_power_state,
++};
++
++/*******************************************************************************
++ * Export the platform specific power ops and initialize Power Controller
++ ******************************************************************************/
++int plat_setup_psci_ops(uintptr_t sec_entrypoint,
++			const plat_psci_ops_t **psci_ops)
++{
++	/*
++	 * Flush entrypoint variable to PoC since it will be
++	 * accessed after a reset with the caches turned off.
++	 */
++	sec_entry_point = sec_entrypoint;
++	flush_dcache_range((uint64_t)&sec_entry_point, sizeof(uint64_t));
++	/*
++	 * Initialize PSCI ops struct
++	 */
++	*psci_ops = &plat_psci_ops;
++	return 0;
++}
++
++void plat_setup_pm_ops(struct pm_ops_cb *ops)
++{
++	pm_ops = ops;
++}
+diff --git a/plat/vendor/ss928v100/plat_private.h b/plat/vendor/ss928v100/plat_private.h
+new file mode 100644
+index 0000000..c371a71
+--- /dev/null
++++ b/plat/vendor/ss928v100/plat_private.h
+@@ -0,0 +1,59 @@
++/*
++ * Copyright (c) 2025 HiSilicon (Shanghai) Technologies Co., Ltd.
++ *
++ * This program is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU General Public License
++ * as published by the Free Software Foundation; either version 2
++ * of the License, or (at your option) any later version.
++ * 
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ * 
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, see
++ * <https://www.gnu.org/licenses/>.
++ */
++
++#ifndef __PLAT_PRIVATE_H__
++#define __PLAT_PRIVATE_H__
++
++/*******************************************************************************
++ * For socs pm ops
++ ******************************************************************************/
++struct pm_ops_cb {
++	int (*cores_pwr_dm_on)(unsigned long mpidr, uint64_t entrypoint);
++	int (*cores_pwr_dm_off)(void);
++	int (*cores_pwr_dm_on_finish)(void);
++	int (*cores_pwr_dm_suspend)(void);
++	int (*cores_pwr_dm_resume)(void);
++	int (*sys_pwr_dm_suspend)(void);
++	int (*sys_pwr_dm_resume)(void);
++	void __dead2 (*sys_gbl_soft_reset)(void);
++};
++
++/*******************************************************************************
++ * Function and variable prototypes
++ ******************************************************************************/
++void configure_mmu_el3(unsigned long total_base,
++			    unsigned long total_size,
++			    unsigned long,
++			    unsigned long,
++			    unsigned long,
++			    unsigned long);
++
++
++void plat_delay_timer_init(void);
++
++void plat_gic_driver_init(void);
++void plat_gic_init(void);
++void plat_gic_cpuif_enable(void);
++void plat_gic_cpuif_disable(void);
++void plat_gic_pcpu_init(void);
++
++void plat_pmc_init(void);
++void plat_setup_pm_ops(struct pm_ops_cb *ops);
++void plat_cci_enable(void);
++
++#endif /* __PLAT_PRIVATE_H__ */
+diff --git a/plat/vendor/ss928v100/plat_topology.c b/plat/vendor/ss928v100/plat_topology.c
+new file mode 100644
+index 0000000..d95dde1
+--- /dev/null
++++ b/plat/vendor/ss928v100/plat_topology.c
+@@ -0,0 +1,69 @@
++/*
++ * Copyright (c) 2025 HiSilicon (Shanghai) Technologies Co., Ltd.
++ *
++ * This program is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU General Public License
++ * as published by the Free Software Foundation; either version 2
++ * of the License, or (at your option) any later version.
++ * 
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ * 
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, see
++ * <https://www.gnu.org/licenses/>.
++ */
++
++#include <arch.h>
++#include <platform_def.h>
++#include <lib/psci/psci.h>
++
++const unsigned char power_domain_tree_desc[] = {
++	/* No of root nodes */
++	1,
++	/* No of clusters */
++	/* PLATFORM_CLUSTER_COUNT, */
++	/* No of CPU cores */
++	PLATFORM_CORE_COUNT,
++};
++
++/*******************************************************************************
++ * This function returns the Tegra default topology tree information.
++ ******************************************************************************/
++const unsigned char *plat_get_power_domain_tree_desc(void)
++{
++	return power_domain_tree_desc;
++}
++
++/*******************************************************************************
++ * This function implements a part of the critical interface between the psci
++ * generic layer and the platform that allows the former to query the platform
++ * to convert an MPIDR to a unique linear index. An error code (-1) is returned
++ * in case the MPIDR is invalid.
++ ******************************************************************************/
++int plat_core_pos_by_mpidr(u_register_t mpidr)
++{
++	unsigned int cluster_id, cpu_id;
++
++	mpidr &= MPIDR_AFFINITY_MASK;
++
++	if (mpidr & ~(MPIDR_CLUSTER_MASK | MPIDR_CPU_MASK))
++		return -1;
++
++	cluster_id = (mpidr >> MPIDR_AFF2_SHIFT) & MPIDR_AFFLVL_MASK;
++	cpu_id = (mpidr >> MPIDR_AFF1_SHIFT) & MPIDR_AFFLVL_MASK;
++
++	if (cluster_id >= PLATFORM_CLUSTER_COUNT)
++		return -1;
++
++	/*
++	 * Validate cpu_id by checking whether it represents a CPU in
++	 * one of the two clusters present on the platform.
++	 */
++	if (cpu_id >= PLATFORM_MAX_CPUS_PER_CLUSTER)
++		return -1;
++
++	return (cpu_id + (cluster_id * PLATFORM_MAX_CPUS_PER_CLUSTER));
++}
+diff --git a/plat/vendor/ss928v100/platform.mk b/plat/vendor/ss928v100/platform.mk
+new file mode 100644
+index 0000000..cc0f548
+--- /dev/null
++++ b/plat/vendor/ss928v100/platform.mk
+@@ -0,0 +1,77 @@
++#
++# Copyright (c) 2015, ARM Limited and Contributors. All rights reserved.
++#
++# Redistribution and use in source and binary forms, with or without
++# modification, are permitted provided that the following conditions are met:
++#
++# Redistributions of source code must retain the above copyright notice, this
++# list of conditions and the following disclaimer.
++#
++# Redistributions in binary form must reproduce the above copyright notice,
++# this list of conditions and the following disclaimer in the documentation
++# and/or other materials provided with the distribution.
++#
++# Neither the name of ARM nor the names of its contributors may be used
++# to endorse or promote products derived from this software without specific
++# prior written permission.
++#
++# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
++# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++# ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
++# LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
++# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
++# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
++# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
++# CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
++# ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
++# POSSIBILITY OF SUCH DAMAGE.
++#
++
++$(eval $(call add_define,CONFIG_BL31_BASE))
++$(eval $(call add_define,CONFIG_FPGA))
++
++VENDOR_PLAT		:=	plat/vendor
++VENDOR_PLAT_SOC		:=	${VENDOR_PLAT}/${PLAT}
++
++PLAT_INCLUDES		:=	-I${VENDOR_PLAT}/				\
++				-I${VENDOR_PLAT_SOC}/				\
++				-I${VENDOR_PLAT_SOC}/include/
++
++VENDOR_GIC_SOURCES	:= 	drivers/arm/gic/common/gic_common.c		\
++				drivers/arm/gic/v3/gicv3_main.c			\
++				drivers/arm/gic/v3/gic600.c			\
++				drivers/arm/gic/v3/gicv3_helpers.c		\
++				plat/common/plat_gicv3.c			\
++				$(VENDOR_PLAT)/common/vendor_gicv3.c
++
++PLAT_BL_COMMON_SOURCES	:=	lib/xlat_tables_v2/xlat_tables_context.c	\
++				lib/xlat_tables_v2/xlat_tables_utils.c		\
++				lib/xlat_tables_v2/xlat_tables_core.c		\
++				lib/xlat_tables_v2/aarch64/enable_mmu.S	\
++				lib/xlat_tables_v2/aarch64/xlat_tables_arch.c	\
++				plat/common/plat_psci_common.c
++
++BL31_SOURCES		+=	$(VENDOR_GIC_SOURCES)				\
++				drivers/arm/pl011/aarch64/pl011_console.S		\
++				drivers/delay_timer/delay_timer.c		\
++				lib/cpus/aarch64/aem_generic.S			\
++				lib/cpus/aarch64/cortex_a55.S			\
++				${VENDOR_PLAT_SOC}/aarch64/plat_helpers.S		\
++				${VENDOR_PLAT_SOC}/aarch64/platform_common.c	\
++				${VENDOR_PLAT_SOC}/drivers/pmc/pmc.c		\
++				${VENDOR_PLAT_SOC}/bl31_plat_setup.c		\
++				${VENDOR_PLAT_SOC}/plat_pm.c			\
++				${VENDOR_PLAT_SOC}/plat_topology.c		\
++				${VENDOR_PLAT_SOC}/plat_delay_timer.c
++
++
++ENABLE_PLAT_COMPAT      := 0
++CTX_INCLUDE_FPREGS	:= 1
++NEED_BL33		:= yes
++MULTI_CONSOLE_API   := 1
++#ERRATA_A53_855873 := 1
++PROGRAMMABLE_RESET_ADDRESS := 1
++
++# Do not enable SVE
++ENABLE_SVE_FOR_NS		:=	0
+diff --git a/plat/vendor/ss928v100/vendor_def.h b/plat/vendor/ss928v100/vendor_def.h
+new file mode 100644
+index 0000000..8b6d799
+--- /dev/null
++++ b/plat/vendor/ss928v100/vendor_def.h
+@@ -0,0 +1,171 @@
++/*
++ * Copyright (c) 2025 HiSilicon (Shanghai) Technologies Co., Ltd.
++ *
++ * This program is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU General Public License
++ * as published by the Free Software Foundation; either version 2
++ * of the License, or (at your option) any later version.
++ * 
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ * 
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, see
++ * <https://www.gnu.org/licenses/>.
++ */
++
++#ifndef __PLAT_DEF_H__
++#define __PLAT_DEF_H__
++
++/* Special value used to verify platform parameters from BL2 to BL3-1 */
++#define VENDOR_BL31_PLAT_PARAM_VAL	0x0f1e2d3c4b5a6978ULL
++
++/*******************************************************************************
++ * Platform memory map related constants
++ ******************************************************************************/
++#define DEVICE_BASE             0x00000000
++#define DEVICE_SIZE             0x40000000
++
++#define DRAM_NS_BASE            0x40000000
++#define DRAM_NS_SIZE            0x40000000
++
++#define TEE_SEC_MEM_BASE	0x90000000
++#define TEE_SEC_MEM_SIZE	0x10000000
++
++#define FCM_CLUSTER_REG_BASE    0x11020000
++#define	CPU_CTRL_RANGE			0x10
++#define	CPU_CTRL2			    0x4248
++#define	CPU_CTRL4			    0x4250
++#define	MISC_REG_CPU_CTRL2	    (FCM_CLUSTER_REG_BASE + CPU_CTRL2)
++#define	MISC_REG_CPU_CTRL4		(FCM_CLUSTER_REG_BASE + CPU_CTRL4)
++#define	MISC_REG_ENABLE_CPU0	MISC_REG_CPU_CTRL2
++#define CPU_HW_STATE_MACHINE	(1 << 6)
++#define	CPU_PSTATE_MASK			(CPU_HW_STATE_MACHINE - 1)
++/*******************************************************************************
++ * UART related constants
++ ******************************************************************************/
++#define VENDOR_UART0_BASE		(0x11040000)
++#define VENDOR_BAUDRATE		(115200)
++#define VENDOR_UART_CLOCK		(24000000)
++
++/*******************************************************************************
++ * System counter frequency related constants
++ ******************************************************************************/
++#define SYS_COUNTER_FREQ_IN_TICKS	25000000
++#define SYS_COUNTER_FREQ_IN_MHZ		25
++
++/* Base MTK_platform compatible GIC memory map */
++#define VENDOR_GICD_BASE		(0x12400000) /*  */
++#define VENDOR_GICR_BASE		(0x12440000) /*  */
++
++/* VENDOR no secure IRQS */
++#define VENDOR_IRQ_RESERVED	(156 + 32)
++/*
++ * Define a list of Group 1 Secure and Group 0 interrupts as per GICv3
++ * terminology. On a GICv2 system or mode, the lists will be merged and treated
++ * as Group 0 interrupts.
++ */
++#define VENDOR_IRQ_SEC_PHY_TIMER           29
++#define VENDOR_IRQ_NS_PHY_TIMER		30
++
++#define VENDOR_IRQ_SEC_SGI_0               8
++#define VENDOR_IRQ_SEC_SGI_1               9
++#define VENDOR_IRQ_SEC_SGI_2               10
++#define VENDOR_IRQ_SEC_SGI_3               11
++#define VENDOR_IRQ_SEC_SGI_4               12
++#define VENDOR_IRQ_SEC_SGI_5               13
++#define VENDOR_IRQ_SEC_SGI_6               14
++#define VENDOR_IRQ_SEC_SGI_7               15
++
++/* Priority levels for ARM platforms */
++#define PLAT_RAS_PRI                    0x10
++#define PLAT_SDEI_CRITICAL_PRI          0x60
++#define PLAT_SDEI_NORMAL_PRI            0x70
++
++#define MISC_REG_BASE	        0x11024000
++#define MISC_CTRL0              (MISC_REG_BASE + 0x0)
++
++#define REG_PERI_CPU_RVBARADDR		0x11024004
++
++/* cci registers */
++#define CLUSTER0_CPU_CTRL		0x1102411C
++#define CLUSTER1_CPU_CTRL		0x11024120
++
++#define SYS_CTRL_BASE	0x11020000
++#define REG_SC_SYSRES	0x0004
++#define REG_SYSSTAT	0x008c
++
++#define CPU_CLST0_CORE0_SET		0x11012048
++#define CPU_CLST0_CORE1_SET		0x1101204c
++#define CPU_CLST0_CORE2_SET		0x11012050
++#define CPU_CLST0_CORE3_SET		0x11012054
++
++/* Slave system security attribute control register */
++#define MISC_REG_SEC_BASE    0x11020000
++#define SEC_CTRL0            0x6000
++#define SEC_CTRL1            0x6004
++#define SEC_CTRL2            0x6008
++#define SEC_CTRL3            0x600c
++#define SEC_BOOTRAM_CTRL     0x6080
++/* SEC_CTRL0 register */
++#define SEC_TIMER01_SLV_SEC_ACC_DISABLE  (0x1 << 0)
++#define SEC_TIMER01_SLV_SEC_ACC_CTRL     (0x1 << 1)
++#define SEC_TIMER23_SLV_SEC_ACC_DISABLE  (0x1 << 4)
++#define SEC_TIMER23_SLV_SEC_ACC_CTRL     (0x1 << 5)
++#define SEC_IPC_SLV_SEC_ACC_DISABLE      (0x1 << 8)
++#define SEC_IPC_SLV_SEC_ACC_CTRL         (0x1 << 9)
++#define SVB_PWM_SLV_SEC_ACC_DISABLE      (0x1 << 12)
++#define SVB_PWM_SLV_SEC_ACC_CTRL         (0x1 << 13)
++#define HPM_CTRL_SLV_SEC_ACC_DISABLE     (0x1 << 16)
++#define HPM_CTRL_SLV_SEC_ACC_CTRL        (0x1 << 17)
++#define EDMA_SLV_SEC_ACC_DISABLE         (0x1 << 24)
++#define EDMA_SLV_SEC_ACC_CTRL            (0x1 << 25)
++#define VEDU_SLV_SEC_ACC_DISABLE         (0x1 << 28)
++#define VEDU_SLV_SEC_ACC_CTRL            (0x1 << 29)
++
++/* SEC_CTRL1 register */
++#define VICAP_SLV_SEC_ACC_DISABLE       (0x1 << 0)
++#define VICAP_SLV_SEC_ACC_CTRL          (0x1 << 1)
++#define VIPROC_PRE_SLV_SEC_ACC_DISABLE  (0x1 << 4)
++#define VIPROC_PRE_SLV_SEC_ACC_CTRL     (0x1 << 5)
++#define VIPROC_POST_SLV_SEC_ACC_DISABLE (0x1 << 8)
++#define VIPROC_POST_SLV_SEC_ACC_CTRL    (0x1 << 9)
++#define VDP_SLV_SEC_ACC_DISABLE         (0x1 << 12)
++#define VDP_SLV_SEC_ACC_CTRL            (0x1 << 13)
++#define DSP0_SLV_SEC_AR_MODE            (0x1 << 20)
++#define DSP0_SLV_SEC_AW_MODE            (0x1 << 21)
++#define DSP1_SLV_SEC_AR_MODE            (0x1 << 24)
++#define DSP1_SLV_SEC_AW_MODE            (0x1 << 25)
++#define IVE_SLV_SEC_ACC_DISABLE         (0x1 << 28)
++#define IVE_SLV_SEC_ACC_CTRL            (0x1 << 29)
++
++/* SEC_CTRL2 register */
++#define DPU_SLV_SEC_ACC_DISABLE         (0x1 << 0)
++#define DPU_SLV_SEC_ACC_CTRL            (0x1 << 1)
++#define JPGE_SLV_SEC_ACC_DISABLE        (0x1 << 4)
++#define JPGE_SLV_SEC_ACC_CTRL           (0x1 << 5)
++#define JPGD_SLV_SEC_ACC_DISABLE        (0x1 << 8)
++#define JPGD_SLV_SEC_ACC_CTRL           (0x1 << 9)
++#define VGS0_SLV_SEC_ACC_DISABLE        (0x1 << 12)
++#define VGS0_SLV_SEC_ACC_CTRL           (0x1 << 13)
++#define VGS1_SLV_SEC_ACC_DISABLE        (0x1 << 16)
++#define VGS1_SLV_SEC_ACC_CTRL           (0x1 << 17)
++#define GDC_SLV_SEC_ACC_DISABLE         (0x1 << 24)
++#define GDC_SLV_SEC_ACC_CTRL            (0x1 << 25)
++#define VDH_SLV_SEC_ACC_DISABLE         (0x1 << 28)
++#define VDH_SLV_SEC_ACC_CTRL            (0x1 << 29)
++
++/* SEC_CTRL3 register */
++#define VPSS_SLV_SEC_ACC_DISABLE        (0x1 << 0)
++#define VPSS_SLV_SEC_ACC_CTRL           (0x1 << 1)
++#define AVSP_SLV_SEC_ACC_DISABLE        (0x1 << 4)
++#define AVSP_SLV_SEC_ACC_CTRL           (0x1 << 5)
++#define ANR_SLV_SEC_ACC_DISABLE         (0x1 << 8)
++#define ANR_SLV_SEC_ACC_CTRL            (0x1 << 9)
++#define DDRC_SLV_SEC_ACC_DISABLE        (0x1 << 11)
++#define DDRC_SLV_SEC_ACC_CTRL           (0x1 << 12)
++
++#define BOOTRAM_RAM_SEL                 (0x1 << 0)
++#endif /* __PLAT_DEF_H__ */

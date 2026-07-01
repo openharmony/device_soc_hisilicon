@@ -1,0 +1,122 @@
+/*
+ * Copyright (c) 2025 HiSilicon (Shanghai) Technologies Co., Ltd.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#ifndef OT_LITEPLAYER_ERR_H
+#define OT_LITEPLAYER_ERR_H
+
+#include "ot_error_def.h"
+#include "ot_defs.h"
+
+#ifdef __cplusplus
+#if __cplusplus
+extern "C" {
+#endif
+#endif /* __cplusplus */
+
+/* ´Ó0x40~0xFF */
+typedef enum OT_APP_LITEPLAYER_ERR_CODE_E {
+    OT_APP_LITEPLAYER_ERR_INVALID_HANDLE = 0x41,       /* handle is invalid */
+    OT_APP_LITEPLAYER_ERR_ILLEGAL_HANDLE = 0x42,       /* handle is inllegal */
+    OT_APP_LITEPLAYER_ERR_MEM_MALLOC = 0x43,           /* memery alloc failed */
+    OT_APP_LITEPLAYER_ERR_THREAD_CREATE_FAIL = 0x44,   /* thread create failed */
+    OT_APP_LITEPLAYER_ERR_MUTEX_INIT_FAIL = 0x45,      /* thread mutex init failed */
+    OT_APP_LITEPLAYER_ERR_ADEC_IN_USE = 0x46,          /* thread mutex init failed */
+    OT_APP_LITEPLAYER_ERR_CALLBACK_ERROR = 0x47,       /* liteplayer callback failed */
+    OT_APP_LITEPLAYER_ERR_ILLEGAL_STATE_ACTION = 0x48, /* error action in current state */
+    OT_APP_LITEPLAYER_ERR_DEMUX_ERROR = 0x49,          /* exec demux error */
+    OT_APP_LITEPLAYER_ERR_DEMUX_HAS_REG = 0x50,        /* has reg the demux lib */
+    OT_APP_LITEPLAYER_ERR_NOT_SUPPORT = 0x51,          /* not support this action */
+    OT_APP_LITEPLAYER_ERR_REINITED = 0x52,             /* liteplayer reinit */
+    OT_APP_LITEPLAYER_ERR_NOT_INIT = 0x53,             /* liteplayer no init */
+    OT_APP_LITEPLAYER_ERR_AVPLAYER = 0x54,             /* avplayer interface exec failed */
+    OT_APP_LITEPLAYER_ERR_DLOPEN = 0x55,               /* dlopen failed */
+    OT_APP_LITEPLAYER_ERR_DLSYM = 0x56,                /* dlsym failed */
+    OT_APP_LITEPLAYER_ERR_NOT_REG_DEMUXER = 0x57,      /* not reg demuxer */
+    OT_APP_LITEPLAYER_ERR_HAS_CREATE = 0x58,           /* has create a liteplayer handle before */
+    OT_APP_LITEPLAYER_ERR_OTHER = 0x59,                /* unknow error */
+    OT_APP_LITEPLAYER_ERR_NDK = 0x60,                  /* ndk error */
+    OT_APP_LITEPLAYER_ERR_DEMUX_IN_USE = 0x61,         /* the demux lib is used now */
+    OT_APP_LITEPLAYER_ERR_ADEC_NOTREG = 0x62,          /* the adec lib not register */
+    OT_APP_LITEPLAYER_ERR_ADEC_HAS_REG = 0x63,         /* the adec lib alread register */
+    OT_APP_LITEPLAYER_ERR_ADEC_ERR = 0x64,             /* create adec fail */
+    OT_APP_LITEPLAYER_ERR_MAX_ERR = 0x65,              /* create player max fail */
+    OT_APP_LITEPLAYER_ERR_MEM_SET = 0x66,              /* memery SET failed */
+    OT_APP_LITEPLAYER_BUTT = 0xFF
+} OT_APP_LITEPLAYER_ERR_CODE_E;
+
+/* general error code */
+#define OT_ERR_LITEPLAYER_NULL_PTR             \
+    OT_APP_DEF_ERR(OT_APPID_LOCALPLAYER, APP_ERR_LEVEL_ERROR, APP_ERR_NULL_PTR)
+#define OT_ERR_LITEPLAYER_ILLEGAL_PARAM        \
+    OT_APP_DEF_ERR(OT_APPID_LOCALPLAYER, APP_ERR_LEVEL_ERROR, APP_ERR_ILLEGAL_PARAM)
+#define OT_ERR_LITEPLAYER_ILLEGAL_HANDLE       \
+    OT_APP_DEF_ERR(OT_APPID_LOCALPLAYER, APP_ERR_LEVEL_ERROR, OT_APP_LITEPLAYER_ERR_ILLEGAL_HANDLE)
+#define OT_ERR_LITEPLAYER_MUTEX_INIT_FAIL      \
+    OT_APP_DEF_ERR(OT_APPID_LOCALPLAYER, APP_ERR_LEVEL_ERROR, OT_APP_LITEPLAYER_ERR_MUTEX_INIT_FAIL)
+#define OT_ERR_LITEPLAYER_ADEC_IN_USE          \
+    OT_APP_DEF_ERR(OT_APPID_LOCALPLAYER, APP_ERR_LEVEL_ERROR, OT_APP_LITEPLAYER_ERR_ADEC_IN_USE)
+#define OT_ERR_LITEPLAYER_MEM_MALLOC           \
+    OT_APP_DEF_ERR(OT_APPID_LOCALPLAYER, APP_ERR_LEVEL_ERROR, OT_APP_LITEPLAYER_ERR_MEM_MALLOC)
+#define OT_ERR_LITEPLAYER_THREAD_CREATE_FAIL   \
+    OT_APP_DEF_ERR(OT_APPID_LOCALPLAYER, APP_ERR_LEVEL_ERROR, OT_APP_LITEPLAYER_ERR_THREAD_CREATE_FAIL)
+#define OT_ERR_LITEPLAYER_CALLBACK_ERROR       \
+    OT_APP_DEF_ERR(OT_APPID_LOCALPLAYER, APP_ERR_LEVEL_ERROR, OT_APP_LITEPLAYER_ERR_CALLBACK_ERROR)
+#define OT_ERR_LITEPLAYER_ILLEGAL_STATE_ACTION \
+    OT_APP_DEF_ERR(OT_APPID_LOCALPLAYER, APP_ERR_LEVEL_ERROR, OT_APP_LITEPLAYER_ERR_ILLEGAL_STATE_ACTION)
+#define OT_ERR_LITEPLAYER_DEMUX_ERROR          \
+    OT_APP_DEF_ERR(OT_APPID_LOCALPLAYER, APP_ERR_LEVEL_ERROR, OT_APP_LITEPLAYER_ERR_DEMUX_ERROR)
+#define OT_ERR_LITEPLAYER_DEMUX_HAS_REG        \
+    OT_APP_DEF_ERR(OT_APPID_LOCALPLAYER, APP_ERR_LEVEL_ERROR, OT_APP_LITEPLAYER_ERR_DEMUX_HAS_REG)
+#define OT_ERR_LITEPLAYER_NOT_SUPPORT          \
+    OT_APP_DEF_ERR(OT_APPID_LOCALPLAYER, APP_ERR_LEVEL_ERROR, OT_APP_LITEPLAYER_ERR_NOT_SUPPORT)
+#define OT_ERR_LITEPLAYER_REINITED             \
+    OT_APP_DEF_ERR(OT_APPID_LOCALPLAYER, APP_ERR_LEVEL_ERROR, OT_APP_LITEPLAYER_ERR_REINITED)
+#define OT_ERR_LITEPLAYER_NOT_INIT             \
+    OT_APP_DEF_ERR(OT_APPID_LOCALPLAYER, APP_ERR_LEVEL_ERROR, OT_APP_LITEPLAYER_ERR_NOT_INIT)
+#define OT_ERR_LITEPLAYER_AVPLAYER             \
+    OT_APP_DEF_ERR(OT_APPID_LOCALPLAYER, APP_ERR_LEVEL_ERROR, OT_APP_LITEPLAYER_ERR_AVPLAYER)
+#define OT_ERR_LITEPLAYER_DLOPEN               \
+    OT_APP_DEF_ERR(OT_APPID_LOCALPLAYER, APP_ERR_LEVEL_ERROR, OT_APP_LITEPLAYER_ERR_DLOPEN)
+#define OT_ERR_LITEPLAYER_DLSYM                \
+    OT_APP_DEF_ERR(OT_APPID_LOCALPLAYER, APP_ERR_LEVEL_ERROR, OT_APP_LITEPLAYER_ERR_DLSYM)
+#define OT_ERR_LITEPLAYER_NOT_REG_DEMUXER      \
+    OT_APP_DEF_ERR(OT_APPID_LOCALPLAYER, APP_ERR_LEVEL_ERROR, OT_APP_LITEPLAYER_ERR_NOT_REG_DEMUXER)
+#define OT_ERR_LITEPLAYER_HAS_CREATE           \
+    OT_APP_DEF_ERR(OT_APPID_LOCALPLAYER, APP_ERR_LEVEL_ERROR, OT_APP_LITEPLAYER_ERR_HAS_CREATE)
+#define OT_ERR_LITEPLAYER_OTHER                \
+    OT_APP_DEF_ERR(OT_APPID_LOCALPLAYER, APP_ERR_LEVEL_ERROR, OT_APP_LITEPLAYER_ERR_OTHER)
+#define OT_ERR_LITEPLAYER_NDK                  \
+    OT_APP_DEF_ERR(OT_APPID_LOCALPLAYER, APP_ERR_LEVEL_ERROR, OT_APP_LITEPLAYER_ERR_NDK)
+#define OT_ERR_LITEPLAYER_DEMUX_IN_USE         \
+    OT_APP_DEF_ERR(OT_APPID_LOCALPLAYER, APP_ERR_LEVEL_ERROR, OT_APP_LITEPLAYER_ERR_DEMUX_IN_USE)
+#define OT_ERR_LITEPLAYER_ADEC_NOT_REG         \
+    OT_APP_DEF_ERR(OT_APPID_LOCALPLAYER, APP_ERR_LEVEL_ERROR, OT_APP_LITEPLAYER_ERR_ADEC_NOTREG)
+#define OT_ERR_LITEPLAYER_ADEC_HAS_REG         \
+    OT_APP_DEF_ERR(OT_APPID_LOCALPLAYER, APP_ERR_LEVEL_ERROR, OT_APP_LITEPLAYER_ERR_ADEC_HAS_REG)
+#define OT_ERR_LITEPLAYER_ADEC_ERROR           \
+    OT_APP_DEF_ERR(OT_APPID_LOCALPLAYER, APP_ERR_LEVEL_ERROR, OT_APP_LITEPLAYER_ERR_ADEC_ERR)
+#define OT_ERR_LITEPLAYER_REACH_MAX            \
+    OT_APP_DEF_ERR(OT_APPID_LOCALPLAYER, APP_ERR_LEVEL_ERROR, OT_APP_LITEPLAYER_ERR_MAX_ERR)
+#define OT_ERR_LITEPLAYER_MEM_SET              \
+    OT_APP_DEF_ERR(OT_APPID_LOCALPLAYER, APP_ERR_LEVEL_ERROR, OT_APP_LITEPLAYER_ERR_MEM_SET)
+
+#ifdef __cplusplus
+#if __cplusplus
+}
+#endif
+#endif /* __cplusplus */
+
+#endif /* OT_LITEPLAYER_ERR_H */
