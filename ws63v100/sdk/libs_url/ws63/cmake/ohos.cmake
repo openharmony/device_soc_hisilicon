@@ -30,3 +30,14 @@ foreach(COMPONENT ${COMPONENT_LIST})
     build_component()
     install_sdk(${BIN_DIR}/${CHIP}/libs/ohos/${TARGET_COMMAND} "*.a")
 endforeach()
+
+# SDK->OHOS switch: link OHOS libmbedtls_ohos.a directly to main app
+# Dual-gate: mbedtls_ohos_switch marker=1 AND libmbedtls_ohos.a exists
+include(${ROOT_DIR}/build/cmake/mbedtls_ohos_switch.cmake)
+if(MBEDTLS_OHOS_SWITCH_ON)
+    target_link_libraries(${MAIN_COMPONENT} PRIVATE
+        -Wl,--whole-archive ${BIN_DIR}/${CHIP}/libs/ohos/${TARGET_COMMAND}/libmbedtls_ohos.a -Wl,--no-whole-archive)
+    target_link_libraries(${MAIN_COMPONENT} PRIVATE ${CMAKE_BINARY_DIR}/CMakeFiles/mbedtls.dir/open_source/mbedtls/mbedtls_v3.1.0/harden/src/cipher_adapt.c.obj)
+    target_link_libraries(${MAIN_COMPONENT} PRIVATE ${CMAKE_BINARY_DIR}/CMakeFiles/mbedtls.dir/open_source/mbedtls/mbedtls_v3.1.0/harden/src/entropy_harden.c.obj)
+endif()
+
