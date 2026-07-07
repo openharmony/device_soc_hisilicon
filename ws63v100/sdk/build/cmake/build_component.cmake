@@ -104,6 +104,7 @@ macro(build_library)
 
     endif()
 
+    if(NOT (MBEDTLS_SDK_EXCLUDE_LINK AND "${COMPONENT_NAME}" STREQUAL "mbedtls"))
     if(WHOLE_ARCHIV STREQUAL false)
         # treat as a non-rom component
         target_link_libraries(${TARGET_NAME}
@@ -116,6 +117,7 @@ macro(build_library)
             PRIVATE
             -Wl,--whole-archive ${LINK_LIB_${COMPONENT_NAME}} -Wl,--no-whole-archive
         )
+    endif()
     endif()
 endmacro()
 

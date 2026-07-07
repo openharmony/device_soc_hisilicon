@@ -5,86 +5,96 @@
 set(COMPONENT_NAME "mbedtls")
 
 set(SOURCES
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/aes.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/aesni.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/aria.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/asn1parse.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/asn1write.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/base64.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/bignum.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/camellia.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/ccm.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/chacha20.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/chachapoly.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/cipher.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/cipher_wrap.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/cmac.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/constant_time.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/ctr_drbg.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/debug.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/des.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/dhm.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/ecdh.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/ecdsa.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/ecjpake.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/ecp.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/ecp_curves.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/entropy.c
-	# ${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/entropy_poll.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/error.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/gcm.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/hmac_drbg.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/hkdf.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/md.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/md5.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/memory_buffer_alloc.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/mps_reader.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/mps_trace.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/net_sockets.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/nist_kw.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/oid.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/padlock.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/pem.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/pk.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/pk_wrap.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/pkcs5.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/pkcs12.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/pkparse.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/pkwrite.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/platform.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/platform_util.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/poly1305.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/ripemd160.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/rsa.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/rsa_alt_helpers.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/sha1.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/sha256.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/sha512.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/ssl_cache.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/ssl_ciphersuites.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/ssl_cli.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/ssl_cookie.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/ssl_debug_helpers_generated.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/ssl_msg.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/ssl_srv.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/ssl_ticket.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/ssl_tls.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/ssl_tls13_client.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/ssl_tls13_generic.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/ssl_tls13_server.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/ssl_tls13_keys.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/threading.c
-	# ${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/timing.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/version.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/version_features.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/x509.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/x509_create.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/x509_crl.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/x509_crt.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/x509_csr.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/x509write_crt.c
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/x509write_csr.c
 )
+
+# library/*.c (v3.1.0 core) compiled into SDK libmbedtls.a only when source switch is off;
+# when switch is on, OHOS libmbedtls_ohos.a provides the implementation.
+# Previously unconditional (broke the all-off path); changed to dual-gate conditional (additive).
+# Dual-gate: mbedtls_ohos_switch marker=1 AND libmbedtls_ohos.a exists
+include(${ROOT_DIR}/build/cmake/mbedtls_ohos_switch.cmake)
+if(NOT MBEDTLS_OHOS_SWITCH_ON)
+	list(APPEND SOURCES
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/aes.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/aesni.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/aria.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/asn1parse.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/asn1write.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/base64.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/bignum.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/camellia.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/ccm.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/chacha20.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/chachapoly.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/cipher.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/cipher_wrap.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/cmac.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/constant_time.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/ctr_drbg.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/debug.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/des.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/dhm.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/ecdh.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/ecdsa.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/ecjpake.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/ecp.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/ecp_curves.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/entropy.c
+		# ${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/entropy_poll.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/error.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/gcm.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/hmac_drbg.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/hkdf.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/md.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/md5.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/memory_buffer_alloc.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/mps_reader.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/mps_trace.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/net_sockets.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/nist_kw.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/oid.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/padlock.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/pem.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/pk.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/pk_wrap.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/pkcs5.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/pkcs12.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/pkparse.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/pkwrite.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/platform.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/platform_util.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/poly1305.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/ripemd160.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/rsa.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/rsa_alt_helpers.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/sha1.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/sha256.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/sha512.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/ssl_cache.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/ssl_ciphersuites.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/ssl_cli.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/ssl_cookie.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/ssl_debug_helpers_generated.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/ssl_msg.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/ssl_srv.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/ssl_ticket.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/ssl_tls.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/ssl_tls13_client.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/ssl_tls13_generic.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/ssl_tls13_server.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/ssl_tls13_keys.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/threading.c
+		# ${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/timing.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/version.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/version_features.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/x509.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/x509_create.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/x509_crl.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/x509_crt.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/x509_csr.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/x509write_crt.c
+		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/x509write_csr.c
+	)
+endif()
 
 set(PUBLIC_HEADER
 	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/include
@@ -106,7 +116,7 @@ set(PRIVATE_DEFINES
 	SYSCALLS_H
 )
 
-if ((NOT ${CHIP} STREQUAL "ws63") AND (NOT ${CHIP} STREQUAL "ws53"))
+if ((NOT MBEDTLS_OHOS_SWITCH_ON) AND (NOT ${CHIP} STREQUAL "ws63") AND (NOT ${CHIP} STREQUAL "ws53"))
 	list(APPEND SOURCES
 		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/psa_crypto.c
 		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/psa_crypto_aead.c
@@ -146,9 +156,11 @@ elseif ((${CHIP} STREQUAL "ws63") OR (${CHIP} STREQUAL "ws53"))
 	list(APPEND PUBLIC_HEADER
 		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/configs/vendor
 	)
-	list(APPEND SOURCES
-		${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/net_sockets.c
-	)
+	if(NOT MBEDTLS_OHOS_SWITCH_ON)
+		list(APPEND SOURCES
+			${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/library/net_sockets.c
+		)
+	endif()
 endif()
 
 if("MBEDTLS_HARDEN_OPEN" IN_LIST DEFINES)
@@ -297,6 +309,11 @@ set(MAIN_COMPONENT
     false
 )
 
+if(MBEDTLS_OHOS_SWITCH_ON)
+    set(MBEDTLS_SDK_EXCLUDE_LINK ON)
+else()
+    set(MBEDTLS_SDK_EXCLUDE_LINK OFF)
+endif()
 build_component()
 
 if (${build_lib})
