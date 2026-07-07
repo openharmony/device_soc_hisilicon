@@ -95,113 +95,105 @@ KEY_CLEAN:
     return ret;
 }
 #else /* USE_ROOT_KEY */
-typedef struct {
-    td_handle kladHandle;
-    ot_klad_attr kladAttr;
-    ot_klad_session_key sessionKey;
-    ot_klad_content_key contentKey;
-} CipherRootKeyCtx;
-
-static td_s32 CipherRootKeyInitCtx(CipherRootKeyCtx *ctx, const td_u8 *key)
+td_s32 cipher_set_root_key(td_handle keyslot_handle, td_u8 *key)
 {
-    td_s32 ret;
-    ctx->kladAttr.klad_cfg.klad_type = OT_KLAD_TYPE_COMMON;
-    ctx->kladAttr.klad_cfg.rootkey_attr.key_secure = OT_KLAD_ROOTKEY_SEC_REE;
-    ctx->kladAttr.klad_cfg.rootkey_attr.key_sel = OT_KLAD_ROOTKEY_SEL_OEM0;
-    ctx->sessionKey.level = OT_KLAD_LEVEL1;
-    ctx->sessionKey.alg = OT_KLAD_ALG_TYPE_AES;
-    ctx->sessionKey.key_size = SESSION_KEY_LEN;
-    ctx->contentKey.alg = OT_KLAD_ALG_TYPE_AES;
-    ctx->contentKey.crypto_alg = OT_KLAD_CRYPTO_ALG_AES;
-    ctx->contentKey.key_size = CONTENT_KEY_LEN;
+    HDF_LOGI("[huks_hdi] %s:called.\n", __func__);
+    td_handle klad_handle = 0;
+    td_s32 ret = TD_FAILURE;
+    ot_klad_attr klad_attr = {
+        .klad_cfg = {
+            .klad_type = OT_KLAD_TYPE_COMMON,
+        },
+    };
+    ot_klad_session_key klad_session_key = {
+        .level = OT_KLAD_LEVEL1,
+        .alg = OT_KLAD_ALG_TYPE_AES,
+        .key_size = SESSION_KEY_LEN,
+    };
 
-    ret = memcpy_s(ctx->sessionKey.key, OT_KLAD_MAX_KEY_LEN,
-        key + CONTENT_KEY_LEN, SESSION_KEY_LEN);
+    ot_klad_content_key klad_content_key = {
+        .alg = OT_KLAD_ALG_TYPE_AES,
+        .crypto_alg = OT_KLAD_CRYPTO_ALG_AES,
+        .key_size = CONTENT_KEY_LEN,
+    };
+
+    klad_attr.klad_cfg.rootkey_attr.owner_id = 0;
+    klad_attr.klad_cfg.rootkey_attr.key_secure = OT_KLAD_ROOTKEY_SEC_REE;
+    klad_attr.klad_cfg.rootkey_attr.key_sel = OT_KLAD_ROOTKEY_SEL_OEM0;
+
+    ret = memcpy_s(klad_session_key.key, OT_KLAD_MAX_KEY_LEN, key + CONTENT_KEY_LEN, SESSION_KEY_LEN);
     if (ret != EOK) {
         HDF_LOGE("[huks_hdi] %s:memcpy_s failed\n", __func__);
-        return ret;
+        goto KEY_CLEAN;
     }
-    ret = memcpy_s(ctx->contentKey.key, OT_KLAD_MAX_KEY_LEN,
-        key, CONTENT_KEY_LEN);
+
+    ret = memcpy_s(klad_content_key.key, OT_KLAD_MAX_KEY_LEN, key, CONTENT_KEY_LEN);
     if (ret != EOK) {
         HDF_LOGE("[huks_hdi] %s:memcpy_s failed\n", __func__);
-        return ret;
+        goto KEY_CLEAN;
     }
-    return TD_SUCCESS;
-}
 
-static td_s32 CipherRootKeyKladOps(CipherRootKeyCtx *ctx, td_handle keyslot_handle)
-{
-    td_s32 ret = ss_mpi_klad_create(&ctx->kladHandle);
+    ret = ss_mpi_klad_create(&klad_handle);
     if (ret != TD_SUCCESS) {
         HDF_LOGE("[huks_hdi] %s:ss_mpi_klad_create failed\n", __func__);
-        return ret;
+        goto KEY_CLEAN;
     }
-    ret = ss_mpi_klad_attach(ctx->kladHandle, keyslot_handle);
+
+    ret = ss_mpi_klad_attach(klad_handle, keyslot_handle);
     if (ret != TD_SUCCESS) {
         HDF_LOGE("[huks_hdi] %s:ss_mpi_klad_attach failed\n", __func__);
         goto KLAD_DESTROY;
     }
-    ret = ss_mpi_klad_set_attr(ctx->kladHandle, &ctx->kladAttr);
+
+    ret = ss_mpi_klad_set_attr(klad_handle, &klad_attr);
     if (ret != TD_SUCCESS) {
         HDF_LOGE("[huks_hdi] %s:ss_mpi_klad_set_attr failed\n", __func__);
         goto KLAD_DETACH;
     }
-    ret = ss_mpi_klad_set_session_key(ctx->kladHandle, &ctx->sessionKey);
+
+    ret = ss_mpi_klad_set_session_key(klad_handle, &klad_session_key);
     if (ret != TD_SUCCESS) {
         HDF_LOGE("[huks_hdi] %s:ss_mpi_klad_set_session_key failed\n", __func__);
         goto KLAD_DETACH;
     }
-    ret = ss_mpi_klad_set_content_key(ctx->kladHandle, &ctx->contentKey);
+
+    ret = ss_mpi_klad_set_content_key(klad_handle, &klad_content_key);
     if (ret != TD_SUCCESS) {
         HDF_LOGE("[huks_hdi] %s:ss_mpi_klad_set_content_key failed\n", __func__);
     }
+
 KLAD_DETACH:
-    (void)ss_mpi_klad_detach(ctx->kladHandle, keyslot_handle);
+    (void)ss_mpi_klad_detach(klad_handle, keyslot_handle);
 KLAD_DESTROY:
-    (void)ss_mpi_klad_destroy(ctx->kladHandle);
-    return ret;
-}
-
-td_s32 cipher_set_root_key(td_handle keyslot_handle, td_u8 *key)
-{
-    HDF_LOGI("[huks_hdi] %s:called.\n", __func__);
-    CipherRootKeyCtx ctx = {0};
-    td_s32 ret;
-
-    ret = CipherRootKeyInitCtx(&ctx, key);
-    if (ret != TD_SUCCESS) {
-        goto KEY_CLEAN;
-    }
-    ret = CipherRootKeyKladOps(&ctx, keyslot_handle);
+    (void)ss_mpi_klad_destroy(klad_handle);
 KEY_CLEAN:
-    (void)memset_s(ctx.sessionKey.key, OT_KLAD_MAX_KEY_LEN, 0, OT_KLAD_MAX_KEY_LEN);
-    (void)memset_s(ctx.contentKey.key, OT_KLAD_MAX_KEY_LEN, 0, OT_KLAD_MAX_KEY_LEN);
+    (void)memset_s(klad_session_key.key, OT_KLAD_MAX_KEY_LEN, 0, OT_KLAD_MAX_KEY_LEN);
+    (void)memset_s(klad_content_key.key, OT_KLAD_MAX_KEY_LEN, 0, OT_KLAD_MAX_KEY_LEN);
     HDF_LOGI("[huks_hdi] %s:end.\n", __func__);
     return ret;
 }
 #endif /* end USE_ROOT_KEY */
 
 typedef struct {
-    td_handle symcHandle;
-    td_handle keyslotHandle;
-    ot_cipher_attr symcAttr;
-    ot_cipher_ctrl symcCtrl;
-    ot_keyslot_attr keyslotAttr;
+    td_handle symc_handle;
+    td_handle keyslot_handle;
+    ot_cipher_attr symc_attr;
+    ot_cipher_ctrl symc_ctrl;
+    ot_keyslot_attr keyslot_attr;
 } HksCipherCtx;
 
 static int32_t HksCipherCtxInit(HksCipherCtx *ctx, const struct HksBlob *keyMaterial)
 {
     (void)memset_s(ctx, sizeof(HksCipherCtx), 0, sizeof(HksCipherCtx));
-    ctx->keyslotAttr.type = OT_KEYSLOT_TYPE_MCIPHER;
-    ctx->keyslotAttr.secure_mode = OT_KEYSLOT_SECURE_MODE_NONE;
-    ctx->symcAttr.cipher_type = OT_CIPHER_TYPE_NORMAL;
-    ctx->symcCtrl.alg = OT_CIPHER_ALG_AES;
-    ctx->symcCtrl.work_mode = OT_CIPHER_WORK_MODE_CBC;
-    ctx->symcCtrl.aes_ctrl.bit_width = OT_CIPHER_BIT_WIDTH_128BIT;
-    ctx->symcCtrl.aes_ctrl.key_len = OT_CIPHER_KEY_AES_256BIT;
-    ctx->symcCtrl.aes_ctrl.chg_flags = OT_CIPHER_IV_CHG_ONE_PACK;
-    if (memcpy_s(ctx->symcCtrl.aes_ctrl.iv, sizeof(ctx->symcCtrl.aes_ctrl.iv),
+    ctx->keyslot_attr.type = OT_KEYSLOT_TYPE_MCIPHER;
+    ctx->keyslot_attr.secure_mode = OT_KEYSLOT_SECURE_MODE_NONE;
+    ctx->symc_attr.cipher_type = OT_CIPHER_TYPE_NORMAL;
+    ctx->symc_ctrl.alg = OT_CIPHER_ALG_AES;
+    ctx->symc_ctrl.work_mode = OT_CIPHER_WORK_MODE_CBC;
+    ctx->symc_ctrl.aes_ctrl.bit_width = OT_CIPHER_BIT_WIDTH_128BIT;
+    ctx->symc_ctrl.aes_ctrl.key_len = OT_CIPHER_KEY_AES_256BIT;
+    ctx->symc_ctrl.aes_ctrl.chg_flags = OT_CIPHER_IV_CHG_ONE_PACK;
+    if (memcpy_s(ctx->symc_ctrl.aes_ctrl.iv, sizeof(ctx->symc_ctrl.aes_ctrl.iv),
                  keyMaterial->data + CONTENT_KEY_LEN + SESSION_KEY_LEN, IV_LEN) != EOK) {
         HDF_LOGE("[huks_hdi] %s:memcpy  failed! \n", __func__);
         return HKS_ERROR_BAD_STATE;
@@ -217,7 +209,7 @@ static int32_t HksCipherOpen(HksCipherCtx *ctx)
         return ret;
     }
 
-    ret = ss_mpi_cipher_create(&ctx->symcHandle, &ctx->symcAttr);
+    ret = ss_mpi_cipher_create(&ctx->symc_handle, &ctx->symc_attr);
     if (ret != TD_SUCCESS) {
         HDF_LOGE("[huks_hdi] %s: ss_mpi_cipher_create failed! \n", __func__);
         goto CIPHER_DEINIT;
@@ -229,13 +221,13 @@ static int32_t HksCipherOpen(HksCipherCtx *ctx)
         goto CIPHER_DESTROY;
     }
 
-    ret = ss_mpi_keyslot_create(&ctx->keyslotAttr, &ctx->keyslotHandle);
+    ret = ss_mpi_keyslot_create(&ctx->keyslot_attr, &ctx->keyslot_handle);
     if (ret != TD_SUCCESS) {
         HDF_LOGE("[huks_hdi] %s:ss_mpi_keyslot_create failed\n", __func__);
         goto KM_DEINIT;
     }
 
-    ret = ss_mpi_cipher_attach(ctx->symcHandle, ctx->keyslotHandle);
+    ret = ss_mpi_cipher_attach(ctx->symc_handle, ctx->keyslot_handle);
     if (ret != TD_SUCCESS) {
         HDF_LOGE("[huks_hdi] %s:ss_mpi_cipher_symc_attach failed\n", __func__);
         goto KEYSLOT_DESTROY;
@@ -243,11 +235,11 @@ static int32_t HksCipherOpen(HksCipherCtx *ctx)
     return TD_SUCCESS;
 
 KEYSLOT_DESTROY:
-    (void)ss_mpi_keyslot_destroy(ctx->keyslotHandle);
+    (void)ss_mpi_keyslot_destroy(ctx->keyslot_handle);
 KM_DEINIT:
     (void)ss_mpi_klad_deinit();
 CIPHER_DESTROY:
-    ss_mpi_cipher_destroy(ctx->symcHandle);
+    ss_mpi_cipher_destroy(ctx->symc_handle);
 CIPHER_DEINIT:
     ss_mpi_cipher_deinit();
     return ret;
@@ -258,20 +250,20 @@ static int32_t HksCipherSetKeyAndCfg(HksCipherCtx *ctx, const struct HksBlob *ke
     int32_t ret;
 
 #ifdef USE_ROOT_KEY
-    ret = cipher_set_root_key(ctx->keyslotHandle, keyMaterial->data);
+    ret = cipher_set_root_key(ctx->keyslot_handle, keyMaterial->data);
     if (ret != TD_SUCCESS) {
         HDF_LOGE("[huks_hdi] %s:cipher_set_root_key failed! \n", __func__);
         return ret;
     }
 #else
-    ret = cipher_set_clear_key(ctx->keyslotHandle, keyMaterial->data);
+    ret = cipher_set_clear_key(ctx->keyslot_handle, keyMaterial->data);
     if (ret != TD_SUCCESS) {
         HDF_LOGE("[huks_hdi] %s:cipher_set_clear_key failed! \n", __func__);
         return ret;
     }
 #endif
 
-    ret = ss_mpi_cipher_set_cfg(ctx->symcHandle, &ctx->symcCtrl);
+    ret = ss_mpi_cipher_set_cfg(ctx->symc_handle, &ctx->symc_ctrl);
     if (ret != TD_SUCCESS) {
         HDF_LOGE("[huks_hdi] %s:ss_mpi_cipher_symc_set_config failed! \n", __func__);
     }
@@ -284,9 +276,9 @@ static int32_t HksCipherProcess(HksCipherCtx *ctx, const struct HksBlob *mainKey
     int32_t ret;
 
     if (isEncrypt) {
-        ret = ss_mpi_cipher_encrypt_virt(ctx->symcHandle, mainKey->data, derivedKey->data, derivedKey->size);
+        ret = ss_mpi_cipher_encrypt_virt(ctx->symc_handle, mainKey->data, derivedKey->data, derivedKey->size);
     } else {
-        ret = ss_mpi_cipher_decrypt_virt(ctx->symcHandle, mainKey->data, derivedKey->data, derivedKey->size);
+        ret = ss_mpi_cipher_decrypt_virt(ctx->symc_handle, mainKey->data, derivedKey->data, derivedKey->size);
     }
     if (ret != TD_SUCCESS) {
         HDF_LOGE("[huks_hdi] %s:ss_mpi_cipher_symc_encrypt or decrypt failed! \n", __func__);
@@ -296,13 +288,13 @@ static int32_t HksCipherProcess(HksCipherCtx *ctx, const struct HksBlob *mainKey
 
 static void HksCipherClose(HksCipherCtx *ctx)
 {
-    ss_mpi_cipher_detach(ctx->symcHandle, ctx->keyslotHandle);
-    (void)ss_mpi_keyslot_destroy(ctx->keyslotHandle);
+    ss_mpi_cipher_detach(ctx->symc_handle, ctx->keyslot_handle);
+    (void)ss_mpi_keyslot_destroy(ctx->keyslot_handle);
     (void)ss_mpi_klad_deinit();
-    ss_mpi_cipher_destroy(ctx->symcHandle);
+    ss_mpi_cipher_destroy(ctx->symc_handle);
     ss_mpi_cipher_deinit();
-    (void)memset_s(ctx->symcCtrl.aes_ctrl.iv, sizeof(ctx->symcCtrl.aes_ctrl.iv), 0,
-        sizeof(ctx->symcCtrl.aes_ctrl.iv));
+    (void)memset_s(ctx->symc_ctrl.aes_ctrl.iv, sizeof(ctx->symc_ctrl.aes_ctrl.iv), 0,
+        sizeof(ctx->symc_ctrl.aes_ctrl.iv));
 }
 
 int32_t HksCipherEncryptAndDecrypt(const struct HksBlob *mainKey,
@@ -326,7 +318,7 @@ int32_t HksCipherEncryptAndDecrypt(const struct HksBlob *mainKey,
     }
     HksCipherClose(&ctx);
 CIPHER_EXIT:
-    (void)memset_s(ctx.symcCtrl.aes_ctrl.iv, sizeof(ctx.symcCtrl.aes_ctrl.iv), 0, sizeof(ctx.symcCtrl.aes_ctrl.iv));
+    (void)memset_s(ctx.symc_ctrl.aes_ctrl.iv, sizeof(ctx.symc_ctrl.aes_ctrl.iv), 0, sizeof(ctx.symc_ctrl.aes_ctrl.iv));
     if (ret == TD_SUCCESS) {
         HDF_LOGI("[huks_hdi] %s:end.\n", __func__);
     }
@@ -356,7 +348,7 @@ int cipher_get_random(uint8_t *data, uint32_t size)
     HDF_LOGI("[huks_hdi] %s:called.\n", __func__);
     uint32_t count = size / CIPHER_RANDOM_LEN;
     uint32_t tail_len = size % CIPHER_RANDOM_LEN;
-    int outLen = 0;
+    int out_len = 0;
     uint32_t random_num = 0;
     uint32_t cur_len = 0;
     td_s32 ret = TD_SUCCESS;
@@ -382,14 +374,14 @@ int cipher_get_random(uint8_t *data, uint32_t size)
         cur_len = tail_len;
     }
 
-    ret = memcpy_s(data + outLen, size - outLen, &random_num, cur_len);
+    ret = memcpy_s(data + out_len, size - out_len, &random_num, cur_len);
         if (ret != EOK) {
             HDF_LOGE("[huks_hdi] %s:Memcpy random failed! \n", __func__);
             ret = TD_FAILURE;
             goto errExit;
         }
 
-        outLen += cur_len;
+        out_len += cur_len;
     }
 
     HDF_LOGI("[huks_hdi] %s:end.\n", __func__);

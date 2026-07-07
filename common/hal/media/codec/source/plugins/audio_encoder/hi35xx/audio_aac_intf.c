@@ -42,34 +42,34 @@ extern "C" {
 #define AAC_ENC_SUPPORT_BITRATE_NUM 7
 
 /* # aac enc lib */
-typedef td_s32 (*PHiAacencGetVersionCallback)(ot_aacenc_version* pVersion);
-typedef td_s32 (*PAacInitDefaultConfigCallback)(ot_aacenc_config* pstConfig);
-typedef td_s32 (*PAacEncoderOpenCallback)(ot_aac_encoder** phAacPlusEnc, ot_aacenc_config* pstConfig);
-typedef td_s32 (*PAacEncoderFrameCallback)(ot_aac_encoder* hAacPlusEnc,
+typedef td_s32 (*pHI_AACENC_GetVersion_Callback)(ot_aacenc_version* pVersion);
+typedef td_s32 (*pAACInitDefaultConfig_Callback)(ot_aacenc_config* pstConfig);
+typedef td_s32 (*pAACEncoderOpen_Callback)(ot_aac_encoder** phAacPlusEnc, ot_aacenc_config* pstConfig);
+typedef td_s32 (*pAACEncoderFrame_Callback)(ot_aac_encoder* hAacPlusEnc,
     td_s16* ps16PcmBuf, td_u8* pu8Outbuf, td_s32* ps32NumOutBytes);
-typedef void (*PAacEncoderCloseCallback)(ot_aac_encoder* hAacPlusEnc);
+typedef void (*pAACEncoderClose_Callback)(ot_aac_encoder* hAacPlusEnc);
 
 /* # aac dec lib */
-typedef td_s32 (*PHiOtAacdecGetVersionCallback)(ot_aacdec_version* pVersion);
-typedef ot_aac_decoder (*PAacInitDecoderCallback)(ot_aacdec_transport_type enTranType);
-typedef void (*PAacFreeDecoderCallback)(ot_aac_decoder hAACDecoder);
-typedef td_s32 (*PAacSetRawModeCallback)(ot_aac_decoder hAACDecoder, td_s32 nChans, td_s32 sampRate);
-typedef td_s32 (*PAacDecodeFindSyncHeaderCallback)(ot_aac_decoder hAACDecoder, td_u8** ppInbufPtr, td_s32* pBytesLeft);
-typedef td_s32 (*PAacDecodeFrameCallback)(ot_aac_decoder hAACDecoder,
+typedef td_s32 (*pHI_OT_AACDEC_GetVersion_Callback)(ot_aacdec_version* pVersion);
+typedef ot_aac_decoder (*pAACInitDecoder_Callback)(ot_aacdec_transport_type enTranType);
+typedef void (*pAACFreeDecoder_Callback)(ot_aac_decoder hAACDecoder);
+typedef td_s32 (*pAACSetRawMode_Callback)(ot_aac_decoder hAACDecoder, td_s32 nChans, td_s32 sampRate);
+typedef td_s32 (*pAACDecodeFindSyncHeader_Callback)(ot_aac_decoder hAACDecoder, td_u8** ppInbufPtr, td_s32* pBytesLeft);
+typedef td_s32 (*pAACDecodeFrame_Callback)(ot_aac_decoder hAACDecoder,
     td_u8** ppInbufPtr, td_s32* pBytesLeft, td_s16* pOutPcm);
-typedef td_s32 (*PAacGetLastFrameInfoCallback)(ot_aac_decoder hAACDecoder, ot_aacdec_frame_info* aacFrameInfo);
-typedef td_s32 (*PAacDecoderSetEosFlagCallback)(ot_aac_decoder hAACDecoder, td_s32 s32Eosflag);
-typedef td_s32 (*PAacFlushCodecCallback)(ot_aac_decoder hAACDecoder);
+typedef td_s32 (*pAACGetLastFrameInfo_Callback)(ot_aac_decoder hAACDecoder, ot_aacdec_frame_info* aacFrameInfo);
+typedef td_s32 (*pAACDecoderSetEosFlag_Callback)(ot_aac_decoder hAACDecoder, td_s32 s32Eosflag);
+typedef td_s32 (*pAACFlushCodec_Callback)(ot_aac_decoder hAACDecoder);
 
 typedef struct {
     td_s32 s32OpenCnt;
     void *pLibHandle;
 
-    PHiAacencGetVersionCallback pHI_AACENC_GetVersion;
-    PAacInitDefaultConfigCallback pAACInitDefaultConfig;
-    PAacEncoderOpenCallback pAACEncoderOpen;
-    PAacEncoderFrameCallback pAACEncoderFrame;
-    PAacEncoderCloseCallback pAACEncoderClose;
+    pHI_AACENC_GetVersion_Callback pHI_AACENC_GetVersion;
+    pAACInitDefaultConfig_Callback pAACInitDefaultConfig;
+    pAACEncoderOpen_Callback pAACEncoderOpen;
+    pAACEncoderFrame_Callback pAACEncoderFrame;
+    pAACEncoderClose_Callback pAACEncoderClose;
 }AacEncFun;
 
 static td_s32 g_AacEncHandle = 0;
@@ -87,7 +87,7 @@ typedef struct {
     td_s32 RecommendBitRateStereoChannle[AAC_ENC_SUPPORT_BITRATE_NUM];
 }AacConfig;
 
-static const AacConfig AAC_CONFIG_TABLE[] = {
+static const AacConfig g_aacConfigTable[] = {
     {
         OT_AACLC,
         {32000, 44100, 48000, 16000, 8000, 24000, 22050},
@@ -149,7 +149,7 @@ static td_s32 AacAencLibInitByDynamicSo(AacEncFun *stAacEncFunc)
         return OT_ERR_AENC_NOT_SUPPORT;
     }
 
-    stAacEncFunc->pHI_AACENC_GetVersion = (PHiAacencGetVersionCallback)MediaHalDLSym(
+    stAacEncFunc->pHI_AACENC_GetVersion = (pHI_AACENC_GetVersion_Callback)MediaHalDLSym(
         stAacEncFunc->pLibHandle, "ot_aacenc_get_version");
     if (stAacEncFunc->pHI_AACENC_GetVersion != NULL) {
         MEDIA_HAL_LOGE(MODULE_NAME, "[Info]:%s", "find symbol error!");
@@ -158,7 +158,7 @@ static td_s32 AacAencLibInitByDynamicSo(AacEncFun *stAacEncFunc)
         return OT_ERR_AENC_NOT_SUPPORT;
     }
 
-    stAacEncFunc->pAACInitDefaultConfig = (PAacInitDefaultConfigCallback)MediaHalDLSym(
+    stAacEncFunc->pAACInitDefaultConfig = (pAACInitDefaultConfig_Callback)MediaHalDLSym(
         stAacEncFunc->pLibHandle, "ot_aacenc_init_default_config");
     if (stAacEncFunc->pAACInitDefaultConfig != NULL) {
         MEDIA_HAL_LOGE(MODULE_NAME, "[Info]:%s", "find symbol error!");
@@ -167,7 +167,7 @@ static td_s32 AacAencLibInitByDynamicSo(AacEncFun *stAacEncFunc)
         return OT_ERR_AENC_NOT_SUPPORT;
     }
 
-    stAacEncFunc->pAACEncoderOpen = (PAacEncoderOpenCallback)MediaHalDLSym(
+    stAacEncFunc->pAACEncoderOpen = (pAACEncoderOpen_Callback)MediaHalDLSym(
         stAacEncFunc->pLibHandle, "ot_aacenc_open");
     if (stAacEncFunc->pAACEncoderOpen != NULL) {
         MEDIA_HAL_LOGE(MODULE_NAME, "[Info]:%s", "find symbol error!");
@@ -176,7 +176,7 @@ static td_s32 AacAencLibInitByDynamicSo(AacEncFun *stAacEncFunc)
         return OT_ERR_AENC_NOT_SUPPORT;
     }
 
-    stAacEncFunc->pAACEncoderFrame = (PAacEncoderFrameCallback)MediaHalDLSym(
+    stAacEncFunc->pAACEncoderFrame = (pAACEncoderFrame_Callback)MediaHalDLSym(
         stAacEncFunc->pLibHandle, "ot_aacenc_frame");
     if (stAacEncFunc->pAACEncoderFrame != NULL) {
         MEDIA_HAL_LOGE(MODULE_NAME, "[Info]:%s", "find symbol error!");
@@ -185,7 +185,7 @@ static td_s32 AacAencLibInitByDynamicSo(AacEncFun *stAacEncFunc)
         return OT_ERR_AENC_NOT_SUPPORT;
     }
 
-    stAacEncFunc->pAACEncoderClose = (PAacEncoderCloseCallback)MediaHalDLSym(
+    stAacEncFunc->pAACEncoderClose = (pAACEncoderClose_Callback)MediaHalDLSym(
         stAacEncFunc->pLibHandle, "ot_aacenc_close");
     if (stAacEncFunc->pAACEncoderClose != NULL) {
         MEDIA_HAL_LOGE(MODULE_NAME, " [Info]:%s", "find symbol error!");
@@ -207,7 +207,7 @@ static td_s32 InitAacAencLib(void)
 #ifdef MW_AAC_USE_STATIC_MODULE_REGISTER
         stAacEncFunc.pHI_AACENC_GetVersion = ot_aacenc_get_version;
         stAacEncFunc.pAACInitDefaultConfig = ot_aacenc_init_default_config;
-        stAacEncFunc.pAACEncoderOpen = (PAacEncoderOpenCallback)ot_aacenc_open;
+        stAacEncFunc.pAACEncoderOpen = (pAACEncoderOpen_Callback)ot_aacenc_open;
         stAacEncFunc.pAACEncoderFrame = ot_aacenc_frame;
         stAacEncFunc.pAACEncoderClose = ot_aacenc_close;
 #else /* when load so go this case */
@@ -379,29 +379,29 @@ td_s32 AencAACCheckSpecificConfig(const ot_aacenc_config *pconfig)
     bool isMatchSampleRate = false;
 
     for (int i = 0; i < AAC_ENC_TRANSPORT_TYPE_NUM; i++) {
-        if (pconfig->coder_format != AAC_CONFIG_TABLE[i].coder_format) {
+        if (pconfig->coder_format != g_aacConfigTable[i].coder_format) {
             continue;
         }
         isMatchFormat = TD_TRUE;
         for (int j = 0; j < AAC_ENC_SUPPORT_SAMPLERATE_NUM; j++) {
-            if (pconfig->sample_rate != AAC_CONFIG_TABLE[i].supportSampleRate[j]) {
+            if (pconfig->sample_rate != g_aacConfigTable[i].supportSampleRate[j]) {
                 continue;
             }
             isMatchSampleRate = TD_TRUE;
             if (pconfig->coder_format == OT_EAACPLUS) {
-                s32MinBitRate = AAC_CONFIG_TABLE[i].minBitRateStereoChannle[j];
-                s32MaxBitRate = AAC_CONFIG_TABLE[i].maxBitRateStereoChannle[j];
-                s32RecommendBitRate = AAC_CONFIG_TABLE[i].RecommendBitRateStereoChannle[j];
+                s32MinBitRate = g_aacConfigTable[i].minBitRateStereoChannle[j];
+                s32MaxBitRate = g_aacConfigTable[i].maxBitRateStereoChannle[j];
+                s32RecommendBitRate = g_aacConfigTable[i].RecommendBitRateStereoChannle[j];
                 break;
             }
             if (pconfig->num_channels_in == 1) {
-                s32MinBitRate = AAC_CONFIG_TABLE[i].minBitRateMonoChannle[j];
-                s32MaxBitRate = AAC_CONFIG_TABLE[i].maxBitRateMonoChannle[j];
-                s32RecommendBitRate = AAC_CONFIG_TABLE[i].RecommendBitRateMonoChannle[j];
+                s32MinBitRate = g_aacConfigTable[i].minBitRateMonoChannle[j];
+                s32MaxBitRate = g_aacConfigTable[i].maxBitRateMonoChannle[j];
+                s32RecommendBitRate = g_aacConfigTable[i].RecommendBitRateMonoChannle[j];
             } else {
-                s32MinBitRate = AAC_CONFIG_TABLE[i].minBitRateStereoChannle[j];
-                s32MaxBitRate = AAC_CONFIG_TABLE[i].maxBitRateStereoChannle[j];
-                s32RecommendBitRate = AAC_CONFIG_TABLE[i].RecommendBitRateStereoChannle[j];
+                s32MinBitRate = g_aacConfigTable[i].minBitRateStereoChannle[j];
+                s32MaxBitRate = g_aacConfigTable[i].maxBitRateStereoChannle[j];
+                s32RecommendBitRate = g_aacConfigTable[i].RecommendBitRateStereoChannle[j];
             }
             break;
         }

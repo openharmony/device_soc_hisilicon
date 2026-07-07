@@ -99,6 +99,7 @@
 
 # 概述<a name="ZH-CN_TOPIC_0000002408294044"></a>
 
+-   **[概述](#ZH-CN_TOPIC_0000002408134140)**  
 
 ## 概述<a name="ZH-CN_TOPIC_0000002408134140"></a>
 
@@ -106,18 +107,21 @@ IVS（Intelligent Video Surveillance）比IVE（Intelligent Video Engine，识�
 
 # MD<a name="ZH-CN_TOPIC_0000002408134164"></a>
 
+-   **[功能描述](#ZH-CN_TOPIC_0000002441733317)**  
 
+-   **[错误码](#ZH-CN_TOPIC_0000002408294036)**  
 
-
-
+-   **[Proc调试信息](#ZH-CN_TOPIC_0000002408294100)**  
 
 ## 功能描述<a name="ZH-CN_TOPIC_0000002441733317"></a>
 
+-   **[移动侦测](#ZH-CN_TOPIC_0000002408134128)**  
 
 ### 移动侦测<a name="ZH-CN_TOPIC_0000002408134128"></a>
 
 移动侦测通过检测视频的亮度变化，侦测视频的运动状态，得出视频侦测分析结果。
 
+-   **[基本概念](#ZH-CN_TOPIC_0000002408294084)**  
 
 #### 基本概念<a name="ZH-CN_TOPIC_0000002408294084"></a>
 
@@ -146,22 +150,14 @@ MD API提供了初始化、退出、获取句柄、释放句柄、获取背景�
 
 该功能模块提供以下API：
 
--   [ss\_ivs\_md\_init](ss_ivs_md_init.md)：初始化。
--   [ss\_ivs\_md\_exit](ss_ivs_md_exit.md)：退出。
--   [ss\_ivs\_md\_create\_chn](ss_ivs_md_create_chn.md)：创建MD通道。
--   [ss\_ivs\_md\_destroy\_chn](ss_ivs_md_destroy_chn.md)：销毁MD通道。
--   [ss\_ivs\_md\_set\_chn\_attr](ss_ivs_md_set_chn_attr.md)：设置MD通道属性。
--   [ss\_ivs\_md\_get\_chn\_attr](ss_ivs_md_get_chn_attr.md)：获取MD通道属性。
--   [ss\_ivs\_md\_get\_bg](ss_ivs_md_get_bg.md)：获取背景。
--   [ss\_ivs\_md\_proc](ss_ivs_md_proc.md)：侦测处理。
-
-
-
-
-
-
-
-
+-   [ss\_ivs\_md\_init](#ZH-CN_TOPIC_0000002441733309)：初始化。
+-   [ss\_ivs\_md\_exit](#ZH-CN_TOPIC_0000002408134148)：退出。
+-   [ss\_ivs\_md\_create\_chn](#ZH-CN_TOPIC_0000002441733333)：创建MD通道。
+-   [ss\_ivs\_md\_destroy\_chn](#ZH-CN_TOPIC_0000002441853505)：销毁MD通道。
+-   [ss\_ivs\_md\_set\_chn\_attr](#ZH-CN_TOPIC_0000002408294068)：设置MD通道属性。
+-   [ss\_ivs\_md\_get\_chn\_attr](#ZH-CN_TOPIC_0000002408294052)：获取MD通道属性。
+-   [ss\_ivs\_md\_get\_bg](#ZH-CN_TOPIC_0000002408134192)：获取背景。
+-   [ss\_ivs\_md\_proc](#ZH-CN_TOPIC_0000002441733297)：侦测处理。
 
 ### ss\_ivs\_md\_init<a name="ZH-CN_TOPIC_0000002441733309"></a>
 
@@ -195,7 +191,7 @@ td_s32 ss_ivs_md_init(td_void)；
 </tr>
 <tr id="row304mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.3.1.1 "><p id="p306mcpsimp"><a name="p306mcpsimp"></a><a name="p306mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p308mcpsimp"><a name="p308mcpsimp"></a><a name="p308mcpsimp"></a>失败，参见<a href="错误码.md">错误码</a><span xml:lang="fr-FR" id="ph311mcpsimp"><a name="ph311mcpsimp"></a><a name="ph311mcpsimp"></a>。</span></p>
+<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p308mcpsimp"><a name="p308mcpsimp"></a><a name="p308mcpsimp"></a>失败，参见<a href="#ZH-CN_TOPIC_0000002408294036">错误码</a><span xml:lang="fr-FR" id="ph311mcpsimp"><a name="ph311mcpsimp"></a><a name="ph311mcpsimp"></a>。</span></p>
 </td>
 </tr>
 </tbody>
@@ -209,7 +205,7 @@ td_s32 ss_ivs_md_init(td_void)；
 【注意】
 
 -   调用MD其他接口前必须先调用此接口进行初始化，而且只需调用一次即可，否则返回错误。
--   该接口必须和[ss\_ivs\_md\_exit](ss_ivs_md_exit.md)配套使用。
+-   该接口必须和[ss\_ivs\_md\_exit](#ZH-CN_TOPIC_0000002408134148)配套使用。
 
 【举例】
 
@@ -217,7 +213,7 @@ td_s32 ss_ivs_md_init(td_void)；
 
 【相关主题】
 
-[ss\_ivs\_md\_exit](#ss_ivs_md_exit)
+[ss\_ivs\_md\_exit](#ZH-CN_TOPIC_0000002408134148)
 
 ### ss\_ivs\_md\_exit<a name="ZH-CN_TOPIC_0000002408134148"></a>
 
@@ -251,7 +247,7 @@ td_s32 ss_ivs_md_exit(td_void);
 </tr>
 <tr id="row349mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.3.1.1 "><p id="p351mcpsimp"><a name="p351mcpsimp"></a><a name="p351mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p353mcpsimp"><a name="p353mcpsimp"></a><a name="p353mcpsimp"></a>失败，参见<a href="错误码.md">错误码</a><span xml:lang="fr-FR" id="ph356mcpsimp"><a name="ph356mcpsimp"></a><a name="ph356mcpsimp"></a>。</span></p>
+<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p353mcpsimp"><a name="p353mcpsimp"></a><a name="p353mcpsimp"></a>失败，参见<a href="#ZH-CN_TOPIC_0000002408294036">错误码</a><span xml:lang="fr-FR" id="ph356mcpsimp"><a name="ph356mcpsimp"></a><a name="ph356mcpsimp"></a>。</span></p>
 </td>
 </tr>
 </tbody>
@@ -264,7 +260,7 @@ td_s32 ss_ivs_md_exit(td_void);
 
 【注意】
 
-必须先调用[ss\_ivs\_md\_init](ss_ivs_md_init.md)初始化才能调用此接口退出，否则返回错误。
+必须先调用[ss\_ivs\_md\_init](#ZH-CN_TOPIC_0000002441733309)初始化才能调用此接口退出，否则返回错误。
 
 【举例】
 
@@ -272,7 +268,7 @@ td_s32 ss_ivs_md_exit(td_void);
 
 【相关主题】
 
-[ss\_ivs\_md\_init](#ss_ivs_md_init)
+[ss\_ivs\_md\_init](#ZH-CN_TOPIC_0000002441733309)
 
 ### ss\_ivs\_md\_create\_chn<a name="ZH-CN_TOPIC_0000002441733333"></a>
 
@@ -331,7 +327,7 @@ td_s32 ss_ivs_md_create_chn(ot_md_chn md_chn, ot_md_attr *md_attr);
 </tr>
 <tr id="row422mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.3.1.1 "><p id="p424mcpsimp"><a name="p424mcpsimp"></a><a name="p424mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p426mcpsimp"><a name="p426mcpsimp"></a><a name="p426mcpsimp"></a>失败，参见<a href="错误码.md">错误码</a><span xml:lang="fr-FR" id="ph429mcpsimp"><a name="ph429mcpsimp"></a><a name="ph429mcpsimp"></a>。</span></p>
+<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p426mcpsimp"><a name="p426mcpsimp"></a><a name="p426mcpsimp"></a>失败，参见<a href="#ZH-CN_TOPIC_0000002408294036">错误码</a><span xml:lang="fr-FR" id="ph429mcpsimp"><a name="ph429mcpsimp"></a><a name="ph429mcpsimp"></a>。</span></p>
 </td>
 </tr>
 </tbody>
@@ -344,7 +340,7 @@ td_s32 ss_ivs_md_create_chn(ot_md_chn md_chn, ot_md_attr *md_attr);
 
 【注意】
 
-必须先调用[ss\_ivs\_md\_init](ss_ivs_md_init.md)初始化，否则返回错误。
+必须先调用[ss\_ivs\_md\_init](#ZH-CN_TOPIC_0000002441733309)初始化，否则返回错误。
 
 【举例】
 
@@ -352,11 +348,11 @@ td_s32 ss_ivs_md_create_chn(ot_md_chn md_chn, ot_md_attr *md_attr);
 
 【相关主题】
 
--   [ss\_ivs\_md\_destroy\_chn](#ss_ivs_md_destroy_chn)
--   [ss\_ivs\_md\_set\_chn\_attr](#ss_ivs_md_set_chn_attr)
--   [ss\_ivs\_md\_get\_chn\_attr](#ss_ivs_md_get_chn_attr)
--   [ss\_ivs\_md\_get\_bg](#ss_ivs_md_get_bg)
--   [ss\_ivs\_md\_proc](#ss_ivs_md_proc)
+-   [ss\_ivs\_md\_destroy\_chn](#ZH-CN_TOPIC_0000002441853505)
+-   [ss\_ivs\_md\_set\_chn\_attr](#ZH-CN_TOPIC_0000002408294068)
+-   [ss\_ivs\_md\_get\_chn\_attr](#ZH-CN_TOPIC_0000002408294052)
+-   [ss\_ivs\_md\_get\_bg](#ZH-CN_TOPIC_0000002408134192)
+-   [ss\_ivs\_md\_proc](#ZH-CN_TOPIC_0000002441733297)
 
 ### ss\_ivs\_md\_destroy\_chn<a name="ZH-CN_TOPIC_0000002441853505"></a>
 
@@ -407,7 +403,7 @@ td_s32 ss_ivs_md_destroy_chn(ot_md_chn md_chn);
 </tr>
 <tr id="row495mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.3.1.1 "><p id="p497mcpsimp"><a name="p497mcpsimp"></a><a name="p497mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p499mcpsimp"><a name="p499mcpsimp"></a><a name="p499mcpsimp"></a>失败，参见<a href="错误码.md">错误码</a><span xml:lang="fr-FR" id="ph502mcpsimp"><a name="ph502mcpsimp"></a><a name="ph502mcpsimp"></a>。</span></p>
+<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p499mcpsimp"><a name="p499mcpsimp"></a><a name="p499mcpsimp"></a>失败，参见<a href="#ZH-CN_TOPIC_0000002408294036">错误码</a><span xml:lang="fr-FR" id="ph502mcpsimp"><a name="ph502mcpsimp"></a><a name="ph502mcpsimp"></a>。</span></p>
 </td>
 </tr>
 </tbody>
@@ -420,8 +416,8 @@ td_s32 ss_ivs_md_destroy_chn(ot_md_chn md_chn);
 
 【注意】
 
--   必须先调用[ss\_ivs\_md\_init](ss_ivs_md_init.md)初始化，否则返回错误。
--   md\_chn必须为[ss\_ivs\_md\_create\_chn](ss_ivs_md_create_chn.md)已创建的通道号,否则返回错误。
+-   必须先调用[ss\_ivs\_md\_init](#ZH-CN_TOPIC_0000002441733309)初始化，否则返回错误。
+-   md\_chn必须为[ss\_ivs\_md\_create\_chn](#ZH-CN_TOPIC_0000002441733333)已创建的通道号,否则返回错误。
 
 【举例】
 
@@ -429,11 +425,11 @@ td_s32 ss_ivs_md_destroy_chn(ot_md_chn md_chn);
 
 【相关主题】
 
--   [ss\_ivs\_md\_create\_chn](#ss_ivs_md_create_chn)
--   [ss\_ivs\_md\_set\_chn\_attr](#ss_ivs_md_set_chn_attr)
--   [ss\_ivs\_md\_get\_chn\_attr](#ss_ivs_md_get_chn_attr)
--   [ss\_ivs\_md\_get\_bg](#ss_ivs_md_get_bg)
--   [ss\_ivs\_md\_proc](#ss_ivs_md_proc)
+-   [ss\_ivs\_md\_create\_chn](#ZH-CN_TOPIC_0000002441733333)
+-   [ss\_ivs\_md\_set\_chn\_attr](#ZH-CN_TOPIC_0000002408294068)
+-   [ss\_ivs\_md\_get\_chn\_attr](#ZH-CN_TOPIC_0000002408294052)
+-   [ss\_ivs\_md\_get\_bg](#ZH-CN_TOPIC_0000002408134192)
+-   [ss\_ivs\_md\_proc](#ZH-CN_TOPIC_0000002441733297)
 
 ### ss\_ivs\_md\_set\_chn\_attr<a name="ZH-CN_TOPIC_0000002408294068"></a>
 
@@ -492,7 +488,7 @@ td_s32 ss_ivs_md_set_chn_attr(ot_md_chn md_chn, ot_md_attr *md_attr);
 </tr>
 <tr id="row580mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.3.1.1 "><p id="p582mcpsimp"><a name="p582mcpsimp"></a><a name="p582mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p584mcpsimp"><a name="p584mcpsimp"></a><a name="p584mcpsimp"></a>失败，参见<a href="错误码.md">错误码</a><span xml:lang="fr-FR" id="ph587mcpsimp"><a name="ph587mcpsimp"></a><a name="ph587mcpsimp"></a>。</span></p>
+<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p584mcpsimp"><a name="p584mcpsimp"></a><a name="p584mcpsimp"></a>失败，参见<a href="#ZH-CN_TOPIC_0000002408294036">错误码</a><span xml:lang="fr-FR" id="ph587mcpsimp"><a name="ph587mcpsimp"></a><a name="ph587mcpsimp"></a>。</span></p>
 </td>
 </tr>
 </tbody>
@@ -505,8 +501,8 @@ td_s32 ss_ivs_md_set_chn_attr(ot_md_chn md_chn, ot_md_attr *md_attr);
 
 【注意】
 
--   必须先调用[ss\_ivs\_md\_init](ss_ivs_md_init.md)初始化，否则返回错误。
--   md\_chn必须为[ss\_ivs\_md\_create\_chn](ss_ivs_md_create_chn.md)已创建的通道号,否则返回错误。
+-   必须先调用[ss\_ivs\_md\_init](#ZH-CN_TOPIC_0000002441733309)初始化，否则返回错误。
+-   md\_chn必须为[ss\_ivs\_md\_create\_chn](#ZH-CN_TOPIC_0000002441733333)已创建的通道号,否则返回错误。
 -   通道静态属性\(alg\_mode、sad\_mode、width、height\)不能更改，必须与创建通道时相等，否则返回错误。
 
 【举例】
@@ -515,11 +511,11 @@ td_s32 ss_ivs_md_set_chn_attr(ot_md_chn md_chn, ot_md_attr *md_attr);
 
 【相关主题】
 
--   [ss\_ivs\_md\_create\_chn](#ss_ivs_md_create_chn)
--   [ss\_ivs\_md\_destroy\_chn](#ss_ivs_md_destroy_chn)
--   [ss\_ivs\_md\_get\_chn\_attr](#ss_ivs_md_get_chn_attr)
--   [ss\_ivs\_md\_get\_bg](#ss_ivs_md_get_bg)
--   [ss\_ivs\_md\_proc](#ss_ivs_md_proc)
+-   [ss\_ivs\_md\_create\_chn](#ZH-CN_TOPIC_0000002441733333)
+-   [ss\_ivs\_md\_destroy\_chn](#ZH-CN_TOPIC_0000002441853505)
+-   [ss\_ivs\_md\_get\_chn\_attr](#ZH-CN_TOPIC_0000002408294052)
+-   [ss\_ivs\_md\_get\_bg](#ZH-CN_TOPIC_0000002408134192)
+-   [ss\_ivs\_md\_proc](#ZH-CN_TOPIC_0000002441733297)
 
 ### ss\_ivs\_md\_get\_chn\_attr<a name="ZH-CN_TOPIC_0000002408294052"></a>
 
@@ -578,7 +574,7 @@ td_s32 ss_ivs_md_get_chn_attr(ot_md_chn md_chn, ot_md_attr *md_attr);
 </tr>
 <tr id="row666mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.3.1.1 "><p id="p668mcpsimp"><a name="p668mcpsimp"></a><a name="p668mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p670mcpsimp"><a name="p670mcpsimp"></a><a name="p670mcpsimp"></a>失败，参见<a href="错误码.md">错误码</a><span xml:lang="fr-FR" id="ph673mcpsimp"><a name="ph673mcpsimp"></a><a name="ph673mcpsimp"></a>。</span></p>
+<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p670mcpsimp"><a name="p670mcpsimp"></a><a name="p670mcpsimp"></a>失败，参见<a href="#ZH-CN_TOPIC_0000002408294036">错误码</a><span xml:lang="fr-FR" id="ph673mcpsimp"><a name="ph673mcpsimp"></a><a name="ph673mcpsimp"></a>。</span></p>
 </td>
 </tr>
 </tbody>
@@ -591,8 +587,8 @@ td_s32 ss_ivs_md_get_chn_attr(ot_md_chn md_chn, ot_md_attr *md_attr);
 
 【注意】
 
--   必须先调用[ss\_ivs\_md\_init](ss_ivs_md_init.md)初始化，否则返回错误。
--   md\_chn必须为[ss\_ivs\_md\_create\_chn](ss_ivs_md_create_chn.md)已创建的通道号,否则返回错误。
+-   必须先调用[ss\_ivs\_md\_init](#ZH-CN_TOPIC_0000002441733309)初始化，否则返回错误。
+-   md\_chn必须为[ss\_ivs\_md\_create\_chn](#ZH-CN_TOPIC_0000002441733333)已创建的通道号,否则返回错误。
 
 【举例】
 
@@ -600,11 +596,11 @@ td_s32 ss_ivs_md_get_chn_attr(ot_md_chn md_chn, ot_md_attr *md_attr);
 
 【相关主题】
 
--   [ss\_ivs\_md\_create\_chn](#ss_ivs_md_create_chn)
--   [ss\_ivs\_md\_destroy\_chn](#ss_ivs_md_destroy_chn)
--   [ss\_ivs\_md\_set\_chn\_attr](#ss_ivs_md_set_chn_attr)
--   [ss\_ivs\_md\_get\_bg](#ss_ivs_md_get_bg)
--   [ss\_ivs\_md\_proc](#ss_ivs_md_proc)
+-   [ss\_ivs\_md\_create\_chn](#ZH-CN_TOPIC_0000002441733333)
+-   [ss\_ivs\_md\_destroy\_chn](#ZH-CN_TOPIC_0000002441853505)
+-   [ss\_ivs\_md\_set\_chn\_attr](#ZH-CN_TOPIC_0000002408294068)
+-   [ss\_ivs\_md\_get\_bg](#ZH-CN_TOPIC_0000002408134192)
+-   [ss\_ivs\_md\_proc](#ZH-CN_TOPIC_0000002441733297)
 
 ### ss\_ivs\_md\_get\_bg<a name="ZH-CN_TOPIC_0000002408134192"></a>
 
@@ -686,7 +682,7 @@ td_s32 ss_ivs_md_get_bg(ot_md_chn md_chn, ot_svp_dst_img *bg);
 </tr>
 <tr id="row776mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.3.1.1 "><p id="p778mcpsimp"><a name="p778mcpsimp"></a><a name="p778mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p780mcpsimp"><a name="p780mcpsimp"></a><a name="p780mcpsimp"></a>失败，参见<a href="错误码.md">错误码</a><span xml:lang="fr-FR" id="ph783mcpsimp"><a name="ph783mcpsimp"></a><a name="ph783mcpsimp"></a>。</span></p>
+<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p780mcpsimp"><a name="p780mcpsimp"></a><a name="p780mcpsimp"></a>失败，参见<a href="#ZH-CN_TOPIC_0000002408294036">错误码</a><span xml:lang="fr-FR" id="ph783mcpsimp"><a name="ph783mcpsimp"></a><a name="ph783mcpsimp"></a>。</span></p>
 </td>
 </tr>
 </tbody>
@@ -699,8 +695,8 @@ td_s32 ss_ivs_md_get_bg(ot_md_chn md_chn, ot_svp_dst_img *bg);
 
 【注意】
 
--   必须先调用[ss\_ivs\_md\_init](ss_ivs_md_init.md)初始化，否则返回错误。
--   md\_chn必须为[ss\_ivs\_md\_create\_chn](ss_ivs_md_create_chn.md)已创建的通道号，否则返回错误。
+-   必须先调用[ss\_ivs\_md\_init](#ZH-CN_TOPIC_0000002441733309)初始化，否则返回错误。
+-   md\_chn必须为[ss\_ivs\_md\_create\_chn](#ZH-CN_TOPIC_0000002441733333)已创建的通道号，否则返回错误。
 -   只有背景法时，才能获取背景数据，否则返回错误。
 
 【举例】
@@ -709,10 +705,10 @@ td_s32 ss_ivs_md_get_bg(ot_md_chn md_chn, ot_svp_dst_img *bg);
 
 【相关主题】
 
--   [ss\_ivs\_md\_create\_chn](#ss_ivs_md_create_chn)
--   [ss\_ivs\_md\_destroy\_chn](#ss_ivs_md_destroy_chn)
--   [ss\_ivs\_md\_set\_chn\_attr](#ss_ivs_md_set_chn_attr)
--   [ss\_ivs\_md\_proc](#ss_ivs_md_proc)
+-   [ss\_ivs\_md\_create\_chn](#ZH-CN_TOPIC_0000002441733333)
+-   [ss\_ivs\_md\_destroy\_chn](#ZH-CN_TOPIC_0000002441853505)
+-   [ss\_ivs\_md\_set\_chn\_attr](#ZH-CN_TOPIC_0000002408294068)
+-   [ss\_ivs\_md\_proc](#ZH-CN_TOPIC_0000002441733297)
 
 ### ss\_ivs\_md\_proc<a name="ZH-CN_TOPIC_0000002441733297"></a>
 
@@ -847,7 +843,7 @@ td_s32 ss_ivs_md_proc(ot_md_chn md_chn, ot_svp_src_img *cur, ot_svp_src_img *ref
 </tr>
 <tr id="row940mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.3.1.1 "><p id="p942mcpsimp"><a name="p942mcpsimp"></a><a name="p942mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p944mcpsimp"><a name="p944mcpsimp"></a><a name="p944mcpsimp"></a>失败，参见<a href="错误码.md">错误码</a><span xml:lang="fr-FR" id="ph947mcpsimp"><a name="ph947mcpsimp"></a><a name="ph947mcpsimp"></a>。</span></p>
+<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p944mcpsimp"><a name="p944mcpsimp"></a><a name="p944mcpsimp"></a>失败，参见<a href="#ZH-CN_TOPIC_0000002408294036">错误码</a><span xml:lang="fr-FR" id="ph947mcpsimp"><a name="ph947mcpsimp"></a><a name="ph947mcpsimp"></a>。</span></p>
 </td>
 </tr>
 </tbody>
@@ -860,8 +856,8 @@ td_s32 ss_ivs_md_proc(ot_md_chn md_chn, ot_svp_src_img *cur, ot_svp_src_img *ref
 
 【注意】
 
--   必须先调用[ss\_ivs\_md\_init](ss_ivs_md_init.md)初始化，否则返回错误。
--   md\_chn必须为[ss\_ivs\_md\_create\_chn](ss_ivs_md_create_chn.md)已创建的通道号，否则返回错误。
+-   必须先调用[ss\_ivs\_md\_init](#ZH-CN_TOPIC_0000002441733309)初始化，否则返回错误。
+-   md\_chn必须为[ss\_ivs\_md\_create\_chn](#ZH-CN_TOPIC_0000002441733333)已创建的通道号，否则返回错误。
 -   最多输出区域信息个数为254，区域信息请参见《IVE API参考》第3章节数据类型中的ot\_ive\_ccblob。ot\_ive\_ccblob的成员info中的cur\_area\_threshold是分块后的面积阈值信息。在这里输出的连通区域信息是连续储存。
 -   在同一个线程中，完成初始化和通道创建之后，对同一通道只调用一次ss\_ivs\_md\_proc接口。
 
@@ -871,14 +867,12 @@ td_s32 ss_ivs_md_proc(ot_md_chn md_chn, ot_svp_src_img *cur, ot_svp_src_img *ref
 
 【相关主题】
 
--   [ss\_ivs\_md\_create\_chn](#ss_ivs_md_create_chn)
--   [ss\_ivs\_md\_destroy\_chn](#ss_ivs_md_destroy_chn)
--   [ss\_ivs\_md\_set\_chn\_attr](#ss_ivs_md_set_chn_attr)
--   [ss\_ivs\_md\_get\_bg](#ss_ivs_md_get_bg)
+-   [ss\_ivs\_md\_create\_chn](#ZH-CN_TOPIC_0000002441733333)
+-   [ss\_ivs\_md\_destroy\_chn](#ZH-CN_TOPIC_0000002441853505)
+-   [ss\_ivs\_md\_set\_chn\_attr](#ZH-CN_TOPIC_0000002408294068)
+-   [ss\_ivs\_md\_get\_bg](#ZH-CN_TOPIC_0000002408134192)
 
 ## MD数据类型<a name="ZH-CN_TOPIC_0000002441853461"></a>
-
-
 
 ### ot\_md\_alg\_mode<a name="ZH-CN_TOPIC_0000002441733345"></a>
 
@@ -1219,7 +1213,9 @@ IVS的错误码与IVE的错误码大部分共用，IVS 错误码表所示中前�
 
 ## Proc调试信息<a name="ZH-CN_TOPIC_0000002408294100"></a>
 
+-   **[概述](#ZH-CN_TOPIC_0000002441853473)**  
 
+-   **[MD Proc信息说明](#ZH-CN_TOPIC_0000002441853441)**  
 
 ### 概述<a name="ZH-CN_TOPIC_0000002441853473"></a>
 

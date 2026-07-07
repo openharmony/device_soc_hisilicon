@@ -57,31 +57,13 @@
 #define ALIGN_VALUE              2
 
 typedef struct {
-    int drmFd;
+    int drm_fd;
     uint32_t width;
     uint32_t height;
     IRect displayRect;
-} DrmOverlayDisplayT;
+} drm_overlay_display_t;
 
-DrmOverlayDisplayT  g_overlayDisplay;
-
-typedef struct {
-    td_u32 headStride;
-    td_u32 headYSize;
-    td_u32 headSize;
-    td_u32 mainStride;
-    td_u32 vbSize;
-    size_t sizeY;
-} VbCalcInfo;
-
-typedef struct {
-    ot_vgs_handle hHandle;
-    ot_vgs_task_attr vgsTaskAttr;
-    ot_vb_blk vbHandle;
-    td_void *virtAddr;
-    td_phys_addr_t physAddr;
-    td_u32 vbSize;
-} OverlayFlushCtx;
+drm_overlay_display_t  overlay_display;
 
 #define DRM_HI3403V100_OVERLAY_FLUSH      1
 #define DRM_IOCTL_HI3403V100_OVERLAY_FLUSH \
@@ -92,16 +74,11 @@ static bool CheckTypeIsOverlayLayer(uint32_t layerId)
     return (layerId & LAYER_ID_VO_LAYER_TYPE_MARK) != 0;
 }
 
-static int create_overlayer_drm(DrmOverlayDisplayT *display, const LayerInfo *layerInfo)
-{
-    errno_t eok = memset_s(&g_overlayDisplay, sizeof(g_overlayDisplay), 0, sizeof(g_overlayDisplay));
-    if (eok != EOK) {
-        HDF_LOGE("%s: memset_s failed\n", __func__);
-        return DISPLAY_FAILURE;
-    }
-    display->drmFd = open(DRM_DEVICE, O_RDWR | O_CLOEXEC);
-    if (display->drmFd == INVALID_FD) {
-        HDF_LOGE("%s,Cannot open DRM device\n", __func__);
+static int create_overlayer_drm(drm_overlay_display_t *display, const LayerInfo *layerInfo) {
+    memset(&overlay_display, 0, sizeof(overlay_display));
+    display->drm_fd = open(DRM_DEVICE, O_RDWR | O_CLOEXEC);
+    if (display->drm_fd == INVALID_FD) {
+        HDF_LOGE("%s,Cannot open DRM device\n",__func__);
         return DISPLAY_FAILURE;
     }
     display->width = layerInfo->width;
@@ -112,7 +89,7 @@ static int create_overlayer_drm(DrmOverlayDisplayT *display, const LayerInfo *la
 int32_t CreateOverlayLayer(uint32_t devId, const LayerInfo *layerInfo, uint32_t *layerId)
 {
     CHECK_DEVID_VALID(devId, DISPLAY_FAILURE);
-    create_overlayer_drm(&g_overlayDisplay, layerInfo);
+    create_overlayer_drm(&overlay_display, layerInfo);
     *layerId = LAYER_ID_VO_LAYER_TYPE_MARK;
     return DISPLAY_SUCCESS;
 }
@@ -124,169 +101,154 @@ int32_t CloseOverlayLayer(uint32_t devId, uint32_t layerId)
         HDF_LOGE("%s: layerId type is not overlay Layer", __func__);
         return DISPLAY_FAILURE;
     }
-    if (VALID_FD(g_overlayDisplay.drmFd)) {
-        close(g_overlayDisplay.drmFd);
-        g_overlayDisplay.drmFd = INVALID_FD;
+    if (VALID_FD(overlay_display.drm_fd)) {
+        close(overlay_display.drm_fd);
+        overlay_display.drm_fd = INVALID_FD;
     }
     return DISPLAY_SUCCESS;
-}
-
-static int32_t OverlayLayerCreateVgsTask(OverlayFlushCtx *ctx,
-    ot_video_frame_info *frameInfo)
-{
-    int32_t ret = ss_mpi_vgs_begin_job(&ctx->hHandle);
-    if (ret != TD_SUCCESS) {
-        HDF_LOGE("mpi_vgs_begin_job failed, ret:0x%x", ret);
-        return ret;
-    }
-    if (memcpy_s(&ctx->vgsTaskAttr.img_in, sizeof(ot_video_frame_info),
-        frameInfo, sizeof(ot_video_frame_info)) != EOK) {
-        HDF_LOGE("memcpy_s img_in failed\n");
-        ss_mpi_vgs_cancel_job(ctx->hHandle);
-        return DISPLAY_FAILURE;
-    }
-    if (memcpy_s(&ctx->vgsTaskAttr.img_out, sizeof(ot_video_frame_info),
-        &ctx->vgsTaskAttr.img_in, sizeof(ot_video_frame_info)) != EOK) {
-        HDF_LOGE("memcpy_s img_out failed\n");
-        ss_mpi_vgs_cancel_job(ctx->hHandle);
-        return DISPLAY_FAILURE;
-    }
-    return DISPLAY_SUCCESS;
-}
-
-static void OverlayLayerCalcVbInfo(VbCalcInfo *info)
-{
-    td_u32 alignHeight = OT_ALIGN_UP(g_overlayDisplay.height, ALIGN_VALUE);
-    td_u32 headStride;
-
-    if (g_overlayDisplay.width <= WIDTH_THRESHOLD_4K) {
-        headStride = HEAD_STRIDE_4K;
-    } else if (g_overlayDisplay.width <= WIDTH_THRESHOLD_8K) {
-        headStride = HEAD_STRIDE_8K;
-    } else {
-        headStride = HEAD_STRIDE_MAX;
-    }
-    info->sizeY = g_overlayDisplay.width * g_overlayDisplay.height;
-    info->mainStride = OT_ALIGN_UP(g_overlayDisplay.width, ALIGN_VALUE);
-    info->headStride = headStride;
-    info->headYSize = headStride * alignHeight;
-    info->headSize = headStride * alignHeight * YUV420_SIZE_RATIO_NUM / YUV420_SIZE_RATIO_DEN;
-    info->vbSize = info->headSize + info->sizeY +
-        g_overlayDisplay.width * g_overlayDisplay.height / YUV420_PLANE_RATIO;
-}
-
-static int32_t OverlayLayerAllocVb(OverlayFlushCtx *ctx, const VbCalcInfo *info)
-{
-    td_phys_addr_t physAddr;
-
-    ctx->vbSize = info->vbSize;
-    ctx->vbHandle = ss_mpi_vb_get_blk(OT_VB_INVALID_POOL_ID, info->vbSize, TD_NULL);
-    if (ctx->vbHandle == OT_VB_INVALID_HANDLE) {
-        HDF_LOGE("mpi_vb_get_block failed!\n");
-        return DISPLAY_FAILURE;
-    }
-    physAddr = ss_mpi_vb_handle_to_phys_addr(ctx->vbHandle);
-    if (physAddr == INVALID_PHYS_ADDR) {
-        HDF_LOGE("mpi_vb_handle2_phys_addr failed!\n");
-        ss_mpi_vb_release_blk(ctx->vbHandle);
-        return DISPLAY_FAILURE;
-    }
-    ctx->virtAddr = ss_mpi_sys_mmap(physAddr, info->vbSize);
-    if (ctx->virtAddr == TD_NULL) {
-        HDF_LOGE("mpi_sys_mmap failed!\n");
-        ss_mpi_vb_release_blk(ctx->vbHandle);
-        return DISPLAY_FAILURE;
-    }
-    ctx->physAddr = physAddr;
-    return DISPLAY_SUCCESS;
-}
-
-static void OverlayLayerConfigOutFrame(ot_vgs_task_attr *attr,
-    const VbCalcInfo *info, const OverlayFlushCtx *ctx)
-{
-    attr->img_out.mod_id  = OT_ID_VGS;
-    attr->img_out.pool_id = ss_mpi_vb_handle_to_pool_id(ctx->vbHandle);
-    attr->img_out.video_frame.width = g_overlayDisplay.displayRect.w;
-    attr->img_out.video_frame.height = g_overlayDisplay.displayRect.h;
-    attr->img_out.video_frame.field        = OT_VIDEO_FIELD_FRAME;
-    attr->img_out.video_frame.video_format = OT_VIDEO_FORMAT_LINEAR;
-    attr->img_out.video_frame.compress_mode = OT_COMPRESS_MODE_NONE;
-    attr->img_out.video_frame.dynamic_range = OT_DYNAMIC_RANGE_SDR8;
-    attr->img_out.video_frame.color_gamut   = OT_COLOR_GAMUT_BT601;
-    attr->img_out.video_frame.header_stride[PLANE_INDEX_Y]  = info->headStride;
-    attr->img_out.video_frame.header_stride[PLANE_INDEX_UV]  = info->headStride;
-    attr->img_out.video_frame.header_phys_addr[PLANE_INDEX_Y] = ctx->physAddr;
-    attr->img_out.video_frame.header_phys_addr[PLANE_INDEX_UV] = ctx->physAddr + info->headYSize;
-    attr->img_out.video_frame.header_virt_addr[PLANE_INDEX_Y] = ctx->virtAddr;
-    attr->img_out.video_frame.header_virt_addr[PLANE_INDEX_UV] = ctx->virtAddr + info->headYSize;
-    attr->img_out.video_frame.stride[PLANE_INDEX_Y]  = info->mainStride;
-    attr->img_out.video_frame.stride[PLANE_INDEX_UV]  = info->mainStride;
-    attr->img_out.video_frame.phys_addr[PLANE_INDEX_Y] = ctx->physAddr + info->headSize;
-    attr->img_out.video_frame.phys_addr[PLANE_INDEX_UV] = ctx->physAddr + info->headSize + info->sizeY;
-    attr->img_out.video_frame.virt_addr[PLANE_INDEX_Y] = ctx->virtAddr + info->headSize;
-    attr->img_out.video_frame.virt_addr[PLANE_INDEX_UV] = ctx->virtAddr + info->headSize + info->sizeY;
-}
-
-static int32_t OverlayLayerSubmitVgs(OverlayFlushCtx *ctx)
-{
-    int32_t ret = ss_mpi_vgs_add_scale_task(ctx->hHandle, &ctx->vgsTaskAttr,
-        OT_VGS_SCALE_COEF_NORM);
-    if (ret != TD_SUCCESS) {
-        HDF_LOGE("mpi_vgs_add_scale_task failed, ret:0x%x", ret);
-        return ret;
-    }
-    ret = ss_mpi_vgs_end_job(ctx->hHandle);
-    if (ret != TD_SUCCESS) {
-        HDF_LOGE("mpi_vgs_end_job failed, ret:0x%x", ret);
-        return ret;
-    }
-    ret = ioctl(g_overlayDisplay.drmFd, DRM_IOCTL_HI3403V100_OVERLAY_FLUSH,
-        &(ctx->vgsTaskAttr.img_out.video_frame));
-    if (ret < IOCTL_SUCCESS) {
-        HDF_LOGE("%s: Failed to overlay_flush:%d\n", __func__, ret);
-    }
-    return ret;
 }
 
 int32_t OverlayLayerFlush(uint32_t devId, uint32_t layerId, LayerBuffer *buffer)
 {
     CHECK_DEVID_VALID(devId, DISPLAY_FAILURE);
-    OverlayFlushCtx ctx = {0};
-    VbCalcInfo vbInfo = {0};
-    int32_t ret;
-    ot_video_frame_info *frameInfo;
+    int32_t ret = DISPLAY_FAILURE;
+    ot_vgs_handle h_handle = INVALID_VGS_HANDLE;
+    ot_vgs_task_attr vgs_task_attr = {0};
+    ot_video_frame_info *video_frame_info;
+    ot_vgs_scale_coef_mode vgs_scl_coef_mode = OT_VGS_SCALE_COEF_NORM;
+    size_t size_y = overlay_display.width *  overlay_display.height;
+    size_t size_uv =  overlay_display.width * overlay_display.height / YUV420_PLANE_RATIO;
+    td_u32 align_height;
+    td_u32 vb_size;
+    td_u32 head_stride;
+    td_u32 head_size;
+    td_u32 head_y_size;
+    td_u32 main_stride;
+    td_u32 main_size;
+    ot_vb_blk vb_handle;
+    td_phys_addr_t phys_addr;
+    td_void *virt_addr;
 
     if (!CheckTypeIsOverlayLayer(layerId)) {
         HDF_LOGE("%s: layerId type is not overlay Layer", __func__);
-        return DISPLAY_FAILURE;
+        return ret;
     }
+
     if (!buffer || !buffer->data.virAddr) {
         HDF_LOGE("%s: buffer no data", __func__);
-        return DISPLAY_FAILURE;
-    }
-    frameInfo = (ot_video_frame_info *)buffer->data.virAddr;
-
-    ret = OverlayLayerCreateVgsTask(&ctx, frameInfo);
-    if (ret != DISPLAY_SUCCESS) {
         return ret;
     }
 
-    OverlayLayerCalcVbInfo(&vbInfo);
-    ret = OverlayLayerAllocVb(&ctx, &vbInfo);
-    if (ret != DISPLAY_SUCCESS) {
-        ss_mpi_vgs_cancel_job(ctx.hHandle);
-        return ret;
+    video_frame_info = (ot_video_frame_info *)buffer->data.virAddr;
+
+    /* step3: create VGS job */
+    ret = ss_mpi_vgs_begin_job(&h_handle);
+    if (ret != TD_SUCCESS) {
+        HDF_LOGE("mpi_vgs_begin_job failed, ret:0x%x", ret);
+        goto exit_and_release;
     }
 
-    OverlayLayerConfigOutFrame(&ctx.vgsTaskAttr, &vbInfo, &ctx);
-    ret = OverlayLayerSubmitVgs(&ctx);
-    ss_mpi_sys_munmap(ctx.virtAddr, ctx.vbSize);
-    ss_mpi_vb_release_blk(ctx.vbHandle);
+    /* step4: add VGS task */
+    if (memcpy_s(&vgs_task_attr.img_in, sizeof(ot_video_frame_info),
+           video_frame_info, sizeof(ot_video_frame_info)) != EOK) {
+        HDF_LOGE("memcpy_s img_in failed\n");
+        goto release_cancel_job;
+    }
+
+    if (memcpy_s(&vgs_task_attr.img_out, sizeof(ot_video_frame_info),
+        &vgs_task_attr.img_in, sizeof(ot_video_frame_info)) != EOK) {
+        HDF_LOGE("memcpy_s img_out failed\n");
+        goto release_cancel_job;
+    }
+
+    align_height = OT_ALIGN_UP(overlay_display.height, ALIGN_VALUE);
+
+    if (overlay_display.width <= WIDTH_THRESHOLD_4K) {
+        head_stride = HEAD_STRIDE_4K;
+    } else if (overlay_display.width <= WIDTH_THRESHOLD_8K) {
+        head_stride = HEAD_STRIDE_8K;
+    } else {
+        head_stride = HEAD_STRIDE_MAX;
+    }
+    main_stride  = OT_ALIGN_UP(overlay_display.width, ALIGN_VALUE);
+    head_y_size =  head_stride * align_height;
+    head_size  = head_stride * align_height * YUV420_SIZE_RATIO_NUM / YUV420_SIZE_RATIO_DEN;
+    main_size = size_y + size_uv;
+    vb_size = head_size + main_size;
+
+    vb_handle= ss_mpi_vb_get_blk(OT_VB_INVALID_POOL_ID, vb_size, TD_NULL);
+    if (vb_handle== OT_VB_INVALID_HANDLE) {
+        HDF_LOGE("mpi_vb_get_block failed!\n");
+        goto release_cancel_job;
+    }
+    phys_addr = ss_mpi_vb_handle_to_phys_addr(vb_handle);
+    if (phys_addr == INVALID_PHYS_ADDR) {
+        HDF_LOGE("mpi_vb_handle2_phys_addr failed!\n");
+        goto release_vb_handle;
+    }
+
+    virt_addr = (td_u8*)ss_mpi_sys_mmap(phys_addr, vb_size);
+    if (virt_addr == TD_NULL) {
+        HDF_LOGE("mpi_sys_mmap failed!\n");
+        goto release_vb_handle;
+    }
+
+    vgs_task_attr.img_out.mod_id  = OT_ID_VGS;
+    vgs_task_attr.img_out.pool_id = ss_mpi_vb_handle_to_pool_id(vb_handle);
+    vgs_task_attr.img_out.video_frame.width = overlay_display.displayRect.w;
+    vgs_task_attr.img_out.video_frame.height = overlay_display.displayRect.h;
+    vgs_task_attr.img_out.video_frame.field        = OT_VIDEO_FIELD_FRAME;
+    vgs_task_attr.img_out.video_frame.video_format = OT_VIDEO_FORMAT_LINEAR;
+    vgs_task_attr.img_out.video_frame.compress_mode = OT_COMPRESS_MODE_NONE;
+    vgs_task_attr.img_out.video_frame.dynamic_range = OT_DYNAMIC_RANGE_SDR8;
+    vgs_task_attr.img_out.video_frame.color_gamut   = OT_COLOR_GAMUT_BT601;
+    vgs_task_attr.img_out.video_frame.header_stride[PLANE_INDEX_Y]  = head_stride;
+    vgs_task_attr.img_out.video_frame.header_stride[PLANE_INDEX_UV]  = head_stride;
+    vgs_task_attr.img_out.video_frame.header_phys_addr[PLANE_INDEX_Y] = phys_addr;
+    vgs_task_attr.img_out.video_frame.header_phys_addr[PLANE_INDEX_UV] = vgs_task_attr.img_out.video_frame.header_phys_addr[PLANE_INDEX_Y] +
+                                                   head_y_size;
+    vgs_task_attr.img_out.video_frame.header_virt_addr[PLANE_INDEX_Y] = virt_addr;
+    vgs_task_attr.img_out.video_frame.header_virt_addr[PLANE_INDEX_UV] = vgs_task_attr.img_out.video_frame.header_virt_addr[PLANE_INDEX_Y] +
+                                                   head_y_size;
+
+    vgs_task_attr.img_out.video_frame.stride[PLANE_INDEX_Y]  = main_stride;
+    vgs_task_attr.img_out.video_frame.stride[PLANE_INDEX_UV]  = main_stride;
+    vgs_task_attr.img_out.video_frame.phys_addr[PLANE_INDEX_Y] = vgs_task_attr.img_out.video_frame.header_phys_addr[PLANE_INDEX_Y] + head_size;
+    vgs_task_attr.img_out.video_frame.phys_addr[PLANE_INDEX_UV] = vgs_task_attr.img_out.video_frame.phys_addr[PLANE_INDEX_Y] + size_y;
+    vgs_task_attr.img_out.video_frame.virt_addr[PLANE_INDEX_Y] = vgs_task_attr.img_out.video_frame.header_virt_addr[PLANE_INDEX_Y] + head_size;
+    vgs_task_attr.img_out.video_frame.virt_addr[PLANE_INDEX_UV] = vgs_task_attr.img_out.video_frame.virt_addr[PLANE_INDEX_Y] + size_y;
+
+    ret = ss_mpi_vgs_add_scale_task(h_handle, &vgs_task_attr, vgs_scl_coef_mode);
+    if (ret != TD_SUCCESS) {
+        HDF_LOGE("mpi_vgs_add_scale_task failed, ret:0x%x", ret);
+        goto release_munmap;
+    }
+
+    /* step5: start VGS work */
+    ret = ss_mpi_vgs_end_job(h_handle);
+    if (ret != TD_SUCCESS) {
+        HDF_LOGE("mpi_vgs_end_job failed, ret:0x%x", ret);
+        goto release_munmap;
+    }
+
+    ret = ioctl(overlay_display.drm_fd, DRM_IOCTL_HI3403V100_OVERLAY_FLUSH, &(vgs_task_attr.img_out.video_frame));
+    if (ret < IOCTL_SUCCESS) {
+        HDF_LOGE("%s: Failed to overlay_flush:%d\n",__func__,ret);
+    }
+release_munmap:
+    ss_mpi_sys_munmap(virt_addr, vb_size);
+release_vb_handle:
+    ss_mpi_vb_release_blk(vb_handle);
+    return ret;
+release_cancel_job:
+    ss_mpi_vgs_cancel_job(h_handle);
+exit_and_release:
     return ret;
 }
 
 int32_t SetOverlayLayerSize(uint32_t devId, uint32_t layerId, const IRect *rect)
 {
+
     CHECK_DEVID_VALID(devId, DISPLAY_FAILURE);
     CHECK_NULLPOINTER_RETURN_VALUE(rect, DISPLAY_NULL_PTR);
     if (!CheckTypeIsOverlayLayer(layerId)) {
@@ -294,10 +256,10 @@ int32_t SetOverlayLayerSize(uint32_t devId, uint32_t layerId, const IRect *rect)
         return DISPLAY_FAILURE;
     }
 
-    g_overlayDisplay.displayRect.x = ALIGN_DOWN(rect->x, ALIGN_DOWN_NUM);
-    g_overlayDisplay.displayRect.y = ALIGN_DOWN(rect->y, ALIGN_DOWN_NUM);
-    g_overlayDisplay.displayRect.w = ALIGN_DOWN(rect->w, ALIGN_DOWN_NUM);
-    g_overlayDisplay.displayRect.h = ALIGN_DOWN(rect->h, ALIGN_DOWN_NUM);
+    overlay_display.displayRect.x = ALIGN_DOWN(rect->x, ALIGN_DOWN_NUM);
+    overlay_display.displayRect.y = ALIGN_DOWN(rect->y, ALIGN_DOWN_NUM);
+    overlay_display.displayRect.w = ALIGN_DOWN(rect->w, ALIGN_DOWN_NUM);
+    overlay_display.displayRect.h = ALIGN_DOWN(rect->h, ALIGN_DOWN_NUM);
     return DISPLAY_SUCCESS;
 }
 

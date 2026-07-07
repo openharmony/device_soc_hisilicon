@@ -61,6 +61,10 @@ static inline unsigned int GetPortId(unsigned int module, unsigned int device, u
 
 #define AUDIO_HAL_FRAME_COUNT 1024
 
+#define AUDIO_AO_INNER_DEV_ID 0 /** ao inner acodec dev id */
+
+#define AUDIO_VQE_ANR_NOISE_DB_THR  45
+#define AUDIO_VQE_ANR_NR_INTENSITY  15
 static const float VOLUME_PERCENT_MIN_IN = 0.0f;
 static const float VOLUME_PERCENT_MAX_IN = 100.0f;
 
