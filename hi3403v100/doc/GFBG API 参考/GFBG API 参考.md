@@ -135,7 +135,9 @@
 
 # 概述<a name="ZH-CN_TOPIC_0000002441654473"></a>
 
+-   **[概述](#ZH-CN_TOPIC_0000002408255058)**  
 
+-   **[参考域说明](#ZH-CN_TOPIC_0000002441694349)**  
 
 ## 概述<a name="ZH-CN_TOPIC_0000002408255058"></a>
 
@@ -143,7 +145,9 @@ Graphic Framebuffer Group（以下简称GFBG）是数字媒体处理平台提供
 
 ## 参考域说明<a name="ZH-CN_TOPIC_0000002441694349"></a>
 
+-   **[API参考域](#ZH-CN_TOPIC_0000002441654501)**  
 
+-   **[数据类型参考域](#ZH-CN_TOPIC_0000002408255006)**  
 
 ### API参考域<a name="ZH-CN_TOPIC_0000002441654501"></a>
 
@@ -249,10 +253,13 @@ Graphic Framebuffer Group（以下简称GFBG）是数字媒体处理平台提供
 
 # API参考<a name="ZH-CN_TOPIC_0000002441654401"></a>
 
+-   **[API类别](#ZH-CN_TOPIC_0000002408255074)**  
 
+-   **[ioctl函数](#ZH-CN_TOPIC_0000002408255022)**  
 
+-   **[扩展功能](#ZH-CN_TOPIC_0000002408095098)**  
 
-
+-   **[错误码](#ZH-CN_TOPIC_0000002441694289)**  
 
 ## API类别<a name="ZH-CN_TOPIC_0000002408255074"></a>
 
@@ -316,7 +323,7 @@ int ioctl (int fd,
 <tr id="row1744mcpsimp"><td class="cellrowborder" valign="top" width="14.000000000000002%" headers="mcps1.2.4.1.1 "><p id="p1746mcpsimp"><a name="p1746mcpsimp"></a><a name="p1746mcpsimp"></a>cmd</p>
 </td>
 <td class="cellrowborder" valign="top" width="64.4%" headers="mcps1.2.4.1.2 "><p id="p1748mcpsimp"><a name="p1748mcpsimp"></a><a name="p1748mcpsimp"></a>主要的cmd（命令控制字）如下：</p>
-<a name="ul1749mcpsimp"></a><a name="ul1749mcpsimp"></a><ul id="ul1749mcpsimp"><li><a href="FBIOGET_VSCREENINFO.md">FBIOGET_VSCREENINFO</a>：获取屏幕可变信息</li><li><a href="FBIOPUT_VSCREENINFO.md">FBIOPUT_VSCREENINFO</a>：设置屏幕可变信息</li><li><a href="FBIOGET_FSCREENINFO.md">FBIOGET_FSCREENINFO</a>：获取屏幕固定信息</li><li><a href="FBIOPAN_DISPLAY.md">FBIOPAN_DISPLAY</a>：设置PAN显示</li><li><a href="FBIOGET_CAPABILITY_GFBG.md">FBIOGET_CAPABILITY_GFBG</a>：获取叠加层的支持能力</li><li><a href="FBIOGET_SCREEN_ORIGIN_GFBG.md">FBIOGET_SCREEN_ORIGIN_GFBG</a>：获取叠加层坐标原点</li><li><a href="FBIOPUT_SCREEN_ORIGIN_GFBG.md">FBIOPUT_SCREEN_ORIGIN_GFBG</a>：设置叠加层坐标原点</li><li><a href="FBIOGET_SHOW_GFBG.md">FBIOGET_SHOW_GFBG</a>：获取叠加层显示状态</li><li><a href="FBIOPUT_SHOW_GFBG.md">FBIOPUT_SHOW_GFBG</a>：设置叠加层显示状态</li><li><a href="FBIOGET_ALPHA_GFBG.md">FBIOGET_ALPHA_GFBG</a>：获取叠加层Alpha</li><li><a href="FBIOPUT_ALPHA_GFBG.md">FBIOPUT_ALPHA_GFBG</a>：设置叠加层Alpha</li><li><a href="FBIOGET_COLORKEY_GFBG.md">FBIOGET_COLORKEY_GFBG</a>：获取叠加层的Colorkey属性</li><li><a href="FBIOPUT_COLORKEY_GFBG.md">FBIOPUT_COLORKEY_GFBG</a>：设置叠加层的Colorkey属性</li><li><a href="FBIOGET_MDDRDETECT_GFBG.md">FBIOGET_MDDRDETECT_GFBG</a>：获取内存侦测属性</li><li><a href="FBIOPUT_MDDRDETECT_GFBG.md">FBIOPUT_MDDRDETECT_GFBG</a>：设置内存侦测属性</li><li><a href="FBIOPUT_DYNAMIC_RANGE_GFBG.md">FBIOPUT_DYNAMIC_RANGE_GFBG</a>：设置叠加层的目标图像动态范围</li><li><a href="FBIOGET_DYNAMIC_RANGE_GFBG.md">FBIOGET_DYNAMIC_RANGE_GFBG</a>：获取叠加层的目标图像动态范围</li><li><a href="FBIOPUT_SCREEN_SIZE.md">FBIOPUT_SCREEN_SIZE</a>：设置叠加层的屏幕输出分辨率</li><li><a href="FBIOGET_SCREEN_SIZE.md">FBIOGET_SCREEN_SIZE</a>：获取叠加层的屏幕输出分辨率</li><li><a href="FBIO_DRAW_SMART_RECT.md">FBIO_DRAW_SMART_RECT</a>：osb在线画框</li><li><a href="FBIO_CREATE_LAYER.md">FBIO_CREATE_LAYER</a>：使能硬件图形层</li><li><a href="FBIO_DESTROY_LAYER.md">FBIO_DESTROY_LAYER</a>：去使能硬件图形层</li><li><a href="FBIO_REFRESH.md">FBIO_REFRESH</a>：硬件图形层刷新</li><li><a href="FBIOPUT_ROTATE_MODE.md">FBIOPUT_ROTATE_MODE</a>：硬件图形层旋转</li></ul>
+<a name="ul1749mcpsimp"></a><a name="ul1749mcpsimp"></a><ul id="ul1749mcpsimp"><li><a href="#ZH-CN_TOPIC_0000002408255078">FBIOGET_VSCREENINFO</a>：获取屏幕可变信息</li><li><a href="#ZH-CN_TOPIC_0000002408255102">FBIOPUT_VSCREENINFO</a>：设置屏幕可变信息</li><li><a href="#ZH-CN_TOPIC_0000002441694273">FBIOGET_FSCREENINFO</a>：获取屏幕固定信息</li><li><a href="#ZH-CN_TOPIC_0000002408095106">FBIOPAN_DISPLAY</a>：设置PAN显示</li><li><a href="#ZH-CN_TOPIC_0000002441654445">FBIOGET_CAPABILITY_GFBG</a>：获取叠加层的支持能力</li><li><a href="#ZH-CN_TOPIC_0000002441694257">FBIOGET_SCREEN_ORIGIN_GFBG</a>：获取叠加层坐标原点</li><li><a href="#ZH-CN_TOPIC_0000002441654497">FBIOPUT_SCREEN_ORIGIN_GFBG</a>：设置叠加层坐标原点</li><li><a href="#ZH-CN_TOPIC_0000002441654505">FBIOGET_SHOW_GFBG</a>：获取叠加层显示状态</li><li><a href="#ZH-CN_TOPIC_0000002408255046">FBIOPUT_SHOW_GFBG</a>：设置叠加层显示状态</li><li><a href="#ZH-CN_TOPIC_0000002441654413">FBIOGET_ALPHA_GFBG</a>：获取叠加层Alpha</li><li><a href="#ZH-CN_TOPIC_0000002408095146">FBIOPUT_ALPHA_GFBG</a>：设置叠加层Alpha</li><li><a href="#ZH-CN_TOPIC_0000002408095110">FBIOGET_COLORKEY_GFBG</a>：获取叠加层的Colorkey属性</li><li><a href="#ZH-CN_TOPIC_0000002408095094">FBIOPUT_COLORKEY_GFBG</a>：设置叠加层的Colorkey属性</li><li><a href="#ZH-CN_TOPIC_0000002408255038">FBIOGET_MDDRDETECT_GFBG</a>：获取内存侦测属性</li><li><a href="#ZH-CN_TOPIC_0000002408095134">FBIOPUT_MDDRDETECT_GFBG</a>：设置内存侦测属性</li><li><a href="#ZH-CN_TOPIC_0000002408255002">FBIOPUT_DYNAMIC_RANGE_GFBG</a>：设置叠加层的目标图像动态范围</li><li><a href="#ZH-CN_TOPIC_0000002408095154">FBIOGET_DYNAMIC_RANGE_GFBG</a>：获取叠加层的目标图像动态范围</li><li><a href="#ZH-CN_TOPIC_0000002441654461">FBIOPUT_SCREEN_SIZE</a>：设置叠加层的屏幕输出分辨率</li><li><a href="#ZH-CN_TOPIC_0000002408255014">FBIOGET_SCREEN_SIZE</a>：获取叠加层的屏幕输出分辨率</li><li><a href="#ZH-CN_TOPIC_0000002441654425">FBIO_DRAW_SMART_RECT</a>：osb在线画框</li><li><a href="#ZH-CN_TOPIC_0000002408095078">FBIO_CREATE_LAYER</a>：使能硬件图形层</li><li><a href="#ZH-CN_TOPIC_0000002441654477">FBIO_DESTROY_LAYER</a>：去使能硬件图形层</li><li><a href="#ZH-CN_TOPIC_0000002441694329">FBIO_REFRESH</a>：硬件图形层刷新</li><li><a href="#ZH-CN_TOPIC_0000002441654409">FBIOPUT_ROTATE_MODE</a>：硬件图形层旋转</li></ul>
 </td>
 <td class="cellrowborder" valign="top" width="21.6%" headers="mcps1.2.4.1.3 "><p id="p1799mcpsimp"><a name="p1799mcpsimp"></a><a name="p1799mcpsimp"></a>输入</p>
 </td>
@@ -324,7 +331,7 @@ int ioctl (int fd,
 <tr id="row1800mcpsimp"><td class="cellrowborder" valign="top" width="14.000000000000002%" headers="mcps1.2.4.1.1 "><p id="p1802mcpsimp"><a name="p1802mcpsimp"></a><a name="p1802mcpsimp"></a>cmd_data</p>
 </td>
 <td class="cellrowborder" valign="top" width="64.4%" headers="mcps1.2.4.1.2 "><p id="p1804mcpsimp"><a name="p1804mcpsimp"></a><a name="p1804mcpsimp"></a>各cmd对应的数据类型分别是：</p>
-<a name="ul1805mcpsimp"></a><a name="ul1805mcpsimp"></a><ul id="ul1805mcpsimp"><li>获取或设置屏幕可变信息：<a href="fb_var_screeninfo.md">fb_var_screeninfo</a>*类型</li><li>获取屏幕固定信息：<a href="fb_fix_screeninfo.md">fb_fix_screeninfo</a> *类型</li><li>设置PAN显示：<a href="fb_var_screeninfo.md">fb_var_screeninfo</a> *类型</li><li>获取叠加层支持能力：<a href="ot_fb_capability.md">ot_fb_capability</a> *类型</li><li>获取或设置屏幕叠加层坐标原点：<a href="ot_fb_point.md">ot_fb_point</a> *类型</li><li>获取或设置叠加层显示状态：td_bool *类型</li><li>获取或设置叠加层Alpha：<a href="ot_fb_alpha.md">ot_fb_alpha</a> *类型</li><li>获取或设置内存侦测属性：<a href="ot_fb_ddr_zone.md">ot_fb_ddr_zone</a> *类型</li><li>获取或设置压缩开关状态：td_bool *类型</li><li>获取或设置图形层动态范围：<a href="ot_fb_dynamic_range.md">ot_fb_dynamic_range</a> * 类型</li></ul>
+<a name="ul1805mcpsimp"></a><a name="ul1805mcpsimp"></a><ul id="ul1805mcpsimp"><li>获取或设置屏幕可变信息：<a href="#ZH-CN_TOPIC_0000002441694265">fb_var_screeninfo</a>*类型</li><li>获取屏幕固定信息：<a href="#ZH-CN_TOPIC_0000002441694325">fb_fix_screeninfo</a> *类型</li><li>设置PAN显示：<a href="#ZH-CN_TOPIC_0000002441694265">fb_var_screeninfo</a> *类型</li><li>获取叠加层支持能力：<a href="#ZH-CN_TOPIC_0000002441654485">ot_fb_capability</a> *类型</li><li>获取或设置屏幕叠加层坐标原点：<a href="#ZH-CN_TOPIC_0000002441694301">ot_fb_point</a> *类型</li><li>获取或设置叠加层显示状态：td_bool *类型</li><li>获取或设置叠加层Alpha：<a href="#ZH-CN_TOPIC_0000002408255094">ot_fb_alpha</a> *类型</li><li>获取或设置内存侦测属性：<a href="#ZH-CN_TOPIC_0000002408095086">ot_fb_ddr_zone</a> *类型</li><li>获取或设置压缩开关状态：td_bool *类型</li><li>获取或设置图形层动态范围：<a href="#ZH-CN_TOPIC_0000002441654465">ot_fb_dynamic_range</a> * 类型</li></ul>
 </td>
 <td class="cellrowborder" valign="top" width="21.6%" headers="mcps1.2.4.1.3 "><p id="p1825mcpsimp"><a name="p1825mcpsimp"></a><a name="p1825mcpsimp"></a>输入</p>
 <p id="p1826mcpsimp"><a name="p1826mcpsimp"></a><a name="p1826mcpsimp"></a>输出</p>
@@ -334,10 +341,6 @@ int ioctl (int fd,
 </table>
 
 ## 标准功能<a name="ZH-CN_TOPIC_0000002408095170"></a>
-
-
-
-
 
 ### FBIOGET\_VSCREENINFO<a name="ZH-CN_TOPIC_0000002408255078"></a>
 
@@ -355,7 +358,7 @@ int ioctl (int fd,
 
 【描述】
 
-使用此接口获取屏幕的可变信息，主要包括分辨率和像素格式。信息的详细描述请参见[fb\_var\_screeninfo](fb_var_screeninfo.md)。
+使用此接口获取屏幕的可变信息，主要包括分辨率和像素格式。信息的详细描述请参见[fb\_var\_screeninfo](#ZH-CN_TOPIC_0000002441694265)。
 
 【参数】
 
@@ -434,7 +437,7 @@ if (ioctl(fd, FBIOGET_VSCREENINFO, &vinfo) < 0)
 
 【相关接口】
 
-[FBIOPUT\_VSCREENINFO](#FBIOPUT_VSCREENINFO)
+[FBIOPUT\_VSCREENINFO](#ZH-CN_TOPIC_0000002408255102)
 
 ### FBIOPUT\_VSCREENINFO<a name="ZH-CN_TOPIC_0000002408255102"></a>
 
@@ -517,11 +520,11 @@ int ioctl (int fd,
 
 【注意】
 
--   分辨率的大小必须在各叠加层支持的分辨率范围内，各叠加层支持的最大分辨率和最小分辨率可通过[FBIOGET\_CAPABILITY\_GFBG](FBIOGET_CAPABILITY_GFBG.md)获取。
+-   分辨率的大小必须在各叠加层支持的分辨率范围内，各叠加层支持的最大分辨率和最小分辨率可通过[FBIOGET\_CAPABILITY\_GFBG](#ZH-CN_TOPIC_0000002441654445)获取。
 -   必须保证实际分辨率与偏移的和在虚拟分辨率范围内，否则系统会自动调整实际分辨率的大小让其在虚拟分辨率范围内。
 -   对于隔行显示设备，要求分辨率的高度必须为偶数。
 -   如果图形层支持缩放，可以设置显示分辨率大于设备分辨率，这时候显示图像的一部分。
--   linux5.10版本在FBIOPUT\_VSCREENINFO接口中增加了xres和yres最小值的的检查，xres和yres均需要大于等8，否则该接口会返回失败。
+-   linux5.10版本在FBIOPUT\_VSCREENINFO接口中增加了xres和yres最小值的检查，xres和yres均需要大于等8，否则该接口会返回失败。
 
 【举例】
 
@@ -557,7 +560,7 @@ if (ioctl(fd, FBIOPUT_VSCREENINFO, &vinfo) < 0)
 
 【相关接口】
 
-[FBIOGET\_VSCREENINFO](#FBIOGET_VSCREENINFO)
+[FBIOGET\_VSCREENINFO](#ZH-CN_TOPIC_0000002408255078)
 
 ### FBIOGET\_FSCREENINFO<a name="ZH-CN_TOPIC_0000002441694273"></a>
 
@@ -575,7 +578,7 @@ int ioctl (int fd,
 
 【描述】
 
-使用此接口获取Framebuffer固定信息，包括显存起始物理地址、显存大小和行间距等。信息的详细描述请参见[fb\_fix\_screeninfo](fb_fix_screeninfo.md)。
+使用此接口获取Framebuffer固定信息，包括显存起始物理地址、显存大小和行间距等。信息的详细描述请参见[fb\_fix\_screeninfo](#ZH-CN_TOPIC_0000002441694325)。
 
 【参数】
 
@@ -775,42 +778,9 @@ if (ioctl(fd, FBIOPAN_DISPLAY, &vinfo) < 0)
 
 ## 扩展功能<a name="ZH-CN_TOPIC_0000002408095098"></a>
 
-
+-   **[软鼠标功能](#ZH-CN_TOPIC_0000002441694337)**  
 
 ### 通用功能<a name="ZH-CN_TOPIC_0000002441654493"></a>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 #### FBIOGET\_CAPABILITY\_GFBG<a name="ZH-CN_TOPIC_0000002441654445"></a>
 
@@ -992,7 +962,7 @@ int ioctl (int fd,
 
 【相关接口】
 
-[FBIOPUT\_SCREEN\_ORIGIN\_GFBG](#FBIOPUT_SCREEN_ORIGIN_GFBG)
+[FBIOPUT\_SCREEN\_ORIGIN\_GFBG](#ZH-CN_TOPIC_0000002441654497)
 
 #### FBIOPUT\_SCREEN\_ORIGIN\_GFBG<a name="ZH-CN_TOPIC_0000002441654497"></a>
 
@@ -1075,7 +1045,7 @@ int ioctl (int fd,
 
 【注意】
 
--   如果叠加层坐标原点超出了范围（x\_pos \> \(max\_width-min\_width\) 或 y\_pos \> \(max\_height-min\_height\)），默认将坐标原点设置为（max\_width-min\_width，max\_height-min\_height），其中max\_width和max\_height的值是设备时序定义的最大宽高；min\_width和min\_height分别表示可加载的最小图像的宽和高，可通过[FBIOGET\_CAPABILITY\_GFBG](FBIOGET_CAPABILITY_GFBG.md)接口中的min\_width和min\_height成员获取。
+-   如果叠加层坐标原点超出了范围（x\_pos \> \(max\_width-min\_width\) 或 y\_pos \> \(max\_height-min\_height\)），默认将坐标原点设置为（max\_width-min\_width，max\_height-min\_height），其中max\_width和max\_height的值是设备时序定义的最大宽高；min\_width和min\_height分别表示可加载的最小图像的宽和高，可通过[FBIOGET\_CAPABILITY\_GFBG](#ZH-CN_TOPIC_0000002441654445)接口中的min\_width和min\_height成员获取。
 -   对于隔行显示设备，要求坐标原点的纵坐标值为偶数。
 
 【举例】
@@ -1084,7 +1054,7 @@ int ioctl (int fd,
 
 【相关接口】
 
-[FBIOGET\_SCREEN\_ORIGIN\_GFBG](#FBIOGET_SCREEN_ORIGIN_GFBG)
+[FBIOGET\_SCREEN\_ORIGIN\_GFBG](#ZH-CN_TOPIC_0000002441694257)
 
 #### FBIOGET\_SHOW\_GFBG<a name="ZH-CN_TOPIC_0000002441654505"></a>
 
@@ -1176,7 +1146,7 @@ int ioctl (int fd,
 
 【相关接口】
 
-[FBIOPUT\_SHOW\_GFBG](#FBIOPUT_SHOW_GFBG)
+[FBIOPUT\_SHOW\_GFBG](#ZH-CN_TOPIC_0000002408255046)
 
 #### FBIOPUT\_SHOW\_GFBG<a name="ZH-CN_TOPIC_0000002408255046"></a>
 
@@ -1270,7 +1240,7 @@ int ioctl (int fd,
 
 【相关接口】
 
-[FBIOGET\_SHOW\_GFBG](#FBIOGET_SHOW_GFBG)
+[FBIOGET\_SHOW\_GFBG](#ZH-CN_TOPIC_0000002441654505)
 
 #### FBIOGET\_MIRROR\_MODE<a name="ZH-CN_TOPIC_0000002441694297"></a>
 
@@ -1538,7 +1508,7 @@ int ioctl (int fd,
 
 【注意】
 
-请参见[ot\_fb\_alpha](ot_fb_alpha.md)的说明。
+请参见[ot\_fb\_alpha](#ZH-CN_TOPIC_0000002408255094)的说明。
 
 【举例】
 
@@ -1546,7 +1516,7 @@ int ioctl (int fd,
 
 【相关接口】
 
-[FBIOPUT\_ALPHA\_GFBG](#FBIOPUT_ALPHA_GFBG)
+[FBIOPUT\_ALPHA\_GFBG](#ZH-CN_TOPIC_0000002408095146)
 
 #### FBIOPUT\_ALPHA\_GFBG<a name="ZH-CN_TOPIC_0000002408095146"></a>
 
@@ -1629,7 +1599,7 @@ int ioctl (int fd,
 
 【注意】
 
-请参见[ot\_fb\_alpha](ot_fb_alpha.md)的说明。
+请参见[ot\_fb\_alpha](#ZH-CN_TOPIC_0000002408255094)的说明。
 
 【举例】
 
@@ -1637,7 +1607,7 @@ int ioctl (int fd,
 
 【相关接口】
 
-[FBIOGET\_ALPHA\_GFBG](#FBIOGET_ALPHA_GFBG)
+[FBIOGET\_ALPHA\_GFBG](#ZH-CN_TOPIC_0000002441654413)
 
 #### FBIOGET\_COLORKEY\_GFBG<a name="ZH-CN_TOPIC_0000002408095110"></a>
 
@@ -1728,7 +1698,7 @@ int ioctl (int fd,
 
 【相关接口】
 
-[FBIOPUT\_COLORKEY\_GFBG](#FBIOPUT_COLORKEY_GFBG)
+[FBIOPUT\_COLORKEY\_GFBG](#ZH-CN_TOPIC_0000002408095094)
 
 #### FBIOPUT\_COLORKEY\_GFBG<a name="ZH-CN_TOPIC_0000002408095094"></a>
 
@@ -1830,7 +1800,7 @@ if (ioctl(fd, FBIOPUT_COLORKEY_GFBG, &colorkey) < 0)
 
 【相关接口】
 
-[FBIOGET\_COLORKEY\_GFBG](#FBIOGET_COLORKEY_GFBG)
+[FBIOGET\_COLORKEY\_GFBG](#ZH-CN_TOPIC_0000002408095110)
 
 #### FBIOGET\_DEFLICKER\_GFBG<a name="ZH-CN_TOPIC_0000002408095186"></a>
 
@@ -1921,7 +1891,7 @@ int ioctl (int fd,
 
 【相关接口】
 
-[FBIOPUT\_DEFLICKER\_GFBG](#FBIOPUT_DEFLICKER_GFBG)
+[FBIOPUT\_DEFLICKER\_GFBG](#ZH-CN_TOPIC_0000002441654469)
 
 #### FBIOPUT\_DEFLICKER\_GFBG<a name="ZH-CN_TOPIC_0000002441654469"></a>
 
@@ -2012,7 +1982,7 @@ int ioctl (int fd,
 
 【相关接口】
 
-[FBIOGET\_DEFLICKER\_GFBG](#FBIOGET_DEFLICKER_GFBG)
+[FBIOGET\_DEFLICKER\_GFBG](#ZH-CN_TOPIC_0000002408095186)
 
 #### FBIOGET\_VER\_BLANK\_GFBG<a name="ZH-CN_TOPIC_0000002441694317"></a>
 
@@ -2112,7 +2082,7 @@ int ioctl (int fd,
 
 【描述】
 
-此接口是[FBIOPAN\_DISPLAY](FBIOPAN_DISPLAY.md)的扩展接口，用于实现多个Surface交替显示的同时设置alpha和colorkey属性。
+此接口是[FBIOPAN\_DISPLAY](#ZH-CN_TOPIC_0000002408095106)的扩展接口，用于实现多个Surface交替显示的同时设置alpha和colorkey属性。
 
 【参数】
 
@@ -2186,7 +2156,7 @@ int ioctl (int fd,
 
 【相关接口】
 
-[FBIOPAN\_DISPLAY](#FBIOPAN_DISPLAY)
+[FBIOPAN\_DISPLAY](#ZH-CN_TOPIC_0000002408095106)
 
 #### FBIOPUT\_COMPRESSION\_GFBG<a name="ZH-CN_TOPIC_0000002408255034"></a>
 
@@ -2290,7 +2260,7 @@ int ioctl (int fd,
 
 【相关接口】
 
-[FBIOGET\_COMPRESSION\_GFBG](#FBIOGET_COMPRESSION_GFBG)
+[FBIOGET\_COMPRESSION\_GFBG](#ZH-CN_TOPIC_0000002441694353)
 
 #### FBIOGET\_COMPRESSION\_GFBG<a name="ZH-CN_TOPIC_0000002441694353"></a>
 
@@ -2381,7 +2351,7 @@ int ioctl (int fd,
 
 【相关接口】
 
-[FBIOPUT\_COMPRESSION\_GFBG](#FBIOPUT_COMPRESSION_GFBG)
+[FBIOPUT\_COMPRESSION\_GFBG](#ZH-CN_TOPIC_0000002408255034)
 
 #### FBIOPUT\_MDDRDETECT\_GFBG<a name="ZH-CN_TOPIC_0000002408095134"></a>
 
@@ -2476,7 +2446,7 @@ int ioctl (int fd,
 
 【相关接口】
 
-[FBIOGET\_COMPRESSION\_GFBG](#FBIOGET_COMPRESSION_GFBG)
+[FBIOGET\_COMPRESSION\_GFBG](#ZH-CN_TOPIC_0000002441694353)
 
 #### FBIOGET\_MDDRDETECT\_GFBG<a name="ZH-CN_TOPIC_0000002408255038"></a>
 
@@ -2567,7 +2537,7 @@ SS528V100/SS625V100/SS524V100/SS522V101/SS928V100/SS626V100不支持该功能。
 
 【相关接口】
 
-[FBIOPUT\_MDDRDETECT\_GFBG](#FBIOPUT_MDDRDETECT_GFBG)
+[FBIOPUT\_MDDRDETECT\_GFBG](#ZH-CN_TOPIC_0000002408095134)
 
 #### FBIOPUT\_LAYER\_INFO<a name="ZH-CN_TOPIC_0000002441694341"></a>
 
@@ -2585,7 +2555,7 @@ int ioctl (int fd,
 
 【描述】
 
-此接口用于设置图层信息，包括刷新模式、抗闪烁级别、屏幕起始点位置、画布分辨率、显存分辨率、屏幕显示分辨率以及是否使能预乘。以上信息的更详细说明见[ot\_fb\_layer\_info](ot_fb_layer_info.md)以及[ot\_fb\_layer\_buf](ot_fb_layer_buf.md)的描述。
+此接口用于设置图层信息，包括刷新模式、抗闪烁级别、屏幕起始点位置、画布分辨率、显存分辨率、屏幕显示分辨率以及是否使能预乘。以上信息的更详细说明见[ot\_fb\_layer\_info](#ZH-CN_TOPIC_0000002441654457)以及[ot\_fb\_layer\_buf](#ZH-CN_TOPIC_0000002441694321)的描述。
 
 【参数】
 
@@ -2653,7 +2623,7 @@ int ioctl (int fd,
 -   在设置完某项属性后，必须通过设置layer\_info的mask设置相应的掩码，否则该项设置不会生效；
 -   若芯片不支持图形层的缩放，则显存分辨率就是屏幕显示分辨率，改变它们其中之一都会改变最终的显示分辨率，另外要求它们不能大于设备分辨率。
 -   对于隔行显示设备，要求显存分辨率与屏幕显示分辨率的高度都必须为偶数。
--   芯片中图层自带的缩放功能可以参考[FBIOPUT\_SCREEN\_SIZE](FBIOPUT_SCREEN_SIZE.md)。
+-   芯片中图层自带的缩放功能可以参考[FBIOPUT\_SCREEN\_SIZE](#ZH-CN_TOPIC_0000002441654461)。
 
 【举例】
 
@@ -2754,7 +2724,7 @@ int ioctl (int fd,
 
 【注意】
 
-该接口获取到的接口数据[ot\_fb\_layer\_info](ot_fb_layer_info.md)中，mask成员是没有意义的，始终被填充为OT\_FB\_LAYER\_MASK\_BUTT。
+该接口获取到的接口数据[ot\_fb\_layer\_info](#ZH-CN_TOPIC_0000002441654457)中，mask成员是没有意义的，始终被填充为OT\_FB\_LAYER\_MASK\_BUTT。
 
 【举例】
 
@@ -3116,7 +3086,7 @@ int ioctl (int fd, FBIOPUT_DYNAMIC_RANGE_GFBG, ot_fb_dynamic_range * dst_dynamic
 
 【相关接口】
 
-[FBIOGET\_DYNAMIC\_RANGE\_GFBG](#FBIOGET_DYNAMIC_RANGE_GFBG)
+[FBIOGET\_DYNAMIC\_RANGE\_GFBG](#ZH-CN_TOPIC_0000002408095154)
 
 #### FBIOGET\_DYNAMIC\_RANGE\_GFBG<a name="ZH-CN_TOPIC_0000002408095154"></a>
 
@@ -3205,7 +3175,7 @@ int ioctl (int fd, FBIOGET_DYNAMIC_RANGE_GFBG, ot_fb_dynamic_range * dst_dynamic
 
 【相关接口】
 
-[FBIOPUT\_DYNAMIC\_RANGE\_GFBG](#FBIOPUT_DYNAMIC_RANGE_GFBG)
+[FBIOPUT\_DYNAMIC\_RANGE\_GFBG](#ZH-CN_TOPIC_0000002408255002)
 
 #### FBIOPUT\_SCREEN\_SIZE<a name="ZH-CN_TOPIC_0000002441654461"></a>
 
@@ -3296,7 +3266,7 @@ int ioctl (int fd, FBIOPUT_SCREEN_SIZE, ot_fb_size * ot_fb_size);
 
 【相关接口】
 
-[FBIOGET\_SCREEN\_SIZE](#FBIOGET_SCREEN_SIZE)
+[FBIOGET\_SCREEN\_SIZE](#ZH-CN_TOPIC_0000002408255014)
 
 #### FBIOGET\_SCREEN\_SIZE<a name="ZH-CN_TOPIC_0000002408255014"></a>
 
@@ -3387,7 +3357,7 @@ int ioctl (int fd,
 
 【相关接口】
 
-[FBIOPUT\_SCREEN\_SIZE](#FBIOPUT_SCREEN_SIZE)
+[FBIOPUT\_SCREEN\_SIZE](#ZH-CN_TOPIC_0000002441654461)
 
 #### FBIOGET\_ROTATE\_MODE<a name="ZH-CN_TOPIC_0000002408095082"></a>
 
@@ -3479,7 +3449,7 @@ int ioctl (int fd,
 
 【相关接口】
 
-[FBIOPUT\_ROTATE\_MODE](#FBIOPUT_ROTATE_MODE)
+[FBIOPUT\_ROTATE\_MODE](#ZH-CN_TOPIC_0000002441654409)
 
 #### FBIOPUT\_ROTATE\_MODE<a name="ZH-CN_TOPIC_0000002441654409"></a>
 
@@ -3566,7 +3536,7 @@ int ioctl (int fd,
 -   OT\_FB\_LAYER\_BUF\_NONE刷新模式下不支持旋转功能。
 -   不支持压缩和旋转同时做。
 -   旋转功能的用法：
-    -   首先需要将[fb\_var\_screeninfo](fb_var_screeninfo.md)中成员xres、yres（以及xres\_virtual、yres\_virtual）分别设置为旋转后的图像的宽和高；
+    -   首先需要将[fb\_var\_screeninfo](#ZH-CN_TOPIC_0000002441694265)中成员xres、yres（以及xres\_virtual、yres\_virtual）分别设置为旋转后的图像的宽和高；
     -   然后调用ioctl \(int fd, FBIOPUT\_ROTATE\_MODE，ot\_fb\_rotate\_mode \* penGfbgRotSet\)接口即可；
     -   另外，该功能仅支持OT\_FB\_LAYER\_BUF\_ONE、OT\_FB\_LAYER\_BUF\_DOUBLE和OT\_FB\_LAYER\_BUF\_DOUBLE\_IMMEDIATE三种刷新模式下（见ot\_fb\_layer\_buf）特定角度（90度、180度、270度）的旋转。
 
@@ -3580,7 +3550,7 @@ int ioctl (int fd,
 
 【相关接口】
 
-[FBIOGET\_ROTATE\_MODE](#FBIOGET_ROTATE_MODE)
+[FBIOGET\_ROTATE\_MODE](#ZH-CN_TOPIC_0000002408095082)
 
 #### FBIO\_CREATE\_LAYER<a name="ZH-CN_TOPIC_0000002408095078"></a>
 
@@ -3591,7 +3561,7 @@ int ioctl (int fd,
 【语法】
 
 ```
-int ioctl (int fd, FBIO_CREATE _LAYER)
+int ioctl (int fd, FBIO_CREATE_LAYER)
 ```
 
 【描述】
@@ -3616,7 +3586,7 @@ int ioctl (int fd, FBIO_CREATE _LAYER)
 <td class="cellrowborder" valign="top" width="20%" headers="mcps1.1.4.1.3 "><p id="p6505mcpsimp"><a name="p6505mcpsimp"></a><a name="p6505mcpsimp"></a>输入</p>
 </td>
 </tr>
-<tr id="row6506mcpsimp"><td class="cellrowborder" valign="top" width="34%" headers="mcps1.1.4.1.1 "><p id="p6508mcpsimp"><a name="p6508mcpsimp"></a><a name="p6508mcpsimp"></a>FBIO_ CREATE _LAYER</p>
+<tr id="row6506mcpsimp"><td class="cellrowborder" valign="top" width="34%" headers="mcps1.1.4.1.1 "><p id="p6508mcpsimp"><a name="p6508mcpsimp"></a><a name="p6508mcpsimp"></a>FBIO_ CREATE_LAYER</p>
 </td>
 <td class="cellrowborder" valign="top" width="46%" headers="mcps1.1.4.1.2 "><p id="p6510mcpsimp"><a name="p6510mcpsimp"></a><a name="p6510mcpsimp"></a>ioctl号</p>
 </td>
@@ -3739,7 +3709,7 @@ int ioctl (int fd, FBIO_DESTROY_LAYER)
 
 -   与FBIO\_ CREATE \_LAYER成对使用。
 -   由于linux 3.10以上的内核对close机制采用异步方式，这样可能在顺序执行图形层关闭和解绑定时驱动会出现颠倒执行顺序的情况，为确保关闭层和解绑定层能顺序执行，增加此接口，在调用close之前调用。
--   推荐用法：通过ioctl  [FBIO\_DESTROY\_LAYER](FBIO_DESTROY_LAYER.md)释放图形层硬件资源后再close 设备，不建议单独调用[FBIO\_DESTROY\_LAYER](FBIO_DESTROY_LAYER.md)关闭图形层。
+-   推荐用法：通过ioctl  [FBIO\_DESTROY\_LAYER](#ZH-CN_TOPIC_0000002441654477)释放图形层硬件资源后再close 设备，不建议单独调用[FBIO\_DESTROY\_LAYER](#ZH-CN_TOPIC_0000002441654477)关闭图形层。
 
 【举例】
 
@@ -3918,9 +3888,9 @@ return TD_SUCCESS;
 
 【相关数据类型与接口】
 
--   [ot\_fb\_smart\_rect\_mode](#ot_fb_smart_rect_mode)
--   [ot\_fb\_smart\_rect](#ot_fb_smart_rect)
--   [ot\_fb\_smart\_rect\_param](#ot_fb_smart_rect_param)
+-   [ot\_fb\_smart\_rect\_mode](#ZH-CN_TOPIC_0000002441694249)
+-   [ot\_fb\_smart\_rect](#ZH-CN_TOPIC_0000002408095158)
+-   [ot\_fb\_smart\_rect\_param](#ZH-CN_TOPIC_0000002441654421)
 
 ### 软鼠标功能<a name="ZH-CN_TOPIC_0000002441694337"></a>
 
@@ -3928,17 +3898,27 @@ return TD_SUCCESS;
 
 SS528V100/SS625V100/SS524V100/SS522V101/SS928V100/SS626V100均不支持软鼠标功能。
 
+-   **[FBIOGET\_CURSOR\_INFO](#ZH-CN_TOPIC_0000002408095114)**  
 
+-   **[FBIOPUT\_CURSOR\_ATTCHCURSOR](#ZH-CN_TOPIC_0000002408255026)**  
 
+-   **[FBIOPUT\_CURSOR\_DETACHCURSOR](#ZH-CN_TOPIC_0000002441694277)**  
 
+-   **[FBIOPUT\_CURSOR\_STATE](#ZH-CN_TOPIC_0000002441694269)**  
 
+-   **[FBIOGET\_CURSOR\_STATE](#ZH-CN_TOPIC_0000002408095174)**  
 
+-   **[FBIOPUT\_CURSOR\_POS](#ZH-CN_TOPIC_0000002408095122)**  
 
+-   **[FBIOGET\_CURSOR\_POS](#ZH-CN_TOPIC_0000002408255010)**  
 
+-   **[FBIOPUT\_CURSOR\_COLORKEY](#ZH-CN_TOPIC_0000002408095178)**  
 
+-   **[FBIOGET\_CURSOR\_COLORKEY](#ZH-CN_TOPIC_0000002408095138)**  
 
+-   **[FBIOPUT\_CURSOR\_ALPHA](#ZH-CN_TOPIC_0000002441654449)**  
 
-
+-   **[FBIOGET\_CURSOR\_ALPHA](#ZH-CN_TOPIC_0000002408255050)**  
 
 #### FBIOPUT\_CURSOR\_INFO<a name="ZH-CN_TOPIC_0000002441654481"></a>
 
@@ -4202,7 +4182,7 @@ int ioctl (int fd,
 
 -   待绑定的图形层必须处于已打开状态；
 -   允许将同一个鼠标与某个图形层绑定多次，但不允许多个鼠标同时绑定到同一图形层；如果一个图形层已与一个鼠标绑定，但想绑定另一个鼠标层，则应先解除之前的绑定关系，否则出错；
--   绑定之前必须设置鼠标层的信息，另外不能将其绑定到其他鼠标层。
+-   绑定之前必须设置鼠标层的信息，另外不能将其绑定到其他图形层。
 
 【举例】
 
@@ -5063,12 +5043,7 @@ int ioctl (int fd, FBIOGET_CURSOR_ALPHA, ot_fb_alpha *pstAlphaInfo)
 
 # 数据类型<a name="ZH-CN_TOPIC_0000002408095090"></a>
 
-
-
 ## 在标准中定义的数据类型<a name="ZH-CN_TOPIC_0000002441694313"></a>
-
-
-
 
 ### fb\_bitfield<a name="ZH-CN_TOPIC_0000002441694281"></a>
 
@@ -5375,7 +5350,7 @@ struct fb_var_screeninfo
 
 【注意】
 
--   高清设备图形层默认的分辩率为图层支持的最大分辨率；标清设备图形层默认的分辩率为720x576，鼠标层默认的分辩率为256x256。像素格式为ARGB1555。
+-   高清设备图形层默认的分辨率为图层支持的最大分辨率；标清设备图形层默认的分辨率为720x576，鼠标层默认的分辨率为256x256。像素格式为ARGB1555。
 -   特别说明：
     -   对于SS528V100，G0/G1分辨率最小32\*32，最大4096\*2160；G2：分辨率最小2\*2，最大256\*256；G3：最小32\*32，CLUT格式支持3840\*2160，其他格式720x576。
     -   对于SS524V100，G0：分辨率最小32\*32，最大3840\*2160；G1：分辨率最小32\*32，最大1920\*1080；G2：分辨率最小2\*2，最大256\*256；G3：最小32\*32，CLUT格式支持3840\*2160，其他格式720x576。
@@ -5386,9 +5361,9 @@ struct fb_var_screeninfo
 
 【相关数据类型及接口】
 
--   [fb\_bitfield](#fb_bitfield)
--   [FBIOGET\_VSCREENINFO](#FBIOGET_VSCREENINFO)
--   [FBIOPUT\_VSCREENINFO](#FBIOPUT_VSCREENINFO)
+-   [fb\_bitfield](#ZH-CN_TOPIC_0000002441694281)
+-   [FBIOGET\_VSCREENINFO](#ZH-CN_TOPIC_0000002408255078)
+-   [FBIOPUT\_VSCREENINFO](#ZH-CN_TOPIC_0000002408255102)
 
 ### fb\_fix\_screeninfo<a name="ZH-CN_TOPIC_0000002441694325"></a>
 
@@ -5538,32 +5513,9 @@ struct fb_fix_screeninfo
 
 【相关数据类型及接口】
 
-[FBIOGET\_FSCREENINFO](#FBIOGET_FSCREENINFO)
+[FBIOGET\_FSCREENINFO](#ZH-CN_TOPIC_0000002441694273)
 
 ## 扩展的数据类型<a name="ZH-CN_TOPIC_0000002408095150"></a>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 ### ot\_fb\_rotate\_mode<a name="ZH-CN_TOPIC_0000002408255070"></a>
 
@@ -6092,8 +6044,8 @@ typedef struct
 
 【相关数据类型及接口】
 
--   [ot\_fb\_dynamic\_range](#ot_fb_dynamic_range)
--   [FBIOGET\_CAPABILITY\_GFBG](#FBIOGET_CAPABILITY_GFBG)
+-   [ot\_fb\_dynamic\_range](#ZH-CN_TOPIC_0000002441654465)
+-   [FBIOGET\_CAPABILITY\_GFBG](#ZH-CN_TOPIC_0000002441654445)
 
 ### ot\_fb\_point<a name="ZH-CN_TOPIC_0000002441694301"></a>
 
@@ -6139,8 +6091,8 @@ typedef struct
 
 【相关数据类型及接口】
 
--   [FBIOGET\_SCREEN\_ORIGIN\_GFBG](#FBIOGET_SCREEN_ORIGIN_GFBG)
--   [FBIOPUT\_SCREEN\_ORIGIN\_GFBG](#FBIOPUT_SCREEN_ORIGIN_GFBG)
+-   [FBIOGET\_SCREEN\_ORIGIN\_GFBG](#ZH-CN_TOPIC_0000002441694257)
+-   [FBIOPUT\_SCREEN\_ORIGIN\_GFBG](#ZH-CN_TOPIC_0000002441654497)
 
 ### ot\_fb\_mirror\_mode<a name="ZH-CN_TOPIC_0000002441654441"></a>
 
@@ -6205,7 +6157,7 @@ typedef enum
 
 【相关数据类型及接口】
 
-[FBIOGET\_MIRROR\_MODE](#FBIOGET_MIRROR_MODE)
+[FBIOGET\_MIRROR\_MODE](#ZH-CN_TOPIC_0000002441694297)
 
 ### ot\_fb\_alpha<a name="ZH-CN_TOPIC_0000002408255094"></a>
 
@@ -6282,8 +6234,8 @@ Alpha值的计算公式有以下几种情况：
 
 【相关数据类型及接口】
 
--   [FBIOGET\_ALPHA\_GFBG](#FBIOGET_ALPHA_GFBG)
--   [FBIOPUT\_ALPHA\_GFBG](#FBIOPUT_ALPHA_GFBG)
+-   [FBIOGET\_ALPHA\_GFBG](#ZH-CN_TOPIC_0000002441654413)
+-   [FBIOPUT\_ALPHA\_GFBG](#ZH-CN_TOPIC_0000002408095146)
 
 ### ot\_fb\_colorkey<a name="ZH-CN_TOPIC_0000002441694333"></a>
 
@@ -6331,8 +6283,8 @@ typedef struct
 
 【相关数据类型及接口】
 
--   [FBIOGET\_COLORKEY\_GFBG](#FBIOGET_COLORKEY_GFBG)
--   [FBIOPUT\_COLORKEY\_GFBG](#FBIOPUT_COLORKEY_GFBG)
+-   [FBIOGET\_COLORKEY\_GFBG](#ZH-CN_TOPIC_0000002408095110)
+-   [FBIOPUT\_COLORKEY\_GFBG](#ZH-CN_TOPIC_0000002408095094)
 
 ### ot\_fb\_deflicker<a name="ZH-CN_TOPIC_0000002441654489"></a>
 
@@ -6390,8 +6342,8 @@ typedef struct ot_fb_deflicker
 
 【相关数据类型及接口】
 
--   [FBIOGET\_DEFLICKER\_GFBG](#FBIOGET_DEFLICKER_GFBG)
--   [FBIOPUT\_DEFLICKER\_GFBG](#FBIOPUT_DEFLICKER_GFBG)
+-   [FBIOGET\_DEFLICKER\_GFBG](#ZH-CN_TOPIC_0000002408095186)
+-   [FBIOPUT\_DEFLICKER\_GFBG](#ZH-CN_TOPIC_0000002441654469)
 
 ### ot\_fb\_surfaceex<a name="ZH-CN_TOPIC_0000002408255082"></a>
 
@@ -6443,7 +6395,7 @@ Surface的物理地址必须在该叠加层配置的显存范围内，而且最�
 
 【相关数据类型及接口】
 
-[FBIOFLIP\_SURFACE](#FBIOFLIP_SURFACE)
+[FBIOFLIP\_SURFACE](#ZH-CN_TOPIC_0000002408255062)
 
 ### ot\_fb\_layer\_info<a name="ZH-CN_TOPIC_0000002441654457"></a>
 
@@ -6522,12 +6474,12 @@ typedef struct
 </tr>
 <tr id="row4250mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.3.1.1 "><p xml:lang="fr-FR" id="p4252mcpsimp"><a name="p4252mcpsimp"></a><a name="p4252mcpsimp"></a>screen_width</p>
 </td>
-<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p4254mcpsimp"><a name="p4254mcpsimp"></a><a name="p4254mcpsimp"></a>屏幕显示分辩率的宽。要求2对齐。</p>
+<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p4254mcpsimp"><a name="p4254mcpsimp"></a><a name="p4254mcpsimp"></a>屏幕显示分辨率的宽。要求2对齐。</p>
 </td>
 </tr>
 <tr id="row4255mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.3.1.1 "><p xml:lang="fr-FR" id="p4257mcpsimp"><a name="p4257mcpsimp"></a><a name="p4257mcpsimp"></a>screen_height</p>
 </td>
-<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p4259mcpsimp"><a name="p4259mcpsimp"></a><a name="p4259mcpsimp"></a>屏幕显示分辩率的高。要求2对齐。</p>
+<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p4259mcpsimp"><a name="p4259mcpsimp"></a><a name="p4259mcpsimp"></a>屏幕显示分辨率的高。要求2对齐。</p>
 </td>
 </tr>
 <tr id="row4260mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.3.1.1 "><p xml:lang="fr-FR" id="p4262mcpsimp"><a name="p4262mcpsimp"></a><a name="p4262mcpsimp"></a>is_premul</p>
@@ -6551,7 +6503,7 @@ typedef struct
     -   Display宽高表示显示缓冲区的宽高；
     -   Screen宽高表示最终显示出来的宽高；
     -   从Canvas宽高到Display宽高使用TDE的搬移和缩放功能，将画布内容搬移并缩放到显存；
-    -   从Canvas宽高到Display宽高且为放大时，需要将[fb\_var\_screeninfo](fb_var_screeninfo.md)中成员xres和yres（以及xres\_virtual和yres\_virtual）分别设置为放大后的图像的宽和高；
+    -   从Canvas宽高到Display宽高且为放大时，需要将[fb\_var\_screeninfo](#ZH-CN_TOPIC_0000002441694265)中成员xres和yres（以及xres\_virtual和yres\_virtual）分别设置为放大后的图像的宽和高；
     -   从Display宽高到Screen宽高使用G0中的缩放功能（支持放大1\~15倍，不支持缩小），将显存内容缩放到Screen宽高显示。
 
     >![](public_sys-resources/icon-notice.gif) **须知：** 
@@ -6560,8 +6512,8 @@ typedef struct
     >-   上述缩放功能中，TDE的缩放能力（放大倍数和缩小倍数）可参考文档《TDE API参考》。
     >    如果仅使用FBIOPAN\_DISPLAY接口进行显示，则不涉及TDE搬移，在使用G0的缩放功能时，GFBG内部以display宽高作为参考，此时需将display宽高设置成Canvas宽高。
 
--   若设置了display\_width和mask（修改显示宽高的掩码设置参见[ot\_fb\_layer\_info\_maskbit](ot_fb_layer_info_maskbit.md)  中的OT\_FB\_LAYER\_MASK\_DISPLAY\_SIZE项）且该宽度值比系统已存在的设置大，则该设置会修改固定屏幕信息[fb\_fix\_screeninfo](fb_fix_screeninfo.md)中的line\_length项，修改后的大小为“设置的宽度值\*每像素字节数”的16字节对齐。
--   若设置了display\_width、display\_height和mask（修改显示宽高的掩码设置参见[ot\_fb\_layer\_info\_maskbit](ot_fb_layer_info_maskbit.md)  中的OT\_FB\_LAYER\_MASK\_DISPLAY\_SIZE项），则该设置会同步修改  [fb\_var\_screeninfo](fb_var_screeninfo.md)中的xres和yres。
+-   若设置了display\_width和mask（修改显示宽高的掩码设置参见[ot\_fb\_layer\_info\_maskbit](#ZH-CN_TOPIC_0000002408095142)  中的OT\_FB\_LAYER\_MASK\_DISPLAY\_SIZE项）且该宽度值比系统已存在的设置大，则该设置会修改固定屏幕信息[fb\_fix\_screeninfo](#ZH-CN_TOPIC_0000002441694325)中的line\_length项，修改后的大小为“设置的宽度值\*每像素字节数”的16字节对齐。
+-   若设置了display\_width、display\_height和mask（修改显示宽高的掩码设置参见[ot\_fb\_layer\_info\_maskbit](#ZH-CN_TOPIC_0000002408095142)  中的OT\_FB\_LAYER\_MASK\_DISPLAY\_SIZE项），则该设置会同步修改  [fb\_var\_screeninfo](#ZH-CN_TOPIC_0000002441694265)中的xres和yres。
     -   如果display\_width大于xres\_virtual，则设置xres\_virtual为display\_width；
     -   如果display\_height大于yres\_virtual，则设置yres\_virtual为display\_height。
 
@@ -6571,8 +6523,8 @@ typedef struct
 
 【相关数据类型及接口】
 
--   [FBIOPUT\_LAYER\_INFO](#FBIOPUT_LAYER_INFO)
--   [FBIOGET\_LAYER\_INFO](#FBIOGET_LAYER_INFO)
+-   [FBIOPUT\_LAYER\_INFO](#ZH-CN_TOPIC_0000002441694341)
+-   [FBIOGET\_LAYER\_INFO](#ZH-CN_TOPIC_0000002408095166)
 
 ### ot\_fb\_layer\_antiflicker\_level<a name="ZH-CN_TOPIC_0000002441654405"></a>
 
@@ -6642,8 +6594,8 @@ typedef enum
 
 【相关数据类型及接口】
 
--   [FBIOPUT\_LAYER\_INFO](#FBIOPUT_LAYER_INFO)
--   [FBIOGET\_LAYER\_INFO](#FBIOGET_LAYER_INFO)
+-   [FBIOPUT\_LAYER\_INFO](#ZH-CN_TOPIC_0000002441694341)
+-   [FBIOGET\_LAYER\_INFO](#ZH-CN_TOPIC_0000002408095166)
 
 ### ot\_fb\_layer\_buf<a name="ZH-CN_TOPIC_0000002441694321"></a>
 
@@ -6711,8 +6663,8 @@ typedef enum
 
 【相关数据类型及接口】
 
--   [FBIOPUT\_LAYER\_INFO](#FBIOPUT_LAYER_INFO)
--   [FBIOGET\_LAYER\_INFO](#FBIOGET_LAYER_INFO)
+-   [FBIOPUT\_LAYER\_INFO](#ZH-CN_TOPIC_0000002441694341)
+-   [FBIOGET\_LAYER\_INFO](#ZH-CN_TOPIC_0000002408095166)
 
 ### ot\_fb\_layer\_info\_maskbit<a name="ZH-CN_TOPIC_0000002408095142"></a>
 
@@ -6794,8 +6746,8 @@ typedef enum
 
 【相关数据类型及接口】
 
--   [FBIOPUT\_LAYER\_INFO](#FBIOPUT_LAYER_INFO)
--   [FBIOGET\_LAYER\_INFO](#FBIOGET_LAYER_INFO)
+-   [FBIOPUT\_LAYER\_INFO](#ZH-CN_TOPIC_0000002441694341)
+-   [FBIOGET\_LAYER\_INFO](#ZH-CN_TOPIC_0000002408095166)
 
 ### ot\_fb\_buf<a name="ZH-CN_TOPIC_0000002441654417"></a>
 
@@ -6839,8 +6791,8 @@ typedef struct
 
 【相关数据类型及接口】
 
--   [FBIO\_REFRESH](#FBIO_REFRESH)
--   [FBIOGET\_CANVAS\_BUF](#FBIOGET_CANVAS_BUF)
+-   [FBIO\_REFRESH](#ZH-CN_TOPIC_0000002441694329)
+-   [FBIOGET\_CANVAS\_BUF](#ZH-CN_TOPIC_0000002408255086)
 
 ### ot\_fb\_surface<a name="ZH-CN_TOPIC_0000002441694253"></a>
 
@@ -6910,8 +6862,8 @@ typedef struct
 
 【相关数据类型及接口】
 
--   [ot\_fb\_buf](#ot_fb_buf)
--   [ot\_fb\_cursor](#ot_fb_cursor)
+-   [ot\_fb\_buf](#ZH-CN_TOPIC_0000002441654417)
+-   [ot\_fb\_cursor](#ZH-CN_TOPIC_0000002408255098)
 
 ### ot\_fb\_cursor<a name="ZH-CN_TOPIC_0000002408255098"></a>
 
@@ -7003,8 +6955,8 @@ typedef struct
 
 【相关数据类型及接口】
 
--   [FBIOPUT\_MDDRDETECT\_GFBG](#FBIOPUT_MDDRDETECT_GFBG)
--   [FBIOGET\_MDDRDETECT\_GFBG](#FBIOGET_MDDRDETECT_GFBG)
+-   [FBIOPUT\_MDDRDETECT\_GFBG](#ZH-CN_TOPIC_0000002408095134)
+-   [FBIOGET\_MDDRDETECT\_GFBG](#ZH-CN_TOPIC_0000002408255038)
 
 ### ot\_fb\_smart\_rect\_mode<a name="ZH-CN_TOPIC_0000002441694249"></a>
 
@@ -7067,7 +7019,7 @@ typedef enum {
 
 【相关数据类型及接口】
 
-[ot\_fb\_smart\_rect](#ot_fb_smart_rect)
+[ot\_fb\_smart\_rect](#ZH-CN_TOPIC_0000002408095158)
 
 ### ot\_fb\_smart\_rect<a name="ZH-CN_TOPIC_0000002408095158"></a>
 
@@ -7142,7 +7094,7 @@ a,r,g,b四个分量均取各自8位的高4位左移4位后的数值作为新的�
 
 【相关数据类型及接口】
 
-[ot\_fb\_smart\_rect\_param](#ot_fb_smart_rect_param)
+[ot\_fb\_smart\_rect\_param](#ZH-CN_TOPIC_0000002441654421)
 
 ### ot\_fb\_smart\_rect\_param<a name="ZH-CN_TOPIC_0000002441654421"></a>
 
@@ -7187,7 +7139,7 @@ num最大限制128。
 
 【相关数据类型及接口】
 
-[FBIO\_DRAW\_SMART\_RECT](#FBIO_DRAW_SMART_RECT)
+[FBIO\_DRAW\_SMART\_RECT](#ZH-CN_TOPIC_0000002441654425)
 
 ### ot\_fb\_rect<a name="ZH-CN_TOPIC_0000002408095102"></a>
 
@@ -7293,11 +7245,13 @@ typedef struct {
 
 # 图形开发辅助接口<a name="ZH-CN_TOPIC_0000002408095162"></a>
 
-
+-   **[概述](#ZH-CN_TOPIC_0000002441694285)**  
 
 ## 概述<a name="ZH-CN_TOPIC_0000002441694285"></a>
 
+-   **[简介](#ZH-CN_TOPIC_0000002441654429)**  
 
+-   **[注意事项](#ZH-CN_TOPIC_0000002408255030)**  
 
 ### 简介<a name="ZH-CN_TOPIC_0000002441654429"></a>
 
@@ -7323,7 +7277,7 @@ typedef struct {
 
 每个显示设备都支持若干种时序输出，SDK在此不提供默认的设备层配置，也不在GFBG模块插入时默认打开设备层。用户需要调用相关接口使能设备层，然后操作图形层，才能看到显示结果。
 
-SDK使用VO模块控制设备层。SDK的VO模块提供设备层和视频层控制接口，其中操作设备层的接口包括：ss\_mpi\_vo\_enable/ss\_mpi\_vo\_disable/ ss\_mpi\_vo \_set\_pub\_attr/ ss\_mpi\_vo \_get\_pub\_attr。
+SDK使用VO模块控制设备层。SDK的VO模块提供设备层和视频层控制接口，其中操作设备层的接口包括：ss\_mpi\_vo\_enable/ss\_mpi\_vo\_disable/ ss\_mpi\_vo \_set\_pub\_attr/ ss\_mpi\_vo\_get\_pub\_attr。
 
 **如何在不同设备间切换图形层<a name="section107961835673"></a>**
 
@@ -7378,12 +7332,6 @@ SDK使用VO模块控制设备层。SDK的VO模块提供设备层和视频层控�
 </table>
 
 ## API参考<a name="ZH-CN_TOPIC_0000002441694293"></a>
-
-
-
-
-
-
 
 ### ss\_mpi\_vo\_bind\_layer<a name="ZH-CN_TOPIC_0000002408095182"></a>
 
@@ -7467,7 +7415,7 @@ td_s32 ss_mpi_vo_bind_layer(ot_vo_layer layer, ot_vo_dev dev)
 
 【相关接口】
 
-[ss\_mpi\_vo\_unbind\_layer](#ss_mpi_vo_unbind_layer)
+[ss\_mpi\_vo\_unbind\_layer](#ZH-CN_TOPIC_0000002441694345)
 
 ### ss\_mpi\_vo\_unbind\_layer<a name="ZH-CN_TOPIC_0000002441694345"></a>
 
@@ -7552,7 +7500,7 @@ td_s32 ss_mpi_vo_unbind_layer(ot_vo_layer layer, ot_vo_dev dev)
 
 【相关接口】
 
-[ss\_mpi\_vo\_bind\_layer](#ss_mpi_vo_bind_layer)
+[ss\_mpi\_vo\_bind\_layer](#ZH-CN_TOPIC_0000002408095182)
 
 ### ss\_mpi\_vo\_set\_pub\_attr<a name="ZH-CN_TOPIC_0000002441694305"></a>
 
@@ -7627,8 +7575,11 @@ td_s32 ss_mpi_vo_disable (ot_vo_dev dev)
 
 # Proc调试信息<a name="ZH-CN_TOPIC_0000002441694261"></a>
 
+-   **[图形层和fb设备号对应关系](#ZH-CN_TOPIC_0000002408255066)**  
 
+-   **[单个图形层调试信息](#ZH-CN_TOPIC_0000002408255106)**  
 
+-   **[图形层的绑定关系](#ZH-CN_TOPIC_0000002408255018)**  
 
 ## 图形层和fb设备号对应关系<a name="ZH-CN_TOPIC_0000002408255066"></a>
 

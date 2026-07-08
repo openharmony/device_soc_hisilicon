@@ -72,7 +72,7 @@ typedef struct {
     CodecType type;
 } PluginConfig;
 
-static const PluginConfig PLUG_CFGS[] = {
+static const PluginConfig g_plugCfgs[] = {
     {"/usr/lib/", "VDecoderGetImpl", VIDEO_DECODER},
     {"/usr/lib/", "ADecoderGetImpl", AUDIO_DECODER},
     {"/usr/lib/", "AEncoderGetImpl", AUDIO_ENCODER},
@@ -206,11 +206,11 @@ int32_t CodecInit(void)
         MEDIA_HAL_LOGE(MODULE_NAME, "MediaSystemInit failed ret:%d", ret);
     }
     gettimeofday(&g_timeInitStart, NULL);
-    size_t cfgSize = sizeof(PLUG_CFGS) / sizeof(PLUG_CFGS[0]);
+    size_t cfgSize = sizeof(g_plugCfgs) / sizeof(g_plugCfgs[0]);
     for (size_t i = 0; i < cfgSize; i++) {
-        ret = SearchLoadValidPlugin(PLUG_CFGS[i].dirPath, PLUG_CFGS[i].getImplSymbol, PLUG_CFGS[i].type);
+        ret = SearchLoadValidPlugin(g_plugCfgs[i].dirPath, g_plugCfgs[i].getImplSymbol, g_plugCfgs[i].type);
         if (ret != TD_SUCCESS) {
-            MEDIA_HAL_LOGE(MODULE_NAME, "search and load plugin type[%d] failed", PLUG_CFGS[i].type);
+            MEDIA_HAL_LOGE(MODULE_NAME, "search and load plugin type[%d] failed", g_plugCfgs[i].type);
             pthread_mutex_unlock(&g_mutex);
             return TD_FAILURE;
         }
@@ -230,11 +230,11 @@ int32_t CodecDeinit(void)
     pthread_mutex_lock(&g_mutex);
     gettimeofday(&g_timeDeinitStart, NULL);
     if (g_inited) {
-        size_t cfgSize = sizeof(PLUG_CFGS) / sizeof(PLUG_CFGS[0]);
+        size_t cfgSize = sizeof(g_plugCfgs) / sizeof(g_plugCfgs[0]);
         for (size_t i = 0; i < cfgSize; i++) {
-            int ret = UnLoadPlugin(PLUG_CFGS[i].type);
+            int ret = UnLoadPlugin(g_plugCfgs[i].type);
             if (ret != TD_SUCCESS) {
-                MEDIA_HAL_LOGE(MODULE_NAME, "unload plugin type[%d] failed", PLUG_CFGS[i].type);
+                MEDIA_HAL_LOGE(MODULE_NAME, "unload plugin type[%d] failed", g_plugCfgs[i].type);
                 pthread_mutex_unlock(&g_mutex);
                 return TD_FAILURE;
             }
@@ -359,6 +359,52 @@ int32_t CodecCreate(const char* name, const Param *attr, int len, CODEC_HANDLETY
     }
     pthread_mutex_lock(&g_mutex);
     ret = CreateHandler(attr, len, type, codecCtx);
+    pthread_mutex_unlock(&g_mutex);
+    if (ret != TD_SUCCESS) {
+        MEDIA_HAL_LOGE(MODULE_NAME, "CreateHandler fail");
+        DeleteHandle(codecCtx);
+        free(codecCtx);
+        return TD_FAILURE;
+    }
+
+    *handle = codecCtx;
+    MEDIA_HAL_LOGD(MODULE_NAME, "out");
+    return TD_SUCCESS;
+}
+
+int32_t CodecCreateByType(CodecType type, AvCodecMime mime, CODEC_HANDLETYPE *handle)
+{
+    MEDIA_HAL_LOGD(MODULE_NAME, "in");
+    if (handle == NULL) {
+        MEDIA_HAL_LOGE(MODULE_NAME, "handle is null");
+        return TD_FAILURE;
+    }
+    Param attr[PARAM_UPPER_LIMIT];
+    if (memset_s(attr, sizeof(Param) * PARAM_UPPER_LIMIT, 0x00, sizeof(Param) * PARAM_UPPER_LIMIT) != EOK) {
+        MEDIA_HAL_LOGE(MODULE_NAME, "memset_s failed");
+        return TD_FAILURE;
+    }
+    attr[0].key = KEY_CODEC_TYPE;
+    attr[0].size = sizeof(CodecType);
+    attr[0].val = &type;
+    attr[1].key = KEY_MIMETYPE;
+    attr[1].size = sizeof(AvCodecMime);
+    attr[1].val = &mime;
+    int len = 2;
+    CodecCtx *codecCtx = (CodecCtx *)malloc(sizeof(CodecCtx));
+    if (codecCtx == NULL) {
+        MEDIA_HAL_LOGE(MODULE_NAME, "malloc context error");
+        return TD_FAILURE;
+    }
+    if (!RecordThisHandle(codecCtx)) {
+        free(codecCtx);
+        return TD_FAILURE;
+    }
+    if (memset_s(codecCtx, sizeof(CodecCtx), 0x00, sizeof(CodecCtx)) != EOK) {
+        MEDIA_HAL_LOGE(MODULE_NAME, "memset_s failed");
+    }
+    pthread_mutex_lock(&g_mutex);
+    int32_t ret = CreateHandler(attr, len, type, codecCtx);
     pthread_mutex_unlock(&g_mutex);
     if (ret != TD_SUCCESS) {
         MEDIA_HAL_LOGE(MODULE_NAME, "CreateHandler fail");

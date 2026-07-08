@@ -250,19 +250,31 @@
 
 # 系统控制<a name="ZH-CN_TOPIC_0000002441674877"></a>
 
+-   **[日志信息](#ZH-CN_TOPIC_0000002408115570)**  
 
+-   **[内存使用](#ZH-CN_TOPIC_0000002441714813)**  
 
+-   **[性能相关](#ZH-CN_TOPIC_0000002441714777)**  
 
+-   **[小型化](#ZH-CN_TOPIC_0000002408275506)**  
 
+-   **[管脚复用、时钟门控、系统控制在哪里配置？](#ZH-CN_TOPIC_0000002441714889)**  
 
+-   **[视频级联配置注意事项](#ZH-CN_TOPIC_0000002408275626)**  
 
+-   **[快速帧存轮转方案使用说明](#ZH-CN_TOPIC_0000002408275574)**  
 
+-   **[修改内核选项后重编KO流程](#ZH-CN_TOPIC_0000002408115654)**  
 
+-   **[Quick schedule注意事项](#ZH-CN_TOPIC_0000002408115634)**  
 
+-   **[低延时](#ZH-CN_TOPIC_0000002441674849)**  
 
+-   **[像素格式说明](#ZH-CN_TOPIC_0000002408115646)**  
 
 ## 日志信息<a name="ZH-CN_TOPIC_0000002408115570"></a>
 
+-   **[如何查看MPP的日志信息](#ZH-CN_TOPIC_0000002408275458)**  
 
 ### 如何查看MPP的日志信息<a name="ZH-CN_TOPIC_0000002408275458"></a>
 
@@ -287,9 +299,13 @@ Log日志记录SDK运行时错误的原因、大致位置以及一些系统运�
 
 ## 内存使用<a name="ZH-CN_TOPIC_0000002441714813"></a>
 
+-   **[OS保留内存和线程栈大小调整](#ZH-CN_TOPIC_0000002408115550)**  
 
+-   **[如何根据具体产品调整媒体业务所占内存](#ZH-CN_TOPIC_0000002408275686)**  
 
+-   **[MMZ信息](#ZH-CN_TOPIC_0000002408115714)**  
 
+-   **[CMA相关](#ZH-CN_TOPIC_0000002441714865)**  
 
 ### OS保留内存和线程栈大小调整<a name="ZH-CN_TOPIC_0000002408115550"></a>
 
@@ -302,7 +318,7 @@ Log日志记录SDK运行时错误的原因、大致位置以及一些系统运�
 
 【解决】
 
--   增大OS内存
+-   增大系统可用内存
 -   增大系统保留内存，可以在/etc/profile中加入以下命令将系统保留内存设置为4M（大小可调整）
 
 echo 2 \>/proc/sys/kernel/randomize\_va\_space
@@ -320,7 +336,7 @@ echo 4096 \>/proc/sys/vm/min\_free\_kbytes
 
 【解决】
 
--   增大OS内存
+-   增大系统可用内存
 -   调整线程最大栈空间大小，调整方式有2种：
     -   Linux系统可以使用ulimit -s命令修改线程栈大小，例如将线程栈大小设置成1M：ulimit -s 1024，可以在/etc/profile中加入此命令则可以开机就设置栈空间大小。
     -   使用pthread\_attr\_setstacksize在程序中改变线程栈大小。
@@ -342,7 +358,7 @@ echo 4096 \>/proc/sys/vm/min\_free\_kbytes
     详见发布包中的文件《SSxxxx SDK安装以及升级使用说明》中的 “地址空间分配与使用”。
 
 2.  根据实际使用情况调整SDK相关业务内存占用。
-    -   产品应保证所有分辨率图像的大小应成整数倍的关系，如1080P为1920x1080，960H为960x480，而不应出现960H为960x756的类似情况；同时，也不应出现VI采集1920x1088大小的图像，而VENC编码为1920x1080的情况。
+    -   产品应保证所有分辨率图像的大小应成整数倍的关系，如1080P为1920×1080，960H为960×480，而不应出现960H为960×756的类似情况；同时，也不应出现VI采集1920×1088大小的图像，而VENC编码为1920×1080的情况。
     -   每个模块的buffer配置最小值。
 
         参考文档：《MPP 媒体处理软件 V5.0 开发参考》。
@@ -371,7 +387,7 @@ echo 4096 \>/proc/sys/vm/min\_free\_kbytes
 
 ---ZONE: PHYS\(0x64100000, 0xBFFFFFFF\), GFP=0, nBYTES=1506304KB,    NAME="anonymous"
 
-表示MMZ区域0，命名为anonymous，MMZ区间为\(0x64100000, 0xBFFFFFFF\)，大小为1506304KB。如果MMZ被分为多个区间会存在多个ZONE。
+表示MMZ区域0，命名为anonymous，MMZ区间为\(0x64100000, 0xBFFFFFFF\)，大小为1506304KB。如果MMZ被分为多个区间，会存在多个ZONE。
 
 ---MMZ\_USE\_INFO: total size=1512448KB\(1477MB\),used=86564KB\(84MB + 548KB\),remain=1425884KB\(1392MB + 476KB\),zone\_number=2,block\_number=16
 
@@ -405,8 +421,11 @@ echo 4096 \>/proc/sys/vm/min\_free\_kbytes
 
 ## 性能相关<a name="ZH-CN_TOPIC_0000002441714777"></a>
 
+-   **[调节USB优先级的作用和影响](#ZH-CN_TOPIC_0000002441714773)**  
 
+-   **[CPU性能Top统计波动大问题](#ZH-CN_TOPIC_0000002408275498)**  
 
+-   **[绑定中断到不同CPU的注意事项](#ZH-CN_TOPIC_0000002441714917)**  
 
 ### 调节USB优先级的作用和影响<a name="ZH-CN_TOPIC_0000002441714773"></a>
 
@@ -419,7 +438,7 @@ echo 4096 \>/proc/sys/vm/min\_free\_kbytes
 
 【现象】使用top进行cpu占用率统计不是很准确，可能出现波动，特别是在小业务场景，top统计的cpu占用率波动会很大。
 
-【分析】版本linux kernel默认使用HZ为100，也即为10ms调度统计，统计时间粒度较粗，导致统计精度不够，如此波动会比较大。
+【分析】版本linux kernel默认使用HZ为100，也即为10ms调度统计，统计时间粒度较粗，导致统计精度不够，因此top统计的CPU占用率波动较大。
 
 【解决】如果期望比较准确的cpu占用率统计值，可以修改kernel HZ为1000，如此可以提高统计精度。
 
@@ -428,12 +447,13 @@ echo 4096 \>/proc/sys/vm/min\_free\_kbytes
 针对中断绑定CPU的操作有如下建议：
 
 -   绑定CPU的操作要在业务运行之前进行，不要在业务运行过程中动态切换绑定；
--   同一个模块的多个核要绑在同一个CPU上；
+-   同一个模块的多个中断应绑到同一个CPU核上；
 -   VPSS与VGS两个模块要绑定在同一个CPU上，因为VPSS可能会调用VGS完成旋转、overlayex、coverex、mosaicex、line、亮度和等功能。
 -   把中断比较多的模块识别出来绑定到其它CPU上，比如网络的中断若比较多，可以把它跟媒体业务分开。
 
 ## 小型化<a name="ZH-CN_TOPIC_0000002408275506"></a>
 
+-   **[静态库使用](#ZH-CN_TOPIC_0000002441675041)**  
 
 ### 静态库使用<a name="ZH-CN_TOPIC_0000002441675041"></a>
 
@@ -445,7 +465,7 @@ echo 4096 \>/proc/sys/vm/min\_free\_kbytes
 
 ## 管脚复用、时钟门控、系统控制在哪里配置？<a name="ZH-CN_TOPIC_0000002441714889"></a>
 
-在单Linux multi-core方案中，管脚复用（pinmux），管脚驱动能力、时钟门控（clk）和系统控制（sysctl）的配置，集中在interdrv/ sysconfig/ sys\_config.c中进行配置，用户可以根据自身产品需要进行修改，编译成sys\_config.ko，加载ko后配置生效。
+在单Linux multi-core方案中，管脚复用（pinmux），管脚驱动能力、时钟门控（clk）和系统控制（sysctl）的配置，集中在interdrv/sysconfig/sys\_config.c中进行配置，用户可以根据自身产品需要进行修改，编译成sys\_config.ko，加载ko后配置生效。
 
 ## 视频级联配置注意事项<a name="ZH-CN_TOPIC_0000002408275626"></a>
 
@@ -493,11 +513,14 @@ Quick schedule为一个VDEC-VPSS-VO整体优化方案，需要端到端的协同
 -   设置VDEC的mark模式为快速mark模式。通过接口ss\_mpi\_vdec\_set\_chn\_param进行配置quick\_mark\_mode为OT\_QUICK\_MARK\_ADAPT或者OT\_QUICK\_MARK\_FORCE。
 -   设置VDEC显示帧个数为0。通过接口ss\_mpi\_vdec\_set\_chn\_param进行配置display\_frame\_num为0。
 -   通过VPSS接口ss\_mpi\_vpss\_enable\_quick\_send开启通道快速发送模式，同时建议不使能backup帧，通道模式设置为auto模式。
--   通过接口ss\_mpi\_vo\_set\_less\_buf\_attr设置VO省BUF开关使能enable为TD\_TRUE，根据不同的客户场景设置省BUF的vtth值, 具体见如下[VO](VO.md)详细描述。
+-   通过接口ss\_mpi\_vo\_set\_less\_buf\_attr设置VO省BUF开关使能enable为TD\_TRUE，根据不同的客户场景设置省BUF的vtth值, 具体见如下[VO](#ZH-CN_TOPIC_0000002408275662)详细描述。
 -   通过接口ss\_mpi\_vo\_set\_video\_layer\_attr设置display\_buf\_len为2个buf，partition\_mode为OT\_VO\_PARTITION\_MODE\_MULTI模式，推荐使用MULTI模式。
 
+-   **[VDEC](#ZH-CN_TOPIC_0000002441674829)**  
 
+-   **[VPSS](#ZH-CN_TOPIC_0000002408115642)**  
 
+-   **[VO](#ZH-CN_TOPIC_0000002408275662)**  
 
 ### VDEC<a name="ZH-CN_TOPIC_0000002441674829"></a>
 
@@ -531,7 +554,7 @@ Quick schedule为一个VDEC-VPSS-VO整体优化方案，需要端到端的协同
 
 ### VO<a name="ZH-CN_TOPIC_0000002408275662"></a>
 
--   VO省buf的vtth值vtth2的取值范围是\[2,vtth1\],其中最大值vtth1为ss\_mpi\_vo\_set\_vtth设置的vtth值。
+-   VO省buf的vtth2的取值范围是\[2,vtth1\],其中vtth1为ss\_mpi\_vo\_set\_vtth设置的vtth值。
 -   在快速调度场景时，如果vtth2接近最小值2，可以保证VO无裂屏风险，但是可能会导致帧率不够或丢帧；如果vtth2接近最大值vtth1，快速调度可保证帧率足够，但是存在裂屏风险。
 -   当通道数目较少，图像分辨率较大时，建议vtth2配置等于最大值vtth1-1；当通道数目较多，图像分辨率较小时，建议vtth2配置接近最小值2，保证无裂屏风险。以SS528V100解决方案为例，推荐vtth2配置见入[表1](#_Ref51839565)。
 
@@ -614,10 +637,15 @@ Quick schedule为一个VDEC-VPSS-VO整体优化方案，需要端到端的协同
 
 低延时功能用于减少通路模块之间的延时，如VPSS-\>VO/VENC，其包括输入低延时和输出低延时，而产品的模块支持低延时功能的情况，可参考《MPP 媒体处理软件 V5.0 开发参考》的“2.2.1 低延时”小节。同时为了更好的指导用户使用，现对各模块低延时的使用建议和注意事项展开介绍，以下描述如无特殊说明，输入低延时默认开启，用户无需配置。
 
+-   **[VDEC](#ZH-CN_TOPIC_0000002441674957)**  
 
+-   **[VPSS](#ZH-CN_TOPIC_0000002441674993)**  
 
+-   **[VO](#ZH-CN_TOPIC_0000002441714745)**  
 
+-   **[VENC](#ZH-CN_TOPIC_0000002441714861)**  
 
+-   **[VI](#ZH-CN_TOPIC_0000002441674889)**  
 
 ### VDEC<a name="ZH-CN_TOPIC_0000002441674957"></a>
 
@@ -788,21 +816,33 @@ YUV PACKAGE 422格式各分量与内存各字节对应关系，以其中的YUYV�
 
 # VI<a name="ZH-CN_TOPIC_0000002441714901"></a>
 
+-   **[热成像探测器对接](#ZH-CN_TOPIC_0000002408115738)**  
 
+-   **[VI YUV时序配置](#ZH-CN_TOPIC_0000002441674917)**  
 
+-   **[Stagger通路配置](#ZH-CN_TOPIC_0000002441714845)**  
 
 ## 热成像探测器对接<a name="ZH-CN_TOPIC_0000002408115738"></a>
 
+-   **[T0类型探测器配置](#ZH-CN_TOPIC_0000002408275594)**  
 
+-   **[T1类型探测器配置](#ZH-CN_TOPIC_0000002441714833)**  
 
+-   **[T2类型探测器配置](#ZH-CN_TOPIC_0000002408275602)**  
 
+-   **[T3类型探测器配置](#ZH-CN_TOPIC_0000002441714705)**  
 
 ### T0类型探测器配置<a name="ZH-CN_TOPIC_0000002408275594"></a>
 
+-   **[CRG和管脚复用配置](#ZH-CN_TOPIC_0000002408275590)**  
 
+-   **[MIPI配置](#ZH-CN_TOPIC_0000002441674977)**  
 
+-   **[VI配置](#ZH-CN_TOPIC_0000002441714721)**  
 
+-   **[VI DEV属性配置](#ZH-CN_TOPIC_0000002408115674)**  
 
+-   **[热成像属性配置](#ZH-CN_TOPIC_0000002408275678)**  
 
 #### CRG和管脚复用配置<a name="ZH-CN_TOPIC_0000002408275590"></a>
 
@@ -816,7 +856,7 @@ YUV PACKAGE 422格式各分量与内存各字节对应关系，以其中的YUYV�
 
 #### VI DEV属性配置<a name="ZH-CN_TOPIC_0000002408115674"></a>
 
-只能使用Dev1对接，intf\_mode配置为OT\_VI\_INTF\_MODE\_THERMO，其余配置与raw数据输入的配置相同，分辨率配置为656x520。
+只能使用Dev1对接，intf\_mode配置为OT\_VI\_INTF\_MODE\_THERMO，其余配置与raw数据输入的配置相同，分辨率配置为656×520。
 
 #### 热成像属性配置<a name="ZH-CN_TOPIC_0000002408275678"></a>
 
@@ -850,10 +890,15 @@ YUV PACKAGE 422格式各分量与内存各字节对应关系，以其中的YUYV�
 
 ### T1类型探测器配置<a name="ZH-CN_TOPIC_0000002441714833"></a>
 
+-   **[CRG和管脚复用配置](#ZH-CN_TOPIC_0000002441674965)**  
 
+-   **[MIPI配置（LVDS配置）](#ZH-CN_TOPIC_0000002408115534)**  
 
+-   **[VI配置](#ZH-CN_TOPIC_0000002408275438)**  
 
+-   **[VI DEV属性配置](#ZH-CN_TOPIC_0000002408115690)**  
 
+-   **[热成像属性配置](#ZH-CN_TOPIC_0000002408115602)**  
 
 #### CRG和管脚复用配置<a name="ZH-CN_TOPIC_0000002441674965"></a>
 
@@ -939,7 +984,7 @@ YUV PACKAGE 422格式各分量与内存各字节对应关系，以其中的YUYV�
 
 #### VI DEV属性配置<a name="ZH-CN_TOPIC_0000002408115690"></a>
 
-可以使用Dev0\~3，与raw数据输入的配置完全相同，分辨率配置为160x120。
+可以使用VI设备号Dev0\~3，配置与raw数据输入完全相同，分辨率配置为160x120。
 
 #### 热成像属性配置<a name="ZH-CN_TOPIC_0000002408115602"></a>
 
@@ -968,10 +1013,15 @@ YUV PACKAGE 422格式各分量与内存各字节对应关系，以其中的YUYV�
 
 ### T2类型探测器配置<a name="ZH-CN_TOPIC_0000002408275602"></a>
 
+-   **[CRG和管脚复用配置](#ZH-CN_TOPIC_0000002408275618)**  
 
+-   **[MIPI配置](#ZH-CN_TOPIC_0000002441674997)**  
 
+-   **[VI配置](#ZH-CN_TOPIC_0000002408115686)**  
 
+-   **[VI DEV属性配置](#ZH-CN_TOPIC_0000002408115578)**  
 
+-   **[热成像属性配置](#ZH-CN_TOPIC_0000002408275482)**  
 
 #### CRG和管脚复用配置<a name="ZH-CN_TOPIC_0000002408275618"></a>
 
@@ -1016,8 +1066,11 @@ YUV PACKAGE 422格式各分量与内存各字节对应关系，以其中的YUYV�
 
 ### T3类型探测器配置<a name="ZH-CN_TOPIC_0000002441714705"></a>
 
+-   **[CRG和管脚复用配置](#ZH-CN_TOPIC_0000002441674961)**  
 
+-   **[MIPI配置](#ZH-CN_TOPIC_0000002408275466)**  
 
+-   **[VI配置](#ZH-CN_TOPIC_0000002408115730)**  
 
 #### CRG和管脚复用配置<a name="ZH-CN_TOPIC_0000002441674961"></a>
 
@@ -1186,15 +1239,23 @@ VI进YUV的场景配置需要注意的地方比较多，首先要配置管脚复
 >-   各接口的load脚本的参数，请参考各芯片的load脚本。
 >-   接线时序不用会导致dev component\_mask配置不同，具体请参考《MPP媒体处理软件 V5.0 开发参考》“视频输入”章节的掩码配置介绍。
 
+-   **[BT.1120](#ZH-CN_TOPIC_0000002441714753)**  
 
+-   **[BT.656](#ZH-CN_TOPIC_0000002441714881)**  
 
+-   **[MIPI\_YUV](#ZH-CN_TOPIC_0000002408275558)**  
 
+-   **[LVDS接YUV422](#ZH-CN_TOPIC_0000002441674861)**  
 
 ### BT.1120<a name="ZH-CN_TOPIC_0000002441714753"></a>
 
+-   **[SYS\_CONFIG配置](#ZH-CN_TOPIC_0000002441674985)**  
 
+-   **[MIPI配置](#ZH-CN_TOPIC_0000002441714761)**  
 
+-   **[VI DEV配置](#ZH-CN_TOPIC_0000002408115742)**  
 
+-   **[VI PIPE配置](#ZH-CN_TOPIC_0000002441675033)**  
 
 #### SYS\_CONFIG配置<a name="ZH-CN_TOPIC_0000002441674985"></a>
 
@@ -1273,9 +1334,13 @@ BT.1120时序不需要配置MIPI\_RX，建议不起MIPI\_RX业务。
 
 ### BT.656<a name="ZH-CN_TOPIC_0000002441714881"></a>
 
+-   **[SYS\_CONFIG配置](#ZH-CN_TOPIC_0000002441714821)**  
 
+-   **[MIPI配置](#ZH-CN_TOPIC_0000002408275570)**  
 
+-   **[VI DEV配置](#ZH-CN_TOPIC_0000002408275550)**  
 
+-   **[VI PIPE配置](#ZH-CN_TOPIC_0000002408115526)**  
 
 #### SYS\_CONFIG配置<a name="ZH-CN_TOPIC_0000002441714821"></a>
 
@@ -1354,9 +1419,13 @@ BT.656时序不需要配置MIPI\_RX，建议不起MIPI\_RX业务。
 
 ### MIPI\_YUV<a name="ZH-CN_TOPIC_0000002408275558"></a>
 
+-   **[SYS\_CONFIG配置](#ZH-CN_TOPIC_0000002441714913)**  
 
+-   **[MIPI配置](#ZH-CN_TOPIC_0000002441675045)**  
 
+-   **[VI DEV配置](#ZH-CN_TOPIC_0000002408275682)**  
 
+-   **[VI PIPE配置](#ZH-CN_TOPIC_0000002441675001)**  
 
 #### SYS\_CONFIG配置<a name="ZH-CN_TOPIC_0000002441714913"></a>
 
@@ -1465,12 +1534,16 @@ BT.656时序不需要配置MIPI\_RX，建议不起MIPI\_RX业务。
 >-   约束sensor首先写出长帧数据，这样物理pipe可以提供长帧数据的AE统计信息。
 >-   设置ss\_mpi\_vi\_set\_pipe\_frame\_source为OT\_VI\_PIPE\_FRAME\_SOURCE\_USER来bypass 物理pipe的BE的处理。
 >-   假定WDR每帧数据的宽高为WIDTH \* HEIGHT，虚拟pipe通路的宽高配置为WIDTH \* HEIGHT，物理pipe宽高为WIDTH \* HEIGHT\_MAX,以3To1 stagger为例，HEIGHT\_MAX = 3\*（HEIGHT + l\_vs\_distance\_max），l\_vs\_distance\_max为长帧和短帧数据之间最大的行差。
->-   物理pipe写出的宽高与sensor输出的图像宽高要完全一致才能保证中断上报以及图像效果的正常，因此在适配sensor驱动时要格外注意delay\_frame\_num以及cfg2\_valid\_delay\_max的正确性。如果logmpp中出现“no eof int”的错误打印或者图像出现上下抖动的异常，请首先排查delay\_frame\_num以及cfg2\_valid\_delay\_max的配置值是否正确。
+>-   物理pipe写出的图像宽高与sensor输出的图像宽高必须完全一致，才能保证中断上报以及图像效果的正常，因此在适配sensor驱动时要格外注意delay\_frame\_num以及cfg2\_valid\_delay\_max的正确性。如果logmpp中出现“no eof int”的错误打印或者图像出现上下抖动的异常，请首先排查delay\_frame\_num以及cfg2\_valid\_delay\_max的配置值是否正确。
 >-   特定sensor的WDR stagger模式下，如在帧起始配置曝光时间，sensor的长短帧曝光时间会分别生效，导致FE的物理pipe写出的宽高与sensor输出图像宽高不一致，logmpp中出现“no eof int”的错误打印或者图像出现上下抖动的异常。此时建议配置VI的中断类型为OT\_FRAME\_INTERRUPT\_EARLY，并配置适当行数（如总高度的一半，具体配置请查看sensor的DateSheet手册），延迟配置sensor时机，可解决上述问题。
 
+-   **[物理pipe配置](#ZH-CN_TOPIC_0000002408115670)**  
 
+-   **[虚拟pipe配置](#ZH-CN_TOPIC_0000002441675053)**  
 
+-   **[Sensor适配](#ZH-CN_TOPIC_0000002408275518)**  
 
+-   **[Stagger通路的伪代码](#ZH-CN_TOPIC_0000002408115698)**  
 
 ### 物理pipe配置<a name="ZH-CN_TOPIC_0000002408115670"></a>
 
@@ -1478,9 +1551,13 @@ BT.656时序不需要配置MIPI\_RX，建议不起MIPI\_RX业务。
 -   物理pipe接收数据的高度会随曝光变化而动态改变，为保证stagger数据的正常写出，VB、mipi宽高、vi dev宽高以及vi pipe的宽高的要配置为sensor所能写出的数据的最大的宽高\(WIDTH \*HEIGHT\_MAX\)。
 -   如果使能stagger\_out\_split接口，pipe的属性需要配置成\(WIDTH \*HEIGH\)，从pipe就只输出第一帧图像。
 
+-   **[MIPI配置](#ZH-CN_TOPIC_0000002441674869)**  
 
+-   **[VI DEV配置](#ZH-CN_TOPIC_0000002408275586)**  
 
+-   **[VI PIPE配置](#ZH-CN_TOPIC_0000002441714925)**  
 
+-   **[ISP配置](#ZH-CN_TOPIC_0000002408115758)**  
 
 #### MIPI配置<a name="ZH-CN_TOPIC_0000002441674869"></a>
 
@@ -1586,8 +1663,11 @@ ot_vi_dev_attr vi_dev_attr  = {
 -   从物理pipe获取raw数据，拆分成不同的WDR帧送给虚拟pipe，因此虚拟pipe通路的宽高为WIDTH \* HEIGHT
 -   虚拟pipe设置ss\_mpi\_vi\_set\_pipe\_frame\_source为OT\_VI\_PIPE\_FRAME\_SOURCE\_USER，然后使用ss\_mpi\_isp\_run\_once + ss\_mpi\_vi\_send\_pipe\_raw的方式运行
 
+-   **[VI PIPE配置](#ZH-CN_TOPIC_0000002408275446)**  
 
+-   **[VI CHN配置](#ZH-CN_TOPIC_0000002408275614)**  
 
+-   **[WDR帧的拆分](#ZH-CN_TOPIC_0000002408275598)**  
 
 #### VI PIPE配置<a name="ZH-CN_TOPIC_0000002408275446"></a>
 
@@ -2129,6 +2209,7 @@ sys_init_failed:
 
 # VPSS<a name="ZH-CN_TOPIC_0000002408275610"></a>
 
+-   **[缩放效果优化](#ZH-CN_TOPIC_0000002408275566)**  
 
 ## 缩放效果优化<a name="ZH-CN_TOPIC_0000002408275566"></a>
 
@@ -2162,20 +2243,33 @@ sys_init_failed:
 
 # 音频<a name="ZH-CN_TOPIC_0000002441714869"></a>
 
+-   **[PC如何播放由MPP编码的音频码流](#ZH-CN_TOPIC_0000002408115770)**  
 
+-   **[MPP如何播放标准的音频码流](#ZH-CN_TOPIC_0000002408275490)**  
 
+-   **[为什么使能VQE后会有高频部分缺失](#ZH-CN_TOPIC_0000002408275634)**  
 
+-   **[G726码流的pop音问题](#ZH-CN_TOPIC_0000002441675009)**  
 
+-   **[音频内置CODEC输出\(AO输出\)出现幅频响应异常](#ZH-CN_TOPIC_0000002441674925)**  
 
+-   **[静态库注册功能](#ZH-CN_TOPIC_0000002441675037)**  
 
+-   **[加载内置ACODEC模块出现pop音的解决方法](#ZH-CN_TOPIC_0000002441714885)**  
 
+-   **[如何对多声道的音频数据进行交织处理](#ZH-CN_TOPIC_0000002408115678)**  
 
+-   **[如何对多声道的音频数据进行混音处理](#ZH-CN_TOPIC_0000002408275642)**  
 
+-   **[AO播放出现pop音的解决方法](#ZH-CN_TOPIC_0000002408275542)**  
 
+-   **[音频时钟源被占用的解决方法](#ZH-CN_TOPIC_0000002408275670)**  
 
+-   **[音频AI与AO复用时钟功能的使用方法](#ZH-CN_TOPIC_0000002408115542)**  
 
 ## PC如何播放由MPP编码的音频码流<a name="ZH-CN_TOPIC_0000002408115770"></a>
 
+-   **[PC如何播放由MPP编码的音频G711/G726/ADPCM码流](#ZH-CN_TOPIC_0000002408115762)**  
 
 ### PC如何播放由MPP编码的音频G711/G726/ADPCM码流<a name="ZH-CN_TOPIC_0000002408115762"></a>
 
@@ -2228,15 +2322,16 @@ int VoiceGetRawStream(short *voicedata, short *outdata, int samplelen)
 ```
 
 >![](public_sys-resources/icon-note.gif) **说明：** 
->-   ADPCM格式中，ADPCM\_DVI4和ADPCM\_ORG\_DVI4适用网络RTP传输使用，不能通过该方式在PC客户端上播放，详情请参考rfc35551标准。
+>-   ADPCM格式中，ADPCM\_DVI4和ADPCM\_ORG\_DVI4适用网络RTP传输使用，不能通过该方式在PC客户端上播放，详情请参考RFC 3551标准。
 >-   添加WAV Header的操作略，客户可以根据WAV Header标准参考链接1和参考链接2进行添加。
 
-参考链接1：[https://msdn.microsoft.com/en-us/library/dd390970\(v=vs.85\).aspx](https://msdn.microsoft.com/en-us/library/dd390970(v=vs.85).aspx)
+参考链接1：[https://msdn.microsoft.com/en-us/library/dd390970(v=vs.85).aspx](https://msdn.microsoft.com/en-us/library/dd390970(v=vs.85).aspx)
 
 参考链接2：http://www.moon-soft.com/program/FORMAT/windows/wavec.htm
 
 ## MPP如何播放标准的音频码流<a name="ZH-CN_TOPIC_0000002408275490"></a>
 
+-   **[MPP如何播放标准的音频G711/G726/ADPCM码流](#ZH-CN_TOPIC_0000002408115718)**  
 
 ### MPP如何播放标准的音频G711/G726/ADPCM码流<a name="ZH-CN_TOPIC_0000002408115718"></a>
 
@@ -2315,7 +2410,7 @@ MPP播放标准的音频G711/G726/ADPCM码流时，需要先获取RAW流数据�
     </table>
 
     >![](public_sys-resources/icon-note.gif) **说明：** 
-    >-   ADPCM格式中，仅支持IMA ADPCM格式，每采样点比特数\(wbitspersample\)只支持。
+    >-   ADPCM格式中，仅支持IMA ADPCM格式，每采样点比特数\(wbitspersample\)只支持4bit。
     >-   如果ADPCM码流添加了WAV Header，可以从WAV Header中获得每块字节数信息；如果为ADPCM裸码流，则需要从码流提供方获取每块字节数信息。
     >-   编码格式仅支持单声道编码格式。
 
@@ -2360,6 +2455,7 @@ MPP播放标准的音频G711/G726/ADPCM码流时，需要先获取RAW流数据�
 
 ## 为什么使能VQE后会有高频部分缺失<a name="ZH-CN_TOPIC_0000002408275634"></a>
 
+-   **[为什么使能VQE后会有高频部分缺失](#ZH-CN_TOPIC_0000002408275622)**  
 
 ### 为什么使能VQE后会有高频部分缺失<a name="ZH-CN_TOPIC_0000002408275622"></a>
 
@@ -2385,7 +2481,7 @@ VQE实际工作采样率仅支持8kHz和16kHz，考虑到客户需要，MPP在VQ
 
 >![](public_sys-resources/icon-note.gif) **说明：** 
 >-   配置采样率后，输出信息频段为采样率的1/2。
->-   当前支持8kHz到48kHz标准采样率，分别为：8kHz，11.025kHz，12kHz，16kHz，22.05kHz，32kHz，44.1kHz，48kHz。
+>-   当前支持8kHz到48kHz标准采样率，分别为：8kHz、11.025kHz、12kHz、16kHz、22.05kHz、32kHz、44.1kHz、48kHz。
 >-   AO处理流程类同AI处理流程。
 
 ## G726码流的pop音问题<a name="ZH-CN_TOPIC_0000002441675009"></a>
@@ -2551,21 +2647,31 @@ static td_void remix_16bit(td_s16 *dest, td_s16 *src_left, td_s16 *src_right, td
 
 # VO<a name="ZH-CN_TOPIC_0000002408275654"></a>
 
+-   **[VO用户时序如何配置](#ZH-CN_TOPIC_0000002408115734)**  
 
+-   **[切分割/画面切换](#ZH-CN_TOPIC_0000002441675005)**  
 
+-   **[视频同步方案](#ZH-CN_TOPIC_0000002441714873)**  
 
+-   **[开机画面平滑/非平滑过渡](#ZH-CN_TOPIC_0000002441675069)**  
 
+-   **[数据透传](#ZH-CN_TOPIC_0000002408115710)**  
 
+-   **[开机画面调试](#ZH-CN_TOPIC_0000002408115626)**  
 
 ## VO用户时序如何配置<a name="ZH-CN_TOPIC_0000002408115734"></a>
 
+-   **[时序结构配置](#ZH-CN_TOPIC_0000002441675025)**  
 
+-   **[时钟大小配置](#ZH-CN_TOPIC_0000002441674973)**  
 
+-   **[用户时序下HDMI接口](#ZH-CN_TOPIC_0000002441714905)**  
 
+-   **[用户时序下MIPI\_TX接口](#ZH-CN_TOPIC_0000002408275646)**  
 
 ### 时序结构配置<a name="ZH-CN_TOPIC_0000002441675025"></a>
 
-在ss\_mpi\_vo\_set\_pub\_attr接口中配置pub\_attr\> intf\_sync为OT\_VO\_OUT\_USER，然后配置sync\_info结构体。关于sync\_info结构体中各参数的解释如下：
+在ss\_mpi\_vo\_set\_pub\_attr接口中配置pub\_attr -\> intf\_sync为OT\_VO\_OUT\_USER，然后配置sync\_info结构体。关于sync\_info结构体中各参数的解释如下：
 
 ```
 typedef struct {
@@ -2683,17 +2789,17 @@ typedef struct {
 </tr>
 <tr id="row2721mcpsimp"><td class="cellrowborder" valign="top" width="18%" headers="mcps1.2.3.1.1 "><p id="p2723mcpsimp"><a name="p2723mcpsimp"></a><a name="p2723mcpsimp"></a>idv</p>
 </td>
-<td class="cellrowborder" valign="top" width="82%" headers="mcps1.2.3.1.2 "><p id="p2725mcpsimp"><a name="p2725mcpsimp"></a><a name="p2725mcpsimp"></a>数据有效信号的极性。配置0为高有效，配置1为低有效。</p>
+<td class="cellrowborder" valign="top" width="82%" headers="mcps1.2.3.1.2 "><p id="p2725mcpsimp"><a name="p2725mcpsimp"></a><a name="p2725mcpsimp"></a>数据有效信号的极性。配置为0表示高有效，配置为1表示低有效。</p>
 </td>
 </tr>
 <tr id="row2726mcpsimp"><td class="cellrowborder" valign="top" width="18%" headers="mcps1.2.3.1.1 "><p id="p2728mcpsimp"><a name="p2728mcpsimp"></a><a name="p2728mcpsimp"></a>ihs</p>
 </td>
-<td class="cellrowborder" valign="top" width="82%" headers="mcps1.2.3.1.2 "><p id="p2730mcpsimp"><a name="p2730mcpsimp"></a><a name="p2730mcpsimp"></a>水平有效信号的极性，配置0为高有效，配置1为低有效。</p>
+<td class="cellrowborder" valign="top" width="82%" headers="mcps1.2.3.1.2 "><p id="p2730mcpsimp"><a name="p2730mcpsimp"></a><a name="p2730mcpsimp"></a>水平有效信号的极性，配置为0表示高有效，配置为1表示低有效。</p>
 </td>
 </tr>
 <tr id="row2731mcpsimp"><td class="cellrowborder" valign="top" width="18%" headers="mcps1.2.3.1.1 "><p id="p2733mcpsimp"><a name="p2733mcpsimp"></a><a name="p2733mcpsimp"></a>ivs</p>
 </td>
-<td class="cellrowborder" valign="top" width="82%" headers="mcps1.2.3.1.2 "><p id="p2735mcpsimp"><a name="p2735mcpsimp"></a><a name="p2735mcpsimp"></a>垂直有效信号的极性，配置0为高有效，配置1为低有效。</p>
+<td class="cellrowborder" valign="top" width="82%" headers="mcps1.2.3.1.2 "><p id="p2735mcpsimp"><a name="p2735mcpsimp"></a><a name="p2735mcpsimp"></a>垂直有效信号的极性，配置为0表示高有效，配置为1表示低有效。</p>
 </td>
 </tr>
 </tbody>
@@ -2747,8 +2853,11 @@ MIPI\_TX没有用户时序的说法，无论VO设置为用户时序还是通过�
 
 ## 切分割/画面切换<a name="ZH-CN_TOPIC_0000002441675005"></a>
 
+-   **[通道属性发生变化](#ZH-CN_TOPIC_0000002408115746)**  
 
+-   **[建议的实现方式](#ZH-CN_TOPIC_0000002441675057)**  
 
+-   **[注意事项](#ZH-CN_TOPIC_0000002441675065)**  
 
 ### 通道属性发生变化<a name="ZH-CN_TOPIC_0000002408115746"></a>
 
@@ -2810,13 +2919,15 @@ set_chn_m_attr(void)
 ### 注意事项<a name="ZH-CN_TOPIC_0000002441675065"></a>
 
 -   切分割/画面切换时建议使用批处理进行操作。
--   不使用批处理时，需严格按照[建议的实现方式](建议的实现方式.md)中步骤2\~4进行操作，即设置完所有通道的通道属性之后，再统一显示所有通道。否则已显示通道会占用显示VB，导致其他通道在设置通道属性时无法重新分配显示VB，最终出现画面卡住。
+-   不使用批处理时，需严格按照[建议的实现方式](#ZH-CN_TOPIC_0000002441675057)中步骤2\~4进行操作，即设置完所有通道的通道属性之后，再统一显示所有通道。否则已显示通道会占用显示VB，导致其他通道在设置通道属性时无法重新分配显示VB，最终出现画面卡住。
 
 ## 视频同步方案<a name="ZH-CN_TOPIC_0000002441714873"></a>
 
 视频同步是指一个芯片的不同VO设备或者不同芯片的VO设备实现视频同步输出。视频同步场景一般是多路切分的解码经过VPSS再送给多个VO设备进行拼接，为了保证拼接效果，需要对各VO设备进行视频同步操作。
 
+-   **[实现原理](#ZH-CN_TOPIC_0000002441675073)**  
 
+-   **[建议的操作步骤](#ZH-CN_TOPIC_0000002441714829)**  
 
 ### 实现原理<a name="ZH-CN_TOPIC_0000002441675073"></a>
 
@@ -2857,6 +2968,7 @@ set_chn_m_attr(void)
 -   开机画面：进入uboot后，使用开机画面命令或相关函数启动的画面。
 -   业务画面：进入内核后，使用VO的MPI接口启动的画面。
 
+-   **[操作步骤](#ZH-CN_TOPIC_0000002408275666)**  
 
 ### 操作步骤<a name="ZH-CN_TOPIC_0000002408275666"></a>
 
@@ -2906,20 +3018,23 @@ set_chn_m_attr(void)
 1.  设置VO输出接口为透传接口，调用ss\_mpi\_vo\_set\_dev\_param打开VO数据透传功能，按一般流程启动VO。
 2.  根据VO接口类型，匹配设置接收端接口类型，如VO设置为BT.1120接口输出，则接收端设备需按照BT.1120接口进行配置，然后按一般流程启动接收端。
 
+-   **[BT.1120](#ZH-CN_TOPIC_0000002441674897)**  
 
+-   **[MIPI\_TX RAW16BIT格式透传](#ZH-CN_TOPIC_0000002441674857)**  
 
+-   **[MIPI\_TX YVU422 SEMIPLANAR格式透传](#ZH-CN_TOPIC_0000002441674837)**  
 
 ### BT.1120<a name="ZH-CN_TOPIC_0000002441674897"></a>
 
 发送端VO的BT.1120配置可参考《MPP 媒体处理软件 V5.0 开发参考》“视频输出”章节。
 
-接收端VI的BT.1120参考“[VI YUV时序配置](VI-YUV时序配置.md)”中的“BT.1120”小节。
+接收端VI的BT.1120参考“[VI YUV时序配置](#ZH-CN_TOPIC_0000002441674917)”中的“BT.1120”小节。
 
 ### MIPI\_TX RAW16BIT格式透传<a name="ZH-CN_TOPIC_0000002441674857"></a>
 
 发送端VO的MIPI\_TX配置可参考《MPP 媒体处理软件 V5.0 开发参考》“视频输出”章节。
 
-发送端MIPI\_TX配置示例如下（以1920x1080分辨率为例）：
+发送端MIPI\_TX配置示例如下（以1920×1080分辨率为例）：
 
 ```
 // mipi_tx
@@ -2946,7 +3061,7 @@ combo_dev_cfg_t mipi_tx_combo_dev_cfg = {
 };
 ```
 
-对应的MIPI\_RX配置如下（以1920x1080分辨率为例）：
+对应的MIPI\_RX配置如下（以1920×1080分辨率为例）：
 
 ```
 // mipi rx ext data (使用OT_MIPI_SET_EXT_DATA_TYPE接口设置)
@@ -2983,7 +3098,7 @@ combo_dev_attr_t mipi_rx_combo_dev_cfg =
 
 发送端VO的MIPI\_TX配置可参考《MPP 媒体处理软件 V5.0 开发参考》“视频输出”章节。
 
-发送端MIPI\_TX配置示例如下（以1920x1080分辨率为例）：
+发送端MIPI\_TX配置示例如下（以1920×1080分辨率为例）：
 
 ```
 // mipi_tx
@@ -3010,7 +3125,7 @@ combo_dev_cfg_t mipi_tx_combo_dev_cfg = {
 };
 ```
 
-对应的MIPI\_RX和VI设备配置如下（以1920x1080分辨率为例）：
+对应的MIPI\_RX和VI设备配置如下（以1920×1080分辨率为例）：
 
 ```
 // mipi_rx
@@ -3085,6 +3200,7 @@ static ot_vi_dev_attr g_mipi_yuv422_dev_attr = {
 
 ## 开机画面调试<a name="ZH-CN_TOPIC_0000002408115626"></a>
 
+-   **[tftp使用注意事项](#ZH-CN_TOPIC_0000002408115614)**  
 
 ### tftp使用注意事项<a name="ZH-CN_TOPIC_0000002408115614"></a>
 
@@ -3106,9 +3222,13 @@ static ot_vi_dev_attr g_mipi_yuv422_dev_attr = {
 
 # VENC<a name="ZH-CN_TOPIC_0000002441675029"></a>
 
+-   **[JPEG量化表配置注意事项](#ZH-CN_TOPIC_0000002441675061)**  
 
+-   **[JPEG发灰发蒙问题](#ZH-CN_TOPIC_0000002441674909)**  
 
+-   **[P帧帧内刷新功能会有较明显的画面滚动效果](#ZH-CN_TOPIC_0000002408275474)**  
 
+-   **[H.264 AVBR 较其他平台码率有差异问题](#ZH-CN_TOPIC_0000002408115726)**  
 
 ## JPEG量化表配置注意事项<a name="ZH-CN_TOPIC_0000002441675061"></a>
 
@@ -3161,9 +3281,13 @@ static ot_vi_dev_attr g_mipi_yuv422_dev_attr = {
 
 # VDEC<a name="ZH-CN_TOPIC_0000002408115562"></a>
 
+-   **[SS626V100 DDR大于3GB时部署MDC解码内存使用注意事项](#ZH-CN_TOPIC_0000002408115774)**  
 
+-   **[SS626V100部署MDC解码模块vb使用注意事项](#ZH-CN_TOPIC_0000002408275578)**  
 
+-   **[不同场景下，销毁VDEC通道，VO显示差异说明](#ZH-CN_TOPIC_0000002441674937)**  
 
+-   **[解码及时性优化](#ZH-CN_TOPIC_0000002441714921)**  
 
 ## SS626V100 DDR大于3GB时部署MDC解码内存使用注意事项<a name="ZH-CN_TOPIC_0000002408115774"></a>
 
@@ -3190,8 +3314,11 @@ static ot_vi_dev_attr g_mipi_yuv422_dev_attr = {
 
 # 通路调试指南<a name="ZH-CN_TOPIC_0000002441714929"></a>
 
+-   **[VI通路调试](#ZH-CN_TOPIC_0000002441714801)**  
 
+-   **[VO通路调试](#ZH-CN_TOPIC_0000002408115702)**  
 
+-   **[HDMI通路调试](#ZH-CN_TOPIC_0000002441674949)**  
 
 ## VI通路调试<a name="ZH-CN_TOPIC_0000002441714801"></a>
 
@@ -3205,16 +3332,21 @@ VI的数据通路如下：
 
 VI通路调试时经常会出现i2c读写错误、输出无图像等问题，下面提供一些常用的错误调试方法。
 
+-   **[i2c错误](#ZH-CN_TOPIC_0000002408115598)**  
 
+-   **[输出无图像和输出图像黑屏](#ZH-CN_TOPIC_0000002441714729)**  
 
+-   **[CC err错误](#ZH-CN_TOPIC_0000002408115666)**  
 
+-   **[丢中断](#ZH-CN_TOPIC_0000002441714817)**  
 
+-   **[Color Bar调试](#ZH-CN_TOPIC_0000002441714897)**  
 
 ### i2c错误<a name="ZH-CN_TOPIC_0000002408115598"></a>
 
-i2c常被用做配置AD使用，在VI的调试过程中，i2c的错误是一类很常见的错误，在i2c错误时候。可以使用内核i2c命令\(i2c\_read/i2c\_write\)器件来检查i2c是否异常。
+i2c常被用做配置AD使用，在VI的调试过程中，i2c的错误是一类很常见的错误，在出现i2c错误时。可以使用内核i2c命令\(i2c\_read/i2c\_write\)读取器件来检查i2c是否异常。
 
-在i2c错误时候，需要做下述错误排查：
+在出现i2c错误时，需要做下述错误排查：
 
 -   检查物理硬件连接；
 -   设备号和i2c地址，我们可以结合分析硬件和使用i2c命令排查此类错误；
@@ -3226,7 +3358,7 @@ i2c常被用做配置AD使用，在VI的调试过程中，i2c的错误是一类�
 
 1.  输出图像黑屏
 
-    输出图像黑屏是在我们确认完通路正常后，但是VO输出无正确图像，此时的VO输出时有图的，只是图像为全黑，但mipi\_rx/VI信息都是正常的，此时会被很多人简单认为是无图像输出，需要大家仔细耐心的确认，在图像黑屏时候，对VI输入来说，问题一般是在[图1](VI通路调试.md#fig1511218112815)的**①**处，需要做的排查主要从录像机的连接。此类问题对VI来说比较容易排查，在此不作详述。
+    输出图像黑屏是在我们确认完通路正常后，但是VO输出无正确图像，此时的VO输出时有图的，只是图像为全黑，但mipi\_rx/VI信息都是正常的，此时会被很多人简单认为是无图像输出，需要大家仔细耐心的确认，图像黑屏时，对VI输入来说，问题一般出现在[图1](#fig1511218112815)的**①**处，需要做的排查主要从录像机的连接。此类问题对VI来说比较容易排查，在此不作详述。
 
 2.  输出无图像
 
@@ -3234,10 +3366,10 @@ i2c常被用做配置AD使用，在VI的调试过程中，i2c的错误是一类�
 
         如果通路数据通过mipi\_rx传输，可以通过cat /proc/umap/mipi\_rx检查mipi\_rx模块的“mipi detect info”的width/height，同时观察“mipi phy data info”中是否有数据在变动，以此来判断是否是mipi\_rx无图像。
 
-        在mipi\_rx宽高错误，或者phy\_data/mipi\_data无数据时候，说明**②**（见[图1](VI通路调试.md#fig1511218112815)）数据异常或者mipi配置不正确，此时需要做下述错误排查：
+        在mipi\_rx宽高错误，或者phy\_data/mipi\_data无数据时候，说明**②**（见[图1](#fig1511218112815)）数据异常或者mipi配置不正确，此时需要做下述错误排查：
 
         -   mipi\_rx配置检查；
-        -   在排查异常出现在通路中的位置时候，可以借助mipi\_rx模块的Color Bar来辅助判断，由上图可见mipi\_rx中的Color Bar的位置，如果配置Color Bar功能时，后级模块能不能正常输出Color Bar，可以定位到图像异常由**②**（见[图1](VI通路调试.md#fig1511218112815)）位置之后的异常引起，即检查mipi的Pixel Controller和output模块的相关配置以及VI模块的异常；如果Color Bar配置后，后级模块输出正常，此时需要重点排查**②**（见）位置之前的模块，即是mipi\_rx的phy配置以及AD相关的软硬件配置。有关于Color Bar调试方法具体步骤参考下述[Color Bar调试](Color-Bar调试.md)。
+        -   在排查异常出现在通路中的位置时候，可以借助mipi\_rx模块的Color Bar来辅助判断，由上图可见mipi\_rx中的Color Bar的位置，如果配置Color Bar功能时，后级模块能不能正常输出Color Bar，可以定位到图像异常由**②**（见[图1](#fig1511218112815)）位置之后的异常引起，即检查mipi的Pixel Controller和output模块的相关配置以及VI模块的异常；如果Color Bar配置后，后级模块输出正常，此时需要重点排查**②**（见）位置之前的模块，即是mipi\_rx的phy配置以及AD相关的软硬件配置。有关于Color Bar调试方法具体步骤参考下述[Color Bar调试](#ZH-CN_TOPIC_0000002441714897)。
 
         >![](public_sys-resources/icon-notice.gif) **须知：** 
         >mipi\_rx问题排查仅仅在设置图像传输接口为mipi时候才使用，如果设置的VI的接口模式为BT.656/BT.1120时，不需要做此步骤的排查。
@@ -3246,7 +3378,7 @@ i2c常被用做配置AD使用，在VI的调试过程中，i2c的错误是一类�
 
     -   VI无图像
 
-        通过cat /proc/umap/vi命令，观察VI是否能检查到正确的宽高，可以用来辅助判断是否VI无图像问题，在检测到宽高错误时，说明[图1](VI通路调试.md#fig1511218112815)的**③**图像出现了异常，需要做下述错误排查：
+        通过cat /proc/umap/vi命令，观察VI是否能检查到正确的宽高，可以用来辅助判断是否VI无图像问题，在检测到宽高错误时，说明[图1](#fig1511218112815)的**③**图像出现了异常，需要做下述错误排查：
 
         1.  cat /proc/interrupts查看是否上报VI中断，在VI无中断上报时，需要去检查VI前级模块（AD-\>VI或AD-\>mipi\_rx-\>VI）是否正常；在VI有中断上报时，可以通过cat /dev/logmpp查看VI是否上报异常中断，再针对不同的异常中断类型做相应的排查分析；
         2.  在检查到“vi phy detect info”中“valid\_width/valid\_height”异常，异常存在两类情况。
@@ -3255,7 +3387,7 @@ i2c常被用做配置AD使用，在VI的调试过程中，i2c的错误是一类�
 
             其二：宽高不断在跳变，并且宽高错误，此时一般VI也会上报错误中断，需要先在A错误中断类型相应排查，同时需要检查VI 的ot\_vi\_dev\_attr和ot\_vi\_chn\_attr是否正确配置。
 
-        3.  在判断此类异常时发生的位置时候，可以借助VI的Color Bar，配置VI的Color Bar后，由[图1](VI通路调试.md#fig1511218112815)可见Color Bar所在的位置，配置Color Bar后，如果可以正常输出到后级模块看到图像，则可以定位到图像异常**②**（见）位置之前的通路异常引起，需要中断排查VI的DEV属性配置以及VI的前级模块异常；如果配置Color Bar后级模块依然不能输出正常Color Bar图像，此时需要重点排查VI模块的CHN属性配置以及VI后级模块的异常。VI模块的Color Bar具体步骤参考下述[Color Bar调试](Color-Bar调试.md)。
+        3.  在判断此类异常时发生的位置时候，可以借助VI的Color Bar，配置VI的Color Bar后，由[图1](#fig1511218112815)可见Color Bar所在的位置，配置Color Bar后，如果可以正常输出到后级模块看到图像，则可以定位到图像异常**②**（见）位置之前的通路异常引起，需要中断排查VI的DEV属性配置以及VI的前级模块异常；如果配置Color Bar后级模块依然不能输出正常Color Bar图像，此时需要重点排查VI模块的CHN属性配置以及VI后级模块的异常。VI模块的Color Bar具体步骤参考下述[Color Bar调试](#ZH-CN_TOPIC_0000002441714897)。
 
         ![](figures/绘图2.png)
 
@@ -3279,7 +3411,7 @@ CC Err错误是指在VI的调试过程中，通过cat /proc/umap/vi查看VI的Pr
 
 ### Color Bar调试<a name="ZH-CN_TOPIC_0000002441714897"></a>
 
-Color Bar主要是指一些图像通路调试中使用的常见纯色或者渐变色条。在通路的调试中，使用自生成时序实现的ColorBar主要用以定位问题在通路中发生的位置。在Color Bar调试候，需要先建立起VI-\>VO的基本通路，在根据在各个模块配置Color Bar的方式来推断问题发生的位置。
+Color Bar主要是指一些图像通路调试中使用的常见纯色或者渐变色条。在通路的调试中，使用自生成时序实现的ColorBar主要用以定位问题在通路中发生的位置。在Color Bar调试时，需要先建立起VI-\>VO的基本通路，在根据在各个模块配置Color Bar的方式来推断问题发生的位置。
 
 在VI的通路调试中，mipi\_rx和vi都具有color bar调试功能。
 
@@ -3292,7 +3424,7 @@ Color Bar主要是指一些图像通路调试中使用的常见纯色或者渐�
          bspmm 0x173c1a10 0x437077f; 
     ```
 
-    0x173c1a10寄存器为Color Bar的宽高寄存器，需要根据需要通路的实际宽高值来修改。Bit\[15:0\]表示图像的宽, Bit \[31:16\]表示图像的高。寄存器的配置值为实际的宽高值减1。
+    0x173c1a10寄存器为Color Bar的宽高寄存器，需要根据需要通路的实际宽高值来修改。Bit\[15:0\]表示图像的宽, Bit \[31:16\]表示图像的高。寄存器的配置值为实际宽度值和高度值分别减1。
 
 -   VI的Color Bar配置：（以Chn0为例）
 
@@ -3329,7 +3461,9 @@ Color Bar主要是指一些图像通路调试中使用的常见纯色或者渐�
 
 ## VO通路调试<a name="ZH-CN_TOPIC_0000002408115702"></a>
 
+-   **[VO Color Bar使用说明](#ZH-CN_TOPIC_0000002441714809)**  
 
+-   **[VO Color Bar配置](#ZH-CN_TOPIC_0000002408275582)**  
 
 ### VO Color Bar使用说明<a name="ZH-CN_TOPIC_0000002441714809"></a>
 
@@ -3444,7 +3578,9 @@ bspmm 0x17a0d000 0xe0000011;
 
 ## HDMI通路调试<a name="ZH-CN_TOPIC_0000002441674949"></a>
 
+-   **[Color bar使用说明](#ZH-CN_TOPIC_0000002408275534)**  
 
+-   **[HDMI的color bar](#ZH-CN_TOPIC_0000002441714849)**  
 
 ### Color bar使用说明<a name="ZH-CN_TOPIC_0000002408275534"></a>
 
@@ -3522,22 +3658,35 @@ bspmm 0x17B40800  0x15    //配置HDMI模块的时序发生器输出1080P60制�
 
 # 其它<a name="ZH-CN_TOPIC_0000002441674989"></a>
 
+-   **[动态库](#ZH-CN_TOPIC_0000002408115754)**  
 
+-   **[红外模式下编码块效应明显如何解决](#ZH-CN_TOPIC_0000002441714853)**  
 
+-   **[DVR前端采集3840x480隔行场景性能优化](#ZH-CN_TOPIC_0000002441674981)**  
 
+-   **[HDMI Hot Plug与功耗问题](#ZH-CN_TOPIC_0000002441714697)**  
 
+-   **[OSD的透明度和颜色问题](#ZH-CN_TOPIC_0000002441714685)**  
 
+-   **[启动VI部分通道黑屏问题](#ZH-CN_TOPIC_0000002408115766)**  
 
+-   **[回放模式下反压VDEC失败问题](#ZH-CN_TOPIC_0000002441714893)**  
 
+-   **[MIPI\_RX管脚复用配置问题](#ZH-CN_TOPIC_0000002441714857)**  
 
+-   **[VI修改用户图片使用的硬件定时器](#ZH-CN_TOPIC_0000002441675017)**  
 
+-   **[EARLY/ EARLY\_END模式下early\_line配置建议](#ZH-CN_TOPIC_0000002408115694)**  
 
+-   **[HNR/智能业务切换流程说明](#ZH-CN_TOPIC_0000002408275658)**  
 
-
+-   **[VO中断延迟问题](#ZH-CN_TOPIC_0000002441714789)**  
 
 ## 动态库<a name="ZH-CN_TOPIC_0000002408115754"></a>
 
+-   **[为什么使用静态编译方式编译应用程序无法使用动态库](#ZH-CN_TOPIC_0000002441675021)**  
 
+-   **[为什么使用libss\_upvqe.a和libss\_dnvqe.a动态编译时出现重定义](#ZH-CN_TOPIC_0000002441714841)**  
 
 ### 为什么使用静态编译方式编译应用程序无法使用动态库<a name="ZH-CN_TOPIC_0000002441675021"></a>
 
@@ -3549,7 +3698,7 @@ bspmm 0x17B40800  0x15    //配置HDMI模块的时序发生器输出1080P60制�
 
 当前ARM-Linux-GCC提供了3种编译方式，分别是静态编译，动态编译，半静态编译。其中：
 
--   静态编译\(-static -pthread -lrt -ldl\)将会将libc, libpthread, librt, libdl都编译到执行程序中，这样的编译方式将会不依赖任何系统动态库（即可独立执行），但无法使用动态库系统。
+-   静态编译\(-static -pthread -lrt -ldl\)将会将libc、libpthread、librt、libdl都编译到执行程序中，这样的编译方式将会不依赖任何系统动态库（即可独立执行），但无法使用动态库系统。
 -   动态编译\(普通编译\)将会采取链接系统库的方式去链接/lib目录下的系统动态库，这样编译出来的程序需要依赖系统动态库，优点是系统动态库可以被多个可执行程序共用，如/bin目录下的busybox，mount等。
 -   半静态编译\(-static-libgcc -static-libstdc++ -L. -pthread -lrt -ldl\)则会将gcc以及stdc++编译到可执行程序中去，其他系统库依然依赖系统动态库。这种编译方式，可以使用动态库系统，但是依然需要在系统目录下放置libc, libpthread, librt, libdl等文件。
 
@@ -3561,7 +3710,7 @@ bspmm 0x17B40800  0x15    //配置HDMI模块的时序发生器输出1080P60制�
 
 【现象】
 
-客户B使用音频组件库的lbss\_upvqe.a和libss\_dnvqe.a编译成一个动态库，编译时发生重定义报错，编译语句为：
+客户B使用音频组件库的libss\_upvqe.a和libss\_dnvqe.a编译成一个动态库，编译时发生重定义报错，编译语句为：
 
 ```
 $(CC) -shared -o $@ -L. -Wl,--whole-archive libss_upvqe.a libss_dnvqe.a -Wl,--no-whole-archive
@@ -3628,12 +3777,13 @@ libss\_upvqe.a和libss\_dnvqe.a中，都使用了一些共同的功能模块，�
 
 【解决】
 
-将3DNR模块中的IES在红外模式下设置为0（默认为4），该方法可显著提高红外模式下的编码效率。同时为了加强一定的去噪能力，将强去噪通道的TFR（HTFR）设置为56。
+将3DNR模块中的IES（图像边缘增强强度）在红外模式下设置为0（默认为4），该方法可显著提高红外模式下的编码效率。同时为了加强一定的去噪能力，将强去噪通道的TFR（HTFR）设置为56。
 
 ## DVR前端采集3840x480隔行场景性能优化<a name="ZH-CN_TOPIC_0000002441674981"></a>
 
 DVR前端AD在切换分辨率的时候为了避免时钟的切换，往往把原低分辨率的图像（如960H）水平放大4倍（3840x480）送VI处理，这种场景下VI模块的压力较大，会影响系统性能。为避免因总线争抢对实时性要求较高的模块（如VO）的性能产生影响，建议在VI模块内部直接进行1/4丢点处理，而不用通过VPSS进行二次缩放。这样既可以降低带宽占用，又能节省VPSS性能。
 
+-   **[模块KO之间的依赖关系](#ZH-CN_TOPIC_0000002408115662)**  
 
 ### 模块KO之间的依赖关系<a name="ZH-CN_TOPIC_0000002408115662"></a>
 
@@ -3651,7 +3801,7 @@ DVR前端AD在切换分辨率的时候为了避免时钟的切换，往往把原
 
 正常情况下，建议通过注册回调的方式来处理HDMI热插拔事件，当收到驱动上报的Hot Plug事件时调用ss\_mpi\_hdmi\_start 接口打开HDMI输出，否则不打开，以降低功耗。
 
-个别不规范的显示设备可能Hot Plug一直为低，此时若需要HDMI输出可调用ss\_mpi\_hdmi\_start接口强制打开HDMI，不需要HDMI输出时调用ss\_mpi\_hdmi\_stop接口关闭HDMI输出。
+个别不规范的显示设备可能热插拔（Hot Plug）信号一直为低，此时若需要HDMI输出可调用ss\_mpi\_hdmi\_start接口强制打开HDMI，不需要HDMI输出时调用ss\_mpi\_hdmi\_stop接口关闭HDMI输出。
 
 ## OSD的透明度和颜色问题<a name="ZH-CN_TOPIC_0000002441714685"></a>
 
@@ -3722,7 +3872,7 @@ vi: vi@0x17400000 {
 };
 ```
 
-其中，0x11003020表示timer7的寄存器基址，11表示timer7的中断位 - 32。timer的基址和中断位，可查阅芯片手册的“系统”章节。
+其中，0x11003020表示timer7的寄存器基址，11表示timer7的中断位 - 32。timer的寄存器基地址和中断位，可查阅芯片手册的“系统”章节。
 
 假如需要修改为timer5，则将vi配置修改为：
 
@@ -3758,9 +3908,9 @@ EARLY/EARLY\_END模式下early\_line配置受系统响应及时性影响，会�
 
 【现象】
 
-SS928V100平台HNR与智能SVP\__NNN_业务互斥，当前两种业务切换需要进行ko的卸载与加载。
+SS928V100平台HNR与智能SVP\_NNN业务互斥，当前两种业务切换需要进行ko的卸载与加载。
 
-注：SS927V100不支持SVP\__NNN_
+注：SS927V100不支持SVP\_NNN
 
 【说明】
 
@@ -3778,9 +3928,9 @@ system\("rmmod ot\_pqp.ko"\);
 
 system\("insmod ot\_svp\__nnn_.ko"\);
 
-// 切换到SVP\__NNN_业务
+// 切换到SVP\_NNN业务
 
-// stop SVP\__NNN_业务
+// stop SVP\_NNN业务
 
 system\("rmmod ot\_svp\__nnn_.ko"\);
 
@@ -3805,29 +3955,4 @@ system\("insmod ot\_pqp.ko"\);
 原因：当前硬件中断都是默认绑定到了CPU 0核上，业务负载较大时，瞬时出现了多个中断，从报中断到响应会延迟。
 
 解决方案：将VO的中断绑定到其他CPU核上。例：将VO中断绑定到CPU 1核上。命令：echo 0x02 \> /proc/irq/70/smp\_affinity
-
-## SS928V100 VI报buffer overflow中断丢帧问题<a name="ZH-CN_TOPIC_0000002408275630"></a>
-
-【现象】
-
-![](figures/zh-cn_image_0000002506897403.png)
-
-【原因】
-
-出现以上log打印时，说明VI模块可能由于访问DDR的latency太大而导致未能在规定时间内顺利将数据写出完成。
-
-【调试建议】
-
-在加载ko之后，执行以下命令来减小VI latency：
-
-```
-bspmm 0x11144600 0x1160002;
-bspmm 0x11144608 0x1160002;
-bspmm 0x11144620 0xa3;
-bspmm 0x11144624 0;
-```
-
-可能会出现执行不成功导致系统挂死的情况；在执行成功的情况下测试业务是否还会出现VI buffer overflow丢帧。
-
-如果丢帧问题可以解决，将这四个寄存器改动配置到uboot表格中的qos\_ctrl子页的对应位置即可。
 

@@ -52,7 +52,7 @@ typedef struct {
     ot_acodec_fs acodecFs;
 } FsSelect;
 
-static const FsSelect FS_SELECT_TABLE[] = {
+static const FsSelect g_fsSelectTable[] = {
     {OT_AUDIO_SAMPLE_RATE_8000, OT_ACODEC_FS_8000},
     {OT_AUDIO_SAMPLE_RATE_11025, OT_ACODEC_FS_11025},
     {OT_AUDIO_SAMPLE_RATE_12000, OT_ACODEC_FS_12000},
@@ -82,13 +82,13 @@ static const ot_audio_sample_rate g_audioSampleRateTable[] = {
 
 static int32_t I2sFsSel(const ot_audio_sample_rate enSampleRate, ot_acodec_fs *i2sFsSel)
 {
-    size_t num = sizeof(FS_SELECT_TABLE) / sizeof(FS_SELECT_TABLE[0]);
+    size_t num = sizeof(g_fsSelectTable) / sizeof(g_fsSelectTable[0]);
     bool isMatch = false;
     ot_acodec_fs i2sFs = OT_ACODEC_FS_BUTT;
     for (size_t i = 0; i < num; i++) {
-        if (enSampleRate == FS_SELECT_TABLE[i].audioSampleRate) {
+        if (enSampleRate == g_fsSelectTable[i].audioSampleRate) {
             isMatch = true;
-            i2sFs = FS_SELECT_TABLE[i].acodecFs;
+            i2sFs = g_fsSelectTable[i].acodecFs;
             break;
         }
     }

@@ -15,8 +15,8 @@
  * along with this program; if not, see
  * <https://www.gnu.org/licenses/>.
  */
-#ifndef HDMI_HAL_CTRL_V200_H
-#define HDMI_HAL_CTRL_V200_H
+#ifndef HDMI_HAL_CTRL_H
+#define HDMI_HAL_CTRL_H
 
 #include "ot_type.h"
 #include "hdmi_hal_machine.h"
