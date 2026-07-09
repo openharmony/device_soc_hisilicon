@@ -53,7 +53,6 @@ shared_library("libaudio_manager_daudio_primary_service_1.0") {
   public_deps = [ "${hdf_service_path}/hdi_service/common:libdaudio_hdf_utils" ]
 
   deps = [
-    "//commonlibrary/c_utils/base:utils",
     "//foundation/multimedia/audio_lite/services/audiomanager:audio_device_manager_lite",
     "//foundation/multimedia/media_utils_lite:media_common",
   ]

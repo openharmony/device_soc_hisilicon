@@ -15,8 +15,8 @@
  * along with this program; if not, see
  * <https://www.gnu.org/licenses/>.
  */
-#ifndef HDMI_HAL_CTRL_H
-#define HDMI_HAL_CTRL_H
+#ifndef HDMI_HAL_CTRL_V200_H
+#define HDMI_HAL_CTRL_V200_H
 
 #include "ot_type.h"
 #include "hdmi_hal_machine.h"
@@ -194,5 +194,5 @@ td_s32 hal_hdmi_ctrl_data_reset(hdmi_device_id hdmi, td_bool debug_mode, td_u32 
 
 td_s32 hal_hdmi_ctrl_tmds_stable_get(hdmi_device_id hdmi, td_bool *stable);
 
-#endif /* HDMI_HAL_CTRL_H */
+#endif /* HDMI_HAL_CTRL_V200_H */
 

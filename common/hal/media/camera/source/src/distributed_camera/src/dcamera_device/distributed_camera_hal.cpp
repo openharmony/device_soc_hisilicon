@@ -440,11 +440,11 @@ static int32_t DistributedOpenSession(CameraDevice *cameraDev)
         return DCamRetCode::FAILED;
     }
     {
-       std::unique_lock<std::mutex> openStateLock(cameraDev->isOpenSessFailedlock_);
-       if (cameraDev->isOpenSessFailed_) {
-           DHLOGE("Open distributed camera session failed.");
-           return DCamRetCode::FAILED;
-       }
+        std::unique_lock<std::mutex> openStateLock(cameraDev->isOpenSessFailedlock_);
+        if (cameraDev->isOpenSessFailed_) {
+            DHLOGE("Open distributed camera session failed.");
+            return DCamRetCode::FAILED;
+        }
     }
     cameraDev->isSessOpened_ = true;
     return HAL_SUCCESS;

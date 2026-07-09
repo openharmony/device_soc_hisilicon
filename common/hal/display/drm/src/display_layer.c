@@ -173,7 +173,7 @@ static int open_drm(drm_display_t *display) {
         return DISPLAY_FAILURE;
     }
     if (drmGetCap(display->drm_fd, DRM_CAP_DUMB_BUFFER, &has_dumb) < 0) {
-        HDF_LOGE("%s,%d failed to get DRM capabilities\n",__func__,__LINE__);
+        HDF_LOGE("%s, %d failed to get DRM capabilities\n", __func__, __LINE__);
         return DISPLAY_FAILURE;
     }
 
@@ -252,7 +252,7 @@ static int CreateDrmFramebuffer(drm_display_t *display)
     create.flags = 0;
     ret = drmIoctl(display->drm_fd, DRM_IOCTL_MODE_CREATE_DUMB, &create);
     if (ret < 0) {
-        HDF_LOGE("%s,DRM_IOCTL_MODE_CREATE_DUMB ret:%d\n", __func__, ret);
+        HDF_LOGE("%s, DRM_IOCTL_MODE_CREATE_DUMB ret: %d\n", __func__, ret);
         return -1;
     }
     /* bind the dumb-buffer to an FB object */
@@ -267,7 +267,7 @@ static int CreateDrmFramebuffer(drm_display_t *display)
     ret = drmModeAddFB2(display->drm_fd, DEFAULT_WIDTH, DEFAULT_HEIGHT, DRM_FORMAT_ABGR8888, handles, pitches,
         offsets, &display->fb_id, 0);
     if (ret) {
-        HDF_LOGE("%s,drmModeAddFB2 ret:%d\n", __func__, ret);
+        HDF_LOGE("%s, drmModeAddFB2 ret: %d\n", __func__, ret);
         return -1;
     }
 
@@ -275,7 +275,7 @@ static int CreateDrmFramebuffer(drm_display_t *display)
     map.handle = display->fb_handle;
     ret = drmIoctl(display->drm_fd, DRM_IOCTL_MODE_MAP_DUMB, &map);
     if (ret < 0) {
-        HDF_LOGE("%s,DRM_IOCTL_MODE_MAP_DUMB ret:%d\n", __func__, ret);
+        HDF_LOGE("%s, DRM_IOCTL_MODE_MAP_DUMB ret: %d\n", __func__, ret);
         return DISPLAY_FAILURE;
     }
 
@@ -335,14 +335,13 @@ static int32_t InitDisplay(uint32_t devId)
     }
 
     if (devId == 0) {
-        memset(&primary_display, 0, sizeof(primary_display));
+        (void)memset_s(&primary_display, sizeof(primary_display), 0, sizeof(primary_display));
         primary_display.setMode = false;
         if (open_drm(&primary_display) < 0) {
             HDF_LOGE("Failed to initialize DRM\n");
             return DISPLAY_FAILURE;
         }
         init_drm(&primary_display);
-
     }
 
     return DISPLAY_SUCCESS;
@@ -441,7 +440,7 @@ static int32_t Flush(uint32_t devId, uint32_t layerId, LayerBuffer *buffer)
     CHECK_GRAPHIC_LAYERID_VALID(layerId, DISPLAY_FAILURE);
 
     ret = drmModeSetCrtc(primary_display.drm_fd, primary_display.crtc_id, primary_display.fb_id, 0, 0,
-                       &primary_display.connector->connector_id, 1, &primary_display.mode);
+        &primary_display.connector->connector_id, 1, &primary_display.mode);
     if (ret < 0) {
         HDF_LOGE("%s: Failed to drmModeSetCrtc. ret: %d\n", __func__, ret);
     }

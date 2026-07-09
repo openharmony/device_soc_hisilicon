@@ -506,7 +506,7 @@ td_s32 hal_hdmi_ddc_deinit(hdmi_device_id hdmi)
 td_s32 hal_hdmi_ddc_issue(hdmi_device_id hdmi, const ddc_cfg *cfg)
 {
     td_s32 ret;
-    errno_t errno;
+    errno_t err_code;
     ddc_record_elem *tmp_elem = TD_NULL;
     ddc_info *tmp = ddc_info_ptr_get(hdmi);
 
@@ -520,8 +520,8 @@ td_s32 hal_hdmi_ddc_issue(hdmi_device_id hdmi, const ddc_cfg *cfg)
     }
     tmp_elem = &tmp->ddc_record[tmp->run.elem_ptr];
     (td_void)memset_s(tmp_elem, sizeof(tmp->ddc_record[tmp->run.elem_ptr]), 0, sizeof(ddc_record_elem));
-    errno = memcpy_s(&tmp_elem->cfg, sizeof(tmp_elem->cfg), cfg, sizeof(ddc_cfg));
-    hdmi_unequal_eok_return(errno, OT_ERR_HDMI_INVALID_PARA);
+    err_code = memcpy_s(&tmp_elem->cfg, sizeof(tmp_elem->cfg), cfg, sizeof(ddc_cfg));
+    hdmi_unequal_eok_return(err_code, OT_ERR_HDMI_INVALID_PARA);
     tmp_elem->start_time = hal_hdmi_mach_ms_get();
 
     hdmi_mutex_lock(tmp->ddc_wr_mutex);

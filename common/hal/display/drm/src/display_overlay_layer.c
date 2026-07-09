@@ -75,10 +75,10 @@ static bool CheckTypeIsOverlayLayer(uint32_t layerId)
 }
 
 static int create_overlayer_drm(drm_overlay_display_t *display, const LayerInfo *layerInfo) {
-    memset(&overlay_display, 0, sizeof(overlay_display));
+    (void)memset_s(&overlay_display, sizeof(overlay_display), 0, sizeof(overlay_display));
     display->drm_fd = open(DRM_DEVICE, O_RDWR | O_CLOEXEC);
     if (display->drm_fd == INVALID_FD) {
-        HDF_LOGE("%s,Cannot open DRM device\n",__func__);
+        HDF_LOGE("%s, Cannot open DRM device\n", __func__);
         return DISPLAY_FAILURE;
     }
     display->width = layerInfo->width;
@@ -150,7 +150,7 @@ int32_t OverlayLayerFlush(uint32_t devId, uint32_t layerId, LayerBuffer *buffer)
 
     /* step4: add VGS task */
     if (memcpy_s(&vgs_task_attr.img_in, sizeof(ot_video_frame_info),
-           video_frame_info, sizeof(ot_video_frame_info)) != EOK) {
+        video_frame_info, sizeof(ot_video_frame_info)) != EOK) {
         HDF_LOGE("memcpy_s img_in failed\n");
         goto release_cancel_job;
     }
@@ -205,18 +205,22 @@ int32_t OverlayLayerFlush(uint32_t devId, uint32_t layerId, LayerBuffer *buffer)
     vgs_task_attr.img_out.video_frame.header_stride[PLANE_INDEX_Y]  = head_stride;
     vgs_task_attr.img_out.video_frame.header_stride[PLANE_INDEX_UV]  = head_stride;
     vgs_task_attr.img_out.video_frame.header_phys_addr[PLANE_INDEX_Y] = phys_addr;
-    vgs_task_attr.img_out.video_frame.header_phys_addr[PLANE_INDEX_UV] = vgs_task_attr.img_out.video_frame.header_phys_addr[PLANE_INDEX_Y] +
-                                                   head_y_size;
+    vgs_task_attr.img_out.video_frame.header_phys_addr[PLANE_INDEX_UV] =
+        vgs_task_attr.img_out.video_frame.header_phys_addr[PLANE_INDEX_Y] + head_y_size;
     vgs_task_attr.img_out.video_frame.header_virt_addr[PLANE_INDEX_Y] = virt_addr;
-    vgs_task_attr.img_out.video_frame.header_virt_addr[PLANE_INDEX_UV] = vgs_task_attr.img_out.video_frame.header_virt_addr[PLANE_INDEX_Y] +
-                                                   head_y_size;
+    vgs_task_attr.img_out.video_frame.header_virt_addr[PLANE_INDEX_UV] =
+        vgs_task_attr.img_out.video_frame.header_virt_addr[PLANE_INDEX_Y] + head_y_size;
 
     vgs_task_attr.img_out.video_frame.stride[PLANE_INDEX_Y]  = main_stride;
     vgs_task_attr.img_out.video_frame.stride[PLANE_INDEX_UV]  = main_stride;
-    vgs_task_attr.img_out.video_frame.phys_addr[PLANE_INDEX_Y] = vgs_task_attr.img_out.video_frame.header_phys_addr[PLANE_INDEX_Y] + head_size;
-    vgs_task_attr.img_out.video_frame.phys_addr[PLANE_INDEX_UV] = vgs_task_attr.img_out.video_frame.phys_addr[PLANE_INDEX_Y] + size_y;
-    vgs_task_attr.img_out.video_frame.virt_addr[PLANE_INDEX_Y] = vgs_task_attr.img_out.video_frame.header_virt_addr[PLANE_INDEX_Y] + head_size;
-    vgs_task_attr.img_out.video_frame.virt_addr[PLANE_INDEX_UV] = vgs_task_attr.img_out.video_frame.virt_addr[PLANE_INDEX_Y] + size_y;
+    vgs_task_attr.img_out.video_frame.phys_addr[PLANE_INDEX_Y] =
+        vgs_task_attr.img_out.video_frame.header_phys_addr[PLANE_INDEX_Y] + head_size;
+    vgs_task_attr.img_out.video_frame.phys_addr[PLANE_INDEX_UV] =
+        vgs_task_attr.img_out.video_frame.phys_addr[PLANE_INDEX_Y] + size_y;
+    vgs_task_attr.img_out.video_frame.virt_addr[PLANE_INDEX_Y] =
+        vgs_task_attr.img_out.video_frame.header_virt_addr[PLANE_INDEX_Y] + head_size;
+    vgs_task_attr.img_out.video_frame.virt_addr[PLANE_INDEX_UV] =
+        vgs_task_attr.img_out.video_frame.virt_addr[PLANE_INDEX_Y] + size_y;
 
     ret = ss_mpi_vgs_add_scale_task(h_handle, &vgs_task_attr, vgs_scl_coef_mode);
     if (ret != TD_SUCCESS) {
@@ -233,7 +237,7 @@ int32_t OverlayLayerFlush(uint32_t devId, uint32_t layerId, LayerBuffer *buffer)
 
     ret = ioctl(overlay_display.drm_fd, DRM_IOCTL_HI3403V100_OVERLAY_FLUSH, &(vgs_task_attr.img_out.video_frame));
     if (ret < IOCTL_SUCCESS) {
-        HDF_LOGE("%s: Failed to overlay_flush:%d\n",__func__,ret);
+        HDF_LOGE("%s: Failed to overlay_flush: %d\n", __func__, ret);
     }
 release_munmap:
     ss_mpi_sys_munmap(virt_addr, vb_size);
@@ -248,7 +252,6 @@ exit_and_release:
 
 int32_t SetOverlayLayerSize(uint32_t devId, uint32_t layerId, const IRect *rect)
 {
-
     CHECK_DEVID_VALID(devId, DISPLAY_FAILURE);
     CHECK_NULLPOINTER_RETURN_VALUE(rect, DISPLAY_NULL_PTR);
     if (!CheckTypeIsOverlayLayer(layerId)) {
