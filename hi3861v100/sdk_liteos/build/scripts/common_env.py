@@ -422,6 +422,17 @@ set_config('env_cfg', 'CONFIG_TARGET_SIG_RSA_PSS', 'y', ['-DCONFIG_TARGET_SIG_RS
 set_config('env_cfg', 'CONFIG_TARGET_SIG_ECC', 'y', ['-DCONFIG_TARGET_SIG_ECC'], 'link_scripts_flag', 'common')
 set_config('env_cfg', 'CONFIG_CHIP_PKT_48K', 'y', ['-DCONFIG_CHIP_PKT_48K'], 'link_scripts_flag', 'common')
 set_config('env_cfg', 'CONFIG_CHIP_PKT_32K', 'y', ['-DCONFIG_CHIP_PKT_32K'], 'link_scripts_flag', 'common')
+# XTS bss overlay isolation: feed -DXTS_OVERLAY_ENABLE into the link.ld.S
+# preprocessing so the OVERLAY block matches the GN-compiled hctest (which gets
+# the same define from the xts_overlay GN arg). CONFIG_XTS_OVERLAY is written
+# into build/config/usr_config.mk by hm_build.sh.
+set_config('env_cfg', 'CONFIG_XTS_OVERLAY', 'y', ['-DXTS_OVERLAY_ENABLE'], 'link_scripts_flag', 'common')
+# HCTEST new-runner isolation: feed -DHCTEST_NEW_RUNNER into the link.ld.S
+# preprocessing so the .xts_init KEEP blocks (per-module init pointer tables
+# in .rodata) survive --gc-sections iff the new runner path is active.
+# CONFIG_HCTEST_NEW_RUNNER is on when either xts_overlay or hctest_rodata_opt
+# is on; written into build/config/usr_config.mk by hm_build.sh.
+set_config('env_cfg', 'CONFIG_HCTEST_NEW_RUNNER', 'y', ['-DHCTEST_NEW_RUNNER'], 'link_scripts_flag', 'common')
 
 macro = 'LOSCFG_COMPILER_HI3861_ASIC'
 macro_cfg = {

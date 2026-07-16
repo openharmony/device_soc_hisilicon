@@ -213,6 +213,12 @@ static void log_event_trigger(void)
 #endif
 void log_event(const uint8_t *buffer, uint16_t length)
 {
+#ifndef LOG_SUPPORT
+    UNUSED(buffer);
+    UNUSED(length);
+    return;
+#endif
+
 #if (USE_COMPRESS_LOG_INSTEAD_OF_SDT_LOG == NO)
     log_ret_t lret;
     uint32_t lb_available = 0;

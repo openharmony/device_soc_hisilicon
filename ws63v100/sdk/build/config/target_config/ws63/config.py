@@ -275,3 +275,15 @@ target_copy = {
 target_group = {
 
 }
+
+import sys
+import os
+if (os.getenv('ENABLE_PRODUCT_CONFIG_PATCH') == 'true'):
+    # ========== 导入的产品配置补丁 ==========
+    try:
+        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+        import config_patch_nearlink
+        config_patch_nearlink.patch_target(target)
+        print("\n[INFO] Applied nearlink_dk_3863_xts_minimal configuration patch")
+    except ImportError:
+        print("\n[WARN] config_patch_nearlink not found, skip nearlink product patch")
