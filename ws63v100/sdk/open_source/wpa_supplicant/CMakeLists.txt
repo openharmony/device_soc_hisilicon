@@ -154,6 +154,29 @@ set(SOURCES
 set(PUBLIC_HEADER
 )
 
+# === SDK->OHOS source switch: wpa_supplicant compiles with v3.6.5 headers ===
+# Reason: mbedtls_mpi struct ABI is incompatible between v3.1.0 and v3.6.5
+# (v3.1.0={s,n,p} 12B; v3.6.5={p,s,n} 8B, s/n type changed from int/size_t to short).
+# Compiling with v3.1.0 headers but linking v3.6.5 library reads wrong mbedtls_mpi
+# field offset (e->A.p reads garbage) -> mbedtls_mpi_copy crash.
+# When switch is on (libmbedtls_ohos.a exists): use v3.6.5 headers + config_lite_feature.h
+# + 22 module macros (consistent with OHOS library build); off: keep v3.1.0 (additive gate).
+# Dual-gate: mbedtls_ohos_switch marker=1 AND libmbedtls_ohos.a exists
+include(${ROOT_DIR}/build/cmake/mbedtls_ohos_switch.cmake)
+    set(_OHOS_MBEDTLS_ON ${MBEDTLS_OHOS_SWITCH_ON})
+if(_OHOS_MBEDTLS_ON)
+    set(OHOS_MBEDTLS_DIR ${ROOT_DIR}/../../../../../third_party/mbedtls)
+    set(MBEDTLS_INC_DIRS
+        ${OHOS_MBEDTLS_DIR}
+        ${OHOS_MBEDTLS_DIR}/include
+        ${OHOS_MBEDTLS_DIR}/library
+        ${OHOS_MBEDTLS_DIR}/port/config)
+else()
+    set(MBEDTLS_INC_DIRS
+        ${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/include
+        ${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0)
+endif()
+
 set(PRIVATE_HEADER
 	${ROOT_DIR}/middleware/services/wifi_service/wpa/wapi
 	${ROOT_DIR}/middleware/services/wifi_service/wpa/driver_soc
@@ -178,8 +201,7 @@ set(PRIVATE_HEADER
 
 	${ROOT_DIR}/middleware/utils/common_headers/
 
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0/include
-	${ROOT_DIR}/open_source/mbedtls/mbedtls_v3.1.0
+	${MBEDTLS_INC_DIRS}
 	${ROOT_DIR}/drivers/drivers/driver/watchdog
 	${ROOT_DIR}/include/driver/security_unified
 	${ROOT_DIR}/protocol/wifi/source/host/inc/liteOS
@@ -387,6 +409,50 @@ set(MAIN_COMPONENT
 
 if("UPDATE_WIFI_STATIC_LIB" IN_LIST DEFINES)
     set(LIB_OUT_PATH ${BIN_DIR}/${CHIP}/libs/wifi/${TARGET_COMMAND})
+endif()
+
+# When switch is on: override v3.1.0 MBEDTLS config/defines with v3.6.5 config + 22 module macros.
+# -U clears config.py global v3.1.0 flags (CONFIG_FILE/AES_ROM_TABLES/HARDEN_OPEN) and
+#   PRIVATE_DEFINES ECP_RESTARTABLE (config_feature_base.h defines it itself).
+# Must use COMPONENT_CCFLAGS (build_component internally rebuilds COMPILE_CCFLAGS from it),
+# and must append after set(COMPONENT_CCFLAGS ...) but before build_component() to avoid override.
+# CCFLAGS via target_compile_options are emitted after target_compile_definitions, so -U overrides -D.
+# SDK uses make build; MBEDTLS_CONFIG_FILE uses escaped quotes (consistent with config.py), with -I .../port/config.
+#
+# NOTE: The 22 module macros + 13 ECP curve macros below must stay in sync with
+#   mbedtls.gni M1 default config. If mbedtls.gni feature defaults or curve set
+#   changes, update here manually.
+if(_OHOS_MBEDTLS_ON)
+	list(APPEND COMPONENT_CCFLAGS
+		-UMBEDTLS_CONFIG_FILE
+		-UMBEDTLS_AES_ROM_TABLES
+		-UMBEDTLS_HARDEN_OPEN
+		-UMBEDTLS_ECP_RESTARTABLE
+		"-DMBEDTLS_CONFIG_FILE=\"config_lite_feature.h\""
+		-D__unix__
+		-DMBEDTLS_AES_C= -DMBEDTLS_DES_C= -DMBEDTLS_GCM_C= -DMBEDTLS_MD5_C=
+		-DMBEDTLS_SHA1_C= -DMBEDTLS_SHA256_C= -DMBEDTLS_SHA224_C= -DMBEDTLS_SHA512_C=
+		-DMBEDTLS_SHA384_C= -DMBEDTLS_HKDF_C= -DMBEDTLS_RSA_C= -DMBEDTLS_DHM_C=
+		-DMBEDTLS_ECP_C= -DMBEDTLS_ECDH_C= -DMBEDTLS_ECDSA_C= -DMBEDTLS_PK_C=
+		-DMBEDTLS_PK_PARSE_C= -DMBEDTLS_PK_WRITE_C= -DMBEDTLS_BIGNUM_C=
+		-DMBEDTLS_ENTROPY_C= -DMBEDTLS_CTR_DRBG_C= -DMBEDTLS_ASN1_PARSE_C=
+		-DMBEDTLS_ASN1_WRITE_C= -DMBEDTLS_PEM_PARSE_C= -DMBEDTLS_PEM_WRITE_C=
+		-DMBEDTLS_BASE64_C= -DMBEDTLS_OID_C= -DMBEDTLS_CIPHER_C= -DMBEDTLS_MD_C=
+		-DMBEDTLS_PKCS5_C= -DMBEDTLS_PLATFORM_C=
+		# X509/SSL module macros: ensure tls_mbedtls.c struct layout matches OHOS library (XTS enables X509/SSL)
+		# Non-XTS: tls_mbedtls.c.obj is GC-ed (no TLS reference), no side effect
+		-DMBEDTLS_SSL_TLS_C= -DMBEDTLS_SSL_CLI_C= -DMBEDTLS_SSL_CACHE_C= -DMBEDTLS_SSL_COOKIE_C= -DMBEDTLS_SSL_TICKET_C=
+		-DMBEDTLS_X509_USE_C= -DMBEDTLS_X509_CRT_PARSE_C= -DMBEDTLS_X509_CRL_PARSE_C=
+		-DMBEDTLS_NET_C=
+		# ECP curve macros: wpa_supplicant uses SDK cmake and does not receive GN-injected ECP_DP_*; must define here
+		# (all 13 curves defined; wpa_supplicant does not need curve trimming, --gc-sections handles unused code)
+		-DMBEDTLS_ECP_DP_SECP192R1_ENABLED -DMBEDTLS_ECP_DP_SECP224R1_ENABLED
+		-DMBEDTLS_ECP_DP_SECP256R1_ENABLED -DMBEDTLS_ECP_DP_SECP384R1_ENABLED
+		-DMBEDTLS_ECP_DP_SECP521R1_ENABLED -DMBEDTLS_ECP_DP_SECP192K1_ENABLED
+		-DMBEDTLS_ECP_DP_SECP224K1_ENABLED -DMBEDTLS_ECP_DP_SECP256K1_ENABLED
+		-DMBEDTLS_ECP_DP_BP256R1_ENABLED -DMBEDTLS_ECP_DP_BP384R1_ENABLED
+		-DMBEDTLS_ECP_DP_BP512R1_ENABLED -DMBEDTLS_ECP_DP_CURVE25519_ENABLED
+		-DMBEDTLS_ECP_DP_CURVE448_ENABLED)
 endif()
 
 build_component()
