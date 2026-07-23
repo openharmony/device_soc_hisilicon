@@ -1,0 +1,33 @@
+arch=arm
+baudrate=115200
+board=ss928v100
+board_name=ss928v100
+bootargs=console=ttyAMA0,115200 clk_ignore_unused rw rootwait rootfstype=ext4 blkdevparts=mmcblk0:512K(uboot),512K(env),512K(fip),19968K(kernel),200M(rootfs),200M(userfs),-(userdata)
+bootcmd=setenv bootargs "mem=${os_mem_size} total_mem=${total_mem_size} ${bootargs} ${rootfs_devpart}";mmc read 0 ${fip_addr} ${fip_start} ${fip_size};mmc read 0 ${kernel_addr} ${kernel_start} ${kernel_size};auto_burn;bootm ${fip_addr}
+bootdelay=1
+buffer_addr=0x42000000
+buffer_size=0x01000000
+cpu=armv8
+ethact=gmac0
+import_addr=0x41000000
+jpeg_addr=0x130000000
+jpeg_emar_buf=0x134000000
+jpeg_size=0x3e728
+kernel_addr=0x5007FFC0
+kernel_size=0x9C00
+kernel_start=0x0C00
+os_mem_size=512M
+rootfs_devpart=root=/dev/mmcblk0p5
+soc=ss928v100
+stderr=serial
+stdin=serial
+stdout=serial
+total_mem_size=4G
+vendor=vendor
+verify=n
+vobuf=0x138000000
+fip_addr=0x50000000
+fip_size=0x400
+fip_start=0x800
+autoload=no
+serverip=192.168.1.160

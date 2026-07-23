@@ -47,6 +47,9 @@ SDK_LINUX_SMP_PATH=${SDK_LINUX_TMP_PATH}/smp
 SDK_LINUX_OPEN_PATH=${SDK_LINUX_TMP_PATH}/open_source
 SDK_LINUX_ATF_PATH=${SDK_LINUX_TMP_PATH}/open_source/trusted-firmware-a
 SYSROOT_PATH=${OHOS_OUTDIR}/sysroot
+ENV_SIZE=0x40000
+UBOOT_ENV_4GB_BIN=${SDK_LINUX_SRC_PATH}/../uboot/uboot_env_4GB.bin
+UBOOT_ENV_4GB_TXT=${SDK_LINUX_SRC_PATH}/../uboot/uboot_env_4GB.txt
 export SYSROOT_PATH
 OSDRV_CROSS_PATH=${OHOS_ROOT_PATH}/prebuilts/gcc/linux-x86/aarch64/gcc-linaro-7.5.0-2019.12-x86_64_aarch64-linux-gnu/bin/aarch64-linux-gnu
  
@@ -95,4 +98,5 @@ mkdir -p ${OUT_LIB_PATH}
 find ${SDK_LIB_PATH} -name "*.so" -exec cp -f {} ${OUT_LIB_PATH}/ \;
 
 # copy uboot file
+mkenvimage -s $ENV_SIZE -o $UBOOT_ENV_4GB_BIN $UBOOT_ENV_4GB_TXT
 cp -rf ${SDK_LINUX_SRC_PATH}/../uboot/* ${OHOS_OUTDIR}
