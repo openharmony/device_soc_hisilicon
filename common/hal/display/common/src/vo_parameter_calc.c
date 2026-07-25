@@ -40,6 +40,7 @@
 #define PLL_REF_DIV          1     // hi3403v100 ref_div is always 1
 #define PLL_PRE_DIV          1     // pre_div default
 #define PLL_DEV_DIV          1     // dev_div default
+#define PLL_FRAC_ROUND_THRESHOLD 0.999999 // fractional part rounding threshold
 
 /*
  * Grid search for (post_div1, post_div2). Returns the first (a,b) pair
@@ -52,9 +53,9 @@ static void FindPostDiv(double srcClk, uint32_t *postDiv1, uint32_t *postDiv2)
      *                       (5,2)(4,3)(7,2)(5,3)(4,4)(6,3)(5,4)(7,3)(6,4)
      *                       (5,5)(7,4)(6,5)(7,5)(6,6)(7,6)(7,7) */
     static const uint8_t grid[][2] = {
-        {1,1},{2,1},{3,1},{2,2},{5,1},{3,2},{7,1},{4,2},{3,3},
-        {5,2},{4,3},{7,2},{5,3},{4,4},{6,3},{5,4},{7,3},{6,4},
-        {5,5},{7,4},{6,5},{7,5},{6,6},{7,6},{7,7}
+        {1, 1}, {2, 1}, {3, 1}, {2, 2}, {5, 1}, {3, 2}, {7, 1}, {4, 2}, {3, 3},
+        {5, 2}, {4, 3}, {7, 2}, {5, 3}, {4, 4}, {6, 3}, {5, 4}, {7, 3}, {6, 4},
+        {5, 5}, {7, 4}, {6, 5}, {7, 5}, {6, 6}, {7, 6}, {7, 7}
     };
     const int gridSize = sizeof(grid) / sizeof(grid[0]);
     int i;
@@ -220,18 +221,58 @@ static uint32_t CalcRgbRefDiv(double pclkInt)
     return 0;
 }
 
+/*
+ * Calculate MIPI PLL clock parameters (hi3403v100 manual Table 3-4):
+ *   FOUTVCO    = pixel_clk * pstdiv1 * pstdiv2
+ *   fb_div_int = FOUTVCO * refdiv / FREF
+ *   FREF = 24MHz, refdiv = 1 (recommended)
+ */
+static int32_t CalcMipiClockParam(double pixClk, VO_USER_INTFSYNC_PLL_S *clk)
+{
+    double srcClk;
+    uint32_t postDiv1;
+    uint32_t postDiv2;
+    double fbDivInt;
+    double fracPart;
+
+    srcClk = pixClk * PLL_PRE_DIV * PLL_DEV_DIV;
+
+    FindPostDiv(srcClk, &postDiv1, &postDiv2);
+    clk->post_div1 = postDiv1;
+    clk->post_div2 = postDiv2;
+    clk->ref_div = PLL_REF_DIV;
+
+    /* FOUTVCO * refdiv / FREF = srcClk * postDiv1 * postDiv2 * refdiv / 24 */
+    fbDivInt = srcClk * PLL_REF_DIV * postDiv1 * postDiv2 / PLL_FRAC_DENOM;
+    fracPart = fbDivInt - floor(fbDivInt);
+    if (fracPart > PLL_FRAC_ROUND_THRESHOLD) {
+        /* fractional part rounds up to next integer */
+        uint32_t fbCeil = (uint32_t)ceil(fbDivInt);
+        if (fbCeil > PLL_FBDIV_MAX) {
+            HDF_LOGE("%s: fb_div %u exceeds max %u", __func__, fbCeil, PLL_FBDIV_MAX);
+            return DISPLAY_FAILURE;
+        }
+        clk->fb_div = fbCeil;
+        clk->frac = 0;
+    } else {
+        uint32_t fbFloor = (uint32_t)floor(fbDivInt);
+        if (fbFloor > PLL_FBDIV_MAX) {
+            HDF_LOGE("%s: fb_div %u exceeds max %u", __func__, fbFloor, PLL_FBDIV_MAX);
+            return DISPLAY_FAILURE;
+        }
+        clk->fb_div = fbFloor;
+        clk->frac = (uint32_t)ceil(fracPart * pow(BASE_NUM, EXP_NUM));
+    }
+    return DISPLAY_SUCCESS;
+}
+
 int32_t GetVoClkParameter(const struct DispInfo *info, VO_USER_INTFSYNC_PLL_S *clk)
 {
     double pixClk;
     double hpixel;
     double vline;
-    double srcClk;
     double pclkInt = 0.0;
     double pclkFrac;
-    uint32_t postDiv1;
-    uint32_t postDiv2;
-    double fbDivInt;
-    double fracPart;
 
     if (info == NULL || clk == NULL) {
         HDF_LOGE("%s: null pointer", __func__);
@@ -246,40 +287,8 @@ int32_t GetVoClkParameter(const struct DispInfo *info, VO_USER_INTFSYNC_PLL_S *c
 
     if (info->intfType == VO_INTF_MIPI || info->intfType == 0) {
         /* VO_INTF_MIPI=0x400 from MPP SDK, or 0=MIPI_DSI from HDF enum */
-        /*
-         * PLL formula (hi3403v100 manual Table 3-4):
-         *   FOUTVCO    = pixel_clk * pstdiv1 * pstdiv2
-         *   fb_div_int = FOUTVCO * refdiv / FREF
-         *   FREF = 24MHz, refdiv = 1 (recommended)
-         */
-        srcClk = pixClk * PLL_PRE_DIV * PLL_DEV_DIV;
-
-        FindPostDiv(srcClk, &postDiv1, &postDiv2);
-        clk->post_div1 = postDiv1;
-        clk->post_div2 = postDiv2;
-        clk->ref_div = PLL_REF_DIV;
-
-        /* FOUTVCO * refdiv / FREF = srcClk * postDiv1 * postDiv2 * refdiv / 24 */
-        fbDivInt = srcClk * PLL_REF_DIV * postDiv1 * postDiv2 / PLL_FRAC_DENOM;
-        fracPart = fbDivInt - floor(fbDivInt);
-
-        if (fracPart > 0.999999) {
-            /* fractional part rounds up to next integer */
-            uint32_t fbCeil = (uint32_t)ceil(fbDivInt);
-            if (fbCeil > PLL_FBDIV_MAX) {
-                HDF_LOGE("%s: fb_div %u exceeds max %u", __func__, fbCeil, PLL_FBDIV_MAX);
-                return DISPLAY_FAILURE;
-            }
-            clk->fb_div = fbCeil;
-            clk->frac = 0;
-        } else {
-            uint32_t fbFloor = (uint32_t)floor(fbDivInt);
-            if (fbFloor > PLL_FBDIV_MAX) {
-                HDF_LOGE("%s: fb_div %u exceeds max %u", __func__, fbFloor, PLL_FBDIV_MAX);
-                return DISPLAY_FAILURE;
-            }
-            clk->fb_div = fbFloor;
-            clk->frac = (uint32_t)ceil(fracPart * pow(2, 24));
+        if (CalcMipiClockParam(pixClk, clk) != DISPLAY_SUCCESS) {
+            return DISPLAY_FAILURE;
         }
     } else {
         /* RGB path — use existing functions (unchanged) */
