@@ -84,6 +84,15 @@ if (defined(ohos_lite)) {
       mpp_arch = "h8"
       sdk_include_dir = "${root_out_dir}/sdk_linux/src_tmp/smp/a55_linux/mpp/out/include"
       sdk_lib_dir = "//device/soc/hisilicon/hi3403v100/sdk_linux:hispark_aifly_sdk"
+      if (graphic_utils_lite_display_type == "mipi") {
+        hdmi_support = false
+        mipi_support = true
+        disenalbe_disp = false
+      } else {
+        hdmi_support = true
+        mipi_support = false
+        disenalbe_disp = true
+      }
       sdk_lib_path = rebase_path("${root_out_dir}/sdk_linux/src_tmp/smp/a55_linux/mpp/out/lib")
       display_layer_lib = [
         "-L${sdk_lib_path}",
@@ -190,6 +199,9 @@ if (defined(ohos_lite)) {
       }
       if (hdmi_support) {
         defines += [ "__HDMI_SUPPORT__" ]
+      }
+      if (mipi_support) {
+        defines += [ "__MIPI_SUPPORT__" ]
       }
       ldflags = display_layer_lib
       defines += [ "VPSS_GRP_START_ID=${vpss_grp_start_id}" ]
