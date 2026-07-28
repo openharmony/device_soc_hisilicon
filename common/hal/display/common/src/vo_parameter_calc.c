@@ -47,7 +47,7 @@
  * where srcClk * a * b falls in (PLL_VCO_MIN, PLL_VCO_MAX).
  * Search order matches MIPI clock calculator spreadsheet.
  */
-static void FindPostDiv(double srcClk, uint32_t *postDiv1, uint32_t *postDiv2)
+static int32_t FindPostDiv(double srcClk, uint32_t *postDiv1, uint32_t *postDiv2)
 {
     /* ordered (a,b) pairs: (1,1)(2,1)(3,1)(2,2)(5,1)(3,2)(7,1)(4,2)(3,3)
      *                       (5,2)(4,3)(7,2)(5,3)(4,4)(6,3)(5,4)(7,3)(6,4)
@@ -67,13 +67,12 @@ static void FindPostDiv(double srcClk, uint32_t *postDiv1, uint32_t *postDiv2)
         if (vco > PLL_VCO_MIN && vco < PLL_VCO_MAX) {
             *postDiv1 = a;
             *postDiv2 = b;
-            return;
+            return DISPLAY_SUCCESS;
         }
     }
     /* Should never reach here for valid pixel clocks */
     HDF_LOGE("%s: no valid (post_div1, post_div2) found for srcClk=%f", __func__, srcClk);
-    *postDiv1 = 1;
-    *postDiv2 = 1;
+    return DISPLAY_FAILURE;
 }
 
 static uint32_t CalcFbDiv(double pixClk, double pclkInt)
@@ -237,7 +236,9 @@ static int32_t CalcMipiClockParam(double pixClk, VO_USER_INTFSYNC_PLL_S *clk)
 
     srcClk = pixClk * PLL_PRE_DIV * PLL_DEV_DIV;
 
-    FindPostDiv(srcClk, &postDiv1, &postDiv2);
+    if (FindPostDiv(srcClk, &postDiv1, &postDiv2) != DISPLAY_SUCCESS) {
+        return DISPLAY_FAILURE;
+    }
     clk->post_div1 = postDiv1;
     clk->post_div2 = postDiv2;
     clk->ref_div = PLL_REF_DIV;
