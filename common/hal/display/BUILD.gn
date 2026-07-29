@@ -84,7 +84,7 @@ if (defined(ohos_lite)) {
       mpp_arch = "h8"
       sdk_include_dir = "${root_out_dir}/sdk_linux/src_tmp/smp/a55_linux/mpp/out/include"
       sdk_lib_dir = "//device/soc/hisilicon/hi3403v100/sdk_linux:hispark_aifly_sdk"
-      if (graphic_utils_lite_display_type == "mipi") {
+      if (device_hispark_aifly_display_type == "mipi") {
         hdmi_support = false
         mipi_support = true
         disenalbe_disp = false
