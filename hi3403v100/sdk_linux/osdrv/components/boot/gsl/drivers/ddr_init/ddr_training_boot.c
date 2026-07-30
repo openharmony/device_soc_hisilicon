@@ -121,8 +121,12 @@ void ddr_training_local_str(void)
     );
 }
 
-static void ddr_training_error_type(unsigned int mask)
+/* Display DDR training error when boot */
+void ddr_training_error(unsigned int mask, unsigned int phy, int byte, int dq)
 {
+	uart_early_putc('\r');
+	uart_early_putc('\n');
+	/* error type */
     switch (mask) {
         case DDR_ERR_WL:
             asm volatile("adr	r0, str_wl\n\t"
@@ -159,10 +163,12 @@ static void ddr_training_error_type(unsigned int mask)
         default:
             break;
     }
-}
 
-static void ddr_training_error_pos(unsigned int phy, int byte, int dq)
-{
+	/* error string */
+	asm volatile("adr	r0, str_err\n\t"
+		"bl	uart_early_puts");
+
+	/* error phy */
     if (phy != 0) {
         asm volatile("adr	r0, str_phy\n\t"
             "bl	uart_early_puts");
@@ -182,37 +188,26 @@ static void ddr_training_error_pos(unsigned int phy, int byte, int dq)
     }
 }
 
-/* Display DDR training error when boot */
-void ddr_training_error(unsigned int mask, unsigned int phy, int byte, int dq)
-{
-    uart_early_putc('\r');
-    uart_early_putc('\n');
-    ddr_training_error_type(mask);
-    asm volatile("adr	r0, str_err\n\t"
-        "bl	uart_early_puts");
-    ddr_training_error_pos(phy, byte, dq);
-}
-
 /* Display DDR training start when boot */
 void ddr_training_start(void)
 {
-    asm volatile(
-        "push    {lr}\n\t"
-        "adr    r0, str_ddrtr_start\n\t"
-        "bl    uart_early_puts\n\t"
-        "pop    {lr}"
-    );
+	asm volatile(
+		"push	{lr}\n\t"
+		"adr	r0, str_ddrtr_start\n\t"
+		"bl	uart_early_puts\n\t"
+		"pop	{lr}"
+	);
 }
 
 /* Display DDR training result when boot */
 void ddr_training_suc(void)
 {
-    asm volatile(
-        "push    {lr}\n\t"
-        "adr    r0, str_ddrtr_suc\n\t"
-        "bl    uart_early_puts\n\t"
-        "pop    {lr}"
-    );
+	asm volatile(
+		"push	{lr}\n\t"
+		"adr	r0, str_ddrtr_suc\n\t"
+		"bl	uart_early_puts\n\t"
+		"pop	{lr}"
+	);
 }
 #endif /* DDR_TRAINING_CUT_CODE_CONFIG */
 #else

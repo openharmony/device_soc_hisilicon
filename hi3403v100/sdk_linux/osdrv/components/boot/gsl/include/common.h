@@ -40,7 +40,6 @@ void uart_init();
 void uart_deinit();
 void uart_reset();
 void uart_port_init();
-void serial_puts(const char *s);
 void log_serial_puts(const char *s);
 void serial_put_hex(unsigned int hex);
 /*-----------------------------------------------------------------

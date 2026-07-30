@@ -17,6 +17,8 @@
 #include "usb3_hw.h"
 #include "usb3_drv.h"
 #include "usb3_pcd.h"
+extern void usb3_handle_dev_intr(usb3_pcd_t *pcd, uint32_t event);
+extern int usb3_handle_ep_intr(usb3_pcd_t *pcd, int physep, uint32_t event);
 
 void ena_eventbuf_intr(const usb3_device_t *dev)
 {

@@ -94,42 +94,39 @@ static int mmc_send_cmd(uint32_t cmd, uint32_t arg)
     return 0;
 }
 
-static void mmc_hw_reset(void)
+static int mmc_card_init(void)
 {
+	uint32_t cmd, arg;
+	uint32_t timeout, retry;
+	uint32_t reg;
+	uint32_t bus_width;
     sdhci_writel(0x0, SDHCI_EMMC_HW_RESET);
     udelay(100); /* delay 100us */
     sdhci_writel(0x1, SDHCI_EMMC_HW_RESET);
     udelay(1000); /* delay 1000us */
-}
 
-static int mmc_wait_op_cond(void)
-{
-    uint32_t cmd;
-    uint32_t retry = 3000; /* retry 3000 times */
-
+	/* Send CMD0 to reset card into idle state */
     cmd = sdhci_make_cmd_fun(MMC_CMD_GO_IDLE_STATE, SDHCI_CMD_RESP_NONE);
     mmc_send_cmd(cmd, 0);
     udelay(2000); /* delay 2000us */
 
+	retry = 3000; /* retry 3000 times */
     while (retry--) {
         /* Send CMD1 for initialization and wait to complete */
-        cmd = sdhci_make_cmd_fun(MMC_CMD_SEND_OP_COND, SDHCI_CMD_RESP_SHORT);
-        mmc_send_cmd(cmd, MMC_VDD_165_195 | OCR_HCS);
+		cmd = sdhci_make_cmd_fun(MMC_CMD_SEND_OP_COND,
+					 SDHCI_CMD_RESP_SHORT);
+		arg = MMC_VDD_165_195 | OCR_HCS;
+		mmc_send_cmd(cmd, arg);
 
         g_ocr = sdhci_readl(SDHCI_RESPONSE);
-        if (g_ocr & OCR_BUSY) {
-            return 0;
-        }
+		if (g_ocr & OCR_BUSY)
+			break;
 
         mdelay(1);
     }
 
+	if (retry == 0)
     return -1;
-}
-
-static void mmc_select_card(void)
-{
-    uint32_t cmd;
 
     /* Send CMD2 to get card cid numbers */
     cmd = sdhci_make_cmd_fun(MMC_CMD_ALL_SEND_CID, SDHCI_CMD_CRC | SDHCI_CMD_RESP_LONG);
@@ -142,14 +139,6 @@ static void mmc_select_card(void)
     /* Send CMD7 for card from standby state to transfer state */
     cmd = sdhci_make_cmd_fun(MMC_CMD_SELECT_CARD, SDHCI_CMD_CRC | SDHCI_CMD_RESP_SHORT);
     mmc_send_cmd(cmd, 1 << 0x10);
-}
-
-static void mmc_config_bus_width(void)
-{
-    uint32_t cmd;
-    uint32_t arg;
-    uint32_t reg;
-    uint32_t bus_width;
 
     /* Get buswidth */
     reg = readl(REG_BASE_SCTL + REG_SC_SYSSTAT);
@@ -163,31 +152,16 @@ static void mmc_config_bus_width(void)
         (EXT_CSD_BUS_WIDTH << MMC_SWITCH_INDEX_SHIFT) |
         (bus_width << MMC_SWITCH_VALUE_SHIFT);
     mmc_send_cmd(cmd, arg);
-}
 
-static void mmc_wait_dat0_ready(void)
-{
-    uint32_t timeout = 10000; /* timeout 10000 * 100us*/
-
-    while (!(sdhci_readl(SDHCI_PRESENT_STATE) & SDHCI_PSTATE_DAT_0)) {
-        if (timeout-- == 0) {
-            debug_info("wait DAT0 ready timeout\n", 0);
-            break;
-        }
-        udelay(100); /* delay 100us */
-    }
-}
-
-static int mmc_card_init(void)
-{
-    mmc_hw_reset();
-    if (mmc_wait_op_cond() != 0) {
-		return -1;
+	timeout = 10000; /* timeout 10000 * 100us*/
+	while (!(sdhci_readl(SDHCI_PRESENT_STATE) & SDHCI_PSTATE_DAT_0)) {
+		if (timeout-- == 0) {
+			debug_info("wait DAT0 ready timeout\n", 0);
+			break;
+		}
+		udelay(100); /* delay 100us */
 	}
 
-    mmc_select_card();
-    mmc_config_bus_width();
-    mmc_wait_dat0_ready();
 	return 0;
 }
 
@@ -284,10 +258,14 @@ int mmc_init(void)
     return 0;
 }
 
-static void mmc_prepare_multi_read(size_t src, size_t cnt)
+int mmc_mb_read_pio(void const *dst, size_t src, size_t cnt, size_t read_type)
 {
-    uint32_t cmd;
-    uint16_t mode;
+	uint8_t *buf = (uint8_t *)dst;
+	uint32_t cmd;
+	uint16_t mode;
+	size_t size;
+	uint32_t spacc_channel_number = 1;
+	spacc_decrypt_params decrypt_params = {0};
 
 	/* set host block size 512 */
     sdhci_writew(EMMC_BLOCK_SIZE, SDHCI_BLOCK_SIZE);
@@ -320,25 +298,23 @@ static void mmc_prepare_multi_read(size_t src, size_t cnt)
         cmd = sdhci_make_cmd_fun(MMC_CMD_READ_MULTIPLE_BLOCK, SDHCI_CMD_CRC | SDHCI_CMD_RESP_SHORT | SDHCI_CMD_DATA);
         mmc_send_cmd(cmd, src);
     }
-}
 
-static void mmc_read_block_by_cpu(uint8_t **buf)
-{
-    size_t size = EMMC_BLOCK_SIZE;
+	while (cnt) {
+		if (sdhci_check_int_status(SDHCI_INT_DATA_AVAIL, 3000)) /* timeout 3000ms */
+			return TD_FAILURE;
 
-    while (size) {
-		*(uint32_t *)(*buf) = sdhci_readl(SDHCI_BUFFER);
-		*buf += 0x4;
-        size -= 0x4;
-    }
-}
+		sdhci_writel(SDHCI_INT_DATA_AVAIL, SDHCI_INT_STATUS);
 
-static int mmc_read_block_by_dma(uint8_t **buf)
-{
-	spacc_decrypt_params decrypt_params = {0};
-
-    decrypt_params.chn = 1;
-    decrypt_params.dst_addr = (uint32_t)(uintptr_t)(*buf);
+		if (read_type == READ_DATA_BY_CPU) {
+			size = EMMC_BLOCK_SIZE;
+			while (size) {
+				*(uint32_t *)buf = sdhci_readl(SDHCI_BUFFER);
+				buf += 0x4;
+				size -= 0x4;
+			}
+		} else {
+			decrypt_params.chn = spacc_channel_number;
+			decrypt_params.dst_addr = (uint32_t)(uintptr_t)buf;
     decrypt_params.src_addr = (uint32_t)(REG_BASE_EMMC + SDHCI_DMA_BUF_ADDR);
     decrypt_params.length = EMMC_BLOCK_SIZE;
     decrypt_params.alg = SYMC_ALG_DMA;
@@ -346,25 +322,7 @@ static int mmc_read_block_by_dma(uint8_t **buf)
 	if (drv_spacc_decrypt(decrypt_params) != TD_SUCCESS)
         return TD_FAILURE;
 
-	*buf += EMMC_BLOCK_SIZE;
-    return TD_SUCCESS;
-}
-
-int mmc_mb_read_pio(void const *dst, size_t src, size_t cnt, size_t read_type)
-{
-	uint8_t *buf = (uint8_t *)dst;
-
-    mmc_prepare_multi_read(src, cnt);
-
-    while (cnt) {
-        if (sdhci_check_int_status(SDHCI_INT_DATA_AVAIL, 3000)) /* timeout 3000ms */
-            return TD_FAILURE;
-
-		sdhci_writel(SDHCI_INT_DATA_AVAIL, SDHCI_INT_STATUS);
-		if (read_type == READ_DATA_BY_CPU) {
-            mmc_read_block_by_cpu(&buf);
-        } else if (mmc_read_block_by_dma(&buf) != TD_SUCCESS) {
-			return TD_FAILURE;
+			buf += EMMC_BLOCK_SIZE;
 		}
 
         cnt--;

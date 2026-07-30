@@ -17,9 +17,6 @@
 #include <platform.h>
 #include <lib.h>
 
-/* Constants for reported magic-number values. */
-#define GSL_TIMER_DELAY_US_1000                1000
-
 static  unsigned long timestamp;
 static  unsigned long lastdec;
 #define TIMER_LOAD_VAL 0xffffffff
@@ -102,11 +99,9 @@ void reset_timer_masked(void)
 }
 
 /* delay x useconds AND perserve advance timstamp value */
-void timer_udelay_inner(unsigned long usec)
+void __udelay(unsigned long usec)
 {
-    unsigned long tmo;
-    unsigned long tmp;
-    unsigned long now;
+	unsigned long tmo, tmp;
 
     /* if "big" number, spread normalization to seconds */
     if (usec >= TIME_COVERT_RATIO) {
@@ -131,11 +126,8 @@ void timer_udelay_inner(unsigned long usec)
         tmo += tmp;
     }
 
-    /* loop till event */
-    now = get_timer_masked();
-    while (now < tmo) {
-        now = get_timer_masked();
-    }
+	/* loop till event */
+	while (get_timer_masked() < tmo);
 }
 
 void udelay(unsigned long usec)
@@ -144,14 +136,13 @@ void udelay(unsigned long usec)
 
     do {
         kv = usec > CONFIG_WD_PERIOD ? CONFIG_WD_PERIOD : usec;
-        timer_udelay_inner(kv);
+		__udelay(kv);
         usec -= kv;
     } while (usec);
 }
 
 void mdelay(unsigned long msec)
 {
-    while (msec--) {
-        udelay(GSL_TIMER_DELAY_US_1000);
-    }
+	while (msec--)
+		udelay(1000);
 }

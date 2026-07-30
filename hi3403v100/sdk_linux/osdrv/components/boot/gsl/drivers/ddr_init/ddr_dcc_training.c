@@ -17,7 +17,7 @@
 #include "ddr_training_impl.h"
 
 /* s40/t28/t16 not support dcc training */
-#define DDR_DCC_TRAINING
+#define __DCC_TRAINING__
 #ifdef DDR_DCC_TRAINING_CONFIG
 /* Save two rank RDET result */
 static void ddr_save_two_rank_bdl(const struct ddr_cfg_st *cfg, struct dcc_data_st *dcc_data)

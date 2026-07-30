@@ -16,7 +16,7 @@
 
 #include "ddr_training_impl.h"
 
-#define DDR_AC_TRAINING
+#define __AC_TRAINING__
 #ifdef DDR_AC_TRAINING_CONFIG
 /*
  * Get clk value.

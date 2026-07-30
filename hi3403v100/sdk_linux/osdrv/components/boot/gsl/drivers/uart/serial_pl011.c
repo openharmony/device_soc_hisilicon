@@ -121,9 +121,9 @@ void serial_putc(const char c)
 
 void serial_puts(const char *s)
 {
-       while (*s) {
-               (void)serial_putc(*s++);
-       }
+    while (*s) {
+        (void)serial_putc(*s++);
+    }
 }
 
 void log_serial_puts(const char *s)
@@ -133,17 +133,19 @@ void log_serial_puts(const char *s)
 
 void serial_put_hex(unsigned int hex)
 {
-        unsigned int i;
-        char c;
-        for (i = 0; i <= 28; i += 4) { /* u32 value output per 4 bits, 28 is offset of the last 4 bits */
-                c = (hex >> (28 - i)) & 0x0F; /* 28 is offset of the last 4 bits */
-                /* transform the 4 bits data to ascii */
-                if (c < 0xA)
-                        c += '0';
-                else
-                        c += 'A' - 0xA;
-                (void)serial_putc(c);
+    unsigned int i;
+    char c;
+
+    for (i = 0; i <= 28; i += 4) { /* u32 value output per 4 bits, 28 is offset of the last 4 bits */
+        c = (hex >> (28 - i)) & 0x0F; /* 28 is offset of the last 4 bits */
+        /* transform the 4 bits data to ascii */
+        if (c < 0xA) {
+            c += '0';
+        } else {
+            c += 'A' - 0xA;
         }
+        (void)serial_putc(c);
+    }
 }
 
 int serial_getc(void)

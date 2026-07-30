@@ -30,10 +30,8 @@
 #include "../drivers/uart/uart.h"
 #include "../drivers/sdio/sdhci.h"
 #include "../drivers/sdio/fat.h"
-#include "../drivers/ddr_init/ddr_hal_context.h"
 #include "../drivers/usb3/usb3.h"
 #include "../drivers/emmc/emmc.h"
-#include "../secure_failure.h"
 
 /* Constants for reported magic-number values. */
 #define SS928_BOOT_ARRAY_INDEX_2               2
@@ -137,7 +135,7 @@ __attribute__((no_stack_protector)) void stack_chk_guard_setup()
 
 void call_reset(void)
 {
-    mdelay(500); /* delay 500 ms */
+    mdelay(500);
     timer_deinit();
     reg_set((uint32_t *)(REG_BASE_SCTL + REG_SC_SYSRES), 0x1);
 }
@@ -150,14 +148,14 @@ void err_print(uint8_t err_type, uint8_t err_idx)
     if (uart_inited == 0) {
         uart_init();
         uart_reset();
-        mdelay(10); /* delay 10 ms */
+        mdelay(10);
     }
     serial_putc('\n');
     serial_putc('G');
     serial_putc(err_type);
     serial_putc('S');
     serial_putc(err_idx);
-    mdelay(10); /* delay 10 ms */
+    mdelay(10);
 }
 
 static void check_and_set_backup_image_flag(uint32_t offset_times)
@@ -196,7 +194,8 @@ void failure_process(void)
         ((is_backup_image_enable() == AUTH_SUCCESS)))
         call_reset();
 
-    _secure_failure_process();
+	extern void _secure_failure_process(void);
+	_secure_failure_process();
 
     return;
 }
@@ -438,7 +437,7 @@ static void get_temperature(int *temperature)
 }
 
 static void adjust_hpm(unsigned int *hpm_core, unsigned int *hpm_mda,
-    unsigned int *hpm_npu, int temperature)
+        unsigned int *hpm_npu, int temperature)
 {
     unsigned int otp_hpm_core = readl(REG_SYSCTRL_BASE + OTP_HPM_CORE_OFFSET);
     unsigned int otp_hpm_npu  = readl(REG_SYSCTRL_BASE + OTP_HPM_NPU_OFFSET);
@@ -512,7 +511,7 @@ static void svb_voltage_change(void)
     /* init temperature and hpm*/
     init_temperature();
     init_hpm();
-    mdelay(20); /* delay 20 ms */
+    mdelay(20);
     start_hpm(&hpm_core, &hpm_npu, &hpm_mda);
 
     /*get temperature */
@@ -561,14 +560,7 @@ static void set_qosbuf_cfg(void)
 
 static void ddr_training(void)
 {
-    struct ddr_hal_context ctx;
-    struct ddr_hal_phy_all phy_all;
-
-    /* ddr ctx cfg */
-    ddr_hal_set_cfg_addr((uintptr_t)&ctx, (uintptr_t)&phy_all);
-    ddr_hal_cfg_init();
-
-    set_qosbuf_cfg();
+	set_qosbuf_cfg();
 
     ddr_set_rdqbdl_def_val();
 
@@ -607,8 +599,8 @@ void ddr_scramb_start(const unsigned int *random, int size)
 
     reg_set((unsigned int *)(REG_SYSCTRL_BASE + DDRCA_REE_RANDOM_L), random[0]);
     reg_set((unsigned int *)(REG_SYSCTRL_BASE + DDRCA_REE_RANDOM_H), random[1]);
-    reg_set((unsigned int *)(REG_SYSCTRL_BASE + DDRCA_TEE_RANDOM_L), random[2]); /* random arr index 2 */
-    reg_set((unsigned int *)(REG_SYSCTRL_BASE + DDRCA_TEE_RANDOM_H), random[3]); /* random arr index 3 */
+    reg_set((unsigned int *)(REG_SYSCTRL_BASE + DDRCA_TEE_RANDOM_L), random[2]);
+    reg_set((unsigned int *)(REG_SYSCTRL_BASE + DDRCA_TEE_RANDOM_H), random[3]);
 
     reg_set((unsigned int *)(REG_SYSCTRL_BASE + DDRCA_EN), SS928_BOOT_DDRCA_ENABLE);
     reg_set((unsigned int *)(REG_SYSCTRL_BASE + DDRCA_REE_UPDATE), 1);
@@ -616,65 +608,37 @@ void ddr_scramb_start(const unsigned int *random, int size)
     reg_set((unsigned int *)(REG_SYSCTRL_BASE + DDR_CA_LOCK), 1);
 }
 
-static void ddr_get_valid_channels(unsigned int *ddrc_isvalid)
-{
-    static const unsigned int mode_ofst[SS928_BOOT_DDRC_CHANNEL_NUM] = {
-        DDRC_CFG_DDRMODE_OFST, DDRC1_CFG_DDRMODE_OFST, DDRC2_CFG_DDRMODE_OFST, DDRC3_CFG_DDRMODE_OFST
-    };
-    unsigned int i;
-
-    for (i = 0; i < SS928_BOOT_DDRC_CHANNEL_NUM; i++) {
-        ddrc_isvalid[i] = (reg_get(REG_BASE_DDRC + mode_ofst[i]) & SS928_BOOT_DDRC_VALID_MASK) ?
-            SS928_BOOT_DDRC_ENABLE : SS928_BOOT_DDRC_DISABLE;
-    }
-}
-
-static void ddr_set_self_refresh(const unsigned int *ddrc_isvalid, unsigned int val)
-{
-    static const unsigned int sref_ofst[SS928_BOOT_DDRC_CHANNEL_NUM] = {
-        DDRC_CTRL_SREF_OFST, DDRC1_CTRL_SREF_OFST, DDRC2_CTRL_SREF_OFST, DDRC3_CTRL_SREF_OFST
-    };
-    unsigned int i;
-
-    for (i = 0; i < SS928_BOOT_DDRC_CHANNEL_NUM; i++) {
-        if (ddrc_isvalid[i]) {
-            reg_set(REG_BASE_DDRC + sref_ofst[i], val);
-        }
-    }
-}
-
-static void ddr_wait_self_refresh(const unsigned int *ddrc_isvalid, unsigned int wait_enter)
-{
-    static const unsigned int curr_func_ofst[SS928_BOOT_DDRC_CHANNEL_NUM] = {
-        DDRC_CURR_FUNC_OFST, DDRC1_CURR_FUNC_OFST, DDRC2_CURR_FUNC_OFST, DDRC3_CURR_FUNC_OFST
-    };
-    unsigned int i;
-    unsigned int reg_val[SS928_BOOT_DDRC_CHANNEL_NUM];
-
-    do {
-        for (i = 0; i < SS928_BOOT_DDRC_CHANNEL_NUM; i++) {
-            reg_val[i] = ddrc_isvalid[i] ?
-                (reg_get(REG_BASE_DDRC + curr_func_ofst[i]) & SS928_BOOT_DDRC_ENABLE) : !wait_enter;
-        }
-    } while (wait_enter ? !(reg_val[0] & reg_val[1] & reg_val[SS928_BOOT_ARRAY_INDEX_2] &
-        reg_val[SS928_BOOT_ARRAY_INDEX_3]) : (reg_val[0] | reg_val[1] | reg_val[SS928_BOOT_ARRAY_INDEX_2] |
-        reg_val[SS928_BOOT_ARRAY_INDEX_3]));
-}
-
 static void ddr_scrambling(void)
 {
 	unsigned int i;
 	unsigned int random_num[RANDOM_SIZE];
+	unsigned int reg_val[SS928_BOOT_DDRC_CHANNEL_NUM] = {0, 0, 0, 0};
 	unsigned int ddrc_isvalid[SS928_BOOT_DDRC_CHANNEL_NUM] = {0, 0, 0, 0};
 
 	/* read ddrc_cfg_ddrmode register,
 	 * if value[3:0] is not 0x0 ,the channel is valid.
 	 */
-    ddr_get_valid_channels(ddrc_isvalid);
+	ddrc_isvalid[0] = (reg_get(REG_BASE_DDRC + DDRC_CFG_DDRMODE_OFST) & 0xf) ? 1 : 0;
+	ddrc_isvalid[1] = (reg_get(REG_BASE_DDRC + DDRC1_CFG_DDRMODE_OFST) & 0xf) ? 1 : 0;
+	ddrc_isvalid[2] = (reg_get(REG_BASE_DDRC + DDRC2_CFG_DDRMODE_OFST) & 0xf) ? 1 : 0;
+	ddrc_isvalid[3] = (reg_get(REG_BASE_DDRC + DDRC3_CFG_DDRMODE_OFST) & 0xf) ? 1 : 0;
 
 	/* set ddrc to do self-refurbish */
-    ddr_set_self_refresh(ddrc_isvalid, SS928_BOOT_DDRC_ENABLE);
-    ddr_wait_self_refresh(ddrc_isvalid, SS928_BOOT_DDRC_ENABLE);
+	if (ddrc_isvalid[0])
+		reg_set(REG_BASE_DDRC + DDRC_CTRL_SREF_OFST, 0x1);
+	if (ddrc_isvalid[1])
+		reg_set(REG_BASE_DDRC + DDRC1_CTRL_SREF_OFST, 0x1);
+	if (ddrc_isvalid[2])
+		reg_set(REG_BASE_DDRC + DDRC2_CTRL_SREF_OFST, 0x1);
+	if (ddrc_isvalid[3])
+		reg_set(REG_BASE_DDRC + DDRC3_CTRL_SREF_OFST, 0x1);
+
+	do {
+		reg_val[0] = ddrc_isvalid[0] ? (reg_get(REG_BASE_DDRC + DDRC_CURR_FUNC_OFST) & 0x1) : 1;
+		reg_val[1] = ddrc_isvalid[1] ? (reg_get(REG_BASE_DDRC + DDRC1_CURR_FUNC_OFST) & 0x1) : 1;
+		reg_val[2] = ddrc_isvalid[2] ? (reg_get(REG_BASE_DDRC + DDRC2_CURR_FUNC_OFST) & 0x1) : 1;
+		reg_val[3] = ddrc_isvalid[3] ? (reg_get(REG_BASE_DDRC + DDRC3_CURR_FUNC_OFST) & 0x1) : 1;
+	} while (!(reg_val[0] & reg_val[1] & reg_val[2] & reg_val[3]));
 
 	/* get random number */
 	for (i = 0; i < RANDOM_SIZE; i++)
@@ -688,10 +652,22 @@ static void ddr_scrambling(void)
 		random_num[i] = get_random_num();
 
 	/* set ddrc to exit self-refurbish */
-    ddr_set_self_refresh(ddrc_isvalid, (SS928_BOOT_DDRC_ENABLE << SS928_BOOT_SHIFT_1));
+	if (ddrc_isvalid[0])
+		reg_set(REG_BASE_DDRC + DDRC_CTRL_SREF_OFST, (0x1 << 1));
+	if (ddrc_isvalid[1])
+		reg_set(REG_BASE_DDRC + DDRC1_CTRL_SREF_OFST, (0x1 << 1));
+	if (ddrc_isvalid[2])
+		reg_set(REG_BASE_DDRC + DDRC2_CTRL_SREF_OFST, (0x1 << 1));
+	if (ddrc_isvalid[3])
+		reg_set(REG_BASE_DDRC + DDRC3_CTRL_SREF_OFST, (0x1 << 1));
 
 	/* wait the status of ddrc to be normal */
-    ddr_wait_self_refresh(ddrc_isvalid, SS928_BOOT_DDRC_DISABLE);
+	do {
+		reg_val[0] = ddrc_isvalid[0] ? (reg_get(REG_BASE_DDRC + DDRC_CURR_FUNC_OFST) & 0x1) : 0;
+		reg_val[1] = ddrc_isvalid[1] ? (reg_get(REG_BASE_DDRC + DDRC1_CURR_FUNC_OFST) & 0x1) : 0;
+		reg_val[2] = ddrc_isvalid[2] ? (reg_get(REG_BASE_DDRC + DDRC2_CURR_FUNC_OFST) & 0x1) : 0;
+		reg_val[3] = ddrc_isvalid[3] ? (reg_get(REG_BASE_DDRC + DDRC3_CURR_FUNC_OFST) & 0x1) : 0;
+	} while (reg_val[0] | reg_val[1] | reg_val[2] | reg_val[3]);
 
     return;
 }
@@ -810,7 +786,6 @@ static int system_init()
     svb_voltage_change();
     ddr_training();
     ddr_debug();
-    ddr_capat_adapt_start();
 #ifdef DDR_SCRAMB_ENABLE
     ddr_scrambling();
 #endif
@@ -946,7 +921,7 @@ static int get_head_area_data_form_sdio()
     /* Read the data from 64K to 79K(lenght is 15K) in the image */
     set_sdio_pos(SECURE_IMAGE_STEP1_SIZE);
     ret = copy_from_sdio((void *)(VENDOR_ROOT_PUBLIC_KEY_ADDR +
-        SECURE_IMAGE_STEP1_SIZE), SECURE_IMAGE_STEP2_SIZE);
+                      SECURE_IMAGE_STEP1_SIZE), SECURE_IMAGE_STEP2_SIZE);
     if (ret != TD_SUCCESS)
         return TD_FAILURE;
 

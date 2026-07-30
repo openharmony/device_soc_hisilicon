@@ -87,15 +87,15 @@ static uint32_t get_rng(void)
 
             i++;
 
-			if ((first_rng_value == 0) || (first_rng_value == 0xffffffff) ||
-			    (first_rng_value == 0x694B873C)) {
-				continue;
-			}
+            if ((first_rng_value == 0) || (first_rng_value == 0xffffffff) ||
+                (first_rng_value == 0x694B873C)) {
+                continue;
+            }
 
-			if ((second_rng_value == 0) || (second_rng_value == 0xffffffff) ||
-			    (second_rng_value == 0x694B873C)) {
-				continue;
-			}
+            if ((second_rng_value == 0) || (second_rng_value == 0xffffffff) ||
+                (second_rng_value == 0x694B873C)) {
+                continue;
+            }
 
             if (first_rng_value == second_rng_value) {
                 continue;
@@ -330,17 +330,17 @@ static void drv_pke_get_ram(pke_ram_type type, uint32_t section, uint8_t *ram, u
     addr = PKE_MRAM + PKE_RAM_RANG_SIZE * type
            + section * PKE_RAM_SECTION_SIZE_IN_BYTE;
 
-	for (i = len; i >= WORD_WIDTH; i -= WORD_WIDTH) {
-		val = pke_read(addr + i - WORD_WIDTH);
-		ram[len - i + 0] = (val >> 24) & 0xFF; /* shift 24 bits */
-		ram[len - i + 1] = (val >> 16) & 0xFF; /* shift 16 bits */
-		ram[len - i + 2] = (val >> 8) & 0xFF;  /* offset 2, shift 8 bits */
-		ram[len - i + 3] = (val) & 0xFF;       /* offset 3 */
-		count++;
-	}
+    for (i = len; i >= WORD_WIDTH; i -= WORD_WIDTH) {
+        val = pke_read(addr + i - WORD_WIDTH);
+        ram[len - i + 0] = (val >> 24) & 0xFF; /* shift 24 bits */
+        ram[len - i + 1] = (val >> 16) & 0xFF; /* shift 16 bits */
+        ram[len - i + 2] = (val >> 8) & 0xFF;  /* offset 2, shift 8 bits */
+        ram[len - i + 3] = (val) & 0xFF;       /* offset 3 */
+        count++;
+    }
     if (count != (len / WORD_WIDTH)) {
-		return;
-	}
+        return;
+    }
 
     count = 0;
     for (i = len; i >= WORD_WIDTH; i -= WORD_WIDTH) {
@@ -436,10 +436,10 @@ static int32_t drv_pke_wait_done(void)
     if (i >= PKE_TIME_OUT)
         return TD_FAILURE;
 
-	ret = drv_pke_error_code();
+    ret = drv_pke_error_code();
     if (ret != TD_SUCCESS) {
-		return ret;
-	}
+        return ret;
+    }
 
     return TD_SUCCESS;
 }
@@ -462,13 +462,13 @@ static void drv_pke_set_key(const uint8_t *inkey, uint8_t *outkey, uint32_t klen
         pke_write(PKE_KEY_RANDOM_1, cpu_to_be32(random->word[1]));
         pke_write(PKE_KEY_RANDOM_2, cpu_to_be32(random->word[0]));
 
-		/* set src16 */
-		pke_write(PKE_KEY_CRC, crc16);
-	} else { /* not private key */
+        /* set src16 */
+        pke_write(PKE_KEY_CRC, crc16);
+    } else { /* not private key */
         if (memcpy_s(outkey, SM2_LEN_IN_BYTE, inkey, klen) != EOK) {
-			return;
-		}
-	}
+            return;
+        }
+    }
 
     /* select cpu key */
     pke_write(PKE_OTP_KEY_SEL, PKE_SECURE_FALSE);
@@ -480,7 +480,7 @@ static int32_t drv_pke_clean_ram(void)
 {
     int32_t ret;
 
-	ret = drv_pke_wait_free();
+    ret = drv_pke_wait_free();
     if (ret != TD_SUCCESS) {
         return ret;
     }
@@ -488,7 +488,7 @@ static int32_t drv_pke_clean_ram(void)
     drv_pke_set_mode(PKE_MODE_CLR_RAM, 0);
     drv_pke_start();
 
-	ret = drv_pke_wait_done();
+    ret = drv_pke_wait_done();
     if (ret != TD_SUCCESS) {
         return ret;
     }
@@ -531,18 +531,18 @@ int32_t drv_ifep_rsa_exp_mod(const unsigned char *n, const unsigned char *k,
 
     drv_pke_set_mode(PKE_MODE_EXP_MOD, klen);
 
-	/* key xor random */
-	err = memcpy_s(key, RSA_TOTAL_LEN, k, klen);
-	if (err != EOK) {
+    /* key xor random */
+    err = memcpy_s(key, RSA_TOTAL_LEN, k, klen);
+    if (err != EOK) {
         gsl_free(key);
         return TD_FAILURE;
     }
 
-	err = memcpy_s(key + klen, RSA_TOTAL_LEN - klen, n, klen);
-	if (err != EOK) {
+    err = memcpy_s(key + klen, RSA_TOTAL_LEN - klen, n, klen);
+    if (err != EOK) {
         gsl_free(key);
-		return TD_FAILURE;
-	}
+        return TD_FAILURE;
+    }
 
     drv_pke_set_key(key, key, klen + klen, &random, 0);
 
@@ -554,18 +554,18 @@ int32_t drv_ifep_rsa_exp_mod(const unsigned char *n, const unsigned char *k,
     /* start */
     drv_pke_start();
 
-	ret = drv_pke_wait_done();
+    ret = drv_pke_wait_done();
     if (ret != TD_SUCCESS) {
-		goto _exit;
-	}
+        goto _exit;
+    }
 
     drv_pke_get_ram(PKE_RAM_TYPE_RRAM, 0, out, klen);
 
 _exit:
-	gsl_free(key);
-	ret1 = drv_pke_clean_ram();
-	if ((ret == TD_SUCCESS) && (ret1 != TD_SUCCESS))
-		ret = ret1;
+    gsl_free(key);
+    ret1 = drv_pke_clean_ram();
+    if ((ret == TD_SUCCESS) && (ret1 != TD_SUCCESS))
+        ret = ret1;
 
     return ret;
 }

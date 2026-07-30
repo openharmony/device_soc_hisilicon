@@ -16,7 +16,7 @@
 
 #include "ddr_training_impl.h"
 
-#define DDR_MPR_TRAINING
+#define __MPR_TRAINING__
 #ifdef DDR_MPR_TRAINING_CONFIG
 /* Switch MPR function */
 static void ddr_mpr_switch(unsigned int base_dmc, int val)

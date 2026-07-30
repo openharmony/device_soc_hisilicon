@@ -219,24 +219,24 @@ uint32_t handshake(const usb3_device_t *dev, const volatile uint32_t *ptr, uint3
     return 0;
 }
 
-void usb3_fill_desc(const usb3_desc_param_t *param)
+void usb3_fill_desc(usb3_dma_desc_t *desc, uint32_t dma_addr, uint32_t dma_len, uint32_t stream,
+            uint32_t type,
+            uint32_t ctrlbits, int own)
 {
-    usb3_dma_desc_t *desc = param->desc;
-    uint32_t dma_addr = map_to_dma_addr(param->dma_addr);
+    dma_addr = map_to_dma_addr(dma_addr);
 
     desc->bptl = (uint32_t)(dma_addr & 0xffffffffU);
     desc->bpth = 0;
-    desc->status = param->dma_len << USB3_DSCSTS_XFRCNT_SHIFT;
+    desc->status = dma_len << USB3_DSCSTS_XFRCNT_SHIFT;
 
     /* Note: If type is 0, leave original control bits intact (for isoc) */
-    if (param->type) {
-        desc->control = param->type << USB3_DSCCTL_TRBCTL_SHIFT;
-    }
+    if (type)
+        desc->control = type << USB3_DSCCTL_TRBCTL_SHIFT;
 
-    desc->control |= (param->stream << USB3_DSCCTL_STRMID_SOFN_SHIFT) | param->ctrlbits;
+    desc->control |= (stream << USB3_DSCCTL_STRMID_SOFN_SHIFT) | ctrlbits;
 
     /* Must do this last! */
-    if (param->own) {
+    if (own) {
         desc->control |= USB3_DSCCTL_HWO_BIT;
     }
 }
@@ -407,8 +407,7 @@ void usb3_ep0_activate(usb3_pcd_t *pcd)
 
 void usb3_ep_activate(usb3_pcd_t *pcd, usb3_pcd_ep_t *ep)
 {
-    usb3_dev_ep_regs_t *ep_reg;
-    usb3_dev_ep_regs_t *ep0_reg;
+    usb3_dev_ep_regs_t *ep_reg, *ep0_reg;
     uint32_t depcfg0;
     uint32_t depcfg1;
     uint32_t depcfg2 = 0;
@@ -502,11 +501,9 @@ void usb3_ep0_out_start(usb3_pcd_t *pcd)
     desc_dma = (uint32_t)(long)pcd->ep0_setup_desc;
 
     /* DMA Descriptor setup */
-    usb3_fill_desc(&(usb3_desc_param_t) {
-        desc, (uint32_t)(long)pcd->ep0_setup_pkt, pcd->ep0.maxpacket, 0,
+    usb3_fill_desc(desc, (uint32_t)(long)pcd->ep0_setup_pkt, pcd->ep0.maxpacket, 0,
         USB3_DSCCTL_TRBCTL_SETUP,
-        USB3_DSCCTL_IOC_BIT | USB3_DSCCTL_ISP_BIT | USB3_DSCCTL_LST_BIT, 1
-    });
+               USB3_DSCCTL_IOC_BIT | USB3_DSCCTL_ISP_BIT | USB3_DSCCTL_LST_BIT, 1);
 
     ep_reg = &pcd->out_ep_regs[0];
 
@@ -515,8 +512,11 @@ void usb3_ep0_out_start(usb3_pcd_t *pcd)
     pcd->ep0.tri_out = tri;
 }
 
-static void usb3_core_soft_reset(usb3_dev_global_regs_t *dev_global_regs)
+void usb3_core_dev_init(usb3_device_t *dev)
 {
+    usb3_core_global_regs_t *global_regs = dev->core_global_regs;
+    usb3_pcd_t *pcd = &dev->pcd;
+    usb3_dev_global_regs_t *dev_global_regs = pcd->dev_global_regs;
     uint32_t temp_t;
 
     do {
@@ -532,13 +532,8 @@ static void usb3_core_soft_reset(usb3_dev_global_regs_t *dev_global_regs)
         /* Wait for at least 3 PHY clocks */
         mdelay(1);
     } while (0);
-}
 
-static void usb3_core_phy_init(usb3_device_t *dev)
-{
-    usb3_core_global_regs_t *global_regs = dev->core_global_regs;
-    usb3_pcd_t *pcd = &dev->pcd;
-    uint32_t temp_t;
+    pcd->link_state = 0;
 
     /* Set Turnaround Time = 9 (8-bit UTMI+ / ULPI) */
     temp_t = usb3_rd32(&global_regs->gusb2phycfg[0]);
@@ -558,31 +553,28 @@ static void usb3_core_phy_init(usb3_device_t *dev)
 
     temp_t = 0x13802004;
     usb3_wr32(&global_regs->gctl, temp_t);
-}
 
-static void usb3_core_event_init(usb3_device_t *dev)
-{
     usb_info("evnt buffer addr: 0x%x\n", dev->event_buf);
+
     usb3_init_eventbuf(dev, USB3_EVENT_BUF_SIZE, (uint32_t)(long)dev->event_buf);
     dev->event_ptr = dev->event_buf;
-}
 
-static void usb3_core_config_dcfg(usb3_pcd_t *pcd)
-{
-    uint32_t temp_t;
-
+    /* Set speed to Super */
     temp_t = usb3_rd32(&pcd->dev_global_regs->dcfg);
     temp_t &= ~(USB3_DCFG_DEVSPD_BITS << USB3_DCFG_DEVSPD_SHIFT);
     temp_t |= USB3_SPEED_HS_PHY_30MHZ_OR_60MHZ << USB3_DCFG_DEVSPD_SHIFT;
+    usb3_wr32(&pcd->dev_global_regs->dcfg, temp_t);
+
+    /* If LPM enable was requested */
+    temp_t = usb3_rd32(&pcd->dev_global_regs->dcfg);
     temp_t |= USB3_DCFG_LPM_CAP_BIT;
+    usb3_wr32(&pcd->dev_global_regs->dcfg, temp_t); /* bspmm 0x1018c700 0x480804 */
+
+    /* Set Nump */
+    temp_t = usb3_rd32(&pcd->dev_global_regs->dcfg);
     temp_t &= ~USB3_DCFG_NUM_RCV_BUF_BITS;
     temp_t |= 16 << USB3_DCFG_NUM_RCV_BUF_SHIFT; // Nump == 16
     usb3_wr32(&pcd->dev_global_regs->dcfg, temp_t);
-}
-
-static void usb3_core_start_ep0(usb3_pcd_t *pcd)
-{
-    uint32_t temp_t;
 
     usb3_set_address(pcd, 0);
 
@@ -605,18 +597,6 @@ static void usb3_core_start_ep0(usb3_pcd_t *pcd)
     temp_t = usb3_rd32(&pcd->dev_global_regs->dctl);
     temp_t |= USB3_DCTL_RUN_STOP_BIT;
     usb3_wr32(&pcd->dev_global_regs->dctl, temp_t);
-}
-
-void usb3_core_dev_init(usb3_device_t *dev)
-{
-    usb3_pcd_t *pcd = &dev->pcd;
-
-    usb3_core_soft_reset(pcd->dev_global_regs);
-    pcd->link_state = 0;
-    usb3_core_phy_init(dev);
-    usb3_core_event_init(dev);
-    usb3_core_config_dcfg(pcd);
-    usb3_core_start_ep0(pcd);
 }
 
 void usb3_pcd_init(usb3_device_t *dev)
@@ -672,7 +652,7 @@ void usb3_init(usb3_device_t *dev)
 #define USB2_1_PHY_ATOP_TEST_ADDR_OFFSET (0xc)
 #define USB2_1_PHY_ATOP_TEST_EOP_DOWN (0x1 << 31)
 #define USB2_1_PHY_ATOP_TEST_BG (0x1 << 27)
-#define USB2_1_PHY_ATOP_TEST_1P8V (0x1 << 26)
+#define USB2_1_PHY_ATOP_TEST_1V8 (0x1 << 26)
 #define USB2_1_PHY_TX_REF_VOL_ADDR_OFFSET (0x10)
 #define USB2_1_PHY_TX_REF_VOL_MASK (0x00000070)
 #define USB2_1_PHY_TX_REF_VOL_410MV ((0x3 << 4) & USB2_1_PHY_TX_REF_VOL_MASK)
@@ -771,26 +751,7 @@ unsigned int usb2_otg_ram_clk_sel(void)
     return (reg & OTP_USB2_RAM_CLK_SEL_MASK) ? (1) : (0);
 }
 
-static void usb2_phy_update(unsigned int offset, unsigned int mask, unsigned int val)
-{
-    unsigned int reg;
-
-    reg = readl(USB2_1_PHY_BASE_ADDR + offset);
-    reg &= ~mask;
-    reg |= val;
-    writel(reg, USB2_1_PHY_BASE_ADDR + offset);
-}
-
-static void usb2_phy_set_bits(unsigned int offset, unsigned int bits)
-{
-    unsigned int reg;
-
-    reg = readl(USB2_1_PHY_BASE_ADDR + offset);
-    reg |= bits;
-    writel(reg, USB2_1_PHY_BASE_ADDR + offset);
-}
-
-static void usb2_phy_trim_config(void)
+void xvpv100_phy_config(void)
 {
     unsigned int reg;
     unsigned int otp_val;
@@ -798,77 +759,94 @@ static void usb2_phy_trim_config(void)
     reg = readl(REG_BASE_OTP_READ_ONLY + OTP_USB2_PO_PHY_INFO_ADDR_OFFSET);
     otp_val = (reg >> OTP_USB2_PHY1_TRIM_OFFSET) & OTP_USB2_PHY1_TRIM_MASK;
     if ((otp_val >= OTP_USB2_PHY1_TRIM_MIN) && (otp_val <= OTP_USB2_PHY1_TRIM_MAX)) {
-        usb2_phy_update(USB2_1_PHY_TRIM_ADDR_OFFSET, USB2_1_PHY_TRIM_MASK, usb2_1_phy_trim_val(otp_val));
+        reg = readl(USB2_1_PHY_BASE_ADDR + USB2_1_PHY_TRIM_ADDR_OFFSET);
+        reg &= ~USB2_1_PHY_TRIM_MASK;
+        reg |= usb2_1_phy_trim_val(otp_val);
+        writel(reg, USB2_1_PHY_BASE_ADDR + USB2_1_PHY_TRIM_ADDR_OFFSET);
     }
-}
-
-static void usb2_phy_eye_config(unsigned int otp_val)
-{
-    unsigned int atop_bits;
-
-    switch (otp_val) {
-        case otp_usb2_eye_val(0):
-            break; // do nothing
-
-        case otp_usb2_eye_val(1):
-            usb2_phy_update(USB2_1_PHY_DISCONNECT_ADDR_OFFSET, USB2_1_PHY_DISCONNECT_MASK,
-                USB2_1_PHY_DISCONNECT_620MV);
-            usb2_phy_update(USB2_1_PHY_CURRENT_BIAS_ADDR_OFFSET, USB2_1_PHY_CURRENT_BIAS_MASK,
-                USB2_1_PHY_CURRENT_BIAS_1DOT25);
-            usb2_phy_update(USB2_1_PHY_TX_REF_VOL_ADDR_OFFSET, USB2_1_PHY_TX_REF_VOL_MASK,
-                USB2_1_PHY_TX_REF_VOL_410MV);
-            usb2_phy_set_bits(USB2_1_PHY_ATOP_TEST_ADDR_OFFSET, USB2_1_PHY_ATOP_TEST_EOP_DOWN);
-            break;
-
-        case otp_usb2_eye_val(2):
-            usb2_phy_update(USB2_1_PHY_DISCONNECT_ADDR_OFFSET, USB2_1_PHY_DISCONNECT_MASK,
-                USB2_1_PHY_DISCONNECT_640MV);
-            usb2_phy_update(USB2_1_PHY_CURRENT_BIAS_ADDR_OFFSET, USB2_1_PHY_CURRENT_BIAS_MASK,
-                USB2_1_PHY_CURRENT_BIAS_1DOT25);
-            usb2_phy_update(USB2_1_PHY_TX_REF_VOL_ADDR_OFFSET, USB2_1_PHY_TX_REF_VOL_MASK,
-                USB2_1_PHY_TX_REF_VOL_410MV);
-            atop_bits = USB2_1_PHY_ATOP_TEST_EOP_DOWN | USB2_1_PHY_ATOP_TEST_BG;
-            usb2_phy_set_bits(USB2_1_PHY_ATOP_TEST_ADDR_OFFSET, atop_bits);
-            break;
-
-        case otp_usb2_eye_val(3):
-            usb2_phy_update(USB2_1_PHY_DISCONNECT_ADDR_OFFSET, USB2_1_PHY_DISCONNECT_MASK,
-                USB2_1_PHY_DISCONNECT_620MV);
-            usb2_phy_update(USB2_1_PHY_TX_REF_VOL_ADDR_OFFSET, USB2_1_PHY_TX_REF_VOL_MASK,
-                USB2_1_PHY_TX_REF_VOL_440MV);
-            atop_bits = USB2_1_PHY_ATOP_TEST_EOP_DOWN | USB2_1_PHY_ATOP_TEST_1P8V;
-            usb2_phy_set_bits(USB2_1_PHY_ATOP_TEST_ADDR_OFFSET, atop_bits);
-            break;
-
-        default:
-            break;
-    }
-}
-
-void xvpv100_phy_config(void)
-{
-    unsigned int reg;
-
-    /* trim setting */
-    usb2_phy_trim_config();
 
     /* config eye diagram */
     reg = readl(REG_BASE_OTP_READ_ONLY + OTP_USB2_PO_INFO_ADDR_OFFSET);
-    usb2_phy_eye_config(reg & OTP_USB2_EYE_VAL_MASK);
+    otp_val = (reg & OTP_USB2_EYE_VAL_MASK);
+    switch (otp_val) {
+    case otp_usb2_eye_val(0):
+        break; // do nothing
+
+    case otp_usb2_eye_val(1):
+        reg = readl(USB2_1_PHY_BASE_ADDR + USB2_1_PHY_DISCONNECT_ADDR_OFFSET);
+        reg &= ~USB2_1_PHY_DISCONNECT_MASK;
+        reg |= USB2_1_PHY_DISCONNECT_620MV;
+        writel(reg, USB2_1_PHY_BASE_ADDR + USB2_1_PHY_DISCONNECT_ADDR_OFFSET);
+
+        reg = readl(USB2_1_PHY_BASE_ADDR + USB2_1_PHY_CURRENT_BIAS_ADDR_OFFSET);
+        reg &= ~USB2_1_PHY_CURRENT_BIAS_MASK;
+        reg |= USB2_1_PHY_CURRENT_BIAS_1DOT25;
+        writel(reg, USB2_1_PHY_BASE_ADDR + USB2_1_PHY_CURRENT_BIAS_ADDR_OFFSET);
+
+        reg = readl(USB2_1_PHY_BASE_ADDR + USB2_1_PHY_TX_REF_VOL_ADDR_OFFSET);
+        reg &= ~USB2_1_PHY_TX_REF_VOL_MASK;
+        reg |= USB2_1_PHY_TX_REF_VOL_410MV;
+        writel(reg, USB2_1_PHY_BASE_ADDR + USB2_1_PHY_TX_REF_VOL_ADDR_OFFSET);
+
+        reg = readl(USB2_1_PHY_BASE_ADDR + USB2_1_PHY_ATOP_TEST_ADDR_OFFSET);
+        reg |= USB2_1_PHY_ATOP_TEST_EOP_DOWN;
+        writel(reg, USB2_1_PHY_BASE_ADDR + USB2_1_PHY_ATOP_TEST_ADDR_OFFSET);
+        break;
+
+    case otp_usb2_eye_val(2):
+        reg = readl(USB2_1_PHY_BASE_ADDR + USB2_1_PHY_DISCONNECT_ADDR_OFFSET);
+        reg &= ~USB2_1_PHY_DISCONNECT_MASK;
+        reg |= USB2_1_PHY_DISCONNECT_640MV;
+        writel(reg, USB2_1_PHY_BASE_ADDR + USB2_1_PHY_DISCONNECT_ADDR_OFFSET);
+
+        reg = readl(USB2_1_PHY_BASE_ADDR + USB2_1_PHY_CURRENT_BIAS_ADDR_OFFSET);
+        reg &= ~USB2_1_PHY_CURRENT_BIAS_MASK;
+        reg |= USB2_1_PHY_CURRENT_BIAS_1DOT25;
+        writel(reg, USB2_1_PHY_BASE_ADDR + USB2_1_PHY_CURRENT_BIAS_ADDR_OFFSET);
+
+        reg = readl(USB2_1_PHY_BASE_ADDR + USB2_1_PHY_TX_REF_VOL_ADDR_OFFSET);
+        reg &= ~USB2_1_PHY_TX_REF_VOL_MASK;
+        reg |= USB2_1_PHY_TX_REF_VOL_410MV;
+        writel(reg, USB2_1_PHY_BASE_ADDR + USB2_1_PHY_TX_REF_VOL_ADDR_OFFSET);
+
+        reg = readl(USB2_1_PHY_BASE_ADDR + USB2_1_PHY_ATOP_TEST_ADDR_OFFSET);
+        reg |= (USB2_1_PHY_ATOP_TEST_EOP_DOWN | USB2_1_PHY_ATOP_TEST_BG);
+        writel(reg, USB2_1_PHY_BASE_ADDR + USB2_1_PHY_ATOP_TEST_ADDR_OFFSET);
+        break;
+
+    case otp_usb2_eye_val(3):
+        reg = readl(USB2_1_PHY_BASE_ADDR + USB2_1_PHY_DISCONNECT_ADDR_OFFSET);
+        reg &= ~USB2_1_PHY_DISCONNECT_MASK;
+        reg |= USB2_1_PHY_DISCONNECT_620MV;
+        writel(reg, USB2_1_PHY_BASE_ADDR + USB2_1_PHY_DISCONNECT_ADDR_OFFSET);
+
+        reg = readl(USB2_1_PHY_BASE_ADDR + USB2_1_PHY_TX_REF_VOL_ADDR_OFFSET);
+        reg &= ~USB2_1_PHY_TX_REF_VOL_MASK;
+        reg |= USB2_1_PHY_TX_REF_VOL_440MV;
+        writel(reg, USB2_1_PHY_BASE_ADDR + USB2_1_PHY_TX_REF_VOL_ADDR_OFFSET);
+
+        reg = readl(USB2_1_PHY_BASE_ADDR + USB2_1_PHY_ATOP_TEST_ADDR_OFFSET);
+        reg |= (USB2_1_PHY_ATOP_TEST_EOP_DOWN | USB2_1_PHY_ATOP_TEST_1V8);
+        writel(reg, USB2_1_PHY_BASE_ADDR + USB2_1_PHY_ATOP_TEST_ADDR_OFFSET);
+        break;
+
+    default:
+        break;
+    }
     udelay(20); // delay 20us
 }
 
-static void usb_xvpv100_crg_default_init(void)
-{
-    /* step1 write default val */
-    writel(USB3_CRG_DEFAULT_VAL, REG_BASE_CRG + USB3_CRG_CTRL);
-    writel(USB2_1_PHY_CRG_DEFAULT_VAL, REG_BASE_CRG + USB2_1_PHY_CRG_OFFSET);
-    writel(USB3_1_PHY_CRG_DEFAULT_VAL, REG_BASE_CRG + USB3_1_PHY_CRG_OFFSET);
-}
-
-static void usb_xvpv100_crg_clock_enable(void)
+void usb_xvpv100_phy_ctrl_init(void)
 {
     unsigned int reg;
+
+    /* step1 write default val */
+    reg = USB3_CRG_DEFAULT_VAL;
+    writel(reg, REG_BASE_CRG + USB3_CRG_CTRL);
+    reg = USB2_1_PHY_CRG_DEFAULT_VAL;
+    writel(reg, REG_BASE_CRG + USB2_1_PHY_CRG_OFFSET);
+    reg = USB3_1_PHY_CRG_DEFAULT_VAL;
+    writel(reg, REG_BASE_CRG + USB3_1_PHY_CRG_OFFSET);
 
     /* step2 config CTRL_CRG & PHY_CRG */
     reg = readl(REG_BASE_CRG + USB3_CRG_CTRL);
@@ -880,11 +858,9 @@ static void usb_xvpv100_crg_clock_enable(void)
     reg &= ~(USB2_1_PHY_CRG_APB_SREQ);
     writel(reg, REG_BASE_CRG + USB2_1_PHY_CRG_OFFSET);
     udelay(100); // delay 100us
-}
 
-static void usb_xvpv100_phy_reset_release(void)
-{
-    unsigned int reg;
+    /* setp3 trim setting & eye config */
+    xvpv100_phy_config();
 
     /* step4 CRG power reset */
     reg = readl(REG_BASE_CRG + USB3_1_PHY_CRG_OFFSET);
@@ -910,11 +886,6 @@ static void usb_xvpv100_phy_reset_release(void)
     reg &= ~USB3_CRG_SRST_REQ;
     writel(reg, REG_BASE_CRG + USB3_CRG_CTRL);
     udelay(200); // delay 200us
-}
-
-static void usb_xvpv100_disable_super_speed(void)
-{
-    unsigned int reg;
 
     /* step5 Disable susper speed. just bootrom need this step */
     reg = readl(USB_P0_REG_BASE + REG_GUSB3PIPECTL0);
@@ -939,15 +910,6 @@ static void usb_xvpv100_disable_super_speed(void)
     udelay(200); // delay 200us
 }
 
-void usb_xvpv100_phy_ctrl_init(void)
-{
-    usb_xvpv100_crg_default_init();
-    usb_xvpv100_crg_clock_enable();
-    xvpv100_phy_config();
-    usb_xvpv100_phy_reset_release();
-    usb_xvpv100_disable_super_speed();
-}
-
 void usb_poll(void)
 {
     if (usb3_dev_ex != NULL) {
@@ -957,66 +919,11 @@ void usb_poll(void)
 
 static uint8_t string_manu[] = {'V', 0, 'E', 0, 'N', 0, 'D', 0, 'O', 0, 'R', 0};
 static uint8_t string_prod[] = {'U', 0, 'S', 0, 'B', 0, 'B', 0, 'u', 0, 'r', 0, 'n', 0};
-
-static void usb3_setup_dma_desc(usb3_device_t *usb3_dev)
-{
-    usb3_dev->pcd.ep0_setup_desc = (usb3_dma_desc_t *)((long)(usb3_dev->pcd.ep0_setup + 0xf) &
-                       (uint32_t)(~0xf));
-    usb3_dev->pcd.ep0_in_desc = (usb3_dma_desc_t *)((long)(usb3_dev->pcd.ep0_in + 0xf) & (uint32_t)(~0xf));
-    usb3_dev->pcd.ep0_out_desc = (usb3_dma_desc_t *)((long)(usb3_dev->pcd.ep0_out + 0xf) & (uint32_t)(~0xf));
-    usb3_dev->pcd.in_ep.ep_desc = (usb3_dma_desc_t *)((long)(usb3_dev->pcd.in_ep.epx_desc + 0xf) &
-                      (uint32_t)(~0xf));
-    usb3_dev->pcd.out_ep.ep_desc = (usb3_dma_desc_t *)((long)(usb3_dev->pcd.out_ep.epx_desc + 0xf) &
-                       (uint32_t)(~0xf));
-}
-
-static void usb3_setup_device_info(usb3_device_t *usb3_dev, struct usb_device_descriptor *usb3_dev_desc)
-{
-    usb_info("size of usb3_dev %d\n", sizeof(*usb3_dev));
-    usb3_dev->base = (volatile uint8_t *)(long)USB_P0_REG_BASE;
-    usb3_dev->string_manu_len = sizeof(string_manu);
-    usb3_dev->string_prod_len = sizeof(string_prod);
-    usb3_dev->dev_desc = usb3_dev_desc;
-    (void)memcpy_s(usb3_dev->string_manu, usb3_dev->string_manu_len, string_manu, usb3_dev->string_manu_len);
-    (void)memcpy_s(usb3_dev->string_prod, usb3_dev->string_prod_len, string_prod, usb3_dev->string_prod_len);
-    usb3_setup_dma_desc(usb3_dev);
-}
-
-static void usb3_start_once(usb3_device_t *usb3_dev)
-{
-    usb_vbus_on();
-    usb2_io_delay_init();
-    usb_xvpv100_phy_ctrl_init();
-    usb3_dev->snpsid = usb3_rd32((volatile uint32_t *)(usb3_dev->base + USB3_CORE_REG_BASE +
-                    USB3_CORE_GSNPSID_REG_OFFSET));
-    usb3_common_init(usb3_dev, usb3_dev->base + USB3_CORE_REG_BASE);
-    usb3_init(usb3_dev);
-    usb_info("usb init done\n");
-}
-
-static bool usb3_wait_configured(usb3_device_t *usb3_dev)
-{
-    unsigned long ts;
-
-    usb3_handle_event(usb3_dev);
-    ts = 2000 * timer_get_divider(); // 2000 count of timer reg
-    timer_start();
-    do {
-        /* Polling the USB3.0 event interrupt */
-        usb3_handle_event(usb3_dev);
-        if ((usb3_dev->pcd).state == USB3_STATE_CONFIGURED) {
-            break;
-        }
-    } while (timer_get_val() < ts);
-
-    return ((usb3_dev->pcd).state == USB3_STATE_CONFIGURED) ? TRUE : FALSE;
-}
-
 bool usb3_driver_init(void)
 {
     usb3_device_t *usb3_dev = NULL;
     struct usb_device_descriptor *usb3_dev_desc = NULL;
-    usb3_pcd_req_t *req = NULL;
+    unsigned long ts;
     int retries = 0;
 
     usb3_dev = gsl_malloc(sizeof(usb3_device_t));
@@ -1026,28 +933,74 @@ bool usb3_driver_init(void)
     (void)memset_s(usb3_dev, sizeof(usb3_device_t), 0, sizeof(usb3_device_t));
     usb3_dev_ex = usb3_dev;
     usb3_dev_desc = gsl_malloc(sizeof(struct usb_device_descriptor));
-    if (usb3_dev_desc == NULL) {
+    if (usb3_dev_desc == NULL)
         goto free_dev;
-    }
 
-    req = &usb3_dev->pcd.in_ep.req;
+    usb3_pcd_t *pcd = &usb3_dev->pcd;
+    usb3_pcd_ep_t *ep = &pcd->in_ep;
+    usb3_pcd_req_t *req = &ep->req;
     req->bufdma = (uint32_t *)gsl_malloc(BULK_EP_MAX_PACKET_SIZE);
-    if (req->bufdma == NULL) {
+    if (req->bufdma == NULL)
         goto free_desc;
-    }
 
-    usb3_setup_device_info(usb3_dev, usb3_dev_desc);
+    usb_info("size of usb3_dev %d\n", sizeof(*usb3_dev));
+    usb3_dev->base = (volatile uint8_t *)(long)USB_P0_REG_BASE;
+    usb3_dev->string_manu_len = sizeof(string_manu);
+    usb3_dev->string_prod_len = sizeof(string_prod);
+    usb3_dev->dev_desc = usb3_dev_desc;
+    (void)memcpy_s(usb3_dev->string_manu, usb3_dev->string_manu_len, string_manu, usb3_dev->string_manu_len);
+    (void)memcpy_s(usb3_dev->string_prod, usb3_dev->string_prod_len, string_prod, usb3_dev->string_prod_len);
+    usb3_dev->pcd.ep0_setup_desc = (usb3_dma_desc_t *)((long)(usb3_dev->pcd.ep0_setup + 0xf) &
+                       (uint32_t)(~0xf));
+    usb3_dev->pcd.ep0_in_desc = (usb3_dma_desc_t *)((long)(usb3_dev->pcd.ep0_in + 0xf) & (uint32_t)(
+                        ~0xf));
+    usb3_dev->pcd.ep0_out_desc = (usb3_dma_desc_t *)((long)(usb3_dev->pcd.ep0_out + 0xf) & (uint32_t)(
+                         ~0xf));
+    usb3_dev->pcd.in_ep.ep_desc = (usb3_dma_desc_t *)((long)(usb3_dev->pcd.in_ep.epx_desc + 0xf) &
+                      (uint32_t)(~0xf));
+    usb3_dev->pcd.out_ep.ep_desc = (usb3_dma_desc_t *)((long)(usb3_dev->pcd.out_ep.epx_desc + 0xf) &
+                       (uint32_t)(~0xf));
+
+tryagain:
+    /* USB_1_VBUS_IO_Config */
+    usb_vbus_on();
+
+    /* io delay init */
+    usb2_io_delay_init();
+
+    /* Release usb2.0 controller */
+    usb_xvpv100_phy_ctrl_init();
+
+    /* Get usb3.0 version number */
+    usb3_dev->snpsid =
+        usb3_rd32((volatile uint32_t *)(usb3_dev->base + USB3_CORE_REG_BASE +
+                        USB3_CORE_GSNPSID_REG_OFFSET));
+
+    /* Initialize usb3.0 core */
+    usb3_common_init(usb3_dev, usb3_dev->base + USB3_CORE_REG_BASE);
+
+    /* Initialize usb3.0 pcd */
+    usb3_init(usb3_dev);
+
+    usb_info("usb init done\n");
+
+    usb3_handle_event(usb3_dev);
+    ts = 2000 * timer_get_divider(); // 2000 count of timer reg
+    timer_start();
     do {
-        usb3_start_once(usb3_dev);
-        if (usb3_wait_configured(usb3_dev)) {
-            return TRUE;
-        }
-        retries++;
-    } while (((usb3_dev->pcd).state == USB3_STATE_DEFAULT) && (retries < USB3_START_MAX_RETRIES));
+        /* Polling the USB3.0 event interrupt */
+        usb3_handle_event(usb3_dev);
+        if ((usb3_dev->pcd).state == USB3_STATE_CONFIGURED)
+            break;
+    } while (timer_get_val() < ts);
 
-    if ((usb3_dev->pcd).state == USB3_STATE_CONFIGURED) {
-        return TRUE;
+    if (((usb3_dev->pcd).state == USB3_STATE_DEFAULT) && (retries < 2)) { // retry 2 times
+        retries++;
+        goto tryagain;
     }
+
+    if ((usb3_dev->pcd).state == USB3_STATE_CONFIGURED)
+        return TRUE;
 
 free_dma:
     gsl_free(req->bufdma);

@@ -16,7 +16,7 @@
 
 #include "ddr_training_impl.h"
 
-#define DDR_PCODE_TRAINING
+#define __PCODE_TRAINING__
 #ifdef DDR_PCODE_TRAINING_CONFIG
 /* Set pcode value to register IMPSTATUS and DDR_PHY_IMP_STATUS1 */
 static void ddr_pcode_set_value(unsigned int base_phy, unsigned int pcode_value)

@@ -17,7 +17,7 @@
 #include "ddr_interface.h"
 #include "ddr_training_impl.h"
 
-#define DDR_TRAINING_CONSOLE
+#define __DDR_TRAINING_CONSOLE__
 #ifdef DDR_TRAINING_CONSOLE_CONFIG
 
 #define DDR_UART_BASE_REG               0x12090000

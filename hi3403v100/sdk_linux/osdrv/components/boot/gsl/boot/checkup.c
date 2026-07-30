@@ -359,32 +359,32 @@ static int confirm_signature_value(const uint8_t *key_n, const uint8_t *key_e, c
     uint8_t *key = NULL;
 
     key = (uint8_t *)gsl_malloc(RSA_TOTAL_LEN);
-	if (key == NULL)
-		return TD_FAILURE;
-
-	err = memset_s(key, RSA_TOTAL_LEN, 0, RSA_TOTAL_LEN);
-	if (err != EOK) {
-        gsl_free(key);
+    if (key == NULL)
         return TD_FAILURE;
-	}
 
-	err = memcpy_s(key, RSA_TOTAL_LEN, key_n, RSA_4096_LEN);
-	if (err != EOK) {
-        gsl_free(key);
-        return TD_FAILURE;
-	}
-
-	err = memcpy_s(key + RSA_TOTAL_LEN - RSA_E_LEN, RSA_E_LEN, key_e, RSA_E_LEN);
-	if (err != EOK) {
+    err = memset_s(key, RSA_TOTAL_LEN, 0, RSA_TOTAL_LEN);
+    if (err != EOK) {
         gsl_free(key);
         return TD_FAILURE;
     }
 
-	ret = secure_authenticate(key, data, data_len, signature);
-	if (ret != TD_SUCCESS) {
+    err = memcpy_s(key, RSA_TOTAL_LEN, key_n, RSA_4096_LEN);
+    if (err != EOK) {
         gsl_free(key);
         return TD_FAILURE;
-	}
+    }
+
+    err = memcpy_s(key + RSA_TOTAL_LEN - RSA_E_LEN, RSA_E_LEN, key_e, RSA_E_LEN);
+    if (err != EOK) {
+        gsl_free(key);
+        return TD_FAILURE;
+    }
+
+    ret = secure_authenticate(key, data, data_len, signature);
+    if (ret != TD_SUCCESS) {
+        gsl_free(key);
+        return TD_FAILURE;
+    }
 
     gsl_free(key);
 
@@ -410,15 +410,17 @@ int handle_bootloader_key_area()
         failure_process();
     }
 
-    ret = confirm_signature_value(oem_root_public_key->modulus,
+    ret = confirm_signature_value(
+        oem_root_public_key->modulus,
         oem_root_public_key->exponent,
         (uintptr_t)bootloader_key_area,
         (uint32_t)sizeof(bootloader_key_area_s) - RSA_4096_LEN,
-        (uint8_t *)bootloader_key_area->bootloader_key_sig);
-	if ((ret != TD_SUCCESS) && (is_scs_enable() == AUTH_SUCCESS)) {
-		err_print('5', '2');
-		failure_process();
-	}
+        (uint8_t *)bootloader_key_area->bootloader_key_sig
+    );
+    if ((ret != TD_SUCCESS) && (is_scs_enable() == AUTH_SUCCESS)) {
+        err_print('5', '2');
+        failure_process();
+    }
 
     ret = check_bootloader_key_area_msid(bootloader_key_area);
     if ((ret != TD_SUCCESS) && (is_scs_enable() == AUTH_SUCCESS)) {
@@ -460,11 +462,13 @@ int handle_bootloader_params_area()
     bootloader_params_area = (bootloader_params_area_s *)(uintptr_t)(VENDOR_ROOT_PUBLIC_KEY_ADDR +
                  BOOTLOADER_PARAMS_AREA_ADDR_OFFSET + gsl_code_area_len);
 
-    ret = confirm_signature_value(bootloader_key_area->modulus,
+    ret = confirm_signature_value(
+        bootloader_key_area->modulus,
         bootloader_key_area->exponent,
         (uintptr_t)bootloader_params_area,
         (uint32_t)sizeof(bootloader_params_area_s) - RSA_4096_LEN,
-        (uint8_t *)bootloader_params_area->bootloader_params_sig);
+        (uint8_t *)bootloader_params_area->bootloader_params_sig
+    );
     if ((ret != TD_SUCCESS) && (is_scs_enable() == AUTH_SUCCESS)) {
         err_print('6', '1');
         failure_process();
@@ -543,89 +547,11 @@ static int obtain_bootloader_code_area_info(bootloader_code_area_info_s *bootloa
     return TD_SUCCESS;
 }
 
-static void bootloader_verify_third_party(const bootloader_code_area_info_s *bootloader_info)
-{
-    int ret;
-
-    ret = confirm_signature_value(bootloader_info->gsl_third_party_key->modulus,
-        bootloader_info->gsl_third_party_key->exponent,
-        bootloader_info->boot_area_addr,
-        (uint32_t)(bootloader_info->checked_area_len),
-        (uint8_t *)(uintptr_t)(bootloader_info->boot_third_party_sig_addr));
-    if ((ret != TD_SUCCESS) && (is_double_sign_en_enable() == AUTH_SUCCESS)) {
-        err_print('9', '2');
-        failure_process();
-    }
-}
-
-static void bootloader_decrypt_if_needed(const bootloader_code_area_info_s *bootloader_info)
-{
-	iv_key_info_s iv_key_info = {0};
-
-    if (AUTH_SUCCESS == check_bootloader_code_area_enc_flag(
-        bootloader_info->bootloader_params_area)) {
-        iv_key_info.iv = bootloader_info->bootloader_params_area->boot_iv;
-        iv_key_info.prot_key_l1_enc =
-			bootloader_info->bootloader_params_area->boot_protection_key_l1_enc;
-        iv_key_info.prot_key_l2_enc =
-			bootloader_info->bootloader_params_area->boot_protection_key_l2_enc;
-        decrypt_field(
-            (uintptr_t)bootloader_info->boot_code_addr,
-            bootloader_info->checked_area_len - BOOTLOADER_BOOT_HEAD_SIZE,
-            KLAD_BOOT,
-            iv_key_info);
-    }
-}
-
-static void bootloader_verify_oem(const bootloader_code_area_info_s *bootloader_info)
-{
-    int ret;
-
-    ret = confirm_signature_value(bootloader_info->bootloader_key_area->modulus,
-        bootloader_info->bootloader_key_area->exponent,
-        bootloader_info->boot_area_addr,
-        (uint32_t)(bootloader_info->checked_area_len),
-        (uint8_t *)(uintptr_t)(bootloader_info->boot_area_addr + bootloader_info->checked_area_len));
-    if ((ret != TD_SUCCESS) && (is_scs_enable() == AUTH_SUCCESS)) {
-        err_print('9', '3');
-        failure_process();
-    }
-}
-
-static void bootloader_check_metadata(const bootloader_code_area_info_s *bootloader_info)
-{
-    int ret;
-
-    ret = check_bootloader_code_area_msid(bootloader_info->boot_msid_version);
-    if ((ret != TD_SUCCESS) && (is_scs_enable() == AUTH_SUCCESS)) {
-        err_print('9', '4');
-        failure_process();
-    }
-
-    ret = check_bootloader_code_area_version(bootloader_info->boot_msid_version);
-    if ((ret != TD_SUCCESS) && (is_scs_enable() == AUTH_SUCCESS)) {
-        err_print('9', '5');
-        failure_process();
-    }
-
-    ret = check_bootloader_code_area_id(*(unsigned int *)(uintptr_t)bootloader_info->boot_code_id_addr);
-    if ((ret != TD_SUCCESS) && (is_scs_enable() == AUTH_SUCCESS)) {
-        err_print('9', '6');
-        failure_process();
-    }
-
-    ret = check_bootloader_code_area_structure_version(*(unsigned int *)
-        (uintptr_t)bootloader_info->boot_structure_version_addr);
-    if ((ret != TD_SUCCESS) && (is_scs_enable() == AUTH_SUCCESS)) {
-        err_print('9', '7');
-        failure_process();
-    }
-}
-
 int handle_bootloader_code_area()
 {
-	int ret;
-	bootloader_code_area_info_s bootloader_info = {0};
+    int ret;
+    bootloader_code_area_info_s bootloader_info = {0};
+    iv_key_info_s iv_key_info = {0};
 
     ret = obtain_bootloader_code_area_info(&bootloader_info);
     if (ret != TD_SUCCESS) {
@@ -633,11 +559,71 @@ int handle_bootloader_code_area()
         failure_process();
     }
 
-    bootloader_verify_third_party(&bootloader_info);
-    bootloader_decrypt_if_needed(&bootloader_info);
-    bootloader_verify_oem(&bootloader_info);
-    bootloader_check_metadata(&bootloader_info);
-	return TD_SUCCESS;
+    ret = confirm_signature_value(
+        bootloader_info.gsl_third_party_key->modulus,
+        bootloader_info.gsl_third_party_key->exponent,
+        bootloader_info.boot_area_addr,
+        (uint32_t)(bootloader_info.checked_area_len),
+        (uint8_t *)(uintptr_t)(bootloader_info.boot_third_party_sig_addr)
+    );
+    if ((ret != TD_SUCCESS) && (is_double_sign_en_enable() == AUTH_SUCCESS)) {
+        err_print('9', '2');
+        failure_process();
+    }
+
+    if (AUTH_SUCCESS == check_bootloader_code_area_enc_flag(
+            bootloader_info.bootloader_params_area)) {
+        iv_key_info.iv = bootloader_info.bootloader_params_area->boot_iv;
+        iv_key_info.prot_key_l1_enc =
+            bootloader_info.bootloader_params_area->boot_protection_key_l1_enc;
+        iv_key_info.prot_key_l2_enc =
+            bootloader_info.bootloader_params_area->boot_protection_key_l2_enc;
+        decrypt_field(
+            (uintptr_t)bootloader_info.boot_code_addr,
+            bootloader_info.checked_area_len - BOOTLOADER_BOOT_HEAD_SIZE,
+            KLAD_BOOT,
+            iv_key_info
+        );
+    }
+
+    ret = confirm_signature_value(
+        bootloader_info.bootloader_key_area->modulus,
+        bootloader_info.bootloader_key_area->exponent,
+        bootloader_info.boot_area_addr,
+        (uint32_t)(bootloader_info.checked_area_len),
+        (uint8_t *)(uintptr_t)(bootloader_info.boot_area_addr +
+                         bootloader_info.checked_area_len));
+    if ((ret != TD_SUCCESS) && (is_scs_enable() == AUTH_SUCCESS)) {
+        err_print('9', '3');
+        failure_process();
+    }
+
+    ret = check_bootloader_code_area_msid(bootloader_info.boot_msid_version);
+    if ((ret != TD_SUCCESS) && (is_scs_enable() == AUTH_SUCCESS)) {
+        err_print('9', '4');
+        failure_process();
+    }
+
+    ret = check_bootloader_code_area_version(bootloader_info.boot_msid_version);
+    if ((ret != TD_SUCCESS) && (is_scs_enable() == AUTH_SUCCESS)) {
+        err_print('9', '5');
+        failure_process();
+    }
+
+    ret = check_bootloader_code_area_id(*(unsigned int *)(uintptr_t)bootloader_info.boot_code_id_addr);
+    if ((ret != TD_SUCCESS) && (is_scs_enable() == AUTH_SUCCESS)) {
+        err_print('9', '6');
+        failure_process();
+    }
+
+    ret = check_bootloader_code_area_structure_version(*(unsigned int *)
+            (uintptr_t)bootloader_info.boot_structure_version_addr);
+    if ((ret != TD_SUCCESS) && (is_scs_enable() == AUTH_SUCCESS)) {
+        err_print('9', '7');
+        failure_process();
+    }
+
+    return TD_SUCCESS;
 }
 
 static void decrypt_field(uintptr_t field_addr, size_t len, hpp_keyladder_sel keyladder,
@@ -796,11 +782,13 @@ int handle_tee_key_area()
         return TD_FAILURE;
     }
 
-    ret = confirm_signature_value(gsl_key_area->modulus,
+    ret = confirm_signature_value(
+        gsl_key_area->modulus,
         gsl_key_area->exponent,
         (uint32_t)(uintptr_t)tee_key_area,
         (uint32_t)(sizeof(tee_key_area_s) - RSA_4096_LEN),
-        (uint8_t *)tee_key_area->tee_key_sig);
+        (uint8_t *)tee_key_area->tee_key_sig
+    );
     if (ret != TD_SUCCESS) {
         err_print('a', '1');
         return TD_FAILURE;
@@ -896,8 +884,16 @@ int handle_atf_area()
     return TD_SUCCESS;
 }
 
-static int tee_copy_code_area(uintptr_t area_addr, size_t area_len)
+int handle_tee_code_area()
 {
+    int ret;
+    tee_key_area_s *tee_key_area = (tee_key_area_s *)g_tee_img_sec_addr;
+    uintptr_t area_addr = ATF_AREA_ADDR + tee_key_area->atf_area_len;
+    size_t area_len = tee_key_area->tee_code_area_len;
+    uintptr_t optee_offset = TEE_CODE_AREA_HEAD_SIZE + sizeof(struct optee_header);
+    size_t optee_len = area_len - TEE_CODE_AREA_NON_CODE_SZIE - sizeof(struct optee_header);
+    iv_key_info_s iv_key_info = {0};
+
     if (area_len < (RSA_4096_LEN + RSA_4096_LEN)) {
         err_print('c', '0');
         return TD_FAILURE;
@@ -907,38 +903,21 @@ static int tee_copy_code_area(uintptr_t area_addr, size_t area_len)
         err_print('c', '1');
         return TD_FAILURE;
     }
-    return TD_SUCCESS;
-}
-
-static int tee_verify_third_party(size_t area_len)
-{
-    int ret;
 
     ret = confirm_signature_value(((gsl_third_party_key_s *)GSL_THIRD_PARTY_KEY_ADDR)->modulus,
-        ((gsl_third_party_key_s *)GSL_THIRD_PARTY_KEY_ADDR)->exponent,
-        (uint32_t)TEE_DEC_ADDR, (uint32_t)(area_len - (RSA_4096_LEN + RSA_4096_LEN)),
-        (uint8_t *)(TEE_DEC_ADDR + area_len - RSA_4096_LEN));
+            ((gsl_third_party_key_s *)GSL_THIRD_PARTY_KEY_ADDR)->exponent,
+            (uint32_t)TEE_DEC_ADDR, (uint32_t)(area_len - (RSA_4096_LEN + RSA_4096_LEN)),
+            (uint8_t *)(TEE_DEC_ADDR + area_len - RSA_4096_LEN));
     if ((ret != TD_SUCCESS) && (is_double_sign_en_enable() == AUTH_SUCCESS)) {
         err_print('c', '2');
         return TD_FAILURE;
     }
-    return TD_SUCCESS;
-}
-
-static void tee_decrypt_code_area(const tee_key_area_s *tee_key_area, size_t area_len)
-{
-    iv_key_info_s iv_key_info = {0};
 
     iv_key_info.iv = tee_key_area->tee_iv;
     iv_key_info.prot_key_l1_enc = tee_key_area->tee_protection_key_l1_enc;
     iv_key_info.prot_key_l2_enc = tee_key_area->tee_protection_key_l2_enc;
     decrypt_field(TEE_DEC_ADDR + TEE_CODE_AREA_HEAD_SIZE, area_len - TEE_CODE_AREA_NON_CODE_SZIE,
         KLAD_TEE, iv_key_info);
-}
-
-static int tee_verify_oem(const tee_key_area_s *tee_key_area, size_t area_len)
-{
-    int ret;
 
     ret = confirm_signature_value(tee_key_area->modulus, tee_key_area->exponent,
         (uint32_t)TEE_DEC_ADDR, (uint32_t)(area_len - (RSA_4096_LEN + RSA_4096_LEN)),
@@ -958,41 +937,12 @@ static int tee_verify_oem(const tee_key_area_s *tee_key_area, size_t area_len)
         err_print('c', '5');
         return TD_FAILURE;
     }
-    return TD_SUCCESS;
-}
 
-static int tee_copy_optee(size_t optee_offset, size_t optee_len)
-{
-    if (memcpy_s((void *)BL32_BASE, optee_len, (void *)TEE_DEC_ADDR + optee_offset, optee_len) != EOK) {
+    if (memcpy_s((void *)BL32_BASE, optee_len,
+             (void *)TEE_DEC_ADDR + optee_offset, optee_len) != EOK) {
         err_print('c', '6');
         return TD_FAILURE;
     }
+
     return TD_SUCCESS;
-}
-
-int handle_tee_code_area()
-{
-	tee_key_area_s *tee_key_area = (tee_key_area_s *)g_tee_img_sec_addr;
-	uintptr_t area_addr = ATF_AREA_ADDR + tee_key_area->atf_area_len;
-	size_t area_len = tee_key_area->tee_code_area_len;
-	uintptr_t optee_offset = TEE_CODE_AREA_HEAD_SIZE + sizeof(struct optee_header);
-	size_t optee_len = area_len - TEE_CODE_AREA_NON_CODE_SZIE - sizeof(struct optee_header);
-
-    if (tee_copy_code_area(area_addr, area_len) != TD_SUCCESS) {
-		return TD_FAILURE;
-	}
-
-    if (tee_verify_third_party(area_len) != TD_SUCCESS) {
-		return TD_FAILURE;
-	}
-
-    tee_decrypt_code_area(tee_key_area, area_len);
-    if (tee_verify_oem(tee_key_area, area_len) != TD_SUCCESS) {
-		return TD_FAILURE;
-	}
-
-    if (tee_copy_optee(optee_offset, optee_len) != TD_SUCCESS) {
-		return TD_FAILURE;
-	}
-	return TD_SUCCESS;
 }

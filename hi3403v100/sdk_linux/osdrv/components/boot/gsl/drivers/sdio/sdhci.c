@@ -30,8 +30,11 @@ int sdhci_check_int_status(uint32_t mask, uint32_t timeout)
     unsigned int wait_time =  timeout * timer_get_divider();
 
     timer_start();
+	for (;;) {
     reg = sdhci_readl(SDHCI_INT_STATUS);
-    while ((reg & mask) == 0) {
+		if (reg & mask) {
+			break;
+		}
         if (timer_get_val() > wait_time) {
             debug_printf("wait int status time out, reg = 0x%x, mask = 0x%x\n", reg, mask);
             return -1;
@@ -40,7 +43,6 @@ int sdhci_check_int_status(uint32_t mask, uint32_t timeout)
             debug_printf("int err: reg = 0x%x\n", reg);
             return -1;
         }
-        reg = sdhci_readl(SDHCI_INT_STATUS);
     }
 
     return 0;
@@ -308,7 +310,7 @@ int32_t sdhci_read_boot_data(uint32_t data_addr, uint32_t read_block, size_t rea
     uint32_t blocks = 0;
     int ret;
 
-    while (blocks < read_block) {
+	while (1) {
         ret = sdhci_check_int_status(SDHCI_INT_DATA_AVAIL, 2000); /* timeout 2000ms */
         if (ret) {
             debug_printf("wait data available int time out\n");
@@ -321,6 +323,8 @@ int32_t sdhci_read_boot_data(uint32_t data_addr, uint32_t read_block, size_t rea
             return TD_FAILURE;
 
         blocks++;
+		if (blocks == read_block)
+			break;
     }
 
     return TD_SUCCESS;

@@ -16,7 +16,7 @@
 
 #include "ddr_training_impl.h"
 
-#define DDR_LPCA_TRAINING
+#define __LPCA_TRAINING__
 #ifdef DDR_LPCA_TRAINING_CONFIG
 /* Reset address bdl training data */
 static void ddr_lpca_reset(struct ca_data_st *data)

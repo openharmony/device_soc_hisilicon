@@ -16,6 +16,7 @@
 
 #include "securecutil.h"
 
+#ifdef SECUREC_NOT_CALL_LIBC_CORE_API
 /*
  * Implementing memory data movement
  */
@@ -51,6 +52,7 @@ SECUREC_INLINE void SecUtilMemmove(void *dst, const void *src, size_t count)
         }
     }
 }
+#endif
 
 /*
  * <FUNCTION DESCRIPTION>
@@ -102,7 +104,12 @@ errno_t memmove_s(void *dest, size_t destMax, const void *src, size_t count)
     }
 
     if (count > 0) {
+#ifdef SECUREC_NOT_CALL_LIBC_CORE_API
         SecUtilMemmove(dest, src, count);
+#else
+        /* Use underlying memmove for performance consideration */
+        (void)memmove(dest, src, count);
+#endif
     }
     return EOK;
 }

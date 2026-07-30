@@ -16,7 +16,7 @@
 
 #include "ddr_training_impl.h"
 
-#define DDR_WRITE_LEVELING
+#define __WRITE_LEVELING__
 #ifdef DDR_WL_TRAINING_CONFIG
 static void ddr_bdl_add(unsigned int *raw, unsigned int val)
 {

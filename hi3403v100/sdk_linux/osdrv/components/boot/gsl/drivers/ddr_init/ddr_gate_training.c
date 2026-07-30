@@ -16,7 +16,7 @@
 
 #include "ddr_training_impl.h"
 
-#define DDR_GATE_TRAINING
+#define __GATE_TRAINING__
 #ifdef DDR_GATE_TRAINING_CONFIG
 /* Find gate phase */
 static int ddr_gate_find_phase(const struct ddr_cfg_st *cfg, struct ddr_delay_st *rdqsg)

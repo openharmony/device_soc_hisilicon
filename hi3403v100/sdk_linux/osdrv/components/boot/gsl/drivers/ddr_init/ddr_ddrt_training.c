@@ -16,7 +16,7 @@
 
 #include "ddr_training_impl.h"
 
-#define DDR_DDRT_TRAINING
+#define __DDRT__
 #ifdef DDR_DDRT_SPECIAL_CONFIG
 /* Some special DDRT need read register repeatedly */
 static unsigned int ddr_ddrt_read(unsigned int addr)

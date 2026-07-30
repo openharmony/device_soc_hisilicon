@@ -33,6 +33,7 @@ char tx_state[200];
 static unsigned int rx_addr;
 static unsigned int rx_length;
 uint32_t usb_status = 0;
+extern void invalidate_icache_all(void);
 
 int usb3_bulk_out_transfer_cmd(void *dev)
 {
@@ -49,7 +50,7 @@ int usb3_bulk_out_transfer_cmd(void *dev)
     return USB_NO_ERR;
 }
 
-void usb_tx_status_complete(void *dev)
+void usb_tx_status_complete(const void *dev)
 {
     usb3_pcd_t *pcd = (usb3_pcd_t *)dev;
     usb3_pcd_ep_t *ep = &pcd->in_ep;
@@ -72,7 +73,7 @@ void usb3_handle_protocol(void *dev)
     if (buf[0] == UHEAD) {
         char buf_tmp[9];
 
-        (void)memcpy_s(buf_tmp, sizeof(buf_tmp), buf + 1, sizeof(buf_tmp) - 1);
+		(void)memcpy_s(buf_tmp, UHEAD_BUF_LENGTH_MAX, buf + 1, UHEAD_BUF_LENGTH_MAX - 1);
         rx_addr = 0;
         rx_addr |= (buf_tmp[0x4] << 24); // 24 bit
         rx_addr |= (buf_tmp[0x5] << 16); // 16 bit
@@ -123,9 +124,8 @@ int copy_from_usb(const void *dest, size_t count)
 {
     uint32_t timerout = USB_PROC_TIME_OUT * timer_get_divider();
     uint32_t not_raw_burn = 0;
-    uint32_t copy_done = 0;
 
-    while (copy_done == 0) {
+	while (1) {
         usb_status = 0;
         timer_start();
 
@@ -146,7 +146,6 @@ int copy_from_usb(const void *dest, size_t count)
                 break;
 
             case USB_STATUS_FIN:
-                copy_done = 1;
                 if (not_raw_burn)
                     return TD_FAILURE;
                 return TD_SUCCESS;
