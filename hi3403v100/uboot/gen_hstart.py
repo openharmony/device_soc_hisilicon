@@ -25,6 +25,7 @@ MMC_DEV_ID = 0
 BLOCK_SIZE_BYTES = 512
 MAX_CHUNK_SIZE = 256 * 1024 * 1024  # 256MB per chunk to fit in most DDR configs
 
+
 def parse_size_to_bytes(size_str):
     """Converts size strings like '512K', '20M' or hex '0x1000' to integer byte counts."""
     if not size_str:
@@ -45,6 +46,7 @@ def parse_size_to_bytes(size_str):
         unit = match.group(2)
         return number * units.get(unit, 1)
     return 0
+
 
 def split_file(source_path, chunk_size, output_dir):
     """Splits a file into multiple chunks and returns a list of filenames."""
@@ -70,6 +72,7 @@ def split_file(source_path, chunk_size, output_dir):
             part_num += 1
             
     return chunk_names
+
 
 def generate_update_scripts(xml_file):
     # Determine the output base directory based on the XML file location
@@ -189,6 +192,7 @@ def generate_update_scripts(xml_file):
         f.write('\n'.join(index_script_lines) + '\n')
 
     print(f"[+] Success: Scripts and chunks generated in '{output_root}'")
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='HiSilicon hstart Script Generator')
