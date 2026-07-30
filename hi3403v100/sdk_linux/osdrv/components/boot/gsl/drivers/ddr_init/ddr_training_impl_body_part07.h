@@ -50,12 +50,12 @@ static void ddr_vref_restore_bdl(const struct ddr_cfg_st *cfg, const struct tr_d
     unsigned int rank = cfg->rank_idx;
     unsigned int byte_index;
 
-    if ((cfg->phy_idx >= DDR_PHY_NUM) || (cfg->dmc_idx >= DDR_DMC_PER_PHY_MAX))
+    if ((cfg->phy_idx >= DDR_PHY_NUM) || (cfg->dmc_idx >= DDR_DMC_PER_PHY_MAX)) {
         return;
-
-    if (get_byte_num(cfg) > DDR_PHY_BYTE_MAX)
+    }
+    if (get_byte_num(cfg) > DDR_PHY_BYTE_MAX) {
         return;
-
+    }
     for (i = 0; i < get_byte_num(cfg); i++) {
         byte_index = i + (cfg->dmc_idx << 1); /* byte index accord to phy */
         if (cfg->cur_mode == DDR_MODE_WRITE) {
@@ -93,8 +93,9 @@ static int ddr_vref_dram_set_process(unsigned int base_phy, unsigned int val, un
     count = DDR_HWR_WAIT_TIMEOUT;
     /* auto cleared to 0 after training finished */
     while (count--) {
-        if (!(reg_read(base_phy + DDR_PHY_PHYINITCTRL) & PHY_PHYINITCTRL_INIT_EN))
+        if (!(reg_read(base_phy + DDR_PHY_PHYINITCTRL) & PHY_PHYINITCTRL_INIT_EN)) {
             break;
+        }
     }
 
     if (count == 0xffffffff) {
@@ -186,12 +187,12 @@ static unsigned int ddr_vref_get_win(struct ddr_cfg_st *cfg,
 
     training->ddr_win_sum = 0;
 
-    if (cfg->cur_mode == DDR_MODE_READ)
+    if (cfg->cur_mode == DDR_MODE_READ) {
         ddr_vref_get_host_max(cfg->rank_idx, vref_max);
-
-    if (vref < vref_min)
+    }
+    if (vref < vref_min) {
         vref_set = vref_min;
-    else if (vref > vref_max)
+    } else if (vref > vref_max)
         vref_set = vref_max;
     else {
         vref_set = vref;
@@ -215,15 +216,15 @@ static unsigned int ddr_vref_find_best(struct ddr_cfg_st *cfg,
     unsigned int vref_min = 0;
     unsigned int vref_max = DDR_VREF_DRAM_VAL_MAX;
 
-    if (cfg->cur_mode == DDR_MODE_READ)
+    if (cfg->cur_mode == DDR_MODE_READ) {
         ddr_vref_get_host_max(cfg->rank_idx, vref_max);
-
+    }
     max_win = 0;
     cur_vref = vref + step;
 
-    if (vref < vref_min)
+    if (vref < vref_min) {
         best_vref = vref_min;
-    else if (vref > vref_max)
+    } else if (vref > vref_max)
         best_vref = vref_max;
     else {
         best_vref = vref;
@@ -275,12 +276,12 @@ static void ddr_vref_cal(struct ddr_cfg_st *cfg, struct training_data *training)
     } else {
         /* when (left_win == right_win), check def_vref */
         unsigned int vref_max = DDR_VREF_DRAM_VAL_MAX;
-        if (cfg->cur_mode == DDR_MODE_READ)
+        if (cfg->cur_mode == DDR_MODE_READ) {
             ddr_vref_get_host_max(cfg->rank_idx, vref_max);
-
-        if (def_vref < (vref_max >> 1))
+        }
+        if (def_vref < (vref_max >> 1)) {
             best_vref = ddr_vref_find_best(cfg, training, def_vref, 1);
-        else {
+        } else {
             best_vref = ddr_vref_find_best(cfg, training, def_vref, -1);
         }
     }
@@ -299,18 +300,18 @@ static int ddr_vref_write(struct ddr_cfg_st *cfg, struct training_data *training
     unsigned int bank_group = (reg_read(cfg->cur_dmc +
         ddr_dmc_cfg_rnkvol(cfg->rank_idx)) >> DMC_CFG_MEM_BG_BIT) & DMC_CFG_MEM_BG_MASK;
 
-    if (dram_type != PHY_DRAMCFG_TYPE_LPDDR4 && dram_type != PHY_DRAMCFG_TYPE_DDR4)
+    if (dram_type != PHY_DRAMCFG_TYPE_LPDDR4 && dram_type != PHY_DRAMCFG_TYPE_DDR4) {
         return -1;
-
+    }
     if (dram_type == PHY_DRAMCFG_TYPE_LPDDR4)
         bank_group = DMC_CFG_MEM_2BG; /* lpddr4 not training byte1 byte3 */
 
-    if (cfg->dmc_idx >= DDR_DMC_PER_PHY_MAX)
+    if (cfg->dmc_idx >= DDR_DMC_PER_PHY_MAX) {
         return -1;
-
-    if (get_byte_num(cfg) > DDR_PHY_BYTE_MAX)
+    }
+    if (get_byte_num(cfg) > DDR_PHY_BYTE_MAX) {
         return -1;
-
+    }
     for (i = 0; i < get_byte_num(cfg); i++) {
         cfg->cur_byte = i + (cfg->dmc_idx << 1); /* byte index accord to phy */
         /* byte1 and byte3 bypass when 2 Bank Group */
@@ -337,9 +338,9 @@ static int ddr_vref_training(struct ddr_cfg_st *cfg)
     ddr_vref_save_bdl(cfg, &dq_data);
     ddrtr_set_data(training, 0, sizeof(struct training_data));
 
-    if (get_byte_num(cfg) > DDR_PHY_BYTE_MAX)
+    if (get_byte_num(cfg) > DDR_PHY_BYTE_MAX) {
         return -1;
-
+    }
     /* vref calibrate */
     if (cfg->cur_mode == DDR_MODE_READ) {
         for (i = 0; i < get_byte_num(cfg); i++) {

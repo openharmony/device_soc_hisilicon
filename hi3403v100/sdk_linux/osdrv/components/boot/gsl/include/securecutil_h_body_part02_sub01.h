@@ -61,7 +61,7 @@
 
 /* SECUREC_PCLINT for tool do not recognize __builtin_expect, just for pclint */
 #if defined(__GNUC__) && \
-	((__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))) && \
+    ((__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3))) && \
 !defined(SECUREC_PCLINT)
 /*
  * This is a built-in function that can be used without a declaration, if you encounter an undeclared compilation alarm,
@@ -77,7 +77,7 @@
 #if (defined(_MSC_VER)) && (_MSC_VER >= 1400)
 /* Shield compilation alerts using discarded functions and Constant  expression to maximize code compatibility */
 #define SECUREC_MASK_MSVC_CRT_WARNING __pragma(warning(push)) \
-	__pragma(warning(disable : 4996 4127))
+    __pragma(warning(disable : 4996 4127))
 #define SECUREC_END_MASK_MSVC_CRT_WARNING  __pragma(warning(pop))
 #else
 #define SECUREC_MASK_MSVC_CRT_WARNING
@@ -189,11 +189,11 @@
 /* This macro does not handle pointer equality or integer overflow */
 #define SECUREC_MEMORY_NO_OVERLAP(dest, src, count) \
     (((src) < (dest) && ((const char *)(src) + (count)) <= (char *)(dest)) || \
-	 ((dest) < (src) && ((char *)(dest) + (count)) <= (const char *)(src)))
+     ((dest) < (src) && ((char *)(dest) + (count)) <= (const char *)(src)))
 
 #define SECUREC_MEMORY_IS_OVERLAP(dest, src, count) \
     (((src) < (dest) && ((const char *)(src) + (count)) > (char *)(dest)) || \
-	 ((dest) < (src) && ((char *)(dest) + (count)) > (const char *)(src)))
+     ((dest) < (src) && ((char *)(dest) + (count)) > (const char *)(src)))
 
 /*
  * Check whether the strings overlap, len is the length of the string not include terminator
@@ -201,7 +201,7 @@
  */
 #define SECUREC_STRING_NO_OVERLAP(dest, src, len) \
     (((src) < (dest) && ((src) + (len)) < (dest)) || \
-	 ((dest) < (src) && ((dest) + (len)) < (src)))
+     ((dest) < (src) && ((dest) + (len)) < (src)))
 
 /*
  * Check whether the strings overlap for strcpy wcscpy function, dest len and src Len are not include terminator
@@ -209,7 +209,7 @@
  */
 #define SECUREC_STRING_IS_OVERLAP(dest, src, len) \
     (((src) < (dest) && ((src) + (len)) >= (dest)) || \
-	 ((dest) < (src) && ((dest) + (len)) >= (src)))
+     ((dest) < (src) && ((dest) + (len)) >= (src)))
 
 /*
  * Check whether the strings overlap for strcat wcscat function, dest len and src Len are not include terminator
@@ -217,11 +217,11 @@
  */
 #define SECUREC_CAT_STRING_IS_OVERLAP(dest, destLen, src, srcLen) \
     (((dest) < (src) && ((dest) + (destLen) + (srcLen)) >= (src)) || \
-	 ((src) < (dest) && ((src) + (srcLen)) >= (dest)))
+     ((src) < (dest) && ((src) + (srcLen)) >= (dest)))
 
 #if SECUREC_HAVE_STRNLEN
 #define SECUREC_CALC_STR_LEN(str, maxLen, outLen) do { \
-	*(outLen) = strnlen((str), (maxLen)); \
+    *(outLen) = strnlen((str), (maxLen)); \
 } SECUREC_WHILE_ZERO
 SECUREC_INLINE size_t SecCalcStrLenOpt(const char *str, size_t maxLen)
 {

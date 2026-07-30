@@ -16,7 +16,7 @@
 
 #include "ddr_training_impl.h"
 
-#define DDR_PCODE_TRAINING
+#define __PCODE_TRAINING__
 #ifdef DDR_PCODE_TRAINING_CONFIG
 /* Set pcode value to register IMPSTATUS and DDR_PHY_IMP_STATUS1 */
 static void ddr_pcode_set_value(unsigned int base_phy, unsigned int pcode_value)
@@ -98,21 +98,21 @@ int ddr_pcode_training(struct ddr_cfg_st *cfg)
     int result = 0;
     int i;
 
-    if (cfg == NULL)
+    if (cfg == NULL) {
         return -1;
-
+    }
     for (i = 0; i < cfg->phy_num; i++) {
         cfg->phy_idx = i;
         cfg->cur_phy = cfg->phy[i].addr;
         cfg->cur_item = cfg->phy[i].rank[0].item;
 
-        if (ddr_training_check_bypass(cfg, 1 << (cfg->phy_idx)) != DDR_FALSE)
+        if (ddr_training_check_bypass(cfg, 1 << (cfg->phy_idx)) != DDR_FALSE) {
             continue;
-
+        }
         /* pcode training disable */
-        if (ddr_training_check_bypass(cfg, DDR_BYPASS_PCODE_MASK) != DDR_FALSE)
+        if (ddr_training_check_bypass(cfg, DDR_BYPASS_PCODE_MASK) != DDR_FALSE) {
             continue;
-
+        }
         ddr_training_save_reg(cfg, &relate_reg, DDR_BYPASS_PCODE_MASK);
         result += ddr_pcode_trainig_by_phy(cfg);
         ddr_training_restore_reg(cfg, &relate_reg);

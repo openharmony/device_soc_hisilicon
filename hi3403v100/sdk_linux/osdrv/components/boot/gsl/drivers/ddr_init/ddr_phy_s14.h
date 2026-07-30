@@ -58,7 +58,7 @@
 #define DDR_PHY_CATCONFIG      0x1C8  /* CA Training Configuration */
 #define DDR_PHY_PHYDQRESULT    0x1D0  /* SW CA Training DQ result from PHY */
 #define DDR_PHY_ADDRPHBOUND    0x1D4  /* CA Training addr phase boundary */
-#define DDR_PHY_SWCATPATTERN_P (0x1D0 + 0x08)  /* pattern for positive CK edge */
+#define DDR_PHY_SWCATPATTERN_P 0x1D8  /* pattern for positive CK edge */
 #define DDR_PHY_SWCATPATTERN_N 0x1DC  /* pattern for negative CK edge */
 #define DDR_PHY_MRS_SEQ_PROG   0x1e0  /* Programmed MRS sequence in the DRAM initialization */
 #define DDR_PHY_TRAINCTRL12    0x1e8  /* TRAINCTRL 12 Register */
@@ -386,7 +386,7 @@ phase shift of the Read DQS to create 90 degree delays */
 #endif
 
 #define ddr_variable_declare(var) \
-	unsigned int var
+    unsigned int var
 
 #define ddr_vref_get_host_max(rank, val) do { \
     if ((rank) == 0) \
@@ -521,7 +521,7 @@ phase shift of the Read DQS to create 90 degree delays */
 #define ddr_dqsswap_restore_func(swapdfibyte_en, base_phy) \
     do { \
         reg_write(swapdfibyte_en, (base_phy) + DDR_PHY_DMSEL); \
-	} while (0)
+    } while (0)
 
 #define ddr_phy_switch_rank(base_phy, val) do { \
     reg_write((reg_read((base_phy) + DDR_PHY_TRAINCTRL0) & (~PHY_TRAINCTRL0_MASK)) | (val), \

@@ -180,7 +180,7 @@ typedef struct {
 extern "C" {
 #endif
 
-	/* Assembly language memory copy and memory set for X86 or MIPS ... */
+    /* Assembly language memory copy and memory set for X86 or MIPS ... */
 #ifdef SECUREC_USE_ASM
 void *memcpy_opt(void *dest, const void *src, size_t n);
 void *memset_opt(void *s, int c, size_t n);

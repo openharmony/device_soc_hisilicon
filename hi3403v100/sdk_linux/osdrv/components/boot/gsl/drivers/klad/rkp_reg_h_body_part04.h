@@ -65,13 +65,13 @@ typedef union {
 
 /* define the union u_rkp_raw_int_ree */
 typedef union {
-	/* define the struct bits */
+    /* define the struct bits */
     struct {
         uint32_t    ree_rkp_raw_int       : 1; /* [0]  */
         uint32_t    reserved_0            : 31; /* [31..1]  */
     } bits;
 
-	/* define an unsigned member */
+    /* define an unsigned member */
     uint32_t    u32;
 } rkp_raw_int_ree;
 
@@ -89,7 +89,7 @@ typedef union {
 
 /* define the union u_rkp_error_status_ree */
 typedef union {
-	/* define the struct bits */
+    /* define the struct bits */
     struct {
         uint32_t    ree_error_type_0      : 1; /* [0]  */
         uint32_t    ree_error_type_1      : 1; /* [1]  */
@@ -116,7 +116,7 @@ typedef union {
         uint32_t    ree_error_type_31_22  : 10; /* [31..22]  */
     } bits;
 
-	/* define an unsigned member */
+    /* define an unsigned member */
     uint32_t    u32;
 } rkp_error_status_ree;
 #endif /* SDK_LINUX_OSDRV_COMPONENTS_BOOT_GSL_DRIVERS_KLAD_RKP_REG_H_BODY_PART04_H_ */

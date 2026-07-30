@@ -35,6 +35,7 @@ all:
 ifneq ($(BUILD_DIR)/$(UBOOT_VER), $(wildcard $(BUILD_DIR)/$(UBOOT_VER)))
 	pushd $(BUILD_DIR);tar xjf $(UBOOT_TAR) -C .;popd
 	pushd $(BUILD_DIR)/$(UBOOT_VER);patch -p1 < ../$(UBOOT_PATCH_NAME).patch;popd
+	pushd $(BUILD_DIR)/$(UBOOT_VER);patch -p1 < ../$(UBOOT_PATCH_NAME)-01.patch;popd
 endif
 
 ifeq ($(shell find $(OSDRV_DIR)/tools/pc/uboot_tools -name "$(UBOOT_REG_BIN)"), )

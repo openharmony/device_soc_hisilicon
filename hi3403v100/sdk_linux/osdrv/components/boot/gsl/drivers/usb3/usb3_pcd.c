@@ -21,10 +21,9 @@
 #include <lib.h>
 
 #define BULK_EP_MAX_PACKET_SIZE   512
-#define USB3_STRING_DESC_HEADER_LEN 2
-#define USB3_STRING_LANG_DESC_LEN 0x04
-#define USB3_STRING_LANG_ID_LOW 0x09
-#define USB3_STRING_LANG_ID_HIGH 0x04
+extern void usb3_bulk_out_transfer(void *dev);
+extern void usb_tx_status_complete(void *dev);
+extern uint32_t usb_status;
 
 const struct usb_interface_descriptor g_intf_desc = {
     sizeof(struct usb_interface_descriptor), /* bLength */
@@ -208,7 +207,6 @@ void usb3_pcd_ep_enable(usb3_pcd_t *pcd, usb3_pcd_ep_t *ep)
     if (ep->type == USB3_EP_TYPE_BULK) {
         ep->data_pid_start = 0;
     }
-
     usb3_ep_activate(pcd, ep);
 }
 
@@ -253,65 +251,64 @@ static void usb3_do_get_status(usb3_pcd_t *pcd)
     usb3_ep0_start_transfer(pcd, &pcd->ep0_req);
 }
 
-static int usb3_check_device_feature(usb3_pcd_t *pcd, usb_device_request_t ctrl, int val)
-{
-    switch (ctrl.w_value) {
-        case UF_DEVICE_REMOTE_WAKEUP:
-        case UF_TEST_MODE:
-        case UF_DEVICE_B_HNP_ENABLE:
-        case UOTG_NTF_HOST_REL:
-        case UOTG_B3_RSP_ENABLE:
-        case UF_DEVICE_A_HNP_SUPPORT:
-        case UF_DEVICE_A_ALT_HNP_SUPPORT:
-            break;
-
-        case UF_U1_ENABLE:
-        case UF_U2_ENABLE:
-            if (pcd->speed != USB_SPEED_SUPER || pcd->state != USB3_STATE_CONFIGURED) {
-                return -1;
-            }
-            break;
-
-        case UF_LTM_ENABLE:
-            if (pcd->speed != USB_SPEED_SUPER || pcd->state != USB3_STATE_CONFIGURED || ctrl.w_index != 0) {
-                return -1;
-            }
-            pcd->ltm_enable = val;
-            break;
-
-        default:
-            return -1;
-    }
-
-    return 0;
-}
-
-static int usb3_do_endpoint_feature(usb3_pcd_t *pcd, usb_device_request_t ctrl, int val)
-{
-    usb3_pcd_ep_t *ep = usb3_get_ep_by_addr(pcd, ctrl.w_index);
-
-    if (ctrl.w_value != UF_ENDPOINT_HALT) {
-        return -1;
-    }
-    if (val == 1) {
-        ep->stopped = 1;
-        usb3_ep_set_stall(pcd, ep);
-    } else {
-        do_clear_halt(pcd, ep);
-    }
-    return 0;
-}
-
 /* val==1 means set feature; val == 0 means clear feature*/
 static void usb3_do_set_clear_feature(usb3_pcd_t *pcd, int val)
 {
     usb_device_request_t ctrl = pcd->ep0_setup_pkt->req;
+    usb3_pcd_ep_t *ep = NULL;
 
     switch (ut_get_recipient(ctrl.bm_request_type)) {
         case UT_DEVICE:
-            if (usb3_check_device_feature(pcd, ctrl, val) != 0) {
-                ep0_do_stall(pcd);
-                return;
+            switch (ctrl.w_value) {
+                case UF_DEVICE_REMOTE_WAKEUP:
+                    break;
+
+                case UF_TEST_MODE:
+                    /* @todo Add CLEAR_FEATURE for TEST modes. */
+                    break;
+
+                case UF_DEVICE_B_HNP_ENABLE:
+                    break;
+
+                case UOTG_NTF_HOST_REL:
+                    break;
+
+                case UOTG_B3_RSP_ENABLE:
+                    break;
+
+                case UF_DEVICE_A_HNP_SUPPORT:
+                    /* RH port supports HNP */
+                    break;
+
+                case UF_DEVICE_A_ALT_HNP_SUPPORT:
+                    /* other RH port does */
+                    break;
+
+                case UF_U1_ENABLE:
+                    if (pcd->speed != USB_SPEED_SUPER || pcd->state != USB3_STATE_CONFIGURED) {
+                        ep0_do_stall(pcd);
+                        return;
+                    }
+                    break;
+
+                case UF_U2_ENABLE:
+                    if (pcd->speed != USB_SPEED_SUPER || pcd->state != USB3_STATE_CONFIGURED) {
+                        ep0_do_stall(pcd);
+                        return;
+                    }
+                    break;
+
+                case UF_LTM_ENABLE:
+                    if (pcd->speed != USB_SPEED_SUPER || pcd->state != USB3_STATE_CONFIGURED || ctrl.w_index != 0) {
+                        ep0_do_stall(pcd);
+                        return;
+                    }
+                    pcd->ltm_enable = val;
+                    break;
+
+                default:
+                    ep0_do_stall(pcd);
+                    return;
             }
             break;
 
@@ -324,9 +321,16 @@ static void usb3_do_set_clear_feature(usb3_pcd_t *pcd, int val)
             break;
 
         case UT_ENDPOINT:
-            if (usb3_do_endpoint_feature(pcd, ctrl, val) != 0) {
+            ep = usb3_get_ep_by_addr(pcd, ctrl.w_index);
+            if (ctrl.w_value != UF_ENDPOINT_HALT) {
                 ep0_do_stall(pcd);
                 return;
+            }
+            if (val == 1) {
+                ep->stopped = 1;
+                usb3_ep_set_stall(pcd, ep);
+            } else {
+                do_clear_halt(pcd, ep);
             }
             break;
 
@@ -411,115 +415,15 @@ static void usb3_do_get_config(usb3_pcd_t *pcd)
     usb3_ep0_start_transfer(pcd, &pcd->ep0_req);
 }
 
-static uint16_t usb3_fill_device_desc(usb3_pcd_t *pcd, uint8_t *buf)
-{
-    usb3_device_t *usb3_dev = pcd->usb3_dev;
-    struct usb_device_descriptor *dev = (struct usb_device_descriptor *)usb3_dev->dev_desc;
-    uint16_t value = sizeof(struct usb_device_descriptor);
-
-    dev->b_length = sizeof(struct usb_device_descriptor);
-    dev->b_descriptor_type = UDESC_DEVICE;
-    dev->b_device_class = 0;
-    dev->b_device_sub_class = 0;
-    dev->b_device_protocol = 0;
-    if (pcd->speed == USB_SPEED_SUPER) {
-        dev->bcd_usb = 0x300;
-        dev->b_max_packet_size0 = 9; // NOTE! 2 ^ 9 = 512 for USB3
-    } else if (pcd->speed == USB_SPEED_HIGH) {
-        dev->bcd_usb = 0x0200;
-        dev->b_max_packet_size0 = pcd->ep0.maxpacket;
-    } else {
-        dev->bcd_usb = 0x0110;
-        dev->b_max_packet_size0 = pcd->ep0.maxpacket;
-    }
-    dev->id_vendor = USB_VENDOR_ID;
-    dev->id_product = USB_PRODUCT_ID;
-    dev->bcd_device = 0x0100;
-    dev->i_manufacturer = STRING_MANUFACTURER;
-    dev->i_product = STRING_PRODUCT;
-    dev->i_serial_number = 0;
-    dev->b_num_configurations = 1;
-    (void)memcpy_s(buf, value, dev, value);
-    return value;
-}
-
-static uint16_t usb3_fill_qualifier_desc(usb3_pcd_t *pcd, uint8_t *buf)
-{
-    usb3_device_t *usb3_dev = pcd->usb3_dev;
-    struct usb_qualifier_descriptor *qual = (struct usb_qualifier_descriptor *)buf;
-    struct usb_device_descriptor *dev = (struct usb_device_descriptor *)usb3_dev->dev_desc;
-
-    qual->b_length = sizeof(*qual);
-    qual->b_descriptor_type = UDESC_DEVICE_QUALIFIER;
-    qual->bcd_usb = dev->bcd_usb;
-    qual->b_device_class = dev->b_device_class;
-    qual->b_device_sub_class = dev->b_device_sub_class;
-    qual->b_device_protocol = dev->b_device_protocol;
-    qual->b_max_packet_size0 = dev->b_max_packet_size0;
-    qual->b_num_configurations = 1;
-    qual->b_reserved = 0;
-    return sizeof(usb_qualifier_descriptor_t);
-}
-
-static uint16_t usb3_fill_config_desc(usb3_pcd_t *pcd, uint8_t *buf)
-{
-    struct usb_config_descriptor *config = (struct usb_config_descriptor *)buf;
-
-    config->b_length = sizeof(*config);
-    config->b_descriptor_type = UDESC_CONFIG;
-    config->b_num_interfaces = 1;
-    config->b_configuration_value = CONFIG_VALUE;
-    config->i_configuration = 0;
-    config->bm_attributes = USB_CONFIG_ATT_ONE;
-    config->b_max_power = (pcd->speed == USB_SPEED_SUPER) ?
-        (USB_CONFIG_VBUS_DRAW / 0x8) : (USB_CONFIG_VBUS_DRAW / 0x2);
-
-    buf += sizeof(*config);
-    (void)memcpy_s(buf, sizeof(g_intf_desc), &g_intf_desc, sizeof(g_intf_desc));
-    buf += sizeof(g_intf_desc);
-    (void)memcpy_s(buf, sizeof(hs_bulk_in), &hs_bulk_in, sizeof(hs_bulk_in));
-    buf += sizeof(hs_bulk_in);
-    (void)memcpy_s(buf, sizeof(hs_bulk_out), &hs_bulk_out, sizeof(hs_bulk_out));
-    config->w_total_length = sizeof(*config) + sizeof(g_intf_desc) + sizeof(hs_bulk_in) + sizeof(hs_bulk_out);
-    return config->w_total_length;
-}
-
-static int usb3_fill_string_desc(usb3_pcd_t *pcd, uint8_t index, uint8_t *buf)
-{
-    usb3_device_t *usb3_dev = pcd->usb3_dev;
-
-    switch (index) {
-        case STRING_LANGUAGE:
-            buf[0] = USB3_STRING_LANG_DESC_LEN;
-            buf[1] = UDESC_STRING;
-            buf[USB3_STRING_DESC_HEADER_LEN] = USB3_STRING_LANG_ID_LOW;
-            buf[USB3_STRING_DESC_HEADER_LEN + 1] = USB3_STRING_LANG_ID_HIGH;
-            return USB3_STRING_LANG_DESC_LEN;
-        case STRING_MANUFACTURER:
-            buf[0] = usb3_dev->string_manu_len + USB3_STRING_DESC_HEADER_LEN;
-            buf[1] = UDESC_STRING;
-            (void)memcpy_s((buf + USB3_STRING_DESC_HEADER_LEN), usb3_dev->string_manu_len,
-                usb3_dev->string_manu, usb3_dev->string_manu_len);
-            return usb3_dev->string_manu_len + USB3_STRING_DESC_HEADER_LEN;
-        case STRING_PRODUCT:
-            buf[0] = usb3_dev->string_prod_len + USB3_STRING_DESC_HEADER_LEN;
-            buf[1] = UDESC_STRING;
-            (void)memcpy_s((buf + USB3_STRING_DESC_HEADER_LEN), usb3_dev->string_prod_len,
-                usb3_dev->string_prod, usb3_dev->string_prod_len);
-            return usb3_dev->string_prod_len + USB3_STRING_DESC_HEADER_LEN;
-        default:
-            return -1;
-    }
-}
-
 static void usb3_do_get_descriptor(usb3_pcd_t *pcd)
 {
     usb_device_request_t ctrl = pcd->ep0_setup_pkt->req;
+    usb3_device_t *usb3_dev = pcd->usb3_dev;
     uint8_t dt = ctrl.w_value >> 8; // value shift 8 bits
     uint8_t index = (uint8_t)ctrl.w_value;
     uint16_t len = ctrl.w_length;
     uint8_t *buf = pcd->ep0_status_buf;
-    int value = 0;
+    uint16_t value = 0;
 
     if (ctrl.bm_request_type != (UT_READ | UT_STANDARD | UT_DEVICE)) {
         ep0_do_stall(pcd);
@@ -527,22 +431,130 @@ static void usb3_do_get_descriptor(usb3_pcd_t *pcd)
     }
 
     switch (dt) {
-        case UDESC_DEVICE:
-            value = usb3_fill_device_desc(pcd, buf);
-            break;
-        case UDESC_DEVICE_QUALIFIER:
-            value = usb3_fill_qualifier_desc(pcd, buf);
-            break;
-        case UDESC_CONFIG:
-            value = usb3_fill_config_desc(pcd, buf);
-            break;
-        case UDESC_STRING:
-            value = usb3_fill_string_desc(pcd, index, buf);
-            if (value < 0) {
-                ep0_do_stall(pcd);
-                return;
+        case UDESC_DEVICE: {
+            struct usb_device_descriptor *dev = (struct usb_device_descriptor *)usb3_dev->dev_desc;
+
+            dev->b_length = sizeof(struct usb_device_descriptor);
+            dev->b_descriptor_type = UDESC_DEVICE;
+
+            dev->b_device_class = 0;
+            dev->b_device_sub_class = 0;
+            dev->b_device_protocol = 0;
+
+            if (pcd->speed == USB_SPEED_SUPER) {
+                dev->bcd_usb = 0x300;
+                dev->b_max_packet_size0 = 9; // NOTE! 2 ^ 9 = 512 for USB3
+            } else if (pcd->speed == USB_SPEED_HIGH) {
+                dev->bcd_usb = 0x0200;
+                dev->b_max_packet_size0 = pcd->ep0.maxpacket;
+            } else {
+                dev->bcd_usb = 0x0110;
+                dev->b_max_packet_size0 = pcd->ep0.maxpacket;
             }
+
+            dev->id_vendor = USB_VENDOR_ID;
+            dev->id_product = USB_PRODUCT_ID;
+            dev->bcd_device = 0x0100;
+
+            dev->i_manufacturer = STRING_MANUFACTURER;
+            dev->i_product = STRING_PRODUCT;
+            dev->i_serial_number = 0;
+
+            dev->b_num_configurations = 1;
+
+            value = sizeof(struct usb_device_descriptor);
+            (void)memcpy_s(buf, value, dev, value);
+        }
+        break;
+
+        case UDESC_DEVICE_QUALIFIER: {
+            struct usb_qualifier_descriptor *qual = (struct usb_qualifier_descriptor *)buf;
+            struct usb_device_descriptor *dev = (struct usb_device_descriptor *)usb3_dev->dev_desc;
+
+            qual->b_length = sizeof(*qual);
+            qual->b_descriptor_type = UDESC_DEVICE_QUALIFIER;
+            qual->bcd_usb = dev->bcd_usb;
+            qual->b_device_class = dev->b_device_class;
+            qual->b_device_sub_class = dev->b_device_sub_class;
+            qual->b_device_protocol = dev->b_device_protocol;
+            qual->b_max_packet_size0 = dev->b_max_packet_size0;
+            qual->b_num_configurations = 1;
+            qual->b_reserved = 0;
+
+            value = sizeof(usb_qualifier_descriptor_t);
+        }
+        break;
+
+        case UDESC_CONFIG: {
+            struct usb_config_descriptor *config = (struct usb_config_descriptor *)buf;
+
+            config->b_length = sizeof(*config);
+            config->b_descriptor_type = UDESC_CONFIG;
+            config->b_num_interfaces = 1;
+            config->b_configuration_value = CONFIG_VALUE;
+            config->i_configuration = 0;
+            config->bm_attributes = USB_CONFIG_ATT_ONE;
+
+            if (pcd->speed == USB_SPEED_SUPER) {
+                config->b_max_power = USB_CONFIG_VBUS_DRAW / 0x8;
+            } else {
+                config->b_max_power = USB_CONFIG_VBUS_DRAW / 0x2;
+            }
+
+            buf += sizeof(*config);
+            (void)memcpy_s(buf, sizeof(g_intf_desc), &g_intf_desc, sizeof(g_intf_desc));
+            buf += sizeof(g_intf_desc);
+
+            switch (pcd->speed) {
+                default: { /* HS/FS */
+                    (void)memcpy_s(buf, sizeof(hs_bulk_in), &hs_bulk_in, sizeof(hs_bulk_in));
+                    buf += sizeof(hs_bulk_in);
+                    (void)memcpy_s(buf, sizeof(hs_bulk_out), &hs_bulk_out, sizeof(hs_bulk_out));
+                }
+                    config->w_total_length = sizeof(*config) + sizeof(g_intf_desc) +
+                        sizeof(hs_bulk_in) + sizeof(hs_bulk_out);
+                    break;
+            }
+            value = config->w_total_length;
+        }
+        break;
+
+        case UDESC_STRING: {
+            switch (index) {
+                case STRING_LANGUAGE:
+                    buf[0] = 0x04;
+                    buf[1] = UDESC_STRING;
+                    buf[2] = 0x09; // the 2 nd byte of buffer
+                    buf[3] = 0x04; // the 3 rd byte of buffer
+
+                    value = 0x04;
+                    break;
+
+                case STRING_MANUFACTURER:
+                    buf[0] = usb3_dev->string_manu_len + 2; // buf[0] and buf[1] takes 2 bytes
+                    buf[1] = UDESC_STRING;
+                    /* buf[0] and buf[1] takes 2 bytes */
+                    (void)memcpy_s((buf + 2), usb3_dev->string_manu_len, usb3_dev->string_manu,
+                        usb3_dev->string_manu_len);
+                    value = usb3_dev->string_manu_len + 2; // buf[0] and buf[1] takes 2 bytes
+                    break;
+
+                case STRING_PRODUCT:
+                    buf[0] = usb3_dev->string_prod_len + 2; // buf[0] and buf[1] takes 2 bytes
+                    buf[1] = UDESC_STRING;
+                    /* buf[0] and buf[1] takes 2 bytes */
+                    (void)memcpy_s((buf + 2), usb3_dev->string_prod_len, usb3_dev->string_prod,
+                        usb3_dev->string_prod_len);
+                    value = usb3_dev->string_prod_len + 2; // buf[0] and buf[1] takes 2 bytes
+                    break;
+
+                default:
+                    ep0_do_stall(pcd);
+                    return;
+            }
+        }
             break;
+
         default:
             ep0_do_stall(pcd);
             return;
@@ -554,12 +566,17 @@ static void usb3_do_get_descriptor(usb3_pcd_t *pcd)
     usb3_ep0_start_transfer(pcd, &pcd->ep0_req);
 }
 
-static void usb3_prepare_ep0_setup(usb3_pcd_t *pcd, usb_device_request_t ctrl)
+void usb3_do_setup(usb3_pcd_t *pcd)
 {
+    usb_device_request_t ctrl = pcd->ep0_setup_pkt->req;
     usb3_pcd_ep_t *ep0 = &pcd->ep0;
+    uint16_t wlength;
+
+    wlength = ctrl.w_length;
 
     ep0->stopped = 0;
     ep0->three_stage = 1;
+
     if (ctrl.bm_request_type & UE_DIR_IN) {
         ep0->is_in = 1;
         pcd->ep0state = EP0_IN_DATA_PHASE;
@@ -568,28 +585,11 @@ static void usb3_prepare_ep0_setup(usb3_pcd_t *pcd, usb_device_request_t ctrl)
         pcd->ep0state = EP0_OUT_DATA_PHASE;
     }
 
-    if (ctrl.w_length == 0) {
+    if (wlength == 0) {
         ep0->is_in = 1;
         pcd->ep0state = EP0_IN_WAIT_NRDY;
         ep0->three_stage = 0;
     }
-}
-
-static void usb3_do_set_sel(usb3_pcd_t *pcd)
-{
-    /* For now this is a no-op */
-    pcd->ep0_req.bufdma = (uint32_t *)(pcd->ep0_status_buf);
-    pcd->ep0_req.length = USB3_STATUS_BUF_SIZE;
-    pcd->ep0_req.actual = 0;
-    pcd->ep0.send_zlp = 0;
-    usb3_ep0_start_transfer(pcd, &pcd->ep0_req);
-}
-
-void usb3_do_setup(usb3_pcd_t *pcd)
-{
-    usb_device_request_t ctrl = pcd->ep0_setup_pkt->req;
-
-    usb3_prepare_ep0_setup(pcd, ctrl);
 
     if ((ut_get_type(ctrl.bm_request_type)) != UT_STANDARD) {
         ep0_do_stall(pcd);
@@ -629,7 +629,12 @@ void usb3_do_setup(usb3_pcd_t *pcd)
             break;
 
         case UR_SET_SEL:
-            usb3_do_set_sel(pcd);
+            /* For now this is a no-op */
+            pcd->ep0_req.bufdma = (uint32_t *)(pcd->ep0_status_buf);
+            pcd->ep0_req.length = USB3_STATUS_BUF_SIZE;
+            pcd->ep0_req.actual = 0;
+            ep0->send_zlp = 0;
+            usb3_ep0_start_transfer(pcd, &pcd->ep0_req);
             break;
 
         case UR_SET_ISOC_DELAY:
@@ -668,8 +673,7 @@ void usb3_ep0_start_transfer(usb3_pcd_t *pcd, usb3_pcd_req_t *req)
     usb3_dev_ep_regs_t *ep_reg;
     usb3_dma_desc_t *desc;
     uint32_t desc_dma;
-    uint32_t desc_type;
-    uint32_t len;
+    uint32_t desc_type, len;
     uint8_t tri;
 
     /* Get the DMA Descriptor (TRB) for this request */
@@ -689,17 +693,14 @@ void usb3_ep0_start_transfer(usb3_pcd_t *pcd, usb3_pcd_req_t *req)
         if (pcd->ep0state == EP0_IN_STATUS_PHASE) {
             if (ep0->three_stage) {
                 desc_type = USB3_DSCCTL_TRBCTL_STATUS_3;
-            } else {
+            } else
                 desc_type = USB3_DSCCTL_TRBCTL_STATUS_2;
-            }
         } else {
             desc_type = USB3_DSCCTL_TRBCTL_CTLDATA_1ST;
         }
 
-        usb3_fill_desc(&(usb3_desc_param_t) {
-            desc, (uint32_t)(long)req->bufdma, len, 0, desc_type,
-            USB3_DSCCTL_IOC_BIT | USB3_DSCCTL_ISP_BIT | USB3_DSCCTL_LST_BIT, 1
-        });
+        usb3_fill_desc(desc, (uint32_t)(long)req->bufdma, len, 0, desc_type,
+                   USB3_DSCCTL_IOC_BIT | USB3_DSCCTL_ISP_BIT | USB3_DSCCTL_LST_BIT, 1);
         /* Issue "DEPSTRTXFER" command to EP0-IN */
         tri = usb3_dep_startxfer(pcd, ep_reg, desc_dma, 0);
         ep0->tri_in = tri;
@@ -715,17 +716,14 @@ void usb3_ep0_start_transfer(usb3_pcd_t *pcd, usb3_pcd_req_t *req)
         if (pcd->ep0state == EP0_OUT_STATUS_PHASE) {
             if (ep0->three_stage) {
                 desc_type = USB3_DSCCTL_TRBCTL_STATUS_3;
-            } else {
+            } else
                 desc_type = USB3_DSCCTL_TRBCTL_STATUS_2;
-            }
         } else {
             desc_type = USB3_DSCCTL_TRBCTL_CTLDATA_1ST;
         }
 
-        usb3_fill_desc(&(usb3_desc_param_t) {
-            desc, (uint32_t)(long)req->bufdma, len, 0, desc_type,
-            USB3_DSCCTL_IOC_BIT | USB3_DSCCTL_ISP_BIT | USB3_DSCCTL_LST_BIT, 1
-        });
+        usb3_fill_desc(desc, (uint32_t)(long)req->bufdma, len, 0, desc_type,
+                   USB3_DSCCTL_IOC_BIT | USB3_DSCCTL_ISP_BIT | USB3_DSCCTL_LST_BIT, 1);
         /* Issue "DEPSTRTXFER" command to EP0-OUT */
         tri = usb3_dep_startxfer(pcd, ep_reg, desc_dma, 0);
         ep0->tri_out = tri;
@@ -750,10 +748,8 @@ static void ep0_continue_transfer(usb3_pcd_t *pcd, usb3_pcd_req_t *req)
         ep_reg = ep0->in_ep_reg;
 
         /* DMA Descriptor Setup */
-        usb3_fill_desc(&(usb3_desc_param_t) {
-            desc, (uint32_t)(long)req->bufdma, 0, 0, USB3_DSCCTL_TRBCTL_NORMAL,
-            USB3_DSCCTL_IOC_BIT | USB3_DSCCTL_ISP_BIT | USB3_DSCCTL_LST_BIT, 1
-        });
+        usb3_fill_desc(desc, (uint32_t)(long)req->bufdma, 0, 0, USB3_DSCCTL_TRBCTL_NORMAL,
+                   USB3_DSCCTL_IOC_BIT | USB3_DSCCTL_ISP_BIT | USB3_DSCCTL_LST_BIT, 1);
 
         tri = usb3_dep_startxfer(pcd, ep_reg, desc_dma, 0);
         ep0->tri_in = tri;
@@ -788,10 +784,8 @@ void usb3_ep_start_transfer(usb3_pcd_t *pcd, usb3_pcd_ep_t *ep)
     }
 
     /* DMA Descriptor Setup */
-    usb3_fill_desc(&(usb3_desc_param_t) {
-        desc, (uint32_t)(long)req->bufdma, len, 0, USB3_DSCCTL_TRBCTL_NORMAL,
-        USB3_DSCCTL_ISP_BIT | USB3_DSCCTL_IOC_BIT | USB3_DSCCTL_LST_BIT, 1
-    });
+    usb3_fill_desc(desc, (uint32_t)(long)req->bufdma, len, 0, USB3_DSCCTL_TRBCTL_NORMAL,
+               USB3_DSCCTL_ISP_BIT | USB3_DSCCTL_IOC_BIT | USB3_DSCCTL_LST_BIT, 1);
 
     if (ep->is_in) {
         /*
@@ -864,7 +858,6 @@ static void ep0_complete_request(usb3_pcd_t *pcd, usb3_pcd_req_t *req, usb3_dma_
     if (!req) {
         return;
     }
-
     if (pcd->ep0state == EP0_OUT_DATA_PHASE || pcd->ep0state == EP0_IN_DATA_PHASE) {
         if (ep->is_in) {
             if (usb3_get_xfercnt(desc) == 0) {
@@ -885,7 +878,6 @@ static void setup_in_status_phase(usb3_pcd_t *pcd, void *buf)
     if (pcd->ep0state == EP0_STALL) {
         return;
     }
-
     ep0->is_in = 1;
     pcd->ep0state = EP0_IN_STATUS_PHASE;
 
@@ -902,7 +894,6 @@ static void setup_out_status_phase(usb3_pcd_t *pcd, void *buf)
     if (pcd->ep0state == EP0_STALL) {
         return;
     }
-
     ep0->is_in = 0;
     pcd->ep0state = EP0_OUT_STATUS_PHASE;
 
@@ -921,22 +912,18 @@ void usb3_handle_ep0_in_data(usb3_pcd_t *pcd, usb3_pcd_req_t *req, uint32_t even
     if (!req) {
         req = &pcd->ep0_req;
     }
-
     if (req == NULL) {
         return;
     }
-
     desc = pcd->ep0_in_desc;
 
     if (dwc_usb3_is_hwo(desc)) {
         return;
     }
-
     status = usb3_get_xfersts(desc);
-    if (status & USB3_TRBRSP_SETUP_PEND) {
+    if (status & USB3_TRBRSP_SETUP_PEND)
         /* Start of a new Control transfer */
         desc->status = 0;
-    }
 
     byte_count = req->length - usb3_get_xfercnt(desc);
     req->actual += byte_count;
@@ -960,23 +947,19 @@ void usb3_handle_ep0_out_data(usb3_pcd_t *pcd, usb3_pcd_req_t *req, uint32_t eve
 {
     usb3_pcd_ep_t *ep0 = &pcd->ep0;
     usb3_dma_desc_t *desc = NULL;
-    uint32_t byte_count;
-    uint32_t len;
+    uint32_t byte_count, len;
 
     if (!req) {
         req = &pcd->ep0_req;
     }
-
     if (req == NULL) {
         return;
     }
-
     desc = pcd->ep0_out_desc;
 
     if (dwc_usb3_is_hwo(desc)) {
         return;
     }
-
     len = (req->length + ep0->maxpacket - 1) & ~(ep0->maxpacket - 1);
     byte_count = len - usb3_get_xfercnt(desc);
     req->actual += byte_count;
@@ -1011,9 +994,8 @@ void usb3_handle_ep0(usb3_pcd_t *pcd, usb3_pcd_req_t *req, uint32_t event)
         case EP0_OUT_WAIT_NRDY:
             if (ep0->is_in) {
                 setup_in_status_phase(pcd, pcd->ep0_setup_pkt);
-            } else {
+            } else
                 setup_out_status_phase(pcd, pcd->ep0_setup_pkt);
-            }
 
             break;
 
@@ -1021,9 +1003,8 @@ void usb3_handle_ep0(usb3_pcd_t *pcd, usb3_pcd_req_t *req, uint32_t event)
         case EP0_OUT_STATUS_PHASE:
             if (ep0->is_in) {
                 desc = pcd->ep0_in_desc;
-            } else {
+            } else
                 desc = pcd->ep0_out_desc;
-            }
             ep0_complete_request(pcd, req, desc, 0);
 
             pcd->ep0state = EP0_IDLE;
@@ -1065,11 +1046,9 @@ int usb3_request_done(usb3_pcd_t *pcd, const usb3_pcd_ep_t *ep, usb3_pcd_req_t *
     if (ep != &pcd->ep0) {
         req->trb = NULL;
     }
-
     if (req->complete) {
         req->complete(pcd);
     }
-
     req->actual = 0;
 
     return error;
@@ -1087,17 +1066,14 @@ int usb3_ep_complete_request(usb3_pcd_t *pcd, usb3_pcd_ep_t *ep, uint32_t event)
     if (!desc) {
         return USB_PROCESS_ERR;
     }
-
     if (dwc_usb3_is_hwo(desc)) {
         return USB_PROCESS_ERR;
     }
-
     if (ep->is_in) {
         /* IN endpoint */
         if (usb3_get_xfercnt(desc) == 0) {
             req->actual += req->length;
         }
-
         /* Reset IN tri */
         ep->tri_in = 0;
         /* Complete the IN request */

@@ -52,7 +52,7 @@ typedef union {
         unsigned int dtrow_high : 3;
         unsigned int reserved2 : 1;
     } bits;
-	unsigned int val;
+    unsigned int val;
 } phy_trainmaddr_desc;
 #define DDR_PHY_MODEREG01      0x64 /* Extend Mode Register 01 */
 #define DDR_PHY_MODEREG23      0x68 /* Extend Mode Register 23 */
@@ -65,7 +65,7 @@ typedef union {
         unsigned int dfi2iomap_rnksel : 1;
         unsigned int reserved2 : 9;
     } bits;
-	unsigned int val;
+    unsigned int val;
 } phy_rnk2rnk_desc;
 #define DDR_PHY_PHYCTRL0       0x78 /* Register in this field are connected to PHY interface directly */
 #define DDR_PHY_DMSEL          0x84 /* DM Swap Selection */
@@ -80,21 +80,21 @@ typedef union {
 #define DDR_PHY_VREFTCTRL      0xc0 /* VREF Training Control Register. */
 #define DDR_PHY_HVRFTCTRL      0xc8 /* Host VREF Training Control Regiser. */
 typedef union {
-	struct {
+    struct {
         unsigned int reserved1 : 15;
         unsigned int cfg_perbit_hvreft_en : 1;
         unsigned int reserved2 : 16;
     } bits;
-	unsigned int val;
+    unsigned int val;
 } phy_hvrftctrl_desc;
 #define DDR_PHY_DVRFTCTRL      0xC4 /* DRAM VREF Training */
 typedef union {
-	struct {
+    struct {
         unsigned int reserved1 : 30;
         unsigned int cfg_perbit_dvreft_en : 1;
         unsigned int reserved2 : 1;
-	} bits;
-	unsigned int val;
+    } bits;
+    unsigned int val;
 } phy_dvrftctrl_desc;
 #define DDR_PHY_TRAINCTRL2     0xd4 /* This register control the data training */
 #define DDR_PHY_TRAINCTRL3     0xdc /* This register control the data training */
@@ -128,34 +128,34 @@ typedef union {
 
 /* WR DQ0-DQ3 [6:0] [14:8] [22:16] [30:24] delay value of the bit delay line on write path */
 #define ddr_hal_phy_dxnwdqnbdl0(rank, byte) \
-	(0x210 + ((rank) << DDR_PHY_RANK_SHIFT) + ((byte) << DDR_PHY_BYTE_SHIFT))
+    (0x210 + ((rank) << DDR_PHY_RANK_SHIFT) + ((byte) << DDR_PHY_BYTE_SHIFT))
 /* WR DQ4-DQ7 [6:0] [14:8] [22:16] [30:24] */
 #define ddr_hal_phy_dxnwdqnbdl1(rank, byte) \
-	(0x214 + ((rank) << DDR_PHY_RANK_SHIFT) + ((byte) << DDR_PHY_BYTE_SHIFT))
+    (0x214 + ((rank) << DDR_PHY_RANK_SHIFT) + ((byte) << DDR_PHY_BYTE_SHIFT))
 /* WR DM [6:0] the delay value of the bit delay line on DQM */
 #define ddr_hal_phy_dxnwdqnbdl2(rank, byte) \
-	(0x218 + ((rank) << DDR_PHY_RANK_SHIFT) + ((byte) << DDR_PHY_BYTE_SHIFT))
+    (0x218 + ((rank) << DDR_PHY_RANK_SHIFT) + ((byte) << DDR_PHY_BYTE_SHIFT))
 typedef union {
-	struct {
+    struct {
         unsigned int wdmbdl : 7;    /* [6:0] */
         unsigned int reserved : 25; /* [31:7] */
     } bits;
-	unsigned int val;
+    unsigned int val;
 } ddr_phy_dxnwdqnbdl2_desc;
 
 /* RD DQ0-DQ3 [6:0] [14:8] [22:16] [30:24] delay value of the bit delay line
  on read path */
 #define ddr_hal_phy_dxnrdqnbdl0(rank, byte) \
-	(0x21C + ((rank) << DDR_PHY_RANK_SHIFT) + ((byte) << DDR_PHY_BYTE_SHIFT))
+    (0x21C + ((rank) << DDR_PHY_RANK_SHIFT) + ((byte) << DDR_PHY_BYTE_SHIFT))
 /* RD DQ4-DQ7 [6:0] [14:8] [22:16] [30:24] delay value of the bit delay line
  on read path */
 #define ddr_hal_phy_dxnrdqnbdl1(rank, byte) \
-	(0x220 + ((rank) << DDR_PHY_RANK_SHIFT) + ((byte) << DDR_PHY_BYTE_SHIFT))
+    (0x220 + ((rank) << DDR_PHY_RANK_SHIFT) + ((byte) << DDR_PHY_BYTE_SHIFT))
 /* [6:0]RD DM */
 #define ddr_hal_phy_dxnrdqnbdl2(rank, byte) \
-	(0x224 + ((rank) << DDR_PHY_RANK_SHIFT) + ((byte) << DDR_PHY_BYTE_SHIFT))
+    (0x224 + ((rank) << DDR_PHY_RANK_SHIFT) + ((byte) << DDR_PHY_BYTE_SHIFT))
 typedef union {
-	struct {
+    struct {
         unsigned int rdmbdl : 7; /* [6:0] */
         unsigned int reserved : 25; /* [31:7] */
     } bits;
@@ -164,42 +164,42 @@ typedef union {
 
 /* [CUSTOM] */
 #define ddr_hal_phy_dxnoebdl(rank, byte) \
-	(0x228 + ((rank) << DDR_PHY_RANK_SHIFT) + ((byte) << DDR_PHY_BYTE_SHIFT))
+    (0x228 + ((rank) << DDR_PHY_RANK_SHIFT) + ((byte) << DDR_PHY_BYTE_SHIFT))
 /* [8:0] rdqs_bdl [24:16]rdqs_cyc.
 phase shift of the Read DQS to create 90 degree delays */
 #define ddr_hal_phy_dxnrdqsdly(byte) (0x22C + ((byte) << DDR_PHY_BYTE_SHIFT))
 typedef union {
-	struct {
+    struct {
         unsigned int rdqsbdl : 9;          /* [8:0] */
         unsigned int tst_wdqsbdl_left : 7; /* [15:9] */
         unsigned int rdqscyc : 9;          /* [24:16] */
         unsigned int reserved : 7;         /* [31:25] */
     } bits;
-	unsigned int val;
+    unsigned int val;
 } ddr_phy_dxnrdqsdly_desc;
 
 /* [6:0] the delay value of delay applied on WDQS for write leveling */
 #define ddr_hal_phy_dxwdqsdly(rank, byte) \
-	(0x230 + ((rank) << DDR_PHY_RANK_SHIFT) + ((byte) << DDR_PHY_BYTE_SHIFT))
+    (0x230 + ((rank) << DDR_PHY_RANK_SHIFT) + ((byte) << DDR_PHY_BYTE_SHIFT))
 /* WR DQ phase BIT 12:8 */
 #define ddr_hal_phy_dxnwdqdly(rank, byte) \
-	(0x234 + ((rank) << DDR_PHY_RANK_SHIFT) + ((byte) << DDR_PHY_BYTE_SHIFT))
+    (0x234 + ((rank) << DDR_PHY_RANK_SHIFT) + ((byte) << DDR_PHY_BYTE_SHIFT))
 typedef union {
-	struct {
+    struct {
         unsigned int reserved1 : 8;  /* [7:0] */
         unsigned int wdqphase : 6;   /* [13:8] */
         unsigned int reserved2 : 18; /* [31:14] */
-	} bits;
-	unsigned int val;
+    } bits;
+    unsigned int val;
 } ddr_phy_dxnwdqdly_desc;
 
 /* DXNWLSL:This reister is used to control if PHY controller add extra system
  * latency */
 #define ddr_hal_phy_dxnwlsl(rank, byte) \
-	(0x238 + ((rank) << DDR_PHY_RANK_SHIFT) + ((byte) << DDR_PHY_BYTE_SHIFT))
+    (0x238 + ((rank) << DDR_PHY_RANK_SHIFT) + ((byte) << DDR_PHY_BYTE_SHIFT))
 /* [CUSTOM] rdqs gating */
 #define ddr_hal_phy_dxnrdqsgdly(rank, byte) \
-	(0x240 + ((rank) << DDR_PHY_RANK_SHIFT) + ((byte) << DDR_PHY_BYTE_SHIFT))
+    (0x240 + ((rank) << DDR_PHY_RANK_SHIFT) + ((byte) << DDR_PHY_BYTE_SHIFT))
 /* read boundary  right 8:0 left 24:16 */
 #define ddr_hal_phy_dxnrdbound(byte) (0x250 + ((byte) << DDR_PHY_BYTE_SHIFT))
 typedef union {
@@ -218,7 +218,7 @@ typedef union {
 #define ddr_hal_phy_dvreft_status(byte) (0x270 + ((byte) << DDR_PHY_BYTE_SHIFT))
 /* [4:0] Host PHY VREF(DQ) training result */
 #define ddr_hal_phy_hvreft_status(rank, byte) \
-	(0x274 + ((rank) << DDR_PHY_RANK_SHIFT) + ((byte) << DDR_PHY_BYTE_SHIFT))
+    (0x274 + ((rank) << DDR_PHY_RANK_SHIFT) + ((byte) << DDR_PHY_BYTE_SHIFT))
 /* This register specify the PHY dynamic tracking configure for DM/DQS */
 #define ddr_hal_phy_dyn_dm_s(rank, byte)  (0x81c + ((rank) * 0x50) + ((byte) * 0x14))
 typedef union {

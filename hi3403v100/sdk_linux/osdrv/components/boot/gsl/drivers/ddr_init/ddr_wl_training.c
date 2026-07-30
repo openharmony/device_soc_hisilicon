@@ -16,21 +16,21 @@
 
 #include "ddr_training_impl.h"
 
-#define DDR_WRITE_LEVELING
+#define __WRITE_LEVELING__
 #ifdef DDR_WL_TRAINING_CONFIG
 static void ddr_bdl_add(unsigned int *raw, unsigned int val)
 {
-    if (((*raw) + val) > PHY_BDL_MASK)
+    if (((*raw) + val) > PHY_BDL_MASK) {
         *raw = PHY_BDL_MASK;
-    else
+    } else
         *raw += val;
 }
 
 static void ddr_bdl_sub(unsigned int *raw, unsigned int val)
 {
-    if ((*raw) > val)
+    if ((*raw) > val) {
         *raw -= val;
-    else
+    } else
         *raw = 0;
 }
 
@@ -40,14 +40,15 @@ static void ddr_phase_inc(unsigned int *raw)
 #if defined (DDR_PHY_T28_CONFIG) || defined(DDR_PHY_T16_CONFIG) || \
     defined (DDR_PHY_T12_V100_CONFIG) || defined (DDR_PHY_T12_V101_CONFIG)
     if ((*raw) < (PHY_WDQS_PHASE_MASK - 1)) {
-        if (((*raw) & 0x3) == 0x2)
+        if (((*raw) & 0x3) == 0x2) {
             *raw += 0x2;
-        else
+        } else
             *raw += 0x1;
     }
 #else
-    if ((*raw) < PHY_WDQS_PHASE_MASK)
+    if ((*raw) < PHY_WDQS_PHASE_MASK) {
         *raw += 0x1;
+    }
 #endif
 }
 
@@ -57,14 +58,15 @@ static void ddr_phase_dec(unsigned int *raw)
 #if defined (DDR_PHY_T28_CONFIG) || defined(DDR_PHY_T16_CONFIG) || \
     defined (DDR_PHY_T12_V100_CONFIG) || defined (DDR_PHY_T12_V101_CONFIG)
     if ((*raw) > 0x1) {
-        if (((*raw) & 0x3) == 0x3)
+        if (((*raw) & 0x3) == 0x3) {
             *raw -= 0x2;
-        else
+        } else
             *raw -= 0x1;
     }
 #else
-    if ((*raw) > 0x0)
+    if ((*raw) > 0x0) {
         *raw -= 0x1;
+    }
 #endif
 }
 
@@ -83,9 +85,9 @@ static void ddr_dq_bdl_operate(unsigned int base_phy,
     dq_bdl[3] = (tmp >> PHY_BDL_DQ3_BIT) & PHY_BDL_MASK; /* wdq3bdl */
 
     for (i = 0; i < DDR_PHY_REG_DQ_NUM; i++) {
-        if (is_add)
+        if (is_add) {
             ddr_bdl_add(&dq_bdl[i], val);
-        else
+        } else
             ddr_bdl_sub(&dq_bdl[i], val);
     }
 
@@ -148,9 +150,9 @@ static void ddr_wl_wdq_cmp(const struct ddr_cfg_st *cfg, struct ddr_delay_st *wd
         phase_adj = val >> DDR_BDL_PHASE_REL;
         wdq_phase = wdq_phase + phase_adj;
 
-        if (wdq_phase > PHY_WDQ_PHASE_MASK)
+        if (wdq_phase > PHY_WDQ_PHASE_MASK) {
             wdq_phase = PHY_WDQ_PHASE_MASK;
-
+        }
         /* adjust wdq bdl and dm bdl in opposite direction */
         bdl_adj = phase_adj << DDR_BDL_PHASE_REL;
         ddr_dq_bdl_operate(base_phy, ddr_phy_dxnwdqnbdl0(rank_idx, byte_idx),
@@ -190,9 +192,9 @@ static void ddr_wl_wdq_adjust(const struct ddr_cfg_st *cfg,
     ddr_debug("DDR WL write adjust");
 
     /* check wl write adjust bypass bit */
-    if (ddr_training_check_bypass(cfg, DDR_BYPASS_WL_ADJ_MASK) != DDR_FALSE)
+    if (ddr_training_check_bypass(cfg, DDR_BYPASS_WL_ADJ_MASK) != DDR_FALSE) {
         return;
-
+    }
     /* adjust wdq phase, wdq bdl, wdm bdl */
     for (i = 0; i < byte_num; i++) {
         if (wdqs_new->phase[i] == wdqs_old->phase[i] &&
@@ -210,19 +212,19 @@ static void ddr_wl_wdq_adjust(const struct ddr_cfg_st *cfg,
 static void ddr_wl_bdl_sync(const struct ddr_cfg_st *cfg,
     const struct ddr_delay_st *wdqs_new, const struct ddr_delay_st *wdqs_old)
 {
-	int i;
-	unsigned int val;
+    int i;
+    unsigned int val;
     unsigned int oen_bdl;
     unsigned int wdqsoe_bdl;
     unsigned int wdm_bdl;
-	unsigned int wdq_phase;
-	unsigned int base_phy = cfg->cur_phy;
+    unsigned int wdq_phase;
+    unsigned int base_phy = cfg->cur_phy;
 
     /* sync wdq phase, wdq bdl, wdm bdl, oen bdl, wdq soe bdl */
     for (i = 0; i < get_byte_num(cfg); i++) {
-        if (wdqs_new->phase[i] == wdqs_old->phase[i] && wdqs_new->bdl[i] == wdqs_old->bdl[i])
+        if (wdqs_new->phase[i] == wdqs_old->phase[i] && wdqs_new->bdl[i] == wdqs_old->bdl[i]) {
             continue;
-
+        }
         ddr_debug("Byte[%x] new[%x][%x] old[%x][%x]", i,
             wdqs_new->phase[i], wdqs_new->bdl[i], wdqs_old->phase[i], wdqs_old->bdl[i]);
 
@@ -256,9 +258,9 @@ static void ddr_wl_bdl_sync(const struct ddr_cfg_st *cfg,
             ddr_bdl_sub(&wdm_bdl, val);
         }
 
-        if (wdq_phase > PHY_WDQ_PHASE_MASK)
+        if (wdq_phase > PHY_WDQ_PHASE_MASK) {
             wdq_phase = PHY_WDQ_PHASE_MASK;
-
+        }
         reg_write(wdq_phase << PHY_WDQ_PHASE_BIT, base_phy + ddr_phy_dxnwdqdly(cfg->rank_idx, i));
         reg_write((wdqsoe_bdl << PHY_WDQSOE_BDL_BIT) + (oen_bdl << PHY_OEN_BDL_BIT),
             base_phy + ddr_phy_dxnoebdl(cfg->rank_idx, i));
@@ -276,8 +278,9 @@ static void ddr_wl_error(unsigned int type, unsigned int byte_num,
     if (type == DDR_DELAY_BDL) {
         ddr_fatal("PHY[%x] WL fail, result[%x]", base_phy, wl_result);
         for (j = 0; j < byte_num; j++) {
-            if (!(wl_result & (1 << j)))
+            if (!(wl_result & (1 << j))) {
                 ddr_training_stat(DDR_ERR_WL, base_phy, j, -1);
+            }
         }
     } else {
         ddr_debug("PHY[%x] WL not found phase, result[%x]", base_phy, wl_result);
@@ -292,14 +295,15 @@ static int ddr_wl_process(const struct ddr_cfg_st *cfg, unsigned int type, struc
 {
     int i;
     int j;
-	unsigned int wl_result;
-	unsigned int length;
-	unsigned int base_phy = cfg->cur_phy;
-	unsigned int byte_num = get_byte_num(cfg);
+    unsigned int wl_result;
+    unsigned int length;
+    unsigned int base_phy = cfg->cur_phy;
+    unsigned int byte_num = get_byte_num(cfg);
 
     if (type == DDR_DELAY_PHASE)
+    {
         length = PHY_WDQS_PHASE_MASK;
-    else
+    } else
         length = PHY_BDL_MASK;
 
     /* find WDQS phase or bdl, assume CLK Delay > DQS Delay */
@@ -310,18 +314,18 @@ static int ddr_wl_process(const struct ddr_cfg_st *cfg, unsigned int type, struc
         wl_result = reg_read(base_phy + DDR_PHY_SWTRLT) & PHY_SWTRLT_WL_MASK;
         reg_write(0x0, base_phy + DDR_PHY_SWTWLDQS);
 
-        if ((wl_result & ((1 << byte_num) - 1)) == ((1 << byte_num) - 1))
+        if ((wl_result & ((1 << byte_num) - 1)) == ((1 << byte_num) - 1)) {
             break;
-
+        }
         for (j = 0; j < byte_num; j++) {
             ddr_info("type[0x%x] byte[0x%x] phase[0x%x] bdl[0x%x] wl_result[0x%x]",
                 type, j, wdqs->phase[j], wdqs->bdl[j], wl_result);
-            if (wl_result & (1 << j))
+            if (wl_result & (1 << j)) {
                 continue;
-
-            if (type == DDR_DELAY_PHASE)
+            }
+            if (type == DDR_DELAY_PHASE) {
                 ddr_phase_inc(&wdqs->phase[j]);
-            else
+            } else
                 wdqs->bdl[j] += DDR_WL_BDL_STEP;
 
             reg_write((wdqs->phase[j] << PHY_WDQS_PHASE_BIT) +
@@ -344,13 +348,13 @@ static int ddr_wl_process(const struct ddr_cfg_st *cfg, unsigned int type, struc
  */
 static int ddr_write_leveling(const struct ddr_cfg_st *cfg)
 {
-	int result;
+    int result;
     unsigned int i;
     unsigned int tmp;
-	unsigned int base_phy = cfg->cur_phy;
-	unsigned int base_dmc = cfg->cur_dmc;
-	struct ddr_delay_st wdqs_old;
-	struct ddr_delay_st wdqs_new;
+    unsigned int base_phy = cfg->cur_phy;
+    unsigned int base_dmc = cfg->cur_dmc;
+    struct ddr_delay_st wdqs_old;
+    struct ddr_delay_st wdqs_new;
 
     ddr_debug("DDR Write Leveling training");
 
@@ -379,9 +383,9 @@ static int ddr_write_leveling(const struct ddr_cfg_st *cfg)
     for (i = 0; i < get_byte_num(cfg); i++) {
         /* find phase error, keep max value to find bdl. */
         /* find phase ok, decrease to find bdl. */
-        if (!result)
+        if (!result) {
             ddr_phase_dec(&wdqs_new.phase[i]);
-
+        }
         reg_write(wdqs_new.phase[i] << PHY_WDQS_PHASE_BIT,
             base_phy + ddr_phy_dxwdqsdly(cfg->rank_idx, i));
     }
@@ -420,9 +424,9 @@ int ddr_wl_func(const struct ddr_cfg_st *cfg)
     int result = 0;
 
     /* write leveling disable */
-    if (ddr_training_check_bypass(cfg, DDR_BYPASS_WL_MASK) != DDR_FALSE)
+    if (ddr_training_check_bypass(cfg, DDR_BYPASS_WL_MASK) != DDR_FALSE) {
         return 0;
-
+    }
     ddr_training_save_reg(cfg, &relate_reg, DDR_BYPASS_WL_MASK);
 
     result += ddr_write_leveling(cfg);

@@ -17,7 +17,7 @@
 #include "ddr_interface.h"
 #include "ddr_training_impl.h"
 
-#define DDR_TRAINING_CONSOLE
+#define __DDR_TRAINING_CONSOLE__
 #ifdef DDR_TRAINING_CONSOLE_CONFIG
 
 #define DDR_UART_BASE_REG               0x12090000
@@ -98,27 +98,29 @@ static int hex2int(char **ss, unsigned int *n)
     unsigned char *s = (unsigned char *)(*ss);
 
     while (isspace(*s))
+    {
         s++;
-
-    if (!(*s))
+    }
+    if (!(*s)) {
         return -1;
-
+    }
     if (s[0] == '0' && (s[1] == 'x' || s[1] == 'X'))
         s += 2; /* Skip the first 2 characters: 0x */
 
     for ((*n) = 0; isxdigit(*s); s++) {
         (*n) = ((*n) << 4); /* shift left 4 */
-        if ((*s) >= '0' && (*s) <= '9')
+        if ((*s) >= '0' && (*s) <= '9') {
             (*n) |= ((*s) - '0');
-        else if ((*s) >= 'a' && (*s) <= 'f')
+        } else if ((*s) >= 'a' && (*s) <= 'f')
             (*n) |= ((*s) + 10 - 'a'); /* transfer a-f to 10-15 */
         else if ((*s) >= 'A' && (*s) <= 'F')
             (*n) |= ((*s) + 10 - 'A'); /* transfer A-F to 10-15 */
     }
 
     if (isspace(*s) || !(*s)) {
-        while (isspace(*s))
+        while (isspace(*s)) {
             s++;
+        }
         (*ss) = (char *)s;
         return 0;
     }
@@ -135,15 +137,15 @@ static int ddr_do_memory_write(char *cmd)
     unsigned int value;
     unsigned int count = ALIGN_COUNT;
 
-    if (hex2int(&cmd, &address))
+    if (hex2int(&cmd, &address)) {
         return -1;
-
-    if (hex2int(&cmd, &value))
+    }
+    if (hex2int(&cmd, &value)) {
         return -1;
-
-    if ((*cmd) && hex2int(&cmd, &count))
+    }
+    if ((*cmd) && hex2int(&cmd, &count)) {
         return -1;
-
+    }
     if ((address & 0x03) || (count & 0x03)) {
         ddr_info("parameter should align with 4 bytes.\n");
         return -1;
@@ -164,15 +166,15 @@ static int ddr_do_memory_display(char *cmd)
     unsigned int address;
     unsigned int count = 64;
 
-    if (hex2int(&cmd, &address))
+    if (hex2int(&cmd, &address)) {
         return -1;
-
-    if ((*cmd) && hex2int(&cmd, &count))
+    }
+    if ((*cmd) && hex2int(&cmd, &count)) {
         return -1;
-
-    if (count < ALIGN_COUNT)
+    }
+    if (count < ALIGN_COUNT) {
         count = ALIGN_COUNT;
-
+    }
     address &= ~0x03;
     loop = (count & ~0x03);
 
@@ -237,10 +239,12 @@ static int ddr_training_console(void)
         DDR_PUTC('#');
 
         p = ddr_readline(str, sizeof(str));
-        while (isspace(*p))
+        while (isspace(*p)) {
             p++;
-        if (p[0] == 'q')
+        }
+        if (p[0] == 'q') {
             break;
+        }
         if (p[0] == 'm' && p[1] == 'w') {
             ddr_do_memory_write(p + 2); /* p[2]:Third character */
         } else if (p[0] == 'm' && p[1] == 'd') {

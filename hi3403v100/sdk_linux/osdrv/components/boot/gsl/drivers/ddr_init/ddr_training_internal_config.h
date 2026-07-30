@@ -153,15 +153,15 @@
 
 /* check config */
 #if defined(DDR_TRAINING_ADJUST_DISABLE) && defined(DDR_HW_TRAINING_CONFIG) && \
-	!defined(DDR_HW_READ_ADJ_CONFIG)
+    !defined(DDR_HW_READ_ADJ_CONFIG)
 #error when defined DDR_TRAINING_ADJUST_DISABLE, \
 MUST define DDR_HW_READ_ADJ_CONFIG.
 #endif
 
 #if (defined(DDR_HW_TRAINING_CONFIG) || defined(DDR_MPR_TRAINING_CONFIG) || \
-	defined(DDR_VREF_TRAINING_CONFIG) || \
-	defined(DDR_TRAINING_ADJUST_CONFIG)) && \
-	!defined(DDR_DATAEYE_TRAINING_CONFIG)
+    defined(DDR_VREF_TRAINING_CONFIG) || \
+    defined(DDR_TRAINING_ADJUST_CONFIG)) && \
+    !defined(DDR_DATAEYE_TRAINING_CONFIG)
 #error when enable HW/GATE/VREF training or dataeye adjust, \
 MUST define DDR_DATAEYE_TRAINING_CONFIG.
 #endif

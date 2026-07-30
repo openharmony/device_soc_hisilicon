@@ -129,19 +129,23 @@ int32_t kc_slot_auto_lock(const kc_slot_ind_e slot_ind, uint32_t *slot_num)
     uint32_t i;
 
     if (slot_num == NULL)
+    {
         return TD_FAILURE;
-    if (slot_ind == KC_SLOT_TS)
+    }
+    if (slot_ind == KC_SLOT_TS) {
         slot = KC_TS_SLOT_NUM;
-    else if (slot_ind == KC_SLOT_MC)
+    } else if (slot_ind == KC_SLOT_MC)
         slot = KC_MC_SLOT_NUM;
     else
         return TD_FAILURE;
 
     for (i = 0; i < slot; i++) {
-        if (_kc_slot_status(slot_ind, i) != KC_SLOT_STAT_UN_LOCK)
+        if (_kc_slot_status(slot_ind, i) != KC_SLOT_STAT_UN_LOCK) {
             continue;
-        if (_kc_slot_lock(slot_ind, i) != TD_SUCCESS)
+        }
+        if (_kc_slot_lock(slot_ind, i) != TD_SUCCESS) {
             continue;
+        }
         *slot_num = i;
         return TD_SUCCESS;
     }

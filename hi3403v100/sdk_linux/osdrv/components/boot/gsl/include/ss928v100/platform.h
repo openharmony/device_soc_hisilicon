@@ -395,7 +395,7 @@
 #define HPM_CLK_REG		0x11014a80
 #define HPM_CLK_CFG		0x30
 
-#define CPU_ISO_REG		(0x1d000000 + 0x821104)
+#define CPU_ISO_REG		0x1d821104
 
 #define REG_TSENSOR_CTRL	0x1102e000
 #define TSENSOR_CTRL0		0x0

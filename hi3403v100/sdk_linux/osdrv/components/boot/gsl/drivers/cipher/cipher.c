@@ -215,16 +215,16 @@ static int symc_start(const uint32_t chn, struct cipher_symc_context *info)
     ptr = cipher_out_wr_ptr.bits.out_sym_chn_node_wr_point + info->entry_symc_out_depth;
     cipher_out_wr_ptr.bits.out_sym_chn_node_wr_point = ptr % CIPHER_MAX_DEPTH;
     reg_set(out_sym_chn_node_wr_point(chn), cipher_out_wr_ptr.u32);
-    if (cipher_out_wr_ptr.u32 != reg_get(out_sym_chn_node_wr_point(chn)))
+    if (cipher_out_wr_ptr.u32 != reg_get(out_sym_chn_node_wr_point(chn))) {
         return TD_FAILURE;
-
+    }
     cipher_in_wr_ptr.u32 = reg_get(in_sym_chn_node_wr_point_fun(chn));
     ptr = cipher_in_wr_ptr.bits.sym_chn_node_wr_point + info->entry_symc_in_depth;
     cipher_in_wr_ptr.bits.sym_chn_node_wr_point = ptr % CIPHER_MAX_DEPTH;
     reg_set(in_sym_chn_node_wr_point_fun(chn), cipher_in_wr_ptr.u32);
-    if (cipher_in_wr_ptr.u32 != reg_get(in_sym_chn_node_wr_point_fun(chn)))
+    if (cipher_in_wr_ptr.u32 != reg_get(in_sym_chn_node_wr_point_fun(chn))) {
         return TD_FAILURE;
-
+    }
     info->entry_symc_in_depth = 0;
     info->entry_symc_out_depth = 0;
 
@@ -268,9 +268,9 @@ static int clear_hash_entry(uint32_t chn)
             break;
         }
     }
-    if (i >= CIPHER_TIME_OUT)
+    if (i >= CIPHER_TIME_OUT) {
         return TD_FAILURE;
-
+    }
     return TD_SUCCESS;
 }
 
@@ -293,9 +293,9 @@ static int clear_symc_entry(uint32_t chn)
             break;
         }
     }
-    if (i >= CIPHER_TIME_OUT)
+    if (i >= CIPHER_TIME_OUT) {
         return TD_FAILURE;
-
+    }
     return TD_SUCCESS;
 }
 
@@ -314,9 +314,9 @@ static int cipher_init_chn(uint32_t chn, uint32_t key_addr)
     out_sym_chn_node_length cipher_out_depth;
     in_sym_chn_key_ctrl in_sym_key_ctrl;
 
-    if (TD_FAILURE == clear_symc_entry(chn))
+    if (TD_FAILURE == clear_symc_entry(chn)) {
         return TD_FAILURE;
-
+    }
     page_phy = g_cipher_nodes_phy;
 
     /* set total num and start addr for cipher in node */
@@ -365,9 +365,9 @@ static int hash_init_chn(uint32_t chn)
     in_hash_chn_node_length hash_node_len;
     in_hash_chn_node_wr_point hash_wr_ptr;
 
-    if (TD_FAILURE == clear_hash_entry(chn))
+    if (TD_FAILURE == clear_hash_entry(chn)) {
         return TD_FAILURE;
-
+    }
     page_phy = g_cipher_nodes_phy;
     page_phy += (SPACC_SYMC_IN_ENTRY_TOTAL_SIZE + SPACC_SYMC_OUT_ENTRY_TOTAL_SIZE);
 
@@ -401,9 +401,9 @@ static int drv_spacc_init(void)
     tee_crg_ctrl un_peri_crg_scipher;
     errno_t err;
 
-    if (g_is_spacc_init == 1)
+    if (g_is_spacc_init == 1) {
         return TD_SUCCESS;
-
+    }
     /* Enable spacc clock */
     un_peri_crg_scipher.u32 = reg_get(TEE_CRG_CTRL);
 
@@ -419,14 +419,14 @@ static int drv_spacc_init(void)
     reg_set(TEE_CRG_CTRL, un_peri_crg_scipher.u32);
     udelay(10); /* delay 10 us */
 
-	/* Allocate the node buffer */
+    /* Allocate the node buffer */
     g_cipher_nodes_phy = gsl_malloc(SPACC_LOCAL_BUF_SIZE);
-	if (g_cipher_nodes_phy == NULL)
-		return TD_FAILURE;
-
-	err = memset_s(g_cipher_nodes_phy, SPACC_LOCAL_BUF_SIZE, 0, SPACC_LOCAL_BUF_SIZE);
+    if (g_cipher_nodes_phy == NULL) {
+        return TD_FAILURE;
+    }
+    err = memset_s(g_cipher_nodes_phy, SPACC_LOCAL_BUF_SIZE, 0, SPACC_LOCAL_BUF_SIZE);
     if (err != EOK) {
-		return TD_FAILURE;
+        return TD_FAILURE;
     }
 
     g_trash_box_phy = g_cipher_nodes_phy + CIPHER_PAGE_SIZE;
@@ -488,9 +488,9 @@ static int drv_spacc_alloc_cipher(uint32_t key_addr, uint32_t *chn)
         }
         spacc_sym_chn_lock = reg_get(SPACC_SYM_CHN_LOCK);
         if (chn_who_used_get(spacc_sym_chn_lock, i) == CHN_WHO_USED_TEE) {
-            if (TD_FAILURE == cipher_init_chn(i, key_addr))
+            if (TD_FAILURE == cipher_init_chn(i, key_addr)) {
                 return TD_FAILURE;
-
+            }
             *chn = i;
             return TD_SUCCESS;
         }
@@ -553,9 +553,9 @@ static int drv_spacc_alloc_hash(uint32_t *chn)
         }
         spacc_sym_chn_lock = reg_get(SPACC_HASH_CHN_LOCK);
         if (chn_who_used_get(spacc_sym_chn_lock, i) == CHN_WHO_USED_TEE)  {
-            if (TD_FAILURE == hash_init_chn(i))
+            if (TD_FAILURE == hash_init_chn(i)) {
                 return TD_FAILURE;
-
+            }
             *chn = i;
             return TD_SUCCESS;
         }
@@ -574,23 +574,23 @@ static int drv_spacc_release_hash(uint32_t chn)
     uint32_t reg_val_readback;
 
     spacc_hash_chn_lock = reg_get(SPACC_HASH_CHN_LOCK);
-    if (chn_who_used_get(spacc_hash_chn_lock, chn) != CHN_WHO_USED_TEE)
+    if (chn_who_used_get(spacc_hash_chn_lock, chn) != CHN_WHO_USED_TEE) {
         return TD_FAILURE;
-
-    if (TD_FAILURE == clear_hash_entry(chn))
+    }
+    if (TD_FAILURE == clear_hash_entry(chn)) {
         return TD_FAILURE;
-
-	chn_who_used_clr(spacc_hash_chn_lock, chn);
-	while (release_times--) {
-		reg_set(SPACC_HASH_CHN_LOCK, spacc_hash_chn_lock);
-		reg_val_readback = reg_get(SPACC_HASH_CHN_LOCK);
+    }
+    chn_who_used_clr(spacc_hash_chn_lock, chn);
+    while (release_times--) {
+        reg_set(SPACC_HASH_CHN_LOCK, spacc_hash_chn_lock);
+        reg_val_readback = reg_get(SPACC_HASH_CHN_LOCK);
         if (chn_who_used_get(reg_val_readback, chn) == CHN_WHO_USED_IDLE) {
-			break;
-		}
-	}
-	if (release_times == 0)
-		return TD_FAILURE;
-
+            break;
+        }
+    }
+    if (release_times == 0) {
+        return TD_FAILURE;
+    }
     return TD_SUCCESS;
 }
 
@@ -609,32 +609,33 @@ int do_structure(spacc_decrypt_params decrypt_params)
     id_in = info->symc_cur_in_nodes++;
     addr = &info->entry_symc_in[id_in];
     size = sizeof(struct cipher_symc_in_entry_t);
-    if (memset_s(addr, sizeof(struct cipher_symc_in_entry_t), 0, size) != EOK)
+    if (memset_s(addr, sizeof(struct cipher_symc_in_entry_t), 0, size) != EOK) {
         return TD_FAILURE;
+    }
+    info->entry_symc_in[id_in].sym_first_node = 1;
+    info->entry_symc_in[id_in].sym_last_node = 1;
+    info->entry_symc_in[id_in].sym_start_addr = decrypt_params.src_addr;
+    info->entry_symc_in[id_in].sym_alg_length = decrypt_params.length;
+    if (decrypt_params.alg != SYMC_ALG_DMA) {
+        if (memset_s(info->entry_symc_in[id_in].iv, IV_WORD_SIZE * sizeof(uint32_t),
+            0, decrypt_params.iv_length) != EOK)
+            return TD_FAILURE;
 
-	info->entry_symc_in[id_in].sym_first_node = 1;
-	info->entry_symc_in[id_in].sym_last_node = 1;
-	info->entry_symc_in[id_in].sym_start_addr = decrypt_params.src_addr;
-	info->entry_symc_in[id_in].sym_alg_length = decrypt_params.length;
-	if (decrypt_params.alg != SYMC_ALG_DMA) {
-		if (memset_s(info->entry_symc_in[id_in].iv, IV_WORD_SIZE * sizeof(uint32_t),
-      0, decrypt_params.iv_length) != EOK)
-			return TD_FAILURE;
-
-		if (memcpy_s(info->entry_symc_in[id_in].iv, decrypt_params.iv_length,
-      (const void *)(uintptr_t)decrypt_params.iv_addr,
-      decrypt_params.iv_length) != EOK)
-			return TD_FAILURE;
-	}
-	info->entry_symc_in_depth++;
-	info->symc_cur_in_nodes %= CIPHER_MAX_DEPTH;
+        if (memcpy_s(info->entry_symc_in[id_in].iv, decrypt_params.iv_length,
+            (const void *)(uintptr_t)decrypt_params.iv_addr,
+            decrypt_params.iv_length) != EOK)
+            return TD_FAILURE;
+    }
+    info->entry_symc_in_depth++;
+    info->symc_cur_in_nodes %= CIPHER_MAX_DEPTH;
 
     /* Output structure */
     id_out = info->symc_cur_out_nodes++;
     addr = &info->entry_symc_out[id_out];
     size = sizeof(struct cipher_symc_out_entry_t);
-    if (memset_s(addr, sizeof(struct cipher_symc_out_entry_t), 0, size) != EOK)
+    if (memset_s(addr, sizeof(struct cipher_symc_out_entry_t), 0, size) != EOK) {
         return TD_FAILURE;
+    }
     info->entry_symc_out[id_out].sym_start_addr = decrypt_params.dst_addr; /* In-place copy */
     info->entry_symc_out[id_out].sym_alg_length = decrypt_params.length;
     info->entry_symc_out_depth++;
@@ -659,8 +660,8 @@ int do_symc_dma_configuration(spacc_decrypt_params decrypt_params)
     cipher_ctrl.bits.sym_alg_sel = decrypt_params.alg;
     reg_set(in_sym_chn_key_ctrl_fun(decrypt_params.chn), cipher_ctrl.u32);
 
-	/* spacc DMA configuration */
-	cipher_out_ctrl.u32 = reg_get(in_sym_out_ctrl_fun(decrypt_params.chn));
+    /* spacc DMA configuration */
+    cipher_out_ctrl.u32 = reg_get(in_sym_out_ctrl_fun(decrypt_params.chn));
     if (decrypt_params.alg == SYMC_ALG_DMA) {
         cipher_out_ctrl.bits.sym_dma_copy = 1;
     } else {
@@ -675,14 +676,15 @@ int do_symc_dma_configuration(spacc_decrypt_params decrypt_params)
     /* check spacc DMA configuration */
     cipher_out_ctrl.u32 = reg_get(in_sym_out_ctrl_fun(decrypt_params.chn));
 
-    if (symc_start(decrypt_params.chn, info) !=  TD_SUCCESS)
+    if (symc_start(decrypt_params.chn, info) !=  TD_SUCCESS) {
         return TD_FAILURE;
-
+    }
     /* Wait for completion */
     while (time_out++ < CIPHER_TIME_OUT_LONG) {
         udelay(10); /* delay 10 us */
-        if (TD_SUCCESS == symc_done_notify(decrypt_params.chn))
+        if (TD_SUCCESS == symc_done_notify(decrypt_params.chn)) {
             return TD_SUCCESS;
+        }
     }
 
     return CIPHER_ERR_TIMEOUT;
@@ -694,9 +696,9 @@ int do_symc_dma_configuration(spacc_decrypt_params decrypt_params)
  */
 int drv_spacc_decrypt(spacc_decrypt_params decrypt_params)
 {
-    if (do_structure(decrypt_params) != TD_SUCCESS)
+    if (do_structure(decrypt_params) != TD_SUCCESS) {
         return TD_FAILURE;
-
+    }
     return do_symc_dma_configuration(decrypt_params);
 }
 
@@ -712,19 +714,19 @@ static int hash_process(uint32_t chn, uint32_t data_addr, uint32_t data_len, uin
     uint32_t mask;
     uint32_t id;
     uint32_t size;
-	struct cipher_digest_context *info = g_digest;
-	void *addr = NULL;
-	uint32_t ptr;
-	struct hash_chann_param_t hash_chann_param = {0};
+    struct cipher_digest_context *info = g_digest;
+    void *addr = NULL;
+    uint32_t ptr;
+    struct hash_chann_param_t hash_chann_param = {0};
 
     time_out = 0;
     /* Configure the node */
     id = info->digest_cur_in_nodes++;
     addr = &info->entry_digest_in[id];
     size = sizeof(struct cipher_digest_in_entry_t);
-    if (memset_s(addr, sizeof(struct cipher_digest_in_entry_t), 0, size) !=  EOK)
+    if (memset_s(addr, sizeof(struct cipher_digest_in_entry_t), 0, size) !=  EOK) {
         return TD_FAILURE;
-
+    }
     info->entry_digest_in[id].spacc_cmd = ctrl;
     info->entry_digest_in[id].hmac_last_block = 0;
     info->entry_digest_in[id].hash_start_addr_l = data_addr;
@@ -751,9 +753,9 @@ static int hash_process(uint32_t chn, uint32_t data_addr, uint32_t data_len, uin
         hash_chann_param.int_raw.bits.hash_chann_raw_int &= (1 << chn);
         mask = hash_chann_param.int_raw.bits.hash_chann_raw_int;
         reg_set(HASH_CHANN_RAW_INT, hash_chann_param.int_raw.u32);
-        if (mask)
+        if (mask) {
             return TD_SUCCESS;
-
+        }
         udelay(10); /* delay 10 us */
     }
 
@@ -773,10 +775,10 @@ static uint32_t drv_spacc_hash_padding(uint8_t *msg, uint32_t msg_size, uint32_t
                   (PADDING_LEN_THRESHOLD - tmp) : (PADDING_LEN_MAX - tmp);
         padding_len += PAD_LEN_FIELD_SIZE;
 
-		err = memset_s(&msg[cur_len], msg_size, 0, padding_len - PAD_LEN_FIELD_SIZE);
+        err = memset_s(&msg[cur_len], msg_size, 0, padding_len - PAD_LEN_FIELD_SIZE);
         if (err != EOK) {
-			return 0;
-		}
+            return 0;
+        }
 
         msg[cur_len++] = 0x80;
         cur_len += padding_len - 1 - PAD_LEN_FIELD_SIZE;
@@ -799,14 +801,14 @@ static uint32_t drv_spacc_hash_padding(uint8_t *msg, uint32_t msg_size, uint32_t
 
 static int drv_spacc_hash_init(uint32_t chn, hash_mode mode, hash_alg alg)
 {
-	uint32_t i;
-	in_hash_chn_key_ctrl hash_ctrl;
-	struct cipher_digest_context *info = g_digest;
-	static const uint32_t sha256_state[SHA256_BUFF_LEN] = {
+    uint32_t i;
+    in_hash_chn_key_ctrl hash_ctrl;
+    struct cipher_digest_context *info = g_digest;
+    static const uint32_t sha256_state[SHA256_BUFF_LEN] = {
     cpu_to_be32(SHA256_H0), cpu_to_be32(SHA256_H1), cpu_to_be32(SHA256_H2),
     cpu_to_be32(SHA256_H3), cpu_to_be32(SHA256_H4), cpu_to_be32(SHA256_H5),
     cpu_to_be32(SHA256_H6), cpu_to_be32(SHA256_H7)
-	};
+    };
 
     g_hash_info.is_init = 0;
     g_hash_info.mode = mode;
@@ -833,18 +835,18 @@ static int drv_spacc_hash_update(uint32_t chn, const uint32_t data_addr,
     volatile int ret;
     uint32_t ctrl = CIPHER_CTRL_NONE;
 
-    if (data_len == 0)
+    if (data_len == 0) {
         return TD_SUCCESS;
-
-	if (!g_hash_info.is_init) {
-		ctrl |= CIPHER_CTRL_HASH_IN_FIRST;
-		g_hash_info.is_init = 1;
-	}
-	ctrl |= CIPHER_CTRL_HASH_IN_LAST;
-	ret = hash_process(chn, data_addr, data_len, ctrl);
+    }
+    if (!g_hash_info.is_init) {
+        ctrl |= CIPHER_CTRL_HASH_IN_FIRST;
+        g_hash_info.is_init = 1;
+    }
+    ctrl |= CIPHER_CTRL_HASH_IN_LAST;
+    ret = hash_process(chn, data_addr, data_len, ctrl);
     if (ret != TD_SUCCESS) {
-		return CIPHER_ERR_BUSY;
-	}
+        return CIPHER_ERR_BUSY;
+    }
 
     return TD_SUCCESS;
 }
@@ -858,26 +860,26 @@ static int drv_spacc_hash_final(uint32_t chn, const uint32_t data_addr,
     struct cipher_digest_context *info = g_digest;
     errno_t err;
 
-	if ((g_hash_info.alg == HASH_ALG_SHA256) || (g_hash_info.alg == HASH_ALG_SM3)) {
-		ret = drv_spacc_hash_update(chn, data_addr, data_len);
+    if ((g_hash_info.alg == HASH_ALG_SHA256) || (g_hash_info.alg == HASH_ALG_SM3)) {
+        ret = drv_spacc_hash_update(chn, data_addr, data_len);
         if (ret != TD_SUCCESS) {
-			return ret;
-		}
+            return ret;
+        }
 
-		for (i = 0; i < (info->digest_len / WORD_WIDTH); i++) {
-			reg_set(chn_hash_state_val_addr(chn), i);
-			tmp = reg_get(chn_hash_state_val(chn));
-			if (memcpy_s(output_hash + (i * WORD_WIDTH), CIPHER_HASH_VAL_SIZA,
-       (uint8_t *)&tmp, 4UL) != EOK)
-				return TD_FAILURE;
-		}
-		err = memset_s((uint8_t *)&g_hash_info, sizeof(g_hash_info), 0, sizeof(g_hash_info));
+        for (i = 0; i < (info->digest_len / WORD_WIDTH); i++) {
+            reg_set(chn_hash_state_val_addr(chn), i);
+            tmp = reg_get(chn_hash_state_val(chn));
+            if (memcpy_s(output_hash + (i * WORD_WIDTH), CIPHER_HASH_VAL_SIZA,
+                (uint8_t *)&tmp, 4UL) != EOK)
+                return TD_FAILURE;
+        }
+        err = memset_s((uint8_t *)&g_hash_info, sizeof(g_hash_info), 0, sizeof(g_hash_info));
         if (err != EOK) {
-			return TD_FAILURE;
-		}
-	} else {
-		call_reset();
-	}
+            return TD_FAILURE;
+        }
+    } else {
+        call_reset();
+    }
 
     return TD_SUCCESS;
 }
@@ -917,22 +919,22 @@ int calc_sha(uint32_t src_addr, uint32_t src_len, uint8_t *data_sha, uint32_t da
     uint8_t *padding = NULL;
     uint32_t malloc_size;
 
-	ret = drv_spacc_alloc_hash(&channel);
-	if (ret != TD_SUCCESS) {
-		return TD_FAILURE;
-	}
+    ret = drv_spacc_alloc_hash(&channel);
+    if (ret != TD_SUCCESS) {
+        return TD_FAILURE;
+    }
 
-	ret = drv_spacc_hash_init(channel, MODE_HASH, HASH_ALG_SHA256);
-	if (ret != TD_SUCCESS) {
-		return TD_FAILURE;
-	}
+    ret = drv_spacc_hash_init(channel, MODE_HASH, HASH_ALG_SHA256);
+    if (ret != TD_SUCCESS) {
+        return TD_FAILURE;
+    }
 
     pad_size = src_len % HASH_BLOCK_SIZE;
 
-	ret = drv_spacc_hash_update(channel, src_addr, src_len - pad_size);
-	if (ret != TD_SUCCESS) {
-		return TD_FAILURE;
-	}
+    ret = drv_spacc_hash_update(channel, src_addr, src_len - pad_size);
+    if (ret != TD_SUCCESS) {
+        return TD_FAILURE;
+    }
 
     if (pad_size < 56) { /* the minimum of padding size is (56 + 8) */
         malloc_size = HASH_BLOCK_SIZE;
@@ -952,7 +954,7 @@ int calc_sha(uint32_t src_addr, uint32_t src_len, uint8_t *data_sha, uint32_t da
         return TD_FAILURE;
     }
 
-	pad_size += drv_spacc_hash_padding(padding, malloc_size, pad_size, src_len);
+    pad_size += drv_spacc_hash_padding(padding, malloc_size, pad_size, src_len);
 
     ret = drv_spacc_hash_final(channel, (uintptr_t)padding, pad_size, data_sha);
     if (ret != TD_SUCCESS) {
@@ -987,20 +989,20 @@ int secure_authenticate(const uint8_t * const key, const uint32_t data, const ui
     uint8_t data_hash[SHA256_LEN];
     errno_t err;
 
-    err = memset_s(data_hash, sizeof(data_hash), 0x5A, sizeof(data_hash));
+    err = memset_s(data_hash, SHA256_LEN, 0x5A, SHA256_LEN);
     if (err != EOK) {
         return TD_FAILURE;
     }
 
-    ret = calc_sha(data, len, data_hash, sizeof(data_hash));
+    ret = calc_sha(data, len, data_hash, SHA256_LEN);
     if (ret != TD_SUCCESS) {
         return TD_FAILURE;
     }
 
-	ret = drv_rsa_verify_hash(key, key + RSA_4096_LEN,
-				     data_hash, signature);
+    ret = drv_rsa_verify_hash(key, key + RSA_4096_LEN,
+                     data_hash, signature);
     if (ret != TD_SUCCESS) {
-		return TD_FAILURE;
+        return TD_FAILURE;
     }
 
     return TD_SUCCESS;

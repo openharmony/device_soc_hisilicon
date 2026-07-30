@@ -20,8 +20,8 @@
 #include <types.h>
 
 #ifndef CONFIG_MINI_BOOT
-extern char g_ddr_training_cmd_start[1];  /* DDR training code start address */
-extern char g_ddr_training_cmd_end[1];    /* DDR training code end address */
+extern char g_ddr_training_cmd_start[];  /* DDR training code start address */
+extern char g_ddr_training_cmd_end[];    /* DDR training code end address */
 #endif
 
 #define reg_read(addr)                (*(volatile unsigned int *)((uintptr_t)(addr)))

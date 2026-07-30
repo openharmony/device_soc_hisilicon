@@ -52,17 +52,20 @@ static ALWAYS_INLINE int32_t _hpp_klad_com_klad_param(common_hkl *com_klad, cons
 
     err = memcpy_s(com_klad->session_key[0], HKL_KEY_LEN, klad->session_key0, KLAD_KEY_LEN);
     if (err !=  EOK)
+    {
         return TD_FAILURE;
-
+    }
     err = memcpy_s(com_klad->session_key[1], HKL_KEY_LEN, klad->session_key1, KLAD_KEY_LEN);
     if (err !=  EOK)
+    {
         return TD_FAILURE;
-
+    }
     err = memcpy_s(com_klad->session_key[2], HKL_KEY_LEN, klad->session_key1 + KLAD_KEY_LEN,
                KLAD_KEY_LEN);
     if (err !=  EOK)
+    {
         return TD_FAILURE;
-
+    }
     com_klad->cfg.is_odd = klad->cfg.is_odd;
     com_klad->cfg.key_slot_num = klad->cfg.key_slot_num;
     com_klad->cfg.tgt_sec_cfg.dest_sec = TRUE;
@@ -82,14 +85,17 @@ int32_t hpp_klad_process(const hpp_keyladder_sel keyladder, const hpp_klad *klad
     int32_t ret;
 
     if (klad == NULL)
+    {
         return TD_FAILURE;
 
+    }
     if (memset_s((uint8_t *)&com_klad, sizeof(common_hkl), 0, sizeof(common_hkl)) !=  EOK)
+    {
         return TD_FAILURE;
-
-    if (memset_s((uint8_t *)&deob_kdf, sizeof(rkp_deob_kdf), 0, sizeof(rkp_deob_kdf)) != EOK)
+    }
+    if (memset_s((uint8_t *)&deob_kdf, sizeof(rkp_deob_kdf), 0, sizeof(rkp_deob_kdf)) != EOK) {
         return TD_FAILURE;
-
+    }
     switch (keyladder) {
     case KLAD_BOOT:
         deob_kdf.kdf.rootkey_slot = OEM_ROOTKEY_SLOT;
@@ -111,12 +117,13 @@ int32_t hpp_klad_process(const hpp_keyladder_sel keyladder, const hpp_klad *klad
     deob_kdf.kdf.sw_reg = g_klad_sw_reg[keyladder];
 
     ret = _hpp_klad_com_klad_param(&com_klad, klad);
-    if (ret != TD_SUCCESS)
+    if (ret != TD_SUCCESS) {
         return TD_FAILURE;
+    }
     tmp = gen_wd_2(&deob_kdf, &com_klad);
     ret = klad_com_process(&deob_kdf, &com_klad, tmp);
-    if (ret != TD_SUCCESS)
+    if (ret != TD_SUCCESS) {
         return TD_FAILURE;
-
+    }
     return TD_SUCCESS;
 }

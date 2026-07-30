@@ -21,36 +21,35 @@
  * library is required to.
  */
 
-#define CTYPE_U	0x01 /* upper */
-#define CTYPE_L	0x02 /* lower */
-#define CTYPE_D	0x04 /* digit */
-#define CTYPE_C	0x08 /* cntrl */
-#define CTYPE_P	0x10 /* punct */
-#define CTYPE_S	0x20 /* white space (space/lf/tab) */
-#define CTYPE_X	0x40 /* hex digit */
-#define CTYPE_SP	0x80 /* hard space (0x20) */
+#define _U 0x01 /* upper */
+#define _L 0x02 /* lower */
+#define _D 0x04 /* digit */
+#define _C 0x08 /* cntrl */
+#define _P 0x10 /* punct */
+#define _S 0x20 /* white space (space/lf/tab) */
+#define _X 0x40 /* hex digit */
+#define _SP 0x80 /* hard space (0x20) */
 
-#define CTYPE_TABLE_SIZE 256
-extern unsigned char _ctype[CTYPE_TABLE_SIZE];
+extern unsigned char _ctype[];
 
-#define ctype_ismask(x) (_ctype[(int)(unsigned char)(x)])
+#define __ismask(x) (_ctype[(int)(unsigned char)(x)])
 
-#define isalnum(c)	((ctype_ismask(c) & (CTYPE_U | CTYPE_L | CTYPE_D)) != 0)
-#define isalpha(c)	((ctype_ismask(c) & (CTYPE_U | CTYPE_L)) != 0)
-#define iscntrl(c)	((ctype_ismask(c) & (CTYPE_C)) != 0)
-#define isdigit(c)	((ctype_ismask(c) & (CTYPE_D)) != 0)
-#define isgraph(c)	((ctype_ismask(c) & (CTYPE_P | CTYPE_U | CTYPE_L | CTYPE_D)) != 0)
-#define islower(c)	((ctype_ismask(c) & (CTYPE_L)) != 0)
-#define isprint(c)	((ctype_ismask(c) & (CTYPE_P | CTYPE_U | CTYPE_L | CTYPE_D | CTYPE_SP)) != 0)
-#define ispunct(c)	((ctype_ismask(c) & (CTYPE_P)) != 0)
-#define isspace(c)	((ctype_ismask(c) & (CTYPE_S)) != 0)
-#define isupper(c)	((ctype_ismask(c) & (CTYPE_U)) != 0)
-#define isxdigit(c)	((ctype_ismask(c) & (CTYPE_D | CTYPE_X)) != 0)
+#define isalnum(c) ((__ismask(c) & (_U | _L | _D)) != 0)
+#define isalpha(c) ((__ismask(c) & (_U | _L)) != 0)
+#define iscntrl(c) ((__ismask(c) & (_C)) != 0)
+#define isdigit(c) ((__ismask(c) & (_D)) != 0)
+#define isgraph(c) ((__ismask(c) & (_P | _U | _L | _D)) != 0)
+#define islower(c) ((__ismask(c) & (_L)) != 0)
+#define isprint(c) ((__ismask(c) & (_P | _U | _L | _D | _SP)) != 0)
+#define ispunct(c) ((__ismask(c) & (_P)) != 0)
+#define isspace(c) ((__ismask(c) & (_S)) != 0)
+#define isupper(c) ((__ismask(c) & (_U)) != 0)
+#define isxdigit(c) ((__ismask(c) & (_D | _X)) != 0)
 
-#define isascii(c) (((unsigned char)(c))<=0x7f)
-#define toascii(c) (((unsigned char)(c))&0x7f)
+#define isascii(c) (((unsigned char)(c)) <= 0x7f)
+#define toascii(c) (((unsigned char)(c)) & 0x7f)
 
-static inline unsigned char ctype_tolower(unsigned char c)
+static inline unsigned char __tolower(unsigned char c)
 {
     if (isupper(c)) {
         c -= 'A' - 'a';
@@ -58,7 +57,7 @@ static inline unsigned char ctype_tolower(unsigned char c)
     return c;
 }
 
-static inline unsigned char ctype_toupper(unsigned char c)
+static inline unsigned char __toupper(unsigned char c)
 {
     if (islower(c)) {
         c -= 'a' - 'A';
@@ -66,8 +65,8 @@ static inline unsigned char ctype_toupper(unsigned char c)
     return c;
 }
 
-#define tolower(c) ctype_tolower(c)
-#define toupper(c) ctype_toupper(c)
+#define tolower(c) __tolower(c)
+#define toupper(c) __toupper(c)
 
 #endif
 

@@ -24,7 +24,7 @@ extern "C" {
 #endif
 
 int32_t klad_com_process(const rkp_deob_kdf *deob_kdf, common_hkl *com_klad,
-			 const uint32_t check_wd);
+    const uint32_t check_wd);
 
 #ifdef __cplusplus
 #if __cplusplus

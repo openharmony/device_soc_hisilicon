@@ -30,8 +30,11 @@ int sdhci_check_int_status(uint32_t mask, uint32_t timeout)
     unsigned int wait_time =  timeout * timer_get_divider();
 
     timer_start();
+    for (;;) {
     reg = sdhci_readl(SDHCI_INT_STATUS);
-    while ((reg & mask) == 0) {
+        if (reg & mask) {
+            break;
+        }
         if (timer_get_val() > wait_time) {
             debug_printf("wait int status time out, reg = 0x%x, mask = 0x%x\n", reg, mask);
             return -1;
@@ -40,7 +43,6 @@ int sdhci_check_int_status(uint32_t mask, uint32_t timeout)
             debug_printf("int err: reg = 0x%x\n", reg);
             return -1;
         }
-        reg = sdhci_readl(SDHCI_INT_STATUS);
     }
 
     return 0;
@@ -139,9 +141,9 @@ static uint32_t mmc_clk_sel()
 
     val = reg_get(REG_BASE_SCTL + REG_PERI_EMMC_STAT);
     /* 400k need to be set when normal mode enable*/
-    if (val & EMMC_NORMAL_MODE)
+    if (val & EMMC_NORMAL_MODE) {
         return MMC_CLK_400K;
-
+    }
     /* boot mode */
     switch (mmc_clk_sel_val(val)) {
         case 0x0:
@@ -204,9 +206,9 @@ static int sdhci_hardware_init(void)
     sdhci_writel(0x10, SDHCI_AT_CTRL);
 
     /* tuning_cclk_sel=45C or tuning_cclk_sel=0C */
-    if (clk_sel == MMC_CLK_50M)
+    if (clk_sel == MMC_CLK_50M) {
         sdhci_writel(0x4, SDHCI_AT_STAT);
-    else
+    } else
         sdhci_writel(0x0, SDHCI_AT_STAT);
 
     udelay(5); /* delay 5us */
@@ -296,8 +298,9 @@ int sdhci_read_block_pio(uint32_t data_addr, uint32_t block, size_t read_type)
         decrypt_params.alg = SYMC_ALG_DMA;
         decrypt_params.mode = SYMC_MODE_CBC;
         ret = drv_spacc_decrypt(decrypt_params);
-        if (ret != TD_SUCCESS)
+        if (ret != TD_SUCCESS) {
             return TD_FAILURE;
+        }
     }
 
     return TD_SUCCESS;
@@ -308,7 +311,7 @@ int32_t sdhci_read_boot_data(uint32_t data_addr, uint32_t read_block, size_t rea
     uint32_t blocks = 0;
     int ret;
 
-    while (blocks < read_block) {
+    while (1) {
         ret = sdhci_check_int_status(SDHCI_INT_DATA_AVAIL, 2000); /* timeout 2000ms */
         if (ret) {
             debug_printf("wait data available int time out\n");
@@ -317,10 +320,13 @@ int32_t sdhci_read_boot_data(uint32_t data_addr, uint32_t read_block, size_t rea
 
         sdhci_writel(SDHCI_INT_DATA_AVAIL, SDHCI_INT_STATUS);
         ret = sdhci_read_block_pio(data_addr, blocks, read_type);
-        if (ret != TD_SUCCESS)
+        if (ret != TD_SUCCESS) {
             return TD_FAILURE;
-
+        }
         blocks++;
+        if (blocks == read_block) {
+            break;
+        }
     }
 
     return TD_SUCCESS;

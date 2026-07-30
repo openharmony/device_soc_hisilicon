@@ -116,7 +116,8 @@ td_s32 hal_hdmi_mach_register(const hdmi_mach_ctrl *mach_ctrl, td_u32 *mach_id)
             tmp_elem = &mach_info->mach_elem[i];
             if (!tmp_elem->mach_run.valid_id) {
                 (td_void)memset_s(&tmp_elem->mach_run, sizeof(tmp_elem->mach_run), 0, sizeof(hdmi_mach_run));
-                err_code = memcpy_s(&tmp_elem->mach_ctrl, sizeof(tmp_elem->mach_ctrl), mach_ctrl, sizeof(hdmi_mach_ctrl));
+                err_code = memcpy_s(&tmp_elem->mach_ctrl, sizeof(tmp_elem->mach_ctrl),
+                    mach_ctrl, sizeof(hdmi_mach_ctrl));
                 hdmi_unlock_unequal_eok_return(err_code, mach_info->mach_mutex, OT_ERR_HDMI_INVALID_PARA);
                 hdmi_unlock_if_null_return(tmp_elem->mach_ctrl.name, mach_info->mach_mutex, TD_FAILURE);
                 name_len = osal_strlen(tmp_elem->mach_ctrl.name);

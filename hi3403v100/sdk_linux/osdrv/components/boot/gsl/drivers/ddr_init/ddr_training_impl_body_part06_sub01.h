@@ -30,9 +30,9 @@ static void ddr_hw_read_adj(const struct ddr_cfg_st *cfg)
 
     ddr_debug("DDR hw read adjust");
     /* check hw read adjust bypass bit */
-    if (ddr_training_check_bypass(cfg, DDR_BYPASS_HW_ADJ_MASK) != DDR_FALSE)
+    if (ddr_training_check_bypass(cfg, DDR_BYPASS_HW_ADJ_MASK) != DDR_FALSE) {
         return;
-
+    }
     /* assume read dataeye window on left */
     for (i = 0; i < byte_num; i++) {
         reg_write(reg_read(base_phy + ddr_phy_dxnrdqnbdl0(cfg->rank_idx, i)) +

@@ -57,15 +57,15 @@
 #define DAIF_ABT_BIT (1<<2)
 #define DAIF_DBG_BIT (1<<3)
 #define DISABLE_ALL_EXECPTIONS	\
-	(DAIF_FIQ_BIT | DAIF_IRQ_BIT | DAIF_ABT_BIT | DAIF_DBG_BIT)
+    (DAIF_FIQ_BIT | DAIF_IRQ_BIT | DAIF_ABT_BIT | DAIF_DBG_BIT)
 
 #define NON_SECURE       0x1
 #define DISABLE_ALL_EXCEPTIONS \
-	(DAIF_FIQ_BIT | DAIF_IRQ_BIT | DAIF_ABT_BIT | DAIF_DBG_BIT)
+    (DAIF_FIQ_BIT | DAIF_IRQ_BIT | DAIF_ABT_BIT | DAIF_DBG_BIT)
 
 #define PARAM_EP_SECURITY_MASK    0x1
 #define get_security_state(x) ((x) & PARAM_EP_SECURITY_MASK)
 #define set_security_state(x, security) \
-	((x) = ((x) & ~PARAM_EP_SECURITY_MASK) | (security))
+    ((x) = ((x) & ~PARAM_EP_SECURITY_MASK) | (security))
 
 #endif /* __BL_COMMON_H__ */

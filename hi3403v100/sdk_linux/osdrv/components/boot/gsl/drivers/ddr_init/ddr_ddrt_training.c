@@ -16,12 +16,12 @@
 
 #include "ddr_training_impl.h"
 
-#define DDR_DDRT_TRAINING
+#define __DDRT__
 #ifdef DDR_DDRT_SPECIAL_CONFIG
 /* Some special DDRT need read register repeatedly */
 static unsigned int ddr_ddrt_read(unsigned int addr)
 {
-	int times = 0;
+    int times = 0;
     unsigned int data0;
     unsigned int data1;
     unsigned int data2;
@@ -53,13 +53,13 @@ static void ddr_ddrt_write(unsigned int data, unsigned int addr)
 
 static unsigned int ddr_get_rank_size(const struct ddr_cfg_st *cfg)
 {
-	unsigned int base_dmc = cfg->cur_dmc;
-	unsigned int rnkvol;
+    unsigned int base_dmc = cfg->cur_dmc;
+    unsigned int rnkvol;
     unsigned int mem_bank;
     unsigned int mem_row;
     unsigned int mem_col;
     unsigned int mem_width;
-	unsigned int size;
+    unsigned int size;
 
     mem_width = (reg_read(base_dmc + DDR_DMC_CFG_DDRMODE) >> DMC_MEM_WIDTH_BIT) & DMC_MEM_WIDTH_MASK;
     rnkvol = reg_read(base_dmc + ddr_dmc_cfg_rnkvol(0));
@@ -103,12 +103,12 @@ void ddr_ddrt_init(const struct ddr_cfg_st *cfg, unsigned int mode)
     unsigned int offset = 0;
 
     if (cfg == NULL) {
-		return;
-	}
+        return;
+    }
 
     if (cfg->rank_idx == 1) {
-		offset = ddr_get_rank_size(cfg);
-	}
+        offset = ddr_get_rank_size(cfg);
+    }
 
     ddr_training_ddrt_prepare_func();
 
@@ -161,9 +161,9 @@ static int ddr_ddrt_test_process(int byte, int dq)
     unsigned int dq_num;
     unsigned int dq_tmp;
 
-	if (dq != -1) { /* check for dq */
-		dq_num = ((unsigned int)byte << DDR_BYTE_DQ) + dq;
-		err_ovfl = ddrt_reg_read(DDR_REG_BASE_DDRT + DDRT_DQ_ERR_OVFL) & (1 << dq_num);
+    if (dq != -1) { /* check for dq */
+        dq_num = ((unsigned int)byte << DDR_BYTE_DQ) + dq;
+        err_ovfl = ddrt_reg_read(DDR_REG_BASE_DDRT + DDRT_DQ_ERR_OVFL) & (1 << dq_num);
         if (err_ovfl) {
             return -1;
         }
@@ -175,27 +175,27 @@ static int ddr_ddrt_test_process(int byte, int dq)
             dq_tmp = (unsigned int)dq << DDR_BYTE_DQ;
         }
 
-		err_cnt = ddrt_reg_read(DDR_REG_BASE_DDRT +
-			ddrt_dq_err_cnt(((unsigned int)byte << 1) + ((unsigned int)dq >> 2))); /* shift left 2: 4 dq */
-		err_cnt = err_cnt & (0xff << dq_tmp);
+        err_cnt = ddrt_reg_read(DDR_REG_BASE_DDRT +
+            ddrt_dq_err_cnt(((unsigned int)byte << 1) + ((unsigned int)dq >> 2))); /* shift left 2: 4 dq */
+        err_cnt = err_cnt & (0xff << dq_tmp);
         if (err_cnt) {
             return -1;
         }
-	} else if (byte != -1) { /* check for byte */
-		err_ovfl = ddrt_reg_read(DDR_REG_BASE_DDRT +
-			DDRT_DQ_ERR_OVFL) & (0xff << ((unsigned int)byte << DDR_BYTE_DQ));
+    } else if (byte != -1) { /* check for byte */
+        err_ovfl = ddrt_reg_read(DDR_REG_BASE_DDRT +
+            DDRT_DQ_ERR_OVFL) & (0xff << ((unsigned int)byte << DDR_BYTE_DQ));
         if (err_ovfl) {
             return -1;
-		}
+        }
 
-		err_cnt = ddrt_reg_read(DDR_REG_BASE_DDRT +
-			ddrt_dq_err_cnt((unsigned int)byte << 1));
-		err_cnt += ddrt_reg_read(DDR_REG_BASE_DDRT +
-			ddrt_dq_err_cnt(((unsigned int)byte << 1) + 1));
+        err_cnt = ddrt_reg_read(DDR_REG_BASE_DDRT +
+            ddrt_dq_err_cnt((unsigned int)byte << 1));
+        err_cnt += ddrt_reg_read(DDR_REG_BASE_DDRT +
+            ddrt_dq_err_cnt(((unsigned int)byte << 1) + 1));
         if (err_cnt) {
             return -1;
-		}
-	}
+        }
+    }
 
     return 0;
 }
@@ -229,12 +229,12 @@ int ddr_ddrt_test(unsigned int mask, int byte, int dq)
         return -1;
     }
 
-	/* DDRT_READ_ONLY_MODE */
+    /* DDRT_READ_ONLY_MODE */
     if ((mask & DDRT_TEST_MODE_MASK) == DDRT_READ_ONLY_MODE) {
         return 0;   /* return when DDRT finish */
     }
 
-	/* DDRT_WR_COMPRARE_MODE No error occurred, test pass. */
+    /* DDRT_WR_COMPRARE_MODE No error occurred, test pass. */
     if (regval & DDRT_TEST_PASS_MASK) {
         return 0;
     }
@@ -249,7 +249,7 @@ int ddr_ddrt_check(const struct ddr_cfg_st *cfg)
 {
     unsigned int byte_index_to_dmc = cfg->cur_byte;
 
-	/* ddrt test the byte relate to dmc, make sure not overflow */
+    /* ddrt test the byte relate to dmc, make sure not overflow */
     if (cfg->cur_byte >= (cfg->dmc_idx << 1)) {
         byte_index_to_dmc = cfg->cur_byte - (cfg->dmc_idx << 1);
     }
@@ -261,7 +261,7 @@ int ddr_ddrt_check(const struct ddr_cfg_st *cfg)
 
     ddrt_reg_write(cfg->cur_pattern, DDR_REG_BASE_DDRT + DDRT_REVERSED_DQ);
     if (ddr_ddrt_test(DDRT_WR_COMPRARE_MODE | DDRT_PATTERM_PRBS11, byte_index_to_dmc, cfg->cur_dq)) {
-		return -1;
+        return -1;
     }
 
     return 0;

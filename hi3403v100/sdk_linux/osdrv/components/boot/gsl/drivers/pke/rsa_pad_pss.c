@@ -73,9 +73,9 @@ static int32_t rsa_padding_check_pkcs1_pss_hash(const rsa_padding_s *pad,
 
     mlen = pss->slen + pad->hlen + PADDING1_SIZE;
     ptr_m = (uint8_t *)(uintptr_t)gsl_malloc(mlen);
-    if (ptr_m == NULL)
+    if (ptr_m == NULL) {
         return TD_FAILURE;
-
+    }
     /* M' = padding1(zero padding) || mHash || salt */
     if (memset_s(ptr_m, mlen, 0x00, PADDING1_SIZE) != EOK) {
         gsl_free(ptr_m);
@@ -100,12 +100,12 @@ static int32_t rsa_padding_check_pkcs1_pss_hash(const rsa_padding_s *pad,
         return TD_FAILURE;
     }
 
-    gsl_free(ptr_m); /* Must free ptr_m befort return */
+    gsl_free(ptr_m); /* Must gsl_free ptr_m befort return */
     ptr_m = NULL;
 
-    if (memcmp(arr_h, pss->masked_seed, pad->hlen) != 0)
+    if (memcmp(arr_h, pss->masked_seed, pad->hlen) != 0) {
         return TD_FAILURE;
-
+    }
     return TD_SUCCESS;
 }
 
@@ -114,32 +114,32 @@ static int32_t rsa_pkcs1_mgf1(const uint8_t *seed, uint32_t seed_len, uint8_t *m
 {
     uint32_t i;
     uint32_t out_len;
-	uint8_t ptr_md[HASH_RESULT_MAX_LEN];
-	uint8_t *ptr_cnt = NULL;
-	uint8_t *ptr_seed = NULL;
-	size_t malloc_size = seed_len + MFG1_CNT_LEN;
-	int ret;
+    uint8_t ptr_md[HASH_RESULT_MAX_LEN];
+    uint8_t *ptr_cnt = NULL;
+    uint8_t *ptr_seed = NULL;
+    size_t malloc_size = seed_len + MFG1_CNT_LEN;
+    int ret;
 
     ptr_seed = (uint8_t *)gsl_malloc(malloc_size);
-	if (ptr_seed == NULL)
-		return TD_FAILURE;
-
+    if (ptr_seed == NULL) {
+        return TD_FAILURE;
+    }
     ptr_cnt = ptr_seed + seed_len;
 
-	if (memset_s(ptr_md, HASH_RESULT_MAX_LEN, 0, HASH_RESULT_MAX_LEN) != EOK) {
+    if (memset_s(ptr_md, HASH_RESULT_MAX_LEN, 0, HASH_RESULT_MAX_LEN) != EOK) {
         gsl_free(ptr_seed);
         return TD_FAILURE;
     }
 
-	if (memset_s(ptr_seed, malloc_size, 0, malloc_size) != EOK) {
+    if (memset_s(ptr_seed, malloc_size, 0, malloc_size) != EOK) {
         gsl_free(ptr_seed);
         return TD_FAILURE;
     }
 
-	if (memcpy_s(ptr_seed, malloc_size, seed, seed_len) != EOK) {
+    if (memcpy_s(ptr_seed, malloc_size, seed, seed_len) != EOK) {
         gsl_free(ptr_seed);
         return TD_FAILURE;
-	}
+    }
 
     /* PKCS#1 V2.1 only use sha1 function, Others allow for future expansion */
     for (i = 0, out_len = 0; out_len < mask_len; i++) {
@@ -150,8 +150,8 @@ static int32_t rsa_pkcs1_mgf1(const uint8_t *seed, uint32_t seed_len, uint8_t *m
         ptr_cnt[2] = (uint8_t)((i >>  8) & 0xFF); /* 2 ptr_cnt index, 8  right shift */
         ptr_cnt[3] = (uint8_t)(i & 0xFF);         /* 3 ptr_cnt index */
 
-		ret = calc_sha((uint32_t)(uintptr_t)ptr_seed, malloc_size, ptr_md, HASH_RESULT_MAX_LEN);
-		if (ret != TD_SUCCESS) {
+        ret = calc_sha((uint32_t)(uintptr_t)ptr_seed, malloc_size, ptr_md, HASH_RESULT_MAX_LEN);
+        if (ret != TD_SUCCESS) {
             gsl_free(ptr_seed);
             return TD_FAILURE;
         }
@@ -167,27 +167,35 @@ static int32_t rsa_pkcs1_mgf1(const uint8_t *seed, uint32_t seed_len, uint8_t *m
 
 int32_t rsa_padding_check_pkcs1_pss(rsa_padding_s *pad, const uint8_t *mhash)
 {
-	int32_t ret;
+    int32_t ret;
     uint32_t index;
     uint32_t tmp_len;
-	rsa_pkcs1_pss_s pss;
+    rsa_pkcs1_pss_s pss;
 
     if (pad == NULL || pad->in_data == NULL)
+    {
         return TD_FAILURE;
 
+    }
     if (memset_s(&pss, sizeof(rsa_pkcs1_pss_s), 0, sizeof(rsa_pkcs1_pss_s)) != EOK)
+    {
         return TD_FAILURE;
 
+    }
     pss.slen = pad->hlen;
     pss.key_len = n_bits_to_n_bytes(pad->em_bit);
     pss.msb_bits = (pad->em_bit - 1) & 0x07;
 
-	if (pss.key_len < (pad->hlen + pss.slen + RSA_PAD_PSS_VALUE_2))
-		return TD_FAILURE;
-
-    if (pad->in_data[0] & (0xFF << pss.msb_bits))
+    if (pss.key_len < (pad->hlen + pss.slen + RSA_PAD_PSS_VALUE_2))
+    {
         return TD_FAILURE;
 
+    }
+    if (pad->in_data[0] & (0xFF << pss.msb_bits))
+    {
+        return TD_FAILURE;
+
+    }
     if (pss.msb_bits == 0) {
         pad->in_data++;
         pss.key_len--;
@@ -197,34 +205,40 @@ int32_t rsa_padding_check_pkcs1_pss(rsa_padding_s *pad, const uint8_t *mhash)
     pss.masked_seed = pad->in_data + pss.key_len - pad->hlen - 1;
 
     if (pad->in_data[pss.key_len - 1] != 0xBC)
+    {
         return TD_FAILURE;
 
+    }
     /* formula: maskedDB = DB xor dbMask, DB = PS || 0x01 || salt */
     ret = rsa_pkcs1_mgf1(pss.masked_seed,
         pad->hlen, pss.masked_db, pss.key_len - pad->hlen - 1);
     if (ret != TD_SUCCESS)
+    {
         return TD_FAILURE;
 
+    }
     if (pss.msb_bits) {
-		pss.masked_db[0] &= 0xFF >> (8 - pss.msb_bits); /* 8 */
-	}
+        pss.masked_db[0] &= 0xFF >> (8 - pss.msb_bits); /* 8 */
+    }
 
     tmp_len = pss.key_len - pss.slen - pad->hlen - 2; /* 2 */
     if (tmp_len >= CIPHER_MAX_RSA_KEY_LEN - 1)
+    {
         return TD_FAILURE;
-
+    }
     for (index = 0; index < tmp_len; index++) {
-        if (pss.masked_db[index] != 0x00)
+        if (pss.masked_db[index] != 0x00) {
             return TD_FAILURE;
+        }
     }
 
-    if (pss.masked_db[index] != 0x01)
+    if (pss.masked_db[index] != 0x01) {
         return TD_FAILURE;
-
+    }
     index++;
 
-    if (memcpy_s(pss.salt, sizeof(pss.salt), &pss.masked_db[index], pss.slen) != EOK)
+    if (memcpy_s(pss.salt, sizeof(pss.salt), &pss.masked_db[index], pss.slen) != EOK) {
         return TD_FAILURE;
-
+    }
     return rsa_padding_check_pkcs1_pss_hash(pad, mhash, &pss);
 }

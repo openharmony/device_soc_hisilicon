@@ -61,9 +61,9 @@ typedef union {
 
 uint32_t is_tee_enable(void)
 {
-    if ((NUM_FF & reg_get(OTP_USER_LOCKABLE0)) == OTP_SOC_TEE_DISABLE_FLAG)
+    if ((NUM_FF & reg_get(OTP_USER_LOCKABLE0)) == OTP_SOC_TEE_DISABLE_FLAG) {
         return AUTH_FAILURE;
-    else
+    } else
         return AUTH_SUCCESS;
 }
 
@@ -78,9 +78,9 @@ uint32_t get_tee_owner(void)
 
 uint32_t is_backup_image_enable(void)
 {
-    if ((reg_get(OTP_USER_LOCKABLE5) >> OTP_UBOOT_REDUNDANCE_BIT) & 0x1)
+    if ((reg_get(OTP_USER_LOCKABLE5) >> OTP_UBOOT_REDUNDANCE_BIT) & 0x1) {
         return AUTH_SUCCESS;
-    else
+    } else
         return AUTH_FAILURE;
 }
 
@@ -90,49 +90,49 @@ uint32_t is_bload_dec_en_enable(void)
 
     otp_user_reg_val.val = reg_get(OTP_USER_LOCKABLE5);
 
-    if (otp_user_reg_val.bits.bload_dec_en)
+    if (otp_user_reg_val.bits.bload_dec_en) {
         return AUTH_SUCCESS;
-    else
+    } else
         return AUTH_FAILURE;
 }
 
 uint32_t is_secure_boot_en_enable(void)
 {
-    if ((NUM_FF & reg_get(OTP_USER_LOCKABLE8)) == OTP_SECURE_BOOT_DISABLE_FLAG)
+    if ((NUM_FF & reg_get(OTP_USER_LOCKABLE8)) == OTP_SECURE_BOOT_DISABLE_FLAG) {
         return AUTH_FAILURE;
-    else
+    } else
         return AUTH_SUCCESS;
 }
 
 uint32_t is_double_sign_en_enable(void)
 {
-    if ((NUM_F & reg_get(OTP_USER_LOCKABLE9)) == OTP_DOUBLE_SIGN_DISABLE_FLAG)
+    if ((NUM_F & reg_get(OTP_USER_LOCKABLE9)) == OTP_DOUBLE_SIGN_DISABLE_FLAG) {
         return AUTH_FAILURE;
-    else
+    } else
         return AUTH_SUCCESS;
 }
 
 uint32_t is_func_jtag_enable(void)
 {
-    if ((NUM_F & reg_get(DBC_APB_JTAG_DBG_INFO)) == CHIP_JTAG_SEL_ENABLE_FLAG)
+    if ((NUM_F & reg_get(DBC_APB_JTAG_DBG_INFO)) == CHIP_JTAG_SEL_ENABLE_FLAG) {
         return AUTH_SUCCESS;
-    else
+    } else
         return AUTH_FAILURE;
 }
 
 uint32_t is_boot_info_lv_debug_enable(void)
 {
-    if ((NUM_FF & reg_get(OTP_PO_INFO_32)) == OTP_BOOT_INFO_LV_ENABLE_FLAG)
+    if ((NUM_FF & reg_get(OTP_PO_INFO_32)) == OTP_BOOT_INFO_LV_ENABLE_FLAG) {
         return AUTH_SUCCESS;
-    else
+    } else
         return AUTH_FAILURE;
 }
 
 uint32_t is_scs_dbg_enable(void)
 {
-    if ((reg_get(OTP_USER_ONEWAYO) >> OTP_SCS_DBG_DISABLE_BIT) & 0x1)
+    if ((reg_get(OTP_USER_ONEWAYO) >> OTP_SCS_DBG_DISABLE_BIT) & 0x1) {
         return AUTH_FAILURE;
-    else
+    } else
         return AUTH_SUCCESS;
 }
 

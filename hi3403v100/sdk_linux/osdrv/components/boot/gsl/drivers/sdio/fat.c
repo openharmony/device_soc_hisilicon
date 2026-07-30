@@ -110,15 +110,15 @@ static uint32_t get_fatent(fsdata *mydata, uint32_t entry)
         uint32_t fatlength = mydata->fatlength;
         uint32_t startblock = bufnum * FATBUFBLOCKS;
 
-        if (getsize > fatlength)
+        if (getsize > fatlength) {
             getsize = fatlength;
-
+        }
         fatlength *= mydata->sect_size;    /* We want it in bytes now */
         startblock += mydata->fat_sect;    /* Offset from start of disk */
 
-        if (disk_read(startblock, getsize, bufptr) < 0)
+        if (disk_read(startblock, getsize, bufptr) < 0) {
             return ret;
-
+        }
         mydata->fatbufnum = bufnum;
     }
 
@@ -148,8 +148,8 @@ static int get_cluster(const fsdata *mydata, uint32_t clustnum, uint8_t *buffer,
         startsect = mydata->rootdir_sect;
     }
 
-	nr_sect = size / mydata->sect_size;
-	ret = disk_read(startsect, nr_sect, buffer);
+    nr_sect = size / mydata->sect_size;
+    ret = disk_read(startsect, nr_sect, buffer);
     if (ret != nr_sect) {
         return -1;
     }
@@ -175,8 +175,18 @@ static int get_cluster(const fsdata *mydata, uint32_t clustnum, uint8_t *buffer,
     return 0;
 }
 
-static int fat_seek_to_sdio_pos(fsdata *mydata, file_contents_parms_t *contents_parms)
+static int do_curclust_contents(fsdata *mydata, const dir_entry *dentptr, uint8_t *buffer,
+    unsigned long maxsize, file_contents_parms_t *contents_parms)
 {
+    uint8_t *tmp_buffer = NULL;
+
+    if (sdio_pos >= contents_parms->filesize)
+    {
+        return -1;
+    }
+    if ((maxsize > 0) && (contents_parms->filesize > (sdio_pos + maxsize))) {
+        contents_parms->filesize = sdio_pos + maxsize;
+    }
     contents_parms->actsize = contents_parms->bytesperclust;
     while (contents_parms->actsize <= sdio_pos) {
         contents_parms->curclust = get_fatent(mydata, contents_parms->curclust);
@@ -189,23 +199,14 @@ static int fat_seek_to_sdio_pos(fsdata *mydata, file_contents_parms_t *contents_
     contents_parms->actsize -= contents_parms->bytesperclust;
     contents_parms->filesize -= contents_parms->actsize;
     sdio_pos -= contents_parms->actsize;
-    return 0;
-}
 
-static int fat_copy_unaligned_head(fsdata *mydata, uint8_t **buffer, file_contents_parms_t *contents_parms)
-{
-    uint8_t *tmp_buffer = NULL;
-
-    if (!sdio_pos) {
-        return 1;
-    }
-
-    contents_parms->actsize = min(contents_parms->filesize, (unsigned long)contents_parms->bytesperclust);
-    tmp_buffer = gsl_malloc(contents_parms->actsize);
-    if (!tmp_buffer) {
+    if (sdio_pos) {
+        contents_parms->actsize = min(contents_parms->filesize,
+            (unsigned long)contents_parms->bytesperclust);
+        tmp_buffer = gsl_malloc(contents_parms->actsize);
+        if (!tmp_buffer) {
         return -1;
-    }
-
+        }
     if (get_cluster(mydata, contents_parms->curclust, tmp_buffer, contents_parms->actsize) != 0) {
         gsl_free(tmp_buffer);
         return -1;
@@ -214,39 +215,20 @@ static int fat_copy_unaligned_head(fsdata *mydata, uint8_t **buffer, file_conten
     contents_parms->filesize -= contents_parms->actsize;
     contents_parms->actsize -= sdio_pos;
     if (memcpy_s(*buffer, contents_parms->actsize, tmp_buffer + sdio_pos, contents_parms->actsize) != EOK) {
-        gsl_free(tmp_buffer);
+            gsl_free(tmp_buffer);
         return -1;
     }
 
-    gsl_free(tmp_buffer);
+        gsl_free(tmp_buffer);
     contents_parms->gotsize += contents_parms->actsize;
     if (!contents_parms->filesize) {
         return 0;
     }
-    *buffer += contents_parms->actsize;
+    buffer += contents_parms->actsize;
     contents_parms->curclust = get_fatent(mydata, contents_parms->curclust);
-    return check_clust(contents_parms->curclust) ? -1 : 1;
-}
-
-static int do_curclust_contents(fsdata *mydata, const dir_entry *dentptr, uint8_t *buffer,
-    unsigned long maxsize, file_contents_parms_t *contents_parms)
-{
-    int ret;
-
-    if (sdio_pos >= contents_parms->filesize) {
+        if (check_clust(contents_parms->curclust)) {
         return -1;
-    }
-
-    if ((maxsize > 0) && (contents_parms->filesize > (sdio_pos + maxsize))) {
-        contents_parms->filesize = sdio_pos + maxsize;
-    }
-
-    if (fat_seek_to_sdio_pos(mydata, contents_parms) != 0) {
-        return -1;
-    }
-    ret = fat_copy_unaligned_head(mydata, &buffer, contents_parms);
-    if (ret <= 0) {
-        return ret;
+        }
     }
 
     contents_parms->actsize = contents_parms->bytesperclust;
@@ -297,12 +279,9 @@ getit:
         if (check_clust(contents_parms->curclust)) {
             return contents_parms->gotsize;
         }
-
         contents_parms->actsize = contents_parms->bytesperclust;
         endclust = contents_parms->curclust;
-    } while (contents_parms->filesize > 0);
-
-    return contents_parms->gotsize;
+    } while (1);
 }
 
 /*
@@ -383,13 +362,13 @@ dir_entry *do_data_cluster(const char *filename, uint32_t cursect,
     dir_entry *dentptr = NULL;
     char s_name[FILE_NAME_MAX_LEN];
 
-    if (mydata == NULL || filename == NULL)
+    if (mydata == NULL || filename == NULL) {
         return NULL;
-
-    while (fat32_end == 0) {
-        if (disk_read(cursect, 1, do_fat_read_at_block) < 0)
+    }
+    while (1) {
+        if (disk_read(cursect, 1, do_fat_read_at_block) < 0) {
             return NULL;
-
+        }
         dentptr = (dir_entry *) do_fat_read_at_block;
 
         for (i = 0; i < DIRENTSPERBLOCK; i++) {
@@ -434,9 +413,12 @@ dir_entry *do_data_cluster(const char *filename, uint32_t cursect,
         } else {
             cursect++;
         }
+        if (fat32_end) {
+            return NULL;
+        }
     }
 
-    return NULL;
+    return dentptr;
 }
 
 long do_fat_read_at(const char *filename, void *buffer,
