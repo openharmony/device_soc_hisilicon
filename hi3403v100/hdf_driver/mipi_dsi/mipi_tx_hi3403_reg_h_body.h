@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-/* SPLIT_WRAPPER_GENERATED_FOR_HEADER_SIZE: keep this compatibility header below the size limit. */
-#ifndef __MIPI_TX_HI3403_REG_H__
-#define __MIPI_TX_HI3403_REG_H__
+#ifndef __MIPI_TX_HI3403_REG_H_BODY_H__
+#define __MIPI_TX_HI3403_REG_H_BODY_H__
 
-#include "mipi_tx_hi3403_reg_h_body.h"
+#include "mipi_tx_hi3403_reg_h_body_part01.h"
+#include "mipi_tx_hi3403_reg_h_body_part02.h"
 
-#endif /* __MIPI_TX_HI3403_REG_H__ */
+#endif /* __MIPI_TX_HI3403_REG_H_BODY_H__ */

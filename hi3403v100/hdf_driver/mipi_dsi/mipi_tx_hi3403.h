@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef MIPI_TX_HI3403_H
-#define MIPI_TX_HI3403_H
+#ifndef __MIPI_TX_HI3403_H__
+#define __MIPI_TX_HI3403_H__
 
 /****************************************************************************
  * hi3403v100 specific definitions
@@ -111,4 +111,4 @@ typedef struct {
 } MipiTxDevPhyTag;
 
 
-#endif /* MIPI_TX_HI3403_H */
+#endif /* __MIPI_TX_HI3403_H__ */
