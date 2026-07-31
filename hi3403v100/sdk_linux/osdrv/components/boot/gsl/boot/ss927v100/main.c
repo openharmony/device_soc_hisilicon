@@ -979,7 +979,6 @@ static int get_head_area_data_form_sdio()
     if (!self_sdio_check())
     {
         return TD_FAILURE;
-
     }
     /* Read the data from 64K to 79K(lenght is 15K) in the image */
     set_sdio_pos(SECURE_IMAGE_STEP1_SIZE);

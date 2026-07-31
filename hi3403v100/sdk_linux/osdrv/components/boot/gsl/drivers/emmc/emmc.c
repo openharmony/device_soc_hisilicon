@@ -96,8 +96,10 @@ static int mmc_send_cmd(uint32_t cmd, uint32_t arg)
 
 static int mmc_card_init(void)
 {
-    uint32_t cmd, arg;
-    uint32_t timeout, retry;
+    uint32_t cmd;
+    uint32_t arg;
+    uint32_t timeout;
+    uint32_t retry;
     uint32_t reg;
     uint32_t bus_width;
     sdhci_writel(0x0, SDHCI_EMMC_HW_RESET);

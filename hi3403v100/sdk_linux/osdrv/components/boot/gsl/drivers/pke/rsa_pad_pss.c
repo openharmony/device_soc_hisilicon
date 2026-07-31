@@ -175,12 +175,10 @@ int32_t rsa_padding_check_pkcs1_pss(rsa_padding_s *pad, const uint8_t *mhash)
     if (pad == NULL || pad->in_data == NULL)
     {
         return TD_FAILURE;
-
     }
     if (memset_s(&pss, sizeof(rsa_pkcs1_pss_s), 0, sizeof(rsa_pkcs1_pss_s)) != EOK)
     {
         return TD_FAILURE;
-
     }
     pss.slen = pad->hlen;
     pss.key_len = n_bits_to_n_bytes(pad->em_bit);
@@ -189,12 +187,10 @@ int32_t rsa_padding_check_pkcs1_pss(rsa_padding_s *pad, const uint8_t *mhash)
     if (pss.key_len < (pad->hlen + pss.slen + RSA_PAD_PSS_VALUE_2))
     {
         return TD_FAILURE;
-
     }
     if (pad->in_data[0] & (0xFF << pss.msb_bits))
     {
         return TD_FAILURE;
-
     }
     if (pss.msb_bits == 0) {
         pad->in_data++;
@@ -207,7 +203,6 @@ int32_t rsa_padding_check_pkcs1_pss(rsa_padding_s *pad, const uint8_t *mhash)
     if (pad->in_data[pss.key_len - 1] != 0xBC)
     {
         return TD_FAILURE;
-
     }
     /* formula: maskedDB = DB xor dbMask, DB = PS || 0x01 || salt */
     ret = rsa_pkcs1_mgf1(pss.masked_seed,
@@ -215,7 +210,6 @@ int32_t rsa_padding_check_pkcs1_pss(rsa_padding_s *pad, const uint8_t *mhash)
     if (ret != TD_SUCCESS)
     {
         return TD_FAILURE;
-
     }
     if (pss.msb_bits) {
         pss.masked_db[0] &= 0xFF >> (8 - pss.msb_bits); /* 8 */

@@ -876,7 +876,8 @@ static void ddr_rdqbdl_adj(struct ddr_cfg_st *cfg, struct ddr_bdl_dly_st *bdl_dl
     const int value_num = 10;
     unsigned int rank = cfg->rank_idx;
     unsigned int min = 0xffffffff;
-    unsigned int rdm, rdqs;
+    unsigned int rdm;
+    unsigned int rdqs;
     unsigned int cur_mode = cfg->cur_mode;
 
     cfg->cur_mode = DDR_MODE_READ;
@@ -947,7 +948,10 @@ static void ddr_judge_wdq_rank(struct ddr_cfg_st *cfg, unsigned int byte_idx,
 {
     int skew;
     int phase2bdl;
-    int wdqphase_rank0_tmp0, wdqphase_rank1_tmp0, wdqphase_rank0_tmp1, wdqphase_rank1_tmp1;
+    int wdqphase_rank0_tmp0;
+    int wdqphase_rank1_tmp0;
+    int wdqphase_rank0_tmp1;
+    int wdqphase_rank1_tmp1;
     unsigned int cur_rank;
 
     cur_rank = cfg->rank_idx;
@@ -1023,8 +1027,10 @@ static int ddr_adjust_wdqs_select_rank(unsigned int byte_idx, struct ddr_cfg_st 
     struct tr_dq_adj_st *wdqs_rank0, struct tr_dq_adj_st *wdqs_rank1)
 {
     int skew;
-    int wdqsphase_rank0_tmp0, wdqsphase_rank1_tmp0;
-    int wdqsphase_rank0_tmp1, wdqsphase_rank1_tmp1;
+    int wdqsphase_rank0_tmp0;
+    int wdqsphase_rank1_tmp0;
+    int wdqsphase_rank0_tmp1;
+    int wdqsphase_rank1_tmp1;
 
     wdqsphase_rank0_tmp0 = wdqs_rank0->wdqsphase & 0xf; /* 0xf:bit[4:0] */
     wdqsphase_rank1_tmp0 = wdqs_rank1->wdqsphase & 0xf; /* 0xf:bit[4:0] */
@@ -1073,7 +1079,8 @@ static void ddr_judge_wdqs_rank(struct ddr_cfg_st *cfg, unsigned int byte_idx,
 {
     int skew;
     int phase2bdl;
-    int wdqsphase_rank0_tmp0, wdqsphase_rank1_tmp0;
+    int wdqsphase_rank0_tmp0;
+    int wdqsphase_rank1_tmp0;
     unsigned int cur_rank;
 
     cur_rank = cfg->rank_idx;
@@ -1155,7 +1162,9 @@ void ddr_training_break_point(const char *name)
 #ifdef DDR_TRAINING_ADJUST_CONFIG
 static unsigned int ddr_adjust_get_average(const struct ddr_cfg_st *cfg)
 {
-    unsigned int dq0_3, dq4_7, val;
+    unsigned int dq0_3;
+    unsigned int dq4_7;
+    unsigned int val;
     unsigned int base_phy = cfg->cur_phy;
     unsigned int byte_index = cfg->cur_byte;
     unsigned int rank = cfg->rank_idx;
@@ -1238,7 +1247,8 @@ static void ddr_rdqs_sync(struct ddr_cfg_st *cfg, int val)
 {
     unsigned int rdqsdly;
     unsigned int cur_rank = cfg->rank_idx;
-    int old, offset;
+    int old;
+    int offset;
 
     rdqsdly = reg_read(cfg->cur_phy + ddr_phy_dxnrdqsdly(cfg->cur_byte));
     old = (rdqsdly >> PHY_RDQS_BDL_BIT) & PHY_RDQS_BDL_MASK;
@@ -1331,7 +1341,8 @@ static void ddr_adjust_change_val(unsigned int dir, int *val,
 static void ddr_adjust_move_win(struct ddr_cfg_st *cfg,
     struct training_data *training, int step, unsigned int dir)
 {
-    int cur_val, def_val;
+    int cur_val;
+    int def_val;
     int accel;
     unsigned int i;
     unsigned int trend;
@@ -1512,7 +1523,10 @@ static void ddr_dataeye_search_dq(unsigned int left, unsigned int right,
 /* Find DQ valid range */
 static void ddr_dataeye_find_dq(const struct ddr_cfg_st *cfg, struct training_data *training)
 {
-    int cur_dq, left_dq, right_dq, def_dq;
+    int cur_dq;
+    int left_dq;
+    int right_dq;
+    int def_dq;
     unsigned int dq_num;
     unsigned int win_num;
 
@@ -1585,8 +1599,10 @@ int ddr_dataeye_deskew(struct ddr_cfg_st *cfg, struct training_data *training)
 {
     unsigned int dq_num;
     unsigned int loop_times = 0;
-    unsigned int win_num, dq_sum;
-    unsigned int def_dq, best_dq;
+    unsigned int win_num;
+    unsigned int dq_sum;
+    unsigned int def_dq;
+    unsigned int best_dq;
     int i;
 
     if (cfg == NULL || training == NULL) {
@@ -1674,7 +1690,8 @@ int ddr_dataeye_training(struct ddr_cfg_st *cfg)
 {
     struct training_data tmp_result;
     struct training_data *training = &tmp_result;
-    int result_read, result_write;
+    int result_read;
+    int result_write;
 
     ddr_debug("DDR dataeye training PHY[%x][%x] DMC[%x][%x] Rank[%x]",
         cfg->phy_idx, cfg->cur_phy, cfg->dmc_idx, cfg->cur_dmc, cfg->rank_idx);
@@ -1795,7 +1812,8 @@ static void ddr_hw_training_adjust_rdqs(struct ddr_cfg_st *cfg, const struct rdq
 {
     unsigned int i;
     unsigned int byte_num = cfg->phy[cfg->phy_idx].total_byte_num;
-    unsigned int rdqs_rank0, rdqs_rank1;
+    unsigned int rdqs_rank0;
+    unsigned int rdqs_rank1;
     unsigned int cur_rank = cfg->rank_idx;
     int offset;
 
@@ -2146,8 +2164,10 @@ static int ddr_hw_training_normal_conf(const struct ddr_cfg_st *cfg)
 
 void ddr_ck_cfg(unsigned int base_phy)
 {
-    unsigned int acphyctl7, acphyctl7_tmp;
-    unsigned int ck0, ck1;
+    unsigned int acphyctl7;
+    unsigned int acphyctl7_tmp;
+    unsigned int ck0;
+    unsigned int ck1;
 
     acphyctl7 = reg_read(base_phy + DDR_PHY_ACPHYCTL7);
     ck0 = (acphyctl7 >> PHY_ACPHY_DCLK0_BIT) & PHY_ACPHY_DCLK_MASK;

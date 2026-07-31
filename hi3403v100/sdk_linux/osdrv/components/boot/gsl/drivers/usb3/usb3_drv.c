@@ -407,7 +407,8 @@ void usb3_ep0_activate(usb3_pcd_t *pcd)
 
 void usb3_ep_activate(usb3_pcd_t *pcd, usb3_pcd_ep_t *ep)
 {
-    usb3_dev_ep_regs_t *ep_reg, *ep0_reg;
+    usb3_dev_ep_regs_t *ep_reg;
+    usb3_dev_ep_regs_t *ep0_reg;
     uint32_t depcfg0;
     uint32_t depcfg1;
     uint32_t depcfg2 = 0;
@@ -930,7 +931,6 @@ bool usb3_driver_init(void)
     if (usb3_dev == NULL)
     {
         return FALSE;
-
     }
     (void)memset_s(usb3_dev, sizeof(usb3_device_t), 0, sizeof(usb3_device_t));
     usb3_dev_ex = usb3_dev;

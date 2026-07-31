@@ -108,7 +108,6 @@ int32_t rkp_eff_rk_start(const rkp_deob_kdf *deob_kdf, const uint32_t check_wd)
     if (deob_kdf == NULL)
     {
         return TD_FAILURE;
-
     }
     _rkp_wait_idle();
     _rkp_sw_reg(deob_kdf->kdf.sw_reg);
@@ -116,7 +115,6 @@ int32_t rkp_eff_rk_start(const rkp_deob_kdf *deob_kdf, const uint32_t check_wd)
     if (ret != TD_SUCCESS)
     {
         return TD_FAILURE;
-
     }
     ret = _rkp_calc_start(&deob_kdf->kdf);
     if (ret != TD_SUCCESS) {
