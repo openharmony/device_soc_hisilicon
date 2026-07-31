@@ -87,7 +87,6 @@ int32_t hpp_klad_process(const hpp_keyladder_sel keyladder, const hpp_klad *klad
     if (klad == NULL)
     {
         return TD_FAILURE;
-
     }
     if (memset_s((uint8_t *)&com_klad, sizeof(common_hkl), 0, sizeof(common_hkl)) !=  EOK)
     {

@@ -328,19 +328,16 @@ static int confirm_sha256_value(uint32_t data_addr, uint32_t data_len,
     if (err != EOK)
     {
         return TD_FAILURE;
-
     }
     err = memset_s(data_sha_b, SHA_256_LEN, 0x5A, SHA_256_LEN);
     if (err != EOK)
     {
         return TD_FAILURE;
-
     }
     ret = calc_sha(data_addr, data_len, data_sha, SHA_256_LEN);
     if (ret != TD_SUCCESS)
     {
         return TD_FAILURE;
-
     }
     ret = memcmp(data_sha_embed, data_sha, SHA_256_LEN);
     if (ret != 0) {

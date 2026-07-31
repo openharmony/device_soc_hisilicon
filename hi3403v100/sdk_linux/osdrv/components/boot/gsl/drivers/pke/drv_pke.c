@@ -40,12 +40,10 @@ int32_t drv_rsa_verify_hash(const uint8_t *n, const uint8_t *e,
     if (sign == NULL)
     {
         return TD_FAILURE;
-
     }
     if (memset_s(em, RSA_KEY_LEN_4096, 0x00, RSA_KEY_LEN_4096) != EOK)
     {
         return TD_FAILURE;
-
     }
     if (memset_s(sign_hash, HASH_LEN_256, 0x0, HASH_LEN_256) != EOK)
     {

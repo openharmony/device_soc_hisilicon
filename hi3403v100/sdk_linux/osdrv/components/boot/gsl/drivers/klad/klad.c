@@ -34,7 +34,6 @@ static ALWAYS_INLINE int32_t _klad_func_start(const rkp_deob_kdf *deob_kdf,
     if (ret != TD_SUCCESS)
     {
         return TD_FAILURE;
-
     }
     com_klad->key_size = 0; /*128 bit key*/
     tmp = gen_wd_2(com_klad, level);
@@ -72,7 +71,6 @@ int32_t klad_com_process(const rkp_deob_kdf *deob_kdf, common_hkl *com_klad,
     if (deob_kdf == NULL || com_klad == NULL)
     {
         return TD_FAILURE;
-
     }
     ret = hkl_com_lock();
     if (ret != TD_SUCCESS) {

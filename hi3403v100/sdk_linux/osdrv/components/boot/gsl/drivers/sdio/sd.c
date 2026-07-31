@@ -227,7 +227,10 @@ static int sd_send_cmd(uint32_t cmd, uint32_t arg)
 
 static int sd_card_init(void)
 {
-    uint32_t cmd, arg, rsp, ctrl;
+    uint32_t cmd;
+    uint32_t arg;
+    uint32_t rsp;
+    uint32_t ctrl;
     uint32_t timeout = 100;
 
     /* Send CMD0 to reset card into idle state */
@@ -443,8 +446,14 @@ size_t mmc_block_read(void *dst, uint32_t src, size_t size)
 
 int update_mmc_read(unsigned long src, char *dst, unsigned long size)
 {
-    unsigned long end, part_start, part_end, part_len, aligned_start, aligned_end;
-    unsigned long mmc_block_size, mmc_block_address;
+    unsigned long end;
+    unsigned long part_start;
+    unsigned long part_end;
+    unsigned long part_len;
+    unsigned long aligned_start;
+    unsigned long aligned_end;
+    unsigned long mmc_block_size;
+    unsigned long mmc_block_address;
     errno_t err;
 
     if (size == 0) {

@@ -673,7 +673,8 @@ void usb3_ep0_start_transfer(usb3_pcd_t *pcd, usb3_pcd_req_t *req)
     usb3_dev_ep_regs_t *ep_reg;
     usb3_dma_desc_t *desc;
     uint32_t desc_dma;
-    uint32_t desc_type, len;
+    uint32_t desc_type;
+    uint32_t len;
     uint8_t tri;
 
     /* Get the DMA Descriptor (TRB) for this request */
@@ -947,7 +948,8 @@ void usb3_handle_ep0_out_data(usb3_pcd_t *pcd, usb3_pcd_req_t *req, uint32_t eve
 {
     usb3_pcd_ep_t *ep0 = &pcd->ep0;
     usb3_dma_desc_t *desc = NULL;
-    uint32_t byte_count, len;
+    uint32_t byte_count;
+    uint32_t len;
 
     if (!req) {
         req = &pcd->ep0_req;

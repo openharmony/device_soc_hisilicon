@@ -1392,31 +1392,26 @@ void main_entry(void)
     if (ret != TD_SUCCESS)
     {
         failure_process();
-
     }
     channel_type = get_data_channel_type();
     if (channel_type == BOOT_SEL_UNKNOW)
     {
         failure_process();
-
     }
     ret = get_head_area_data(channel_type, &g_backup_params);
     if (ret != TD_SUCCESS)
     {
         failure_process();
-
     }
     ret = handle_bootloader_key_area();
     if (ret != TD_SUCCESS)
     {
         failure_process();
-
     }
     ret = handle_bootloader_params_area();
     if (ret != TD_SUCCESS)
     {
         failure_process();
-
     }
     ret = system_init();
     if (ret != TD_SUCCESS) {
@@ -1476,7 +1471,6 @@ void secure_os_entry(void)
     if (ret != TD_SUCCESS)
     {
         tee_img_verify_failure();
-
     }
     /* configure ree DDR for tee image */
     config_tee_img_non_sec_ddr();

@@ -101,7 +101,8 @@ void reset_timer_masked(void)
 /* delay x useconds AND perserve advance timstamp value */
 void __udelay(unsigned long usec)
 {
-    unsigned long tmo, tmp;
+    unsigned long tmo;
+    unsigned long tmp;
 
     /* if "big" number, spread normalization to seconds */
     if (usec >= TIME_COVERT_RATIO) {
