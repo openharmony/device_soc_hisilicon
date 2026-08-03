@@ -148,6 +148,13 @@ static struct DispInfo *GetDispInfo(uint32_t devId)
 #endif // DISENABLE_DISP
 static LayerPrivate *GetLayerInstance(uint32_t devId, uint32_t layerId)
 {
+#ifdef __MIPI_SUPPORT__
+#define LAYER_CAP_W  4096
+#define LAYER_CAP_H  4096
+#else
+#define LAYER_CAP_W  DEFAULT_WIDTH
+#define LAYER_CAP_H  DEFAULT_HEIGHT
+#endif
     static LayerPrivate layerPriv[DEV_ID_NUM][GRA_LAYER_MAX] = {
         {
             {
@@ -158,7 +165,7 @@ static LayerPrivate *GetLayerInstance(uint32_t devId, uint32_t layerId)
                 .flushRect = {0, 0, DEFAULT_WIDTH, DEFAULT_HEIGHT},
                 .width = DEFAULT_WIDTH,
                 .height = DEFAULT_HEIGHT,
-                .cap = {TD_TRUE, DEFAULT_WIDTH, DEFAULT_HEIGHT, TD_TRUE},
+                .cap = {TD_TRUE, LAYER_CAP_W, LAYER_CAP_H, TD_TRUE},
             },
             {
                 .fd = -1,
@@ -168,7 +175,7 @@ static LayerPrivate *GetLayerInstance(uint32_t devId, uint32_t layerId)
                 .flushRect = {0, 0, DEFAULT_WIDTH, DEFAULT_HEIGHT},
                 .width = DEFAULT_WIDTH,
                 .height = DEFAULT_HEIGHT,
-                .cap = {TD_TRUE, DEFAULT_WIDTH, DEFAULT_HEIGHT, TD_TRUE},
+                .cap = {TD_TRUE, LAYER_CAP_W, LAYER_CAP_H, TD_TRUE},
             },
             {
                 .fd = -1,
@@ -178,10 +185,12 @@ static LayerPrivate *GetLayerInstance(uint32_t devId, uint32_t layerId)
                 .flushRect = {0, 0, DEFAULT_WIDTH, DEFAULT_HEIGHT},
                 .width = DEFAULT_WIDTH,
                 .height = DEFAULT_HEIGHT,
-                .cap = {TD_TRUE, DEFAULT_WIDTH, DEFAULT_HEIGHT, TD_TRUE},
+                .cap = {TD_TRUE, LAYER_CAP_W, LAYER_CAP_H, TD_TRUE},
             }
         }
     };
+#undef LAYER_CAP_W
+#undef LAYER_CAP_H
     return &layerPriv[devId][layerId];
 }
 
@@ -303,8 +312,8 @@ static int32_t SetVarScreenInfo(int32_t fd, const LayerInfo *info)
 
     vInfo.yoffset = 0;
     ConvertFieldInfo(info->pixFormat, &bitField);
-    vInfo.xres = vInfo.xres_virtual = DEFAULT_WIDTH;
-    vInfo.yres = vInfo.yres_virtual = DEFAULT_HEIGHT;
+    vInfo.xres = vInfo.xres_virtual = (info->width > 0) ? info->width : DEFAULT_WIDTH;
+    vInfo.yres = vInfo.yres_virtual = (info->height > 0) ? info->height : DEFAULT_HEIGHT;
     vInfo.bits_per_pixel = info->bpp < 0 ? 0 : info->bpp;
     vInfo.red = bitField.red;
     vInfo.blue = bitField.blue;
@@ -520,7 +529,12 @@ static int32_t Convert2IntfSync(enum IntfSync intfSync, VO_INTF_SYNC_E *voIntfSy
 static void GetUserPubBaseAttr(uint32_t devId, VO_PUB_ATTR_S *pubAttr)
 {
     struct DispInfo *info = GetDispInfo(devId);
-    pubAttr->intf_type = info->intfType;
+    /* Map HDF LcdIntfType enum to MPP VO_INTF_* value */
+    if (info->intfType == 0) {
+        pubAttr->intf_type = VO_INTF_MIPI;  /* 0: MIPI_DSI → VO_INTF_MIPI */
+    } else {
+        pubAttr->intf_type = info->intfType;
+    }
     if (Convert2IntfSync(info->intfSync, &pubAttr->intf_sync) != DISPLAY_SUCCESS) {
         HDF_LOGE("%s: unsupport intfSync", __func__);
         return;
@@ -553,7 +567,8 @@ static int32_t GetUserIntfSyncAttr(uint32_t devId, VO_USER_INTFSYNC_INFO_S *intf
     struct DispInfo *info = GetDispInfo(devId);
 
     (void)memset_s(&pllClk, sizeof(VO_USER_INTFSYNC_PLL_S), 0, sizeof(VO_USER_INTFSYNC_PLL_S));
-    intfSyncAttr->clk_reverse_en = HI_TRUE;
+    /* MIPI DSI does not need clock reverse; HDMI does */
+    intfSyncAttr->clk_reverse_en = (info->intfType == 0) ? TD_FALSE : TD_TRUE;
     intfSyncAttr->dev_div = 1;
     intfSyncAttr->pre_div = 1;
     intfSyncAttr->user_sync_attr.clk_src = VO_CLK_SOURCE_PLL;
@@ -595,7 +610,7 @@ static int32_t EnableVoWithHdfDisp(uint32_t devId)
     }
     VO_MOD_PARAM_S modParam = {0};
     ss_mpi_vo_get_mod_param(&modParam);
-    modParam.exit_dev_en = HI_FALSE;
+    modParam.exit_dev_en = TD_FALSE;
     ret = ss_mpi_vo_set_mod_param(&modParam);
     HDF_LOGI("%s: DISP ss_mpi_vo_set_mod_param, ret 0x%x", __func__, ret);
     ret = ss_mpi_vo_enable(voDev);
@@ -686,7 +701,15 @@ static int32_t DeinitDisplay(uint32_t devId)
     CHECK_DEVID_VALID(devId, DISPLAY_FAILURE);
 
     if (g_initType == INIT_TYPE_MEDIA || g_initType == INIT_TYPE_GRAPHIC_ONLY) {
+#ifdef __MIPI_SUPPORT__
+        /* HDF DISP handles MIPI/panel power-off internally */
+        HalFuncs *halFunc = GetHalFuncs();
+        if (halFunc != NULL) {
+            halFunc->SetPowerStatus(devId, POWER_STATUS_OFF);
+        }
+#else
         DisableVOWithHdmi(devId);
+#endif
     }
     if (g_initType == INIT_TYPE_GRAPHIC_ONLY) {
         SdkExit();
@@ -723,10 +746,21 @@ static int32_t InitDisplay(uint32_t devId)
     }
     
     if (g_initType == INIT_TYPE_MEDIA || g_initType == INIT_TYPE_GRAPHIC_ONLY) {
+#ifdef __MIPI_SUPPORT__
+        if (InitHdfDisp(workDev) != DISPLAY_SUCCESS) {
+            HDF_LOGE("%s: InitHdfDisp fail", __func__);
+            return DISPLAY_FAILURE;
+        }
+        if (EnableVoWithHdfDisp(workDev) != DISPLAY_SUCCESS) {
+            HDF_LOGE("%s: EnableVoWithHdfDisp fail", __func__);
+            return DISPLAY_FAILURE;
+        }
+#else
         if (EnableVOWithHdmi(workDev) != DISPLAY_SUCCESS) {
             HDF_LOGE("%s: EnableVOWithHdmi fail", __func__);
             return DISPLAY_FAILURE;
         }
+#endif
     }
 
     return DISPLAY_SUCCESS;
@@ -736,6 +770,21 @@ static int32_t GetDisplayInfo(uint32_t devId, DisplayInfo *dispInfo)
 {
     CHECK_DEVID_VALID(devId, DISPLAY_FAILURE);
     CHECK_NULLPOINTER_RETURN_VALUE(dispInfo, DISPLAY_NULL_PTR);
+#ifdef __MIPI_SUPPORT__
+    {
+        /* Get panel info from HDF — panel is already registered at kernel init */
+        HalFuncs *halFunc = GetHalFuncs();
+        if (halFunc != NULL && halFunc->GetInfo != NULL) {
+            struct DispInfo info;
+            if (halFunc->GetInfo(devId, &info) == DISPLAY_SUCCESS) {
+                dispInfo->width = info.width;
+                dispInfo->height = info.height;
+                dispInfo->rotAngle = ROTATE_NONE;
+                return DISPLAY_SUCCESS;
+            }
+        }
+    }
+#endif
 #ifdef __BT1120_SUPPORT__
     dispInfo->width = DEFAULT_WIDTH;
     dispInfo->height = DEFAULT_HEIGHT;

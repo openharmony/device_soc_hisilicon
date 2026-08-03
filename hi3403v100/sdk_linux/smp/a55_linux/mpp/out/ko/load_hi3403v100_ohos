@@ -105,7 +105,7 @@ function insert_ko()
     insmod ot_tde.ko
     insmod svp_npu/ot_svp_npu.ko
 
-    insmod ot_mipi_tx.ko g_smooth=0
+    # ot_mipi_tx.ko no longer needed: MIPI TX is built into kernel as HDF MIPI DSI driver
     insmod ot_mipi_rx.ko
 
     insert_security_subsys
@@ -128,7 +128,7 @@ function remove_ko()
     remove_security_subsys
     
     rmmod ot_mipi_rx
-    rmmod ot_mipi_tx
+    # ot_mipi_tx removed (built into kernel as HDF driver)
     rmmod svp_npu/ot_svp_npu.ko
     rmmod ot_tde
     rmmod ot_sys

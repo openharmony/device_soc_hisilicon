@@ -11,4 +11,5 @@
 
 declare_args() {
   graphic_utils_lite_enable_drm_display_hal = false
+  device_hispark_aifly_display_type = "hdmi"
 }
