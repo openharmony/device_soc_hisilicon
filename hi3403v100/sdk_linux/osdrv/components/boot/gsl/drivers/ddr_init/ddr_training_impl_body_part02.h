@@ -146,12 +146,14 @@ static void ddr_dmc_sfc_cmd(unsigned int base_dmc, unsigned int sfc_cmd,
     ddr_asm_dsb();
 
     while (count < DDR_SFC_WAIT_TIMEOUT) { /* wait command finished */
-        if (!(reg_read(base_dmc + DDR_DMC_SFCREQ) & 0x1))
+        if (!(reg_read(base_dmc + DDR_DMC_SFCREQ) & 0x1)) {
             break;
+        }
         count++;
     }
-    if (count >= DDR_HWR_WAIT_TIMEOUT)
+    if (count >= DDR_HWR_WAIT_TIMEOUT) {
         ddr_error("SFC cmd wait timeout");
+    }
 }
 #endif
 

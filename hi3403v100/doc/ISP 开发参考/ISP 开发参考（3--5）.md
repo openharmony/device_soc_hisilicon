@@ -1,9 +1,12 @@
 # AE<a name="ZH-CN_TOPIC_0000002471085148"></a>
 
+-   **[概述](#ZH-CN_TOPIC_0000002504084725)**  
 
+-   **[重要概念](#ZH-CN_TOPIC_0000002471084834)**  
 
+-   **[功能描述](#ZH-CN_TOPIC_0000002470924948)**  
 
-
+-   **[API参考](#ZH-CN_TOPIC_0000002504084819)**  
 
 ## 概述<a name="ZH-CN_TOPIC_0000002504084725"></a>
 
@@ -26,28 +29,21 @@ AE模块由ISP的AE统计信息模块及AE控制策略的AE算法Firmware两部�
 **图 1**  AE 1024段统计信息直方图<a name="fig1568813224314"></a>  
 ![](figures/AE-1024段统计信息直方图.png "AE-1024段统计信息直方图")
 
-AE算法的主要工作原理是实时获取输入图像的统计信息并与设定目标亮度进行比较，而动态调节sensor的曝光时间和增益以及镜头光圈大小以达到实际亮度与设定目标亮度接近。其工作原理如[图2](#fig85992506321)所示。
+AE算法的主要工作原理是实时获取输入图像的统计信息并与设定目标亮度进行比较，从而动态调节sensor的曝光时间和增益以及镜头光圈大小以达到实际亮度与设定目标亮度接近。其工作原理如[图2](#fig85992506321)所示。
 
 **图 2**  AE工作原理图<a name="fig85992506321"></a>  
 ![](figures/AE工作原理图.png "AE工作原理图")
 
 ## API参考<a name="ZH-CN_TOPIC_0000002504084819"></a>
 
-
-
-
 ### AE库接口<a name="ZH-CN_TOPIC_0000002471084986"></a>
 
 所有AE库接口都只是针对SDK提供的AE库，如果客户自己实现AE库，不需要关注这些接口，且无法使用这些接口。
 
--   [ss\_mpi\_ae\_register](ss_mpi_ae_register.md)：向ISP注册AE库。
--   [ss\_mpi\_ae\_unregister](ss_mpi_ae_unregister.md)：向ISP反注册AE库。
--   [ss\_mpi\_ae\_sensor\_reg\_callback](ss_mpi_ae_sensor_reg_callback.md)：AE库提供的sensor注册的回调接口。
--   [ss\_mpi\_ae\_sensor\_unreg\_callback](ss_mpi_ae_sensor_unreg_callback.md)：AE库提供的sensor反注册的回调接口。
-
-
-
-
+-   [ss\_mpi\_ae\_register](#ZH-CN_TOPIC_0000002470925134)：向ISP注册AE库。
+-   [ss\_mpi\_ae\_unregister](#ZH-CN_TOPIC_0000002471084866)：向ISP反注册AE库。
+-   [ss\_mpi\_ae\_sensor\_reg\_callback](#ZH-CN_TOPIC_0000002470924952)：AE库提供的sensor注册的回调接口。
+-   [ss\_mpi\_ae\_sensor\_unreg\_callback](#ZH-CN_TOPIC_0000002471084858)：AE库提供的sensor反注册的回调接口。
 
 #### ss\_mpi\_ae\_register<a name="ZH-CN_TOPIC_0000002470925134"></a>
 
@@ -448,48 +444,27 @@ if (ret != TD_SUCCESS) {
 
 曝光控制接口：
 
--   [ss\_mpi\_isp\_set\_exposure\_attr](ss_mpi_isp_set_exposure_attr.md)：设置AE曝光属性。
--   [ss\_mpi\_isp\_get\_exposure\_attr](ss_mpi_isp_get_exposure_attr.md)：获取AE曝光属性。
--   [ss\_mpi\_isp\_set\_wdr\_exposure\_attr](ss_mpi_isp_set_wdr_exposure_attr.md)：设置WDR模式下的AE曝光属性。
--   [ss\_mpi\_isp\_get\_wdr\_exposure\_attr](ss_mpi_isp_get_wdr_exposure_attr.md)：获取WDR模式下的AE曝光属性。
--   [ss\_mpi\_isp\_set\_hdr\_exposure\_attr](ss_mpi_isp_set_hdr_exposure_attr.md)：设置HDR模式下的AE曝光属性。
--   [ss\_mpi\_isp\_get\_hdr\_exposure\_attr](ss_mpi_isp_get_hdr_exposure_attr.md)：获取HDR模式下的AE曝光属性。
--   [ss\_mpi\_isp\_set\_smart\_exposure\_attr](ss_mpi_isp_set_smart_exposure_attr.md)：设置智能模式下的AE曝光属性。
--   [ss\_mpi\_isp\_get\_smart\_exposure\_attr](ss_mpi_isp_get_smart_exposure_attr.md)：获取智能模式下的AE曝光属性。
--   [ss\_mpi\_isp\_set\_fast\_face\_ae\_attr](ss_mpi_isp_set_fast_face_ae_attr.md)：设置人脸快速收敛模式下的AE曝光属性。
--   [ss\_mpi\_isp\_get\_fast\_face\_ae\_attr](ss_mpi_isp_get_fast_face_ae_attr.md)：获取人脸快速收敛模式下的AE曝光属性。
--   [ss\_mpi\_isp\_set\_ae\_route\_attr](ss_mpi_isp_set_ae_route_attr.md)：设置AE曝光分配策略属性。
--   [ss\_mpi\_isp\_get\_ae\_route\_attr](ss_mpi_isp_get_ae_route_attr.md)：获取AE曝光分配策略属性。
--   [ss\_mpi\_isp\_set\_ae\_route\_attr\_ex](ss_mpi_isp_set_ae_route_attr_ex.md)：设置AE曝光分配扩展属性，支持分别设置AE分配策略中的sensor模拟增益，sensor数字增益和ISP数字增益。
--   [ss\_mpi\_isp\_get\_ae\_route\_attr\_ex](ss_mpi_isp_get_ae_route_attr_ex.md)：获取AE曝光分配策略扩展属性。
--   [ss\_mpi\_isp\_set\_ae\_route\_sf\_attr](ss_mpi_isp_set_ae_route_sf_attr.md)：WDR模式下，设置AE短帧的曝光分配策略属性。
--   [ss\_mpi\_isp\_get\_ae\_route\_sf\_attr](ss_mpi_isp_get_ae_route_sf_attr.md)：获取AE短帧曝光分配策略属性。
--   [ss\_mpi\_isp\_set\_ae\_route\_sf\_attr\_ex](ss_mpi_isp_set_ae_route_sf_attr_ex.md)：WDR模式下，设置AE短帧的曝光分配策略扩展属性。
--   [ss\_mpi\_isp\_get\_ae\_route\_sf\_attr\_ex](ss_mpi_isp_get_ae_route_sf_attr_ex.md)：获取AE短帧曝光分配策略扩展属性。
--   [ss\_mpi\_isp\_query\_exposure\_info](ss_mpi_isp_query_exposure_info.md)：获取AE内部状态信息。
--   [ss\_mpi\_isp\_set\_exp\_convert](ss_mpi_isp_set_exp_convert.md)：设置不同帧率下等曝光量转换的相关属性。
--   [ss\_mpi\_isp\_get\_exp\_convert](ss_mpi_isp_get_exp_convert.md)：获取不同帧率下等曝光量转换结果相关的曝光参数属性。
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+-   [ss\_mpi\_isp\_set\_exposure\_attr](#ZH-CN_TOPIC_0000002503964781)：设置AE曝光属性。
+-   [ss\_mpi\_isp\_get\_exposure\_attr](#ZH-CN_TOPIC_0000002504084835)：获取AE曝光属性。
+-   [ss\_mpi\_isp\_set\_wdr\_exposure\_attr](#ZH-CN_TOPIC_0000002504084905)：设置WDR模式下的AE曝光属性。
+-   [ss\_mpi\_isp\_get\_wdr\_exposure\_attr](#ZH-CN_TOPIC_0000002470924854)：获取WDR模式下的AE曝光属性。
+-   [ss\_mpi\_isp\_set\_hdr\_exposure\_attr](#ZH-CN_TOPIC_0000002504084737)：设置HDR模式下的AE曝光属性。
+-   [ss\_mpi\_isp\_get\_hdr\_exposure\_attr](#ZH-CN_TOPIC_0000002504084897)：获取HDR模式下的AE曝光属性。
+-   [ss\_mpi\_isp\_set\_smart\_exposure\_attr](#ZH-CN_TOPIC_0000002471084856)：设置智能模式下的AE曝光属性。
+-   [ss\_mpi\_isp\_get\_smart\_exposure\_attr](#ZH-CN_TOPIC_0000002504084961)：获取智能模式下的AE曝光属性。
+-   [ss\_mpi\_isp\_set\_fast\_face\_ae\_attr](#ZH-CN_TOPIC_0000002503964919)：设置人脸快速收敛模式下的AE曝光属性。
+-   [ss\_mpi\_isp\_get\_fast\_face\_ae\_attr](#ZH-CN_TOPIC_0000002504084751)：获取人脸快速收敛模式下的AE曝光属性。
+-   [ss\_mpi\_isp\_set\_ae\_route\_attr](#ZH-CN_TOPIC_0000002504084821)：设置AE曝光分配策略属性。
+-   [ss\_mpi\_isp\_get\_ae\_route\_attr](#ZH-CN_TOPIC_0000002471084932)：获取AE曝光分配策略属性。
+-   [ss\_mpi\_isp\_set\_ae\_route\_attr\_ex](#ZH-CN_TOPIC_0000002503965045)：设置AE曝光分配扩展属性，支持分别设置AE分配策略中的sensor模拟增益，sensor数字增益和ISP数字增益。
+-   [ss\_mpi\_isp\_get\_ae\_route\_attr\_ex](#ZH-CN_TOPIC_0000002471084852)：获取AE曝光分配策略扩展属性。
+-   [ss\_mpi\_isp\_set\_ae\_route\_sf\_attr](#ZH-CN_TOPIC_0000002503964803)：WDR模式下，设置AE短帧的曝光分配策略属性。
+-   [ss\_mpi\_isp\_get\_ae\_route\_sf\_attr](#ZH-CN_TOPIC_0000002471085052)：获取AE短帧曝光分配策略属性。
+-   [ss\_mpi\_isp\_set\_ae\_route\_sf\_attr\_ex](#ZH-CN_TOPIC_0000002503964835)：WDR模式下，设置AE短帧的曝光分配策略扩展属性。
+-   [ss\_mpi\_isp\_get\_ae\_route\_sf\_attr\_ex](#ZH-CN_TOPIC_0000002470925156)：获取AE短帧曝光分配策略扩展属性。
+-   [ss\_mpi\_isp\_query\_exposure\_info](#ZH-CN_TOPIC_0000002503964993)：获取AE内部状态信息。
+-   [ss\_mpi\_isp\_set\_exp\_convert](#ZH-CN_TOPIC_0000002470925022)：设置不同帧率下等曝光量转换的相关属性。
+-   [ss\_mpi\_isp\_get\_exp\_convert](#ZH-CN_TOPIC_0000002504084753)：获取不同帧率下等曝光量转换结果相关的曝光参数属性。
 
 #### ss\_mpi\_isp\_set\_exposure\_attr<a name="ZH-CN_TOPIC_0000002503964781"></a>
 
@@ -560,7 +535,7 @@ td_s32 ss_mpi_isp_set_exposure_attr (ot_vi_pipe vi_pipe, const ot_isp_exposure_a
 
 【注意】
 
--   AE曝光控制类型为自动时，曝光时间，曝光增益都由AE算法自动控制，可以通过配置自动曝光属性结构体[ot\_isp\_ae\_attr](ot_isp_ae_attr.md)里面的参数得到不同的曝光效果。
+-   AE曝光控制类型为自动时，曝光时间，曝光增益都由AE算法自动控制，可以通过配置自动曝光属性结构体[ot\_isp\_ae\_attr](#ZH-CN_TOPIC_0000002470924872)里面的参数得到不同的曝光效果。
 -   AE曝光控制类型为手动时，可以通过配置手动曝光属性结构体manual\_attr控制使能类型（曝光时间使能、sensor模拟增益使能、sensor数字增益使能、ISP数字增益使能）及相应的曝光参数（曝光时间、sensor模拟增益、sensor数字增益、ISP数字增益）。
 -   AE曝光控制类型为自动时，配置手动曝光属性的参数无效。同理，AE曝光控制类型为手动时，配置自动曝光属性的参数无效。
 -   AE曝光控制类型为手动时，若曝光参数设置超出最大（小）值，将使用sensor支持的最大（小）值代替。
@@ -619,7 +594,7 @@ ss_mpi_isp_get_exposure_attr(vi_pipe, &exp_attr);
 
 【相关主题】
 
-[ss\_mpi\_isp\_get\_exposure\_attr](#ss_mpi_isp_get_exposure_attr)
+[ss\_mpi\_isp\_get\_exposure\_attr](#ZH-CN_TOPIC_0000002504084835)
 
 #### ss\_mpi\_isp\_get\_exposure\_attr<a name="ZH-CN_TOPIC_0000002504084835"></a>
 
@@ -698,7 +673,7 @@ td_s32 ss_mpi_isp_get_exposure_attr(ot_vi_pipe vi_pipe, ot_isp_exposure_attr *ex
 
 【相关主题】
 
-[ss\_mpi\_isp\_set\_exposure\_attr](#ss_mpi_isp_set_exposure_attr)
+[ss\_mpi\_isp\_set\_exposure\_attr](#ZH-CN_TOPIC_0000002503964781)
 
 #### ss\_mpi\_isp\_set\_wdr\_exposure\_attr<a name="ZH-CN_TOPIC_0000002504084905"></a>
 
@@ -777,7 +752,7 @@ td_s32 ss_mpi_isp_set_wdr_exposure_attr(ot_vi_pipe vi_pipe, const ot_isp_wdr_exp
 
 【相关主题】
 
-[ss\_mpi\_isp\_get\_wdr\_exposure\_attr](#ss_mpi_isp_get_wdr_exposure_attr)
+[ss\_mpi\_isp\_get\_wdr\_exposure\_attr](#ZH-CN_TOPIC_0000002470924854)
 
 #### ss\_mpi\_isp\_get\_wdr\_exposure\_attr<a name="ZH-CN_TOPIC_0000002470924854"></a>
 
@@ -856,7 +831,7 @@ td_s32 ss_mpi_isp_get_wdr_exposure_attr(ot_vi_pipe vi_pipe, ot_isp_wdr_exposure_
 
 【相关主题】
 
-[ss\_mpi\_isp\_set\_wdr\_exposure\_attr](#ss_mpi_isp_set_wdr_exposure_attr)
+[ss\_mpi\_isp\_set\_wdr\_exposure\_attr](#ZH-CN_TOPIC_0000002504084905)
 
 #### ss\_mpi\_isp\_set\_hdr\_exposure\_attr<a name="ZH-CN_TOPIC_0000002504084737"></a>
 
@@ -935,7 +910,7 @@ SS928V100不支持HDR模式。
 
 【相关主题】
 
-[ss\_mpi\_isp\_get\_hdr\_exposure\_attr](#ss_mpi_isp_get_hdr_exposure_attr)
+[ss\_mpi\_isp\_get\_hdr\_exposure\_attr](#ZH-CN_TOPIC_0000002504084897)
 
 #### ss\_mpi\_isp\_get\_hdr\_exposure\_attr<a name="ZH-CN_TOPIC_0000002504084897"></a>
 
@@ -1014,7 +989,7 @@ SS928V100不支持HDR模式。
 
 【相关主题】
 
-[ss\_mpi\_isp\_set\_hdr\_exposure\_attr](#ss_mpi_isp_set_hdr_exposure_attr)
+[ss\_mpi\_isp\_set\_hdr\_exposure\_attr](#ZH-CN_TOPIC_0000002504084737)
 
 #### ss\_mpi\_isp\_set\_smart\_exposure\_attr<a name="ZH-CN_TOPIC_0000002471084856"></a>
 
@@ -1086,7 +1061,7 @@ td_s32 ss_mpi_isp_set_smart_exposure_attr(ot_vi_pipe vi_pipe, const ot_isp_smart
 【注意】
 
 -   客户使用此功能时可通过自己的智能模块得到相应智能信息并传递给ISP，传递方式可参考ss\_mpi\_isp\_set\_smart\_info接口，ISP得到人脸或人形的亮度信息后，会针对性地调节曝光，以使人脸或人形亮度达到设定的目标值。
--   接口使用详见[ot\_isp\_smart\_exposure\_attr](ot_isp_smart_exposure_attr.md)说明。
+-   接口使用详见[ot\_isp\_smart\_exposure\_attr](#ZH-CN_TOPIC_0000002503964907)说明。
 
 【举例】
 
@@ -1094,7 +1069,7 @@ td_s32 ss_mpi_isp_set_smart_exposure_attr(ot_vi_pipe vi_pipe, const ot_isp_smart
 
 【相关主题】
 
-[ss\_mpi\_isp\_get\_smart\_exposure\_attr](#ss_mpi_isp_get_smart_exposure_attr)
+[ss\_mpi\_isp\_get\_smart\_exposure\_attr](#ZH-CN_TOPIC_0000002504084961)
 
 #### ss\_mpi\_isp\_get\_smart\_exposure\_attr<a name="ZH-CN_TOPIC_0000002504084961"></a>
 
@@ -1173,7 +1148,7 @@ td_s32 ss_mpi_isp_get_smart_exposure_attr(ot_vi_pipe vi_pipe, ot_isp_smart_expos
 
 【相关主题】
 
-[ss\_mpi\_isp\_set\_smart\_exposure\_attr](#ss_mpi_isp_set_smart_exposure_attr)
+[ss\_mpi\_isp\_set\_smart\_exposure\_attr](#ZH-CN_TOPIC_0000002471084856)
 
 #### ss\_mpi\_isp\_set\_fast\_face\_ae\_attr<a name="ZH-CN_TOPIC_0000002503964919"></a>
 
@@ -1254,8 +1229,8 @@ ss_mpi_isp_set_fast_face_ae_attr (vi_pipe, &fast_face_attr);
 
 【相关主题】
 
--   [ss\_mpi\_isp\_get\_fast\_face\_ae\_attr](#ss_mpi_isp_set_fast_face_ae_attr)
--   [ot\_isp\_fast\_face\_ae\_attr](#ot_isp_fast_face_ae_attr)
+-   [ss\_mpi\_isp\_get\_fast\_face\_ae\_attr](#ZH-CN_TOPIC_0000002503964919)
+-   [ot\_isp\_fast\_face\_ae\_attr](#ZH-CN_TOPIC_0000002503964961)
 
 #### ss\_mpi\_isp\_get\_fast\_face\_ae\_attr<a name="ZH-CN_TOPIC_0000002504084751"></a>
 
@@ -1336,8 +1311,8 @@ ss_mpi_isp_set_fast_face_ae_attr (vi_pipe, &fast_face_attr);
 
 【相关主题】
 
--   [ss\_mpi\_isp\_set\_fast\_face\_ae\_attr](#ss_mpi_isp_get_fast_face_ae_attr)
--   [ot\_isp\_fast\_face\_ae\_attr](#ot_isp_fast_face_ae_attr)
+-   [ss\_mpi\_isp\_set\_fast\_face\_ae\_attr](#ZH-CN_TOPIC_0000002504084751)
+-   [ot\_isp\_fast\_face\_ae\_attr](#ZH-CN_TOPIC_0000002503964961)
 
 #### ss\_mpi\_isp\_set\_ae\_route\_attr<a name="ZH-CN_TOPIC_0000002504084821"></a>
 
@@ -1424,7 +1399,7 @@ td_s32 ss_mpi_isp_set_ae_route_attr(ot_vi_pipe vi_pipe, const ot_isp_ae_route *a
     -   自动降帧时，若cmos.c里面设置了AE route，则在切换后会采用cmos.c中的AE route，否则采用已生效的AE route。同时，最大曝光时间的改变会更新到AE route中。
     -   线性模式与WDR模式切换时，若cmos.c里面设置了AE route，则在切换后会采用cmos.c中的route，否则采用默认的AE route。
     -   帧率或分辨率切换时，若用户设置的最大曝光目标时间大于切换后1帧所允许的最大曝光时间，那么分配路线的最大曝光时间会更新为切换后1帧所允许的最大曝光时间。
-    -   发生自动降帧、线性与WDR模式切换、帧率或分辨率切换、优先帧切换、增益分开配置切换、限制曝光时间或增益的最大最小值等情况时，实际生效的AE route可能与MPI设置的不一致，此时可以通过[ss\_mpi\_isp\_query\_exposure\_info](ss_mpi_isp_query_exposure_info.md)获取实际生效的AE route。
+    -   发生自动降帧、线性与WDR模式切换、帧率或分辨率切换、优先帧切换、增益分开配置切换、限制曝光时间或增益的最大最小值等情况时，实际生效的AE route可能与MPI设置的不一致，此时可以通过[ss\_mpi\_isp\_query\_exposure\_info](#ZH-CN_TOPIC_0000002503964993)获取实际生效的AE route。
 
 **图 1**  AE分配路线示意图<a name="_Ref376180242"></a>  
 ![](figures/AE分配路线示意图.png "AE分配路线示意图")
@@ -1444,8 +1419,8 @@ ss_mpi_isp_set_ae_route_attr(vi_pipe, &ae_route);
 
 【相关主题】
 
--   [ss\_mpi\_isp\_get\_ae\_route\_attr](#ss_mpi_isp_get_ae_route_attr)
--   [ot\_isp\_ae\_route](#ot_isp_ae_route)
+-   [ss\_mpi\_isp\_get\_ae\_route\_attr](#ZH-CN_TOPIC_0000002471084932)
+-   [ot\_isp\_ae\_route](#ZH-CN_TOPIC_0000002504084703)
 
 #### ss\_mpi\_isp\_get\_ae\_route\_attr<a name="ZH-CN_TOPIC_0000002471084932"></a>
 
@@ -1524,7 +1499,7 @@ td_s32 ss_mpi_isp_get_ae_route_attr(ot_vi_pipe vi_pipe, ot_isp_ae_route *ae_rout
 
 【相关主题】
 
-[ss\_mpi\_isp\_set\_ae\_route\_attr](#ss_mpi_isp_set_ae_route_attr)
+[ss\_mpi\_isp\_set\_ae\_route\_attr](#ZH-CN_TOPIC_0000002504084821)
 
 #### ss\_mpi\_isp\_set\_ae\_route\_attr\_ex<a name="ZH-CN_TOPIC_0000002503965045"></a>
 
@@ -1596,7 +1571,7 @@ td_s32 ss_mpi_isp_set_ae_route_attr_ex(ot_vi_pipe vi_pipe, const ot_isp_ae_route
 【注意】
 
 -   此接口用于设定AE曝光分配扩展属性，AE计算得到的曝光量将按照设定的路线进行分配，用户可以根据自己的需求设定曝光时间优先、sensor模拟增益优先、sensor数字增益优先、ISP数字增益优先和光圈优先。该接口可用于设置WDR模式下的曝光分配路线，减轻正常室内照度多帧合成WDR产生的工频闪现象，优化WDR模式图像效果。
--   AE曝光分配扩展属性是否生效可通过配置[ss\_mpi\_isp\_set\_exposure\_attr](ss_mpi_isp_set_exposure_attr.md)接口中的ae\_route\_ex\_valid来实现。ae\_route\_ex\_valid为TD\_TRUE时使用扩展AE route，否则使用正常AE route。
+-   AE曝光分配扩展属性是否生效可通过配置[ss\_mpi\_isp\_set\_exposure\_attr](#ZH-CN_TOPIC_0000002503964781)接口中的ae\_route\_ex\_valid来实现。ae\_route\_ex\_valid为TD\_TRUE时使用扩展AE route，否则使用普通AE分配路线。
 -   AE扩展分配路线遵循以下限定：
     -   最大支持16个节点，每个节点有曝光时间、sensor模拟增益、sensor数字增益、ISP数字增益和光圈五个分量。
     -   节点中曝光时间的单位为us，不能设置为0，也不能设置太小导致实际对应的曝光行数为0，否则可能产生异常。
@@ -1612,7 +1587,7 @@ td_s32 ss_mpi_isp_set_ae_route_attr_ex(ot_vi_pipe vi_pipe, const ot_isp_ae_route
     -   自动降帧时，最大曝光时间的改变会更新到分配路线中。
     -   线性模式与WDR模式切换时，若cmos.c里面设置了扩展AE route，且cmos.c中的扩展AE route标识符ae\_route\_ex\_valid为TD\_TRUE，则在切换后会采用cmos.c中的扩展AE route，否则采用默认的AE route。
     -   帧率或分辨率切换时，若用户设置的最大曝光目标时间大于切换后1帧所允许的最大曝光时间，那么分配路线的最大曝光时间会更新为切换后1帧所允许的最大曝光时间。
-    -   发生自动降帧、线性与WDR模式切换、帧率或分辨率切换、优先帧切换、增益分开配置切换、限制曝光时间或增益的最大最小值等情况时，实际生效的扩展AE route可能与MPI设置的不一致，此时可以通过[ss\_mpi\_isp\_query\_exposure\_info](ss_mpi_isp_query_exposure_info.md)获取实际生效的扩展AE route。
+    -   发生自动降帧、线性与WDR模式切换、帧率或分辨率切换、优先帧切换、增益分开配置切换、限制曝光时间或增益的最大最小值等情况时，实际生效的扩展AE route可能与MPI设置的不一致，此时可以通过[ss\_mpi\_isp\_query\_exposure\_info](#ZH-CN_TOPIC_0000002503964993)获取实际生效的扩展AE route。
 
 【举例】
 
@@ -1637,9 +1612,9 @@ ss_mpi_isp_set_exposure_attr (vi_pipe, &exp_attr);
 
 【相关主题】
 
--   [ss\_mpi\_isp\_get\_ae\_route\_attr\_ex](#ss_mpi_isp_get_ae_route_attr_ex)
--   [ss\_mpi\_isp\_set\_exposure\_attr](#ss_mpi_isp_set_exposure_attr)
--   [ot\_isp\_ae\_route\_ex](#ot_isp_ae_route_ex)
+-   [ss\_mpi\_isp\_get\_ae\_route\_attr\_ex](#ZH-CN_TOPIC_0000002471084852)
+-   [ss\_mpi\_isp\_set\_exposure\_attr](#ZH-CN_TOPIC_0000002503964781)
+-   [ot\_isp\_ae\_route\_ex](#ZH-CN_TOPIC_0000002470924848)
 
 #### ss\_mpi\_isp\_get\_ae\_route\_attr\_ex<a name="ZH-CN_TOPIC_0000002471084852"></a>
 
@@ -1718,7 +1693,7 @@ td_s32 ss_mpi_isp_get_ae_route_attr_ex(ot_vi_pipe vi_pipe, ot_isp_ae_route_ex *a
 
 【相关主题】
 
-[ss\_mpi\_isp\_set\_ae\_route\_attr\_ex](#ss_mpi_isp_set_ae_route_attr_ex)
+[ss\_mpi\_isp\_set\_ae\_route\_attr\_ex](#ZH-CN_TOPIC_0000002503965045)
 
 #### ss\_mpi\_isp\_set\_ae\_route\_sf\_attr<a name="ZH-CN_TOPIC_0000002503964803"></a>
 
@@ -1805,7 +1780,7 @@ td_s32 ss_mpi_isp_set_ae_route_sf_attr(ot_vi_pipe vi_pipe, const ot_isp_ae_route
     -   自动降帧时，最大曝光时间的改变会更新到分配路线中。
     -   线性模式与WDR模式切换时，若cmos.c里面设置了短帧AE route，则在切换后会采用cmos.c中的route，否则采用默认的短帧AE route。
     -   2合1WDR模式下，帧率或分辨率切换时，若用户设置的最大曝光目标时间大于切换后1帧所允许的最大曝光时间的一半，那么分配路线的最大曝光时间会更新为切换后1帧所允许的最大曝光时间的一半。
-    -   发生自动降帧、线性与2合1WDR模式切换、帧率或分辨率切换、优先帧切换、增益分开配置切换、限制曝光时间或增益的最大最小值等情况时，实际生效的AE route可能与MPI设置的不一致，此时可以通过[ss\_mpi\_isp\_query\_exposure\_info](ss_mpi_isp_query_exposure_info.md)获取实际生效的短帧AE route。
+    -   发生自动降帧、线性与2合1WDR模式切换、帧率或分辨率切换、优先帧切换、增益分开配置切换、限制曝光时间或增益的最大最小值等情况时，实际生效的AE route可能与MPI设置的不一致，此时可以通过[ss\_mpi\_isp\_query\_exposure\_info](#ZH-CN_TOPIC_0000002503964993)获取实际生效的短帧AE route。
 
 【举例】
 
@@ -1823,8 +1798,8 @@ ss_mpi_isp_set_ae_route_sf_attr (vi_pipe, &ae_route_sf_attr);
 
 【相关主题】
 
--   [ss\_mpi\_isp\_get\_ae\_route\_sf\_attr](#ss_mpi_isp_get_ae_route_sf_attr)
--   [ot\_isp\_ae\_route](#ot_isp_ae_route)
+-   [ss\_mpi\_isp\_get\_ae\_route\_sf\_attr](#ZH-CN_TOPIC_0000002471085052)
+-   [ot\_isp\_ae\_route](#ZH-CN_TOPIC_0000002504084703)
 
 #### ss\_mpi\_isp\_get\_ae\_route\_sf\_attr<a name="ZH-CN_TOPIC_0000002471085052"></a>
 
@@ -1903,7 +1878,7 @@ td_s32 ss_mpi_isp_get_ae_route_sf_attr(ot_vi_pipe vi_pipe, ot_isp_ae_route *ae_r
 
 【相关主题】
 
-[ss\_mpi\_isp\_set\_ae\_route\_sf\_attr](#ss_mpi_isp_set_ae_route_sf_attr)
+[ss\_mpi\_isp\_set\_ae\_route\_sf\_attr](#ZH-CN_TOPIC_0000002503964803)
 
 #### ss\_mpi\_isp\_set\_ae\_route\_sf\_attr\_ex<a name="ZH-CN_TOPIC_0000002503964835"></a>
 
@@ -1975,7 +1950,7 @@ td_s32 ss_mpi_isp_set_ae_route_sf_attr_ex(ot_vi_pipe vi_pipe, const ot_isp_ae_ro
 【注意】
 
 -   此接口用于WDR模式下设定AE短帧的曝光分配扩展属性，AE计算得到的短帧的曝光量将按照设定的路线进行分配，用户可以根据自己的需求设定曝光时间优先、sensor模拟增益优先、sensor数字增益优先、ISP数字增益优先和光圈优先。
--   AE曝光分配扩展属性是否生效可通过配置[ss\_mpi\_isp\_set\_exposure\_attr](ss_mpi_isp_set_exposure_attr.md)接口中的ae\_route\_ex\_valid来实现。ae\_route\_ex\_valid为TD\_TRUE时使用扩展AE route，否则使用正常AE route。
+-   AE曝光分配扩展属性是否生效可通过配置[ss\_mpi\_isp\_set\_exposure\_attr](#ZH-CN_TOPIC_0000002503964781)接口中的ae\_route\_ex\_valid来实现。ae\_route\_ex\_valid为TD\_TRUE时使用扩展AE route，否则使用普通AE分配路线。
 -   AE扩展分配路线遵循以下限定：
     -   最大支持16个节点，每个节点有曝光时间、sensor模拟增益、sensor数字增益、ISP数字增益和光圈五个分量。
     -   节点中曝光时间的单位为us，不能设置为0，也不能设置太小导致实际对应的曝光行数为0，否则可能产生异常。节点曝光时间应设置不超过sensor最大曝光时间的一半。
@@ -1991,7 +1966,7 @@ td_s32 ss_mpi_isp_set_ae_route_sf_attr_ex(ot_vi_pipe vi_pipe, const ot_isp_ae_ro
     -   自动降帧时，最大曝光时间的改变会更新到分配路线中。
     -   线性模式与WDR模式切换时，若cmos.c里面设置了短帧扩展AE route，且cmos.c中的扩展AE route标识符ae\_route\_ex\_valid为TD\_TRUE，则在切换后会采用cmos.c中的短帧扩展AE route，否则采用默认的短帧AE route。
     -   2合1WDR模式下，帧率或分辨率切换时，若用户设置的最大曝光目标时间大于切换后1帧所允许的最大曝光时间，那么分配路线的最大曝光时间会更新为切换后1帧所允许的最大曝光时间。
-    -   发生自动降帧、线性与WDR模式切换、帧率或分辨率切换、优先帧切换、增益分开配置切换、限制曝光时间或增益的最大最小值等情况时，实际生效的扩展AE route可能与MPI设置的不一致，此时可以通过[ss\_mpi\_isp\_query\_exposure\_info](ss_mpi_isp_query_exposure_info.md)获取实际生效的短帧扩展AE route。
+    -   发生自动降帧、线性与WDR模式切换、帧率或分辨率切换、优先帧切换、增益分开配置切换、限制曝光时间或增益的最大最小值等情况时，实际生效的扩展AE route可能与MPI设置的不一致，此时可以通过[ss\_mpi\_isp\_query\_exposure\_info](#ZH-CN_TOPIC_0000002503964993)获取实际生效的短帧扩展AE route。
 
 【举例】
 
@@ -2017,9 +1992,9 @@ ss_mpi_isp_set_exposure_attr (vi_pipe, &exp_attr);
 
 【相关主题】
 
--   [ss\_mpi\_isp\_get\_ae\_route\_sf\_attr\_ex](#ss_mpi_isp_get_ae_route_sf_attr_ex)
--   [ss\_mpi\_isp\_set\_exposure\_attr](#ss_mpi_isp_set_exposure_attr)
--   [ot\_isp\_ae\_route\_ex](#ot_isp_ae_route_ex)
+-   [ss\_mpi\_isp\_get\_ae\_route\_sf\_attr\_ex](#ZH-CN_TOPIC_0000002470925156)
+-   [ss\_mpi\_isp\_set\_exposure\_attr](#ZH-CN_TOPIC_0000002503964781)
+-   [ot\_isp\_ae\_route\_ex](#ZH-CN_TOPIC_0000002470924848)
 
 #### ss\_mpi\_isp\_get\_ae\_route\_sf\_attr\_ex<a name="ZH-CN_TOPIC_0000002470925156"></a>
 
@@ -2098,7 +2073,7 @@ td_s32 ss_mpi_isp_get_ae_route_sf_attr_ex(ot_vi_pipe vi_pipe, ot_isp_ae_route_ex
 
 【相关主题】
 
-[ss\_mpi\_isp\_set\_ae\_route\_sf\_attr\_ex](#ss_mpi_isp_set_ae_route_sf_attr_ex)
+[ss\_mpi\_isp\_set\_ae\_route\_sf\_attr\_ex](#ZH-CN_TOPIC_0000002503964835)
 
 #### ss\_mpi\_isp\_query\_exposure\_info<a name="ZH-CN_TOPIC_0000002503964993"></a>
 
@@ -2170,9 +2145,9 @@ td_s32 ss_mpi_isp_query_exposure_info(ot_vi_pipe vi_pipe, ot_isp_exp_info *exp_i
 【注意】
 
 -   获取的曝光时间以微秒\(us\)为单位，获取的sensor模拟增益、sensor数字增益和ISP数字增益以倍数为单位，精度是10bit。
--   获取的曝光量=\(曝光时间 \* 曝光增益\)，未考虑光圈状态，其中曝光时间以行数为单位，曝光增益包括sensor模拟增益、sensor数字增益和ISP数字增益，以倍数为单位，6bit小数精度。若该值的精度不足以满足需求，可以根据上面高精度的曝光时间\(us\)和增益\(10bit小数精度\)重新计算一个曝光量。
+-   获取的曝光量=\(曝光时间 \* 曝光增益\)，未考虑光圈状态，其中曝光时间以us为单位，曝光增益包括sensor模拟增益、sensor数字增益和ISP数字增益，以倍数为单位，6bit小数精度。若该值的精度不足以满足需求，可以根据上面高精度的曝光时间\(us\)和增益\(10bit小数精度\)重新计算一个曝光量。
 -   可通过查询hist\_error来获取AE是否稳定的信息，若hist\_error的绝对值小于曝光容忍偏差值，意味着当前AE不会动作。
--   通过该接口获取的AE route与Proc信息中的AE route都是实际生效的值。只不过该接口的节点曝光时间以us为单位，而Proc信息中的曝光时间以行数为单位；该接口的光圈分量为F值大小，取值范围为\[0,10\]，而Proc信息中的光圈分量为F值等效增益，大小为\(1<<F值\)。扩展AE route以及短帧AE route和短帧扩展AE route也是同样的对应关系。
+-   通过该接口获取的AE route与Proc信息中的AE route都是实际生效的值。只不过该接口的节点曝光时间以us为单位，而Proc信息中的曝光时间以行数为单位；该接口的光圈分量为F值大小，取值范围为\[0x0, 0x400\]。扩展AE route以及短帧AE route和短帧扩展AE route也是同样的对应关系。
 -   若用户使用非SDK提供的AE算法，则该接口需要自己实现并且需要同步修改PQTOOLS的xml文件，具体修改方式请参考《图像质量调试工具使用指南》第2.1.3.7小节。
 -   调用该接口需要确保系统已经运行起来并且统计信息已经生成；当系统刚运行起来第一帧，AE内部还没有统计信息时，调用该接口统计信息会返回全0，这时候系统内存是足够的。
 
@@ -2233,7 +2208,7 @@ td_s32 ss_mpi_isp_set_exp_convert(ot_vi_pipe vi_pipe, ot_isp_exp_conv_param *con
 </tr>
 <tr id="row12046mcpsimp"><td class="cellrowborder" valign="top" width="25%" headers="mcps1.1.4.1.1 "><p id="p12048mcpsimp"><a name="p12048mcpsimp"></a><a name="p12048mcpsimp"></a>conv_param</p>
 </td>
-<td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.4.1.2 "><p id="p12050mcpsimp"><a name="p12050mcpsimp"></a><a name="p12050mcpsimp"></a>等曝光量转换相关曝光量属性指针。</p>
+<td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.4.1.2 "><p id="p12050mcpsimp"><a name="p12050mcpsimp"></a><a name="p12050mcpsimp"></a>等曝光量转换相关曝光参数属性指针。</p>
 </td>
 <td class="cellrowborder" valign="top" width="25%" headers="mcps1.1.4.1.3 "><p id="p12052mcpsimp"><a name="p12052mcpsimp"></a><a name="p12052mcpsimp"></a>输入</p>
 </td>
@@ -2380,18 +2355,12 @@ td_s32 ss_mpi_isp_get_exp_convert(ot_vi_pipe vi_pipe, ot_isp_exp_conv_param *con
 
 光圈控制接口：
 
--   [ss\_mpi\_isp\_set\_iris\_attr](ss_mpi_isp_set_iris_attr.md)：设置光圈的控制属性。
--   [ss\_mpi\_isp\_get\_iris\_attr](ss_mpi_isp_get_iris_attr.md)：获取光圈的控制属性。
--   [ss\_mpi\_isp\_set\_dciris\_attr](ss_mpi_isp_set_dciris_attr.md)：设置DC-Iris自动光圈控制属性。
--   [ss\_mpi\_isp\_get\_dciris\_attr](ss_mpi_isp_get_dciris_attr.md)：获取DC-Iris自动光圈控制属性。
--   [ss\_mpi\_isp\_set\_piris\_attr](ss_mpi_isp_set_piris_attr.md)：设置P-Iris自动光圈控制属性。
--   [ss\_mpi\_isp\_get\_piris\_attr](ss_mpi_isp_get_piris_attr.md)：获取P-Iris自动光圈控制属性。
-
-
-
-
-
-
+-   [ss\_mpi\_isp\_set\_iris\_attr](#ZH-CN_TOPIC_0000002503964851)：设置光圈的控制属性。
+-   [ss\_mpi\_isp\_get\_iris\_attr](#ZH-CN_TOPIC_0000002503964783)：获取光圈的控制属性。
+-   [ss\_mpi\_isp\_set\_dciris\_attr](#ZH-CN_TOPIC_0000002470924940)：设置DC-Iris自动光圈控制属性。
+-   [ss\_mpi\_isp\_get\_dciris\_attr](#ZH-CN_TOPIC_0000002504084869)：获取DC-Iris自动光圈控制属性。
+-   [ss\_mpi\_isp\_set\_piris\_attr](#ZH-CN_TOPIC_0000002503964847)：设置P-Iris自动光圈控制属性。
+-   [ss\_mpi\_isp\_get\_piris\_attr](#ZH-CN_TOPIC_0000002471084962)：获取P-Iris自动光圈控制属性。
 
 #### ss\_mpi\_isp\_set\_iris\_attr<a name="ZH-CN_TOPIC_0000002503964851"></a>
 
@@ -2464,7 +2433,7 @@ td_s32 ss_mpi_isp_set_iris_attr(ot_vi_pipe vi_pipe, const ot_isp_iris_attr *iris
 
 -   进行AI算法测试前，建议确认AI电路特性是否符合_录像机_要求。
 -   根据实际对接镜头光圈类型，设置正确的光圈类型属性，由此再去设置相关的DC-Iris/P-Iris控制属性。若对接的是手动光圈镜头，可将光圈类型设置为OT\_ISP\_IRIS\_DC\_TYPE，建议此时关闭AI使能。
--   手动光圈属性主要用于调试，可通过该MPI进行设置。对于P-Iris镜头，手动iris\_fno值会受到最大、最小光圈目标值的影响。自动光圈属性的更多参数需要调用[ss\_mpi\_isp\_set\_dciris\_attr](ss_mpi_isp_set_dciris_attr.md)和[ss\_mpi\_isp\_get\_piris\_attr](ss_mpi_isp_get_piris_attr.md)进行设置。
+-   手动光圈属性主要用于调试，可通过该MPI进行设置。对于P-Iris镜头，手动iris\_fno值会受到最大、最小光圈目标值的影响。自动光圈属性的更多参数需要调用[ss\_mpi\_isp\_set\_dciris\_attr](#ZH-CN_TOPIC_0000002470924940)和[ss\_mpi\_isp\_get\_piris\_attr](#ZH-CN_TOPIC_0000002471084962)进行设置。
 
 【举例】
 
@@ -2472,9 +2441,9 @@ td_s32 ss_mpi_isp_set_iris_attr(ot_vi_pipe vi_pipe, const ot_isp_iris_attr *iris
 
 【相关主题】
 
--   [ot\_isp\_iris\_attr](#ot_isp_iris_attr)
--   [ss\_mpi\_isp\_set\_dciris\_attr](#ss_mpi_isp_set_dciris_attr)
--   [ss\_mpi\_isp\_set\_piris\_attr](#ss_mpi_isp_set_piris_attr)
+-   [ot\_isp\_iris\_attr](#ZH-CN_TOPIC_0000002471085086)
+-   [ss\_mpi\_isp\_set\_dciris\_attr](#ZH-CN_TOPIC_0000002470924940)
+-   [ss\_mpi\_isp\_set\_piris\_attr](#ZH-CN_TOPIC_0000002503964847)
 
 #### ss\_mpi\_isp\_get\_iris\_attr<a name="ZH-CN_TOPIC_0000002503964783"></a>
 
@@ -2624,7 +2593,7 @@ td_s32 ss_mpi_isp_set_dciris_attr(ot_vi_pipe vi_pipe, const ot_isp_dciris_attr *
 
 【注意】
 
--   DC-Iris光圈控制采用PID算法，算法根据画面亮度，调节PWM占空比对光圈大小进行控制。当曝光时间和增益达到最小目标值之后，会进入光圈控制区域。当光圈控制能满足目标亮度的要求时，AE直接返回，保持曝光时间和增益不变。当画面亮度稳定且PWM占空比维持在打开值一段时间后，AI算法会认为光圈已经打开至最大，退出光圈控制区，将控制权交还给AE。处于光圈控制区时，更改AE算法参数，如最大/最小曝光时间、最大/最小增益和抗闪等需要即时生效的参数，AE会即时响应，根据新设定的参数和环境亮度，AI算法重新决定是否要进入光圈控制区。由于进入光圈控制区域和退出光圈控制区域需要短暂时间，针对手动光圈镜头建议关闭AI功能，否则AE的调节速度会受到一点影响。针对DC-Iris镜头建议一直打开AI功能，随意开关AI容易导致光圈控制出现异常。针对某些长焦的DC-Iris镜头，默认参数可能会导致光圈打开/关闭速度过快，此时可以调节相关参数来解决，详见[ot\_isp\_dciris\_attr](ot_isp_dciris_attr.md)部分描述。
+-   DC-Iris光圈控制采用PID算法，算法根据画面亮度，调节PWM占空比对光圈大小进行控制。当曝光时间和增益达到最小目标值之后，会进入光圈控制区域。当光圈控制能满足目标亮度的要求时，AE直接返回，保持曝光时间和增益不变。当画面亮度稳定且PWM占空比维持在打开值一段时间后，AI算法会认为光圈已经打开至最大，退出光圈控制区，将控制权交还给AE。处于光圈控制区时，更改AE算法参数，如最大/最小曝光时间、最大/最小增益和抗闪等需要即时生效的参数，AE会即时响应，根据新设定的参数和环境亮度，AI算法重新决定是否要进入光圈控制区。由于进入光圈控制区域和退出光圈控制区域需要短暂时间，针对手动光圈镜头建议关闭AI功能，否则AE的调节速度会受到一点影响。针对DC-Iris镜头建议一直打开AI功能，随意开关AI容易导致光圈控制出现异常。针对某些长焦的DC-Iris镜头，默认参数可能会导致光圈打开/关闭速度过快，此时可以调节相关参数来解决，详见[ot\_isp\_dciris\_attr](#ZH-CN_TOPIC_0000002503964925)部分描述。
 -   关闭AI功能，对于DC-Iris镜头，光圈会打开到最大。
 
 【举例】
@@ -2633,8 +2602,8 @@ td_s32 ss_mpi_isp_set_dciris_attr(ot_vi_pipe vi_pipe, const ot_isp_dciris_attr *
 
 【相关主题】
 
--   [ot\_isp\_iris\_attr](#ot_isp_iris_attr)
--   [ot\_isp\_dciris\_attr](#ot_isp_dciris_attr)
+-   [ot\_isp\_iris\_attr](#ZH-CN_TOPIC_0000002471085086)
+-   [ot\_isp\_dciris\_attr](#ZH-CN_TOPIC_0000002503964925)
 
 #### ss\_mpi\_isp\_get\_dciris\_attr<a name="ZH-CN_TOPIC_0000002504084869"></a>
 
@@ -2785,7 +2754,7 @@ td_s32 ss_mpi_isp_set_piris_attr(ot_vi_pipe vi_pipe, const ot_isp_piris_attr *pi
 【注意】
 
 -   P-Iris自动光圈控制属性包含一个只写参数step\_fno\_table\_change，建议先对该结构体赋值，set MPI接口一次之后再get MPI 接口，直接get再set MPI可能会报错。
--   P-Iris镜头光圈控制通过AE分配路线进行。P-Iris对接重点在于正确设置镜头相关参数和合理设置AE分配路线，详见[ot\_isp\_piris\_attr](ot_isp_piris_attr.md)和[ss\_mpi\_isp\_set\_ae\_route\_attr](ss_mpi_isp_set_ae_route_attr.md)部分描述，才能保证P-Iris正常工作。由于不同P-Iris的驱动方式可能会有差别，用户可以自行修改P-Iris驱动以适配不同镜头。
+-   P-Iris镜头光圈控制通过AE分配路线进行。P-Iris对接重点在于正确设置镜头相关参数和合理设置AE分配路线，详见[ot\_isp\_piris\_attr](#ZH-CN_TOPIC_0000002504084801)和[ss\_mpi\_isp\_set\_ae\_route\_attr](#ZH-CN_TOPIC_0000002504084821)部分描述，才能保证P-Iris正常工作。由于不同P-Iris的驱动方式可能会有差别，用户可以自行修改P-Iris驱动以适配不同镜头。
 -   关闭AI功能，对于P-Iris镜头，光圈会打开到最大光圈目标值对应步进电机位置。
 -   单光圈多pipe时，只能有一个pipe的AE控制光圈，其余pipe不能控制光圈，即当一路pipe enable光圈控制，其余路应设置为disable。
 
@@ -2812,8 +2781,8 @@ ot_vi_pipe vi_pipe = 0;
 
 【相关主题】
 
--   [ot\_isp\_iris\_attr](#ot_isp_iris_attr)
--   [ot\_isp\_piris\_attr](#ot_isp_piris_attr)
+-   [ot\_isp\_iris\_attr](#ZH-CN_TOPIC_0000002471085086)
+-   [ot\_isp\_piris\_attr](#ZH-CN_TOPIC_0000002504084801)
 
 #### ss\_mpi\_isp\_get\_piris\_attr<a name="ZH-CN_TOPIC_0000002471084962"></a>
 
@@ -2896,25 +2865,15 @@ td_s32 ss_mpi_isp_get_piris_attr(ot_vi_pipe vi_pipe, ot_isp_piris_attr *piris_at
 
 ## 数据类型<a name="ZH-CN_TOPIC_0000002470925014"></a>
 
-
-
-
 ### Register<a name="ZH-CN_TOPIC_0000002470925128"></a>
 
--   [OT\_ISP\_HIST\_NUM](OT_ISP_HIST_NUM.md): 定义直方图bin的数目。
--   [OT\_ISP\_AI\_MAX\_STEP\_FNO\_NUM](OT_ISP_AI_MAX_STEP_FNO_NUM.md):定义光圈的最大步数。
--   [ot\_isp\_ae\_sensor\_register](ot_isp_ae_sensor_register.md)：定义sensor注册结构体。
--   [ot\_isp\_ae\_sensor\_exp\_func](ot_isp_ae_sensor_exp_func.md)：定义sensor回调函数结构体。
--   [ot\_isp\_ae\_sensor\_default](ot_isp_ae_sensor_default.md)：定义AE算法库的初始化参数结构体。
--   [ot\_isp\_ae\_accuracy\_type](ot_isp_ae_accuracy_type.md)：定义曝光时间、增益的精度类型的枚举。
--   [ot\_isp\_ae\_accuracy](ot_isp_ae_accuracy.md)：定义曝光时间、增益的精度的结构体。
-
-
-
-
-
-
-
+-   [OT\_ISP\_HIST\_NUM](#ZH-CN_TOPIC_0000002470924896): 定义直方图bin的数目。
+-   [OT\_ISP\_AI\_MAX\_STEP\_FNO\_NUM](#ZH-CN_TOPIC_0000002470924950):定义光圈的最大步数。
+-   [ot\_isp\_ae\_sensor\_register](#ZH-CN_TOPIC_0000002504084731)：定义sensor注册结构体。
+-   [ot\_isp\_ae\_sensor\_exp\_func](#ZH-CN_TOPIC_0000002504084949)：定义sensor回调函数结构体。
+-   [ot\_isp\_ae\_sensor\_default](#ZH-CN_TOPIC_0000002470924862)：定义AE算法库的初始化参数结构体。
+-   [ot\_isp\_ae\_accuracy\_type](#ZH-CN_TOPIC_0000002470924972)：定义曝光时间、增益的精度类型的枚举。
+-   [ot\_isp\_ae\_accuracy](#ZH-CN_TOPIC_0000002503964839)：定义曝光时间、增益的精度的结构体。
 
 #### OT\_ISP\_HIST\_NUM<a name="ZH-CN_TOPIC_0000002470924896"></a>
 
@@ -2938,7 +2897,7 @@ td_s32 ss_mpi_isp_get_piris_attr(ot_vi_pipe vi_pipe, ot_isp_piris_attr *piris_at
 -   ot\_isp\_be\_ae\_stat\_1
 -   ot\_isp\_ae\_stats
 -   ot\_isp\_ae\_stitch\_stats
--   [ot\_isp\_exp\_info](#ot_isp_exp_info)
+-   [ot\_isp\_exp\_info](#ZH-CN_TOPIC_0000002470924900)
 
 #### OT\_ISP\_AI\_MAX\_STEP\_FNO\_NUM<a name="ZH-CN_TOPIC_0000002470924950"></a>
 
@@ -2958,7 +2917,7 @@ td_s32 ss_mpi_isp_get_piris_attr(ot_vi_pipe vi_pipe, ot_isp_piris_attr *piris_at
 
 【相关数据类型及接口】
 
-[ot\_isp\_piris\_attr](#ot_isp_piris_attr)
+[ot\_isp\_piris\_attr](#ZH-CN_TOPIC_0000002504084801)
 
 #### ot\_isp\_ae\_sensor\_register<a name="ZH-CN_TOPIC_0000002504084731"></a>
 
@@ -2997,7 +2956,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ot\_isp\_ae\_sensor\_exp\_func](#ot_isp_ae_sensor_exp_func)
+[ot\_isp\_ae\_sensor\_exp\_func](#ZH-CN_TOPIC_0000002504084949)
 
 #### ot\_isp\_ae\_sensor\_exp\_func<a name="ZH-CN_TOPIC_0000002504084949"></a>
 
@@ -3012,23 +2971,23 @@ typedef struct {
     td_s32 (*pfn_cmos_get_ae_default)(ot_vi_pipe vi_pipe, ot_isp_ae_sensor_default *ae_sns_dft);
  
     /* the function of sensor set fps */
-    ot_void (*pfn_cmos_fps_set)(ot_vi_pipe vi_pipe, ot_float f32_fps, ot_isp_ae_sensor_default *ae_sns_dft);
-    ot_void (*pfn_cmos_slow_framerate_set)(ot_vi_pipe vi_pipe, td_u32 full_lines, ot_isp_ae_sensor_default *ae_sns_dft);
+    td_void (*pfn_cmos_fps_set)(ot_vi_pipe vi_pipe, ot_float f32_fps, ot_isp_ae_sensor_default *ae_sns_dft);
+    td_void (*pfn_cmos_slow_framerate_set)(ot_vi_pipe vi_pipe, td_u32 full_lines, ot_isp_ae_sensor_default *ae_sns_dft);
  
     /* while isp notify ae to update sensor regs, ae call these funcs. */
-    ot_void (*pfn_cmos_inttime_update)(ot_vi_pipe vi_pipe, td_u32 int_time);
-    ot_void (*pfn_cmos_gains_update)(ot_vi_pipe vi_pipe, td_u32 again, td_u32 dgain);
+    td_void (*pfn_cmos_inttime_update)(ot_vi_pipe vi_pipe, td_u32 int_time);
+    td_void (*pfn_cmos_gains_update)(ot_vi_pipe vi_pipe, td_u32 again, td_u32 dgain);
  
-    ot_void (*pfn_cmos_again_calc_table)(ot_vi_pipe vi_pipe, td_u32 *again_lin, td_u32 *again_db);
-    ot_void (*pfn_cmos_dgain_calc_table)(ot_vi_pipe vi_pipe, td_u32 *dgain_lin, td_u32 *dgain_db);
+    td_void (*pfn_cmos_again_calc_table)(ot_vi_pipe vi_pipe, td_u32 *again_lin, td_u32 *again_db);
+    td_void (*pfn_cmos_dgain_calc_table)(ot_vi_pipe vi_pipe, td_u32 *dgain_lin, td_u32 *dgain_db);
  
-    ot_void (*pfn_cmos_get_inttime_max)(ot_vi_pipe vi_pipe, td_u16 man_ratio_enable, td_u32 *ratio,
+    td_void (*pfn_cmos_get_inttime_max)(ot_vi_pipe vi_pipe, td_u16 man_ratio_enable, td_u32 *ratio,
                                         ot_isp_ae_int_time_range *int_time, td_u32 *lf_max_int_time);
  
     /* long frame mode set */
-    ot_void (*pfn_cmos_ae_fswdr_attr_set)(ot_vi_pipe vi_pipe, ot_isp_ae_fswdr_attr *ae_fswdr_attr);
-    ot_void (*pfn_cmos_ae_quick_start_status_set)(ot_vi_pipe vi_pipe, td_bool quick_start_status);
-    ot_void (*pfn_cmos_exp_param_convert)(ot_vi_pipe vi_pipe, ot_isp_ae_convert_param *exp_param);
+    td_void (*pfn_cmos_ae_fswdr_attr_set)(ot_vi_pipe vi_pipe, ot_isp_ae_fswdr_attr *ae_fswdr_attr);
+    td_void (*pfn_cmos_ae_quick_start_status_set)(ot_vi_pipe vi_pipe, td_bool quick_start_status);
+    td_void (*pfn_cmos_exp_param_convert)(ot_vi_pipe vi_pipe, ot_isp_ae_convert_param *exp_param);
 } ot_isp_ae_sensor_exp_func;
 ```
 
@@ -3097,7 +3056,7 @@ typedef struct {
 【注意事项】
 
 -   如果回调函数指针不需要赋值，需要置为NULL。
--   在[ot\_isp\_ae\_sensor\_default](ot_isp_ae_sensor_default.md)中定义了曝光时间和增益的精度，pfn\_cmos\_inttime\_update和pfn\_cmos\_gains\_update中设置的曝光时间和增益都是带精度的值，如何转换成sensor的配置值与sensor强相关，请参阅sensor手册。
+-   在[ot\_isp\_ae\_sensor\_default](#ZH-CN_TOPIC_0000002470924862)中定义了曝光时间和增益的精度，pfn\_cmos\_inttime\_update和pfn\_cmos\_gains\_update中设置的曝光时间和增益都是带精度的值，如何转换成sensor的配置值与sensor强相关，请参阅sensor手册。
 -   不使用无光敏快启功能时，pfn\_cmos\_ae\_quick\_start\_status\_set需要设置为NULL。
 -   quick\_start\_status是AE无光敏快启收敛状态的标志位。该值为TD\_TRUE时，无光敏快启收敛完成。
 
@@ -3118,7 +3077,7 @@ typedef struct {
     td_u8   ae_compensation;
     td_u32  lines_per500ms;
     td_u32  flicker_freq;
-    ot_float fps;
+    td_float fps;
     td_u32  hmax_times;
     td_u32  init_exposure;
     td_u32  init_int_time;
@@ -3177,6 +3136,7 @@ typedef struct {
     td_bool ae_gain_sep_cfg;
     td_bool lhcg_support;
     td_u32 sns_lhcg_exp_ratio;
+    td_u8 ae_stat_pos;
 } ot_isp_ae_sensor_default;
 ```
 
@@ -3510,6 +3470,14 @@ typedef struct {
 <td class="cellrowborder" valign="top" width="70%" headers="mcps1.1.3.1.2 "><p id="p13212mcpsimp"><a name="p13212mcpsimp"></a><a name="p13212mcpsimp"></a>LCG+HCG模式的基础曝光比。</p>
 </td>
 </tr>
+<tr id="row2701534411"><td class="cellrowborder" valign="top" width="30%" headers="mcps1.1.3.1.1 "><p id="p10711315417"><a name="p10711315417"></a><a name="p10711315417"></a>ae_stat_pos</p>
+</td>
+<td class="cellrowborder" valign="top" width="70%" headers="mcps1.1.3.1.2 "><p id="p3869157897"><a name="p3869157897"></a><a name="p3869157897"></a>设置AE统计信息位置。仅在线性模式下使用。</p>
+<p id="p16686031019"><a name="p16686031019"></a><a name="p16686031019"></a>0：FE统计信息；</p>
+<p id="p86801121014"><a name="p86801121014"></a><a name="p86801121014"></a>1：BE统计信息；</p>
+<p id="p0948155171819"><a name="p0948155171819"></a><a name="p0948155171819"></a>其他：FE统计信息。</p>
+</td>
+</tr>
 </tbody>
 </table>
 
@@ -3629,7 +3597,7 @@ typedef struct {
 -   线性精度指的是增益的倍数均匀增加。例如sensor能支持的again为1倍，1\(1+1/16\)倍，1\(1+2/16\)倍……这种情况下，精度类型可以设定为OT\_ISP\_AE\_ACCURACY\_LINEAR，精度值设置为0.0625，在这种精度下，again为32则表示32\*0.0625= 2倍增益。
 -   DB精度指的是增益的倍数以倍增的形式增加。例如sensor的芯片手册说明能支持的again为0db，0.3db，0.6db……这种情况下，精度类型可以设定为OT\_ISP\_AE\_ACCURACY\_DB，精度值设置为0.3，在这种精度下，again为80则表示80\*0.3db=24db，24db是16倍增益。再例如sensor能支持的again为1倍，2倍，4倍，8倍……这种情况下，对应为db则为0db，6db，12db，18db，所以精度类型设定为OT\_ISP\_AE\_ACCURACY\_DB，精度值设置为6。由于AE算法内部实现线性转DB时计算精度存在误差，当DB精度较高\(小于1\)时，建议采用TABLE精度来实现。
 -   TABLE精度指增益的倍数是通过查表的形式获得，表格统一使用10bit精度，即1024表示1倍增益。当某些sensor的增益值的增加规律不线性或者DB精度较高时，可以使用TABLE方式，AE算法计算出需要的模拟增益/数字增益的数值，用查询sensor增益表格中最接近的值作为数字增益/模拟增益的值。
--   使用TABLE模式时，需要相应的初始化回调结构体[ot\_isp\_ae\_sensor\_exp\_func](ot_isp_ae_sensor_exp_func.md)中的回调函数。
+-   使用TABLE模式时，需要相应的初始化回调结构体[ot\_isp\_ae\_sensor\_exp\_func](#ZH-CN_TOPIC_0000002504084949)中的回调函数。
 -   曝光时间的精度通常都是线性的，都是以行为单位。若曝光时间为线性精度，精度accuracy为大于1的整数，则意味着AE计算出来的曝光行数只能为最小曝光时间加上accuracy的整数倍。该功能可用于计算某些sensor WDR模式下的长/短帧曝光时间，如某些sensor曝光行数必须为2n+1，则可以配置最小曝光时间为1或3，配置accuracy为2。
 -   曝光时间与sensor增益保持线性关系是AE曝光量分配的前提，即认为曝光量一定的情况下，曝光时间和sensor增益可以相互转换而保持图像亮度基本不变。比如说曝光量为4096，那么分配为曝光时间\(2\)\*增益\(2048\)，也可以分配为曝光时间\(4\)\*增益\(1024\)，这2种情况下图像亮度应该基本不变。若不满足这种线性关系，在高亮环境下，由于曝光时间很短，1行曝光时间的变化也容易使画面发生闪烁。某些sensor采用1080p@30fps的初始化序列配置时，曝光时间必须偏移0.8018行之后才与sensor增益有线性关系，因此增加了offset这个变量，它为float型变量，以行为单位，将offset设置成0.8018，AE算法内部即可完成偏移处理。一般sensor的曝光时间和增益不存在这种偏移关系，需在cmos.c中将该值配为0。
 -   规定这3种精度类型，可以以统一的接口形式对接绝大部分sensor。
@@ -3640,48 +3608,27 @@ ot\_isp\_sensor\_register
 
 ### AE<a name="ZH-CN_TOPIC_0000002504084791"></a>
 
--   [ot\_isp\_ae\_mode](ot_isp_ae_mode.md)：定义自动曝光的模式。
--   [ot\_isp\_ae\_strategy](ot_isp_ae_strategy.md)：定义AE曝光策略模式。
--   [ot\_isp\_ae\_delay](ot_isp_ae_delay.md)：定义AE延时属性。
--   [ot\_isp\_ae\_range](ot_isp_ae_range.md)：定义曝光时间或增益的最大值和最小值。
--   [ot\_isp\_antiflicker\_mode](ot_isp_antiflicker_mode.md)：定义抗闪模式。
--   [ot\_isp\_antiflicker](ot_isp_antiflicker.md)：定义抗闪属性。
--   [ot\_isp\_subflicker](ot_isp_subflicker.md)：定义ISP图像亚抗闪属性。
--   [ot\_isp\_fswdr\_mode](ot_isp_fswdr_mode.md)：定义ISP FSWDR运行模式。
--   [ot\_isp\_ae\_attr](ot_isp_ae_attr.md)：定义自动曝光属性。
--   [ot\_isp\_me\_attr](ot_isp_me_attr.md)：定义手动曝光属性。
--   [ot\_isp\_exposure\_attr](ot_isp_exposure_attr.md)：定义ISP曝光属性。
--   [ot\_isp\_wdr\_exposure\_attr](ot_isp_wdr_exposure_attr.md)：定义WDR模式下的曝光属性。
--   [ot\_isp\_hdr\_exposure\_attr](ot_isp_hdr_exposure_attr.md)：定义HDR模式下的曝光属性。
--   [ot\_isp\_smart\_exposure\_attr](ot_isp_smart_exposure_attr.md)：定义智能模式下的曝光属性。
--   [ot\_isp\_fast\_face\_ae\_attr](ot_isp_fast_face_ae_attr.md): 定义人脸快速收敛算法的曝光属性。
--   [ot\_isp\_ae\_route\_node](ot_isp_ae_route_node.md)：定义AE分配路线节点属性。
--   [ot\_isp\_ae\_route](ot_isp_ae_route.md)：定义AE曝光分配策略属性。
--   [ot\_isp\_ae\_route\_ex\_node](ot_isp_ae_route_ex_node.md)：定义AE扩展分配路线节点属性。
--   [ot\_isp\_ae\_route\_ex](ot_isp_ae_route_ex.md)：定义AE曝光分配策略扩展属性。
--   [ot\_isp\_exp\_info](ot_isp_exp_info.md)：定义ISP曝光内部状态信息。
--   [ot\_isp\_prior\_frame](ot_isp_prior_frame.md)：定义WDR模式下的优先帧。
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+-   [ot\_isp\_ae\_mode](#ZH-CN_TOPIC_0000002504084733)：定义自动曝光的模式。
+-   [ot\_isp\_ae\_strategy](#ZH-CN_TOPIC_0000002471085056)：定义AE曝光策略模式。
+-   [ot\_isp\_ae\_delay](#ZH-CN_TOPIC_0000002504084723)：定义AE延时属性。
+-   [ot\_isp\_ae\_range](#ZH-CN_TOPIC_0000002470925080)：定义曝光时间或增益的最大值和最小值。
+-   [ot\_isp\_antiflicker\_mode](#ZH-CN_TOPIC_0000002504084707)：定义抗闪模式。
+-   [ot\_isp\_antiflicker](#ZH-CN_TOPIC_0000002503965075)：定义抗闪属性。
+-   [ot\_isp\_subflicker](#ZH-CN_TOPIC_0000002504084863)：定义ISP图像亚抗闪属性。
+-   [ot\_isp\_fswdr\_mode](#ZH-CN_TOPIC_0000002503965115)：定义ISP FSWDR运行模式。
+-   [ot\_isp\_ae\_attr](#ZH-CN_TOPIC_0000002470924872)：定义自动曝光属性。
+-   [ot\_isp\_me\_attr](#ZH-CN_TOPIC_0000002470925000)：定义手动曝光属性。
+-   [ot\_isp\_exposure\_attr](#ZH-CN_TOPIC_0000002470924918)：定义ISP曝光属性。
+-   [ot\_isp\_wdr\_exposure\_attr](#ZH-CN_TOPIC_0000002471084990)：定义WDR模式下的曝光属性。
+-   [ot\_isp\_hdr\_exposure\_attr](#ZH-CN_TOPIC_0000002503964801)：定义HDR模式下的曝光属性。
+-   [ot\_isp\_smart\_exposure\_attr](#ZH-CN_TOPIC_0000002503964907)：定义智能模式下的曝光属性。
+-   [ot\_isp\_fast\_face\_ae\_attr](#ZH-CN_TOPIC_0000002503964961): 定义人脸快速收敛算法的曝光属性。
+-   [ot\_isp\_ae\_route\_node](#ZH-CN_TOPIC_0000002471085080)：定义AE分配路线节点属性。
+-   [ot\_isp\_ae\_route](#ZH-CN_TOPIC_0000002504084703)：定义AE曝光分配策略属性。
+-   [ot\_isp\_ae\_route\_ex\_node](#ZH-CN_TOPIC_0000002504085035)：定义AE扩展分配路线节点属性。
+-   [ot\_isp\_ae\_route\_ex](#ZH-CN_TOPIC_0000002470924848)：定义AE曝光分配策略扩展属性。
+-   [ot\_isp\_exp\_info](#ZH-CN_TOPIC_0000002470924900)：定义ISP曝光内部状态信息。
+-   [ot\_isp\_prior\_frame](#ZH-CN_TOPIC_0000002503965047)：定义WDR模式下的优先帧。
 
 #### ot\_isp\_ae\_mode<a name="ZH-CN_TOPIC_0000002504084733"></a>
 
@@ -3972,7 +3919,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ot\_isp\_antiflicker\_mode](#ot_isp_antiflicker_mode)
+[ot\_isp\_antiflicker\_mode](#ZH-CN_TOPIC_0000002504084707)
 
 #### ot\_isp\_subflicker<a name="ZH-CN_TOPIC_0000002504084863"></a>
 
@@ -4309,7 +4256,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ss\_mpi\_isp\_set\_exposure\_attr](#ss_mpi_isp_set_exposure_attr)
+[ss\_mpi\_isp\_set\_exposure\_attr](#ZH-CN_TOPIC_0000002503964781)
 
 #### ot\_isp\_me\_attr<a name="ZH-CN_TOPIC_0000002470925000"></a>
 
@@ -4397,7 +4344,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ss\_mpi\_isp\_set\_exposure\_attr](#ss_mpi_isp_set_exposure_attr)
+[ss\_mpi\_isp\_set\_exposure\_attr](#ZH-CN_TOPIC_0000002503964781)
 
 #### ot\_isp\_exposure\_attr<a name="ZH-CN_TOPIC_0000002470924918"></a>
 
@@ -4497,8 +4444,8 @@ typedef struct {
 
 【相关数据类型及接口】
 
--   [ss\_mpi\_isp\_set\_exposure\_attr](#ss_mpi_isp_set_exposure_attr)
--   [ss\_mpi\_isp\_get\_exposure\_attr](#ss_mpi_isp_get_exposure_attr)
+-   [ss\_mpi\_isp\_set\_exposure\_attr](#ZH-CN_TOPIC_0000002503964781)
+-   [ss\_mpi\_isp\_get\_exposure\_attr](#ZH-CN_TOPIC_0000002504084835)
 
 #### ot\_isp\_wdr\_exposure\_attr<a name="ZH-CN_TOPIC_0000002471084990"></a>
 
@@ -4608,8 +4555,8 @@ typedef struct { ot_op_mode  exp_ratio_type;
 
 【相关数据类型及接口】
 
--   [ss\_mpi\_isp\_set\_wdr\_exposure\_attr](#ss_mpi_isp_set_wdr_exposure_attr)
--   [ss\_mpi\_isp\_get\_wdr\_exposure\_attr](#ss_mpi_isp_get_wdr_exposure_attr)
+-   [ss\_mpi\_isp\_set\_wdr\_exposure\_attr](#ZH-CN_TOPIC_0000002504084905)
+-   [ss\_mpi\_isp\_get\_wdr\_exposure\_attr](#ZH-CN_TOPIC_0000002470924854)
 
 #### ot\_isp\_hdr\_exposure\_attr<a name="ZH-CN_TOPIC_0000002503964801"></a>
 
@@ -4641,7 +4588,7 @@ typedef struct {
 <tbody><tr id="row14364mcpsimp"><td class="cellrowborder" valign="top" width="25%" headers="mcps1.1.3.1.1 "><p xml:lang="sv-SE" id="p14366mcpsimp"><a name="p14366mcpsimp"></a><a name="p14366mcpsimp"></a>exp_hdr_lv_type</p>
 </td>
 <td class="cellrowborder" valign="top" width="75%" headers="mcps1.1.3.1.2 "><p xml:lang="sv-SE" id="p14368mcpsimp"><a name="p14368mcpsimp"></a><a name="p14368mcpsimp"></a><span xml:lang="en-US" id="ph14369mcpsimp"><a name="ph14369mcpsimp"></a><a name="ph14369mcpsimp"></a>仅在</span>WDR-HDR<span xml:lang="en-US" id="ph14370mcpsimp"><a name="ph14370mcpsimp"></a><a name="ph14370mcpsimp"></a>模式下有效</span>，<span xml:lang="en-US" id="ph14371mcpsimp"><a name="ph14371mcpsimp"></a><a name="ph14371mcpsimp"></a>在</span>linear-HDR<span xml:lang="en-US" id="ph14372mcpsimp"><a name="ph14372mcpsimp"></a><a name="ph14372mcpsimp"></a>模式下不生效。</span></p>
-<a name="ul14373mcpsimp"></a><a name="ul14373mcpsimp"></a><ul id="ul14373mcpsimp"><li xml:lang="sv-SE">OT_OP_MODE_AUTO：<span xml:lang="en-US" id="ph14375mcpsimp"><a name="ph14375mcpsimp"></a><a name="ph14375mcpsimp"></a>根据场景自动计算曝光等级</span>；</li><li xml:lang="sv-SE">OP_TYPE_MANUAL：<span xml:lang="en-US" id="ph14377mcpsimp"><a name="ph14377mcpsimp"></a><a name="ph14377mcpsimp"></a>手动配置曝光等级。</span></li></ul>
+<a name="ul14373mcpsimp"></a><a name="ul14373mcpsimp"></a><ul id="ul14373mcpsimp"><li xml:lang="sv-SE">OT_OP_MODE_AUTO：<span xml:lang="en-US" id="ph14375mcpsimp"><a name="ph14375mcpsimp"></a><a name="ph14375mcpsimp"></a>根据场景自动计算曝光等级</span>；</li><li xml:lang="sv-SE">OT_OP_MODE_MANUAL：<span xml:lang="en-US" id="ph14377mcpsimp"><a name="ph14377mcpsimp"></a><a name="ph14377mcpsimp"></a>手动配置曝光等级。</span></li></ul>
 </td>
 </tr>
 <tr id="row14378mcpsimp"><td class="cellrowborder" valign="top" width="25%" headers="mcps1.1.3.1.1 "><p xml:lang="sv-SE" id="p14380mcpsimp"><a name="p14380mcpsimp"></a><a name="p14380mcpsimp"></a>exp_hdr_lv</p>
@@ -4677,8 +4624,8 @@ typedef struct {
 
 【相关数据类型及接口】
 
--   [ss\_mpi\_isp\_set\_hdr\_exposure\_attr](#ss_mpi_isp_set_hdr_exposure_attr)
--   [ss\_mpi\_isp\_get\_hdr\_exposure\_attr](#ss_mpi_isp_get_hdr_exposure_attr)
+-   [ss\_mpi\_isp\_set\_hdr\_exposure\_attr](#ZH-CN_TOPIC_0000002504084737)
+-   [ss\_mpi\_isp\_get\_hdr\_exposure\_attr](#ZH-CN_TOPIC_0000002504084897)
 
 【注意事项】
 
@@ -4802,8 +4749,8 @@ typedef struct {
 
 【相关数据类型及接口】
 
--   [ss\_mpi\_isp\_set\_smart\_exposure\_attr](#ss_mpi_isp_set_smart_exposure_attr)
--   [ss\_mpi\_isp\_get\_smart\_exposure\_attr](#ss_mpi_isp_get_smart_exposure_attr)
+-   [ss\_mpi\_isp\_set\_smart\_exposure\_attr](#ZH-CN_TOPIC_0000002471084856)
+-   [ss\_mpi\_isp\_get\_smart\_exposure\_attr](#ZH-CN_TOPIC_0000002504084961)
 
 #### ot\_isp\_fast\_face\_ae\_attr<a name="ZH-CN_TOPIC_0000002503964961"></a>
 
@@ -4882,8 +4829,8 @@ typedef struct {
 
 【相关数据类型及接口】
 
--   [ss\_mpi\_isp\_set\_fast\_face\_ae\_attr](#ss_mpi_isp_set_fast_face_ae_attr)
--   [ss\_mpi\_isp\_get\_fast\_face\_ae\_attr](#ss_mpi_isp_get_fast_face_ae_attr)
+-   [ss\_mpi\_isp\_set\_fast\_face\_ae\_attr](#ZH-CN_TOPIC_0000002503964919)
+-   [ss\_mpi\_isp\_get\_fast\_face\_ae\_attr](#ZH-CN_TOPIC_0000002504084751)
 
 #### ot\_isp\_ae\_route\_node<a name="ZH-CN_TOPIC_0000002471085080"></a>
 
@@ -4941,7 +4888,7 @@ typedef struct {
 【注意事项】
 
 -   节点的曝光量是曝光时间、增益和光圈的乘积，节点曝光量必须单调递增，即后一个节点的曝光量大于或等于前一个节点的曝光量，第一个节点的曝光量最小，最后一个节点的曝光量最大。在计算曝光量时，光圈F值要等效成一个增益，公式如下：等效增益FNO = 1 <<OT\_ISP\_IRIS\_F\_NO\_XX\_XX。由此可知F32.0对应增益1，F22.0对应增益2，F16.0对应增益4，以此类推，F1.0对应增益1024。
--   可以通过设置结构体[ot\_isp\_piris\_attr](ot_isp_piris_attr.md)中的fno\_ex\_valid来决定实际生效的AE route节点光圈值采用iris\_fno或iris\_fno\_lin。fno\_ex\_valid为TD\_TRUE时采用高精度的iris\_fno\_lin，默认采用iris\_fno。iris\_fno会受到[ot\_isp\_piris\_attr](ot_isp_piris_attr.md)中max\_iris\_fno\_target / min\_iris\_fno\_target的限制，iris\_fno\_lin会受到[ot\_isp\_piris\_attr](ot_isp_piris_attr.md)中max\_iris\_fno\_target\_linear / min\_iris\_fno\_target\_linear的限制。另外，iris\_fno和iris\_fno\_lin还会受到[ot\_isp\_ae\_sensor\_default](ot_isp_ae_sensor_default.md)中max\_iris\_fno / min\_iris\_fno的限制，所以对接P-Iris时要在cmos.c中给max\_iris\_fno / min\_iris\_fno赋合适的值。
+-   可以通过设置结构体[ot\_isp\_piris\_attr](#ZH-CN_TOPIC_0000002504084801)中的fno\_ex\_valid来决定实际生效的AE route节点光圈值采用iris\_fno或iris\_fno\_lin。fno\_ex\_valid为TD\_TRUE时采用高精度的iris\_fno\_lin，默认采用iris\_fno。iris\_fno会受到[ot\_isp\_piris\_attr](#ZH-CN_TOPIC_0000002504084801)中max\_iris\_fno\_target / min\_iris\_fno\_target的限制，iris\_fno\_lin会受到[ot\_isp\_piris\_attr](#ZH-CN_TOPIC_0000002504084801)中max\_iris\_fno\_target\_linear / min\_iris\_fno\_target\_linear的限制。另外，iris\_fno和iris\_fno\_lin还会受到[ot\_isp\_ae\_sensor\_default](#ZH-CN_TOPIC_0000002470924862)中max\_iris\_fno / min\_iris\_fno的限制，所以对接P-Iris时要在cmos.c中给max\_iris\_fno / min\_iris\_fno赋合适的值。
 -   不支持设置等曝光量节点。
 -   为了保证曝光节点的曝光量，曝光节点的一个分量发生限制时，会对其他未达到最大值的分量进行调整，实际生效路径可能与设定路径不一致。为了防止曝光量溢出，如果光圈分量使能，则同一节点的曝光时间与增益的乘积最大值不能超过0x1FFFFFFFFFFFFF，如果光圈分量不使能，则同一节点的曝光时间与10bit精度系统增益的乘积最大值不能超过0x7FFFFFFFFFFFFFFF。
 -   如果相邻节点的曝光量增加，则应该有一个分量增加，其他分量固定，增加的分量决定该段路线的分配策略。例如增益分量增加，那么该段路线的分配策略是增益优先。
@@ -4950,7 +4897,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ss\_mpi\_isp\_set\_ae\_route\_attr](#ss_mpi_isp_set_ae_route_attr)
+[ss\_mpi\_isp\_set\_ae\_route\_attr](#ZH-CN_TOPIC_0000002504084821)
 
 #### ot\_isp\_ae\_route<a name="ZH-CN_TOPIC_0000002504084703"></a>
 
@@ -4999,7 +4946,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ss\_mpi\_isp\_set\_ae\_route\_attr](#ss_mpi_isp_set_ae_route_attr)
+[ss\_mpi\_isp\_set\_ae\_route\_attr](#ZH-CN_TOPIC_0000002504084821)
 
 #### ot\_isp\_ae\_route\_ex\_node<a name="ZH-CN_TOPIC_0000002504085035"></a>
 
@@ -5071,7 +5018,7 @@ typedef struct {
 【注意事项】
 
 -   节点的曝光量是曝光时间、sensor模拟增益、sensor数字增益、ISP数字增益和光圈的乘积，节点曝光量必须单调递增，即后一个节点的曝光量大于或等于前一个节点的曝光量，第一个节点的曝光量最小，最后一个节点的曝光量最大。在计算曝光量时，光圈F值要等效成一个增益，公式如下：等效增益FNO = 1 << OT\_ISP\_IRIS\_F\_NO\_XX\_XX。由此可知F32.0对应增益1，F22.0对应增益2，F16.0对应增益4，以此类推，F1.0对应增益1024。
--   可以通过设置结构体[ot\_isp\_piris\_attr](ot_isp_piris_attr.md)中的fno\_ex\_valid来决定实际生效的扩展AE route节点光圈值采用iris\_fno或iris\_fno\_lin。fno\_ex\_valid为TD\_TRUE时采用高精度的iris\_fno\_lin，默认采用iris\_fno。iris\_fno会受到[ot\_isp\_piris\_attr](ot_isp_piris_attr.md)中max\_iris\_fno\_target/ min\_iris\_fno\_target的限制，iris\_fno\_lin会受到[ot\_isp\_piris\_attr](ot_isp_piris_attr.md)中max\_iris\_fno\_target/ min\_iris\_fno\_target的限制。另外，iris\_fno和iris\_fno\_lin还会受到[ot\_isp\_ae\_sensor\_default](ot_isp_ae_sensor_default.md)中max\_iris\_fno/ min\_iris\_fno的限制，所以对接P-Iris时要在cmos.c中给max\_iris\_fno/ min\_iris\_fno赋合适的值。
+-   可以通过设置结构体[ot\_isp\_piris\_attr](#ZH-CN_TOPIC_0000002504084801)中的fno\_ex\_valid来决定实际生效的扩展AE route节点光圈值采用iris\_fno或iris\_fno\_lin。fno\_ex\_valid为TD\_TRUE时采用高精度的iris\_fno\_lin，默认采用iris\_fno。iris\_fno会受到[ot\_isp\_piris\_attr](#ZH-CN_TOPIC_0000002504084801)中max\_iris\_fno\_target/ min\_iris\_fno\_target的限制，iris\_fno\_lin会受到[ot\_isp\_piris\_attr](#ZH-CN_TOPIC_0000002504084801)中max\_iris\_fno\_target/ min\_iris\_fno\_target的限制。另外，iris\_fno和iris\_fno\_lin还会受到[ot\_isp\_ae\_sensor\_default](#ZH-CN_TOPIC_0000002470924862)中max\_iris\_fno/ min\_iris\_fno的限制，所以对接P-Iris时要在cmos.c中给max\_iris\_fno/ min\_iris\_fno赋合适的值。
 -   不支持设置等曝光量节点。
 -   为了保证曝光节点的曝光量，曝光节点的一个分量发生限制时，会对其他未达到最大值的分量进行调整，实际生效路径可能与设定路径不一致。
 -   如果相邻节点的曝光量增加，则应该有一个分量增加，其他分量固定，增加的分量决定该段路线的分配策略。例如sensor模拟增益分量增加，那么该段路线的分配策略是sensor模拟增益优先。
@@ -5084,7 +5031,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ss\_mpi\_isp\_set\_ae\_route\_attr\_ex](#ss_mpi_isp_set_ae_route_attr_ex)
+[ss\_mpi\_isp\_set\_ae\_route\_attr\_ex](#ZH-CN_TOPIC_0000002503965045)
 
 #### ot\_isp\_ae\_route\_ex<a name="ZH-CN_TOPIC_0000002470924848"></a>
 
@@ -5134,7 +5081,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ss\_mpi\_isp\_set\_ae\_route\_attr\_ex](#ss_mpi_isp_set_ae_route_attr_ex)
+[ss\_mpi\_isp\_set\_ae\_route\_attr\_ex](#ZH-CN_TOPIC_0000002503965045)
 
 #### ot\_isp\_exp\_info<a name="ZH-CN_TOPIC_0000002470924900"></a>
 
@@ -5167,7 +5114,7 @@ typedef struct {
     td_u32 isosf; 
     td_u32 iso_calibrate;
     td_u32 ref_exp_ratio;
-    td_u32 wdr_exp_coef;
+    td_u16 wdr_exp_coef;
     td_u32 first_stable_time; 
     td_u32 quick_star_iso; 
     ot_isp_ae_route ae_route;
@@ -5258,7 +5205,7 @@ typedef struct {
 <p id="p14988mcpsimp"><a name="p14988mcpsimp"></a><a name="p14988mcpsimp"></a>取值范围：[-0x8000, 0x7FFF]</p>
 </td>
 </tr>
-<tr id="row14989mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.3.1.1 "><p xml:lang="sv-SE" id="p14991mcpsimp"><a name="p14991mcpsimp"></a><a name="p14991mcpsimp"></a>ae_hist1024_value [<a href="OT_ISP_HIST_NUM.md"><span xml:lang="en-US" id="ph14993mcpsimp"><a name="ph14993mcpsimp"></a><a name="ph14993mcpsimp"></a>OT_ISP_HIST_NUM</span></a>]</p>
+<tr id="row14989mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.3.1.1 "><p xml:lang="sv-SE" id="p14991mcpsimp"><a name="p14991mcpsimp"></a><a name="p14991mcpsimp"></a>ae_hist1024_value [<a href="#ZH-CN_TOPIC_0000002470924896"><span xml:lang="en-US" id="ph14993mcpsimp"><a name="ph14993mcpsimp"></a><a name="ph14993mcpsimp"></a>OT_ISP_HIST_NUM</span></a>]</p>
 </td>
 <td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p14995mcpsimp"><a name="p14995mcpsimp"></a><a name="p14995mcpsimp"></a>全局1024段直方图统计信息</p>
 <p id="p14996mcpsimp"><a name="p14996mcpsimp"></a><a name="p14996mcpsimp"></a>取值范围：[0x0, 0xFFFFFFFF]</p>
@@ -5309,7 +5256,7 @@ typedef struct {
 </tr>
 <tr id="row15054mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.3.1.1 "><p xml:lang="sv-SE" id="p15056mcpsimp"><a name="p15056mcpsimp"></a><a name="p15056mcpsimp"></a>ref_exp_ratio</p>
 </td>
-<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p xml:lang="sv-SE" id="p15058mcpsimp"><a name="p15058mcpsimp"></a><a name="p15058mcpsimp"></a><span xml:lang="en-US" id="ph15059mcpsimp"><a name="ph15059mcpsimp"></a><a name="ph15059mcpsimp"></a>参考曝光比</span>，<span xml:lang="en-US" id="ph15060mcpsimp"><a name="ph15060mcpsimp"></a><a name="ph15060mcpsimp"></a>用于估计当前场景的动态范围</span>，<span xml:lang="en-US" id="ph15061mcpsimp"><a name="ph15061mcpsimp"></a><a name="ph15061mcpsimp"></a>会受到</span><a href="ot_isp_wdr_exposure_attr.md">ot_isp_wdr_exposure_attr</a><span xml:lang="en-US" id="ph15063mcpsimp"><a name="ph15063mcpsimp"></a><a name="ph15063mcpsimp"></a>中</span>tolerance和speed等值<span xml:lang="en-US" id="ph15064mcpsimp"><a name="ph15064mcpsimp"></a><a name="ph15064mcpsimp"></a>的影响。</span></p>
+<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p xml:lang="sv-SE" id="p15058mcpsimp"><a name="p15058mcpsimp"></a><a name="p15058mcpsimp"></a><span xml:lang="en-US" id="ph15059mcpsimp"><a name="ph15059mcpsimp"></a><a name="ph15059mcpsimp"></a>参考曝光比</span>，<span xml:lang="en-US" id="ph15060mcpsimp"><a name="ph15060mcpsimp"></a><a name="ph15060mcpsimp"></a>用于估计当前场景的动态范围</span>，<span xml:lang="en-US" id="ph15061mcpsimp"><a name="ph15061mcpsimp"></a><a name="ph15061mcpsimp"></a>会受到</span><a href="#ZH-CN_TOPIC_0000002471084990">ot_isp_wdr_exposure_attr</a><span xml:lang="en-US" id="ph15063mcpsimp"><a name="ph15063mcpsimp"></a><a name="ph15063mcpsimp"></a>中</span>tolerance和speed等值<span xml:lang="en-US" id="ph15064mcpsimp"><a name="ph15064mcpsimp"></a><a name="ph15064mcpsimp"></a>的影响。</span></p>
 <p xml:lang="sv-SE" id="p15065mcpsimp"><a name="p15065mcpsimp"></a><a name="p15065mcpsimp"></a><span xml:lang="en-US" id="ph15066mcpsimp"><a name="ph15066mcpsimp"></a><a name="ph15066mcpsimp"></a>取值范围</span>：[0x40, 0x4000]</p>
 </td>
 </tr>
@@ -5368,7 +5315,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ss\_mpi\_isp\_query\_exposure\_info](#ss_mpi_isp_query_exposure_info)
+[ss\_mpi\_isp\_query\_exposure\_info](#ZH-CN_TOPIC_0000002503964993)
 
 #### ot\_isp\_prior\_frame<a name="ZH-CN_TOPIC_0000002503965047"></a>
 
@@ -5420,24 +5367,15 @@ typedef enum {
 
 ### AI<a name="ZH-CN_TOPIC_0000002504084715"></a>
 
--   [ot\_isp\_iris\_status](ot_isp_iris_status.md)：定义ISP光圈状态。
--   [ot\_isp\_iris\_type](ot_isp_iris_type.md)：定义ISP光圈类型。
--   [ot\_isp\_iris\_f\_no](ot_isp_iris_f_no.md)：定义ISP光圈F值。
--   [ot\_isp\_mi\_attr](ot_isp_mi_attr.md)：定义手动光圈属性。
--   [ot\_isp\_dciris\_attr](ot_isp_dciris_attr.md)：定义DC-Iris AI算法属性。
--   [ot\_isp\_piris\_attr](ot_isp_piris_attr.md)：定义P-Iris属性。
--   [ot\_isp\_iris\_attr](ot_isp_iris_attr.md)：定义ISP光圈属性。
--   [ot\_isp\_exp\_conv\_param](ot_isp_exp_conv_param.md)：定义不同帧率等曝光量转换相关曝光参数属性。
--   [ot\_isp\_exp\_param\_reg](ot_isp_exp_param_reg.md)：定义寄存器状态。
-
-
-
-
-
-
-
-
-
+-   [ot\_isp\_iris\_status](#ZH-CN_TOPIC_0000002470925224)：定义ISP光圈状态。
+-   [ot\_isp\_iris\_type](#ZH-CN_TOPIC_0000002471084912)：定义ISP光圈类型。
+-   [ot\_isp\_iris\_f\_no](#ZH-CN_TOPIC_0000002471084864)：定义ISP光圈F值。
+-   [ot\_isp\_mi\_attr](#ZH-CN_TOPIC_0000002470924946)：定义手动光圈属性。
+-   [ot\_isp\_dciris\_attr](#ZH-CN_TOPIC_0000002503964925)：定义DC-Iris AI算法属性。
+-   [ot\_isp\_piris\_attr](#ZH-CN_TOPIC_0000002504084801)：定义P-Iris属性。
+-   [ot\_isp\_iris\_attr](#ZH-CN_TOPIC_0000002471085086)：定义ISP光圈属性。
+-   [ot\_isp\_exp\_conv\_param](#ZH-CN_TOPIC_0000002471085202)：定义不同帧率等曝光量转换相关曝光参数属性。
+-   [ot\_isp\_exp\_param\_reg](#ZH-CN_TOPIC_0000002470924964)：定义寄存器状态。
 
 #### ot\_isp\_iris\_status<a name="ZH-CN_TOPIC_0000002470925224"></a>
 
@@ -5703,8 +5641,8 @@ typedef struct {
 
 【注意事项】
 
--   对接DC-Iris镜头时，若[ot\_isp\_iris\_status](ot_isp_iris_status.md)设置为OT\_ISP\_IRIS\_KEEP，手动光圈使能，hold\_value可用于DC-Iris的调试，此时PWM的占空比即为hold\_value。
--   对接P-Iris镜头时，若[ot\_isp\_iris\_status](ot_isp_iris_status.md)设置为OT\_ISP\_IRIS\_KEEP，手动光圈使能，iris\_fno可用于P-Iris的调试，此时会控制P-Iris步进电机走到光圈F值与iris\_fno最接近的位置。自动曝光模式下，P-Iris手动光圈不生效，此时若要固定光圈为某个F值，可以将max\_iris\_fno\_target/ min\_iris\_fno\_target设置为相同值来实现。
+-   对接DC-Iris镜头时，若[ot\_isp\_iris\_status](#ZH-CN_TOPIC_0000002470925224)设置为OT\_ISP\_IRIS\_KEEP，手动光圈使能，hold\_value可用于DC-Iris的调试，此时PWM的占空比即为hold\_value。
+-   对接P-Iris镜头时，若[ot\_isp\_iris\_status](#ZH-CN_TOPIC_0000002470925224)设置为OT\_ISP\_IRIS\_KEEP，手动光圈使能，iris\_fno可用于P-Iris的调试，此时会控制P-Iris步进电机走到光圈F值与iris\_fno最接近的位置。自动曝光模式下，P-Iris手动光圈不生效，此时若要固定光圈为某个F值，可以将max\_iris\_fno\_target/ min\_iris\_fno\_target设置为相同值来实现。
 
 【相关数据类型及接口】
 
@@ -5784,8 +5722,8 @@ typedef struct {
 
 【相关数据类型及接口】
 
--   [ss\_mpi\_isp\_set\_dciris\_attr](#ss_mpi_isp_set_dciris_attr)
--   [ss\_mpi\_isp\_get\_dciris\_attr](#ss_mpi_isp_get_dciris_attr)
+-   [ss\_mpi\_isp\_set\_dciris\_attr](#ZH-CN_TOPIC_0000002470924940)
+-   [ss\_mpi\_isp\_get\_dciris\_attr](#ZH-CN_TOPIC_0000002504084869)
 
 #### ot\_isp\_piris\_attr<a name="ZH-CN_TOPIC_0000002504084801"></a>
 
@@ -5888,7 +5826,7 @@ typedef struct {
 -   [Tabell 1](#_Ref417716615)中步进电机位置与孔径面积对应关系是镜头原厂提供的。该款镜头步进电机总步数为93，步进电机位置为0时，光圈孔径面积最大，标称最大相对孔径为F1.4，据此规定映射表F值最大值为512。规定好最大值后，就可以计算出其他孔径面积对应的F值，因为孔径面积与F值成线性关系。比如说步进电机位置1对应的孔径面积为48.835，得到F值为\(48.835/49.366\)\*512=506，以此类推，可以得到所有有效步进电机位置对应的F值。由下表可以看到，当镜头靠近关闭端时，孔径面积很小，与最大孔径面积相差上万倍，映射表F值精度已不足以表现出孔径面积的变化，得到的F值都为0。实际上，哪怕提高映射表精度，由于镜头关闭端附近标称孔径面积与实际孔径面积一般相差较大，得到的F值也是不正确的，建议不要使用，否则在光圈调节过程中容易出现振荡。对于该款镜头，建议制作映射表时只取前62步，因此得到镜头相关的参数如[Tabell 2](#_Ref417716778)所示。
 -   步进电机位置与光圈F值映射表step\_fno\_table的前step\_count个元素才是有效的，会被AE算法计算时用到，需要保证数组座标小于step\_count时，值单调递增，当数组座标为\(step\_count-1\)时，达到光圈最大F值。通过MPI设置step\_fno\_table时，只有前step\_count个元素才会被写入寄存器保存；通过MPI获取step\_fno\_table时，只有前step\_count个元素才会读出有效数值，其他值为0。
 -   光圈类型为P-Iris时，AE算法计算最大/最小曝光量会参考max\_iris\_fno\_target/min\_iris\_fno\_target\(若fno\_ex\_valid为true，则参考max\_iris\_fno\_target\_linear/min\_iris\_fno\_target\_linear\)的值，因此这几个值要与step\_fno\_table的值相匹配，即最大/最小值都在step\_fno\_table有效数据范围内。
--   在手动配置DCF光圈相关信息时，需要关闭AI。如果需要配置的最大及实际光圈值为[ot\_isp\_iris\_f\_no](ot_isp_iris_f_no.md)中定义的10个标准值，配置max\_iris\_fno\_target为最大光圈值，配置min\_iris\_fno\_target为实际光圈值即可。如果光圈不为10个标准值，则需要配置fno\_ex\_valid为TD\_TRUE，以F32.0等效增益为1倍为基数计算实际光圈及最大光圈等效增益，并配置max\_iris\_fno\_target\_linear为最大光圈等效增益，配置min\_iris\_fno\_target\_linear为实际光圈等效增益。如果AI使能，则根据实际光圈生效的大小计算光圈值，并更新DCF信息。光圈最小可支持到F32.0。
+-   在手动配置DCF光圈相关信息时，需要关闭AI。如果需要配置的最大及实际光圈值为[ot\_isp\_iris\_f\_no](#ZH-CN_TOPIC_0000002471084864)中定义的10个标准值，配置max\_iris\_fno\_target为最大光圈值，配置min\_iris\_fno\_target为实际光圈值即可。如果光圈不为10个标准值，则需要配置fno\_ex\_valid为TD\_TRUE，以F32.0等效增益为1倍为基数计算实际光圈及最大光圈等效增益，并配置max\_iris\_fno\_target\_linear为最大光圈等效增益，配置min\_iris\_fno\_target\_linear为实际光圈等效增益。如果AI使能，则根据实际光圈生效的大小计算光圈值，并更新DCF信息。光圈最小可支持到F32.0。
 -   当P-Iris步进电机0为最大光圈位置时，更改step\_count，会影响它的最小值生效的大小。
 
 **表 1**  P-Iris步进电机位置与F值映射表
@@ -6661,10 +6599,10 @@ typedef struct {
 
 【相关数据类型及接口】
 
--   [ss\_mpi\_isp\_set\_piris\_attr](#ss_mpi_isp_set_piris_attr)
--   [ss\_mpi\_isp\_get\_piris\_attr](#ss_mpi_isp_get_piris_attr)
--   [ss\_mpi\_isp\_set\_ae\_route\_attr](#ss_mpi_isp_set_ae_route_attr)
--   [ss\_mpi\_isp\_set\_ae\_route\_attr\_ex](#ss_mpi_isp_set_ae_route_attr_ex)
+-   [ss\_mpi\_isp\_set\_piris\_attr](#ZH-CN_TOPIC_0000002503964847)
+-   [ss\_mpi\_isp\_get\_piris\_attr](#ZH-CN_TOPIC_0000002471084962)
+-   [ss\_mpi\_isp\_set\_ae\_route\_attr](#ZH-CN_TOPIC_0000002504084821)
+-   [ss\_mpi\_isp\_set\_ae\_route\_attr\_ex](#ZH-CN_TOPIC_0000002503965045)
 
 #### ot\_isp\_iris\_attr<a name="ZH-CN_TOPIC_0000002471085086"></a>
 
@@ -6724,8 +6662,8 @@ typedef struct {
 【注意事项】
 
 -   进行AI算法测试前，建议确认AI电路特性是否符合_录像机_要求。
--   针对DC-Iris镜头，AI算法会根据画面亮度，调节PWM占空比对光圈进行控制。当曝光时间和增益达到最小目标值之后，会进入光圈控制区域。当光圈控制能满足目标亮度的要求时，AE直接返回，保持曝光时间和增益不变。当画面亮度稳定且PWM占空比维持在打开值一段时间后，AI算法会认为光圈已经打开至最大，退出光圈控制区，将控制权交还给AE。处于光圈控制区时，更改AE算法参数，如最大/最小曝光时间、最大/最小增益和抗闪等需要即时生效的参数，AE会即时响应，根据新设定的参数和环境亮度，AI算法重新决定是否要进入光圈控制区。由于进入光圈控制区域和退出光圈控制区域需要短暂时间，针对手动光圈镜头建议关闭AI功能，否则AE的调节速度会受到一点影响。针对DC-Iris镜头建议一直打开AI功能，随意开关AI容易导致光圈控制出现异常。针对某些长焦的DC-Iris镜头，默认参数可能会导致光圈打开/关闭速度过快，此时可以调节相关参数来解决，详见[ot\_isp\_dciris\_attr](ot_isp_dciris_attr.md)部分描述。
--   针对P-Iris镜头，光圈控制通过AE分配路线进行。P-Iris对接重点在于正确设置镜头相关参数和合理设置AE分配路线，详见[ot\_isp\_piris\_attr](ot_isp_piris_attr.md)和[ss\_mpi\_isp\_set\_ae\_route\_attr](ss_mpi_isp_set_ae_route_attr.md)部分描述，才能保证P-Iris正常工作。由于不同P-Iris的驱动方式可能会有差别，用户可以自行修改P-Iris驱动以适配不同镜头。
+-   针对DC-Iris镜头，AI算法会根据画面亮度，调节PWM占空比对光圈进行控制。当曝光时间和增益达到最小目标值之后，会进入光圈控制区域。当光圈控制能满足目标亮度的要求时，AE直接返回，保持曝光时间和增益不变。当画面亮度稳定且PWM占空比维持在打开值一段时间后，AI算法会认为光圈已经打开至最大，退出光圈控制区，将控制权交还给AE。处于光圈控制区时，更改AE算法参数，如最大/最小曝光时间、最大/最小增益和抗闪等需要即时生效的参数，AE会即时响应，根据新设定的参数和环境亮度，AI算法重新决定是否要进入光圈控制区。由于进入光圈控制区域和退出光圈控制区域需要短暂时间，针对手动光圈镜头建议关闭AI功能，否则AE的调节速度会受到一点影响。针对DC-Iris镜头建议一直打开AI功能，随意开关AI容易导致光圈控制出现异常。针对某些长焦的DC-Iris镜头，默认参数可能会导致光圈打开/关闭速度过快，此时可以调节相关参数来解决，详见[ot\_isp\_dciris\_attr](#ZH-CN_TOPIC_0000002503964925)部分描述。
+-   针对P-Iris镜头，光圈控制通过AE分配路线进行。P-Iris对接重点在于正确设置镜头相关参数和合理设置AE分配路线，详见[ot\_isp\_piris\_attr](#ZH-CN_TOPIC_0000002504084801)和[ss\_mpi\_isp\_set\_ae\_route\_attr](#ZH-CN_TOPIC_0000002504084821)部分描述，才能保证P-Iris正常工作。由于不同P-Iris的驱动方式可能会有差别，用户可以自行修改P-Iris驱动以适配不同镜头。
 -   关闭AI功能，对于DC-Iris镜头，光圈会打开到最大；对于P-Iris镜头，光圈会打开到最大光圈目标值对应步进电机位置，但此时曝光分配仍会参考AE路线，可能导致画面亮度异常，因此对接P-Iris镜头时，若不想使能AI，为保证曝光正常，需要把光圈类型切换至OT\_ISP\_IRIS\_DC\_TYPE。
 -   由DC-Iris切换至P-Iris，需提前设置好P-Iris镜头相关参数，并且将光圈状态设置为OT\_ISP\_IRIS\_KEEP，再进行切换。
 -   利用Demo板或Ref板进行DC-Iris测试时，load ko时要配置以下2个寄存器，用于配置管脚复用和时钟：bspmm 0x102F0078 0x12F5；bspmm 0x11014590 0x0010。
@@ -6735,8 +6673,8 @@ typedef struct {
 
 【相关数据类型及接口】
 
--   [ss\_mpi\_isp\_set\_iris\_attr](#ss_mpi_isp_set_iris_attr)
--   [ss\_mpi\_isp\_get\_iris\_attr](#ss_mpi_isp_get_iris_attr)
+-   [ss\_mpi\_isp\_set\_iris\_attr](#ZH-CN_TOPIC_0000002503964851)
+-   [ss\_mpi\_isp\_get\_iris\_attr](#ZH-CN_TOPIC_0000002503964783)
 
 #### ot\_isp\_exp\_conv\_param<a name="ZH-CN_TOPIC_0000002471085202"></a>
 
@@ -6800,8 +6738,8 @@ typedef struct {
 
 【相关数据类型及接口】
 
--   [ss\_mpi\_isp\_set\_exp\_convert](#ss_mpi_isp_set_exp_convert)
--   [ss\_mpi\_isp\_set\_exp\_convert](#ss_mpi_isp_set_exp_convert)
+-   [ss\_mpi\_isp\_set\_exp\_convert](#ZH-CN_TOPIC_0000002470925022)
+-   [ss\_mpi\_isp\_set\_exp\_convert](#ZH-CN_TOPIC_0000002470925022)
 
 #### ot\_isp\_exp\_param\_reg<a name="ZH-CN_TOPIC_0000002470924964"></a>
 
@@ -6846,14 +6784,17 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ot\_isp\_exp\_conv\_param](#ot_isp_exp_conv_param)
+[ot\_isp\_exp\_conv\_param](#ZH-CN_TOPIC_0000002471085202)
 
 # AWB<a name="ZH-CN_TOPIC_0000002503965009"></a>
 
+-   **[概述](#ZH-CN_TOPIC_0000002471084836)**  
 
+-   **[重要概念](#ZH-CN_TOPIC_0000002504084709)**  
 
+-   **[功能描述](#ZH-CN_TOPIC_0000002471085004)**  
 
-
+-   **[数据类型](#ZH-CN_TOPIC_0000002504084957)**  
 
 ## 概述<a name="ZH-CN_TOPIC_0000002471084836"></a>
 
@@ -6881,20 +6822,14 @@ AWB工作原理如[图1](#fig149281848203012)所示。
 
 ## API参考<a name="ZH-CN_TOPIC_0000002470924994"></a>
 
-
-
 ### AWB库接口<a name="ZH-CN_TOPIC_0000002504084793"></a>
 
 所有AWB库接口都只是针对SDK提供的AWB库，如果客户自己实现AWB库，不需要关注这些接口，且无法使用这些接口。
 
--   [ss\_mpi\_awb\_register](ss_mpi_awb_register.md)：向ISP注册AWB库。
--   [ss\_mpi\_awb\_unregister](ss_mpi_awb_unregister.md)：向ISP注销AWB库。
--   [ss\_mpi\_awb\_sensor\_reg\_callback](ss_mpi_awb_sensor_reg_callback.md)：AWB库提供的sensor注册的回调接口。
--   [ss\_mpi\_awb\_sensor\_unreg\_callback](ss_mpi_awb_sensor_unreg_callback.md)：AWB库提供的sensor注销的回调接口。
-
-
-
-
+-   [ss\_mpi\_awb\_register](#ZH-CN_TOPIC_0000002470924870)：向ISP注册AWB库。
+-   [ss\_mpi\_awb\_unregister](#ZH-CN_TOPIC_0000002470925240)：向ISP注销AWB库。
+-   [ss\_mpi\_awb\_sensor\_reg\_callback](#ZH-CN_TOPIC_0000002503965011)：AWB库提供的sensor注册的回调接口。
+-   [ss\_mpi\_awb\_sensor\_unreg\_callback](#ZH-CN_TOPIC_0000002504085059)：AWB库提供的sensor注销的回调接口。
 
 #### ss\_mpi\_awb\_register<a name="ZH-CN_TOPIC_0000002470924870"></a>
 
@@ -7047,7 +6982,7 @@ td_s32 ss_mpi_awb_unregister (ot_vi_pipe vi_pipe, ot_isp_3a_alg_lib *awb_lib);
 
 【注意】
 
--   该接口调用了ISP库提供的AWB反注册回调接口。ss\_mpi\_isp\_awb\_lib\_reg\_callback，以实现AWB向ISP库反注册的功能。
+-   该接口调用了ISP库提供的AWB反注册回调接口。ss\_mpi\_isp\_awb\_lib\_unreg\_callback，以实现AWB向ISP库反注册的功能。
 -   用户调用此接口完成AWB库向ISP库反注册。
 -   此接口不支持多进程操作。
 
@@ -7257,18 +7192,12 @@ td_s32 ss_mpi_awb_sensor_unreg_callback (ot_vi_pipe vi_pipe, ot_isp_3a_alg_lib *
 
 ### AWB控制模块<a name="ZH-CN_TOPIC_0000002470925116"></a>
 
--   [ss\_mpi\_isp\_set\_wb\_attr](ss_mpi_isp_set_wb_attr.md)：设置白平衡属性。
--   [ss\_mpi\_isp\_get\_wb\_attr](ss_mpi_isp_get_wb_attr.md)：获取白平衡属性。
--   [ss\_mpi\_isp\_set\_awb\_attr\_ex](ss_mpi_isp_set_awb_attr_ex.md)：设置自动白平衡扩展属性。
--   [ss\_mpi\_isp\_get\_awb\_attr\_ex](ss_mpi_isp_get_awb_attr_ex.md)：获取自动白平衡扩展属性。
--   [ss\_mpi\_isp\_query\_wb\_info](ss_mpi_isp_query_wb_info.md)：获取当前白平衡增益系数，检测色温，饱和度值，颜色校正矩阵系数等信息。
--   [ss\_mpi\_isp\_cal\_gain\_by\_temp](ss_mpi_isp_cal_gain_by_temp.md)：计算特定色温下的白平衡增益系数。
-
-
-
-
-
-
+-   [ss\_mpi\_isp\_set\_wb\_attr](#ZH-CN_TOPIC_0000002471084842)：设置白平衡属性。
+-   [ss\_mpi\_isp\_get\_wb\_attr](#ZH-CN_TOPIC_0000002470925188)：获取白平衡属性。
+-   [ss\_mpi\_isp\_set\_awb\_attr\_ex](#ZH-CN_TOPIC_0000002471085100)：设置自动白平衡扩展属性。
+-   [ss\_mpi\_isp\_get\_awb\_attr\_ex](#ZH-CN_TOPIC_0000002471085124)：获取自动白平衡扩展属性。
+-   [ss\_mpi\_isp\_query\_wb\_info](#ZH-CN_TOPIC_0000002503964977)：获取当前白平衡增益系数，当前色温值，饱和度值，颜色校正矩阵系数等信息。
+-   [ss\_mpi\_isp\_cal\_gain\_by\_temp](#ZH-CN_TOPIC_0000002503965093)：计算特定色温下的白平衡增益系数。
 
 #### ss\_mpi\_isp\_set\_wb\_attr<a name="ZH-CN_TOPIC_0000002471084842"></a>
 
@@ -7302,7 +7231,7 @@ td_s32 ss_mpi_isp_set_wb_attr(ot_vi_pipe vi_pipe, const ot_isp_wb_attr * wb_attr
 </tr>
 <tr id="row16971mcpsimp"><td class="cellrowborder" valign="top" width="15%" headers="mcps1.1.4.1.1 "><p id="p16973mcpsimp"><a name="p16973mcpsimp"></a><a name="p16973mcpsimp"></a>*wb_attr</p>
 </td>
-<td class="cellrowborder" valign="top" width="69%" headers="mcps1.1.4.1.2 "><p id="p16975mcpsimp"><a name="p16975mcpsimp"></a><a name="p16975mcpsimp"></a>白平衡的参数属性</p>
+<td class="cellrowborder" valign="top" width="69%" headers="mcps1.1.4.1.2 "><p id="p16975mcpsimp"><a name="p16975mcpsimp"></a><a name="p16975mcpsimp"></a>白平衡参数属性结构体指针</p>
 </td>
 <td class="cellrowborder" valign="top" width="16%" headers="mcps1.1.4.1.3 "><p id="p16977mcpsimp"><a name="p16977mcpsimp"></a><a name="p16977mcpsimp"></a>输入</p>
 </td>
@@ -7349,7 +7278,7 @@ td_s32 ss_mpi_isp_set_wb_attr(ot_vi_pipe vi_pipe, const ot_isp_wb_attr * wb_attr
 
 【相关主题】
 
-[ss\_mpi\_isp\_get\_wb\_attr](#ss_mpi_isp_get_wb_attr)
+[ss\_mpi\_isp\_get\_wb\_attr](#ZH-CN_TOPIC_0000002470925188)
 
 #### ss\_mpi\_isp\_get\_wb\_attr<a name="ZH-CN_TOPIC_0000002470925188"></a>
 
@@ -7428,7 +7357,7 @@ td_s32 ss_mpi_isp_get_wb_attr (ot_vi_pipe vi_pipe, ot_isp_wb_attr *wb_attr);
 
 【相关主题】
 
-[ss\_mpi\_isp\_set\_wb\_attr](#ss_mpi_isp_set_wb_attr)
+[ss\_mpi\_isp\_set\_wb\_attr](#ZH-CN_TOPIC_0000002471084842)
 
 #### ss\_mpi\_isp\_set\_awb\_attr\_ex<a name="ZH-CN_TOPIC_0000002471085100"></a>
 
@@ -7499,7 +7428,7 @@ td_s32 ss_mpi_isp_set_awb_attr_ex (ot_vi_pipe vi_pipe, ot_isp_awb_attr_ex *awb_a
 
 【注意】
 
-当[ss\_mpi\_isp\_set\_wb\_attr](ss_mpi_isp_set_wb_attr.md)接口成员wb\_attr. auto\_attr. alg\_type为 OT\_ISP\_AWB\_ALG\_ADVANCE时，此接口才有效。
+当[ss\_mpi\_isp\_set\_wb\_attr](#ZH-CN_TOPIC_0000002471084842)接口成员wb\_attr. auto\_attr. alg\_type为 OT\_ISP\_AWB\_ALG\_ADVANCE时，此接口才有效。
 
 【举例】
 
@@ -7507,7 +7436,7 @@ td_s32 ss_mpi_isp_set_awb_attr_ex (ot_vi_pipe vi_pipe, ot_isp_awb_attr_ex *awb_a
 
 【相关主题】
 
-[ss\_mpi\_isp\_get\_awb\_attr\_ex](#ss_mpi_isp_get_awb_attr_ex)
+[ss\_mpi\_isp\_get\_awb\_attr\_ex](#ZH-CN_TOPIC_0000002471085124)
 
 #### ss\_mpi\_isp\_get\_awb\_attr\_ex<a name="ZH-CN_TOPIC_0000002471085124"></a>
 
@@ -7586,13 +7515,13 @@ td_s32 ss_mpi_isp_get_awb_attr_ex (ot_vi_pipe vi_pipe, ot_isp_awb_attr_ex *awb_a
 
 【相关主题】
 
-[ss\_mpi\_isp\_set\_awb\_attr\_ex](#ss_mpi_isp_set_awb_attr_ex)
+[ss\_mpi\_isp\_set\_awb\_attr\_ex](#ZH-CN_TOPIC_0000002471085100)
 
 #### ss\_mpi\_isp\_query\_wb\_info<a name="ZH-CN_TOPIC_0000002503964977"></a>
 
 【描述】
 
-获取当前白平衡增益系数，检测色温，饱和度值，颜色校正矩阵系数等信息。
+获取当前白平衡增益系数，当前色温值，饱和度值，颜色校正矩阵系数等信息。
 
 【语法】
 
@@ -7699,7 +7628,7 @@ td_s32 ss_mpi_isp_cal_gain_by_temp(ot_vi_pipe vi_pipe, const ot_isp_wb_attr *wb_
 </tr>
 <tr id="row17328mcpsimp"><td class="cellrowborder" valign="top" width="23%" headers="mcps1.1.4.1.1 "><p id="p17330mcpsimp"><a name="p17330mcpsimp"></a><a name="p17330mcpsimp"></a>*wb_attr</p>
 </td>
-<td class="cellrowborder" valign="top" width="61%" headers="mcps1.1.4.1.2 "><p id="p17332mcpsimp"><a name="p17332mcpsimp"></a><a name="p17332mcpsimp"></a>白平衡的参数属性。需要用到<a href="ot_isp_awb_attr.md"><span xml:lang="sv-SE" id="ph17334mcpsimp"><a name="ph17334mcpsimp"></a><a name="ph17334mcpsimp"></a>ot_isp_awb_attr</span></a>中的static_wb，curve_para两组标定参数。</p>
+<td class="cellrowborder" valign="top" width="61%" headers="mcps1.1.4.1.2 "><p id="p17332mcpsimp"><a name="p17332mcpsimp"></a><a name="p17332mcpsimp"></a>白平衡的参数属性。需要用到<a href="#ZH-CN_TOPIC_0000002471085116"><span xml:lang="sv-SE" id="ph17334mcpsimp"><a name="ph17334mcpsimp"></a><a name="ph17334mcpsimp"></a>ot_isp_awb_attr</span></a>中的static_wb，curve_para两组标定参数。</p>
 </td>
 <td class="cellrowborder" valign="top" width="16%" headers="mcps1.1.4.1.3 "><p id="p17336mcpsimp"><a name="p17336mcpsimp"></a><a name="p17336mcpsimp"></a>输入</p>
 </td>
@@ -7759,8 +7688,8 @@ td_s32 ss_mpi_isp_cal_gain_by_temp(ot_vi_pipe vi_pipe, const ot_isp_wb_attr *wb_
 
 【注意】
 
--   白平衡标定参数决定预设色温增益计算的准确性，因此，在调用该接口前，必须完成标定，且标定参数配置到ISP。用户先通过[ss\_mpi\_isp\_set\_wb\_attr](ss_mpi_isp_set_wb_attr.md)接口设置标定结果，再调用[ss\_mpi\_isp\_cal\_gain\_by\_temp](#ZH-CN_TOPIC_0000001220057571)接口计算预设色温的增益，过程中不能再修改标定结果。
--   [ss\_mpi\_isp\_cal\_gain\_by\_temp](#ZH-CN_TOPIC_0000001220057571)功能基于AWB标定参数实现，因此，该接口仅对[ot\_isp\_awb\_attr](ot_isp_awb_attr.md)结构体的标定参数static\_wb，curve\_para 做有效范围检查，不对其他参数做约束。
+-   白平衡标定参数决定预设色温增益计算的准确性，因此，在调用该接口前，必须完成标定，且标定参数配置到ISP。用户先通过[ss\_mpi\_isp\_set\_wb\_attr](#ZH-CN_TOPIC_0000002471084842)接口设置标定结果，再调用ss\_mpi\_isp\_cal\_gain\_by\_temp接口计算预设色温的增益，过程中不能再修改标定结果。
+-   ss\_mpi\_isp\_cal\_gain\_by\_temp功能基于AWB标定参数实现，因此，该接口仅对[ot\_isp\_awb\_attr](#ZH-CN_TOPIC_0000002471085116)结构体的标定参数static\_wb，curve\_para 做有效范围检查，不对其他参数做约束。
 -   shift参数决定光源点与Planckian曲线的位置关系，shift为负数时，光源点位于Planckian曲线左侧，计算的白平衡增益在预设色温下会稍微偏红；shift为正数时，光源点位于Planckian曲线右侧，计算的白平衡增益在预设色温下会稍微偏绿。
 
 【举例】
@@ -7769,44 +7698,27 @@ td_s32 ss_mpi_isp_cal_gain_by_temp(ot_vi_pipe vi_pipe, const ot_isp_wb_attr *wb_
 
 【相关主题】
 
-[ss\_mpi\_isp\_get\_wb\_attr](#ss_mpi_isp_get_wb_attr)
+[ss\_mpi\_isp\_get\_wb\_attr](#ZH-CN_TOPIC_0000002470925188)
 
 ## 数据类型<a name="ZH-CN_TOPIC_0000002504084957"></a>
 
-
-
 ### Register<a name="ZH-CN_TOPIC_0000002503964787"></a>
 
--   [OT\_ISP\_CCM\_MATRIX\_NUM](OT_ISP_CCM_MATRIX_NUM.md)：定义AWB可配置的CCM矩阵组数。
--   [OT\_ISP\_AWB\_CURVE\_PARA\_NUM](OT_ISP_AWB_CURVE_PARA_NUM.md)：定义AWB标定的Plank曲线参数个数。
--   [OT\_ISP\_AWB\_ZONE\_ORIG\_ROW](OT_ISP_AWB_ZONE_ORIG_ROW.md)：定义AWB水平方向分区间数目。
--   [OT\_ISP\_AWB\_ZONE\_ORIG\_COLUMN](OT_ISP_AWB_ZONE_ORIG_COLUMN.md)：定义AWB垂直方向分区间数目。
--   [OT\_ISP\_AWB\_ZONE\_NUM](OT_ISP_AWB_ZONE_NUM.md)：定义AWB分区间数目。
--   [OT\_ISP\_AWB\_ZONE\_STITCH\_MAX](OT_ISP_AWB_ZONE_STITCH_MAX.md)：定义拼接模式下AWB分区间数目最大值。
--   [OT\_ISP\_AWB\_LUM\_HIST\_NUM](OT_ISP_AWB_LUM_HIST_NUM.md)：定义AWB的亮度分组数目。
--   [OT\_ISP\_AWB\_LS\_NUM](OT_ISP_AWB_LS_NUM.md)：定义AWB的独立光源点数目。
--   [OT\_ISP\_AWB\_MULTI\_CT\_NUM](OT_ISP_AWB_MULTI_CT_NUM.md)：定义AWB的色温分组数目。
--   [ot\_isp\_awb\_sensor\_register](ot_isp_awb_sensor_register.md)：定义sensor注册结构体。
--   [ot\_isp\_awb\_sensor\_exp\_func](ot_isp_awb_sensor_exp_func.md)：定义sensor回调函数结构体。
--   [ot\_isp\_awb\_sensor\_default](ot_isp_awb_sensor_default.md)：定义AWB算法库的初始化参数结构体。
--   [ot\_isp\_awb\_agc\_table](ot_isp_awb_agc_table.md)：定义饱和度初始化参数结构体。
--   [ot\_isp\_awb\_ccm\_tab](ot_isp_awb_ccm_tab.md)：定义不同色温下自动颜色校正矩阵系数。
--   [ot\_isp\_awb\_ccm](ot_isp_awb_ccm.md)：定义CCM颜色校正矩阵属性。
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+-   [OT\_ISP\_CCM\_MATRIX\_NUM](#ZH-CN_TOPIC_0000002503965169)：定义AWB可配置的CCM矩阵组数。
+-   [OT\_ISP\_AWB\_CURVE\_PARA\_NUM](#ZH-CN_TOPIC_0000002503964883)：定义AWB标定的Plank曲线参数个数。
+-   [OT\_ISP\_AWB\_ZONE\_ORIG\_ROW](#ZH-CN_TOPIC_0000002470925114)：定义AWB水平方向分区间数目。
+-   [OT\_ISP\_AWB\_ZONE\_ORIG\_COLUMN](#ZH-CN_TOPIC_0000002503964921)：定义AWB垂直方向分区间数目。
+-   [OT\_ISP\_AWB\_ZONE\_NUM](#ZH-CN_TOPIC_0000002470925182)：定义AWB分区间数目。
+-   [OT\_ISP\_AWB\_ZONE\_STITCH\_MAX](#ZH-CN_TOPIC_0000002470925102)：定义拼接模式下AWB分区间数目最大值。
+-   [OT\_ISP\_AWB\_LUM\_HIST\_NUM](#ZH-CN_TOPIC_0000002503965149)：定义AWB的亮度分组数目。
+-   [OT\_ISP\_AWB\_LS\_NUM](#ZH-CN_TOPIC_0000002470924888)：定义AWB的独立光源点数目。
+-   [OT\_ISP\_AWB\_MULTI\_CT\_NUM](#ZH-CN_TOPIC_0000002470924846)：定义AWB的色温分组数目。
+-   [ot\_isp\_awb\_sensor\_register](#ZH-CN_TOPIC_0000002471085008)：定义sensor注册结构体。
+-   [ot\_isp\_awb\_sensor\_exp\_func](#ZH-CN_TOPIC_0000002470925180)：定义sensor回调函数结构体。
+-   [ot\_isp\_awb\_sensor\_default](#ZH-CN_TOPIC_0000002471084944)：定义AWB算法库的初始化参数结构体。
+-   [ot\_isp\_awb\_agc\_table](#ZH-CN_TOPIC_0000002470925034)：定义饱和度初始化参数结构体。
+-   [ot\_isp\_awb\_ccm\_tab](#ZH-CN_TOPIC_0000002504084989)：定义不同色温下自动颜色校正矩阵系数。
+-   [ot\_isp\_awb\_ccm](#ZH-CN_TOPIC_0000002471084862)：定义CCM颜色校正矩阵属性。
 
 #### OT\_ISP\_CCM\_MATRIX\_NUM<a name="ZH-CN_TOPIC_0000002503965169"></a>
 
@@ -7826,8 +7738,8 @@ td_s32 ss_mpi_isp_cal_gain_by_temp(ot_vi_pipe vi_pipe, const ot_isp_wb_attr *wb_
 
 【相关数据类型及接口】
 
--   [ot\_isp\_awb\_ccm](#ot_isp_awb_ccm)
--   [ot\_isp\_color\_matrix\_auto](#ot_isp_color_matrix_auto)
+-   [ot\_isp\_awb\_ccm](#ZH-CN_TOPIC_0000002471084862)
+-   [ot\_isp\_color\_matrix\_auto](#ZH-CN_TOPIC_0000002471084956)
 
 #### OT\_ISP\_AWB\_CURVE\_PARA\_NUM<a name="ZH-CN_TOPIC_0000002503964883"></a>
 
@@ -7847,8 +7759,8 @@ td_s32 ss_mpi_isp_cal_gain_by_temp(ot_vi_pipe vi_pipe, const ot_isp_wb_attr *wb_
 
 【相关数据类型及接口】
 
--   [ot\_isp\_awb\_sensor\_default](#ot_isp_awb_sensor_default)
--   [ot\_isp\_awb\_attr](#ot_isp_awb_attr)
+-   [ot\_isp\_awb\_sensor\_default](#ZH-CN_TOPIC_0000002471084944)
+-   [ot\_isp\_awb\_attr](#ZH-CN_TOPIC_0000002471085116)
 
 #### OT\_ISP\_AWB\_ZONE\_ORIG\_ROW<a name="ZH-CN_TOPIC_0000002470925114"></a>
 
@@ -7869,7 +7781,7 @@ td_s32 ss_mpi_isp_cal_gain_by_temp(ot_vi_pipe vi_pipe, const ot_isp_wb_attr *wb_
 【相关数据类型及接口】
 
 -   ot\_isp\_awb\_grid\_info
--   [ot\_isp\_awb\_attr](#ot_isp_awb_attr)
+-   [ot\_isp\_awb\_attr](#ZH-CN_TOPIC_0000002471085116)
 
 #### OT\_ISP\_AWB\_ZONE\_ORIG\_COLUMN<a name="ZH-CN_TOPIC_0000002503964921"></a>
 
@@ -7890,7 +7802,7 @@ td_s32 ss_mpi_isp_cal_gain_by_temp(ot_vi_pipe vi_pipe, const ot_isp_wb_attr *wb_
 【相关数据类型及接口】
 
 -   ot\_isp\_awb\_grid\_info
--   [ot\_isp\_awb\_attr](#ot_isp_awb_attr)
+-   [ot\_isp\_awb\_attr](#ZH-CN_TOPIC_0000002471085116)
 
 #### OT\_ISP\_AWB\_ZONE\_NUM<a name="ZH-CN_TOPIC_0000002470925182"></a>
 
@@ -7950,7 +7862,7 @@ ot\_isp\_wb\_stitch\_stats
 
 【相关数据类型及接口】
 
-[ot\_isp\_awb\_lum\_histgram\_attr](#ot_isp_awb_lum_histgram_attr)
+[ot\_isp\_awb\_lum\_histgram\_attr](#ZH-CN_TOPIC_0000002503965121)
 
 #### OT\_ISP\_AWB\_LS\_NUM<a name="ZH-CN_TOPIC_0000002470924888"></a>
 
@@ -7970,7 +7882,7 @@ ot\_isp\_wb\_stitch\_stats
 
 【相关数据类型及接口】
 
-[ot\_isp\_awb\_attr\_ex](#ot_isp_awb_attr_ex)
+[ot\_isp\_awb\_attr\_ex](#ZH-CN_TOPIC_0000002470925006)
 
 #### OT\_ISP\_AWB\_MULTI\_CT\_NUM<a name="ZH-CN_TOPIC_0000002470924846"></a>
 
@@ -7990,7 +7902,7 @@ ot\_isp\_wb\_stitch\_stats
 
 【相关数据类型及接口】
 
-[ot\_isp\_awb\_attr\_ex](#ot_isp_awb_attr_ex)
+[ot\_isp\_awb\_attr\_ex](#ZH-CN_TOPIC_0000002470925006)
 
 #### ot\_isp\_awb\_sensor\_register<a name="ZH-CN_TOPIC_0000002471085008"></a>
 
@@ -8029,7 +7941,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ot\_isp\_awb\_sensor\_exp\_func](#ot_isp_awb_sensor_exp_func)
+[ot\_isp\_awb\_sensor\_exp\_func](#ZH-CN_TOPIC_0000002470925180)
 
 #### ot\_isp\_awb\_sensor\_exp\_func<a name="ZH-CN_TOPIC_0000002470925180"></a>
 
@@ -8277,7 +8189,7 @@ saturation  为非单调递减序列。
 
 【相关数据类型及接口】
 
-[ot\_isp\_awb\_sensor\_default](#ot_isp_awb_sensor_default)
+[ot\_isp\_awb\_sensor\_default](#ZH-CN_TOPIC_0000002471084944)
 
 #### ot\_isp\_awb\_ccm\_tab<a name="ZH-CN_TOPIC_0000002504084989"></a>
 
@@ -8320,11 +8232,11 @@ typedef struct {
 
 【注意事项】
 
-不同色温下的自动颜色校正矩阵，应满足灰色数据不变的约束条件，即矩阵中每行参数的和为0x100。请通过[ot\_isp\_wb\_info](ot_isp_wb_info.md)查询当前生效的颜色校正矩阵的值，确认每行参数的和为0x100。
+不同色温下的自动颜色校正矩阵，应满足灰色数据不变的约束条件，即矩阵中每行参数的和为0x100。请通过[ot\_isp\_wb\_info](#ZH-CN_TOPIC_0000002470925190)查询当前生效的颜色校正矩阵的值，确认每行参数的和为0x100。
 
 【相关数据类型及接口】
 
-[ot\_isp\_awb\_ccm](#ot_isp_awb_ccm)
+[ot\_isp\_awb\_ccm](#ZH-CN_TOPIC_0000002471084862)
 
 #### ot\_isp\_awb\_ccm<a name="ZH-CN_TOPIC_0000002471084862"></a>
 
@@ -8356,7 +8268,7 @@ typedef struct {
 <p id="p17900mcpsimp"><a name="p17900mcpsimp"></a><a name="p17900mcpsimp"></a>取值范围：[3, 7]</p>
 </td>
 </tr>
-<tr id="row17901mcpsimp"><td class="cellrowborder" valign="top" width="36%" headers="mcps1.1.3.1.1 "><p id="p17903mcpsimp"><a name="p17903mcpsimp"></a><a name="p17903mcpsimp"></a>ccm_tab[<a href="OT_ISP_CCM_MATRIX_NUM.md">OT_ISP_CCM_MATRIX_NUM</a>]</p>
+<tr id="row17901mcpsimp"><td class="cellrowborder" valign="top" width="36%" headers="mcps1.1.3.1.1 "><p id="p17903mcpsimp"><a name="p17903mcpsimp"></a><a name="p17903mcpsimp"></a>ccm_tab[<a href="#ZH-CN_TOPIC_0000002503965169">OT_ISP_CCM_MATRIX_NUM</a>]</p>
 </td>
 <td class="cellrowborder" valign="top" width="64%" headers="mcps1.1.3.1.2 "><p id="p17906mcpsimp"><a name="p17906mcpsimp"></a><a name="p17906mcpsimp"></a>不同色温下的颜色校正矩阵和对应的色温值。</p>
 </td>
@@ -8370,37 +8282,24 @@ typedef struct {
 
 【相关数据类型及接口】
 
--   [ot\_isp\_awb\_ccm\_tab](#ot_isp_awb_ccm_tab)
--   [ot\_isp\_awb\_sensor\_default](#ot_isp_awb_sensor_default)
+-   [ot\_isp\_awb\_ccm\_tab](#ZH-CN_TOPIC_0000002504084989)
+-   [ot\_isp\_awb\_sensor\_default](#ZH-CN_TOPIC_0000002471084944)
 
 ### AWB<a name="ZH-CN_TOPIC_0000002504085083"></a>
 
--   [ot\_isp\_awb\_attr](ot_isp_awb_attr.md)：定义ISP自动白平衡属性。
--   [ot\_isp\_awb\_cbcr\_track\_attr](ot_isp_awb_cbcr_track_attr.md)：定义Bayer域统计信息的联动参数。
--   [ot\_isp\_awb\_lum\_histgram\_attr](ot_isp_awb_lum_histgram_attr.md)：定义白平衡的亮度直方图统计参数。
--   [ot\_isp\_awb\_alg\_type](ot_isp_awb_alg_type.md)：定义GW白平衡的计算方式属性。
--   [ot\_isp\_awb\_ct\_limit\_attr](ot_isp_awb_ct_limit_attr.md)：定义白平衡的增益范围限制属性。
--   [ot\_isp\_mwb\_attr](ot_isp_mwb_attr.md)：定义ISP手动白平衡属性。
--   [ot\_isp\_wb\_attr](ot_isp_wb_attr.md)：定义白平衡属性。
--   [ot\_isp\_awb\_multi\_ls\_type](ot_isp_awb_multi_ls_type.md)：定义混合光源下的白平衡策略。
--   [ot\_isp\_awb\_indoor\_outdoor\_status](ot_isp_awb_indoor_outdoor_status.md)：定义室内外状态。
--   [ot\_isp\_awb\_attr\_ex](ot_isp_awb_attr_ex.md)：定义自动白平衡扩展属性。
--   [ot\_isp\_awb\_extra\_light\_source\_info](ot_isp_awb_extra_light_source_info.md)：定义独立光源点的信息。
--   [ot\_isp\_awb\_in\_out\_attr](ot_isp_awb_in_out_attr.md)：定义对场景做室内外判断的参数。
--   [ot\_isp\_wb\_info](ot_isp_wb_info.md)：定义白平衡，饱和度，颜色校正信息。
-
-
-
-
-
-
-
-
-
-
-
-
-
+-   [ot\_isp\_awb\_attr](#ZH-CN_TOPIC_0000002471085116)：定义ISP自动白平衡属性。
+-   [ot\_isp\_awb\_cbcr\_track\_attr](#ZH-CN_TOPIC_0000002503964959)：定义Bayer域统计信息的联动参数。
+-   [ot\_isp\_awb\_lum\_histgram\_attr](#ZH-CN_TOPIC_0000002503965121)：定义白平衡的亮度直方图统计参数。
+-   [ot\_isp\_awb\_alg\_type](#ZH-CN_TOPIC_0000002504084807)：定义GW白平衡的计算方式属性。
+-   [ot\_isp\_awb\_ct\_limit\_attr](#ZH-CN_TOPIC_0000002503964905)：定义白平衡的增益范围限制属性。
+-   [ot\_isp\_mwb\_attr](#ZH-CN_TOPIC_0000002471084832)：定义ISP手动白平衡属性。
+-   [ot\_isp\_wb\_attr](#ZH-CN_TOPIC_0000002471084898)：定义白平衡属性。
+-   [ot\_isp\_awb\_multi\_ls\_type](#ZH-CN_TOPIC_0000002470925136)：定义混合光源下的白平衡策略。
+-   [ot\_isp\_awb\_indoor\_outdoor\_status](#ZH-CN_TOPIC_0000002470925202)：定义室内外状态。
+-   [ot\_isp\_awb\_attr\_ex](#ZH-CN_TOPIC_0000002470925006)：定义自动白平衡扩展属性。
+-   [ot\_isp\_awb\_extra\_light\_source\_info](#ZH-CN_TOPIC_0000002471084850)：定义独立光源点的信息。
+-   [ot\_isp\_awb\_in\_out\_attr](#ZH-CN_TOPIC_0000002470924916)：定义对场景做室内外判断的参数。
+-   [ot\_isp\_wb\_info](#ZH-CN_TOPIC_0000002470925190)：定义白平衡，饱和度，颜色校正信息。
 
 #### ot\_isp\_awb\_attr<a name="ZH-CN_TOPIC_0000002471085116"></a>
 
@@ -8461,7 +8360,7 @@ typedef struct {
 <p id="p18015mcpsimp"><a name="p18015mcpsimp"></a><a name="p18015mcpsimp"></a>取值范围：[0x0, 0xFFF]</p>
 </td>
 </tr>
-<tr id="row18016mcpsimp"><td class="cellrowborder" valign="top" width="32%" headers="mcps1.1.3.1.1 "><p xml:lang="fr-FR" id="p18018mcpsimp"><a name="p18018mcpsimp"></a><a name="p18018mcpsimp"></a><span xml:lang="en-US" id="ph18019mcpsimp"><a name="ph18019mcpsimp"></a><a name="ph18019mcpsimp"></a>curve_para[</span><a href="OT_ISP_AWB_CURVE_PARA_NUM.md">OT_ISP_AWB_CURVE_PARA_NUM</a><span xml:lang="en-US" id="ph18021mcpsimp"><a name="ph18021mcpsimp"></a><a name="ph18021mcpsimp"></a>]</span></p>
+<tr id="row18016mcpsimp"><td class="cellrowborder" valign="top" width="32%" headers="mcps1.1.3.1.1 "><p xml:lang="fr-FR" id="p18018mcpsimp"><a name="p18018mcpsimp"></a><a name="p18018mcpsimp"></a><span xml:lang="en-US" id="ph18019mcpsimp"><a name="ph18019mcpsimp"></a><a name="ph18019mcpsimp"></a>curve_para[</span><a href="#ZH-CN_TOPIC_0000002503964883">OT_ISP_AWB_CURVE_PARA_NUM</a><span xml:lang="en-US" id="ph18021mcpsimp"><a name="ph18021mcpsimp"></a><a name="ph18021mcpsimp"></a>]</span></p>
 </td>
 <td class="cellrowborder" valign="top" width="68%" headers="mcps1.1.3.1.2 "><p id="p18023mcpsimp"><a name="p18023mcpsimp"></a><a name="p18023mcpsimp"></a>校准曲线的系数。</p>
 <p id="p18024mcpsimp"><a name="p18024mcpsimp"></a><a name="p18024mcpsimp"></a>取值范围：curve_para [3]!=0; curve_para [4]=128。</p>
@@ -8549,7 +8448,7 @@ typedef struct {
 <td class="cellrowborder" valign="top" width="68%" headers="mcps1.1.3.1.2 "><p id="p18106mcpsimp"><a name="p18106mcpsimp"></a><a name="p18106mcpsimp"></a>白平衡的分块权重使能开关，默认TD_FALSE。</p>
 </td>
 </tr>
-<tr id="row18107mcpsimp"><td class="cellrowborder" valign="top" width="32%" headers="mcps1.1.3.1.1 "><p xml:lang="fr-FR" id="p18109mcpsimp"><a name="p18109mcpsimp"></a><a name="p18109mcpsimp"></a><span xml:lang="en-US" id="ph18110mcpsimp"><a name="ph18110mcpsimp"></a><a name="ph18110mcpsimp"></a>zone_wt[</span><a href="OT_ISP_AWB_ZONE_NUM.md">OT_ISP_AWB_ZONE_NUM</a><span xml:lang="en-US" id="ph18112mcpsimp"><a name="ph18112mcpsimp"></a><a name="ph18112mcpsimp"></a>]</span></p>
+<tr id="row18107mcpsimp"><td class="cellrowborder" valign="top" width="32%" headers="mcps1.1.3.1.1 "><p xml:lang="fr-FR" id="p18109mcpsimp"><a name="p18109mcpsimp"></a><a name="p18109mcpsimp"></a><span xml:lang="en-US" id="ph18110mcpsimp"><a name="ph18110mcpsimp"></a><a name="ph18110mcpsimp"></a>zone_wt[</span><a href="#ZH-CN_TOPIC_0000002470925182">OT_ISP_AWB_ZONE_NUM</a><span xml:lang="en-US" id="ph18112mcpsimp"><a name="ph18112mcpsimp"></a><a name="ph18112mcpsimp"></a>]</span></p>
 </td>
 <td class="cellrowborder" valign="top" width="68%" headers="mcps1.1.3.1.2 "><p id="p18114mcpsimp"><a name="p18114mcpsimp"></a><a name="p18114mcpsimp"></a>白平衡的1024分块权重表，取值范围：[0x0, 0xFF]</p>
 </td>
@@ -8589,9 +8488,9 @@ typedef struct {
 
 【相关数据类型及接口】
 
--   [ot\_isp\_wb\_attr](#ot_isp_wb_attr)
--   [ot\_isp\_awb\_cbcr\_track\_attr](#ot_isp_awb_cbcr_track_attr)
--   [ot\_isp\_awb\_lum\_histgram\_attr](#ot_isp_awb_lum_histgram_attr)
+-   [ot\_isp\_wb\_attr](#ZH-CN_TOPIC_0000002471084898)
+-   [ot\_isp\_awb\_cbcr\_track\_attr](#ZH-CN_TOPIC_0000002503964959)
+-   [ot\_isp\_awb\_lum\_histgram\_attr](#ZH-CN_TOPIC_0000002503965121)
 
 #### ot\_isp\_awb\_cbcr\_track\_attr<a name="ZH-CN_TOPIC_0000002503964959"></a>
 
@@ -8657,7 +8556,7 @@ typedef struct {
 -   AWB算法计算的cr\_max等统计参数在根据ISO插值的时候，会基于cr\_max\[0\]、cr\_min\[0\]、cb\_max\[0\]、cb\_min\[0\]的值。所以不同ISO下的取值设定应以ISO100的值为基础，单调递增或递减。
 -   建议在低色温\(钠灯\)环境标定cr\_max、cb\_min数组。用户统计不同照度下白色区域的R/G、B/G值，设置cr\_max、cb\_min数组。推荐用户设置的Cr、Cb范围稍大于RAW图片统计的R/G、B/G取值范围。
 -   因低照度下环境色温多在5000K以下，cr\_min、cb\_max两个数组的取值可设为常数。
--   当AWB统计信息配置在DRC后的时候，[ot\_isp\_awb\_cbcr\_track\_attr](#ZH-CN_TOPIC_0000001220137511)参数不生效，cr\_min、cb\_min固定为128，cr\_max、cb\_max固定为512。
+-   当AWB统计信息配置在DRC后的时候，ot\_isp\_awb\_cbcr\_track\_attr参数不生效，cr\_min、cb\_min固定为128，cr\_max、cb\_max固定为512。
 
 **表 1** cr\_max  \[16\]在不同的增益情况下的设置值（仅供参考）
 
@@ -9165,7 +9064,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ot\_isp\_awb\_attr](#ot_isp_awb_attr)
+[ot\_isp\_awb\_attr](#ZH-CN_TOPIC_0000002471085116)
 
 #### ot\_isp\_awb\_lum\_histgram\_attr<a name="ZH-CN_TOPIC_0000002503965121"></a>
 
@@ -9203,12 +9102,12 @@ typedef struct {
 <td class="cellrowborder" valign="top" width="44%" headers="mcps1.1.3.1.2 "><p id="p18791mcpsimp"><a name="p18791mcpsimp"></a><a name="p18791mcpsimp"></a>自动模式下，AWB算法对分块统计结果做亮度直方图统计，自动分配亮度权重。手动模式下，用户设置亮度直方图的门限和权重。</p>
 </td>
 </tr>
-<tr id="row18792mcpsimp"><td class="cellrowborder" valign="top" width="56.00000000000001%" headers="mcps1.1.3.1.1 "><p xml:lang="fr-FR" id="p18794mcpsimp"><a name="p18794mcpsimp"></a><a name="p18794mcpsimp"></a><span xml:lang="en-US" id="ph18795mcpsimp"><a name="ph18795mcpsimp"></a><a name="ph18795mcpsimp"></a>hist_thresh[</span><a href="OT_ISP_AWB_LUM_HIST_NUM.md">OT_ISP_AWB_LUM_HIST_NUM</a><span xml:lang="en-US" id="ph18797mcpsimp"><a name="ph18797mcpsimp"></a><a name="ph18797mcpsimp"></a>]</span></p>
+<tr id="row18792mcpsimp"><td class="cellrowborder" valign="top" width="56.00000000000001%" headers="mcps1.1.3.1.1 "><p xml:lang="fr-FR" id="p18794mcpsimp"><a name="p18794mcpsimp"></a><a name="p18794mcpsimp"></a><span xml:lang="en-US" id="ph18795mcpsimp"><a name="ph18795mcpsimp"></a><a name="ph18795mcpsimp"></a>hist_thresh[</span><a href="#ZH-CN_TOPIC_0000002503965149">OT_ISP_AWB_LUM_HIST_NUM</a><span xml:lang="en-US" id="ph18797mcpsimp"><a name="ph18797mcpsimp"></a><a name="ph18797mcpsimp"></a>]</span></p>
 </td>
 <td class="cellrowborder" valign="top" width="44%" headers="mcps1.1.3.1.2 "><p id="p18799mcpsimp"><a name="p18799mcpsimp"></a><a name="p18799mcpsimp"></a>用户设置亮度直方图的门限，仅手动模式有效。</p>
 </td>
 </tr>
-<tr id="row18800mcpsimp"><td class="cellrowborder" valign="top" width="56.00000000000001%" headers="mcps1.1.3.1.1 "><p xml:lang="fr-FR" id="p18802mcpsimp"><a name="p18802mcpsimp"></a><a name="p18802mcpsimp"></a><span xml:lang="en-US" id="ph18803mcpsimp"><a name="ph18803mcpsimp"></a><a name="ph18803mcpsimp"></a>hist_wt[</span><a href="OT_ISP_AWB_LUM_HIST_NUM.md">OT_ISP_AWB_LUM_HIST_NUM</a><span xml:lang="en-US" id="ph18805mcpsimp"><a name="ph18805mcpsimp"></a><a name="ph18805mcpsimp"></a>]</span></p>
+<tr id="row18800mcpsimp"><td class="cellrowborder" valign="top" width="56.00000000000001%" headers="mcps1.1.3.1.1 "><p xml:lang="fr-FR" id="p18802mcpsimp"><a name="p18802mcpsimp"></a><a name="p18802mcpsimp"></a><span xml:lang="en-US" id="ph18803mcpsimp"><a name="ph18803mcpsimp"></a><a name="ph18803mcpsimp"></a>hist_wt[</span><a href="#ZH-CN_TOPIC_0000002503965149">OT_ISP_AWB_LUM_HIST_NUM</a><span xml:lang="en-US" id="ph18805mcpsimp"><a name="ph18805mcpsimp"></a><a name="ph18805mcpsimp"></a>]</span></p>
 </td>
 <td class="cellrowborder" valign="top" width="44%" headers="mcps1.1.3.1.2 "><p id="p18807mcpsimp"><a name="p18807mcpsimp"></a><a name="p18807mcpsimp"></a>用户设置亮度直方图的权重，自动模式和手动模式下均有效。8bit小数精度。</p>
 </td>
@@ -9223,7 +9122,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ot\_isp\_awb\_attr](#ot_isp_awb_attr)
+[ot\_isp\_awb\_attr](#ZH-CN_TOPIC_0000002471085116)
 
 #### ot\_isp\_awb\_alg\_type<a name="ZH-CN_TOPIC_0000002504084807"></a>
 
@@ -9282,7 +9181,7 @@ typedef enum {
 
 【相关数据类型及接口】
 
-[ot\_isp\_awb\_attr](#ot_isp_awb_attr)
+[ot\_isp\_awb\_attr](#ZH-CN_TOPIC_0000002471085116)
 
 #### ot\_isp\_awb\_ct\_limit\_attr<a name="ZH-CN_TOPIC_0000002503964905"></a>
 
@@ -9349,13 +9248,13 @@ typedef struct {
 
 【注意事项】
 
--   [ot\_isp\_awb\_ct\_limit\_attr](#ZH-CN_TOPIC_0000001220219051)结构体定义环境色温超过用户设定的色温范围时，AWB应采取的动作。AWB检测到环境色温超过用户设置的上下限时，相关参数才会生效。
+-   ot\_isp\_awb\_ct\_limit\_attr结构体定义环境色温超过用户设定的色温范围时，AWB应采取的动作。AWB检测到环境色温超过用户设置的上下限时，相关参数才会生效。
 -   支持自动模式和手动模式选择。自动模式下，AWB根据用户校正的色温曲线计算色温上下限色温的AWB增益，以限制R, B通道增益；手动模式下，高色温时，AWB调用high\_rg\_limit、high\_bg\_limit参数限制R, B通道增益，低色温时，AWB调用low\_rg\_limit、low\_bg\_limit参数限制R,B通道增益。
 -   建议用户在进行AWB色温曲线校正时，确定了AWB工作的色温范围后，再确定high\_rg\_limit、high\_bg\_limit、low\_rg\_limit、low\_bg\_limit四个参数取值。Rg对应Planckian曲线的横坐标值，Bg对应Planckian曲线的纵坐标值。
 
 【相关数据类型及接口】
 
-[ot\_isp\_awb\_attr](#ot_isp_awb_attr)
+[ot\_isp\_awb\_attr](#ZH-CN_TOPIC_0000002471085116)
 
 #### ot\_isp\_mwb\_attr<a name="ZH-CN_TOPIC_0000002471084832"></a>
 
@@ -9416,7 +9315,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ot\_isp\_wb\_attr](#ot_isp_wb_attr)
+[ot\_isp\_wb\_attr](#ZH-CN_TOPIC_0000002471084898)
 
 #### ot\_isp\_wb\_attr<a name="ZH-CN_TOPIC_0000002471084898"></a>
 
@@ -9487,8 +9386,8 @@ typedef struct {
 
 【相关数据类型及接口】
 
--   [ot\_isp\_mwb\_attr](#ot_isp_mwb_attr)
--   [ot\_isp\_awb\_attr](#ot_isp_awb_attr)
+-   [ot\_isp\_mwb\_attr](#ZH-CN_TOPIC_0000002471084832)
+-   [ot\_isp\_awb\_attr](#ZH-CN_TOPIC_0000002471085116)
 
 #### ot\_isp\_awb\_multi\_ls\_type<a name="ZH-CN_TOPIC_0000002470925136"></a>
 
@@ -9540,7 +9439,7 @@ typedef enum {
 
 【相关数据类型及接口】
 
-[ot\_isp\_awb\_attr](#ot_isp_awb_attr)
+[ot\_isp\_awb\_attr](#ZH-CN_TOPIC_0000002471085116)
 
 #### ot\_isp\_awb\_indoor\_outdoor\_status<a name="ZH-CN_TOPIC_0000002470925202"></a>
 
@@ -9591,7 +9490,7 @@ typedef enum {
 
 【相关数据类型及接口】
 
-[ot\_isp\_awb\_in\_out\_attr](#ot_isp_awb_in_out_attr)
+[ot\_isp\_awb\_in\_out\_attr](#ZH-CN_TOPIC_0000002470924916)
 
 #### ot\_isp\_awb\_attr\_ex<a name="ZH-CN_TOPIC_0000002470925006"></a>
 
@@ -9654,7 +9553,7 @@ typedef struct {
 <td class="cellrowborder" valign="top" width="68%" headers="mcps1.1.3.1.2 "><p id="p19219mcpsimp"><a name="p19219mcpsimp"></a><a name="p19219mcpsimp"></a>自动白平衡计算时是否考虑色温曲线外的独立光源点。</p>
 </td>
 </tr>
-<tr id="row19220mcpsimp"><td class="cellrowborder" valign="top" width="32%" headers="mcps1.1.3.1.1 "><p xml:lang="fr-FR" id="p19222mcpsimp"><a name="p19222mcpsimp"></a><a name="p19222mcpsimp"></a><span xml:lang="en-US" id="ph19223mcpsimp"><a name="ph19223mcpsimp"></a><a name="ph19223mcpsimp"></a>light_info[</span><a href="OT_ISP_AWB_LS_NUM.md">OT_ISP_AWB_LS_NUM</a><span xml:lang="en-US" id="ph19225mcpsimp"><a name="ph19225mcpsimp"></a><a name="ph19225mcpsimp"></a>]</span></p>
+<tr id="row19220mcpsimp"><td class="cellrowborder" valign="top" width="32%" headers="mcps1.1.3.1.1 "><p xml:lang="fr-FR" id="p19222mcpsimp"><a name="p19222mcpsimp"></a><a name="p19222mcpsimp"></a><span xml:lang="en-US" id="ph19223mcpsimp"><a name="ph19223mcpsimp"></a><a name="ph19223mcpsimp"></a>light_info[</span><a href="#ZH-CN_TOPIC_0000002470924888">OT_ISP_AWB_LS_NUM</a><span xml:lang="en-US" id="ph19225mcpsimp"><a name="ph19225mcpsimp"></a><a name="ph19225mcpsimp"></a>]</span></p>
 </td>
 <td class="cellrowborder" valign="top" width="68%" headers="mcps1.1.3.1.2 "><p id="p19227mcpsimp"><a name="p19227mcpsimp"></a><a name="p19227mcpsimp"></a>色温曲线外的独立光源点的信息, 最多可以添加4个。</p>
 </td>
@@ -9680,13 +9579,13 @@ typedef struct {
 <p id="p19248mcpsimp"><a name="p19248mcpsimp"></a><a name="p19248mcpsimp"></a>取值范围：[0x0, 0x100]</p>
 </td>
 </tr>
-<tr id="row19249mcpsimp"><td class="cellrowborder" valign="top" width="32%" headers="mcps1.1.3.1.1 "><p xml:lang="fr-FR" id="p19251mcpsimp"><a name="p19251mcpsimp"></a><a name="p19251mcpsimp"></a><span xml:lang="en-US" id="ph19252mcpsimp"><a name="ph19252mcpsimp"></a><a name="ph19252mcpsimp"></a>multi_ct_bin[</span><a href="OT_ISP_AWB_MULTI_CT_NUM.md">OT_ISP_AWB_MULTI_CT_NUM</a><span xml:lang="en-US" id="ph19254mcpsimp"><a name="ph19254mcpsimp"></a><a name="ph19254mcpsimp"></a>]</span></p>
+<tr id="row19249mcpsimp"><td class="cellrowborder" valign="top" width="32%" headers="mcps1.1.3.1.1 "><p xml:lang="fr-FR" id="p19251mcpsimp"><a name="p19251mcpsimp"></a><a name="p19251mcpsimp"></a><span xml:lang="en-US" id="ph19252mcpsimp"><a name="ph19252mcpsimp"></a><a name="ph19252mcpsimp"></a>multi_ct_bin[</span><a href="#ZH-CN_TOPIC_0000002470924846">OT_ISP_AWB_MULTI_CT_NUM</a><span xml:lang="en-US" id="ph19254mcpsimp"><a name="ph19254mcpsimp"></a><a name="ph19254mcpsimp"></a>]</span></p>
 </td>
 <td class="cellrowborder" valign="top" width="68%" headers="mcps1.1.3.1.2 "><p id="p19256mcpsimp"><a name="p19256mcpsimp"></a><a name="p19256mcpsimp"></a>混合光源下的色温分段参数。</p>
 <p id="p19257mcpsimp"><a name="p19257mcpsimp"></a><a name="p19257mcpsimp"></a>取值范围：要求为单调递增序列。</p>
 </td>
 </tr>
-<tr id="row19258mcpsimp"><td class="cellrowborder" valign="top" width="32%" headers="mcps1.1.3.1.1 "><p xml:lang="fr-FR" id="p19260mcpsimp"><a name="p19260mcpsimp"></a><a name="p19260mcpsimp"></a><span xml:lang="en-US" id="ph19261mcpsimp"><a name="ph19261mcpsimp"></a><a name="ph19261mcpsimp"></a>multi_ct_wt[</span><a href="OT_ISP_AWB_MULTI_CT_NUM.md">OT_ISP_AWB_MULTI_CT_NUM</a><span xml:lang="en-US" id="ph19263mcpsimp"><a name="ph19263mcpsimp"></a><a name="ph19263mcpsimp"></a>]</span></p>
+<tr id="row19258mcpsimp"><td class="cellrowborder" valign="top" width="32%" headers="mcps1.1.3.1.1 "><p xml:lang="fr-FR" id="p19260mcpsimp"><a name="p19260mcpsimp"></a><a name="p19260mcpsimp"></a><span xml:lang="en-US" id="ph19261mcpsimp"><a name="ph19261mcpsimp"></a><a name="ph19261mcpsimp"></a>multi_ct_wt[</span><a href="#ZH-CN_TOPIC_0000002470924846">OT_ISP_AWB_MULTI_CT_NUM</a><span xml:lang="en-US" id="ph19263mcpsimp"><a name="ph19263mcpsimp"></a><a name="ph19263mcpsimp"></a>]</span></p>
 </td>
 <td class="cellrowborder" valign="top" width="68%" headers="mcps1.1.3.1.2 "><p id="p19265mcpsimp"><a name="p19265mcpsimp"></a><a name="p19265mcpsimp"></a>混合光源下的色温权重参数。</p>
 <p id="p19266mcpsimp"><a name="p19266mcpsimp"></a><a name="p19266mcpsimp"></a>取值范围：[0x0, 0x400]</p>
@@ -9727,8 +9626,8 @@ typedef struct {
 
 【相关数据类型及接口】
 
--   [ot\_isp\_awb\_extra\_light\_source\_info](#ot_isp_awb_extra_light_source_info)
--   [ot\_isp\_awb\_in\_out\_attr](#ot_isp_awb_in_out_attr)
+-   [ot\_isp\_awb\_extra\_light\_source\_info](#ZH-CN_TOPIC_0000002471084850)
+-   [ot\_isp\_awb\_in\_out\_attr](#ZH-CN_TOPIC_0000002470924916)
 
 #### ot\_isp\_awb\_extra\_light\_source\_info<a name="ZH-CN_TOPIC_0000002471084850"></a>
 
@@ -9802,7 +9701,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ot\_isp\_awb\_attr\_ex](#ot_isp_awb_attr_ex)
+[ot\_isp\_awb\_attr\_ex](#ZH-CN_TOPIC_0000002470925006)
 
 #### ot\_isp\_awb\_in\_out\_attr<a name="ZH-CN_TOPIC_0000002470924916"></a>
 
@@ -9908,7 +9807,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ot\_isp\_awb\_attr\_ex](#ot_isp_awb_attr_ex)
+[ot\_isp\_awb\_attr\_ex](#ZH-CN_TOPIC_0000002470925006)
 
 #### ot\_isp\_wb\_info<a name="ZH-CN_TOPIC_0000002470925190"></a>
 
@@ -10047,10 +9946,11 @@ typedef struct {
 
 # CCM<a name="ZH-CN_TOPIC_0000002503964791"></a>
 
+-   **[概述](#ZH-CN_TOPIC_0000002470925198)**  
 
+-   **[重要概念](#ZH-CN_TOPIC_0000002470925132)**  
 
-
-
+-   **[功能描述](#ZH-CN_TOPIC_0000002471084846)**  
 
 ## 概述<a name="ZH-CN_TOPIC_0000002470925198"></a>
 
@@ -10072,14 +9972,10 @@ sensor对光谱的响应，在RGB各分量上与人眼对光谱的响应通常�
 
 饱和度、色调和CCM接口只是针对SDK提供的AWB库，如果客户自己实现AWB库，不需要关注这些接口，且无法使用这些接口。
 
--   [ss\_mpi\_isp\_set\_saturation\_attr](ss_mpi_isp_set_saturation_attr.md)：设置颜色饱和度属性。
--   [ss\_mpi\_isp\_get\_saturation\_attr](ss_mpi_isp_get_saturation_attr.md)：获取颜色饱和度属性。
--   [ss\_mpi\_isp\_set\_ccm\_attr](ss_mpi_isp_set_ccm_attr.md)：设置颜色校正基础矩阵。
--   [ss\_mpi\_isp\_get\_ccm\_attr](ss_mpi_isp_get_ccm_attr.md)：获取颜色校正基础矩阵。
-
-
-
-
+-   [ss\_mpi\_isp\_set\_saturation\_attr](#ZH-CN_TOPIC_0000002503965061)：设置颜色饱和度属性。
+-   [ss\_mpi\_isp\_get\_saturation\_attr](#ZH-CN_TOPIC_0000002504085053)：获取颜色饱和度属性。
+-   [ss\_mpi\_isp\_set\_ccm\_attr](#ZH-CN_TOPIC_0000002471084958)：设置颜色校正基础矩阵。
+-   [ss\_mpi\_isp\_get\_ccm\_attr](#ZH-CN_TOPIC_0000002503964997)：获取颜色校正基础矩阵。
 
 ### ss\_mpi\_isp\_set\_saturation\_attr<a name="ZH-CN_TOPIC_0000002503965061"></a>
 
@@ -10158,7 +10054,7 @@ td_s32 ss_mpi_isp_set_saturation_attr (ot_vi_pipe vi_pipe, const ot_isp_saturati
 
 【相关主题】
 
-[ss\_mpi\_isp\_get\_saturation\_attr](#ss_mpi_isp_get_saturation_attr)
+[ss\_mpi\_isp\_get\_saturation\_attr](#ZH-CN_TOPIC_0000002504085053)
 
 ### ss\_mpi\_isp\_get\_saturation\_attr<a name="ZH-CN_TOPIC_0000002504085053"></a>
 
@@ -10237,7 +10133,7 @@ td_s32 ss_mpi_isp_get_saturation_attr (ot_vi_pipe vi_pipe, ot_isp_saturation_att
 
 【相关主题】
 
-[ss\_mpi\_isp\_set\_saturation\_attr](#ss_mpi_isp_set_saturation_attr)
+[ss\_mpi\_isp\_set\_saturation\_attr](#ZH-CN_TOPIC_0000002503965061)
 
 ### ss\_mpi\_isp\_set\_ccm\_attr<a name="ZH-CN_TOPIC_0000002471084958"></a>
 
@@ -10271,7 +10167,7 @@ td_s32 ss_mpi_isp_set_ccm_attr (ot_vi_pipe vi_pipe, const ot_isp_color_matrix_at
 </tr>
 <tr id="row19808mcpsimp"><td class="cellrowborder" valign="top" width="25%" headers="mcps1.1.4.1.1 "><p id="p19810mcpsimp"><a name="p19810mcpsimp"></a><a name="p19810mcpsimp"></a>ccm_attr</p>
 </td>
-<td class="cellrowborder" valign="top" width="55.00000000000001%" headers="mcps1.1.4.1.2 "><p id="p19812mcpsimp"><a name="p19812mcpsimp"></a><a name="p19812mcpsimp"></a>颜色矩阵。</p>
+<td class="cellrowborder" valign="top" width="55.00000000000001%" headers="mcps1.1.4.1.2 "><p id="p19812mcpsimp"><a name="p19812mcpsimp"></a><a name="p19812mcpsimp"></a>指向颜色矩阵的结构体指针。</p>
 </td>
 <td class="cellrowborder" valign="top" width="20%" headers="mcps1.1.4.1.3 "><p id="p19814mcpsimp"><a name="p19814mcpsimp"></a><a name="p19814mcpsimp"></a>输入</p>
 </td>
@@ -10310,7 +10206,7 @@ td_s32 ss_mpi_isp_set_ccm_attr (ot_vi_pipe vi_pipe, const ot_isp_color_matrix_at
 
 -   颜色校正矩阵的数据格式，应与校正工具提供的保持一致。
 -   可根据当前色温，设置不同的CCM，从而在高低色温下都达到较好的颜色还原。
--   该MPI支持最大七个最小三个不同色温下的色彩还原矩阵，要按照色温递减的方式配置CCM，即0-6组CCM矩阵由高色温到低色温。典型的三组CCM为D50，TL84，A三个光源下的CCM。典型的五组CCM为10K，D65，D50，TL84，A五个光源下的CCM。前一组的色温值与后一组的色温值需符合如下规则：Tpre \* \(100 – 6.25\) \> Tpost \* \(100 + 6.25\)。
+-   该MPI支持最多支持七个，最少三个不同色温下的色彩还原矩阵，要按照色温递减的方式配置CCM，即0-6组CCM矩阵由高色温到低色温。典型的三组CCM为D50，TL84，A三个光源下的CCM。典型的五组CCM为10K，D65，D50，TL84，A五个光源下的CCM。前一组的色温值与后一组的色温值需符合如下规则：Tpre \* \(100 – 6.25\) \> Tpost \* \(100 + 6.25\)。
 -   手动模式下，ISP系统生效的CCM即用户手动配置的CCM，有利于CCM精调，因此建议在手动模式下校正不同色温光源下的CCM矩阵，得到多组CCM矩阵后再通过MPI写入，验证多个光源下的CCM组和效果。手动CCM模式下，饱和度调整有效。在特定光源下做CCM精调时，需要先确认饱和度是否期望值。
 
 【举例】
@@ -10319,7 +10215,7 @@ td_s32 ss_mpi_isp_set_ccm_attr (ot_vi_pipe vi_pipe, const ot_isp_color_matrix_at
 
 【相关主题】
 
-[ss\_mpi\_isp\_get\_ccm\_attr](#ss_mpi_isp_get_ccm_attr)
+[ss\_mpi\_isp\_get\_ccm\_attr](#ZH-CN_TOPIC_0000002503964997)
 
 ### ss\_mpi\_isp\_get\_ccm\_attr<a name="ZH-CN_TOPIC_0000002503964997"></a>
 
@@ -10398,24 +10294,17 @@ td_s32 ss_mpi_isp_get_ccm_attr (ot_vi_pipe vi_pipe, ot_isp_color_matrix_attr *cc
 
 【相关主题】
 
-[ss\_mpi\_isp\_set\_ccm\_attr](#ss_mpi_isp_set_ccm_attr)
+[ss\_mpi\_isp\_set\_ccm\_attr](#ZH-CN_TOPIC_0000002471084958)
 
 ## 数据类型<a name="ZH-CN_TOPIC_0000002503964799"></a>
 
--   [ot\_isp\_saturation\_attr](ot_isp_saturation_attr.md)：定义ISP颜色饱和度属性。
--   [ot\_isp\_saturation\_manual](ot_isp_saturation_manual.md)：定义手动饱和度属性。
--   [ot\_isp\_saturation\_auto](ot_isp_saturation_auto.md)：定义自动饱和度属性。
--   [ot\_isp\_color\_matrix\_attr](ot_isp_color_matrix_attr.md)：定义ISP颜色矩阵属性。
--   [ot\_isp\_color\_matrix\_auto](ot_isp_color_matrix_auto.md)：定义自动颜色校正矩阵属性。
--   [ot\_isp\_color\_matrix\_manual](ot_isp_color_matrix_manual.md)：定义手动颜色校正矩阵属性。
--   [ot\_isp\_color\_matrix\_param](ot_isp_color_matrix_param.md)：定义多组颜色矫正矩阵系数
-
-
-
-
-
-
-
+-   [ot\_isp\_saturation\_attr](#ZH-CN_TOPIC_0000002470925216)：定义ISP颜色饱和度属性。
+-   [ot\_isp\_saturation\_manual](#ZH-CN_TOPIC_0000002504085025)：定义手动饱和度属性。
+-   [ot\_isp\_saturation\_auto](#ZH-CN_TOPIC_0000002470925012)：定义自动饱和度属性。
+-   [ot\_isp\_color\_matrix\_attr](#ZH-CN_TOPIC_0000002470924866)：定义ISP颜色矩阵属性。
+-   [ot\_isp\_color\_matrix\_auto](#ZH-CN_TOPIC_0000002471084956)：定义自动颜色校正矩阵属性。
+-   [ot\_isp\_color\_matrix\_manual](#ZH-CN_TOPIC_0000002471085002)：定义手动颜色校正矩阵属性。
+-   [ot\_isp\_color\_matrix\_param](#ZH-CN_TOPIC_0000002504084943)：定义多组颜色矫正矩阵系数
 
 ### ot\_isp\_saturation\_attr<a name="ZH-CN_TOPIC_0000002470925216"></a>
 
@@ -10479,8 +10368,8 @@ typedef struct {
 
 【相关数据类型及接口】
 
--   [ot\_isp\_saturation\_auto](#ot_isp_saturation_auto)
--   [ot\_isp\_saturation\_manual](#ot_isp_saturation_manual)
+-   [ot\_isp\_saturation\_auto](#ZH-CN_TOPIC_0000002470925012)
+-   [ot\_isp\_saturation\_manual](#ZH-CN_TOPIC_0000002504085025)
 
 ### ot\_isp\_saturation\_manual<a name="ZH-CN_TOPIC_0000002504085025"></a>
 
@@ -10520,7 +10409,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ot\_isp\_saturation\_auto](#ot_isp_saturation_auto)
+[ot\_isp\_saturation\_auto](#ZH-CN_TOPIC_0000002470925012)
 
 ### ot\_isp\_saturation\_auto<a name="ZH-CN_TOPIC_0000002470925012"></a>
 
@@ -10686,7 +10575,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ot\_isp\_saturation\_manual](#ot_isp_saturation_manual)
+[ot\_isp\_saturation\_manual](#ZH-CN_TOPIC_0000002504085025)
 
 ### ot\_isp\_color\_matrix\_attr<a name="ZH-CN_TOPIC_0000002470924866"></a>
 
@@ -10737,8 +10626,8 @@ typedef struct {
 
 【相关数据类型及接口】
 
--   [ot\_isp\_color\_matrix\_auto](#ot_isp_color_matrix_auto)
--   [ot\_isp\_color\_matrix\_manual](#ot_isp_color_matrix_manual)
+-   [ot\_isp\_color\_matrix\_auto](#ZH-CN_TOPIC_0000002471084956)
+-   [ot\_isp\_color\_matrix\_manual](#ZH-CN_TOPIC_0000002471085002)
 
 ### ot\_isp\_color\_matrix\_auto<a name="ZH-CN_TOPIC_0000002471084956"></a>
 
@@ -10784,7 +10673,7 @@ typedef struct {
 <p id="p20297mcpsimp"><a name="p20297mcpsimp"></a><a name="p20297mcpsimp"></a>取值范围：[3,7]</p>
 </td>
 </tr>
-<tr id="row20298mcpsimp"><td class="cellrowborder" valign="top" width="43%" headers="mcps1.1.3.1.1 "><p id="p20300mcpsimp"><a name="p20300mcpsimp"></a><a name="p20300mcpsimp"></a>ccm_tab[<a href="OT_ISP_CCM_MATRIX_NUM.md">OT_ISP_CCM_MATRIX_NUM</a>]</p>
+<tr id="row20298mcpsimp"><td class="cellrowborder" valign="top" width="43%" headers="mcps1.1.3.1.1 "><p id="p20300mcpsimp"><a name="p20300mcpsimp"></a><a name="p20300mcpsimp"></a>ccm_tab[<a href="#ZH-CN_TOPIC_0000002503965169">OT_ISP_CCM_MATRIX_NUM</a>]</p>
 </td>
 <td class="cellrowborder" valign="top" width="56.99999999999999%" headers="mcps1.1.3.1.2 "><p id="p20303mcpsimp"><a name="p20303mcpsimp"></a><a name="p20303mcpsimp"></a>不同色温下的颜色校正矩阵和对应的色温值。</p>
 </td>
@@ -10794,15 +10683,15 @@ typedef struct {
 
 【注意事项】
 
--   当[ot\_isp\_saturation\_attr](ot_isp_saturation_attr.md)中的op\_type  为  OT\_OP\_MODE\_AUTO，使用自动饱和度调节功能时，iso\_act\_en 和 temp\_act\_en功能生效。当op\_type为OT\_OP\_MODE\_MANUAL，使用手动饱和度调节功能时，iso\_act\_en 和temp\_act\_en功能不生效。
+-   当[ot\_isp\_saturation\_attr](#ZH-CN_TOPIC_0000002470925216)中的op\_type  为  OT\_OP\_MODE\_AUTO，使用自动饱和度调节功能时，iso\_act\_en 和 temp\_act\_en功能生效。当op\_type为OT\_OP\_MODE\_MANUAL，使用手动饱和度调节功能时，iso\_act\_en 和temp\_act\_en功能不生效。
 -   iso\_act\_en 功能指的是极低照度下（ISO大于12800）逐渐Bypass CCM，将由饱和度数组sat\[16\]控制得到的CCM矩阵逐渐调向接近单位阵，这时CCM的实际饱和度会和饱和度数组中设定的不一致。用户关闭该功能后，极低照度下，饱和度数组仍生效。
 -   temp\_act\_en功能指的是在高色温\(大于8000K\)和低色温场景\(小于2500K\)，AWB可能未完全恢复，此时采用高饱和度CCM矩阵，会加剧AWB的偏色程度。比如钠灯场景，AWB校正后白色区域蓝色稍有不足，采用高饱和度CCM矩阵，白色区域的蓝色分量可能为0，图像整体偏黄。使能temp\_act\_en，在高低色温下逐渐BypassCCM，将由饱和度数组sat\[16\]控制得到的CCM矩阵逐渐调向接近单位阵，优化类似场景颜色表现。
 -   颜色校正矩阵的数据格式，应与校正工具提供的保持一致。
 
 【相关数据类型及接口】
 
--   [ot\_isp\_color\_matrix\_attr](#ot_isp_color_matrix_attr)
--   [ot\_isp\_color\_matrix\_param](#ot_isp_color_matrix_param)
+-   [ot\_isp\_color\_matrix\_attr](#ZH-CN_TOPIC_0000002470924866)
+-   [ot\_isp\_color\_matrix\_param](#ZH-CN_TOPIC_0000002504084943)
 
 ### ot\_isp\_color\_matrix\_param<a name="ZH-CN_TOPIC_0000002504084943"></a>
 
@@ -10847,12 +10736,12 @@ typedef struct {
 
 -   颜色校正矩阵的数据格式，应与校正工具提供的保持一致。
 -   当饱和度为自动的时候，实际生效的CCM参数和AWB算法反馈的当前色温值，自动饱和度参数有关。当饱和度为手动的时候，实际生效的CCM参数和AWB算法反馈的当前色温值有关。
--   不同色温下的自动颜色校正矩阵，应满足灰色数据不变的约束条件，即矩阵中每行参数的和为0x100。请通过[ot\_isp\_wb\_info](ot_isp_wb_info.md)查询当前生效的颜色校正矩阵的值，确认每行参数的和为0x100。
--   在调高饱和度时，如果需要配置的CCM值超过了最大正值0x0FFF或最小负值0x8FFF，会将CCM参数限制在合理范围内再配置。在这组异常的CCM参数下，图像中饱和度高的颜色可能会发生亮度变暗的现象，建议通过[ot\_isp\_wb\_info](ot_isp_wb_info.md)查询当前生效的CCM值，确认生效的值未发生clip。
+-   不同色温下的自动颜色校正矩阵，应满足灰色数据不变的约束条件，即矩阵中每行参数的和为0x100。请通过[ot\_isp\_wb\_info](#ZH-CN_TOPIC_0000002470925190)查询当前生效的颜色校正矩阵的值，确认每行参数的和为0x100。
+-   在调高饱和度时，如果需要配置的CCM值超过了最大正值0x0FFF或最小负值0x8FFF，会将CCM参数限制在合理范围内再配置。在这组异常的CCM参数下，图像中饱和度高的颜色可能会发生亮度变暗的现象，建议通过[ot\_isp\_wb\_info](#ZH-CN_TOPIC_0000002470925190)查询当前生效的CCM值，确认生效的值未发生clip。
 
 【相关数据类型及接口】
 
-[ot\_isp\_color\_matrix\_auto](#ot_isp_color_matrix_auto)
+[ot\_isp\_color\_matrix\_auto](#ZH-CN_TOPIC_0000002471084956)
 
 ### ot\_isp\_color\_matrix\_manual<a name="ZH-CN_TOPIC_0000002471085002"></a>
 
@@ -10865,7 +10754,7 @@ typedef struct {
 ```
 typedef struct {
     td_bool sat_en;               /* RW; Range: [0, 1]; Format:1.0;
-    If bSatEn=1, the active CCM = SatMatrix * ManualMatrix, else the active CCM =  ManualMatrix */
+    If sat_en=1, the active CCM = SatMatrix * ManualMatrix, else the active CCM =  ManualMatrix */
     td_u16  ccm[OT_ISP_CCM_MATRIX_SIZE]; /* RW; Range: [0x0, 0xFFFF]; Format:8.8; Manual CCM matrix, */
 } ot_isp_color_matrix_manual;
 ```
@@ -10904,5 +10793,5 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ot\_isp\_color\_matrix\_auto](#ot_isp_color_matrix_auto)
+[ot\_isp\_color\_matrix\_auto](#ZH-CN_TOPIC_0000002471084956)
 

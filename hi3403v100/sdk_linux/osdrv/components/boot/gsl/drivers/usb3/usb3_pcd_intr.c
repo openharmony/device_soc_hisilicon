@@ -17,6 +17,8 @@
 #include "usb3_drv.h"
 #include "usb3_pcd.h"
 
+extern unsigned int usb2_otg_ram_clk_sel(void);
+
 static void handle_usb_reset_intr(usb3_pcd_t *pcd)
 {
     usb3_pcd_ep_t *ep;
@@ -111,14 +113,6 @@ static void handle_connect_done_intr(usb3_pcd_t *pcd)
     pcd->state = USB3_STATE_DEFAULT;
 }
 
-static void usb3_handle_ep0_nrdy(usb3_pcd_t *pcd, int is_in, uint32_t event)
-{
-    if ((pcd->ep0state == EP0_IN_WAIT_NRDY && is_in) ||
-        (pcd->ep0state == EP0_OUT_WAIT_NRDY && !is_in)) {
-        usb3_os_handle_ep0(pcd, event);
-    }
-}
-
 int usb3_handle_ep_intr(usb3_pcd_t *pcd, int physep, uint32_t event)
 {
     usb3_pcd_ep_t *ep;
@@ -150,7 +144,20 @@ int usb3_handle_ep_intr(usb3_pcd_t *pcd, int physep, uint32_t event)
 
         case USB3_DEPEVT_XFER_NRDY << USB3_DEPEVT_INTTYPE_SHIFT:
             if (epnum == 0) {
-                usb3_handle_ep0_nrdy(pcd, is_in, event);
+                switch (pcd->ep0state) {
+                    case EP0_IN_WAIT_NRDY:
+                        if (is_in) {
+                            usb3_os_handle_ep0(pcd, event);
+                        }
+                        break;
+                    case EP0_OUT_WAIT_NRDY:
+                        if (!is_in) {
+                            usb3_os_handle_ep0(pcd, event);
+                        }
+                        break;
+                    default:
+                        break;
+                }
             }
             break;
 

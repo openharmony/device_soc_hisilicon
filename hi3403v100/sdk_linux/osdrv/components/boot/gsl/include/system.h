@@ -72,7 +72,7 @@
  * SCTLR_EL2 bits definitions
  */
 #define SCTLR_EL2_RES1		(3 << 28 | 3 << 22 | 1 << 18 | 1 << 16 | \
-				 1 << 11 | 3 << 4)	    /* Reserved, RES1 */
+                 1 << 11 | 3 << 4)	    /* Reserved, RES1 */
 #define SCTLR_EL2_EE_LE		(0 << 25) /* Exception Little-endian          */
 #define SCTLR_EL2_WXN_DIS	(0 << 19) /* Write permission is not XN       */
 #define SCTLR_EL2_ICACHE_DIS	(0 << 12) /* Instruction cache disabled       */
@@ -103,7 +103,7 @@
  * SCTLR_EL1 bits definitions
  */
 #define SCTLR_EL1_RES1		(3 << 28 | 3 << 22 | 1 << 20 | \
-				 1 << 11) /* Reserved, RES1                   */
+                 1 << 11) /* Reserved, RES1                   */
 #define SCTLR_EL1_UCI_DIS	(0 << 26) /* Cache instruction disabled       */
 #define SCTLR_EL1_EE_LE		(0 << 25) /* Exception Little-endian          */
 #define SCTLR_EL1_WXN_DIS	(0 << 19) /* Write permission is not XN       */

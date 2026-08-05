@@ -233,7 +233,7 @@ struct ddr_ddrc_data {
 #define ddr_rnkvol_restore_func(relate_reg, base_dmc) \
     do { \
         reg_write((relate_reg)->ddrc.rnkvol, (base_dmc) + ddr_dmc_cfg_rnkvol(0)); \
-	} while (0)
+    } while (0)
 
 /* set mem_row to 0 */
 #define ddr_rnkvol_set_func(cfg) do { \

@@ -85,11 +85,13 @@ static ALWAYS_INLINE int32_t _hkl_get_com_lock_num()
     lock_info.u32 = 0;
     ret = _hkl_com_lock_wait_idle(&lock_info);
     if (ret != TD_SUCCESS)
+    {
         return TD_FAILURE;
-
+    }
     if (lock_info.bits.kl_com_lock_fail == 0b10)
+    {
         return TD_SUCCESS;
-
+    }
     return TD_FAILURE;
 }
 
@@ -185,11 +187,13 @@ static ALWAYS_INLINE int32_t _hkl_set_data_in(const uint8_t *data, const uint32_
     uint32_t din = 0;
 
     if (data == NULL)
+    {
         return TD_FAILURE;
-
+    }
     if (len != HKL_KEY_LEN)
+    {
         return TD_FAILURE;
-
+    }
     for (i = 0; i < HKL_KEY_LEN; i += 4) {
         din = ((uint32_t)data[i + 3] << 24) | ((uint32_t)data[i + 2] << 16) |
             ((uint32_t)data[i + 1] << 8) | data[i];
@@ -197,8 +201,9 @@ static ALWAYS_INLINE int32_t _hkl_set_data_in(const uint8_t *data, const uint32_
     }
 
     if (i != HKL_KEY_LEN)
+    {
         return TD_FAILURE;
-
+    }
     return TD_SUCCESS;
 }
 
@@ -236,9 +241,9 @@ static ALWAYS_INLINE int32_t _hkl_check_err(void)
 int32_t hkl_content_start(const common_hkl *com_klad, const uint32_t level,
     const uint32_t check_wd)
 {
-    if (level >= HKL_LEVEL || com_klad == NULL)
+    if (level >= HKL_LEVEL || com_klad == NULL) {
         return TD_FAILURE;
-
+    }
     chk_wd_2(com_klad, level, check_wd);
     chk_ret(_hkl_wait_idle());
     chk_ret(_hkl_set_addr(com_klad->cfg.key_slot_num, com_klad->cfg.is_odd));

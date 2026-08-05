@@ -156,82 +156,88 @@ static bool calc_check_crc(frame_info *frame, uint32_t pos, uint8_t cr)
     return TRUE;
 }
 
-static void parse_file_frame_done(data_handle_t *data_handle)
+static void parse_file_frame_length(data_handle_t *dataHandle, uint32_t pos, uint8_t cr)
 {
-    data_handle->total_frame = (data_handle->file_length - 1) / XUSER_DATA_LENGTH + GSL_UART_VALUE_2;
-    data_handle->SubFunction = (void *)(uintptr_t)data_handle->file_address;
-    data_handle->count_frame = 1;
-    data_handle->exp_frame_idx = 1;
+    if (pos == PROC_BYTE_FILE_LENG0) {
+        dataHandle->file_length = 0; /* reset file_length */
+    }
+
+    /* obtain the length of file, Byte */
+    dataHandle->file_length |= cr << (BIT_CNT_8 * (PROC_BYTE_FILE_LENG3 - pos));
 }
 
-static void parse_file_frame_len_or_addr(data_handle_t *data_handle, uint32_t pos, uint8_t cr)
+static void parse_file_frame_address(data_handle_t *dataHandle, uint32_t pos, uint8_t cr)
 {
-    if (pos <= PROC_BYTE_FILE_LENG3) {
-        if (pos == PROC_BYTE_FILE_LENG0) {
-            data_handle->file_length = 0;
-        }
-        data_handle->file_length |= cr << (BIT_CNT_8 * ((PROC_BYTE_FILE_LENG3) - pos));
-        return;
+    if (pos == PROC_BYTE_FILE_ADDR0) {
+        dataHandle->file_address = 0; /* reset file_address */
     }
 
-    if (pos == PROC_BYTE_FILE_ADDR0) {
-        data_handle->file_address = 0;
+    /* obtain the address which file should be located in, Byte */
+    dataHandle->file_address |= cr << (BIT_CNT_8 * (PROC_BYTE_FILE_ADDR3 - pos));
+}
+
+static int finish_file_frame(data_handle_t *dataHandle, frame_info *frame,
+    uint32_t pos, uint8_t cr)
+{
+    if (!calc_check_crc(frame, pos, cr)) {
+        return -1;
     }
-    data_handle->file_address |= cr << (BIT_CNT_8 * ((PROC_BYTE_FILE_ADDR3) - pos));
+
+    if (pos == frame->len) {
+        /* be careful when the file's length is the integer times of XUSER_DATA_LENGTH */
+        dataHandle->total_frame = (dataHandle->file_length - 1) / XUSER_DATA_LENGTH + GSL_UART_VALUE_2;
+        /* the file should be executed after download is complete. */
+        dataHandle->SubFunction = (void *)(uintptr_t)dataHandle->file_address;
+        /* the index of frame. */
+        dataHandle->count_frame = 1;
+        /* I think, it equals to count_frame. */
+        dataHandle->exp_frame_idx = 1;
+    }
+    return 0;
 }
 
 static int parse_file_frame(data_handle_t *data_handle, frame_info *frame,
     uint32_t pos, uint8_t cr)
 {
     switch (pos) {
-     case PROC_BYTE_HEAD:
-        frame->len = FRAME_LENGTH_FILE;
-        break;
-
-     case PROC_BYTE_SEQ:
-        frame->seq = cr;
-        if (frame->seq != 0) {
-            return -1;
-        }
-        break;
-
-     case PROC_BYTE_SEQF:
-        if (cr != (uint8_t) ~frame->seq) {
-            return -1;
-        }
-        break;
-
-     case PROC_BYTE_FILE_TYPE:
-        if ((cr == LOAD_RAM) || (cr == LOAD_USB)) {
-            data_handle->file_type = cr;
-        } else {
-            return -1;
-        }
-        break;
-
-     case PROC_BYTE_FILE_LENG0:
-     case PROC_BYTE_FILE_LENG1:
-     case PROC_BYTE_FILE_LENG2:
-     case PROC_BYTE_FILE_LENG3:
-     case PROC_BYTE_FILE_ADDR0:
-     case PROC_BYTE_FILE_ADDR1:
-     case PROC_BYTE_FILE_ADDR2:
-     case PROC_BYTE_FILE_ADDR3:
-        parse_file_frame_len_or_addr(data_handle, pos, cr);
-        break;
-
-     default:
-        break;
+        case PROC_BYTE_HEAD:
+            frame->len = FRAME_LENGTH_FILE;
+            break;
+        case PROC_BYTE_SEQ:
+            frame->seq = cr;
+            if (frame->seq != 0) {
+                return -1;
+            }
+            break;
+        case PROC_BYTE_SEQF:
+            if (cr != (uint8_t)~frame->seq) {
+                return -1;
+            }
+            break;
+        case PROC_BYTE_FILE_TYPE:
+            if ((cr == LOAD_RAM) || (cr == LOAD_USB)) {
+                data_handle->file_type = cr;
+            } else {
+                return -1;
+            }
+            break;
+        case PROC_BYTE_FILE_LENG0:
+        case PROC_BYTE_FILE_LENG1:
+        case PROC_BYTE_FILE_LENG2:
+        case PROC_BYTE_FILE_LENG3:
+            parse_file_frame_length(data_handle, pos, cr);
+            break;
+        case PROC_BYTE_FILE_ADDR0:
+        case PROC_BYTE_FILE_ADDR1:
+        case PROC_BYTE_FILE_ADDR2:
+        case PROC_BYTE_FILE_ADDR3:
+            parse_file_frame_address(data_handle, pos, cr);
+            break;
+        default:
+            break;
     }
 
-    if (!calc_check_crc(frame, pos, cr)) {
-        return -1;
-    }
-
-    if (pos == frame->len) {
-        parse_file_frame_done(data_handle);
-    }
-    return 0;
+    return finish_file_frame(data_handle, frame, pos, cr);
 }
 
 static uint16_t calc_frame_len(data_handle_t *data_handle)
@@ -280,8 +286,9 @@ static bool parse_data_frame(data_handle_t *data_handle, frame_info *frame, uint
 
      default:
         /* locate frame */
-        if (pos <= (frame->len - CRC16_LEN))
+        if (pos <= (frame->len - CRC16_LEN)) {
             *(frame->write_addr++) = cr;
+        }
         break;
     }
 
@@ -362,9 +369,9 @@ uint8_t uart_hand_head_frame(IN data_handle_t *data_handle, uint8_t  *frame_type
     uint8_t  cr;
 
     cr = (uint8_t)serial_getc();
-    if (pos != FRAME_HEAD)
+    if (pos != FRAME_HEAD) {
         return cr;
-
+    }
     if (data_handle == NULL || frame_type == NULL) {
         return 0;
     }
@@ -380,9 +387,9 @@ uint8_t uart_hand_head_frame(IN data_handle_t *data_handle, uint8_t  *frame_type
         return cr;
     }
 
-    if ((*frame_type != XFILE) && (*frame_type != XSTART))
+    if ((*frame_type != XFILE) && (*frame_type != XSTART)) {
         return cr;
-
+    }
     err = memset_s(data_handle, sizeof(data_handle_t),
             0, sizeof(data_handle_t));
     if (err != EOK) {
@@ -390,55 +397,6 @@ uint8_t uart_hand_head_frame(IN data_handle_t *data_handle, uint8_t  *frame_type
     }
 
     return cr;
-}
-
-static bool uart_handle_skip_status(const data_handle_t *data_handle, int *status, uint32_t *pos)
-{
-    if ((*status != OCR_STATUS_SKIP) && (*status != OCR_STATUS_ERROR)) {
-        return FALSE;
-    }
-
-    if (data_handle->count_frame == 0) {
-        *status = OCR_STATUS_OK;
-        *pos = 0;
-    } else {
-        (*pos)++;
-    }
-    return TRUE;
-}
-
-typedef struct {
-    data_handle_t *data_handle;
-    frame_info *frame;
-    uint8_t frame_type;
-    uint32_t pos;
-    uint8_t cr;
-    int *status;
-} uart_dispatch_ctx;
-
-static void uart_dispatch_frame(const uart_dispatch_ctx *ctx)
-{
-    switch (ctx->frame_type) {
-    case XFILE:
-        if (parse_file_frame(ctx->data_handle, ctx->frame, ctx->pos, ctx->cr)) {
-            *(ctx->status) = OCR_STATUS_ERROR;
-        }
-        break;
-    case XDATA:
-        if (parse_data_frame(ctx->data_handle, ctx->frame, ctx->pos, ctx->cr)) {
-            *(ctx->status) = OCR_STATUS_ERROR;
-        }
-        break;
-    case XEOT:
-        if (parse_eot_frame(ctx->data_handle, ctx->frame, ctx->pos, ctx->cr)) {
-            *(ctx->status) = OCR_STATUS_ERROR;
-        } else if (ctx->pos == ctx->frame->len) {
-            *(ctx->status) = OCR_STATUS_FIN;
-        }
-        break;
-    default:
-        *(ctx->status) = OCR_STATUS_SKIP;
-    }
 }
 
 static int uart_proc_loop(IN data_handle_t *data_handle)
@@ -449,34 +407,53 @@ static int uart_proc_loop(IN data_handle_t *data_handle)
 
     int status = OCR_STATUS_OK;
     frame_info frame;
-    uart_dispatch_ctx dispatch_ctx;
 
     if (memset_s(&frame, sizeof(frame_info), 0, sizeof(frame_info)) != EOK) {
         return -1;
     }
 
-    while (status != OCR_STATUS_FIN) {
-        if (uart_wait_data(status) != OCR_STATUS_OK) {
+    while (1) {
+        if (uart_wait_data(status) != OCR_STATUS_OK)
+        {
             return -1;
         }
-
         cr = uart_hand_head_frame(data_handle, &frame_type, pos, &status);
-        if (uart_handle_skip_status(data_handle, &status, &pos)) {
+        if ((status == OCR_STATUS_SKIP) || (status == OCR_STATUS_ERROR)) {
+            if (data_handle->count_frame == 0) {
+                status = OCR_STATUS_OK;
+                pos = 0;
+            } else  {
+                pos++;
+            }
             continue;
         }
 
-        dispatch_ctx.data_handle = data_handle;
-        dispatch_ctx.frame = &frame;
-        dispatch_ctx.frame_type = frame_type;
-        dispatch_ctx.pos = pos;
-        dispatch_ctx.cr = cr;
-        dispatch_ctx.status = &status;
-        uart_dispatch_frame(&dispatch_ctx);
+        switch (frame_type) {
+        /*FILE frame, or START frame*/
+        case XFILE:
+            if (parse_file_frame(data_handle, &frame, pos, cr))
+            {
+                status = OCR_STATUS_ERROR;
+            }
+            break;
+        case XDATA:
+            if (parse_data_frame(data_handle, &frame, pos, cr)) {
+                status = OCR_STATUS_ERROR;
+            }
+            break;
+        case XEOT:
+            if (parse_eot_frame(data_handle, &frame, pos, cr)) {
+                status = OCR_STATUS_ERROR;
+            } else if (pos == frame.len)
+                status = OCR_STATUS_FIN;
+            break;
+        default:
+            status = OCR_STATUS_SKIP;
+        }
 
         if (pos == frame.len) {
             return status;
         }
-
         /* increase the index within the frame */
         pos++;
     }
@@ -490,7 +467,6 @@ int copy_from_uart(const void *dest, size_t count)
     int32_t status;
     int32_t error = 0;
     int32_t count_err = 0;
-    int32_t receiving = 1;
     errno_t err;
 
     err = memset_s(&data_handle, sizeof(data_handle_t), 0, sizeof(data_handle_t));
@@ -498,24 +474,26 @@ int copy_from_uart(const void *dest, size_t count)
         return ERROR;
     }
 
-    while (receiving) {
+    while (1) {
         status = uart_proc_loop(&data_handle);
 
         switch (status) {
         case OCR_STATUS_OK:
             serial_putc((uint8_t)ACK);
             if (data_handle.file_length != (uint32_t)count)
+            {
                 count_err = 1;
-
-            if (data_handle.count_frame == 1)
+            }
+            if (data_handle.count_frame == 1) {
                 data_handle.file_address = (uint32_t)(uintptr_t)dest;
+            }
             break;
 
         case OCR_STATUS_FIN:
-            receiving = 0;
             serial_putc((uint8_t)ACK);
-            if (count_err)
+            if (count_err) {
                 return ERROR;
+            }
             return OK;
 
         case OCR_STATUS_ERROR:
@@ -525,12 +503,10 @@ int copy_from_uart(const void *dest, size_t count)
         default:
             ++error;
 
-            if (error > 0xff)
+            if (error > 0xff) {
                 return ERROR;
-
+            }
             break;
         }
     }
-
-    return ERROR;
 }

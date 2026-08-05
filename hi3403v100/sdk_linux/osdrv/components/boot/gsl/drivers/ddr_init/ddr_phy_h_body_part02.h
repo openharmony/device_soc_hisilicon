@@ -32,16 +32,16 @@
 #define PHY_HW_GP_PHY_RESET (PHY_PHYINITCTRL_PHY_RST)
 #define PHY_HW_GP_CNT_RESET_START (PHY_PHYINITCTRL_PHYCONN_RST)
 #define PHY_HW_GP_PLL (PHY_PHYINITCTRL_PLL_INIT_EN | PHY_PHYINITCTRL_ZCAL_EN | \
-	PHY_PHYINITCTRL_DLYMEAS_EN)
+    PHY_PHYINITCTRL_DLYMEAS_EN)
 #define PHY_HW_GP_DRAM_RESET (PHY_PHYINITCTRL_DRAM_RST | PHY_PHYINITCTRL_DRAM_INIT_EN)
 #define PHY_HW_GP_VREF_AC (PHY_PHYINITCTRL_ACDVREFS_EN)
 #define PHY_HW_GP_CS (PHY_PHYINITCTRL_CST_EN)
 #define PHY_HW_GP_VREF_DQ (PHY_PHYINITCTRL_DVREFT_SYNC)
 #define PHY_HW_GP_NORMAL (PHY_PHYINITCTRL_GT_EN | PHY_PHYINITCTRL_GDST_EN | \
-	PHY_PHYINITCTRL_WL2_EN | PHY_PHYINITCTRL_RDET_EN |                     \
-	PHY_PHYINITCTRL_WDET_EN | PHY_PHYINITCTRL_HVREFT_EN | PHY_PHYINITCTRL_PIC_TDQSST)
+    PHY_PHYINITCTRL_WL2_EN | PHY_PHYINITCTRL_RDET_EN |                     \
+    PHY_PHYINITCTRL_WDET_EN | PHY_PHYINITCTRL_HVREFT_EN | PHY_PHYINITCTRL_PIC_TDQSST)
 #define PHY_HW_GP_NORMAL_RANK1 (PHY_PHYINITCTRL_GT_EN | PHY_PHYINITCTRL_GDST_EN | PHY_PHYINITCTRL_WL2_EN | \
-	PHY_PHYINITCTRL_RDET_EN | PHY_PHYINITCTRL_WDET_EN)
+    PHY_PHYINITCTRL_RDET_EN | PHY_PHYINITCTRL_WDET_EN)
 #define PHY_HW_GP_CNT_RESET_END (PHY_PHYINITCTRL_PHYCONN_RST)
 
 #define PHY_PHYINITSTATUS_ZCAL_ERROR (1 << 3) /* Impedance Calibration Error. */
@@ -151,7 +151,7 @@
 
 /* Define the union ddr_phy_cat_config */
 union ddr_phy_cat_config {
-	/* Define the struct bits */
+    /* Define the struct bits */
     struct {
         unsigned int ca_samp_num_bdl : 4;   /* [3:0] */
         unsigned int ca_samp_num_ph : 4;    /* [7:4] */
@@ -172,13 +172,13 @@ union ddr_phy_cat_config {
         unsigned int sw_cat_en : 1;         /* [31] */
     } bits;
 
-	/* Define an unsigned member */
+    /* Define an unsigned member */
     unsigned int u32;
 };
 
 /* Define the union ddr_phy_addr_phbound */
 union ddr_phy_addr_phbound {
-	/* Define the struct bits */
+    /* Define the struct bits */
     struct {
         unsigned int addrph_a_right : 5; /* [4:0] */
         unsigned int reserved0 : 3;      /* [7:5] */
@@ -190,31 +190,31 @@ union ddr_phy_addr_phbound {
         unsigned int reserved3 : 3;      /* [31:29] */
     } bits;
 
-	/* Define an unsigned member */
+    /* Define an unsigned member */
     unsigned int u32;
 };
 
 #define DDR_PHY_VREF_HOST_DISPLAY { 0, 0, ddr_hal_phy_hvreft_status(0, 0), 0, "Host Vref Byte0" },     \
-		{ 0, 1, ddr_hal_phy_hvreft_status(0, 1), 0, "Host Vref Byte1" }, \
-		{ 0, 2, ddr_hal_phy_hvreft_status(0, 2), 0, "Host Vref Byte2" }, \
-		{ 0, 3, ddr_hal_phy_hvreft_status(0, 3), 0, "Host Vref Byte3" },
+        { 0, 1, ddr_hal_phy_hvreft_status(0, 1), 0, "Host Vref Byte1" }, \
+        { 0, 2, ddr_hal_phy_hvreft_status(0, 2), 0, "Host Vref Byte2" }, \
+        { 0, 3, ddr_hal_phy_hvreft_status(0, 3), 0, "Host Vref Byte3" },
 
 #define DDR_PHY_VREF_HOST_DISPLAY_RANK1 { 1, 0, ddr_hal_phy_hvreft_status(1, 0), 0, "Host Vref Byte0" },     \
-		{ 1, 1, ddr_hal_phy_hvreft_status(1, 1), 0, "Host Vref Byte1" }, \
-		{ 1, 2, ddr_hal_phy_hvreft_status(1, 2), 0, "Host Vref Byte2" }, \
-		{ 1, 3, ddr_hal_phy_hvreft_status(1, 3), 0, "Host Vref Byte3" },
+        { 1, 1, ddr_hal_phy_hvreft_status(1, 1), 0, "Host Vref Byte1" }, \
+        { 1, 2, ddr_hal_phy_hvreft_status(1, 2), 0, "Host Vref Byte2" }, \
+        { 1, 3, ddr_hal_phy_hvreft_status(1, 3), 0, "Host Vref Byte3" },
 
 #define DDR_PHY_VREF_DRAM_DISPLAY { 0, 0, ddr_hal_phy_dvreft_status(0), 0, "DRAM Vref Byte0" },     \
-		{ 0, 1, ddr_hal_phy_dvreft_status(1), 0, "DRAM Vref Byte1" }, \
-		{ 0, 2, ddr_hal_phy_dvreft_status(2), 0, "DRAM Vref Byte2" }, \
-		{ 0, 3, ddr_hal_phy_dvreft_status(3), 0, "DRAM Vref Byte3" },
+        { 0, 1, ddr_hal_phy_dvreft_status(1), 0, "DRAM Vref Byte1" }, \
+        { 0, 2, ddr_hal_phy_dvreft_status(2), 0, "DRAM Vref Byte2" }, \
+        { 0, 3, ddr_hal_phy_dvreft_status(3), 0, "DRAM Vref Byte3" },
 
 /* Dx dpmc operations */
 #define DDR_DX_DPMC_DISPLAY \
     {0, 0, dx_dxnmiscctrl3(0), 0, "Dpmc Byte0"}, \
-	{0, 1, dx_dxnmiscctrl3(1), 0, "Dpmc Byte1"}, \
-	{0, 2, dx_dxnmiscctrl3(2), 0, "Dpmc Byte2"}, \
-	{0, 3, dx_dxnmiscctrl3(3), 0, "Dpmc Byte3"},
+    {0, 1, dx_dxnmiscctrl3(1), 0, "Dpmc Byte1"}, \
+    {0, 2, dx_dxnmiscctrl3(2), 0, "Dpmc Byte2"}, \
+    {0, 3, dx_dxnmiscctrl3(3), 0, "Dpmc Byte3"},
 
 /* phy t28 not support DCC training */
 #define DDR_PHY_DCC_DISPLAY { 0, 0, DDR_PHY_ACIOCTL21, 0, "CK DUTY" },
@@ -223,11 +223,11 @@ union ddr_phy_addr_phbound {
 #define DDR_PHY_ADDRPH_DISPLAY { 0, 0, DDR_PHY_ADDRPHBOUND, 0, "CA Phase" },
 
 #define DDR_PHY_ADDRBDL_DISPLAY { 0, 0, ddr_phy_acaddrbdl(0), 0, "CA BDL(0)" },     \
-		{ 0, 0, ddr_phy_acaddrbdl(1), 0, "CA BDL(1)" }, \
-		{ 0, 0, ddr_phy_acaddrbdl(2), 0, "CA BDL(2)" }, \
-		{ 0, 0, ddr_phy_acaddrbdl(3), 0, "CA BDL(3)" }, \
-		{ 0, 0, ddr_phy_acaddrbdl(4), 0, "CA BDL(4)" }, \
-		{ 0, 0, ddr_phy_acaddrbdl(6), 0, "CA BDL(5)" },
+        { 0, 0, ddr_phy_acaddrbdl(1), 0, "CA BDL(1)" }, \
+        { 0, 0, ddr_phy_acaddrbdl(2), 0, "CA BDL(2)" }, \
+        { 0, 0, ddr_phy_acaddrbdl(3), 0, "CA BDL(3)" }, \
+        { 0, 0, ddr_phy_acaddrbdl(4), 0, "CA BDL(4)" }, \
+        { 0, 0, ddr_phy_acaddrbdl(6), 0, "CA BDL(5)" },
 
 
 #endif /* SDK_LINUX_OSDRV_COMPONENTS_BOOT_GSL_DRIVERS_DDR_INIT_DDR_PHY_H_BODY_PART02_H_ */

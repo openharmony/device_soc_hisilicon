@@ -122,7 +122,15 @@
 </th>
 </tr>
 </thead>
-<tbody><tr id="row2175mcpsimp"><td class="cellrowborder" valign="top" width="17.24%" headers="mcps1.1.4.1.1 "><p id="p2177mcpsimp"><a name="p2177mcpsimp"></a><a name="p2177mcpsimp"></a>00B01</p>
+<tbody><tr id="row1117162275616"><td class="cellrowborder" valign="top" width="17.24%" headers="mcps1.1.4.1.1 "><p id="p68017313562"><a name="p68017313562"></a><a name="p68017313562"></a>00B02</p>
+</td>
+<td class="cellrowborder" valign="top" width="24.27%" headers="mcps1.1.4.1.2 "><p id="p280203125614"><a name="p280203125614"></a><a name="p280203125614"></a>2026-02-25</p>
+</td>
+<td class="cellrowborder" valign="top" width="58.489999999999995%" headers="mcps1.1.4.1.3 "><p id="p780103195613"><a name="p780103195613"></a><a name="p780103195613"></a>第2次临时版本发布。</p>
+<p id="p285332213578"><a name="p285332213578"></a><a name="p285332213578"></a>“Debug调试”小节涉及修改。</p>
+</td>
+</tr>
+<tr id="row2175mcpsimp"><td class="cellrowborder" valign="top" width="17.24%" headers="mcps1.1.4.1.1 "><p id="p2177mcpsimp"><a name="p2177mcpsimp"></a><a name="p2177mcpsimp"></a>00B01</p>
 </td>
 <td class="cellrowborder" valign="top" width="24.27%" headers="mcps1.1.4.1.2 "><p id="p2179mcpsimp"><a name="p2179mcpsimp"></a><a name="p2179mcpsimp"></a>2025-09-15</p>
 </td>
@@ -134,7 +142,9 @@
 
 # 概述<a name="ZH-CN_TOPIC_0000002408254646"></a>
 
+-   **[重要概念](#ZH-CN_TOPIC_0000002441693893)**  
 
+-   **[规格说明](#ZH-CN_TOPIC_0000002408254638)**  
 
 ## 重要概念<a name="ZH-CN_TOPIC_0000002441693893"></a>
 
@@ -145,7 +155,7 @@ HDMI的音频不能单独输出，必须依赖于视频输出，且HDMI的时钟
 文档中未特别注明为HDMI2.0规格，默认只支持HDMI1.4规格的产品。
 
 >![](public_sys-resources/icon-notice.gif) **须知：** 
->所有解决方案采用是同一套API接口，但只支持HDMI1.4 API接口的解决方案，不支持HDMI2.0相关参数。
+>所有解决方案采用的是同一套API接口，但只支持HDMI1.4 API接口的解决方案，不支持HDMI2.0相关参数。
 
 解决方案HDMI规格说明，如[表1](#_Ref472517318)所示。未明确列出的规格表示不支持。
 
@@ -195,44 +205,25 @@ HDMI的音频不能单独输出，必须依赖于视频输出，且HDMI的时钟
 
 该功能模块提供以下MPI。
 
--   [ss\_mpi\_hdmi\_init](ss_mpi_hdmi_init.md)：初始化HDMI。
--   [ss\_mpi\_hdmi\_deinit](ss_mpi_hdmi_deinit.md)：去初始化HDMI。
--   [ss\_mpi\_hdmi\_open](ss_mpi_hdmi_open.md)：打开HDMI。
--   [ss\_mpi\_hdmi\_close](ss_mpi_hdmi_close.md)：关闭HDMI。
--   [ss\_mpi\_hdmi\_set\_attr](ss_mpi_hdmi_set_attr.md)：设置HDMI属性。
--   [ss\_mpi\_hdmi\_get\_attr](ss_mpi_hdmi_get_attr.md)：获取HDMI属性。
--   [ss\_mpi\_hdmi\_start](ss_mpi_hdmi_start.md)：启动HDMI输出。
--   [ss\_mpi\_hdmi\_stop](ss_mpi_hdmi_stop.md)：停止HDMI输出。
--   [ss\_mpi\_hdmi\_get\_sink\_capability](ss_mpi_hdmi_get_sink_capability.md)：获取HDMI Sink端的能力集。
--   [ss\_mpi\_hdmi\_force\_get\_edid](ss_mpi_hdmi_force_get_edid.md)：获取HDMI的EDID原始数据。
--   [ss\_mpi\_hdmi\_register\_callback](ss_mpi_hdmi_register_callback.md)：注册事件回调函数
--   [ss\_mpi\_hdmi\_unregister\_callback](ss_mpi_hdmi_unregister_callback.md)：撤销事件回调函数
--   [ss\_mpi\_hdmi\_set\_infoframe](ss_mpi_hdmi_set_infoframe.md)：设置信息帧。
--   [ss\_mpi\_hdmi\_get\_infoframe](ss_mpi_hdmi_get_infoframe.md)：获取信息帧。
--   [ss\_mpi\_hdmi\_set\_hw\_spec](ss_mpi_hdmi_set_hw_spec.md)：设置指标参数。
--   [ss\_mpi\_hdmi\_get\_hw\_spec](ss_mpi_hdmi_get_hw_spec.md)：获取指标参数。
--   [ss\_mpi\_hdmi\_set\_avmute](ss_mpi_hdmi_set_avmute.md)：设置AVMUTE。
--   [ss\_mpi\_hdmi\_set\_mod\_param](ss_mpi_hdmi_set_mod_param.md): HDMI模块参数设置。
--   [ss\_mpi\_hdmi\_get\_mod\_param](ss_mpi_hdmi_get_mod_param.md): 获取HDMI模块参数。
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+-   [ss\_mpi\_hdmi\_init](#ZH-CN_TOPIC_0000002408094734)：初始化HDMI。
+-   [ss\_mpi\_hdmi\_deinit](#ZH-CN_TOPIC_0000002408094726)：去初始化HDMI。
+-   [ss\_mpi\_hdmi\_open](#ZH-CN_TOPIC_0000002441654053)：打开HDMI。
+-   [ss\_mpi\_hdmi\_close](#ZH-CN_TOPIC_0000002408254642)：关闭HDMI。
+-   [ss\_mpi\_hdmi\_set\_attr](#ZH-CN_TOPIC_0000002441693897)：设置HDMI属性。
+-   [ss\_mpi\_hdmi\_get\_attr](#ZH-CN_TOPIC_0000002408094710)：获取HDMI属性。
+-   [ss\_mpi\_hdmi\_start](#ZH-CN_TOPIC_0000002408094694)：启动HDMI输出。
+-   [ss\_mpi\_hdmi\_stop](#ZH-CN_TOPIC_0000002441693837)：停止HDMI输出。
+-   [ss\_mpi\_hdmi\_get\_sink\_capability](#ZH-CN_TOPIC_0000002408254566)：获取HDMI Sink端的能力集。
+-   [ss\_mpi\_hdmi\_force\_get\_edid](#ZH-CN_TOPIC_0000002441693877)：获取HDMI的EDID原始数据。
+-   [ss\_mpi\_hdmi\_register\_callback](#ZH-CN_TOPIC_0000002408094654)：注册事件回调函数
+-   [ss\_mpi\_hdmi\_unregister\_callback](#ZH-CN_TOPIC_0000002408254562)：撤销事件回调函数
+-   [ss\_mpi\_hdmi\_set\_infoframe](#ZH-CN_TOPIC_0000002441693881)：设置信息帧。
+-   [ss\_mpi\_hdmi\_get\_infoframe](#ZH-CN_TOPIC_0000002441693885)：获取信息帧。
+-   [ss\_mpi\_hdmi\_set\_hw\_spec](#ZH-CN_TOPIC_0000002408254618)：设置指标参数。
+-   [ss\_mpi\_hdmi\_get\_hw\_spec](#ZH-CN_TOPIC_0000002408094690)：获取指标参数。
+-   [ss\_mpi\_hdmi\_set\_avmute](#ZH-CN_TOPIC_0000002441693833)：设置AVMUTE。
+-   [ss\_mpi\_hdmi\_set\_mod\_param](#ZH-CN_TOPIC_0000002408094658): HDMI模块参数设置。
+-   [ss\_mpi\_hdmi\_get\_mod\_param](#ZH-CN_TOPIC_0000002441653985): 获取HDMI模块参数。
 
 ## ss\_mpi\_hdmi\_init<a name="ZH-CN_TOPIC_0000002408094734"></a>
 
@@ -266,7 +257,7 @@ td_s32 ss_mpi_hdmi_init(td_void);
 </tr>
 <tr id="row2630mcpsimp"><td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.1 "><p id="p2632mcpsimp"><a name="p2632mcpsimp"></a><a name="p2632mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.2 "><p id="p2634mcpsimp"><a name="p2634mcpsimp"></a><a name="p2634mcpsimp"></a>失败，其值为<a href="错误码.md">错误码</a>。</p>
+<td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.2 "><p id="p2634mcpsimp"><a name="p2634mcpsimp"></a><a name="p2634mcpsimp"></a>失败，其值为<a href="#ZH-CN_TOPIC_0000002441693861">错误码</a>。</p>
 </td>
 </tr>
 </tbody>
@@ -316,7 +307,7 @@ ss_mpi_hdmi_deinit();
 
 【相关主题】
 
-[ss\_mpi\_hdmi\_deinit](#ss_mpi_hdmi_deinit)
+[ss\_mpi\_hdmi\_deinit](#ZH-CN_TOPIC_0000002408094726)
 
 ## ss\_mpi\_hdmi\_deinit<a name="ZH-CN_TOPIC_0000002408094726"></a>
 
@@ -350,7 +341,7 @@ td_s32 ss_mpi_hdmi_deinit(td_void);
 </tr>
 <tr id="row3413mcpsimp"><td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.1 "><p id="p3415mcpsimp"><a name="p3415mcpsimp"></a><a name="p3415mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.2 "><p id="p3417mcpsimp"><a name="p3417mcpsimp"></a><a name="p3417mcpsimp"></a>失败，其值为<a href="错误码.md">错误码</a>。</p>
+<td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.2 "><p id="p3417mcpsimp"><a name="p3417mcpsimp"></a><a name="p3417mcpsimp"></a>失败，其值为<a href="#ZH-CN_TOPIC_0000002441693861">错误码</a>。</p>
 </td>
 </tr>
 </tbody>
@@ -368,7 +359,7 @@ td_s32 ss_mpi_hdmi_deinit(td_void);
 
 【举例】
 
-请参见[ss\_mpi\_hdmi\_init](ss_mpi_hdmi_init.md)和[ss\_mpi\_hdmi\_register\_callback](ss_mpi_hdmi_register_callback.md)的举例。
+请参见[ss\_mpi\_hdmi\_init](#ZH-CN_TOPIC_0000002408094734)和[ss\_mpi\_hdmi\_register\_callback](#ZH-CN_TOPIC_0000002408094654)的举例。
 
 【相关主题】
 
@@ -400,7 +391,7 @@ td_s32 ss_mpi_hdmi_open(ot_hdmi_id hdmi);
 <tbody><tr id="row6483mcpsimp"><td class="cellrowborder" valign="top" width="15.150000000000002%" headers="mcps1.1.4.1.1 "><p id="p6485mcpsimp"><a name="p6485mcpsimp"></a><a name="p6485mcpsimp"></a>hdmi</p>
 </td>
 <td class="cellrowborder" valign="top" width="69.7%" headers="mcps1.1.4.1.2 "><p id="p6487mcpsimp"><a name="p6487mcpsimp"></a><a name="p6487mcpsimp"></a>HDMI接口号。</p>
-<p id="p6488mcpsimp"><a name="p6488mcpsimp"></a><a name="p6488mcpsimp"></a>取值：0。参见<a href="ot_hdmi_id.md">ot_hdmi_id</a>保留将来扩展多个HDMI设备支持，下同。</p>
+<p id="p6488mcpsimp"><a name="p6488mcpsimp"></a><a name="p6488mcpsimp"></a>取值：0。参见<a href="#ZH-CN_TOPIC_0000002441653977">ot_hdmi_id</a>保留将来扩展多个HDMI设备支持，下同。</p>
 </td>
 <td class="cellrowborder" valign="top" width="15.150000000000002%" headers="mcps1.1.4.1.3 "><p id="p6491mcpsimp"><a name="p6491mcpsimp"></a><a name="p6491mcpsimp"></a>输入</p>
 </td>
@@ -424,7 +415,7 @@ td_s32 ss_mpi_hdmi_open(ot_hdmi_id hdmi);
 </tr>
 <tr id="row6509mcpsimp"><td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.1 "><p id="p6511mcpsimp"><a name="p6511mcpsimp"></a><a name="p6511mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.2 "><p id="p6513mcpsimp"><a name="p6513mcpsimp"></a><a name="p6513mcpsimp"></a>失败，其值为<a href="错误码.md">错误码</a>。</p>
+<td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.2 "><p id="p6513mcpsimp"><a name="p6513mcpsimp"></a><a name="p6513mcpsimp"></a>失败，其值为<a href="#ZH-CN_TOPIC_0000002441693861">错误码</a>。</p>
 </td>
 </tr>
 </tbody>
@@ -437,17 +428,17 @@ td_s32 ss_mpi_hdmi_open(ot_hdmi_id hdmi);
 
 【注意】
 
--   ss\_mpi\_hdmi\_open之前须确保HDMI已被初始化，否则将返回[OT\_ERR\_HDMI\_NOT\_INIT](错误码.md#OT_ERR_HDMI_NOT_INIT)。
+-   ss\_mpi\_hdmi\_open之前须确保HDMI已被初始化，否则将返回[OT\_ERR\_HDMI\_NOT\_INIT](#OT_ERR_HDMI_NOT_INIT)。
 -   重复打开HDMI返回成功。
 -   调用该接口时，如果处于未接入hdmi线的状态下，该接口调度耗时相对较长（正常1\~3s）。如果是正常接hdmi线且sink端状态正常，该接口耗时为1s左右。
 
 【举例】
 
-请参见[ss\_mpi\_hdmi\_register\_callback](ss_mpi_hdmi_register_callback.md)的举例。
+请参见[ss\_mpi\_hdmi\_register\_callback](#ZH-CN_TOPIC_0000002408094654)的举例。
 
 【相关主题】
 
-[ss\_mpi\_hdmi\_close](#ss_mpi_hdmi_close)
+[ss\_mpi\_hdmi\_close](#ZH-CN_TOPIC_0000002408254642)
 
 ## ss\_mpi\_hdmi\_close<a name="ZH-CN_TOPIC_0000002408254642"></a>
 
@@ -499,7 +490,7 @@ td_s32 ss_mpi_hdmi_close(ot_hdmi_id hdmi);
 </tr>
 <tr id="row6436mcpsimp"><td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.1 "><p id="p6438mcpsimp"><a name="p6438mcpsimp"></a><a name="p6438mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.2 "><p id="p6440mcpsimp"><a name="p6440mcpsimp"></a><a name="p6440mcpsimp"></a>失败，其值为<a href="错误码.md">错误码</a>。</p>
+<td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.2 "><p id="p6440mcpsimp"><a name="p6440mcpsimp"></a><a name="p6440mcpsimp"></a>失败，其值为<a href="#ZH-CN_TOPIC_0000002441693861">错误码</a>。</p>
 </td>
 </tr>
 </tbody>
@@ -512,16 +503,16 @@ td_s32 ss_mpi_hdmi_close(ot_hdmi_id hdmi);
 
 【注意】
 
--   调用前须确保HDMI已被open，否则将返回[OT\_ERR\_HDMI\_DEV\_NOT\_OPEN](错误码.md#OT_ERR_HDMI_DEV_NOT_OPEN)。
--   HDMI open成功之后，若应用发生异常，需要退出，需要调用此接口及[ss\_mpi\_hdmi\_deinit](ss_mpi_hdmi_deinit.md)释放HDMI资源。
+-   调用前须确保HDMI已被open，否则将返回[OT\_ERR\_HDMI\_DEV\_NOT\_OPEN](#OT_ERR_HDMI_DEV_NOT_OPEN)。
+-   HDMI open成功之后，若应用发生异常，需要退出，需要调用此接口及[ss\_mpi\_hdmi\_deinit](#ZH-CN_TOPIC_0000002408094726)释放HDMI资源。
 
 【举例】
 
-请参见[ss\_mpi\_hdmi\_register\_callback](ss_mpi_hdmi_register_callback.md)的举例。
+请参见[ss\_mpi\_hdmi\_register\_callback](#ZH-CN_TOPIC_0000002408094654)的举例。
 
 【相关主题】
 
-[ss\_mpi\_hdmi\_open](#ss_mpi_hdmi_open)
+[ss\_mpi\_hdmi\_open](#ZH-CN_TOPIC_0000002441654053)
 
 ## ss\_mpi\_hdmi\_set\_attr<a name="ZH-CN_TOPIC_0000002441693897"></a>
 
@@ -580,7 +571,7 @@ td_s32 ss_mpi_hdmi_set_attr(ot_hdmi_id hdmi, const ot_hdmi_attr *attr);
 </tr>
 <tr id="row3557mcpsimp"><td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.1 "><p id="p3559mcpsimp"><a name="p3559mcpsimp"></a><a name="p3559mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.2 "><p id="p3561mcpsimp"><a name="p3561mcpsimp"></a><a name="p3561mcpsimp"></a>失败，其值为<a href="错误码.md">错误码</a>。</p>
+<td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.2 "><p id="p3561mcpsimp"><a name="p3561mcpsimp"></a><a name="p3561mcpsimp"></a>失败，其值为<a href="#ZH-CN_TOPIC_0000002441693861">错误码</a>。</p>
 </td>
 </tr>
 </tbody>
@@ -593,27 +584,27 @@ td_s32 ss_mpi_hdmi_set_attr(ot_hdmi_id hdmi, const ot_hdmi_attr *attr);
 
 【注意】
 
--   调用前须确保HDMI已被open，否则将返回[OT\_ERR\_HDMI\_DEV\_NOT\_OPEN](错误码.md#OT_ERR_HDMI_DEV_NOT_OPEN)。
+-   调用前须确保HDMI已被open，否则将返回[OT\_ERR\_HDMI\_DEV\_NOT\_OPEN](#OT_ERR_HDMI_DEV_NOT_OPEN)。
 -   用户需在启动之前设置HDMI属性；若HDMI已启动，则应先停止HDMI，设置属性后再重新启动。不遵循该流程使用的行为是未定义的。
--   部分属性SSxx中暂时不支持，见数据类型[ot\_hdmi\_attr](ot_hdmi_attr.md)说明。
+-   部分属性SSxx中暂时不支持，见数据类型[ot\_hdmi\_attr](#ZH-CN_TOPIC_0000002408094686)说明。
 -   若只设置部分属性，设置前应先获取属性，赋值该部分属性后再设置。
 -   部分显示设备的EDID可能不够准确，如有的显示设备具备显示4kP60的能力，但其EDID中申明并不支持4kP60和SCDC，此时调用此接口设置4kP60输出时，为了避免引入兼容性问题，HDMI驱动不会强制设置4kP60输出，电视不会正常显示（串口会有如下提示：sink is not support scdc）。针对类似情况，若确定显示设备支持4kP60，可将接口参数中auth\_mode设置为TD\_TRUE，HDMI驱动将强制按照4kP60输出。但存在引入各种兼容性问题的风险，如电视花屏、闪屏，甚至死机等。
 -   SS625V100、SS524V100、SS522V101只支持到HDMI1.4，属性中的video\_format取值最大只能到OT\_HDMI\_VIDEO\_FORMAT\_3840X2160P\_30。
 -   此接口为同步接口，在调用过程中，驱动可能会通过SCDC与显示设备交互，此过程耗时较长（正常约3\~5s）。
--   设置属性前应用必须参考对端能力，特殊情况如对端不支持HDMI时必须先调用VDP的mpi接口[ss\_mpi\_vo\_set\_hdmi\_param](ss_mpi_hdmi_set_hw_spec.md#ss_mpi_vo_set_hdmi_param)将HDMI的color space设置成RGB，然后再通过本接口将模式设置成DVI模式，否则驱动会有错误打印。
--   关于VDP的[ss\_mpi\_vo\_set\_hdmi\_param](ss_mpi_hdmi_set_hw_spec.md#ss_mpi_vo_set_hdmi_param)，使用时需要先调用HDMI的[ss\_mpi\_hdmi\_stop](ss_mpi_hdmi_stop.md)接口将HDMI的信号关断然后再调用，设置完成后需再调用HDMI的[ss\_mpi\_hdmi\_start](ss_mpi_hdmi_start.md)接口打开信号输出。
--   在调用此接口前一定要先调用[ss\_mpi\_hdmi\_get\_sink\_capability](ss_mpi_hdmi_get_sink_capability.md)接口获取对端的能力然后合理的配置属性，特别的情况如对端不支持HDMI时需要先调用VO的[ss\_mpi\_vo\_set\_hdmi\_param](ss_mpi_hdmi_set_hw_spec.md#ss_mpi_vo_set_hdmi_param)接口将颜色空间配置成RGB，然后才能调用此接口来配置HDMI的其他属性，否则驱动会有报错。
--   有开机画面且非平滑过渡的场景下，应用上电后第一次设置属性前一定要先调用一次[ss\_mpi\_hdmi\_stop](ss_mpi_hdmi_stop.md)，否则可能会导致兼容性问题。
+-   设置属性前应用必须参考对端能力，特殊情况如对端不支持HDMI时必须先调用VDP的mpi接口[ss\_mpi\_vo\_set\_hdmi\_param](#ss_mpi_vo_set_hdmi_param)将HDMI的color space设置成RGB，然后再通过本接口将模式设置成DVI模式，否则驱动会有错误打印。
+-   关于VDP的[ss\_mpi\_vo\_set\_hdmi\_param](#ss_mpi_vo_set_hdmi_param)，使用时需要先调用HDMI的[ss\_mpi\_hdmi\_stop](#ZH-CN_TOPIC_0000002441693837)接口将HDMI的信号关断然后再调用，设置完成后需再调用HDMI的[ss\_mpi\_hdmi\_start](#ZH-CN_TOPIC_0000002408094694)接口打开信号输出。
+-   在调用此接口前一定要先调用[ss\_mpi\_hdmi\_get\_sink\_capability](#ZH-CN_TOPIC_0000002408254566)接口获取对端的能力然后合理的配置属性，特别的情况如对端不支持HDMI时需要先调用VO的[ss\_mpi\_vo\_set\_hdmi\_param](#ss_mpi_vo_set_hdmi_param)接口将颜色空间配置成RGB，然后才能调用此接口来配置HDMI的其他属性，否则驱动会有报错。
+-   有开机画面且非平滑过渡的场景下，应用上电后第一次设置属性前一定要先调用一次[ss\_mpi\_hdmi\_stop](#ZH-CN_TOPIC_0000002441693837)，否则可能会导致兼容性问题。
 
 备注：当auth\_mode设置为TD\_TRUE时驱动会强制SCDC操作，若显示设备不支持或不插HDMI线，此接口耗时可能更长。
 
 【举例】
 
-请参见[ss\_mpi\_hdmi\_register\_callback](ss_mpi_hdmi_register_callback.md)的举例。
+请参见[ss\_mpi\_hdmi\_register\_callback](#ZH-CN_TOPIC_0000002408094654)的举例。
 
 【相关主题】
 
-[ss\_mpi\_hdmi\_get\_attr](#ss_mpi_hdmi_get_attr)
+[ss\_mpi\_hdmi\_get\_attr](#ZH-CN_TOPIC_0000002408094710)
 
 ## ss\_mpi\_hdmi\_get\_attr<a name="ZH-CN_TOPIC_0000002408094710"></a>
 
@@ -672,7 +663,7 @@ td_s32 ss_mpi_hdmi_get_attr(ot_hdmi_id hdmi, ot_hdmi_attr *attr);
 </tr>
 <tr id="row5280mcpsimp"><td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.1 "><p id="p5282mcpsimp"><a name="p5282mcpsimp"></a><a name="p5282mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.2 "><p id="p5284mcpsimp"><a name="p5284mcpsimp"></a><a name="p5284mcpsimp"></a>失败，其值为<a href="错误码.md">错误码</a>。</p>
+<td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.2 "><p id="p5284mcpsimp"><a name="p5284mcpsimp"></a><a name="p5284mcpsimp"></a>失败，其值为<a href="#ZH-CN_TOPIC_0000002441693861">错误码</a>。</p>
 </td>
 </tr>
 </tbody>
@@ -685,16 +676,16 @@ td_s32 ss_mpi_hdmi_get_attr(ot_hdmi_id hdmi, ot_hdmi_attr *attr);
 
 【注意】
 
--   调用前须确保HDMI已被open，否则将返回[OT\_ERR\_HDMI\_DEV\_NOT\_OPEN](错误码.md#OT_ERR_HDMI_DEV_NOT_OPEN)。
+-   调用前须确保HDMI已被open，否则将返回[OT\_ERR\_HDMI\_DEV\_NOT\_OPEN](#OT_ERR_HDMI_DEV_NOT_OPEN)。
 -   若只设置部分属性，设置前应先获取属性，赋值需要修改的属性后再设置。
 
 【举例】
 
-请参见[ss\_mpi\_hdmi\_register\_callback](ss_mpi_hdmi_register_callback.md)的举例。
+请参见[ss\_mpi\_hdmi\_register\_callback](#ZH-CN_TOPIC_0000002408094654)的举例。
 
 【相关主题】
 
-[ss\_mpi\_hdmi\_set\_attr](#ss_mpi_hdmi_set_attr)
+[ss\_mpi\_hdmi\_set\_attr](#ZH-CN_TOPIC_0000002441693897)
 
 ## ss\_mpi\_hdmi\_start<a name="ZH-CN_TOPIC_0000002408094694"></a>
 
@@ -746,7 +737,7 @@ td_s32 ss_mpi_hdmi_start(ot_hdmi_id hdmi);
 </tr>
 <tr id="row627mcpsimp"><td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.1 "><p id="p629mcpsimp"><a name="p629mcpsimp"></a><a name="p629mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.2 "><p id="p631mcpsimp"><a name="p631mcpsimp"></a><a name="p631mcpsimp"></a>失败，其值为<a href="错误码.md">错误码</a>。</p>
+<td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.2 "><p id="p631mcpsimp"><a name="p631mcpsimp"></a><a name="p631mcpsimp"></a>失败，其值为<a href="#ZH-CN_TOPIC_0000002441693861">错误码</a>。</p>
 </td>
 </tr>
 </tbody>
@@ -759,16 +750,16 @@ td_s32 ss_mpi_hdmi_start(ot_hdmi_id hdmi);
 
 【注意】
 
--   调用前须确保HDMI已被open，否则将返回[OT\_ERR\_HDMI\_DEV\_NOT\_OPEN](错误码.md#OT_ERR_HDMI_DEV_NOT_OPEN)。
+-   调用前须确保HDMI已被open，否则将返回[OT\_ERR\_HDMI\_DEV\_NOT\_OPEN](#OT_ERR_HDMI_DEV_NOT_OPEN)。
 -   调用该接口时输出4K60且sink端能力支持，此时该接口耗时会在1s左右。如果输出4K30及以下分辨率，该接口耗时会在1s以内。
 
 【举例】
 
-请参见[ss\_mpi\_hdmi\_init](ss_mpi_hdmi_init.md)和[ss\_mpi\_hdmi\_register\_callback](ss_mpi_hdmi_register_callback.md)的举例。
+请参见[ss\_mpi\_hdmi\_init](#ZH-CN_TOPIC_0000002408094734)和[ss\_mpi\_hdmi\_register\_callback](#ZH-CN_TOPIC_0000002408094654)的举例。
 
 【相关主题】
 
-[ss\_mpi\_hdmi\_stop](#ss_mpi_hdmi_stop)
+[ss\_mpi\_hdmi\_stop](#ZH-CN_TOPIC_0000002441693837)
 
 ## ss\_mpi\_hdmi\_stop<a name="ZH-CN_TOPIC_0000002441693837"></a>
 
@@ -820,7 +811,7 @@ td_s32 ss_mpi_hdmi_stop(ot_hdmi_id hdmi);
 </tr>
 <tr id="row6252mcpsimp"><td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.1 "><p id="p6254mcpsimp"><a name="p6254mcpsimp"></a><a name="p6254mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.2 "><p id="p6256mcpsimp"><a name="p6256mcpsimp"></a><a name="p6256mcpsimp"></a>失败，其值为<a href="错误码.md">错误码</a>。</p>
+<td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.2 "><p id="p6256mcpsimp"><a name="p6256mcpsimp"></a><a name="p6256mcpsimp"></a>失败，其值为<a href="#ZH-CN_TOPIC_0000002441693861">错误码</a>。</p>
 </td>
 </tr>
 </tbody>
@@ -833,11 +824,11 @@ td_s32 ss_mpi_hdmi_stop(ot_hdmi_id hdmi);
 
 【注意】
 
-调用前须确保HDMI已被open，否则将返回[OT\_ERR\_HDMI\_DEV\_NOT\_OPEN](错误码.md#OT_ERR_HDMI_DEV_NOT_OPEN)。
+调用前须确保HDMI已被open，否则将返回[OT\_ERR\_HDMI\_DEV\_NOT\_OPEN](#OT_ERR_HDMI_DEV_NOT_OPEN)。
 
 【举例】
 
-请参见[ss\_mpi\_hdmi\_register\_callback](ss_mpi_hdmi_register_callback.md)的举例。
+请参见[ss\_mpi\_hdmi\_register\_callback](#ZH-CN_TOPIC_0000002408094654)的举例。
 
 【相关主题】
 
@@ -900,7 +891,7 @@ td_s32 ss_mpi_hdmi_get_sink_capability(ot_hdmi_id hdmi, ot_hdmi_sink_capability 
 </tr>
 <tr id="row2921mcpsimp"><td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.1 "><p id="p2923mcpsimp"><a name="p2923mcpsimp"></a><a name="p2923mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.2 "><p id="p2925mcpsimp"><a name="p2925mcpsimp"></a><a name="p2925mcpsimp"></a>失败，其值为<a href="错误码.md">错误码</a>。</p>
+<td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.2 "><p id="p2925mcpsimp"><a name="p2925mcpsimp"></a><a name="p2925mcpsimp"></a>失败，其值为<a href="#ZH-CN_TOPIC_0000002441693861">错误码</a>。</p>
 </td>
 </tr>
 </tbody>
@@ -913,9 +904,9 @@ td_s32 ss_mpi_hdmi_get_sink_capability(ot_hdmi_id hdmi, ot_hdmi_sink_capability 
 
 【注意】
 
--   调用前须确保HDMI已被open，否则将返回[OT\_ERR\_HDMI\_DEV\_NOT\_OPEN](错误码.md#OT_ERR_HDMI_DEV_NOT_OPEN)。
+-   调用前须确保HDMI已被open，否则将返回[OT\_ERR\_HDMI\_DEV\_NOT\_OPEN](#OT_ERR_HDMI_DEV_NOT_OPEN)。
 -   应在HDMI启动且插入线缆之后调用。
--   驱动会在应用调用[ss\_mpi\_hdmi\_open](ss_mpi_hdmi_open.md)后读取显示设备的EDID，读取和解析过程需要一定时间。因此，若应用注册HDMI事件回调，则建议在检测到插入事件后调用；若应用不注册回调，则在open HDMI后延时1\~2秒再调用此接口（若不延时，则可能出现获取失败）。
+-   驱动会在应用调用[ss\_mpi\_hdmi\_open](#ZH-CN_TOPIC_0000002441654053)后读取显示设备的EDID，读取和解析过程需要一定时间。因此，若应用注册HDMI事件回调，则建议在检测到插入事件后调用；若应用不注册回调，则在open HDMI后延时1\~2秒再调用此接口（若不延时，则可能出现获取失败）。
 
 【举例】
 
@@ -940,7 +931,7 @@ ss_mpi_hdmi_get_sink_capability(OT_HDMI_ID_0, &st_sink_cap);
 
 【相关主题】
 
-[ss\_mpi\_hdmi\_force\_get\_edid](#ss_mpi_hdmi_force_get_edid)
+[ss\_mpi\_hdmi\_force\_get\_edid](#ZH-CN_TOPIC_0000002441693877)
 
 ## ss\_mpi\_hdmi\_force\_get\_edid<a name="ZH-CN_TOPIC_0000002441693877"></a>
 
@@ -999,7 +990,7 @@ td_s32 ss_mpi_hdmi_force_get_edid(ot_hdmi_id hdmi, ot_hdmi_edid *edid_data);
 </tr>
 <tr id="row6366mcpsimp"><td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.1 "><p id="p6368mcpsimp"><a name="p6368mcpsimp"></a><a name="p6368mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.2 "><p id="p6370mcpsimp"><a name="p6370mcpsimp"></a><a name="p6370mcpsimp"></a>失败，其值为<a href="错误码.md">错误码</a>。</p>
+<td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.2 "><p id="p6370mcpsimp"><a name="p6370mcpsimp"></a><a name="p6370mcpsimp"></a>失败，其值为<a href="#ZH-CN_TOPIC_0000002441693861">错误码</a>。</p>
 </td>
 </tr>
 </tbody>
@@ -1012,16 +1003,16 @@ td_s32 ss_mpi_hdmi_force_get_edid(ot_hdmi_id hdmi, ot_hdmi_edid *edid_data);
 
 【注意】
 
--   调用前须确保HDMI已被open，否则将返回[OT\_ERR\_HDMI\_DEV\_NOT\_OPEN](错误码.md#OT_ERR_HDMI_DEV_NOT_OPEN)。
+-   调用前须确保HDMI已被open，否则将返回[OT\_ERR\_HDMI\_DEV\_NOT\_OPEN](#OT_ERR_HDMI_DEV_NOT_OPEN)。
 -   HDMI内部在线缆插入后已从Sink获取EDID。该API为强制获取EDID，一般情况下不需使用。
 
 【举例】
 
-请参见[ss\_mpi\_hdmi\_get\_sink\_capability](ss_mpi_hdmi_get_sink_capability.md)。
+请参见[ss\_mpi\_hdmi\_get\_sink\_capability](#ZH-CN_TOPIC_0000002408254566)。
 
 【相关主题】
 
-[ss\_mpi\_hdmi\_get\_sink\_capability](#ss_mpi_hdmi_get_sink_capability)
+[ss\_mpi\_hdmi\_get\_sink\_capability](#ZH-CN_TOPIC_0000002408254566)
 
 ## ss\_mpi\_hdmi\_register\_callback<a name="ZH-CN_TOPIC_0000002408094654"></a>
 
@@ -1080,7 +1071,7 @@ td_s32 ss_mpi_hdmi_register_callback(ot_hdmi_id hdmi, const ot_hdmi_callback_fun
 </tr>
 <tr id="row926mcpsimp"><td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.1 "><p id="p928mcpsimp"><a name="p928mcpsimp"></a><a name="p928mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.2 "><p id="p930mcpsimp"><a name="p930mcpsimp"></a><a name="p930mcpsimp"></a>失败，其值为<a href="错误码.md">错误码</a>。</p>
+<td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.2 "><p id="p930mcpsimp"><a name="p930mcpsimp"></a><a name="p930mcpsimp"></a>失败，其值为<a href="#ZH-CN_TOPIC_0000002441693861">错误码</a>。</p>
 </td>
 </tr>
 </tbody>
@@ -1093,13 +1084,13 @@ td_s32 ss_mpi_hdmi_register_callback(ot_hdmi_id hdmi, const ot_hdmi_callback_fun
 
 【注意】
 
--   调用前须确保HDMI已被open，否则将返回[OT\_ERR\_HDMI\_DEV\_NOT\_OPEN](错误码.md#OT_ERR_HDMI_DEV_NOT_OPEN)。
+-   调用前须确保HDMI已被open，否则将返回[OT\_ERR\_HDMI\_DEV\_NOT\_OPEN](#OT_ERR_HDMI_DEV_NOT_OPEN)。
 -   建议用户注册HDMI事件回调函数。例如，当产生热插拔事件时，可以通过注册的回调函数读取热插拔后产生的能力集信息为依据更改HDMI的属性，然后重新启动HDMI，使HDMI的属性适配新插入的对端显示器/电视。若用户不注册事件回调函数，则当事件产生时，HDMI内部会采取默认的处理方式。
--   若用户注册了事件回调函数，则退出HDMI前应调用[ss\_mpi\_hdmi\_unregister\_callback](ss_mpi_hdmi_unregister_callback.md)注销该回调函数，否则会有内存泄漏的问题。
+-   若用户注册了事件回调函数，则退出HDMI前应调用[ss\_mpi\_hdmi\_unregister\_callback](#ZH-CN_TOPIC_0000002408254562)注销该回调函数，否则会有内存泄漏的问题。
 -   若用户没有注册回调函数，则驱动报的事件会走内核回调处理。
 -   内核事件回调函数只在用户start HDMI之后才能正常响应拔插事件。
--   内核回调函数中若事件为HPD事件驱动会自动start HMDI，若事件为UNHPD事件驱动会自动stop HDMI。
--   重复注册同一回调函数与参数将返回[OT\_ERR\_HDMI\_CALLBACK\_ALREADY](错误码.md#OT_HDMI_CALLBACK_ALREADY)。
+-   内核回调函数中若事件为HPD事件驱动会自动start HDMI，若事件为UNHPD事件驱动会自动stop HDMI。
+-   重复注册同一回调函数与参数将返回[OT\_ERR\_HDMI\_CALLBACK\_ALREADY](#OT_HDMI_CALLBACK_ALREADY)。
 -   建议用户最多同时注册10个不同的回调函数，注册超过10个的回调函数将会影响之前注册的回调函数使用。
 -   若同时注册了多个不同的事件回调函数，当一个事件产生时，HDMI会按事件回调函数注册先后顺序，遍历事件池，响应用户注册的回调函数。
 
@@ -1265,7 +1256,7 @@ hdmi_args_s g_st_hdmi_args;
 
 【相关主题】
 
-[ss\_mpi\_hdmi\_unregister\_callback](#ss_mpi_hdmi_unregister_callback)
+[ss\_mpi\_hdmi\_unregister\_callback](#ZH-CN_TOPIC_0000002408254562)
 
 ## ss\_mpi\_hdmi\_unregister\_callback<a name="ZH-CN_TOPIC_0000002408254562"></a>
 
@@ -1324,7 +1315,7 @@ td_s32 ss_mpi_hdmi_unregister_callback(ot_hdmi_id hdmi, const ot_hdmi_callback_f
 </tr>
 <tr id="row3856mcpsimp"><td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.1 "><p id="p3858mcpsimp"><a name="p3858mcpsimp"></a><a name="p3858mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.2 "><p id="p3860mcpsimp"><a name="p3860mcpsimp"></a><a name="p3860mcpsimp"></a>失败，其值为<a href="错误码.md">错误码</a>。</p>
+<td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.2 "><p id="p3860mcpsimp"><a name="p3860mcpsimp"></a><a name="p3860mcpsimp"></a>失败，其值为<a href="#ZH-CN_TOPIC_0000002441693861">错误码</a>。</p>
 </td>
 </tr>
 </tbody>
@@ -1337,17 +1328,17 @@ td_s32 ss_mpi_hdmi_unregister_callback(ot_hdmi_id hdmi, const ot_hdmi_callback_f
 
 【注意】
 
--   调用前须确保HDMI已被open，否则将返回[OT\_ERR\_HDMI\_DEV\_NOT\_OPEN](错误码.md#OT_ERR_HDMI_DEV_NOT_OPEN)。
+-   调用前须确保HDMI已被open，否则将返回[OT\_ERR\_HDMI\_DEV\_NOT\_OPEN](#OT_ERR_HDMI_DEV_NOT_OPEN)。
 -   若用户注册了回调函数，则退出HDMI前，应使用撤销HDMI事件回调函数。
--   重复撤销或未注册就撤销将返回[OT\_ERR\_HDMI\_CALLBACK\_NOT\_REGISTER](错误码.md#OT_HDMI_CALLBACK_NOT_REGISTER)。
+-   重复撤销或未注册就撤销将返回[OT\_ERR\_HDMI\_CALLBACK\_NOT\_REGISTER](#OT_HDMI_CALLBACK_NOT_REGISTER)。
 
 【举例】
 
-见[ss\_mpi\_hdmi\_register\_callback](ss_mpi_hdmi_register_callback.md)。
+见[ss\_mpi\_hdmi\_register\_callback](#ZH-CN_TOPIC_0000002408094654)。
 
 【相关主题】
 
-[ss\_mpi\_hdmi\_register\_callback](#ss_mpi_hdmi_register_callback)
+[ss\_mpi\_hdmi\_register\_callback](#ZH-CN_TOPIC_0000002408094654)
 
 ## ss\_mpi\_hdmi\_set\_infoframe<a name="ZH-CN_TOPIC_0000002441693881"></a>
 
@@ -1406,7 +1397,7 @@ td_s32 ss_mpi_hdmi_set_infoframe(ot_hdmi_id hdmi, const ot_hdmi_infoframe *infof
 </tr>
 <tr id="row3256mcpsimp"><td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.1 "><p id="p3258mcpsimp"><a name="p3258mcpsimp"></a><a name="p3258mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.2 "><p id="p3260mcpsimp"><a name="p3260mcpsimp"></a><a name="p3260mcpsimp"></a>失败，其值为<a href="错误码.md">错误码</a>。</p>
+<td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.2 "><p id="p3260mcpsimp"><a name="p3260mcpsimp"></a><a name="p3260mcpsimp"></a>失败，其值为<a href="#ZH-CN_TOPIC_0000002441693861">错误码</a>。</p>
 </td>
 </tr>
 </tbody>
@@ -1419,7 +1410,7 @@ td_s32 ss_mpi_hdmi_set_infoframe(ot_hdmi_id hdmi, const ot_hdmi_infoframe *infof
 
 【注意】
 
--   调用前须确保HDMI已被open，否则将返回[OT\_ERR\_HDMI\_DEV\_NOT\_OPEN](错误码.md#OT_ERR_HDMI_DEV_NOT_OPEN)。
+-   调用前须确保HDMI已被open，否则将返回[OT\_ERR\_HDMI\_DEV\_NOT\_OPEN](#OT_ERR_HDMI_DEV_NOT_OPEN)。
 -   该接口属于高级接口，一般不需要调用。若用户使用，则应根据已设置的音视频相关属性（如enVideoFORMAT），及遵从《High-Definition Multimedia Interface Specification Version 1.4b》、《High-Definition Multimedia Interface Specification Version 2.0》、《CEA-861-D》与《CEA-861-F》标准基础上设置信息帧，不依据音视频属性遵从标准发送信息帧的行为是未定义的。调用此接口，可能会造成显示异常。
 
 【举例】
@@ -1438,13 +1429,13 @@ ss_mpi_hdmi_start (OT_HDMI_ID_0);
 /*设置AVI的有效宽高比*/
 ss_mpi_hdmi_get_infoframe(OT_HDMI_ID_0, OT_INFOFRAME_TYPE_AVI, &st_infoframe);
 st_infoframe.infoframe_type = OT_INFOFRAME_TYPE_AVI;
-st_infoframe.infor_unit.avi_infoframe.active_aspect_ratio = OT_HDMI_PIC_ASP_RATIO_16TO9;
+st_infoframe.infoframe_unit.avi_infoframe.active_aspect_ratio = OT_HDMI_PIC_ASP_RATIO_16TO9;
 ss_mpi_hdmi_set_infoframe(OT_HDMI_ID_0, &st_infoframe);
 ```
 
 【相关主题】
 
-[ss\_mpi\_hdmi\_get\_infoframe](#ss_mpi_hdmi_get_infoframe)
+[ss\_mpi\_hdmi\_get\_infoframe](#ZH-CN_TOPIC_0000002441693885)
 
 ## ss\_mpi\_hdmi\_get\_infoframe<a name="ZH-CN_TOPIC_0000002441693885"></a>
 
@@ -1510,7 +1501,7 @@ td_s32 ss_mpi_hdmi_get_infoframe(ot_hdmi_id hdmi, ot_hdmi_infoframe_type infofra
 </tr>
 <tr id="row2734mcpsimp"><td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.1 "><p id="p2736mcpsimp"><a name="p2736mcpsimp"></a><a name="p2736mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.2 "><p id="p2738mcpsimp"><a name="p2738mcpsimp"></a><a name="p2738mcpsimp"></a>失败，其值为<a href="错误码.md">错误码</a>。</p>
+<td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.2 "><p id="p2738mcpsimp"><a name="p2738mcpsimp"></a><a name="p2738mcpsimp"></a>失败，其值为<a href="#ZH-CN_TOPIC_0000002441693861">错误码</a>。</p>
 </td>
 </tr>
 </tbody>
@@ -1524,16 +1515,16 @@ td_s32 ss_mpi_hdmi_get_infoframe(ot_hdmi_id hdmi, ot_hdmi_infoframe_type infofra
 【注意】
 
 -   该接口属于高级接口，一般不需要调用。
--   调用前须确保HDMI已被open，否则将返回[OT\_ERR\_HDMI\_DEV\_NOT\_OPEN](错误码.md#OT_ERR_HDMI_DEV_NOT_OPEN)。
--   调用前须确保单板上电后己调用过[ss\_mpi\_hdmi\_set\_attr](ss_mpi_hdmi_set_attr.md)，否则通过此接口获取到的部分参数可能是非法值。
+-   调用前须确保HDMI已被open，否则将返回[OT\_ERR\_HDMI\_DEV\_NOT\_OPEN](#OT_ERR_HDMI_DEV_NOT_OPEN)。
+-   调用前须确保单板上电后已调用过[ss\_mpi\_hdmi\_set\_attr](#ZH-CN_TOPIC_0000002441693897)，否则通过此接口获取到的部分参数可能是非法值。
 
 【举例】
 
-请参考[ss\_mpi\_hdmi\_set\_infoframe](#ss_mpi_hdmi_set_infoframe)
+请参考[ss\_mpi\_hdmi\_set\_infoframe](#ZH-CN_TOPIC_0000002441693881)
 
 【相关主题】
 
-[ss\_mpi\_hdmi\_set\_infoframe](#ss_mpi_hdmi_set_infoframe)
+[ss\_mpi\_hdmi\_set\_infoframe](#ZH-CN_TOPIC_0000002441693881)
 
 ## ss\_mpi\_hdmi\_set\_hw\_spec<a name="ZH-CN_TOPIC_0000002408254618"></a>
 
@@ -1592,7 +1583,7 @@ td_s32 ss_mpi_hdmi_set_hw_spec(ot_hdmi_id hdmi, const ot_hdmi_hw_spec *hw_spec);
 </tr>
 <tr id="row4131mcpsimp"><td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.1 "><p id="p4133mcpsimp"><a name="p4133mcpsimp"></a><a name="p4133mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.2 "><p id="p4135mcpsimp"><a name="p4135mcpsimp"></a><a name="p4135mcpsimp"></a>失败，其值为<a href="错误码.md">错误码</a>。</p>
+<td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.2 "><p id="p4135mcpsimp"><a name="p4135mcpsimp"></a><a name="p4135mcpsimp"></a>失败，其值为<a href="#ZH-CN_TOPIC_0000002441693861">错误码</a>。</p>
 </td>
 </tr>
 </tbody>
@@ -1606,12 +1597,12 @@ td_s32 ss_mpi_hdmi_set_hw_spec(ot_hdmi_id hdmi, const ot_hdmi_hw_spec *hw_spec);
 【注意】
 
 -   正常情况请勿使用该接口。若必要情况下需要设置HDMI硬件指标参数，请务必确保参数设置后HDMI电气特性符合协议标准，否则可能出现不可预知的兼容性问题。
--   调用前须确保HDMI已被open，否则将返回[OT\_ERR\_HDMI\_DEV\_NOT\_OPEN](错误码.md#OT_ERR_HDMI_DEV_NOT_OPEN)。
--   若需要设置HDMI硬件指标参数，请务必在调用[ss\_mpi\_hdmi\_set\_attr](ss_mpi_hdmi_set_attr.md)后调用此接口。
--   调用此接口前请务必先调用[ss\_mpi\_hdmi\_get\_hw\_spec](ss_mpi_hdmi_get_hw_spec.md)获取当前所有频段的指标参数。根据实际需求调整对应频段的具体参数\(参考[ot\_hdmi\_hw\_spec](ot_hdmi_hw_spec.md)\)。
+-   调用前须确保HDMI已被open，否则将返回[OT\_ERR\_HDMI\_DEV\_NOT\_OPEN](#OT_ERR_HDMI_DEV_NOT_OPEN)。
+-   若需要设置HDMI硬件指标参数，请务必在调用[ss\_mpi\_hdmi\_set\_attr](#ZH-CN_TOPIC_0000002441693897)后调用此接口。
+-   调用此接口前请务必先调用[ss\_mpi\_hdmi\_get\_hw\_spec](#ZH-CN_TOPIC_0000002408094690)获取当前所有频段的指标参数。根据实际需求调整对应频段的具体参数\(参考[ot\_hdmi\_hw\_spec](#ZH-CN_TOPIC_0000002441693849)\)。
 -   根据不同分辨率，色深\(Deep Color\)以及颜色空间\(Color Space\)可划分为四个频段，如[表1](#_Ref528253079)所示。
 
-调用该接口**调试**硬件指标时，分辨率，色深以及颜色空间必须按下表设置，其中\[25M, 100M\]TMDS时钟频段需要下表两种配置都要调试。同时必须将[ot\_hdmi\_attr](ot_hdmi_attr.md)成员auth\_mode\_en设置成TD\_TRUE。若调试结束后，**正常使用**该接口设置指标参数时，请必须将[ot\_hdmi\_attr](ot_hdmi_attr.md)成员auth\_mode\_en设置成TD\_FALSE。
+调用该接口**调试**硬件指标时，分辨率，色深以及颜色空间必须按下表设置，其中\[25M, 100M\]TMDS时钟频段需要下表两种配置都要调试。同时必须将[ot\_hdmi\_attr](#ZH-CN_TOPIC_0000002408094686)成员auth\_mode\_en设置成TD\_TRUE。若调试结束后，**正常使用**该接口设置指标参数时，请必须将[ot\_hdmi\_attr](#ZH-CN_TOPIC_0000002408094686)成员auth\_mode\_en设置成TD\_FALSE。
 
 **表 1**  色深\(Deep Color\)以及颜色空间\(Color Space\)频段表
 
@@ -1673,7 +1664,7 @@ td_s32 ss_mpi_hdmi_set_hw_spec(ot_hdmi_id hdmi, const ot_hdmi_hw_spec *hw_spec);
 </tbody>
 </table>
 
--   其他注意事项请参考[ot\_hdmi\_hw\_spec](ot_hdmi_hw_spec.md)。
+-   其他注意事项请参考[ot\_hdmi\_hw\_spec](#ZH-CN_TOPIC_0000002441693849)。
 -   color space需要通过VO的ss\_mpi\_vo\_set\_hdmi\_param接口设置。此接口请参考《MPP 媒体处理软件V5.0 开发参考》。
 -   如果用户有开机画面场景，且用户使用此接口自行配置了HDMI硬件指标参数，请在开机画面场景下使用相关的函数设置相同的HDMI硬件指标参数。
 
@@ -1737,7 +1728,7 @@ ss_mpi_hdmi_deinit();
 
 【相关主题】
 
-[ss\_mpi\_hdmi\_get\_hw\_spec](#ss_mpi_hdmi_get_hw_spec)
+[ss\_mpi\_hdmi\_get\_hw\_spec](#ZH-CN_TOPIC_0000002408094690)
 
 ## ss\_mpi\_hdmi\_get\_hw\_spec<a name="ZH-CN_TOPIC_0000002408094690"></a>
 
@@ -1796,7 +1787,7 @@ td_s32 ss_mpi_hdmi_get_hw_spec(ot_hdmi_id hdmi, ot_hdmi_hw_spec *hw_spec);
 </tr>
 <tr id="row3120mcpsimp"><td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.1 "><p id="p3122mcpsimp"><a name="p3122mcpsimp"></a><a name="p3122mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.2 "><p id="p3124mcpsimp"><a name="p3124mcpsimp"></a><a name="p3124mcpsimp"></a>失败，其值为<a href="错误码.md">错误码</a>。</p>
+<td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.2 "><p id="p3124mcpsimp"><a name="p3124mcpsimp"></a><a name="p3124mcpsimp"></a>失败，其值为<a href="#ZH-CN_TOPIC_0000002441693861">错误码</a>。</p>
 </td>
 </tr>
 </tbody>
@@ -1809,15 +1800,15 @@ td_s32 ss_mpi_hdmi_get_hw_spec(ot_hdmi_id hdmi, ot_hdmi_hw_spec *hw_spec);
 
 【注意】
 
-调用前须确保HDMI已被open，否则将返回[OT\_ERR\_HDMI\_DEV\_NOT\_OPEN](错误码.md#OT_ERR_HDMI_DEV_NOT_OPEN)。
+调用前须确保HDMI已被open，否则将返回[OT\_ERR\_HDMI\_DEV\_NOT\_OPEN](#OT_ERR_HDMI_DEV_NOT_OPEN)。
 
 【举例】
 
-参考[ss\_mpi\_hdmi\_set\_hw\_spec](ss_mpi_hdmi_set_hw_spec.md)。
+参考[ss\_mpi\_hdmi\_set\_hw\_spec](#ZH-CN_TOPIC_0000002408254618)。
 
 【相关主题】
 
-[ss\_mpi\_hdmi\_set\_hw\_spec](#ss_mpi_hdmi_set_hw_spec)
+[ss\_mpi\_hdmi\_set\_hw\_spec](#ZH-CN_TOPIC_0000002408254618)
 
 ## ss\_mpi\_hdmi\_set\_avmute<a name="ZH-CN_TOPIC_0000002441693833"></a>
 
@@ -1876,7 +1867,7 @@ td_s32 ss_mpi_hdmi_set_avmute(ot_hdmi_id hdmi, td_bool avmute_en);
 </tr>
 <tr id="row5973mcpsimp"><td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.1 "><p id="p5975mcpsimp"><a name="p5975mcpsimp"></a><a name="p5975mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.2 "><p id="p5977mcpsimp"><a name="p5977mcpsimp"></a><a name="p5977mcpsimp"></a>失败，其值为<a href="错误码.md">错误码</a>。</p>
+<td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.2 "><p id="p5977mcpsimp"><a name="p5977mcpsimp"></a><a name="p5977mcpsimp"></a>失败，其值为<a href="#ZH-CN_TOPIC_0000002441693861">错误码</a>。</p>
 </td>
 </tr>
 </tbody>
@@ -1889,11 +1880,11 @@ td_s32 ss_mpi_hdmi_set_avmute(ot_hdmi_id hdmi, td_bool avmute_en);
 
 【注意】
 
--   调用前须确保HDMI已被open，否则将返回[OT\_ERR\_HDMI\_DEV\_NOT\_OPEN](错误码.md#OT_ERR_HDMI_DEV_NOT_OPEN)。
+-   调用前须确保HDMI已被open，否则将返回[OT\_ERR\_HDMI\_DEV\_NOT\_OPEN](#OT_ERR_HDMI_DEV_NOT_OPEN)。
 -   由于不同设备对AVMUTE包有不同的响应，在有些设备上有可能会导致黑屏、绿屏等异常现象，建议不要使用此接口。
--   AVMUTE的设置操作在start、stop接口中均有涉及，其中在[ss\_mpi\_hdmi\_start](ss_mpi_hdmi_start.md)接口中驱动会clean avmute，在[ss\_mpi\_hdmi\_stop](ss_mpi_hdmi_stop.md)接口中驱动会set avmute。
+-   AVMUTE的设置操作在start、stop接口中均有涉及，其中在[ss\_mpi\_hdmi\_start](#ZH-CN_TOPIC_0000002408094694)接口中驱动会clean avmute，在[ss\_mpi\_hdmi\_stop](#ZH-CN_TOPIC_0000002441693837)接口中驱动会set avmute。
 -   用户通过此接口设置了AVMUTE之后，如果后续有stop、start等操作时，AVMUTE的状态会被改变，最终状态可能会与用户前面设置的值不一样。
--   没有注册回调函数时用户不调用[ss\_mpi\_hdmi\_start](ss_mpi_hdmi_start.md)或[ss\_mpi\_hdmi\_stop](ss_mpi_hdmi_stop.md)AVMUTE状态也可能被改变，详细说明请参看[ss\_mpi\_hdmi\_register\_callback](ss_mpi_hdmi_register_callback.md)接口的注意事项。
+-   没有注册回调函数时用户不调用[ss\_mpi\_hdmi\_start](#ZH-CN_TOPIC_0000002408094694)或[ss\_mpi\_hdmi\_stop](#ZH-CN_TOPIC_0000002441693837)AVMUTE状态也可能被改变，详细说明请参看[ss\_mpi\_hdmi\_register\_callback](#ZH-CN_TOPIC_0000002408094654)接口的注意事项。
 -   请在对端设备稳定时调用该接口，可能存在启动业务时对端设备HPD不稳定从而重新start hdmi，最终会导致set avmute失败的情况。
 
 【举例】
@@ -1920,7 +1911,7 @@ ss_mpi_hdmi_deinit();
 
 【相关主题】
 
-[ss\_mpi\_hdmi\_set\_hw\_spec](#ss_mpi_hdmi_set_hw_spec)
+[ss\_mpi\_hdmi\_set\_hw\_spec](#ZH-CN_TOPIC_0000002408254618)
 
 ## ss\_mpi\_hdmi\_set\_mod\_param<a name="ZH-CN_TOPIC_0000002408094658"></a>
 
@@ -1979,7 +1970,7 @@ td_s32 ss_mpi_hdmi_set_mod_param(ot_hdmi_id hdmi, const ot_hdmi_mod_param *mod_p
 </tr>
 <tr id="row5723mcpsimp"><td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.1 "><p id="p5725mcpsimp"><a name="p5725mcpsimp"></a><a name="p5725mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.2 "><p id="p5727mcpsimp"><a name="p5727mcpsimp"></a><a name="p5727mcpsimp"></a>失败，其值为<a href="错误码.md">错误码</a>。</p>
+<td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.2 "><p id="p5727mcpsimp"><a name="p5727mcpsimp"></a><a name="p5727mcpsimp"></a>失败，其值为<a href="#ZH-CN_TOPIC_0000002441693861">错误码</a>。</p>
 </td>
 </tr>
 </tbody>
@@ -1992,10 +1983,10 @@ td_s32 ss_mpi_hdmi_set_mod_param(ot_hdmi_id hdmi, const ot_hdmi_mod_param *mod_p
 
 【注意】
 
--   调用前须确保HDMI已被open，否则将返回[OT\_ERR\_HDMI\_DEV\_NOT\_OPEN](错误码.md#OT_ERR_HDMI_DEV_NOT_OPEN)。
--   若需调用此接口，请在[ss\_mpi\_hdmi\_set\_attr](ss_mpi_hdmi_set_attr.md)接口之前完成设置。
+-   调用前须确保HDMI已被open，否则将返回[OT\_ERR\_HDMI\_DEV\_NOT\_OPEN](#OT_ERR_HDMI_DEV_NOT_OPEN)。
+-   若需调用此接口，请在[ss\_mpi\_hdmi\_set\_attr](#ZH-CN_TOPIC_0000002441693897)接口之前完成设置。
 -   不同走线长度对应不同的指标参数，使用时请根据实际的情况选择正确的参数。
--   枚举值与走线长度的对应关系请参考[ot\_hdmi\_trace\_len](ot_hdmi_trace_len.md)的说明。
+-   枚举值与走线长度的对应关系请参考[ot\_hdmi\_trace\_len](#ZH-CN_TOPIC_0000002441654005)的说明。
 -   若不设置则驱动对每个解决方案会有一个默认的尺寸：
     -   SS528V100默认2.5inch
     -   SS625V100默认3.5inch
@@ -2018,7 +2009,7 @@ td_s32 ss_mpi_hdmi_set_mod_param(ot_hdmi_id hdmi, const ot_hdmi_mod_param *mod_p
 
 【相关主题】
 
-[ss\_mpi\_hdmi\_get\_mod\_param](#ss_mpi_hdmi_get_mod_param)
+[ss\_mpi\_hdmi\_get\_mod\_param](#ZH-CN_TOPIC_0000002441653985)
 
 ## ss\_mpi\_hdmi\_get\_mod\_param<a name="ZH-CN_TOPIC_0000002441653985"></a>
 
@@ -2077,7 +2068,7 @@ td_s32 ss_mpi_hdmi_get_mod_param(ot_hdmi_id hdmi, ot_hdmi_mod_param *mod_param);
 </tr>
 <tr id="row155mcpsimp"><td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.1 "><p id="p157mcpsimp"><a name="p157mcpsimp"></a><a name="p157mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.2 "><p id="p159mcpsimp"><a name="p159mcpsimp"></a><a name="p159mcpsimp"></a>失败，其值为<a href="错误码.md">错误码</a>。</p>
+<td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.2 "><p id="p159mcpsimp"><a name="p159mcpsimp"></a><a name="p159mcpsimp"></a>失败，其值为<a href="#ZH-CN_TOPIC_0000002441693861">错误码</a>。</p>
 </td>
 </tr>
 </tbody>
@@ -2090,7 +2081,7 @@ td_s32 ss_mpi_hdmi_get_mod_param(ot_hdmi_id hdmi, ot_hdmi_mod_param *mod_param);
 
 【注意】
 
-调用前须确保HDMI已被open，否则将返回[OT\_ERR\_HDMI\_DEV\_NOT\_OPEN](错误码.md#OT_ERR_HDMI_DEV_NOT_OPEN)。
+调用前须确保HDMI已被open，否则将返回[OT\_ERR\_HDMI\_DEV\_NOT\_OPEN](#OT_ERR_HDMI_DEV_NOT_OPEN)。
 
 【举例】
 
@@ -2098,124 +2089,69 @@ td_s32 ss_mpi_hdmi_get_mod_param(ot_hdmi_id hdmi, ot_hdmi_mod_param *mod_param);
 
 【相关主题】
 
-[ss\_mpi\_hdmi\_set\_mod\_param](#ss_mpi_hdmi_set_mod_param)
+[ss\_mpi\_hdmi\_set\_mod\_param](#ZH-CN_TOPIC_0000002408094658)
 
 # 数据类型<a name="ZH-CN_TOPIC_0000002441693829"></a>
 
 HDMI相关数据类型定义如下：
 
--   [ot\_hdmi\_id](ot_hdmi_id.md)：定义HDMI接口号。
--   [ot\_hdmi\_callback](ot_hdmi_callback.md)：定义HDMI回调函数指针类型。
--   [ot\_hdmi\_callback\_func](ot_hdmi_callback_func.md)：定义HDMI回调函数结构体。
--   [ot\_hdmi\_event\_type](ot_hdmi_event_type.md)：定义HDMI事件通知枚举。
--   [ot\_hdmi\_attr](ot_hdmi_attr.md)：定义HDMI属性结构体。
--   [ot\_hdmi\_video\_format](ot_hdmi_video_format.md)：定义HDMI视频制式枚举。
--   [ot\_hdmi\_video\_mode](ot_hdmi_video_mode.md)：定义HDMI颜色空间类型枚举。
--   [ot\_hdmi\_deep\_color](ot_hdmi_deep_color.md)：定义HDMI深色模式枚举。
--   [ot\_hdmi\_sample\_rate](ot_hdmi_sample_rate.md)：定义HDMI音频输出采样率枚举。
--   [ot\_hdmi\_bit\_depth](ot_hdmi_bit_depth.md)：定义HDMI音频输出采样位宽枚举。
--   [ot\_hdmi\_audio\_format\_code](ot_hdmi_audio_format_code.md)：定义HDMI音频格式枚举。
--   [ot\_hdmi\_audio\_info](ot_hdmi_audio_info.md)：定义HDMI音频能力集信息。
--   [ot\_hdmi\_timing\_info](ot_hdmi_timing_info.md)：定义HDMI详细时序信息。
--   [ot\_hdmi\_detail\_timing](ot_hdmi_detail_timing.md)：定义HDMI详细时序能力集信息。
--   [ot\_hdmi\_sink\_capability](ot_hdmi_sink_capability.md)：定义HDMI Sink端能力集结构体。
--   [ot\_hdmi\_edid](ot_hdmi_edid.md)：定义HDMI EDID信息结构体。
--   [ot\_hdmi\_infoframe\_type](ot_hdmi_infoframe_type.md)：定义HDMI信息帧类型枚举。
--   [ot\_hdmi\_infoframe](ot_hdmi_infoframe.md)：定义HDMI信息帧结构体。
--   [ot\_hdmi\_infoframe\_unit](ot_hdmi_infoframe_unit.md)：定义HDMI信息帧单元结构体。
--   [ot\_hdmi\_avi\_infoframe](ot_hdmi_avi_infoframe.md)：定义AVI信息帧（版本2）单元结构体。
--   [ot\_hdmi\_audio\_infoframe](ot_hdmi_audio_infoframe.md)：定义AUDIO信息帧（版本1）单元结构体。
--   [ot\_hdmi\_vendorspec\_infoframe](ot_hdmi_vendorspec_infoframe.md)：vendor信息帧结构体。
--   [ot\_hdmi\_color\_space](ot_hdmi_color_space.md)：定义颜色空间枚举。
--   [ot\_hdmi\_bar\_info](ot_hdmi_bar_info.md)：定义Bar信息枚举。
--   [ot\_hdmi\_scan\_info](ot_hdmi_scan_info.md)：定义Scan信息枚举。
--   [ot\_hdmi\_colorimetry](ot_hdmi_colorimetry.md)：定义Colorimetry信息枚举。
--   [ot\_hdmi\_ex\_colorimetry](ot_hdmi_ex_colorimetry.md)：定义扩展Colorimetry信息枚举
--   [ot\_pic\_aspect\_ratio](ot_pic_aspect_ratio.md)：定义图像宽高比枚举。
--   [ot\_hdmi\_active\_aspect\_ratio](ot_hdmi_active_aspect_ratio.md)：定义实际图像宽高比枚举。
--   [ot\_hdmi\_pic\_scaline](ot_hdmi_pic_scaline.md)：定义图像扫描信息枚举。
--   [ot\_hdmi\_rgb\_quant\_range](ot_hdmi_rgb_quant_range.md)：定义RGB量化范围枚举。
--   [ot\_hdmi\_pixel\_repetition](ot_hdmi_pixel_repetition.md)：定义像素复制次数枚举。
--   [ot\_hdmi\_content\_type](ot_hdmi_content_type.md)：定义内容信息枚举。
--   [ot\_hdmi\_ycc\_quant\_range](ot_hdmi_ycc_quant_range.md)：定义YCC量化范围枚举。
--   [ot\_hdmi\_audio\_chn\_cnt](ot_hdmi_audio_chn_cnt.md)：定义音频通道数枚举。
--   [ot\_hdmi\_coding\_type](ot_hdmi_coding_type.md)：定义音频编码类型枚举。
--   [ot\_hdmi\_audio\_sample\_size](ot_hdmi_audio_sample_size.md)：定义音频采样大小枚举。
--   [ot\_hdmi\_audio\_sample\_freq](ot_hdmi_audio_sample_freq.md)：定义音频采样频率枚举。
--   [ot\_hdmi\_level\_shift\_val](ot_hdmi_level_shift_val.md)：定义音频Shift信息枚举。
--   [ot\_hdmi\_lfe\_playback\_level](ot_hdmi_lfe_playback_level.md)：定义音频Playback信息枚举。
--   [ot\_hdmi\_eotf](ot_hdmi_eotf.md)：定义支持的EOTF能力结构体。
--   [ot\_hdmi\_hdr\_metadata\_type](ot_hdmi_hdr_metadata_type.md)：定义支持metadata类型结构体。
--   [ot\_hdmi\_hdr\_capability](ot_hdmi_hdr_capability.md)：定义HDR能力结构体。
--   [ot\_hdmi\_hw\_param](ot_hdmi_hw_param.md)：HDMI指标参数结构体。
--   [ot\_hdmi\_hw\_spec](ot_hdmi_hw_spec.md)：HDMI指标参数。
--   [ot\_hdmi\_mod\_param](ot_hdmi_mod_param.md)：HDMI模块参数设置。
--   [ot\_hdmi\_trace\_len](ot_hdmi_trace_len.md)：HDMI信号线在PCB板上的走线长度枚举。
--   [OT\_HDMI\_VENDOR\_USER\_DATA\_MAX\_LEN](OT_HDMI_VENDOR_USER_DATA_MAX_LEN.md)：最大自定义vendor数据的长度。
--   [OT\_HDMI\_MAX\_AUDIO\_CAPBILITY\_CNT](OT_HDMI_MAX_AUDIO_CAPBILITY_CNT.md)：能获取的音频能力个数。
--   [OT\_HDMI\_MAX\_SAMPLE\_RATE\_NUM](OT_HDMI_MAX_SAMPLE_RATE_NUM.md)：音频采样率个数。
--   [OT\_HDMI\_MAX\_BIT\_DEPTH\_NUM](OT_HDMI_MAX_BIT_DEPTH_NUM.md)：音频采样深度个数。
--   [OT\_HDMI\_DETAIL\_TIMING\_MAX](OT_HDMI_DETAIL_TIMING_MAX.md)：详细的视频制式信息个数。
--   [OT\_HDMI\_EDID\_RAW\_DATA\_LEN](OT_HDMI_EDID_RAW_DATA_LEN.md)：EDID原始数据的长度。
--   [OT\_HDMI\_HW\_PARAM\_NUM](OT_HDMI_HW_PARAM_NUM.md)：硬件参数的个数。
--   [OT\_HDMI\_MANUFACTURE\_NAME\_LEN](OT_HDMI_MANUFACTURE_NAME_LEN.md)：制造商名称的长度。
+-   [ot\_hdmi\_id](#ZH-CN_TOPIC_0000002441653977)：定义HDMI接口号。
+-   [ot\_hdmi\_callback](#ZH-CN_TOPIC_0000002441653981)：定义HDMI回调函数指针类型。
+-   [ot\_hdmi\_callback\_func](#ZH-CN_TOPIC_0000002441654041)：定义HDMI回调函数结构体。
+-   [ot\_hdmi\_event\_type](#ZH-CN_TOPIC_0000002441654025)：定义HDMI事件通知枚举。
+-   [ot\_hdmi\_attr](#ZH-CN_TOPIC_0000002408094686)：定义HDMI属性结构体。
+-   [ot\_hdmi\_video\_format](#ZH-CN_TOPIC_0000002441653989)：定义HDMI视频制式枚举。
+-   [ot\_hdmi\_video\_mode](#ZH-CN_TOPIC_0000002408254594)：定义HDMI颜色空间类型枚举。
+-   [ot\_hdmi\_deep\_color](#ZH-CN_TOPIC_0000002408094682)：定义HDMI深色模式枚举。
+-   [ot\_hdmi\_sample\_rate](#ZH-CN_TOPIC_0000002441653993)：定义HDMI音频输出采样率枚举。
+-   [ot\_hdmi\_bit\_depth](#ZH-CN_TOPIC_0000002408254590)：定义HDMI音频输出采样位宽枚举。
+-   [ot\_hdmi\_audio\_format\_code](#ZH-CN_TOPIC_0000002441693825)：定义HDMI音频格式枚举。
+-   [ot\_hdmi\_audio\_info](#ZH-CN_TOPIC_0000002441654037)：定义HDMI音频能力集信息。
+-   [ot\_hdmi\_timing\_info](#ZH-CN_TOPIC_0000002408094702)：定义HDMI详细时序信息。
+-   [ot\_hdmi\_detail\_timing](#ZH-CN_TOPIC_0000002408254598)：定义HDMI详细时序能力集信息。
+-   [ot\_hdmi\_sink\_capability](#ZH-CN_TOPIC_0000002408254610)：定义HDMI Sink端能力集结构体。
+-   [ot\_hdmi\_edid](#ZH-CN_TOPIC_0000002408094698)：定义HDMI EDID信息结构体。
+-   [ot\_hdmi\_infoframe\_type](#ZH-CN_TOPIC_0000002408254602)：定义HDMI信息帧类型枚举。
+-   [ot\_hdmi\_infoframe](#ZH-CN_TOPIC_0000002408254606)：定义HDMI信息帧结构体。
+-   [ot\_hdmi\_infoframe\_unit](#ZH-CN_TOPIC_0000002441693841)：定义HDMI信息帧单元结构体。
+-   [ot\_hdmi\_avi\_infoframe](#ZH-CN_TOPIC_0000002408254570)：定义AVI信息帧（版本2）单元结构体。
+-   [ot\_hdmi\_audio\_infoframe](#ZH-CN_TOPIC_0000002408094714)：定义AUDIO信息帧（版本1）单元结构体。
+-   [ot\_hdmi\_vendorspec\_infoframe](#ZH-CN_TOPIC_0000002408254614)：vendor信息帧结构体。
+-   [ot\_hdmi\_color\_space](#ZH-CN_TOPIC_0000002441654033)：定义颜色空间枚举。
+-   [ot\_hdmi\_bar\_info](#ZH-CN_TOPIC_0000002408254622)：定义Bar信息枚举。
+-   [ot\_hdmi\_scan\_info](#ZH-CN_TOPIC_0000002441693869)：定义Scan信息枚举。
+-   [ot\_hdmi\_colorimetry](#ZH-CN_TOPIC_0000002441693873)：定义Colorimetry信息枚举。
+-   [ot\_hdmi\_ex\_colorimetry](#ZH-CN_TOPIC_0000002441693857)：定义扩展Colorimetry信息枚举
+-   [ot\_pic\_aspect\_ratio](#ZH-CN_TOPIC_0000002408254586)：定义图像宽高比枚举。
+-   [ot\_hdmi\_active\_aspect\_ratio](#ZH-CN_TOPIC_0000002441653973)：定义实际图像宽高比枚举。
+-   [ot\_hdmi\_pic\_scaline](#ZH-CN_TOPIC_0000002408254626)：定义图像扫描信息枚举。
+-   [ot\_hdmi\_rgb\_quant\_range](#ZH-CN_TOPIC_0000002441693817)：定义RGB量化范围枚举。
+-   [ot\_hdmi\_pixel\_repetition](#ZH-CN_TOPIC_0000002441653969)：定义像素复制次数枚举。
+-   [ot\_hdmi\_content\_type](#ZH-CN_TOPIC_0000002408254630)：定义内容信息枚举。
+-   [ot\_hdmi\_ycc\_quant\_range](#ZH-CN_TOPIC_0000002408254634)：定义YCC量化范围枚举。
+-   [ot\_hdmi\_audio\_chn\_cnt](#ZH-CN_TOPIC_0000002441654029)：定义音频通道数枚举。
+-   [ot\_hdmi\_coding\_type](#ZH-CN_TOPIC_0000002441693853)：定义音频编码类型枚举。
+-   [ot\_hdmi\_audio\_sample\_size](#ZH-CN_TOPIC_0000002408254582)：定义音频采样大小枚举。
+-   [ot\_hdmi\_audio\_sample\_freq](#ZH-CN_TOPIC_0000002441693821)：定义音频采样频率枚举。
+-   [ot\_hdmi\_level\_shift\_val](#ZH-CN_TOPIC_0000002408094670)：定义音频Shift信息枚举。
+-   [ot\_hdmi\_lfe\_playback\_level](#ZH-CN_TOPIC_0000002408254578)：定义音频Playback信息枚举。
+-   [ot\_hdmi\_eotf](#ZH-CN_TOPIC_0000002408094662)：定义支持的EOTF能力结构体。
+-   [ot\_hdmi\_hdr\_metadata\_type](#ZH-CN_TOPIC_0000002408094666)：定义支持metadata类型结构体。
+-   [ot\_hdmi\_hdr\_capability](#ZH-CN_TOPIC_0000002408094722)：定义HDR能力结构体。
+-   [ot\_hdmi\_hw\_param](#ZH-CN_TOPIC_0000002408094706)：HDMI指标参数结构体。
+-   [ot\_hdmi\_hw\_spec](#ZH-CN_TOPIC_0000002441693849)：HDMI指标参数。
+-   [ot\_hdmi\_mod\_param](#ZH-CN_TOPIC_0000002408094674)：HDMI模块参数设置。
+-   [ot\_hdmi\_trace\_len](#ZH-CN_TOPIC_0000002441654005)：HDMI信号线在PCB板上的走线长度枚举。
+-   [OT\_HDMI\_VENDOR\_USER\_DATA\_MAX\_LEN](#ZH-CN_TOPIC_0000002441693845)：最大自定义vendor数据的长度。
+-   [OT\_HDMI\_MAX\_AUDIO\_CAPBILITY\_CNT](#ZH-CN_TOPIC_0000002408094678)：能获取的音频能力个数。
+-   [OT\_HDMI\_MAX\_SAMPLE\_RATE\_NUM](#ZH-CN_TOPIC_0000002441654001)：音频采样率个数。
+-   [OT\_HDMI\_MAX\_BIT\_DEPTH\_NUM](#ZH-CN_TOPIC_0000002408254574)：音频采样深度个数。
+-   [OT\_HDMI\_DETAIL\_TIMING\_MAX](#ZH-CN_TOPIC_0000002408094718)：详细的视频制式信息个数。
+-   [OT\_HDMI\_EDID\_RAW\_DATA\_LEN](#ZH-CN_TOPIC_0000002441693865)：EDID原始数据的长度。
+-   [OT\_HDMI\_HW\_PARAM\_NUM](#ZH-CN_TOPIC_0000002441654009)：硬件参数的个数。
+-   [OT\_HDMI\_MANUFACTURE\_NAME\_LEN](#ZH-CN_TOPIC_0000002441654021)：制造商名称的长度。
 
 注：本节已涵盖各重要的数据类型，部分未列出数据类型请参见ot\_comm\_hdmi.h
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 ## ot\_hdmi\_id<a name="ZH-CN_TOPIC_0000002441653977"></a>
 
@@ -2258,7 +2194,7 @@ typedef enum {
 【注意事项】
 
 -   保留将来扩展多个HDMI设备支持。
--   设置其他值将返回[OT\_ERR\_HDMI\_INVALID\_PARA](错误码.md#OT_ERR_HDMI_INVALID_PARA)。
+-   设置其他值将返回[OT\_ERR\_HDMI\_INVALID\_PARA](#OT_ERR_HDMI_INVALID_PARA)。
 
 【相关数据类型及接口】
 
@@ -2304,9 +2240,9 @@ typedef void (*ot_hdmi_callback)(ot_hdmi_event_type event, td_void *private_data
 
 【相关数据类型及接口】
 
--   [ot\_hdmi\_callback\_func](#ot_hdmi_callback_func)
--   [ss\_mpi\_hdmi\_register\_callback](#ss_mpi_hdmi_register_callback)
--   [ss\_mpi\_hdmi\_unregister\_callback](#ss_mpi_hdmi_unregister_callback)
+-   [ot\_hdmi\_callback\_func](#ZH-CN_TOPIC_0000002441654041)
+-   [ss\_mpi\_hdmi\_register\_callback](#ZH-CN_TOPIC_0000002408094654)
+-   [ss\_mpi\_hdmi\_unregister\_callback](#ZH-CN_TOPIC_0000002408254562)
 
 ## ot\_hdmi\_callback\_func<a name="ZH-CN_TOPIC_0000002441654041"></a>
 
@@ -2347,15 +2283,15 @@ typedef struct {
 
 【注意事项】
 
--   建议用户注册事件回调函数，若不注册则HDMI内部采取默认行为。见[ss\_mpi\_hdmi\_register\_callback](ss_mpi_hdmi_register_callback.md)。
+-   建议用户注册事件回调函数，若不注册则HDMI内部采取默认行为。见[ss\_mpi\_hdmi\_register\_callback](#ZH-CN_TOPIC_0000002408094654)。
 -   私有数据不能为局部变量，否则可能导致回调函数中不能正常访问。
 -   回调函数参数私有数据，一般并不使用，赋值可以为NULL。
 
 【相关数据类型及接口】
 
--   [ot\_hdmi\_callback](#ot_hdmi_callback)
--   [ss\_mpi\_hdmi\_register\_callback](#ss_mpi_hdmi_register_callback)
--   [ss\_mpi\_hdmi\_unregister\_callback](#ss_mpi_hdmi_unregister_callback)
+-   [ot\_hdmi\_callback](#ZH-CN_TOPIC_0000002441653981)
+-   [ss\_mpi\_hdmi\_register\_callback](#ZH-CN_TOPIC_0000002408094654)
+-   [ss\_mpi\_hdmi\_unregister\_callback](#ZH-CN_TOPIC_0000002408254562)
 
 ## ot\_hdmi\_event\_type<a name="ZH-CN_TOPIC_0000002441654025"></a>
 
@@ -2407,8 +2343,8 @@ typedef enum {
 
 【相关数据类型及接口】
 
--   [ss\_mpi\_hdmi\_register\_callback](#ss_mpi_hdmi_register_callback)
--   [ss\_mpi\_hdmi\_unregister\_callback](#ss_mpi_hdmi_unregister_callback)
+-   [ss\_mpi\_hdmi\_register\_callback](#ZH-CN_TOPIC_0000002408094654)
+-   [ss\_mpi\_hdmi\_unregister\_callback](#ZH-CN_TOPIC_0000002408254562)
 
 ## ot\_hdmi\_attr<a name="ZH-CN_TOPIC_0000002408094686"></a>
 
@@ -2484,7 +2420,7 @@ typedef struct {
 <td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p3719mcpsimp"><a name="p3719mcpsimp"></a><a name="p3719mcpsimp"></a>使能该模式，HDMI强制输出，不再去根据显示或认证设备的EDID信息来自适应调整，主要针对认证场景。</p>
 <p id="p3720mcpsimp"><a name="p3720mcpsimp"></a><a name="p3720mcpsimp"></a>0：不使能auth_mode；</p>
 <p id="p3721mcpsimp"><a name="p3721mcpsimp"></a><a name="p3721mcpsimp"></a>1：使能auth_mode。</p>
-<p id="p3722mcpsimp"><a name="p3722mcpsimp"></a><a name="p3722mcpsimp"></a>说明：默认为TD_FALSE，此标志用于调试和HDMI认证测试用，建议用户不要修改，其他注意事项请参考<a href="ss_mpi_hdmi_set_attr.md">ss_mpi_hdmi_set_attr</a>。</p>
+<p id="p3722mcpsimp"><a name="p3722mcpsimp"></a><a name="p3722mcpsimp"></a>说明：默认为TD_FALSE，此标志用于调试和HDMI认证测试用，建议用户不要修改，其他注意事项请参考<a href="#ZH-CN_TOPIC_0000002441693897">ss_mpi_hdmi_set_attr</a>。</p>
 </td>
 </tr>
 <tr id="row3724mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.3.1.1 "><p id="p3726mcpsimp"><a name="p3726mcpsimp"></a><a name="p3726mcpsimp"></a>deep_color_adapt_en</p>
@@ -2509,12 +2445,12 @@ typedef struct {
 -   用户设置DVI模式输出之前必须先通过VO的接口将color space设置成RGB。
 -   对于暂时不支持的属性，请设置为默认值。
 -   用户设置自定义时序时，一定要设置该时序对应的像素时钟pix\_clk（其他情况下不需要设置此参数，即使设置也不会生效），否则可能显示设备无法正常显示。此参数的合法性需用户保证，驱动无法识别该参数是否合法，如果参数不合法，也可能导致显示设备无法正常显示。
--   enable\_hdmi被设置为TD\_FALSE时，HDMI驱动将工作在DVI模式，此时不输出音频以及所有信息帧。
+-   hdmi\_en被设置为TD\_FALSE时，HDMI驱动将工作在DVI模式，此时不输出音频以及所有信息帧。
 
 【相关数据类型及接口】
 
--   [ss\_mpi\_hdmi\_set\_attr](#ss_mpi_hdmi_set_attr)
--   [ss\_mpi\_hdmi\_get\_attr](#ss_mpi_hdmi_get_attr)
+-   [ss\_mpi\_hdmi\_set\_attr](#ZH-CN_TOPIC_0000002441693897)
+-   [ss\_mpi\_hdmi\_get\_attr](#ZH-CN_TOPIC_0000002408094710)
 
 ## ot\_hdmi\_video\_format<a name="ZH-CN_TOPIC_0000002441653989"></a>
 
@@ -2593,13 +2529,13 @@ typedef enum {
     -   OT\_HDMI\_VIDEO\_FORMAT\_4096X2160P\_120
     -   OT\_HDMI\_VIDEO\_FORMAT\_7680X4320P\_30
 
-    设置这些参数将返回[OT\_ERR\_HDMI\_FEATURE\_NO\_SUPPORT](错误码.md#OT_ERR_HDMI_FEATURE_NO_SUPPORT)。
+    设置这些参数将返回[OT\_ERR\_HDMI\_FEATURE\_NO\_SUPPORT](#OT_ERR_HDMI_FEATURE_NO_SUPPORT)。
 
--   当[ot\_hdmi\_attr](ot_hdmi_attr.md)中的hdmi\_en设置成TD\_FALSE\(DVI模式\)时，不支持OT\_HDMI\_VIDEO\_FORMAT\_3840X2160P\_24及以上分辨率，强行设置时会返回[OT\_ERR\_HDMI\_FEATURE\_NO\_SUPPORT](错误码.md#OT_ERR_HDMI_FEATURE_NO_SUPPORT)。
+-   当[ot\_hdmi\_attr](#ZH-CN_TOPIC_0000002408094686)中的hdmi\_en设置成TD\_FALSE\(DVI模式\)时，不支持OT\_HDMI\_VIDEO\_FORMAT\_3840X2160P\_24及以上分辨率，强行设置时会返回[OT\_ERR\_HDMI\_FEATURE\_NO\_SUPPORT](#OT_ERR_HDMI_FEATURE_NO_SUPPORT)。
 
 【相关数据类型及接口】
 
-[ss\_mpi\_hdmi\_set\_attr](#ss_mpi_hdmi_set_attr)
+[ss\_mpi\_hdmi\_set\_attr](#ZH-CN_TOPIC_0000002441693897)
 
 ## ot\_hdmi\_video\_mode<a name="ZH-CN_TOPIC_0000002408254594"></a>
 
@@ -2706,11 +2642,11 @@ typedef enum {
 【注意事项】
 
 -   若获取到对端能力不支持30bit和36bit时，建议不要设置，否则显示设备很有可能无显示。
--   设置OT\_HDMI\_DEEP\_COLOR\_BUTT及枚举以外的值将返回[OT\_ERR\_HDMI\_INVALID\_PARA](错误码.md#OT_ERR_HDMI_INVALID_PARA)。
+-   设置OT\_HDMI\_DEEP\_COLOR\_BUTT及枚举以外的值将返回[OT\_ERR\_HDMI\_INVALID\_PARA](#OT_ERR_HDMI_INVALID_PARA)。
 
 【相关数据类型及接口】
 
-[ss\_mpi\_hdmi\_set\_attr](#ss_mpi_hdmi_set_attr)
+[ss\_mpi\_hdmi\_set\_attr](#ZH-CN_TOPIC_0000002441693897)
 
 ## ot\_hdmi\_sample\_rate<a name="ZH-CN_TOPIC_0000002441653993"></a>
 
@@ -2748,12 +2684,12 @@ typedef enum {
 【注意事项】
 
 -   当前仅支持OT\_HDMI\_SAMPLE\_RATE\_32K、OT\_HDMI\_SAMPLE\_RATE\_44K、OT\_HDMI\_SAMPLE\_RATE\_48K。
--   设置OT\_HDMI\_SAMPLE\_RATE\_BUTT及枚举以外的值将返回[OT\_ERR\_HDMI\_INVALID\_PARA](错误码.md#OT_ERR_HDMI_INVALID_PARA)，设置其他参数将返回[OT\_ERR\_HDMI\_FEATURE\_NO\_SUPPORT](错误码.md#OT_ERR_HDMI_FEATURE_NO_SUPPORT)。
+-   设置OT\_HDMI\_SAMPLE\_RATE\_BUTT及枚举以外的值将返回[OT\_ERR\_HDMI\_INVALID\_PARA](#OT_ERR_HDMI_INVALID_PARA)，设置其他参数将返回[OT\_ERR\_HDMI\_FEATURE\_NO\_SUPPORT](#OT_ERR_HDMI_FEATURE_NO_SUPPORT)。
 -   音频模块传递给HDMI的数据，采样率必须与HDMI输出的保持一致。如音频模块采集的音频源为8KHz，而HDMI需要输出48KHz音频数据，此时需要音频模块对源数据进行重采样到48KHz。
 
 【相关数据类型及接口】
 
-[ss\_mpi\_hdmi\_set\_attr](#ss_mpi_hdmi_set_attr)
+[ss\_mpi\_hdmi\_set\_attr](#ZH-CN_TOPIC_0000002441693897)
 
 ## ot\_hdmi\_bit\_depth<a name="ZH-CN_TOPIC_0000002408254590"></a>
 
@@ -2783,11 +2719,11 @@ typedef enum {
 【注意事项】
 
 -   目前只支持设置OT\_HDMI\_BIT\_DEPTH\_16的音频采样位宽。
--   OT\_HDMI\_BIT\_DEPTH\_UNKNOWN、OT\_HDMI\_BIT\_DEPTH\_8、OT\_HDMI\_BIT\_DEPTH\_18、OT\_HDMI\_BIT\_DEPTH\_20、OT\_HDMI\_BIT\_DEPTH\_24、OT\_HDMI\_BIT\_DEPTH\_32暂不支持，设置这些参数时将返回[OT\_ERR\_HDMI\_FEATURE\_NO\_SUPPORT](错误码.md#OT_ERR_HDMI_FEATURE_NO_SUPPORT)。设置OT\_HDMI\_BIT\_DEPTH\_BUTT及枚举以外的值将返回[OT\_ERR\_HDMI\_INVALID\_PARA](错误码.md#OT_ERR_HDMI_INVALID_PARA)。
+-   OT\_HDMI\_BIT\_DEPTH\_UNKNOWN、OT\_HDMI\_BIT\_DEPTH\_8、OT\_HDMI\_BIT\_DEPTH\_18、OT\_HDMI\_BIT\_DEPTH\_20、OT\_HDMI\_BIT\_DEPTH\_24、OT\_HDMI\_BIT\_DEPTH\_32暂不支持，设置这些参数时将返回[OT\_ERR\_HDMI\_FEATURE\_NO\_SUPPORT](#OT_ERR_HDMI_FEATURE_NO_SUPPORT)。设置OT\_HDMI\_BIT\_DEPTH\_BUTT及枚举以外的值将返回[OT\_ERR\_HDMI\_INVALID\_PARA](#OT_ERR_HDMI_INVALID_PARA)。
 
 【相关数据类型及接口】
 
-[ss\_mpi\_hdmi\_set\_attr](#ss_mpi_hdmi_set_attr)
+[ss\_mpi\_hdmi\_set\_attr](#ZH-CN_TOPIC_0000002441693897)
 
 ## ot\_hdmi\_audio\_format\_code<a name="ZH-CN_TOPIC_0000002441693825"></a>
 
@@ -2828,7 +2764,7 @@ typedef enum {
 
 【相关数据类型及接口】
 
-[ss\_mpi\_hdmi\_set\_attr](#ss_mpi_hdmi_set_attr)
+[ss\_mpi\_hdmi\_set\_attr](#ZH-CN_TOPIC_0000002441693897)
 
 ## ot\_hdmi\_audio\_info<a name="ZH-CN_TOPIC_0000002441654037"></a>
 
@@ -2897,8 +2833,8 @@ typedef struct {
 
 【相关数据类型及接口】
 
--   [ot\_hdmi\_sink\_capability](#ot_hdmi_sink_capability)
--   [ss\_mpi\_hdmi\_get\_sink\_capability](#ss_mpi_hdmi_get_sink_capability)
+-   [ot\_hdmi\_sink\_capability](#ZH-CN_TOPIC_0000002408254610)
+-   [ss\_mpi\_hdmi\_get\_sink\_capability](#ZH-CN_TOPIC_0000002408254566)
 
 ## ot\_hdmi\_timing\_info<a name="ZH-CN_TOPIC_0000002408094702"></a>
 
@@ -3033,8 +2969,8 @@ typedef struct {
 
 【相关数据类型及接口】
 
--   [ot\_hdmi\_sink\_capability](#ot_hdmi_sink_capability)
--   [ss\_mpi\_hdmi\_get\_sink\_capability](#ss_mpi_hdmi_get_sink_capability)
+-   [ot\_hdmi\_sink\_capability](#ZH-CN_TOPIC_0000002408254610)
+-   [ss\_mpi\_hdmi\_get\_sink\_capability](#ZH-CN_TOPIC_0000002408254566)
 
 ## ot\_hdmi\_detail\_timing<a name="ZH-CN_TOPIC_0000002408254598"></a>
 
@@ -3065,7 +3001,7 @@ typedef struct {
 <td class="cellrowborder" valign="top" width="62%" headers="mcps1.1.3.1.2 "><p id="p5791mcpsimp"><a name="p5791mcpsimp"></a><a name="p5791mcpsimp"></a>支持的详细时序个数。</p>
 </td>
 </tr>
-<tr id="row5792mcpsimp"><td class="cellrowborder" valign="top" width="38%" headers="mcps1.1.3.1.1 "><p id="p5794mcpsimp"><a name="p5794mcpsimp"></a><a name="p5794mcpsimp"></a>detail_timing[<a href="OT_HDMI_DETAIL_TIMING_MAX.md">OT_HDMI_DETAIL_TIMING_MAX</a>]</p>
+<tr id="row5792mcpsimp"><td class="cellrowborder" valign="top" width="38%" headers="mcps1.1.3.1.1 "><p id="p5794mcpsimp"><a name="p5794mcpsimp"></a><a name="p5794mcpsimp"></a>detail_timing[<a href="#ZH-CN_TOPIC_0000002408094718">OT_HDMI_DETAIL_TIMING_MAX</a>]</p>
 </td>
 <td class="cellrowborder" valign="top" width="62%" headers="mcps1.1.3.1.2 "><p id="p5797mcpsimp"><a name="p5797mcpsimp"></a><a name="p5797mcpsimp"></a>支持的详细时序信息。</p>
 </td>
@@ -3079,8 +3015,8 @@ typedef struct {
 
 【相关数据类型及接口】
 
--   [ot\_hdmi\_sink\_capability](#ot_hdmi_sink_capability)
--   [ss\_mpi\_hdmi\_get\_sink\_capability](#ss_mpi_hdmi_get_sink_capability)
+-   [ot\_hdmi\_sink\_capability](#ZH-CN_TOPIC_0000002408254610)
+-   [ss\_mpi\_hdmi\_get\_sink\_capability](#ZH-CN_TOPIC_0000002408254566)
 
 ## ot\_hdmi\_sink\_capability<a name="ZH-CN_TOPIC_0000002408254610"></a>
 
@@ -3112,7 +3048,7 @@ typedef struct {
     td_u8               version;
     td_u8               revision;
     td_u8               edid_ex_blk_num;
-    td_bool             is_phy_addr_valid;
+    td_bool             is_phys_addr_valid;
     td_u8               phys_addr_a;
     td_u8               phys_addr_b;
     td_u8               phys_addr_c;
@@ -3420,7 +3356,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ss\_mpi\_hdmi\_get\_sink\_capability](#ss_mpi_hdmi_get_sink_capability)
+[ss\_mpi\_hdmi\_get\_sink\_capability](#ZH-CN_TOPIC_0000002408254566)
 
 ## ot\_hdmi\_edid<a name="ZH-CN_TOPIC_0000002408094698"></a>
 
@@ -3457,7 +3393,7 @@ typedef struct {
 <td class="cellrowborder" valign="top" width="55.00000000000001%" headers="mcps1.1.3.1.2 "><p id="p4657mcpsimp"><a name="p4657mcpsimp"></a><a name="p4657mcpsimp"></a>EDID信息数据长度。</p>
 </td>
 </tr>
-<tr id="row4658mcpsimp"><td class="cellrowborder" valign="top" width="45%" headers="mcps1.1.3.1.1 "><p id="p4660mcpsimp"><a name="p4660mcpsimp"></a><a name="p4660mcpsimp"></a>edid[<a href="OT_HDMI_EDID_RAW_DATA_LEN.md">OT_HDMI_EDID_RAW_DATA_LEN</a>]</p>
+<tr id="row4658mcpsimp"><td class="cellrowborder" valign="top" width="45%" headers="mcps1.1.3.1.1 "><p id="p4660mcpsimp"><a name="p4660mcpsimp"></a><a name="p4660mcpsimp"></a>edid[<a href="#ZH-CN_TOPIC_0000002441693865">OT_HDMI_EDID_RAW_DATA_LEN</a>]</p>
 </td>
 <td class="cellrowborder" valign="top" width="55.00000000000001%" headers="mcps1.1.3.1.2 "><p id="p4663mcpsimp"><a name="p4663mcpsimp"></a><a name="p4663mcpsimp"></a>EDID信息数据。</p>
 </td>
@@ -3471,7 +3407,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ss\_mpi\_hdmi\_force\_get\_edid](#ss_mpi_hdmi_force_get_edid)
+[ss\_mpi\_hdmi\_force\_get\_edid](#ZH-CN_TOPIC_0000002441693877)
 
 ## ot\_hdmi\_infoframe\_type<a name="ZH-CN_TOPIC_0000002408254602"></a>
 
@@ -3500,8 +3436,8 @@ typedef enum {
 
 【相关数据类型及接口】
 
--   [ss\_mpi\_hdmi\_set\_infoframe](#ss_mpi_hdmi_set_infoframe)
--   [ss\_mpi\_hdmi\_get\_infoframe](#ss_mpi_hdmi_get_infoframe)
+-   [ss\_mpi\_hdmi\_set\_infoframe](#ZH-CN_TOPIC_0000002441693881)
+-   [ss\_mpi\_hdmi\_get\_infoframe](#ZH-CN_TOPIC_0000002441693885)
 
 ## ot\_hdmi\_infoframe<a name="ZH-CN_TOPIC_0000002408254606"></a>
 
@@ -3546,8 +3482,8 @@ typedef struct {
 
 【相关数据类型及接口】
 
--   [ss\_mpi\_hdmi\_set\_infoframe](#ss_mpi_hdmi_set_infoframe)
--   [ss\_mpi\_hdmi\_get\_infoframe](#ss_mpi_hdmi_get_infoframe)
+-   [ss\_mpi\_hdmi\_set\_infoframe](#ZH-CN_TOPIC_0000002441693881)
+-   [ss\_mpi\_hdmi\_get\_infoframe](#ZH-CN_TOPIC_0000002441693885)
 
 ## ot\_hdmi\_infoframe\_unit<a name="ZH-CN_TOPIC_0000002441693841"></a>
 
@@ -3598,8 +3534,8 @@ typedef union {
 
 【相关数据类型及接口】
 
--   [ss\_mpi\_hdmi\_set\_infoframe](#ss_mpi_hdmi_set_infoframe)
--   [ss\_mpi\_hdmi\_get\_infoframe](#ss_mpi_hdmi_get_infoframe)
+-   [ss\_mpi\_hdmi\_set\_infoframe](#ZH-CN_TOPIC_0000002441693881)
+-   [ss\_mpi\_hdmi\_get\_infoframe](#ZH-CN_TOPIC_0000002441693885)
 
 ## ot\_hdmi\_avi\_infoframe<a name="ZH-CN_TOPIC_0000002408254570"></a>
 
@@ -3746,8 +3682,8 @@ typedef struct {
 
 【相关数据类型及接口】
 
--   [ss\_mpi\_hdmi\_set\_infoframe](#ss_mpi_hdmi_set_infoframe)
--   [ss\_mpi\_hdmi\_get\_infoframe](#ss_mpi_hdmi_get_infoframe)
+-   [ss\_mpi\_hdmi\_set\_infoframe](#ZH-CN_TOPIC_0000002441693881)
+-   [ss\_mpi\_hdmi\_get\_infoframe](#ZH-CN_TOPIC_0000002441693885)
 
 ## ot\_hdmi\_audio\_infoframe<a name="ZH-CN_TOPIC_0000002408094714"></a>
 
@@ -3828,8 +3764,8 @@ typedef struct {
 
 【相关数据类型及接口】
 
--   [ss\_mpi\_hdmi\_set\_infoframe](#ss_mpi_hdmi_set_infoframe)
--   [ss\_mpi\_hdmi\_get\_infoframe](#ss_mpi_hdmi_get_infoframe)
+-   [ss\_mpi\_hdmi\_set\_infoframe](#ZH-CN_TOPIC_0000002441693881)
+-   [ss\_mpi\_hdmi\_get\_infoframe](#ZH-CN_TOPIC_0000002441693885)
 
 ## ot\_hdmi\_vendorspec\_infoframe<a name="ZH-CN_TOPIC_0000002408254614"></a>
 
@@ -3860,7 +3796,7 @@ typedef struct {
 <td class="cellrowborder" valign="top" width="62%" headers="mcps1.1.3.1.2 "><p id="p5127mcpsimp"><a name="p5127mcpsimp"></a><a name="p5127mcpsimp"></a>用户数据的长度</p>
 </td>
 </tr>
-<tr id="row5128mcpsimp"><td class="cellrowborder" valign="top" width="38%" headers="mcps1.1.3.1.1 "><p id="p5130mcpsimp"><a name="p5130mcpsimp"></a><a name="p5130mcpsimp"></a>user_data[<a href="OT_HDMI_VENDOR_USER_DATA_MAX_LEN.md">OT_HDMI_VENDOR_USER_DATA_MAX_LEN</a>]</p>
+<tr id="row5128mcpsimp"><td class="cellrowborder" valign="top" width="38%" headers="mcps1.1.3.1.1 "><p id="p5130mcpsimp"><a name="p5130mcpsimp"></a><a name="p5130mcpsimp"></a>user_data[<a href="#ZH-CN_TOPIC_0000002441693845">OT_HDMI_VENDOR_USER_DATA_MAX_LEN</a>]</p>
 </td>
 <td class="cellrowborder" valign="top" width="62%" headers="mcps1.1.3.1.2 "><p id="p5132mcpsimp"><a name="p5132mcpsimp"></a><a name="p5132mcpsimp"></a>用户数据</p>
 </td>
@@ -3874,8 +3810,8 @@ typedef struct {
 
 【相关数据类型及接口】
 
--   [ss\_mpi\_hdmi\_set\_infoframe](#ss_mpi_hdmi_set_infoframe)
--   [ss\_mpi\_hdmi\_get\_infoframe](#ss_mpi_hdmi_get_infoframe)
+-   [ss\_mpi\_hdmi\_set\_infoframe](#ZH-CN_TOPIC_0000002441693881)
+-   [ss\_mpi\_hdmi\_get\_infoframe](#ZH-CN_TOPIC_0000002441693885)
 
 ## ot\_hdmi\_color\_space<a name="ZH-CN_TOPIC_0000002441654033"></a>
 
@@ -3905,8 +3841,8 @@ OT\_HDMI\_COLOR\_SPACE\_YCBCR420**为HDMI2.0规格，仅支持HDMI1.4规格的�
 
 【相关数据类型及接口】
 
--   [ss\_mpi\_hdmi\_set\_infoframe](#ss_mpi_hdmi_set_infoframe)
--   [ss\_mpi\_hdmi\_get\_infoframe](#ss_mpi_hdmi_get_infoframe)
+-   [ss\_mpi\_hdmi\_set\_infoframe](#ZH-CN_TOPIC_0000002441693881)
+-   [ss\_mpi\_hdmi\_get\_infoframe](#ZH-CN_TOPIC_0000002441693885)
 
 ## ot\_hdmi\_bar\_info<a name="ZH-CN_TOPIC_0000002408254622"></a>
 
@@ -3936,8 +3872,8 @@ typedef enum {
 
 【相关数据类型及接口】
 
--   [ss\_mpi\_hdmi\_set\_infoframe](#ss_mpi_hdmi_set_infoframe)
--   [ss\_mpi\_hdmi\_get\_infoframe](#ss_mpi_hdmi_get_infoframe)
+-   [ss\_mpi\_hdmi\_set\_infoframe](#ZH-CN_TOPIC_0000002441693881)
+-   [ss\_mpi\_hdmi\_get\_infoframe](#ZH-CN_TOPIC_0000002441693885)
 
 ## ot\_hdmi\_scan\_info<a name="ZH-CN_TOPIC_0000002441693869"></a>
 
@@ -3966,8 +3902,8 @@ typedef enum {
 
 【相关数据类型及接口】
 
--   [ss\_mpi\_hdmi\_set\_infoframe](#ss_mpi_hdmi_set_infoframe)
--   [ss\_mpi\_hdmi\_get\_infoframe](#ss_mpi_hdmi_get_infoframe)
+-   [ss\_mpi\_hdmi\_set\_infoframe](#ZH-CN_TOPIC_0000002441693881)
+-   [ss\_mpi\_hdmi\_get\_infoframe](#ZH-CN_TOPIC_0000002441693885)
 
 ## ot\_hdmi\_colorimetry<a name="ZH-CN_TOPIC_0000002441693873"></a>
 
@@ -3996,8 +3932,8 @@ OT\_HDMI\_COMMON\_COLORIMETRY\_BUTT值有效，其含义表示设置为扩展色
 
 【相关数据类型及接口】
 
--   [ss\_mpi\_hdmi\_set\_infoframe](#ss_mpi_hdmi_set_infoframe)
--   [ss\_mpi\_hdmi\_get\_infoframe](#ss_mpi_hdmi_get_infoframe)
+-   [ss\_mpi\_hdmi\_set\_infoframe](#ZH-CN_TOPIC_0000002441693881)
+-   [ss\_mpi\_hdmi\_get\_infoframe](#ZH-CN_TOPIC_0000002441693885)
 
 ## ot\_hdmi\_ex\_colorimetry<a name="ZH-CN_TOPIC_0000002441693857"></a>
 
@@ -4016,7 +3952,7 @@ typedef enum {
     OT_HDMI_COMMON_COLORIMETRY_ADOBE_RGB,
     OT_HDMI_COMMON_COLORIMETRY_2020_CONST_LUMINOUS,
     OT_HDMI_COMMON_COLORIMETRY_2020_NON_CONST_LUMINOUS,
-    OT_HDMI_COMMON_COLORIMETRY_BUTT
+    OT_HDMI_COMMON_COLORIMETRY_EXT_BUTT
 } ot_hdmi_ex_colorimetry;
 ```
 
@@ -4030,8 +3966,8 @@ typedef enum {
 
 【相关数据类型及接口】
 
--   [ss\_mpi\_hdmi\_set\_infoframe](#ss_mpi_hdmi_set_infoframe)
--   [ss\_mpi\_hdmi\_get\_infoframe](#ss_mpi_hdmi_get_infoframe)
+-   [ss\_mpi\_hdmi\_set\_infoframe](#ZH-CN_TOPIC_0000002441693881)
+-   [ss\_mpi\_hdmi\_get\_infoframe](#ZH-CN_TOPIC_0000002441693885)
 
 ## ot\_pic\_aspect\_ratio<a name="ZH-CN_TOPIC_0000002408254586"></a>
 
@@ -4058,12 +3994,12 @@ typedef enum {
 
 【注意事项】
 
-设置枚举以外的值将返回[OT\_ERR\_HDMI\_INVALID\_PARA](错误码.md#OT_ERR_HDMI_INVALID_PARA)。
+设置枚举以外的值将返回[OT\_ERR\_HDMI\_INVALID\_PARA](#OT_ERR_HDMI_INVALID_PARA)。
 
 【相关数据类型及接口】
 
--   [ss\_mpi\_hdmi\_set\_infoframe](#ss_mpi_hdmi_set_infoframe)
--   [ss\_mpi\_hdmi\_get\_infoframe](#ss_mpi_hdmi_get_infoframe)
+-   [ss\_mpi\_hdmi\_set\_infoframe](#ZH-CN_TOPIC_0000002441693881)
+-   [ss\_mpi\_hdmi\_get\_infoframe](#ZH-CN_TOPIC_0000002441693885)
 
 ## ot\_hdmi\_active\_aspect\_ratio<a name="ZH-CN_TOPIC_0000002441653973"></a>
 
@@ -4099,8 +4035,8 @@ typedef enum {
 
 【相关数据类型及接口】
 
--   [ss\_mpi\_hdmi\_set\_infoframe](#ss_mpi_hdmi_set_infoframe)
--   [ss\_mpi\_hdmi\_get\_infoframe](#ss_mpi_hdmi_get_infoframe)
+-   [ss\_mpi\_hdmi\_set\_infoframe](#ZH-CN_TOPIC_0000002441693881)
+-   [ss\_mpi\_hdmi\_get\_infoframe](#ZH-CN_TOPIC_0000002441693885)
 
 ## ot\_hdmi\_pic\_scaline<a name="ZH-CN_TOPIC_0000002408254626"></a>
 
@@ -4112,11 +4048,11 @@ typedef enum {
 
 ```
 typedef enum {
-    OT_HDMI_PICTURE_NON_UNIFORM_SCALING,
-    OT_HDMI_PICTURE_SCALING_H,
-    OT_HDMI_PICTURE_SCALING_V,
-    OT_HDMI_PICTURE_SCALING_HV,
-    OT_HDMI_PICTURE_SCALING_BUTT
+    OT_HDMI_PIC_NON_UNIFORM_SCALING,
+    OT_HDMI_PIC_SCALING_H,
+    OT_HDMI_PIC_SCALING_V,
+    OT_HDMI_PIC_SCALING_HV,
+    OT_HDMI_PIC_SCALING_BUTT
 } ot_hdmi_pic_scaline;
 ```
 
@@ -4130,8 +4066,8 @@ typedef enum {
 
 【相关数据类型及接口】
 
--   [ss\_mpi\_hdmi\_set\_infoframe](#ss_mpi_hdmi_set_infoframe)
--   [ss\_mpi\_hdmi\_get\_infoframe](#ss_mpi_hdmi_get_infoframe)
+-   [ss\_mpi\_hdmi\_set\_infoframe](#ZH-CN_TOPIC_0000002441693881)
+-   [ss\_mpi\_hdmi\_get\_infoframe](#ZH-CN_TOPIC_0000002441693885)
 
 ## ot\_hdmi\_rgb\_quant\_range<a name="ZH-CN_TOPIC_0000002441693817"></a>
 
@@ -4160,8 +4096,8 @@ typedef enum {
 
 【相关数据类型及接口】
 
--   [ss\_mpi\_hdmi\_set\_infoframe](#ss_mpi_hdmi_set_infoframe)
--   [ss\_mpi\_hdmi\_get\_infoframe](#ss_mpi_hdmi_get_infoframe)
+-   [ss\_mpi\_hdmi\_set\_infoframe](#ZH-CN_TOPIC_0000002441693881)
+-   [ss\_mpi\_hdmi\_get\_infoframe](#ZH-CN_TOPIC_0000002441693885)
 
 ## ot\_hdmi\_pixel\_repetition<a name="ZH-CN_TOPIC_0000002441653969"></a>
 
@@ -4193,12 +4129,12 @@ typedef enum {
 
 【注意事项】
 
-设置枚举以外的值将返回[OT\_ERR\_HDMI\_INVALID\_PARA](错误码.md#OT_ERR_HDMI_INVALID_PARA)。
+设置枚举以外的值将返回[OT\_ERR\_HDMI\_INVALID\_PARA](#OT_ERR_HDMI_INVALID_PARA)。
 
 【相关数据类型及接口】
 
--   [ss\_mpi\_hdmi\_set\_infoframe](#ss_mpi_hdmi_set_infoframe)
--   [ss\_mpi\_hdmi\_get\_infoframe](#ss_mpi_hdmi_get_infoframe)
+-   [ss\_mpi\_hdmi\_set\_infoframe](#ZH-CN_TOPIC_0000002441693881)
+-   [ss\_mpi\_hdmi\_get\_infoframe](#ZH-CN_TOPIC_0000002441693885)
 
 ## ot\_hdmi\_content\_type<a name="ZH-CN_TOPIC_0000002408254630"></a>
 
@@ -4228,8 +4164,8 @@ typedef enum {
 
 【相关数据类型及接口】
 
--   [ss\_mpi\_hdmi\_set\_infoframe](#ss_mpi_hdmi_set_infoframe)
--   [ss\_mpi\_hdmi\_get\_infoframe](#ss_mpi_hdmi_get_infoframe)
+-   [ss\_mpi\_hdmi\_set\_infoframe](#ZH-CN_TOPIC_0000002441693881)
+-   [ss\_mpi\_hdmi\_get\_infoframe](#ZH-CN_TOPIC_0000002441693885)
 
 ## ot\_hdmi\_ycc\_quant\_range<a name="ZH-CN_TOPIC_0000002408254634"></a>
 
@@ -4253,12 +4189,12 @@ typedef enum {
 
 【注意事项】
 
-设置枚举以外的值将返回[OT\_ERR\_HDMI\_INVALID\_PARA](错误码.md#OT_ERR_HDMI_INVALID_PARA)。
+设置枚举以外的值将返回[OT\_ERR\_HDMI\_INVALID\_PARA](#OT_ERR_HDMI_INVALID_PARA)。
 
 【相关数据类型及接口】
 
--   [ss\_mpi\_hdmi\_set\_infoframe](#ss_mpi_hdmi_set_infoframe)
--   [ss\_mpi\_hdmi\_get\_infoframe](#ss_mpi_hdmi_get_infoframe)
+-   [ss\_mpi\_hdmi\_set\_infoframe](#ZH-CN_TOPIC_0000002441693881)
+-   [ss\_mpi\_hdmi\_get\_infoframe](#ZH-CN_TOPIC_0000002441693885)
 
 ## ot\_hdmi\_audio\_chn\_cnt<a name="ZH-CN_TOPIC_0000002441654029"></a>
 
@@ -4270,15 +4206,15 @@ typedef enum {
 
 ```
 typedef enum {
-    OT_HDMI_AUDIO_CHANEL_CNT_STREAM,
-    OT_HDMI_AUDIO_CHANEL_CNT_2,
-    OT_HDMI_AUDIO_CHANEL_CNT_3,
-    OT_HDMI_AUDIO_CHANEL_CNT_4,
-    OT_HDMI_AUDIO_CHANEL_CNT_5,
-    OT_HDMI_AUDIO_CHANEL_CNT_6,
-    OT_HDMI_AUDIO_CHANEL_CNT_7,
-    OT_HDMI_AUDIO_CHANEL_CNT_8,
-    OT_HDMI_AUDIO_CHANEL_BUTT
+    OT_HDMI_AUDIO_CHN_CNT_STREAM,
+    OT_HDMI_AUDIO_CHN_CNT_2,
+    OT_HDMI_AUDIO_CHN_CNT_3,
+    OT_HDMI_AUDIO_CHN_CNT_4,
+    OT_HDMI_AUDIO_CHN_CNT_5,
+    OT_HDMI_AUDIO_CHN_CNT_6,
+    OT_HDMI_AUDIO_CHN_CNT_7,
+    OT_HDMI_AUDIO_CHN_CNT_8,
+    OT_HDMI_AUDIO_CHN_BUTT
 } ot_hdmi_audio_chn_cnt;
 ```
 
@@ -4292,8 +4228,8 @@ typedef enum {
 
 【相关数据类型及接口】
 
--   [ss\_mpi\_hdmi\_set\_infoframe](#ss_mpi_hdmi_set_infoframe)
--   [ss\_mpi\_hdmi\_get\_infoframe](#ss_mpi_hdmi_get_infoframe)
+-   [ss\_mpi\_hdmi\_set\_infoframe](#ZH-CN_TOPIC_0000002441693881)
+-   [ss\_mpi\_hdmi\_get\_infoframe](#ZH-CN_TOPIC_0000002441693885)
 
 ## ot\_hdmi\_coding\_type<a name="ZH-CN_TOPIC_0000002441693853"></a>
 
@@ -4315,7 +4251,7 @@ typedef enum {
     OT_HDMI_AUDIO_CODING_DTS,
     OT_HDMI_AUDIO_CODING_ATRAC,
     OT_HDMI_AUDIO_CODIND_ONE_BIT_AUDIO,
-    OT_HDMI_AUDIO_CODING_ENAHNCED_AC3,
+    OT_HDMI_AUDIO_CODING_ENHANCED_AC3,
     OT_HDMI_AUDIO_CODING_DTS_HD,
     OT_HDMI_AUDIO_CODING_MAT,
     OT_HDMI_AUDIO_CODING_DST,
@@ -4334,8 +4270,8 @@ typedef enum {
 
 【相关数据类型及接口】
 
--   [ss\_mpi\_hdmi\_set\_infoframe](#ss_mpi_hdmi_set_infoframe)
--   [ss\_mpi\_hdmi\_get\_infoframe](#ss_mpi_hdmi_get_infoframe)
+-   [ss\_mpi\_hdmi\_set\_infoframe](#ZH-CN_TOPIC_0000002441693881)
+-   [ss\_mpi\_hdmi\_get\_infoframe](#ZH-CN_TOPIC_0000002441693885)
 
 ## ot\_hdmi\_audio\_sample\_size<a name="ZH-CN_TOPIC_0000002408254582"></a>
 
@@ -4365,8 +4301,8 @@ typedef enum {
 
 【相关数据类型及接口】
 
--   [ss\_mpi\_hdmi\_set\_infoframe](#ss_mpi_hdmi_set_infoframe)
--   [ss\_mpi\_hdmi\_get\_infoframe](#ss_mpi_hdmi_get_infoframe)
+-   [ss\_mpi\_hdmi\_set\_infoframe](#ZH-CN_TOPIC_0000002441693881)
+-   [ss\_mpi\_hdmi\_get\_infoframe](#ZH-CN_TOPIC_0000002441693885)
 
 ## ot\_hdmi\_audio\_sample\_freq<a name="ZH-CN_TOPIC_0000002441693821"></a>
 
@@ -4400,8 +4336,8 @@ typedef enum {
 
 【相关数据类型及接口】
 
--   [ss\_mpi\_hdmi\_set\_infoframe](#ss_mpi_hdmi_set_infoframe)
--   [ss\_mpi\_hdmi\_get\_infoframe](#ss_mpi_hdmi_get_infoframe)
+-   [ss\_mpi\_hdmi\_set\_infoframe](#ZH-CN_TOPIC_0000002441693881)
+-   [ss\_mpi\_hdmi\_get\_infoframe](#ZH-CN_TOPIC_0000002441693885)
 
 ## ot\_hdmi\_level\_shift\_val<a name="ZH-CN_TOPIC_0000002408094670"></a>
 
@@ -4413,23 +4349,23 @@ typedef enum {
 
 ```
 typedef enum {
-    OT_HDMI_LEVEL_SHIFT_VALUE_0_DB,
-    OT_HDMI_LEVEL_SHIFT_VALUE_1_DB,
-    OT_HDMI_LEVEL_SHIFT_VALUE_2_DB,
-    OT_HDMI_LEVEL_SHIFT_VALUE_3_DB,
-    OT_HDMI_LEVEL_SHIFT_VALUE_4_DB,
-    OT_HDMI_LEVEL_SHIFT_VALUE_5_DB,
-    OT_HDMI_LEVEL_SHIFT_VALUE_6_DB,
-    OT_HDMI_LEVEL_SHIFT_VALUE_7_DB,
-    OT_HDMI_LEVEL_SHIFT_VALUE_8_DB,
-    OT_HDMI_LEVEL_SHIFT_VALUE_9_DB,
-    OT_HDMI_LEVEL_SHIFT_VALUE_10_DB,
-    OT_HDMI_LEVEL_SHIFT_VALUE_11_DB,
-    OT_HDMI_LEVEL_SHIFT_VALUE_12_DB,
-    OT_HDMI_LEVEL_SHIFT_VALUE_13_DB,
-    OT_HDMI_LEVEL_SHIFT_VALUE_14_DB,
-    OT_HDMI_LEVEL_SHIFT_VALUE_15_DB,
-    OT_HDMI_LEVEL_SHIFT_VALUE_BUTT
+    OT_HDMI_LEVEL_SHIFT_VAL_0_DB,
+    OT_HDMI_LEVEL_SHIFT_VAL_1_DB,
+    OT_HDMI_LEVEL_SHIFT_VAL_2_DB,
+    OT_HDMI_LEVEL_SHIFT_VAL_3_DB,
+    OT_HDMI_LEVEL_SHIFT_VAL_4_DB,
+    OT_HDMI_LEVEL_SHIFT_VAL_5_DB,
+    OT_HDMI_LEVEL_SHIFT_VAL_6_DB,
+    OT_HDMI_LEVEL_SHIFT_VAL_7_DB,
+    OT_HDMI_LEVEL_SHIFT_VAL_8_DB,
+    OT_HDMI_LEVEL_SHIFT_VAL_9_DB,
+    OT_HDMI_LEVEL_SHIFT_VAL_10_DB,
+    OT_HDMI_LEVEL_SHIFT_VAL_11_DB,
+    OT_HDMI_LEVEL_SHIFT_VAL_12_DB,
+    OT_HDMI_LEVEL_SHIFT_VAL_13_DB,
+    OT_HDMI_LEVEL_SHIFT_VAL_14_DB,
+    OT_HDMI_LEVEL_SHIFT_VAL_15_DB,
+    OT_HDMI_LEVEL_SHIFT_VAL_BUTT
 } ot_hdmi_level_shift_val;
 ```
 
@@ -4443,8 +4379,8 @@ typedef enum {
 
 【相关数据类型及接口】
 
--   [ss\_mpi\_hdmi\_set\_infoframe](#ss_mpi_hdmi_set_infoframe)
--   [ss\_mpi\_hdmi\_get\_infoframe](#ss_mpi_hdmi_get_infoframe)
+-   [ss\_mpi\_hdmi\_set\_infoframe](#ZH-CN_TOPIC_0000002441693881)
+-   [ss\_mpi\_hdmi\_get\_infoframe](#ZH-CN_TOPIC_0000002441693885)
 
 ## ot\_hdmi\_lfe\_playback\_level<a name="ZH-CN_TOPIC_0000002408254578"></a>
 
@@ -4469,12 +4405,12 @@ typedef enum {
 
 【注意事项】
 
-设置枚举以外的值将返回[OT\_ERR\_HDMI\_INVALID\_PARA](错误码.md#OT_ERR_HDMI_INVALID_PARA)。
+设置枚举以外的值将返回[OT\_ERR\_HDMI\_INVALID\_PARA](#OT_ERR_HDMI_INVALID_PARA)。
 
 【相关数据类型及接口】
 
--   [ss\_mpi\_hdmi\_set\_infoframe](#ss_mpi_hdmi_set_infoframe)
--   [ss\_mpi\_hdmi\_get\_infoframe](#ss_mpi_hdmi_get_infoframe)
+-   [ss\_mpi\_hdmi\_set\_infoframe](#ZH-CN_TOPIC_0000002441693881)
+-   [ss\_mpi\_hdmi\_get\_infoframe](#ZH-CN_TOPIC_0000002441693885)
 
 ## ot\_hdmi\_eotf<a name="ZH-CN_TOPIC_0000002408094662"></a>
 
@@ -4537,8 +4473,8 @@ typedef struct {
 
 【相关数据类型及接口】
 
--   [ot\_hdmi\_hdr\_capability](#ot_hdmi_hdr_capability)
--   [ss\_mpi\_hdmi\_get\_sink\_capability](#ss_mpi_hdmi_get_sink_capability)
+-   [ot\_hdmi\_hdr\_capability](#ZH-CN_TOPIC_0000002408094722)
+-   [ss\_mpi\_hdmi\_get\_sink\_capability](#ZH-CN_TOPIC_0000002408254566)
 
 ## ot\_hdmi\_hdr\_metadata\_type<a name="ZH-CN_TOPIC_0000002408094666"></a>
 
@@ -4577,8 +4513,8 @@ HDR相关能力在SS528V100、SS625V100、SS524V100、SS522V101上不支持。
 
 【相关数据类型及接口】
 
--   [ot\_hdmi\_hdr\_capability](#ot_hdmi_hdr_capability)
--   [ss\_mpi\_hdmi\_get\_sink\_capability](#ss_mpi_hdmi_get_sink_capability)
+-   [ot\_hdmi\_hdr\_capability](#ZH-CN_TOPIC_0000002408094722)
+-   [ss\_mpi\_hdmi\_get\_sink\_capability](#ZH-CN_TOPIC_0000002408254566)
 
 ## ot\_hdmi\_hdr\_capability<a name="ZH-CN_TOPIC_0000002408094722"></a>
 
@@ -4641,7 +4577,7 @@ HDR相关能力在SS528V100、SS625V100、SS524V100、SS522V101上不支持。
 
 【相关数据类型及接口】
 
-[ss\_mpi\_hdmi\_get\_sink\_capability](#ss_mpi_hdmi_get_sink_capability)
+[ss\_mpi\_hdmi\_get\_sink\_capability](#ZH-CN_TOPIC_0000002408254566)
 
 ## ot\_hdmi\_hw\_param<a name="ZH-CN_TOPIC_0000002408094706"></a>
 
@@ -4719,8 +4655,8 @@ typedef struct {
 
 【相关数据类型及接口】
 
--   [ss\_mpi\_hdmi\_set\_hw\_spec](#ss_mpi_hdmi_set_hw_spec)
--   [ot\_hdmi\_hw\_spec](#ot_hdmi_hw_spec)
+-   [ss\_mpi\_hdmi\_set\_hw\_spec](#ZH-CN_TOPIC_0000002408254618)
+-   [ot\_hdmi\_hw\_spec](#ZH-CN_TOPIC_0000002441693849)
 
 ## ot\_hdmi\_hw\_spec<a name="ZH-CN_TOPIC_0000002441693849"></a>
 
@@ -4745,7 +4681,7 @@ typedef struct {
 </th>
 </tr>
 </thead>
-<tbody><tr id="row3769mcpsimp"><td class="cellrowborder" valign="top" width="54%" headers="mcps1.1.3.1.1 "><p id="p3771mcpsimp"><a name="p3771mcpsimp"></a><a name="p3771mcpsimp"></a>hw_param[<a href="OT_HDMI_HW_PARAM_NUM.md">OT_HDMI_HW_PARAM_NUM</a>]</p>
+<tbody><tr id="row3769mcpsimp"><td class="cellrowborder" valign="top" width="54%" headers="mcps1.1.3.1.1 "><p id="p3771mcpsimp"><a name="p3771mcpsimp"></a><a name="p3771mcpsimp"></a>hw_param[<a href="#ZH-CN_TOPIC_0000002441654009">OT_HDMI_HW_PARAM_NUM</a>]</p>
 </td>
 <td class="cellrowborder" valign="top" width="46%" headers="mcps1.1.3.1.2 "><p id="p3774mcpsimp"><a name="p3774mcpsimp"></a><a name="p3774mcpsimp"></a>指标参数。</p>
 </td>
@@ -4755,8 +4691,8 @@ typedef struct {
 
 【相关数据类型及接口】
 
--   [ss\_mpi\_hdmi\_set\_hw\_spec](#ss_mpi_hdmi_set_hw_spec)
--   [ot\_hdmi\_hw\_param](#ot_hdmi_hw_param)
+-   [ss\_mpi\_hdmi\_set\_hw\_spec](#ZH-CN_TOPIC_0000002408254618)
+-   [ot\_hdmi\_hw\_param](#ZH-CN_TOPIC_0000002408094706)
 
 ## ot\_hdmi\_mod\_param<a name="ZH-CN_TOPIC_0000002408094674"></a>
 
@@ -4797,8 +4733,8 @@ typedef struct {
 
 【相关数据类型及接口】
 
--   [ss\_mpi\_hdmi\_set\_mod\_param](#ss_mpi_hdmi_set_mod_param)
--   [ss\_mpi\_hdmi\_get\_mod\_param](#ss_mpi_hdmi_get_mod_param)
+-   [ss\_mpi\_hdmi\_set\_mod\_param](#ZH-CN_TOPIC_0000002408094658)
+-   [ss\_mpi\_hdmi\_get\_mod\_param](#ZH-CN_TOPIC_0000002441653985)
 
 ## ot\_hdmi\_trace\_len<a name="ZH-CN_TOPIC_0000002441654005"></a>
 
@@ -4834,9 +4770,9 @@ typedef enum {
 
 【相关数据类型及接口】
 
--   [ss\_mpi\_hdmi\_set\_mod\_param](#ss_mpi_hdmi_set_mod_param)
--   [ss\_mpi\_hdmi\_get\_mod\_param](#ss_mpi_hdmi_get_mod_param)
--   [ot\_hdmi\_mod\_param](#ot_hdmi_mod_param)
+-   [ss\_mpi\_hdmi\_set\_mod\_param](#ZH-CN_TOPIC_0000002408094658)
+-   [ss\_mpi\_hdmi\_get\_mod\_param](#ZH-CN_TOPIC_0000002441653985)
+-   [ot\_hdmi\_mod\_param](#ZH-CN_TOPIC_0000002408094674)
 
 ## OT\_HDMI\_VENDOR\_USER\_DATA\_MAX\_LEN<a name="ZH-CN_TOPIC_0000002441693845"></a>
 
@@ -6939,7 +6875,7 @@ sample rate(Hz)     : 32000 44100 48000
 
 -   compat\(cmp\)
 
-    命令：echo chcompat argv1 argv2 \> /proc/umap/hdmi0
+    命令：echo cmp argv1 argv2 \> /proc/umap/hdmi0
 
     功能：兼容性调试命令。
 
@@ -6998,14 +6934,6 @@ sample rate(Hz)     : 32000 44100 48000
     功能：设置fmt delay的时长。
 
     参数说明：argv1取值\[0, 100000\]，单位ms。
-
--   threadtime\(time\)
-
-    命令：echo thread\_time argv1  \> /proc/umap/hdmi0
-
-    功能：设置HDMI HPD线程检测时间间隔
-
-    参数说明：argv1取值\[10, 100\]，表示间隔时间为10-100ms
 
 # 缩略语<a name="ZH-CN_TOPIC_0000002441654045"></a>
 

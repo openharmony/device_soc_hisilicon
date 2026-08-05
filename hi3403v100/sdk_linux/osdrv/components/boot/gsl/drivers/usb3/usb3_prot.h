@@ -65,6 +65,5 @@
 #define USB3_XFR_PROT_ADDR_ERROR	0x07
 
 void usb3_handle_protocol(void *dev);
-void usb_tx_status_complete(void *dev);
 
 #endif /* __USB3_PROT_H__ */

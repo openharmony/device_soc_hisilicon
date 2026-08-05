@@ -17,6 +17,8 @@
 #include "usb3_hw.h"
 #include "usb3_drv.h"
 #include "usb3_pcd.h"
+extern void usb3_handle_dev_intr(usb3_pcd_t *pcd, uint32_t event);
+extern int usb3_handle_ep_intr(usb3_pcd_t *pcd, int physep, uint32_t event);
 
 void ena_eventbuf_intr(const usb3_device_t *dev)
 {
@@ -73,9 +75,9 @@ uint32_t get_eventbuf_event(usb3_device_t *dev, int size)
     event = *dev->event_ptr++;
 
     if (dev->event_ptr >= dev->event_buf + size) {
-		dev->event_ptr = dev->event_buf;
+        dev->event_ptr = dev->event_buf;
     }
-	return event;
+    return event;
 }
 
 void usb3_init_eventbuf(const usb3_device_t *dev, int size, uint32_t dma_addr)
@@ -110,23 +112,23 @@ void usb3_enable_device_interrupts(usb3_device_t *dev)
 
 void usb3_handle_event(usb3_device_t *dev)
 {
-	usb3_pcd_t *pcd = &dev->pcd;
-	uint32_t event;
+    usb3_pcd_t *pcd = &dev->pcd;
+    uint32_t event;
     int count;
     int intr;
     int physep;
     int i;
 
-	count = get_eventbuf_count(dev);
+    count = get_eventbuf_count(dev);
     if ((count & USB3_EVENTCNT_CNT_BITS) == USB3_EVENTCNT_CNT_BITS ||
-	    count >= USB3_EVENT_BUF_SIZE * 4) { // 4 bytes per event
-		update_eventbuf_count(dev, count);
-		count = 0;
-	}
+        count >= USB3_EVENT_BUF_SIZE * 4) { // 4 bytes per event
+        update_eventbuf_count(dev, count);
+        count = 0;
+    }
 
     if (count < 0) {
-		count = 0;
-	}
+        count = 0;
+    }
 
     for (i = 0; i < count; i += 4) { // 4 bytes per event
         event = get_eventbuf_event(dev, USB3_EVENT_BUF_SIZE);
@@ -138,8 +140,9 @@ void usb3_handle_event(usb3_device_t *dev)
 
         if (event & USB3_EVENT_NON_EP_BIT) {
             intr = event & USB3_EVENT_INTTYPE_BITS;
-            if (intr == (USB3_EVENT_DEV_INT << USB3_EVENT_INTTYPE_SHIFT))
+            if (intr == (USB3_EVENT_DEV_INT << USB3_EVENT_INTTYPE_SHIFT)) {
                 usb3_handle_dev_intr(pcd, event);
+            }
         } else {
             physep = (event >> USB3_DEPEVT_EPNUM_SHIFT) & (USB3_DEPEVT_EPNUM_BITS >> USB3_DEPEVT_EPNUM_SHIFT);
             (void)usb3_handle_ep_intr(pcd, physep, event);

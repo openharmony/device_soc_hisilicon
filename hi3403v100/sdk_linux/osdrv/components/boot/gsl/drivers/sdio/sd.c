@@ -120,20 +120,22 @@ static int sd_check_int_status(uint32_t mask, uint32_t timeout)
     unsigned int reg;
     unsigned int wait_time =  timeout * timer_get_divider();
 
-	timer_start();
-	reg = sd_readl(SDHCI_INT_STATUS);
-    while ((reg & mask) == 0) {
-		if (timer_get_val() > wait_time) {
-			debug_printf("wait int status time out, reg = 0x%x, mask = 0x%x\n",
-				     reg, mask);
-			return -1;
-		}
-		if (reg & SDHCI_INT_ERROR_MASK) {
-			debug_printf("int err: reg = 0x%x\n", reg);
-			return -1;
-		}
-		reg = sd_readl(SDHCI_INT_STATUS);
-	}
+    timer_start();
+    for (;;) {
+    reg = sd_readl(SDHCI_INT_STATUS);
+        if (reg & mask) {
+            break;
+        }
+        if (timer_get_val() > wait_time) {
+            debug_printf("wait int status time out, reg = 0x%x, mask = 0x%x\n",
+                     reg, mask);
+            return -1;
+        }
+        if (reg & SDHCI_INT_ERROR_MASK) {
+            debug_printf("int err: reg = 0x%x\n", reg);
+            return -1;
+        }
+    }
 
     return 0;
 }
@@ -223,61 +225,13 @@ static int sd_send_cmd(uint32_t cmd, uint32_t arg)
     return 0;
 }
 
-static int sd_wait_op_cond(uint32_t arg, uint32_t *rsp)
-{
-    uint32_t cmd;
-    uint32_t timeout = 100;
-
-    do {
-        cmd = sdhci_make_cmd_fun(MMC_CMD_APP_CMD, SDHCI_CMD_CRC | SDHCI_CMD_RESP_SHORT);
-        sd_send_cmd(cmd, 0);
-
-        cmd = sdhci_make_cmd_fun(SD_CMD_APP_SEND_OP_COND, SDHCI_CMD_RESP_SHORT);
-        sd_send_cmd(cmd, arg);
-        *rsp = sd_readl(SDHCI_RESPONSE);
-        if (timeout-- == 0) {
-            return -1;
-        }
-        mdelay(10); /* delay 10ms */
-    } while (!(*rsp & OCR_BUSY));
-
-    return 0;
-}
-
-static void sd_select_card_and_bus(uint32_t *arg)
-{
-    uint32_t cmd;
-    uint32_t rsp;
-    uint32_t ctrl;
-
-    cmd = sdhci_make_cmd_fun(MMC_CMD_ALL_SEND_CID, SDHCI_CMD_CRC | SDHCI_CMD_RESP_LONG);
-    sd_send_cmd(cmd, 0);
-
-    cmd = sdhci_make_cmd_fun(MMC_CMD_SET_RELATIVE_ADDR, SDHCI_CMD_CRC | SDHCI_CMD_RESP_SHORT);
-    sd_send_cmd(cmd, 0);
-
-    rsp = sd_readl(SDHCI_RESPONSE);
-    cmd = sdhci_make_cmd_fun(MMC_CMD_SELECT_CARD, SDHCI_CMD_CRC | SDHCI_CMD_RESP_SHORT);
-    *arg = rsp & 0xffff0000;
-    sd_send_cmd(cmd, *arg);
-
-    cmd = sdhci_make_cmd_fun(MMC_CMD_APP_CMD, SDHCI_CMD_CRC | SDHCI_CMD_RESP_SHORT);
-    sd_send_cmd(cmd, *arg);
-
-    cmd = sdhci_make_cmd_fun(SD_CMD_APP_SET_BUS_WIDTH, SDHCI_CMD_CRC | SDHCI_CMD_RESP_SHORT);
-    sd_send_cmd(cmd, 0x2);
-
-    ctrl = sd_readb(SDHCI_HOST_CONTROL);
-    ctrl &= ~SDHCI_CTRL_8BITBUS;
-    ctrl |= SDHCI_CTRL_4BITBUS;
-    sd_writeb(ctrl, SDHCI_HOST_CONTROL);
-}
-
 static int sd_card_init(void)
 {
     uint32_t cmd;
     uint32_t arg;
     uint32_t rsp;
+    uint32_t ctrl;
+    uint32_t timeout = 100;
 
     /* Send CMD0 to reset card into idle state */
     cmd = sdhci_make_cmd_fun(MMC_CMD_GO_IDLE_STATE, SDHCI_CMD_RESP_NONE);
@@ -291,17 +245,49 @@ static int sd_card_init(void)
     sd_send_cmd(cmd, ((arg != 0) << 0x8) | 0xaa);
 
     rsp = sd_readl(SDHCI_RESPONSE);
-    if ((rsp & 0xff) == 0xaa)
+    if ((rsp & 0xff) == 0xaa) {
         arg |= OCR_HCS;
-
-    if (sd_wait_op_cond(arg, &rsp) != 0) {
-        return -1;
     }
+    /* Send ACMD41 for initialization and wait to complete*/
+    do {
+        cmd = sdhci_make_cmd_fun(MMC_CMD_APP_CMD, SDHCI_CMD_CRC | SDHCI_CMD_RESP_SHORT);
+        sd_send_cmd(cmd, 0);
+
+        cmd = sdhci_make_cmd_fun(SD_CMD_APP_SEND_OP_COND, SDHCI_CMD_RESP_SHORT);
+        sd_send_cmd(cmd, arg);
+        rsp = sd_readl(SDHCI_RESPONSE);
+        if (timeout-- == 0) {
+            return -1;
+        }
+        mdelay(10); /* delay 10ms */
+    } while (!(rsp & OCR_BUSY));
 
     /* card capacity */
     hcs = ((rsp & OCR_HCS) == OCR_HCS);
 
-    sd_select_card_and_bus(&arg);
+    /* Send CMD2 to get card cid numbers*/
+    cmd = sdhci_make_cmd_fun(MMC_CMD_ALL_SEND_CID,
+        SDHCI_CMD_CRC | SDHCI_CMD_RESP_LONG);
+    sd_send_cmd(cmd, 0);
+
+    cmd = sdhci_make_cmd_fun(MMC_CMD_SET_RELATIVE_ADDR, SDHCI_CMD_CRC | SDHCI_CMD_RESP_SHORT);
+    sd_send_cmd(cmd, 0);
+
+    rsp = sd_readl(SDHCI_RESPONSE);
+    cmd = sdhci_make_cmd_fun(MMC_CMD_SELECT_CARD, SDHCI_CMD_CRC | SDHCI_CMD_RESP_SHORT);
+    arg = rsp & 0xffff0000;
+    sd_send_cmd(cmd, arg);
+
+    cmd = sdhci_make_cmd_fun(MMC_CMD_APP_CMD, SDHCI_CMD_CRC | SDHCI_CMD_RESP_SHORT);
+    sd_send_cmd(cmd, arg);
+
+    cmd = sdhci_make_cmd_fun(SD_CMD_APP_SET_BUS_WIDTH, SDHCI_CMD_CRC | SDHCI_CMD_RESP_SHORT);
+    sd_send_cmd(cmd, 0x2);
+
+    ctrl = sd_readb(SDHCI_HOST_CONTROL);
+    ctrl &= ~SDHCI_CTRL_8BITBUS;
+    ctrl |= SDHCI_CTRL_4BITBUS;
+    sd_writeb(ctrl, SDHCI_HOST_CONTROL);
 
     return 0;
 }
@@ -326,22 +312,21 @@ int sdio_init()
 
     mmc_buf = gsl_malloc(MMC_BLOCK_SIZE);
     if (!mmc_buf) {
-		return -1;
-	}
-
+        return -1;
+    }
     return 0;
 }
 
 void sdio_deinit()
 {
-	if (mmc_buf) {
+    if (mmc_buf) {
         gsl_free(mmc_buf);
-		mmc_buf = NULL;
-	}
-	if (mmc_dev) {
+        mmc_buf = NULL;
+    }
+    if (mmc_dev) {
         gsl_free(mmc_dev);
-		mmc_dev = NULL;
-	}
+        mmc_dev = NULL;
+    }
 
     sd_reset(SDHCI_RESET_ALL);
 
@@ -364,8 +349,9 @@ int sd_card_check(void)
             return FALSE;
         } else {
             status3 = sd_readl(SDHCI_PRESENT_STATE);
-            if (!(status3 & SDHCI_CARD_DETECT_PIN))
+            if (!(status3 & SDHCI_CARD_DETECT_PIN)) {
                 return FALSE;
+            }
         }
     }
 
@@ -399,30 +385,41 @@ void sdio0_io_config(void)
     }
 }
 
-static void mmc_prepare_single_read(void)
+size_t mmc_block_read(void *dst, uint32_t src, size_t size)
 {
+    uint8_t *buf = (uint8_t *)dst;
+    uint32_t cmd;
     uint16_t mode;
+    int ret;
+    uint32_t spacc_channel_number = 1;
+    spacc_decrypt_params decrypt_params = {0};
 
     sd_writew(MMC_BLOCK_SIZE, SDHCI_BLOCK_SIZE);
+    cmd = sdhci_make_cmd_fun(MMC_CMD_SET_BLOCKLEN, SDHCI_CMD_CRC | SDHCI_CMD_RESP_SHORT);
+    sd_send_cmd(cmd, MMC_BLOCK_SIZE);
     sd_writeb(0xe, SDHCI_TIMEOUT_CONTROL);
     sd_writew(1, SDHCI_BLOCK_COUNT);
 
     mode = SDHCI_TRNS_READ;
     sd_writew(mode, SDHCI_TRANSFER_MODE);
-}
 
-static void mmc_send_single_read_cmd(uint32_t src)
-{
-    uint32_t cmd = sdhci_make_cmd_fun(MMC_CMD_READ_SINGLE_BLOCK,
-        SDHCI_CMD_CRC | SDHCI_CMD_RESP_SHORT | SDHCI_CMD_DATA);
+    /* Send CMD17 for single block read*/
+    if (hcs) {
+        cmd = sdhci_make_cmd_fun(MMC_CMD_READ_SINGLE_BLOCK,
+            SDHCI_CMD_CRC | SDHCI_CMD_RESP_SHORT
+            | SDHCI_CMD_DATA);
+        sd_send_cmd(cmd, src / MMC_BLOCK_SIZE);
+    } else {
+        cmd = sdhci_make_cmd_fun(MMC_CMD_READ_SINGLE_BLOCK,
+            SDHCI_CMD_CRC | SDHCI_CMD_RESP_SHORT
+            | SDHCI_CMD_DATA);
+        sd_send_cmd(cmd, src);
+    }
 
-    sd_send_cmd(cmd, hcs ? src / MMC_BLOCK_SIZE : src);
-}
+    if (sd_check_int_status(SDHCI_INT_DATA_AVAIL, 2000)) /* 2000ms timeout */
+        return -1;
 
-static int mmc_copy_block_data(uint8_t *buf, size_t size)
-{
-    uint32_t spacc_channel_number = 1;
-    spacc_decrypt_params decrypt_params = {0};
+    sd_writel(SDHCI_INT_DATA_AVAIL, SDHCI_INT_STATUS);
 
     if (!sdio_dma_enable) {
         while (size) {
@@ -430,83 +427,21 @@ static int mmc_copy_block_data(uint8_t *buf, size_t size)
             buf += 0x4;
             size -= 0x4;
         }
-        return 0;
-    }
-
-    decrypt_params.chn = spacc_channel_number;
+    } else {
+        decrypt_params.chn = spacc_channel_number;
     decrypt_params.dst_addr = (uint32_t)(uintptr_t)buf;
     decrypt_params.src_addr = (uint32_t)(REG_BASE_SDIO0 + SDHCI_DMA_BUF_ADDR);
     decrypt_params.length = MMC_BLOCK_SIZE;
     decrypt_params.alg = SYMC_ALG_DMA;
     decrypt_params.mode = SYMC_MODE_CBC;
-    return (drv_spacc_decrypt(decrypt_params) == TD_SUCCESS) ? 0 : -1;
-}
-
-size_t mmc_block_read(void *dst, uint32_t src, size_t size)
-{
-	uint8_t *buf = (uint8_t *)dst;
-	uint32_t cmd;
-
-    cmd = sdhci_make_cmd_fun(MMC_CMD_SET_BLOCKLEN,
-        SDHCI_CMD_CRC | SDHCI_CMD_RESP_SHORT);
-    sd_send_cmd(cmd, MMC_BLOCK_SIZE);
-
-    mmc_prepare_single_read();
-    mmc_send_single_read_cmd(src);
-
-    /* 2000ms timeout */
-    if (sd_check_int_status(SDHCI_INT_DATA_AVAIL, 2000)) {
-        return -1;
+        ret = drv_spacc_decrypt(decrypt_params);
+        if (ret != TD_SUCCESS) {
+            return -1;
+        }
+        buf += MMC_BLOCK_SIZE;
     }
-
-    sd_writel(SDHCI_INT_DATA_AVAIL, SDHCI_INT_STATUS);
-
-    if (mmc_copy_block_data(buf, size) != 0) {
-        return -1;
-    }
-    buf += sdio_dma_enable ? MMC_BLOCK_SIZE : size;
 
     return (size_t)(buf - (uint8_t *)dst);
-}
-
-static int update_mmc_read_head(unsigned long aligned_start, unsigned long part_start,
-    unsigned long *src, char **dst)
-{
-    unsigned long part_len = MMC_BLOCK_SIZE - part_start;
-    errno_t err;
-
-    if (part_start == 0) {
-        return 0;
-    }
-
-    if ((mmc_block_read(mmc_buf, aligned_start, MMC_BLOCK_SIZE)) < 0) {
-        return -1;
-    }
-
-    err = memcpy_s(*dst, part_len, mmc_buf + part_start, part_len);
-    if (err != EOK) {
-        return -1;
-    }
-
-    *dst += part_len;
-    *src += part_len;
-    return 0;
-}
-
-static int update_mmc_read_tail(unsigned long aligned_end, unsigned long part_end, char *dst)
-{
-    errno_t err;
-
-    if (part_end == 0) {
-        return 0;
-    }
-
-    if ((mmc_block_read(mmc_buf, aligned_end, MMC_BLOCK_SIZE)) < 0) {
-        return -1;
-    }
-
-    err = memcpy_s(dst, part_end, mmc_buf, part_end);
-    return (err == EOK) ? 0 : -1;
 }
 
 int update_mmc_read(unsigned long src, char *dst, unsigned long size)
@@ -514,10 +449,12 @@ int update_mmc_read(unsigned long src, char *dst, unsigned long size)
     unsigned long end;
     unsigned long part_start;
     unsigned long part_end;
+    unsigned long part_len;
     unsigned long aligned_start;
     unsigned long aligned_end;
     unsigned long mmc_block_size;
     unsigned long mmc_block_address;
+    errno_t err;
 
     if (size == 0) {
         return -1;
@@ -535,22 +472,38 @@ int update_mmc_read(unsigned long src, char *dst, unsigned long size)
     aligned_end = mmc_block_address & end;
 
     /* all block aligned accesses */
-    if (update_mmc_read_head(aligned_start, part_start, &src, &dst) != 0) {
+    if (part_start) {
+        part_len = mmc_block_size - part_start;
+        if ((mmc_block_read(mmc_buf, aligned_start, mmc_block_size)) < 0)
+        {
+            return -1;
+        }
+        err = memcpy_s(dst, part_len, mmc_buf + part_start, part_len);
+        if (err != EOK)
+        {
         return -1;
+        }
+        dst += part_len;
+        src += part_len;
     }
 
     if (aligned_end < src) {
         return -1;
     }
-
     for (; src < aligned_end; src += mmc_block_size, dst += mmc_block_size) {
         if ((mmc_block_read((char *)(dst), src, mmc_block_size)) < 0) {
             return -1;
         }
     }
 
-    if ((src < end) && (update_mmc_read_tail(aligned_end, part_end, dst) != 0)) {
+    if (part_end && src < end) {
+        if ((mmc_block_read(mmc_buf, aligned_end, mmc_block_size)) < 0) {
+            return -1;
+        }
+        err = memcpy_s(dst, part_end, mmc_buf, part_end);
+        if (err != EOK) {
         return -1;
+        }
     }
 
     return 0;
@@ -575,13 +528,13 @@ int self_sdio_check()
     sdio_init();
 
     mmc_dev = gsl_malloc(sizeof(block_dev_desc_t));
-	if (!mmc_dev) {
-		sdio_deinit();
-		return 0;
-	}
+    if (!mmc_dev) {
+        sdio_deinit();
+        return 0;
+    }
 
-	err = memset_s(mmc_dev, sizeof(block_dev_desc_t), 0, sizeof(block_dev_desc_t));
-	if (err != EOK) {
+    err = memset_s(mmc_dev, sizeof(block_dev_desc_t), 0, sizeof(block_dev_desc_t));
+    if (err != EOK) {
         sdio_deinit();
         gsl_free(mmc_dev);
         mmc_dev = NULL;
@@ -595,14 +548,14 @@ int self_sdio_check()
     mmc_dev->removable = 1;
     mmc_dev->blksz = MMC_BLOCK_SIZE;
 
-	ret = fat_register_device(mmc_dev);
+    ret = fat_register_device(mmc_dev);
     if (ret == 0x3) {
-		return 1;
-	}
+        return 1;
+    }
 
-	sdio_deinit();
+    sdio_deinit();
     gsl_free(mmc_dev);
-	mmc_dev = NULL;
+    mmc_dev = NULL;
 
     return 0;
 }

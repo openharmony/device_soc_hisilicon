@@ -194,5 +194,5 @@ td_s32 hal_hdmi_ctrl_data_reset(hdmi_device_id hdmi, td_bool debug_mode, td_u32 
 
 td_s32 hal_hdmi_ctrl_tmds_stable_get(hdmi_device_id hdmi, td_bool *stable);
 
-#endif /* HDMI_HAL_CTRL_H */
+#endif /* HDMI_HAL_CTRL_V200_H */
 

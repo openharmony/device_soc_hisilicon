@@ -97,7 +97,7 @@ td_s32 hal_hdmi_mach_invoke(td_void)
 td_s32 hal_hdmi_mach_register(const hdmi_mach_ctrl *mach_ctrl, td_u32 *mach_id)
 {
     td_u32 i;
-    errno_t err_num;
+    errno_t err_code;
     td_s32 name_len;
     td_s32 ret;
     hdmi_mach_elem *tmp_elem  = TD_NULL;
@@ -116,14 +116,15 @@ td_s32 hal_hdmi_mach_register(const hdmi_mach_ctrl *mach_ctrl, td_u32 *mach_id)
             tmp_elem = &mach_info->mach_elem[i];
             if (!tmp_elem->mach_run.valid_id) {
                 (td_void)memset_s(&tmp_elem->mach_run, sizeof(tmp_elem->mach_run), 0, sizeof(hdmi_mach_run));
-                errno = memcpy_s(&tmp_elem->mach_ctrl, sizeof(tmp_elem->mach_ctrl), mach_ctrl, sizeof(hdmi_mach_ctrl));
-                hdmi_unlock_unequal_eok_return(errno, mach_info->mach_mutex, OT_ERR_HDMI_INVALID_PARA);
+                err_code = memcpy_s(&tmp_elem->mach_ctrl, sizeof(tmp_elem->mach_ctrl),
+                    mach_ctrl, sizeof(hdmi_mach_ctrl));
+                hdmi_unlock_unequal_eok_return(err_code, mach_info->mach_mutex, OT_ERR_HDMI_INVALID_PARA);
                 hdmi_unlock_if_null_return(tmp_elem->mach_ctrl.name, mach_info->mach_mutex, TD_FAILURE);
                 name_len = osal_strlen(tmp_elem->mach_ctrl.name);
                 name_len = (name_len < HDMI_MACH_MAX_NAME_SIZE) ? name_len : (HDMI_MACH_MAX_NAME_SIZE - 1);
-                err_num = memcpy_s(tmp_elem->mach_run.name, HDMI_MACH_MAX_NAME_SIZE,
+                err_code = memcpy_s(tmp_elem->mach_run.name, HDMI_MACH_MAX_NAME_SIZE,
                     tmp_elem->mach_ctrl.name, name_len);
-                hdmi_unlock_unequal_eok_return(err_num, mach_info->mach_mutex, OT_ERR_HDMI_INVALID_PARA);
+                hdmi_unlock_unequal_eok_return(err_code, mach_info->mach_mutex, OT_ERR_HDMI_INVALID_PARA);
                 tmp_elem->mach_run.name[name_len] = '\0';
                 tmp_elem->mach_ctrl.name = tmp_elem->mach_run.name;
                 mach_info->total++;

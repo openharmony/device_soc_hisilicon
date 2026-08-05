@@ -100,13 +100,17 @@
 
 # MIPI使用指南<a name="ZH-CN_TOPIC_0000002408262226"></a>
 
+-   **[概述](#ZH-CN_TOPIC_0000002408262262)**  
 
+-   **[重要概念](#ZH-CN_TOPIC_0000002441701413)**  
 
+-   **[功能描述](#ZH-CN_TOPIC_0000002408262130)**  
 
+-   **[MIPI TX模块参数](#ZH-CN_TOPIC_0000002441661657)**  
 
+-   **[Proc信息](#ZH-CN_TOPIC_0000002408102246)**  
 
-
-
+-   **[FAQ](#ZH-CN_TOPIC_0000002441701389)**  
 
 ## 概述<a name="ZH-CN_TOPIC_0000002408262262"></a>
 
@@ -279,11 +283,11 @@ MIPI Rx具体的Lane管脚连接请参见[表4](#_Ref484014656)。
 </td>
 <td class="cellrowborder" valign="top" width="15.841584158415845%" headers="mcps1.2.7.1.3 "><p id="p602mcpsimp"><a name="p602mcpsimp"></a><a name="p602mcpsimp"></a>√</p>
 </td>
-<td class="cellrowborder" valign="top" width="15.841584158415845%" headers="mcps1.2.7.1.4 "><p id="entry603mcpsimpp0"><a name="entry603mcpsimpp0"></a><a name="entry603mcpsimpp0"></a>-</p>
+<td class="cellrowborder" valign="top" width="15.841584158415845%" headers="mcps1.2.7.1.4 "><p id="p1078865633612"><a name="p1078865633612"></a><a name="p1078865633612"></a>N</p>
 </td>
-<td class="cellrowborder" valign="top" width="15.841584158415845%" headers="mcps1.2.7.1.5 "><p id="entry604mcpsimpp0"><a name="entry604mcpsimpp0"></a><a name="entry604mcpsimpp0"></a>-</p>
+<td class="cellrowborder" valign="top" width="15.841584158415845%" headers="mcps1.2.7.1.5 "><p id="p1798416043711"><a name="p1798416043711"></a><a name="p1798416043711"></a>N</p>
 </td>
-<td class="cellrowborder" valign="top" width="14.851485148514854%" headers="mcps1.2.7.1.6 "><p id="entry605mcpsimpp0"><a name="entry605mcpsimpp0"></a><a name="entry605mcpsimpp0"></a>-</p>
+<td class="cellrowborder" valign="top" width="14.851485148514854%" headers="mcps1.2.7.1.6 "><p id="p16282172193711"><a name="p16282172193711"></a><a name="p16282172193711"></a>N</p>
 </td>
 </tr>
 <tr id="row606mcpsimp"><td class="cellrowborder" valign="top" headers="mcps1.2.7.1.1 "><p id="p608mcpsimp"><a name="p608mcpsimp"></a><a name="p608mcpsimp"></a>Lane1</p>
@@ -292,20 +296,20 @@ MIPI Rx具体的Lane管脚连接请参见[表4](#_Ref484014656)。
 </td>
 <td class="cellrowborder" valign="top" headers="mcps1.2.7.1.3 "><p id="p612mcpsimp"><a name="p612mcpsimp"></a><a name="p612mcpsimp"></a>√</p>
 </td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.7.1.4 "><p id="entry613mcpsimpp0"><a name="entry613mcpsimpp0"></a><a name="entry613mcpsimpp0"></a>-</p>
+<td class="cellrowborder" valign="top" headers="mcps1.2.7.1.4 "><p id="p109869016372"><a name="p109869016372"></a><a name="p109869016372"></a>N</p>
 </td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.7.1.5 "><p id="entry614mcpsimpp0"><a name="entry614mcpsimpp0"></a><a name="entry614mcpsimpp0"></a>-</p>
+<td class="cellrowborder" valign="top" headers="mcps1.2.7.1.5 "><p id="p142840219379"><a name="p142840219379"></a><a name="p142840219379"></a>N</p>
 </td>
 </tr>
 <tr id="row615mcpsimp"><td class="cellrowborder" valign="top" headers="mcps1.2.7.1.1 "><p id="p617mcpsimp"><a name="p617mcpsimp"></a><a name="p617mcpsimp"></a>Lane2</p>
 </td>
 <td class="cellrowborder" valign="top" headers="mcps1.2.7.1.2 "><p id="p619mcpsimp"><a name="p619mcpsimp"></a><a name="p619mcpsimp"></a>√</p>
 </td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.7.1.3 "><p id="entry620mcpsimpp0"><a name="entry620mcpsimpp0"></a><a name="entry620mcpsimpp0"></a>-</p>
+<td class="cellrowborder" valign="top" headers="mcps1.2.7.1.3 "><p id="p6408125814361"><a name="p6408125814361"></a><a name="p6408125814361"></a>N</p>
 </td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.7.1.4 "><p id="entry621mcpsimpp0"><a name="entry621mcpsimpp0"></a><a name="entry621mcpsimpp0"></a>-</p>
+<td class="cellrowborder" valign="top" headers="mcps1.2.7.1.4 "><p id="p199888013373"><a name="p199888013373"></a><a name="p199888013373"></a>N</p>
 </td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.7.1.5 "><p id="entry622mcpsimpp0"><a name="entry622mcpsimpp0"></a><a name="entry622mcpsimpp0"></a>-</p>
+<td class="cellrowborder" valign="top" headers="mcps1.2.7.1.5 "><p id="p328622183710"><a name="p328622183710"></a><a name="p328622183710"></a>N</p>
 </td>
 </tr>
 <tr id="row623mcpsimp"><td class="cellrowborder" valign="top" headers="mcps1.2.7.1.1 "><p id="p625mcpsimp"><a name="p625mcpsimp"></a><a name="p625mcpsimp"></a>Lane3</p>
@@ -314,27 +318,27 @@ MIPI Rx具体的Lane管脚连接请参见[表4](#_Ref484014656)。
 </td>
 <td class="cellrowborder" valign="top" headers="mcps1.2.7.1.3 "><p id="p629mcpsimp"><a name="p629mcpsimp"></a><a name="p629mcpsimp"></a>√</p>
 </td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.7.1.4 "><p id="entry630mcpsimpp0"><a name="entry630mcpsimpp0"></a><a name="entry630mcpsimpp0"></a>-</p>
+<td class="cellrowborder" valign="top" headers="mcps1.2.7.1.4 "><p id="p799115018375"><a name="p799115018375"></a><a name="p799115018375"></a>N</p>
 </td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.7.1.5 "><p id="entry631mcpsimpp0"><a name="entry631mcpsimpp0"></a><a name="entry631mcpsimpp0"></a>-</p>
+<td class="cellrowborder" valign="top" headers="mcps1.2.7.1.5 "><p id="p162872027378"><a name="p162872027378"></a><a name="p162872027378"></a>N</p>
 </td>
 </tr>
 <tr id="row632mcpsimp"><td class="cellrowborder" valign="top" headers="mcps1.2.7.1.1 "><p id="p634mcpsimp"><a name="p634mcpsimp"></a><a name="p634mcpsimp"></a>Lane4</p>
 </td>
 <td class="cellrowborder" valign="top" headers="mcps1.2.7.1.2 "><p id="p636mcpsimp"><a name="p636mcpsimp"></a><a name="p636mcpsimp"></a>√</p>
 </td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.7.1.3 "><p id="entry637mcpsimpp0"><a name="entry637mcpsimpp0"></a><a name="entry637mcpsimpp0"></a>-</p>
+<td class="cellrowborder" valign="top" headers="mcps1.2.7.1.3 "><p id="p1241813595368"><a name="p1241813595368"></a><a name="p1241813595368"></a>N</p>
 </td>
 <td class="cellrowborder" valign="top" headers="mcps1.2.7.1.4 "><p id="p639mcpsimp"><a name="p639mcpsimp"></a><a name="p639mcpsimp"></a>√</p>
 </td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.7.1.5 "><p id="entry640mcpsimpp0"><a name="entry640mcpsimpp0"></a><a name="entry640mcpsimpp0"></a>-</p>
+<td class="cellrowborder" valign="top" headers="mcps1.2.7.1.5 "><p id="p13289122378"><a name="p13289122378"></a><a name="p13289122378"></a>N</p>
 </td>
 </tr>
 <tr id="row641mcpsimp"><td class="cellrowborder" valign="top" headers="mcps1.2.7.1.1 "><p id="p643mcpsimp"><a name="p643mcpsimp"></a><a name="p643mcpsimp"></a>Lane5</p>
 </td>
 <td class="cellrowborder" valign="top" headers="mcps1.2.7.1.2 "><p id="p645mcpsimp"><a name="p645mcpsimp"></a><a name="p645mcpsimp"></a>√</p>
 </td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.7.1.3 "><p id="entry646mcpsimpp0"><a name="entry646mcpsimpp0"></a><a name="entry646mcpsimpp0"></a>-</p>
+<td class="cellrowborder" valign="top" headers="mcps1.2.7.1.3 "><p id="p11420135993611"><a name="p11420135993611"></a><a name="p11420135993611"></a>N</p>
 </td>
 <td class="cellrowborder" valign="top" headers="mcps1.2.7.1.4 "><p id="p648mcpsimp"><a name="p648mcpsimp"></a><a name="p648mcpsimp"></a>√</p>
 </td>
@@ -345,18 +349,18 @@ MIPI Rx具体的Lane管脚连接请参见[表4](#_Ref484014656)。
 </td>
 <td class="cellrowborder" valign="top" headers="mcps1.2.7.1.2 "><p id="p655mcpsimp"><a name="p655mcpsimp"></a><a name="p655mcpsimp"></a>√</p>
 </td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.7.1.3 "><p id="entry656mcpsimpp0"><a name="entry656mcpsimpp0"></a><a name="entry656mcpsimpp0"></a>-</p>
+<td class="cellrowborder" valign="top" headers="mcps1.2.7.1.3 "><p id="p0422205919363"><a name="p0422205919363"></a><a name="p0422205919363"></a>N</p>
 </td>
 <td class="cellrowborder" valign="top" headers="mcps1.2.7.1.4 "><p id="p658mcpsimp"><a name="p658mcpsimp"></a><a name="p658mcpsimp"></a>√</p>
 </td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.7.1.5 "><p id="entry659mcpsimpp0"><a name="entry659mcpsimpp0"></a><a name="entry659mcpsimpp0"></a>-</p>
+<td class="cellrowborder" valign="top" headers="mcps1.2.7.1.5 "><p id="p62891435371"><a name="p62891435371"></a><a name="p62891435371"></a>N</p>
 </td>
 </tr>
 <tr id="row660mcpsimp"><td class="cellrowborder" valign="top" headers="mcps1.2.7.1.1 "><p id="p662mcpsimp"><a name="p662mcpsimp"></a><a name="p662mcpsimp"></a>Lane7</p>
 </td>
 <td class="cellrowborder" valign="top" headers="mcps1.2.7.1.2 "><p id="p664mcpsimp"><a name="p664mcpsimp"></a><a name="p664mcpsimp"></a>√</p>
 </td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.7.1.3 "><p id="entry665mcpsimpp0"><a name="entry665mcpsimpp0"></a><a name="entry665mcpsimpp0"></a>-</p>
+<td class="cellrowborder" valign="top" headers="mcps1.2.7.1.3 "><p id="p174259597368"><a name="p174259597368"></a><a name="p174259597368"></a>N</p>
 </td>
 <td class="cellrowborder" valign="top" headers="mcps1.2.7.1.4 "><p id="p667mcpsimp"><a name="p667mcpsimp"></a><a name="p667mcpsimp"></a>√</p>
 </td>
@@ -370,43 +374,26 @@ MIPI Rx具体的Lane管脚连接请参见[表4](#_Ref484014656)。
 
 MIPI Rx提供对接sensor时序的功能。提供ioctl接口，可用的命令如下：
 
--   [OT\_MIPI\_SET\_DEV\_ATTR](OT_MIPI_SET_DEV_ATTR.md)：设置MIPI设备属性。
--   [OT\_MIPI\_SET\_HS\_MODE](OT_MIPI_SET_HS_MODE.md)：设置MIPI Rx的Lane分布。
--   [OT\_MIPI\_SET\_PHY\_CMVMODE](OT_MIPI_SET_PHY_CMVMODE.md)  ：设置共模电压模式。
--   [OT\_MIPI\_RESET\_SENSOR](OT_MIPI_RESET_SENSOR.md)：复位sensor。
--   [OT\_MIPI\_UNRESET\_SENSOR](OT_MIPI_UNRESET_SENSOR.md)：撤销复位sensor。
--   [OT\_MIPI\_RESET\_MIPI](OT_MIPI_RESET_MIPI.md)：复位MIPI Rx。
--   [OT\_MIPI\_UNRESET\_MIPI](OT_MIPI_UNRESET_MIPI.md)：撤销复位MIPI Rx。
--   [OT\_MIPI\_ENABLE\_MIPI\_CLOCK](OT_MIPI_ENABLE_MIPI_CLOCK.md)：打开MIPI设备的时钟。
--   [OT\_MIPI\_DISABLE\_MIPI\_CLOCK](OT_MIPI_DISABLE_MIPI_CLOCK.md)：关闭MIPI设备的时钟。
--   [OT\_MIPI\_ENABLE\_SENSOR\_CLOCK](OT_MIPI_ENABLE_SENSOR_CLOCK.md)：打开SENSOR的时钟。
--   [OT\_MIPI\_DISABLE\_SENSOR\_CLOCK](OT_MIPI_DISABLE_SENSOR_CLOCK.md)：关闭SENSOR的时钟。
--   [OT\_MIPI\_SET\_EXT\_DATA\_TYPE](OT_MIPI_SET_EXT_DATA_TYPE.md)：设置MIPI扩展DATA TYPE的属性。
+-   [OT\_MIPI\_SET\_DEV\_ATTR](#ZH-CN_TOPIC_0000002441661529)：设置MIPI设备属性。
+-   [OT\_MIPI\_SET\_HS\_MODE](#ZH-CN_TOPIC_0000002408262166)：设置MIPI Rx的Lane分布。
+-   [OT\_MIPI\_SET\_PHY\_CMVMODE](#ZH-CN_TOPIC_0000002441661633)  ：设置共模电压模式。
+-   [OT\_MIPI\_RESET\_SENSOR](#ZH-CN_TOPIC_0000002408102350)：复位sensor。
+-   [OT\_MIPI\_UNRESET\_SENSOR](#ZH-CN_TOPIC_0000002408102206)：撤销复位sensor。
+-   [OT\_MIPI\_RESET\_MIPI](#ZH-CN_TOPIC_0000002408262202)：复位MIPI Rx。
+-   [OT\_MIPI\_UNRESET\_MIPI](#ZH-CN_TOPIC_0000002441701445)：撤销复位MIPI Rx。
+-   [OT\_MIPI\_ENABLE\_MIPI\_CLOCK](#ZH-CN_TOPIC_0000002408102238)：打开MIPI设备的时钟。
+-   [OT\_MIPI\_DISABLE\_MIPI\_CLOCK](#ZH-CN_TOPIC_0000002408262178)：关闭MIPI设备的时钟。
+-   [OT\_MIPI\_ENABLE\_SENSOR\_CLOCK](#ZH-CN_TOPIC_0000002441701461)：打开SENSOR的时钟。
+-   [OT\_MIPI\_DISABLE\_SENSOR\_CLOCK](#ZH-CN_TOPIC_0000002441661661)：关闭SENSOR的时钟。
+-   [OT\_MIPI\_SET\_EXT\_DATA\_TYPE](#ZH-CN_TOPIC_0000002441661693)：设置MIPI扩展DATA TYPE的属性。
 
 MIPI Tx提供对接显示屏、级联的功能。提供ioctl接口，可用的命令如下：
 
--   [OT\_MIPI\_TX\_SET\_DEV\_CFG](OT_MIPI_TX_SET_DEV_CFG.md)：设置MIPI Tx设备的属性。
--   [OT\_MIPI\_TX\_SET\_CMD](OT_MIPI_TX_SET_CMD.md)：设置发送给MIPI Tx设备的命令数据。
--   [OT\_MIPI\_TX\_GET\_CMD](OT_MIPI_TX_GET_CMD.md)：用于从外围设备读取信息。
--   [OT\_MIPI\_TX\_ENABLE](OT_MIPI_TX_ENABLE.md)：使能MIPI Tx设备。
--   [OT\_MIPI\_TX\_DISABLE](OT_MIPI_TX_DISABLE.md)：禁用MIPI Tx设备。
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+-   [OT\_MIPI\_TX\_SET\_DEV\_CFG](#ZH-CN_TOPIC_0000002441701429)：设置MIPI Tx设备的属性。
+-   [OT\_MIPI\_TX\_SET\_CMD](#ZH-CN_TOPIC_0000002408102326)：设置发送给MIPI Tx设备的命令数据。
+-   [OT\_MIPI\_TX\_GET\_CMD](#ZH-CN_TOPIC_0000002441661629)：用于从外围设备读取信息。
+-   [OT\_MIPI\_TX\_ENABLE](#ZH-CN_TOPIC_0000002408262190)：使能MIPI Tx设备。
+-   [OT\_MIPI\_TX\_DISABLE](#ZH-CN_TOPIC_0000002408102310)：禁用MIPI Tx设备。
 
 ### OT\_MIPI\_SET\_DEV\_ATTR<a name="ZH-CN_TOPIC_0000002441661529"></a>
 
@@ -422,7 +409,7 @@ MIPI Tx提供对接显示屏、级联的功能。提供ioctl接口，可用的�
 
 【参数】
 
-[combo\_dev\_attr\_t](combo_dev_attr_t.md)类型的指针。
+[combo\_dev\_attr\_t](#ZH-CN_TOPIC_0000002441701509)类型的指针。
 
 【返回值】
 
@@ -456,40 +443,44 @@ MIPI Tx提供对接显示屏、级联的功能。提供ioctl接口，可用的�
 
 【注意】
 
--   除了配置[OT\_MIPI\_SET\_DEV\_ATTR](#ZH-CN_TOPIC_0000001173550480)之外，还需要配置以下接口。
--   设置模式：接口为[OT\_MIPI\_SET\_HS\_MODE](OT_MIPI_SET_HS_MODE.md)。
--   打开MIPI时钟：接口为[OT\_MIPI\_ENABLE\_MIPI\_CLOCK](OT_MIPI_ENABLE_MIPI_CLOCK.md)。
--   复位MIPI：接口为[OT\_MIPI\_RESET\_MIPI](OT_MIPI_RESET_MIPI.md)。
--   打开SENSOR的时钟：接口为[OT\_MIPI\_ENABLE\_SENSOR\_CLOCK](OT_MIPI_ENABLE_SENSOR_CLOCK.md)。
--   复位SENSOR：接口为[OT\_MIPI\_RESET\_SENSOR](OT_MIPI_RESET_SENSOR.md)。
--   撤销复位MIPI：接口为[OT\_MIPI\_UNRESET\_MIPI](OT_MIPI_UNRESET_MIPI.md)。
--   撤销复位SENSOR：接口为[OT\_MIPI\_UNRESET\_SENSOR](OT_MIPI_UNRESET_SENSOR.md)。
--   推荐的配置流程如下：
-    1.  设置模式。
-    2.  打开多路MIPI时钟。
-    3.  复位多路SENSOR所对接的MIPI Rx。
-    4.  打开多路SENSOR所连接的时钟。
-    5.  复位对接的所有SENSOR。
-    6.  配置MIPI Rx设备属性。
-    7.  撤销复位多路SENSOR所对接的MIPI Rx。
-    8.  撤销复位对接的所有SENSOR。
+除了配置OT\_MIPI\_SET\_DEV\_ATTR之外，还需要配置以下接口。
 
--   推荐的退出流程如下：
-    1.  复位多路对接的SENSOR。
-    2.  关闭多路SENSOR所连接的时钟。
-    3.  复位多路SENSOR所对接的MIPI Rx。
-    4.  清除多路SENSOR所对接的MIPI Rx设备的配置。
-    5.  关闭多路MIPI时钟。
+-   设置模式：接口为[OT\_MIPI\_SET\_HS\_MODE](#ZH-CN_TOPIC_0000002408262166)。
+-   打开MIPI时钟：接口为[OT\_MIPI\_ENABLE\_MIPI\_CLOCK](#ZH-CN_TOPIC_0000002408102238)。
+-   复位MIPI：接口为[OT\_MIPI\_RESET\_MIPI](#ZH-CN_TOPIC_0000002408262202)。
+-   打开SENSOR的时钟：接口为[OT\_MIPI\_ENABLE\_SENSOR\_CLOCK](#ZH-CN_TOPIC_0000002441701461)。
+-   复位SENSOR：接口为[OT\_MIPI\_RESET\_SENSOR](#ZH-CN_TOPIC_0000002408102350)。
+-   撤销复位MIPI：接口为[OT\_MIPI\_UNRESET\_MIPI](#ZH-CN_TOPIC_0000002441701445)。
+-   撤销复位SENSOR：接口为[OT\_MIPI\_UNRESET\_SENSOR](#ZH-CN_TOPIC_0000002408102206)。
 
--   操作SENSOR复位信号线和时钟信号线会对所连接到该信号线的所有SENSOR都产生效果。
+推荐的配置流程如下：
+
+1.  设置模式。
+2.  打开多路MIPI时钟。
+3.  复位多路SENSOR所对接的MIPI Rx。
+4.  打开多路SENSOR所连接的时钟。
+5.  复位对接的所有SENSOR。
+6.  配置MIPI Rx设备属性。
+7.  撤销复位多路SENSOR所对接的MIPI Rx。
+8.  撤销复位对接的所有SENSOR。
+
+推荐的退出流程如下：
+
+1.  复位多路对接的SENSOR。
+2.  关闭多路SENSOR所连接的时钟。
+3.  复位多路SENSOR所对接的MIPI Rx。
+4.  清除多路SENSOR所对接的MIPI Rx设备的配置。
+5.  关闭多路MIPI时钟。
+
+操作SENSOR复位信号线和时钟信号线会对所连接到该信号线的所有SENSOR都产生效果。
 
 【相关数据类型及接口】
 
--   [OT\_MIPI\_SET\_HS\_MODE](#OT_MIPI_SET_HS_MODE)
--   [OT\_MIPI\_RESET\_SENSOR](#OT_MIPI_RESET_SENSOR)
--   [OT\_MIPI\_UNRESET\_SENSOR](#OT_MIPI_UNRESET_SENSOR)
--   [OT\_MIPI\_RESET\_MIPI](#OT_MIPI_RESET_MIPI)
--   [OT\_MIPI\_UNRESET\_MIPI](#OT_MIPI_UNRESET_MIPI)
+-   [OT\_MIPI\_SET\_HS\_MODE](#ZH-CN_TOPIC_0000002408262166)
+-   [OT\_MIPI\_RESET\_SENSOR](#ZH-CN_TOPIC_0000002408102350)
+-   [OT\_MIPI\_UNRESET\_SENSOR](#ZH-CN_TOPIC_0000002408102206)
+-   [OT\_MIPI\_RESET\_MIPI](#ZH-CN_TOPIC_0000002408262202)
+-   [OT\_MIPI\_UNRESET\_MIPI](#ZH-CN_TOPIC_0000002441701445)
 
 ### OT\_MIPI\_SET\_HS\_MODE<a name="ZH-CN_TOPIC_0000002408262166"></a>
 
@@ -505,7 +496,7 @@ MIPI Tx提供对接显示屏、级联的功能。提供ioctl接口，可用的�
 
 【参数】
 
-[lane\_divide\_mode\_t](lane_divide_mode_t.md)类型的指针。
+[lane\_divide\_mode\_t](#ZH-CN_TOPIC_0000002441701525)类型的指针。
 
 【返回值】
 
@@ -552,7 +543,7 @@ MIPI Tx提供对接显示屏、级联的功能。提供ioctl接口，可用的�
 
 【注意】
 
-在接多路sensor输入时，建议在初始时根据硬件连接对整个lane分布进行全局的lane分布模式的设定，在之后的多路sensor采集过程中不能再调用此接口，否则可能对其他sensor采集有影响。
+在多路sensor输入场景下，建议在初始化时根据硬件连接全局设置一次Lane分布模式。后续采集过程中不应再次调用该接口，否则可能影响其他sensor的正常采集。
 
 ### OT\_MIPI\_SET\_PHY\_CMVMODE<a name="ZH-CN_TOPIC_0000002441661633"></a>
 
@@ -568,7 +559,7 @@ MIPI Tx提供对接显示屏、级联的功能。提供ioctl接口，可用的�
 
 【参数】
 
-[phy\_cmv\_t](phy_cmv_t.md)类型的指针。
+[phy\_cmv\_t](#ZH-CN_TOPIC_0000002408102302)类型的指针。
 
 【返回值】
 
@@ -631,7 +622,7 @@ MIPI Tx提供对接显示屏、级联的功能。提供ioctl接口，可用的�
 
 【参数】
 
-[sns\_rst\_source\_t](sns_rst_source_t.md)  SENSOR复位信号线编号。
+[sns\_rst\_source\_t](#ZH-CN_TOPIC_0000002441701501)  SENSOR复位信号线编号。
 
 【返回值】
 
@@ -694,7 +685,7 @@ MIPI Tx提供对接显示屏、级联的功能。提供ioctl接口，可用的�
 
 【参数】
 
-[sns\_rst\_source\_t](sns_rst_source_t.md)  SENSOR复位信号线编号。
+[sns\_rst\_source\_t](#ZH-CN_TOPIC_0000002441701501)  SENSOR复位信号线编号。
 
 【返回值】
 
@@ -757,7 +748,7 @@ MIPI Tx提供对接显示屏、级联的功能。提供ioctl接口，可用的�
 
 【参数】
 
-[combo\_dev\_t](combo_dev_t.md)设备号。
+[combo\_dev\_t](#ZH-CN_TOPIC_0000002408262150)设备号。
 
 【返回值】
 
@@ -820,7 +811,7 @@ MIPI Tx提供对接显示屏、级联的功能。提供ioctl接口，可用的�
 
 【参数】
 
-[combo\_dev\_t](combo_dev_t.md)设备号。
+[combo\_dev\_t](#ZH-CN_TOPIC_0000002408262150)设备号。
 
 【返回值】
 
@@ -883,7 +874,7 @@ MIPI Tx提供对接显示屏、级联的功能。提供ioctl接口，可用的�
 
 【参数】
 
-[combo\_dev\_t](combo_dev_t.md)  设备号。
+[combo\_dev\_t](#ZH-CN_TOPIC_0000002408262150)  设备号。
 
 【返回值】
 
@@ -946,7 +937,7 @@ MIPI Tx提供对接显示屏、级联的功能。提供ioctl接口，可用的�
 
 【参数】
 
-[combo\_dev\_t](combo_dev_t.md)  设备号。
+[combo\_dev\_t](#ZH-CN_TOPIC_0000002408262150)  设备号。
 
 【返回值】
 
@@ -1135,7 +1126,7 @@ SENSOR的时钟设备源编号。
 
 【参数】
 
-[ext\_data\_type\_t](ext_data_type_t.md)类型的指针。
+[ext\_data\_type\_t](#ZH-CN_TOPIC_0000002408102258)类型的指针。
 
 【返回值】
 
@@ -1212,7 +1203,7 @@ MIPI Tx设备属性。
 
 【注意】
 
--   必须在执行[OT\_MIPI\_TX\_ENABLE](OT_MIPI_TX_ENABLE.md)前，即使能前调用此接口。
+-   必须在执行[OT\_MIPI\_TX\_ENABLE](#ZH-CN_TOPIC_0000002408262190)前，即使能前调用此接口。
 -   执行该接口后，MIPI\_TX将默认设置为LP（Lower Power）模式，LP时钟设置为：关闭。
 
 ### OT\_MIPI\_TX\_SET\_CMD<a name="ZH-CN_TOPIC_0000002408102326"></a>
@@ -1259,8 +1250,8 @@ MIPI Tx设备属性。
 
 【注意】
 
--   必须在执行[OT\_MIPI\_TX\_ENABLE](OT_MIPI_TX_ENABLE.md)前，即使能前调用此接口。
--   必须在执行[OT\_MIPI\_TX\_SET\_DEV\_CFG](OT_MIPI_TX_SET_DEV_CFG.md)后，即配置设备后调用此接口。
+-   必须在执行[OT\_MIPI\_TX\_ENABLE](#ZH-CN_TOPIC_0000002408262190)前，即使能前调用此接口。
+-   必须在执行[OT\_MIPI\_TX\_SET\_DEV\_CFG](#ZH-CN_TOPIC_0000002441701429)后，即配置设备后调用此接口。
 -   此接口执行成功与否依赖硬件或lane链路的连通性，连通性异常，则返回失败。
 
 ### OT\_MIPI\_TX\_GET\_CMD<a name="ZH-CN_TOPIC_0000002441661629"></a>
@@ -1277,7 +1268,7 @@ MIPI Tx设备属性。
 
 【参数】
 
-详见[get\_cmd\_info\_t](get_cmd_info_t.md)结构体说明。
+详见[get\_cmd\_info\_t](#ZH-CN_TOPIC_0000002408262218)结构体说明。
 
 【返回值】
 
@@ -1307,8 +1298,8 @@ MIPI Tx设备属性。
 
 【注意】
 
--   在执行[OT\_MIPI\_TX\_ENABLE](OT_MIPI_TX_ENABLE.md)后，调用此接口，存在概率读失败的情况。
--   必须在执行[OT\_MIPI\_TX\_SET\_DEV\_CFG](OT_MIPI_TX_SET_DEV_CFG.md)后，即配置设备后调用此接口。
+-   在执行[OT\_MIPI\_TX\_ENABLE](#ZH-CN_TOPIC_0000002408262190)后，调用此接口，存在概率读失败的情况。
+-   必须在执行[OT\_MIPI\_TX\_SET\_DEV\_CFG](#ZH-CN_TOPIC_0000002441701429)后，即配置设备后调用此接口。
 -   此接口执行成功与否依赖硬件或lane链路的连通性，连通性异常，则返回失败。
 
 ### OT\_MIPI\_TX\_ENABLE<a name="ZH-CN_TOPIC_0000002408262190"></a>
@@ -1355,7 +1346,7 @@ MIPI Tx设备属性。
 
 【注意】
 
--   使能前，必须调用[OT\_MIPI\_TX\_SET\_DEV\_CFG](OT_MIPI_TX_SET_DEV_CFG.md)对设备进行配置。
+-   使能前，必须调用[OT\_MIPI\_TX\_SET\_DEV\_CFG](#ZH-CN_TOPIC_0000002441701429)对设备进行配置。
 -   此接口调用后MIPI\_TX将工作于HS模式（High Speed），LP时钟设置为：打开。
 
 ### OT\_MIPI\_TX\_DISABLE<a name="ZH-CN_TOPIC_0000002408102310"></a>
@@ -1403,104 +1394,58 @@ MIPI Tx设备属性。
 【注意】
 
 -   此接口调用后MIPI\_TX将工作于LP模式（Lower Power），LP时钟设置为：关闭。
--   设备禁用后需要使用[OT\_MIPI\_TX\_SET\_DEV\_CFG](OT_MIPI_TX_SET_DEV_CFG.md)重新设置设备属性，才可使能设备。
+-   设备禁用后需要使用[OT\_MIPI\_TX\_SET\_DEV\_CFG](#ZH-CN_TOPIC_0000002441701429)重新设置设备属性，才可使能设备。
 
 ## 数据类型<a name="ZH-CN_TOPIC_0000002441661649"></a>
 
 MIPI Rx相关数据类型定义如下：
 
--   [OT\_MIPI\_IOC\_MAGIC](OT_MIPI_IOC_MAGIC.md)：MIPI Rx ioctl命令的幻数。
--   [combo\_dev\_t](combo_dev_t.md)：MIPI Rx设备类型。
--   [SNS\_MAX\_RST\_SOURCE\_NUM](SNS_MAX_RST_SOURCE_NUM.md)：SENSOR的复位信号线个数。
--   [SNS\_MAX\_CLK\_SOURCE\_NUM](SNS_MAX_CLK_SOURCE_NUM.md)：SENSOR的时钟信号线个数。
--   [sns\_rst\_source\_t](sns_rst_source_t.md)：SENSOR的复位信号线编号，软件上称为SENSOR的复位源。
--   [sns\_clk\_source\_t](sns_clk_source_t.md)：SENSOR的时钟信号线编号，软件上称为SENSOR的时钟源。
--   [MIPI\_RX\_MAX\_DEV\_NUM](MIPI_RX_MAX_DEV_NUM.md)：MIPI Rx支持的设备数。
--   [COMBO\_MAX\_LANE\_NUM](COMBO_MAX_LANE_NUM.md)：设备最大支持的Lane数量。
--   [MAX\_LANE\_NUM\_PER\_LINK](MAX_LANE_NUM_PER_LINK.md)：MIPI Rx一个link的Lane数。
--   [MIPI\_LANE\_NUM](MIPI_LANE_NUM.md)：MIPI Rx的MIPI设备支持的最大Lane数。
--   [LVDS\_LANE\_NUM](LVDS_LANE_NUM.md)：LVDS/HiSPi接口支持的Lane数量。
--   [WDR\_VC\_NUM](WDR_VC_NUM.md)：定义最多支持的Virtual Chnnael数量。
--   [SYNC\_CODE\_NUM](SYNC_CODE_NUM.md)：定义LVDS每个Virtual Channel的同步码数量。
--   [MAX\_EXT\_DATA\_TYPE\_NUM](MAX_EXT_DATA_TYPE_NUM.md)：定义扩展DATE TYPE的数量。
--   [lane\_divide\_mode\_t](lane_divide_mode_t.md)：MIPI Rx的Lane分布。
--   [input\_mode\_t](input_mode_t.md)：MIPI Rx输入接口类型。
--   [mipi\_data\_rate\_t](mipi_data_rate_t.md)：MIPI Rx输入速率。
--   [img\_rect\_t](img_rect_t.md)：crop属性。
--   [data\_type\_t](data_type_t.md)：传输的数据类型。
--   [ext\_data\_type\_t](ext_data_type_t.md)：MIPI 扩展data type属性。
--   [mipi\_wdr\_mode\_t](mipi_wdr_mode_t.md)：MIPI WDR模式。
--   [mipi\_dev\_attr\_t](mipi_dev_attr_t.md)：MIPI设备属性。
--   [lvds\_wdr\_mode\_t](lvds_wdr_mode_t.md)：LVDS WDR模式。
--   [lvds\_sync\_mode\_t](lvds_sync_mode_t.md)：LVDS同步方式。
--   [lvds\_bit\_endian\_t](lvds_bit_endian_t.md)：比特位大小端模式。
--   [lvds\_vsync\_type\_t](lvds_vsync_type_t.md)：LVDS vsync类型。
--   [lvds\_vsync\_attr\_t](lvds_vsync_attr_t.md)：LVDS vsync参数。
--   [lvds\_fid\_type\_t](lvds_fid_type_t.md)：Frame identification Id类型。
--   [lvds\_fid\_attr\_t](lvds_fid_attr_t.md)：Frame indentification Id配置信息。
--   [lvds\_dev\_attr\_t](lvds_dev_attr_t.md)：LVDS/SubLVDS/HiSPi设备属性。
--   [phy\_cmv\_mode\_t](phy_cmv_mode_t.md)：PHY共模电压模式。
--   [phy\_cmv\_t](phy_cmv_t.md)：PHY共模电压配置信息。
--   [combo\_dev\_attr\_t](combo_dev_attr_t.md)：combo设备属性。
--   [OT\_MIPI\_TX\_IOC\_MAGIC](OT_MIPI_TX_IOC_MAGIC.md)：MIPI Tx ioctl命令的幻数。
--   [LANE\_MAX\_NUM](LANE_MAX_NUM.md)：定义MIPI Tx支持的最大Lane数。
--   [MIPI\_TX\_SET\_DATA\_SIZE](MIPI_TX_SET_DATA_SIZE.md)：定义MIPI TX长指令支持的最大数据长度。
--   [MIPI\_TX\_GET\_DATA\_SIZE](MIPI_TX_GET_DATA_SIZE.md)：定义MIPI TX读指令支持的最大数据长度。
--   [ATTRIBUTE](ATTRIBUTE.md)：定义编译时对齐字节数。
--   [out\_mode\_t](out_mode_t.md)：MIPI Tx输出或外设操作模式。
--   [mipi\_tx\_work\_mode\_t](mipi_tx_work_mode_t.md)：MIPI Tx 工作模式。
--   [video\_mode\_t](video_mode_t.md)：MIPI Tx视频模式或视频格式，或包序列格式。
--   [out\_format\_t](out_format_t.md)：MIPI Tx输出数据格式。
--   [sync\_info\_t](sync_info_t.md)：MIPI Tx设备同步信息。
--   [combo\_dev\_cfg\_t](combo_dev_cfg_t.md)：MIPI Tx设备属性。
--   [cmd\_info\_t](cmd_info_t.md)：发送给MIPI Tx设备的命令信息。
--   [get\_cmd\_info\_t](get_cmd_info_t.md)：发送给MIPI Tx设备的命令信息。
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+-   [OT\_MIPI\_IOC\_MAGIC](#ZH-CN_TOPIC_0000002408102374)：MIPI Rx ioctl命令的幻数。
+-   [combo\_dev\_t](#ZH-CN_TOPIC_0000002408262150)：MIPI Rx设备类型。
+-   [SNS\_MAX\_RST\_SOURCE\_NUM](#ZH-CN_TOPIC_0000002441661625)：SENSOR的复位信号线个数。
+-   [SNS\_MAX\_CLK\_SOURCE\_NUM](#ZH-CN_TOPIC_0000002441661669)：SENSOR的时钟信号线个数。
+-   [sns\_rst\_source\_t](#ZH-CN_TOPIC_0000002441701501)：SENSOR的复位信号线编号，软件上称为SENSOR的复位源。
+-   [sns\_clk\_source\_t](#ZH-CN_TOPIC_0000002408102314)：SENSOR的时钟信号线编号，软件上称为SENSOR的时钟源。
+-   [MIPI\_RX\_MAX\_DEV\_NUM](#ZH-CN_TOPIC_0000002408262242)：MIPI Rx支持的设备数。
+-   [COMBO\_MAX\_LANE\_NUM](#ZH-CN_TOPIC_0000002408102358)：设备最大支持的Lane数量。
+-   [MAX\_LANE\_NUM\_PER\_LINK](#ZH-CN_TOPIC_0000002441701405)：MIPI Rx一个link的Lane数。
+-   [MIPI\_LANE\_NUM](#ZH-CN_TOPIC_0000002408102294)：MIPI Rx的MIPI设备支持的最大Lane数。
+-   [LVDS\_LANE\_NUM](#ZH-CN_TOPIC_0000002408102334)：LVDS/HiSPi接口支持的Lane数量。
+-   [WDR\_VC\_NUM](#ZH-CN_TOPIC_0000002408102378)：定义最多支持的Virtual Channel数量。
+-   [SYNC\_CODE\_NUM](#ZH-CN_TOPIC_0000002408102366)：定义LVDS每个Virtual Channel的同步码数量。
+-   [MAX\_EXT\_DATA\_TYPE\_NUM](#ZH-CN_TOPIC_0000002408262246)：定义扩展DATE TYPE的数量。
+-   [lane\_divide\_mode\_t](#ZH-CN_TOPIC_0000002441701525)：MIPI Rx的Lane分布。
+-   [input\_mode\_t](#ZH-CN_TOPIC_0000002441661697)：MIPI Rx输入接口类型。
+-   [mipi\_data\_rate\_t](#ZH-CN_TOPIC_0000002441701457)：MIPI Rx输入速率。
+-   [img\_rect\_t](#ZH-CN_TOPIC_0000002441661641)：crop属性。
+-   [data\_type\_t](#ZH-CN_TOPIC_0000002441661677)：传输的数据类型。
+-   [ext\_data\_type\_t](#ZH-CN_TOPIC_0000002408102258)：MIPI 扩展data type属性。
+-   [mipi\_wdr\_mode\_t](#ZH-CN_TOPIC_0000002441661545)：MIPI WDR模式。
+-   [mipi\_dev\_attr\_t](#ZH-CN_TOPIC_0000002441661685)：MIPI设备属性。
+-   [lvds\_wdr\_mode\_t](#ZH-CN_TOPIC_0000002441701381)：LVDS WDR模式。
+-   [lvds\_sync\_mode\_t](#ZH-CN_TOPIC_0000002441661581)：LVDS同步方式。
+-   [lvds\_bit\_endian\_t](#ZH-CN_TOPIC_0000002441701481)：比特位大小端模式。
+-   [lvds\_vsync\_type\_t](#ZH-CN_TOPIC_0000002408262254)：LVDS vsync类型。
+-   [lvds\_vsync\_attr\_t](#ZH-CN_TOPIC_0000002408262114)：LVDS vsync参数。
+-   [lvds\_fid\_type\_t](#ZH-CN_TOPIC_0000002441661617)：Frame identification Id类型。
+-   [lvds\_fid\_attr\_t](#ZH-CN_TOPIC_0000002408102282)：Frame indentification Id配置信息。
+-   [lvds\_dev\_attr\_t](#ZH-CN_TOPIC_0000002408262138)：LVDS/SubLVDS/HiSPi设备属性。
+-   [phy\_cmv\_mode\_t](#ZH-CN_TOPIC_0000002441661593)：PHY共模电压模式。
+-   [phy\_cmv\_t](#ZH-CN_TOPIC_0000002408102302)：PHY共模电压配置信息。
+-   [combo\_dev\_attr\_t](#ZH-CN_TOPIC_0000002441701509)：combo设备属性。
+-   [OT\_MIPI\_TX\_IOC\_MAGIC](#ZH-CN_TOPIC_0000002441701541)：MIPI Tx ioctl命令的幻数。
+-   [LANE\_MAX\_NUM](#ZH-CN_TOPIC_0000002408102274)：定义MIPI Tx支持的最大Lane数。
+-   [MIPI\_TX\_SET\_DATA\_SIZE](#ZH-CN_TOPIC_0000002408262234)：定义MIPI TX长指令支持的最大数据长度。
+-   [MIPI\_TX\_GET\_DATA\_SIZE](#ZH-CN_TOPIC_0000002441701477)：定义MIPI TX读指令支持的最大数据长度。
+-   [ATTRIBUTE](#ZH-CN_TOPIC_0000002441661605)：定义编译时对齐字节数。
+-   [out\_mode\_t](#ZH-CN_TOPIC_0000002408262214)：MIPI Tx输出或外设操作模式。
+-   [mipi\_tx\_work\_mode\_t](#ZH-CN_TOPIC_0000002441701497)：MIPI Tx 工作模式。
+-   [video\_mode\_t](#ZH-CN_TOPIC_0000002408262278)：MIPI Tx视频模式或视频格式，或包序列格式。
+-   [out\_format\_t](#ZH-CN_TOPIC_0000002441661565)：MIPI Tx输出数据格式。
+-   [sync\_info\_t](#ZH-CN_TOPIC_0000002441701469)：MIPI Tx设备同步信息。
+-   [combo\_dev\_cfg\_t](#ZH-CN_TOPIC_0000002441701517)：MIPI Tx设备属性。
+-   [cmd\_info\_t](#ZH-CN_TOPIC_0000002408102342)：发送给MIPI Tx设备的命令信息。
+-   [get\_cmd\_info\_t](#ZH-CN_TOPIC_0000002408262218)：发送给MIPI Tx设备的命令信息。
 
 ### OT\_MIPI\_IOC\_MAGIC<a name="ZH-CN_TOPIC_0000002408102374"></a>
 
@@ -1553,7 +1498,7 @@ typedef unsigned int combo_dev_t;
 </thead>
 <tbody><tr id="row3447mcpsimp"><td class="cellrowborder" valign="top" width="39%" headers="mcps1.1.3.1.1 "><p id="p3449mcpsimp"><a name="p3449mcpsimp"></a><a name="p3449mcpsimp"></a>SS928V100</p>
 </td>
-<td class="cellrowborder" valign="top" width="61%" headers="mcps1.1.3.1.2 "><p id="p3451mcpsimp"><a name="p3451mcpsimp"></a><a name="p3451mcpsimp"></a>[0, <a href="MIPI_RX_MAX_DEV_NUM.md">MIPI_RX_MAX_DEV_NUM</a>)</p>
+<td class="cellrowborder" valign="top" width="61%" headers="mcps1.1.3.1.2 "><p id="p3451mcpsimp"><a name="p3451mcpsimp"></a><a name="p3451mcpsimp"></a>[0, <a href="#ZH-CN_TOPIC_0000002408262242">MIPI_RX_MAX_DEV_NUM</a>)</p>
 </td>
 </tr>
 </tbody>
@@ -1565,10 +1510,10 @@ typedef unsigned int combo_dev_t;
 
 【相关数据类型及接口】
 
--   [combo\_dev\_attr\_t](#combo_dev_attr_t)
--   [OT\_MIPI\_SET\_DEV\_ATTR](#OT_MIPI_SET_DEV_ATTR)
--   [OT\_MIPI\_RESET\_MIPI](#OT_MIPI_RESET_MIPI)
--   [OT\_MIPI\_UNRESET\_MIPI](#OT_MIPI_UNRESET_MIPI)
+-   [combo\_dev\_attr\_t](#ZH-CN_TOPIC_0000002441701509)
+-   [OT\_MIPI\_SET\_DEV\_ATTR](#ZH-CN_TOPIC_0000002441661529)
+-   [OT\_MIPI\_RESET\_MIPI](#ZH-CN_TOPIC_0000002408262202)
+-   [OT\_MIPI\_UNRESET\_MIPI](#ZH-CN_TOPIC_0000002441701445)
 
 ### SNS\_MAX\_RST\_SOURCE\_NUM<a name="ZH-CN_TOPIC_0000002441661625"></a>
 
@@ -1667,7 +1612,7 @@ typedef unsigned int sns_rst_source_t;
 </thead>
 <tbody><tr id="row1138mcpsimp"><td class="cellrowborder" valign="top" width="39%" headers="mcps1.1.3.1.1 "><p id="p1140mcpsimp"><a name="p1140mcpsimp"></a><a name="p1140mcpsimp"></a>SS928V100</p>
 </td>
-<td class="cellrowborder" valign="top" width="61%" headers="mcps1.1.3.1.2 "><p id="p1142mcpsimp"><a name="p1142mcpsimp"></a><a name="p1142mcpsimp"></a>[0, <a href="SNS_MAX_RST_SOURCE_NUM.md">SNS_MAX_RST_SOURCE_NUM</a>)</p>
+<td class="cellrowborder" valign="top" width="61%" headers="mcps1.1.3.1.2 "><p id="p1142mcpsimp"><a name="p1142mcpsimp"></a><a name="p1142mcpsimp"></a>[0, <a href="#ZH-CN_TOPIC_0000002441661625">SNS_MAX_RST_SOURCE_NUM</a>)</p>
 </td>
 </tr>
 </tbody>
@@ -1704,7 +1649,7 @@ typedef unsigned int sns_clk_source_t;
 </thead>
 <tbody><tr id="row1548mcpsimp"><td class="cellrowborder" valign="top" width="39%" headers="mcps1.1.3.1.1 "><p id="p1550mcpsimp"><a name="p1550mcpsimp"></a><a name="p1550mcpsimp"></a>SS928V100</p>
 </td>
-<td class="cellrowborder" valign="top" width="61%" headers="mcps1.1.3.1.2 "><p id="p1552mcpsimp"><a name="p1552mcpsimp"></a><a name="p1552mcpsimp"></a>[0, <a href="SNS_MAX_CLK_SOURCE_NUM.md">SNS_MAX_CLK_SOURCE_NUM</a>)</p>
+<td class="cellrowborder" valign="top" width="61%" headers="mcps1.1.3.1.2 "><p id="p1552mcpsimp"><a name="p1552mcpsimp"></a><a name="p1552mcpsimp"></a>[0, <a href="#ZH-CN_TOPIC_0000002441661669">SNS_MAX_CLK_SOURCE_NUM</a>)</p>
 </td>
 </tr>
 </tbody>
@@ -1716,8 +1661,8 @@ typedef unsigned int sns_clk_source_t;
 
 【相关数据类型及接口】
 
--   [OT\_MIPI\_ENABLE\_SENSOR\_CLOCK](#OT_MIPI_ENABLE_SENSOR_CLOCK)
--   [OT\_MIPI\_DISABLE\_SENSOR\_CLOCK](#OT_MIPI_DISABLE_SENSOR_CLOCK)
+-   [OT\_MIPI\_ENABLE\_SENSOR\_CLOCK](#ZH-CN_TOPIC_0000002441701461)
+-   [OT\_MIPI\_DISABLE\_SENSOR\_CLOCK](#ZH-CN_TOPIC_0000002441661661)
 
 ### MIPI\_RX\_MAX\_DEV\_NUM<a name="ZH-CN_TOPIC_0000002408262242"></a>
 
@@ -1856,7 +1801,7 @@ MIPI Rx的LVDS设备支持的最大Lane数。
 
 【说明】
 
-定义最多支持的Virtual Chnnael数量。
+定义最多支持的Virtual Channel数量。
 
 【定义】
 
@@ -1880,7 +1825,7 @@ MIPI Rx的LVDS设备支持的最大Lane数。
 
 【说明】
 
-定义LVDS每个Virtual Channel的同步码数量
+定义LVDS每个Virtual Channel的同步码数量。
 
 【定义】
 
@@ -1922,7 +1867,7 @@ MIPI Rx的LVDS设备支持的最大Lane数。
 
 【相关数据类型及接口】
 
-[ext\_data\_type\_t](#ext_data_type_t)
+[ext\_data\_type\_t](#ZH-CN_TOPIC_0000002408102258)
 
 ### lane\_divide\_mode\_t<a name="ZH-CN_TOPIC_0000002441701525"></a>
 
@@ -1965,7 +1910,7 @@ typedef enum {
 
 【相关数据类型及接口】
 
-[OT\_MIPI\_SET\_HS\_MODE](#OT_MIPI_SET_HS_MODE)
+[OT\_MIPI\_SET\_HS\_MODE](#ZH-CN_TOPIC_0000002408262166)
 
 ### input\_mode\_t<a name="ZH-CN_TOPIC_0000002441661697"></a>
 
@@ -2266,7 +2211,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[OT\_MIPI\_SET\_EXT\_DATA\_TYPE](#OT_MIPI_SET_EXT_DATA_TYPE)
+[OT\_MIPI\_SET\_EXT\_DATA\_TYPE](#ZH-CN_TOPIC_0000002441661693)
 
 ### mipi\_wdr\_mode\_t<a name="ZH-CN_TOPIC_0000002441661545"></a>
 
@@ -2379,7 +2324,7 @@ typedef struct
 </tr>
 <tr id="row4021mcpsimp"><td class="cellrowborder" valign="top" width="25%" headers="mcps1.1.3.1.1 "><p xml:lang="sv-SE" id="p4023mcpsimp"><a name="p4023mcpsimp"></a><a name="p4023mcpsimp"></a>data_type</p>
 </td>
-<td class="cellrowborder" valign="top" width="75%" headers="mcps1.1.3.1.2 "><p xml:lang="sv-SE" id="p4025mcpsimp"><a name="p4025mcpsimp"></a><a name="p4025mcpsimp"></a>当wdr_mode为OT_MIPI_WDR_MODE_DT<span xml:lang="en-US" id="ph4026mcpsimp"><a name="ph4026mcpsimp"></a><a name="ph4026mcpsimp"></a>时</span>，<span xml:lang="en-US" id="ph4027mcpsimp"><a name="ph4027mcpsimp"></a><a name="ph4027mcpsimp"></a>需要设置</span>data_type，表示不同曝光长度数据对应的Data Type。</p>
+<td class="cellrowborder" valign="top" width="75%" headers="mcps1.1.3.1.2 "><p xml:lang="sv-SE" id="p4025mcpsimp"><a name="p4025mcpsimp"></a><a name="p4025mcpsimp"></a>当wdr_mode为OT_MIPI_WDR_MODE_DT时，需要设置data_type，表示不同曝光长度数据对应的Data type。</p>
 </td>
 </tr>
 </tbody>
@@ -2395,9 +2340,9 @@ typedef struct
 
 【相关数据类型及接口】
 
--   [data\_type\_t](#data_type_t)
--   [mipi\_wdr\_mode\_t](#mipi_wdr_mode_t)
--   [OT\_MIPI\_SET\_DEV\_ATTR](#OT_MIPI_SET_DEV_ATTR)
+-   [data\_type\_t](#ZH-CN_TOPIC_0000002441661677)
+-   [mipi\_wdr\_mode\_t](#ZH-CN_TOPIC_0000002441661545)
+-   [OT\_MIPI\_SET\_DEV\_ATTR](#ZH-CN_TOPIC_0000002441661529)
 
 ### lvds\_wdr\_mode\_t<a name="ZH-CN_TOPIC_0000002441701381"></a>
 
@@ -2410,14 +2355,14 @@ LVDS WDR模式。
 ```
 typedef enum
 {
-    OT_WDR_MODE_NONE  = 0x0,
-    OT_WDR_MODE_2F      = 0x1,
-    OT_WDR_MODE_3F      = 0x2,
-    OT_WDR_MODE_4F      = 0x3,
-    OT_WDR_MODE_DOL_2F  = 0x4,
-    OT_WDR_MODE_DOL_3F  = 0x5,
-    OT_WDR_MODE_DOL_4F  = 0x6,
-    OT_WDR_MODE_BUTT
+    OT_LVDS_WDR_MODE_NONE  = 0x0,
+    OT_LVDS_WDR_MODE_2F      = 0x1,
+    OT_LVDS_WDR_MODE_3F      = 0x2,
+    OT_LVDS_WDR_MODE_4F      = 0x3,
+    OT_LVDS_WDR_MODE_DOL_2F  = 0x4,
+    OT_LVDS_WDR_MODE_DOL_3F  = 0x5,
+    OT_LVDS_WDR_MODE_DOL_4F  = 0x6,
+    OT_LVDS_WDR_MODE_BUTT
 } lvds_wdr_mode_t;
 ```
 
@@ -2430,37 +2375,37 @@ typedef enum
 </th>
 </tr>
 </thead>
-<tbody><tr id="row3533mcpsimp"><td class="cellrowborder" valign="top" width="35%" headers="mcps1.1.3.1.1 "><p id="p3535mcpsimp"><a name="p3535mcpsimp"></a><a name="p3535mcpsimp"></a>OT_WDR_MODE_NONE</p>
+<tbody><tr id="row3533mcpsimp"><td class="cellrowborder" valign="top" width="35%" headers="mcps1.1.3.1.1 "><p id="p3535mcpsimp"><a name="p3535mcpsimp"></a><a name="p3535mcpsimp"></a>OT_LVDS_WDR_MODE_NONE</p>
 </td>
 <td class="cellrowborder" valign="top" width="65%" headers="mcps1.1.3.1.2 "><p xml:lang="sv-SE" id="p3537mcpsimp"><a name="p3537mcpsimp"></a><a name="p3537mcpsimp"></a>线性模式</p>
 </td>
 </tr>
-<tr id="row3538mcpsimp"><td class="cellrowborder" valign="top" width="35%" headers="mcps1.1.3.1.1 "><p id="p3540mcpsimp"><a name="p3540mcpsimp"></a><a name="p3540mcpsimp"></a>OT_WDR_MODE_2F</p>
+<tr id="row3538mcpsimp"><td class="cellrowborder" valign="top" width="35%" headers="mcps1.1.3.1.1 "><p id="p3540mcpsimp"><a name="p3540mcpsimp"></a><a name="p3540mcpsimp"></a>OT_LVDS_WDR_MODE_2F</p>
 </td>
 <td class="cellrowborder" valign="top" width="65%" headers="mcps1.1.3.1.2 "><p xml:lang="sv-SE" id="p3542mcpsimp"><a name="p3542mcpsimp"></a><a name="p3542mcpsimp"></a>2合一WDR</p>
 </td>
 </tr>
-<tr id="row3543mcpsimp"><td class="cellrowborder" valign="top" width="35%" headers="mcps1.1.3.1.1 "><p id="p3545mcpsimp"><a name="p3545mcpsimp"></a><a name="p3545mcpsimp"></a>OT_WDR_MODE_3F</p>
+<tr id="row3543mcpsimp"><td class="cellrowborder" valign="top" width="35%" headers="mcps1.1.3.1.1 "><p id="p3545mcpsimp"><a name="p3545mcpsimp"></a><a name="p3545mcpsimp"></a>OT_LVDS_WDR_MODE_3F</p>
 </td>
 <td class="cellrowborder" valign="top" width="65%" headers="mcps1.1.3.1.2 "><p xml:lang="sv-SE" id="p3547mcpsimp"><a name="p3547mcpsimp"></a><a name="p3547mcpsimp"></a>3合一WDR</p>
 </td>
 </tr>
-<tr id="row3548mcpsimp"><td class="cellrowborder" valign="top" width="35%" headers="mcps1.1.3.1.1 "><p id="p3550mcpsimp"><a name="p3550mcpsimp"></a><a name="p3550mcpsimp"></a>OT_WDR_MODE_4F</p>
+<tr id="row3548mcpsimp"><td class="cellrowborder" valign="top" width="35%" headers="mcps1.1.3.1.1 "><p id="p3550mcpsimp"><a name="p3550mcpsimp"></a><a name="p3550mcpsimp"></a>OT_LVDS_WDR_MODE_4F</p>
 </td>
 <td class="cellrowborder" valign="top" width="65%" headers="mcps1.1.3.1.2 "><p xml:lang="sv-SE" id="p3552mcpsimp"><a name="p3552mcpsimp"></a><a name="p3552mcpsimp"></a>4合一WDR</p>
 </td>
 </tr>
-<tr id="row3553mcpsimp"><td class="cellrowborder" valign="top" width="35%" headers="mcps1.1.3.1.1 "><p id="p3555mcpsimp"><a name="p3555mcpsimp"></a><a name="p3555mcpsimp"></a>OT_WDR_MODE_DOL_2F</p>
+<tr id="row3553mcpsimp"><td class="cellrowborder" valign="top" width="35%" headers="mcps1.1.3.1.1 "><p id="p3555mcpsimp"><a name="p3555mcpsimp"></a><a name="p3555mcpsimp"></a>OT_LVDS_WDR_MODE_DOL_2F</p>
 </td>
 <td class="cellrowborder" valign="top" width="65%" headers="mcps1.1.3.1.2 "><p xml:lang="sv-SE" id="p3557mcpsimp"><a name="p3557mcpsimp"></a><a name="p3557mcpsimp"></a>DOL模式2合一WDR</p>
 </td>
 </tr>
-<tr id="row3558mcpsimp"><td class="cellrowborder" valign="top" width="35%" headers="mcps1.1.3.1.1 "><p id="p3560mcpsimp"><a name="p3560mcpsimp"></a><a name="p3560mcpsimp"></a>OT_WDR_MODE_DOL_3F</p>
+<tr id="row3558mcpsimp"><td class="cellrowborder" valign="top" width="35%" headers="mcps1.1.3.1.1 "><p id="p3560mcpsimp"><a name="p3560mcpsimp"></a><a name="p3560mcpsimp"></a>OT_LVDS_WDR_MODE_DOL_3F</p>
 </td>
 <td class="cellrowborder" valign="top" width="65%" headers="mcps1.1.3.1.2 "><p xml:lang="sv-SE" id="p3562mcpsimp"><a name="p3562mcpsimp"></a><a name="p3562mcpsimp"></a>DOL模式3合一WDR</p>
 </td>
 </tr>
-<tr id="row3563mcpsimp"><td class="cellrowborder" valign="top" width="35%" headers="mcps1.1.3.1.1 "><p id="p3565mcpsimp"><a name="p3565mcpsimp"></a><a name="p3565mcpsimp"></a>OT_WDR_MODE_DOL_4F</p>
+<tr id="row3563mcpsimp"><td class="cellrowborder" valign="top" width="35%" headers="mcps1.1.3.1.1 "><p id="p3565mcpsimp"><a name="p3565mcpsimp"></a><a name="p3565mcpsimp"></a>OT_LVDS_WDR_MODE_DOL_4F</p>
 </td>
 <td class="cellrowborder" valign="top" width="65%" headers="mcps1.1.3.1.2 "><p xml:lang="sv-SE" id="p3567mcpsimp"><a name="p3567mcpsimp"></a><a name="p3567mcpsimp"></a>DOL模式4合一WDR</p>
 </td>
@@ -2523,13 +2468,13 @@ typedef enum
 <tbody><tr id="row3889mcpsimp"><td class="cellrowborder" valign="top" width="35%" headers="mcps1.2.3.1.1 "><p id="p3891mcpsimp"><a name="p3891mcpsimp"></a><a name="p3891mcpsimp"></a>LVDS_SYNC_MODE_SOF</p>
 </td>
 <td class="cellrowborder" valign="top" width="65%" headers="mcps1.2.3.1.2 "><p id="p3893mcpsimp"><a name="p3893mcpsimp"></a><a name="p3893mcpsimp"></a>SOF、EOF、SOL、EOL</p>
-<p id="p3894mcpsimp"><a name="p3894mcpsimp"></a><a name="p3894mcpsimp"></a>请参考<a href="重要概念.md#fig9405124663417">图1</a>。</p>
+<p id="p3894mcpsimp"><a name="p3894mcpsimp"></a><a name="p3894mcpsimp"></a>请参考<a href="#fig9405124663417">图1</a>。</p>
 </td>
 </tr>
 <tr id="row3896mcpsimp"><td class="cellrowborder" valign="top" width="35%" headers="mcps1.2.3.1.1 "><p id="p3898mcpsimp"><a name="p3898mcpsimp"></a><a name="p3898mcpsimp"></a>LVDS_SYNC_MODE_SAV</p>
 </td>
 <td class="cellrowborder" valign="top" width="65%" headers="mcps1.2.3.1.2 "><p id="p3900mcpsimp"><a name="p3900mcpsimp"></a><a name="p3900mcpsimp"></a>invalid SAV、invalid EAV、valid SAV、valid EAV</p>
-<p id="p3901mcpsimp"><a name="p3901mcpsimp"></a><a name="p3901mcpsimp"></a>请参考<a href="重要概念.md#fig1737184853619">图2</a>。</p>
+<p id="p3901mcpsimp"><a name="p3901mcpsimp"></a><a name="p3901mcpsimp"></a>请参考<a href="#fig1737184853619">图2</a>。</p>
 </td>
 </tr>
 </tbody>
@@ -2724,7 +2669,7 @@ typedef enum
 
 【相关数据类型及接口】
 
-[lvds\_vsync\_attr\_t](#lvds_vsync_attr_t)
+[lvds\_vsync\_attr\_t](#ZH-CN_TOPIC_0000002408262114)
 
 ### lvds\_vsync\_attr\_t<a name="ZH-CN_TOPIC_0000002408262114"></a>
 
@@ -2749,11 +2694,11 @@ typedef struct
 
 【注意事项】
 
-当sync\_type为[LVDS\_VSYNC\_HCONNECT](lvds_vsync_type_t.md#LVDS_VSYNC_HCONNECT)时，需要配置hblank1和hblank2，表示Hconnect的消隐区长度。
+当sync\_type为[LVDS\_VSYNC\_HCONNECT](#LVDS_VSYNC_HCONNECT)时，需配置hblank1和hblank2，分别表示HCONNECT模式下的消隐区长度。
 
 【相关数据类型及接口】
 
-[lvds\_vsync\_type\_t](#lvds_vsync_type_t)
+[lvds\_vsync\_type\_t](#ZH-CN_TOPIC_0000002408262254)
 
 ### lvds\_fid\_type\_t<a name="ZH-CN_TOPIC_0000002441661617"></a>
 
@@ -2844,9 +2789,8 @@ typedef struct
 </tr>
 <tr id="row3762mcpsimp"><td class="cellrowborder" valign="top" width="25%" headers="mcps1.1.3.1.1 "><p xml:lang="sv-SE" id="p3764mcpsimp"><a name="p3764mcpsimp"></a><a name="p3764mcpsimp"></a>output_fil</p>
 </td>
-<td class="cellrowborder" valign="top" width="75%" headers="mcps1.1.3.1.2 "><p xml:lang="sv-SE" id="p3766mcpsimp"><a name="p3766mcpsimp"></a><a name="p3766mcpsimp"></a>DOL模式中的Frame information line紧接在V-Blanking之后输出，Frame ID是Frame information line中的第一个像素值。</p>
-<p xml:lang="sv-SE" id="p3767mcpsimp"><a name="p3767mcpsimp"></a><a name="p3767mcpsimp"></a>Frame information line中并不包含有效的视频数据：</p>
-<a name="ul3768mcpsimp"></a><a name="ul3768mcpsimp"></a><ul id="ul3768mcpsimp"><li>如果output_fil设置为1，Frame information line会输出到后端设备。</li><li>如果output_fil设置为0，MIPI Rx将丢弃这一行数据。</li></ul>
+<td class="cellrowborder" valign="top" width="75%" headers="mcps1.1.3.1.2 "><p xml:lang="sv-SE" id="p3766mcpsimp"><a name="p3766mcpsimp"></a><a name="p3766mcpsimp"></a>在DOL模式下，Frame information line紧跟在V-Blanking之后输出，其第一个像素值为Frame ID，该行不包含有效的视频数据。</p>
+<a name="ul3768mcpsimp"></a><a name="ul3768mcpsimp"></a><ul id="ul3768mcpsimp"><li>若output_fil设为1，则该行会输出到后端；</li><li>若output_fil设为0，则MIPI Rx丢弃该行。</li></ul>
 </td>
 </tr>
 </tbody>
@@ -2862,7 +2806,7 @@ typedef struct
 
 【相关数据类型及接口】
 
-[lvds\_fid\_type\_t](#lvds_fid_type_t)
+[lvds\_fid\_type\_t](#ZH-CN_TOPIC_0000002441661617)
 
 ### lvds\_dev\_attr\_t<a name="ZH-CN_TOPIC_0000002408262138"></a>
 
@@ -2913,7 +2857,7 @@ typedef struct
 </tr>
 <tr id="row2048mcpsimp"><td class="cellrowborder" valign="top" width="25%" headers="mcps1.1.3.1.1 "><p xml:lang="sv-SE" id="p2050mcpsimp"><a name="p2050mcpsimp"></a><a name="p2050mcpsimp"></a>vsync_<span xml:lang="en-US" id="ph2051mcpsimp"><a name="ph2051mcpsimp"></a><a name="ph2051mcpsimp"></a>attr</span></p>
 </td>
-<td class="cellrowborder" valign="top" width="75%" headers="mcps1.1.3.1.2 "><p xml:lang="sv-SE" id="p2053mcpsimp"><a name="p2053mcpsimp"></a><a name="p2053mcpsimp"></a>vsync类型，当wdr_mod为DOL模式并且sync_mode为LVDS_SYNC_MODE_SAV时，需要配置vsync的类型。</p>
+<td class="cellrowborder" valign="top" width="75%" headers="mcps1.1.3.1.2 "><p xml:lang="sv-SE" id="p2053mcpsimp"><a name="p2053mcpsimp"></a><a name="p2053mcpsimp"></a>vsync类型，当wdr_mode为DOL模式并且sync_mode为LVDS_SYNC_MODE_SAV时，需要配置vsync的类型。</p>
 </td>
 </tr>
 <tr id="row2054mcpsimp"><td class="cellrowborder" valign="top" width="25%" headers="mcps1.1.3.1.1 "><p id="p2056mcpsimp"><a name="p2056mcpsimp"></a><a name="p2056mcpsimp"></a>fid_attr</p>
@@ -2935,12 +2879,12 @@ typedef struct
 </td>
 <td class="cellrowborder" valign="top" width="75%" headers="mcps1.1.3.1.2 "><p xml:lang="sv-SE" id="p2073mcpsimp"><a name="p2073mcpsimp"></a><a name="p2073mcpsimp"></a>发送端(sensor)和接收端(MIPI Rx) lane的对应关系</p>
 <p xml:lang="sv-SE" id="p2074mcpsimp"><a name="p2074mcpsimp"></a><a name="p2074mcpsimp"></a>未使用的lane设置为-1</p>
-<p xml:lang="sv-SE" id="p2075mcpsimp"><a name="p2075mcpsimp"></a><a name="p2075mcpsimp"></a>lane id的配置方式请参考“<a href="MIPI-RX-Lane-id如何配置.md">MIPI RX Lane id<span xml:lang="en-US" id="ph2077mcpsimp"><a name="ph2077mcpsimp"></a><a name="ph2077mcpsimp"></a>如何配置</span></a>”。</p>
+<p xml:lang="sv-SE" id="p2075mcpsimp"><a name="p2075mcpsimp"></a><a name="p2075mcpsimp"></a>lane id的配置方式请参考“<a href="#ZH-CN_TOPIC_0000002441701529">MIPI RX Lane id<span xml:lang="en-US" id="ph2077mcpsimp"><a name="ph2077mcpsimp"></a><a name="ph2077mcpsimp"></a>如何配置</span></a>”。</p>
 </td>
 </tr>
 <tr id="row2078mcpsimp"><td class="cellrowborder" valign="top" width="25%" headers="mcps1.1.3.1.1 "><p xml:lang="sv-SE" id="p2080mcpsimp"><a name="p2080mcpsimp"></a><a name="p2080mcpsimp"></a>sync_code</p>
 </td>
-<td class="cellrowborder" valign="top" width="75%" headers="mcps1.1.3.1.2 "><p xml:lang="sv-SE" id="p2082mcpsimp"><a name="p2082mcpsimp"></a><a name="p2082mcpsimp"></a>每个Virtual Channel有4个同步码，根据同步模式不同，分别表示SOF/EOF/ SOL/EOL的同步码或者invalid SAV/invalid EAV/ valid SAV/valid EAV的同步码。</p>
+<td class="cellrowborder" valign="top" width="75%" headers="mcps1.1.3.1.2 "><p xml:lang="sv-SE" id="p2082mcpsimp"><a name="p2082mcpsimp"></a><a name="p2082mcpsimp"></a>每个Virtual Channel有4个同步码，根据同步模式不同，分别表示SOF/EOF/SOL/EOL的同步码或者invalid SAV/invalid EAV/valid SAV/valid EAV的同步码。</p>
 </td>
 </tr>
 </tbody>
@@ -2956,13 +2900,13 @@ typedef struct
 
 【相关数据类型及接口】
 
--   [lvds\_wdr\_mode\_t](#lvds_wdr_mode_t)
--   [lvds\_sync\_mode\_t](#lvds_sync_mode_t)
--   [data\_type\_t](#data_type_t)
--   [lvds\_bit\_endian\_t](#lvds_bit_endian_t)
--   [lvds\_vsync\_type\_t](#lvds_vsync_type_t)
--   [lvds\_fid\_type\_t](#lvds_fid_type_t)
--   [OT\_MIPI\_SET\_DEV\_ATTR](#OT_MIPI_SET_DEV_ATTR)
+-   [lvds\_wdr\_mode\_t](#ZH-CN_TOPIC_0000002441701381)
+-   [lvds\_sync\_mode\_t](#ZH-CN_TOPIC_0000002441661581)
+-   [data\_type\_t](#ZH-CN_TOPIC_0000002441661677)
+-   [lvds\_bit\_endian\_t](#ZH-CN_TOPIC_0000002441701481)
+-   [lvds\_vsync\_type\_t](#ZH-CN_TOPIC_0000002408262254)
+-   [lvds\_fid\_type\_t](#ZH-CN_TOPIC_0000002441661617)
+-   [OT\_MIPI\_SET\_DEV\_ATTR](#ZH-CN_TOPIC_0000002441661529)
 
 ### phy\_cmv\_mode\_t<a name="ZH-CN_TOPIC_0000002441661593"></a>
 
@@ -3063,8 +3007,8 @@ typedef struct
 
 【相关数据类型及接口】
 
--   [phy\_cmv\_mode\_t](#phy_cmv_mode_t)
--   [OT\_MIPI\_SET\_PHY\_CMVMODE](#OT_MIPI_SET_PHY_CMVMODE)
+-   [phy\_cmv\_mode\_t](#ZH-CN_TOPIC_0000002441661593)
+-   [OT\_MIPI\_SET\_PHY\_CMVMODE](#ZH-CN_TOPIC_0000002441661633)
 
 ### combo\_dev\_attr\_t<a name="ZH-CN_TOPIC_0000002441701509"></a>
 
@@ -3125,7 +3069,7 @@ typedef struct
 </tr>
 <tr id="row3356mcpsimp"><td class="cellrowborder" valign="top" width="25%" headers="mcps1.1.3.1.1 "><p id="p3358mcpsimp"><a name="p3358mcpsimp"></a><a name="p3358mcpsimp"></a>lvds_attr</p>
 </td>
-<td class="cellrowborder" valign="top" width="75%" headers="mcps1.1.3.1.2 "><p xml:lang="sv-SE" id="p3360mcpsimp"><a name="p3360mcpsimp"></a><a name="p3360mcpsimp"></a>如果input_mode配置为INPUT_MODE_SUBLVDS/ INPUT_MODE_LVDS/ INPUT_MODE_HISPI，则必须配置lvds_attr</p>
+<td class="cellrowborder" valign="top" width="75%" headers="mcps1.1.3.1.2 "><p xml:lang="sv-SE" id="p3360mcpsimp"><a name="p3360mcpsimp"></a><a name="p3360mcpsimp"></a>如果input_mode配置为INPUT_MODE_SUBLVDS/INPUT_MODE_LVDS/INPUT_MODE_HISPI，则必须配置lvds_attr</p>
 </td>
 </tr>
 </tbody>
@@ -3495,7 +3439,7 @@ typedef struct {
 <tr id="row349mcpsimp"><td class="cellrowborder" valign="top" width="25%" headers="mcps1.1.3.1.1 "><p xml:lang="sv-SE" id="p351mcpsimp"><a name="p351mcpsimp"></a><a name="p351mcpsimp"></a>lane_id</p>
 </td>
 <td class="cellrowborder" valign="top" width="75%" headers="mcps1.1.3.1.2 "><p xml:lang="sv-SE" id="p353mcpsimp"><a name="p353mcpsimp"></a><a name="p353mcpsimp"></a>lane个数和模式配置，取决于lane_id中非-1值的个数，仅四种模式可选，且lane个数、lane号码、lane顺序可调整：</p>
-<p xml:lang="sv-SE" id="p354mcpsimp"><a name="p354mcpsimp"></a><a name="p354mcpsimp"></a>配置方法参考本章<a href="MIPI-RX-Lane-id如何配置.md">MIPI RX Lane id如何配置</a>小节。</p>
+<p xml:lang="sv-SE" id="p354mcpsimp"><a name="p354mcpsimp"></a><a name="p354mcpsimp"></a>配置方法参考本章<a href="#ZH-CN_TOPIC_0000002441701529">MIPI RX Lane id如何配置</a>小节。</p>
 <p xml:lang="sv-SE" id="p358mcpsimp"><a name="p358mcpsimp"></a><a name="p358mcpsimp"></a>1 lane模式：lane0</p>
 <p xml:lang="sv-SE" id="p359mcpsimp"><a name="p359mcpsimp"></a><a name="p359mcpsimp"></a>2 lane模式：lane0，lane1</p>
 <p xml:lang="sv-SE" id="p360mcpsimp"><a name="p360mcpsimp"></a><a name="p360mcpsimp"></a>3 lane模式：lane0，lane1，lane2</p>
@@ -3601,9 +3545,9 @@ typedef struct {
 <tr id="row2592mcpsimp"><td class="cellrowborder" valign="top" width="25%" headers="mcps1.1.3.1.1 "><p id="p2594mcpsimp"><a name="p2594mcpsimp"></a><a name="p2594mcpsimp"></a>cmd_size</p>
 </td>
 <td class="cellrowborder" valign="top" width="75%" headers="mcps1.1.3.1.2 "><p xml:lang="sv-SE" id="p2596mcpsimp"><a name="p2596mcpsimp"></a><a name="p2596mcpsimp"></a>短指令的数据，范围：[0, 0xFFFF]。</p>
-<p xml:lang="sv-SE" id="p2597mcpsimp"><a name="p2597mcpsimp"></a><a name="p2597mcpsimp"></a>长指令的数据长度，范围：(0, <a href="MIPI_TX_SET_DATA_SIZE.md">MIPI_TX_SET_DATA_SIZE</a>]，单位：字节。</p>
-<p id="p2599mcpsimp"><a name="p2599mcpsimp"></a><a name="p2599mcpsimp"></a>注<span xml:lang="sv-SE" id="ph2600mcpsimp"><a name="ph2600mcpsimp"></a><a name="ph2600mcpsimp"></a>：cmd</span>置为<span xml:lang="sv-SE" id="ph2601mcpsimp"><a name="ph2601mcpsimp"></a><a name="ph2601mcpsimp"></a>NULL：cmd_size</span>表示短指令的数据<span xml:lang="sv-SE" id="ph2602mcpsimp"><a name="ph2602mcpsimp"></a><a name="ph2602mcpsimp"></a>，</span>低八位对应数据<span xml:lang="sv-SE" id="ph2603mcpsimp"><a name="ph2603mcpsimp"></a><a name="ph2603mcpsimp"></a>1</span>、高八位对应数据<span xml:lang="sv-SE" id="ph2604mcpsimp"><a name="ph2604mcpsimp"></a><a name="ph2604mcpsimp"></a>2</span>。</p>
-<p xml:lang="sv-SE" id="p2605mcpsimp"><a name="p2605mcpsimp"></a><a name="p2605mcpsimp"></a>cmd<span xml:lang="en-US" id="ph2606mcpsimp"><a name="ph2606mcpsimp"></a><a name="ph2606mcpsimp"></a>置为非</span>NULL：<span xml:lang="en-US" id="ph2607mcpsimp"><a name="ph2607mcpsimp"></a><a name="ph2607mcpsimp"></a>cmd_size表示</span>长指令的数据长度。</p>
+<p xml:lang="sv-SE" id="p2597mcpsimp"><a name="p2597mcpsimp"></a><a name="p2597mcpsimp"></a>长指令的数据长度，范围：(0, <a href="#ZH-CN_TOPIC_0000002408262234">MIPI_TX_SET_DATA_SIZE</a>]，单位：字节。</p>
+<p id="p1416312591265"><a name="p1416312591265"></a><a name="p1416312591265"></a>注：</p>
+<a name="ul1550427192716"></a><a name="ul1550427192716"></a><ul id="ul1550427192716"><li>cmd置为NULL时，cmd_size表示短指令的数据，低八位对应数据1、高八位对应数据2。</li><li xml:lang="sv-SE">cmd置为非NULL时，cmd_size表示长指令的数据长度。</li></ul>
 </td>
 </tr>
 <tr id="row2608mcpsimp"><td class="cellrowborder" valign="top" width="25%" headers="mcps1.1.3.1.1 "><p id="p2610mcpsimp"><a name="p2610mcpsimp"></a><a name="p2610mcpsimp"></a>cmd</p>
@@ -3679,7 +3623,7 @@ typedef struct {
 </tr>
 <tr id="row930mcpsimp"><td class="cellrowborder" valign="top" width="25%" headers="mcps1.1.3.1.1 "><p id="p932mcpsimp"><a name="p932mcpsimp"></a><a name="p932mcpsimp"></a>get_data_size</p>
 </td>
-<td class="cellrowborder" valign="top" width="75%" headers="mcps1.1.3.1.2 "><p id="p934mcpsimp"><a name="p934mcpsimp"></a><a name="p934mcpsimp"></a><span xml:lang="sv-SE" id="ph935mcpsimp"><a name="ph935mcpsimp"></a><a name="ph935mcpsimp"></a>预期获取的数据字节数，范围：(0,</span> <a href="MIPI_TX_GET_DATA_SIZE.md">MIPI_TX_GET_DATA_SIZE</a><span xml:lang="sv-SE" id="ph937mcpsimp"><a name="ph937mcpsimp"></a><a name="ph937mcpsimp"></a>]。</span></p>
+<td class="cellrowborder" valign="top" width="75%" headers="mcps1.1.3.1.2 "><p id="p934mcpsimp"><a name="p934mcpsimp"></a><a name="p934mcpsimp"></a><span xml:lang="sv-SE" id="ph935mcpsimp"><a name="ph935mcpsimp"></a><a name="ph935mcpsimp"></a>预期获取的数据字节数，范围：(0,</span> <a href="#ZH-CN_TOPIC_0000002441701477">MIPI_TX_GET_DATA_SIZE</a><span xml:lang="sv-SE" id="ph937mcpsimp"><a name="ph937mcpsimp"></a><a name="ph937mcpsimp"></a>]。</span></p>
 </td>
 </tr>
 <tr id="row938mcpsimp"><td class="cellrowborder" valign="top" width="25%" headers="mcps1.1.3.1.1 "><p id="p940mcpsimp"><a name="p940mcpsimp"></a><a name="p940mcpsimp"></a>get_data</p>
@@ -3700,6 +3644,7 @@ typedef struct {
 
 ## MIPI TX模块参数<a name="ZH-CN_TOPIC_0000002441661657"></a>
 
+-   **[g\_smooth](#ZH-CN_TOPIC_0000002441701545)**  
 
 ### g\_smooth<a name="ZH-CN_TOPIC_0000002441701545"></a>
 
@@ -3712,7 +3657,9 @@ g\_smooth模块参数用于实现平滑过渡，使用方法如下：
 
 ## Proc信息<a name="ZH-CN_TOPIC_0000002408102246"></a>
 
+-   **[MIPI\_RX Proc信息](#ZH-CN_TOPIC_0000002441701489)**  
 
+-   **[MIPI\_TX Proc信息](#ZH-CN_TOPIC_0000002408262282)**  
 
 ### MIPI\_RX Proc信息<a name="ZH-CN_TOPIC_0000002441701489"></a>
 
@@ -3722,7 +3669,7 @@ MIPI\_RX正常工作状态下proc信息中宽高应该是稳定不变且和senso
 
 ```
 [MIPI_RX] Version: [SS928V100V1.0.0.0 B010 Release], Build Time[Jan 25 2022, 11:06:37]
------mipi lane divide mdoe---------------------------------------------------------------------------------
+-----mipi lane divide mode---------------------------------------------------------------------------------
   mode         lane divide
      0                   8
  
@@ -4543,12 +4490,15 @@ MIPI\_TX模块参数、MIPI\_TX设备配置信息、MIPI\_TX时序配置信息�
 
 MIPI具体规格请参考芯片手册。
 
+-   **[MIPI RX Lane id如何配置](#ZH-CN_TOPIC_0000002441701529)**  
 
+-   **[MIPI TX Lane id如何配置](#ZH-CN_TOPIC_0000002408102222)**  
 
+-   **[MIPI频率说明](#ZH-CN_TOPIC_0000002408262210)**  
 
 ### MIPI RX Lane id如何配置<a name="ZH-CN_TOPIC_0000002441701529"></a>
 
-Lane id的配置对应[mipi\_dev\_attr\_t](mipi_dev_attr_t.md)中的short lane\_id\[[MIPI\_LANE\_NUM](MIPI_LANE_NUM.md)\]，其中lane\_id数组的索引号表示的是SENSOR的LANE ID，lane\_id数组的值表示的是MIPI的LANE ID。
+Lane id的配置对应[mipi\_dev\_attr\_t](#ZH-CN_TOPIC_0000002441661685)中的short lane\_id\[[MIPI\_LANE\_NUM](#ZH-CN_TOPIC_0000002408102294)\]，其中lane\_id数组的索引号表示的是SENSOR的LANE ID，lane\_id数组的值表示的是MIPI的LANE ID。
 
 对接sensor时，未使用的lane将其对应的lane\_id配置为-1。配置lane\_id还可以调整数据通道顺序，**根据硬件单板与实际sensor输出通道的对应关系调整lane\_id的配置。**
 
@@ -4592,7 +4542,7 @@ MIPI的最大Lane数为8，我们认为SENSOR的Lane数目最多8个，由于sen
 
 ### MIPI TX Lane id如何配置<a name="ZH-CN_TOPIC_0000002408102222"></a>
 
-Lane id的配置对应[combo\_dev\_cfg\_t](combo_dev_cfg_t.md)中的short lane\_id\[[LANE\_MAX\_NUM](LANE_MAX_NUM.md)\]，其中lane\_id数组的索引号即数组下标表示的是MIPI TX对端设备的LANE ID，lane\_id数组的值表示的是MIPI TX的LANE ID。
+Lane id的配置对应[combo\_dev\_cfg\_t](#ZH-CN_TOPIC_0000002441701517)中的short lane\_id\[[LANE\_MAX\_NUM](#ZH-CN_TOPIC_0000002408102274)\]，其中lane\_id数组的索引号即数组下标表示的是MIPI TX对端设备的LANE ID，lane\_id数组的值表示的是MIPI TX的LANE ID。
 
 对接屏幕时，未使用的lane将其对应的lane\_id配置为-1。配置lane\_id还可以调整数据通道顺序，**根据硬件单板与实际屏幕输出通道的对应关系调整lane\_id的配置。**
 
@@ -4672,6 +4622,7 @@ MIPI TX的最大Lane数为4，屏幕实际可能有4、2个Lane，只使用到MI
 
 ### MIPI频率说明<a name="ZH-CN_TOPIC_0000002408262210"></a>
 
+-   **[MIPI Lane频率与VI频率关系](#ZH-CN_TOPIC_0000002408102318)**  
 
 #### MIPI Lane频率与VI频率关系<a name="ZH-CN_TOPIC_0000002408102318"></a>
 

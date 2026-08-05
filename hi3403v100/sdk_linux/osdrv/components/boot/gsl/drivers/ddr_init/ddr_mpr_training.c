@@ -16,15 +16,15 @@
 
 #include "ddr_training_impl.h"
 
-#define DDR_MPR_TRAINING
+#define __MPR_TRAINING__
 #ifdef DDR_MPR_TRAINING_CONFIG
 /* Switch MPR function */
 static void ddr_mpr_switch(unsigned int base_dmc, int val)
 {
     unsigned int sfc_cmd;
-    if (val == DDR_TRUE)
+    if (val == DDR_TRUE) {
         sfc_cmd = (DMC_CMD_MRS_MR3 << DMC_SFC_CMD_MRS_BIT) | DMC_CMD_TYPE_LMR;
-    else
+    } else
         sfc_cmd = DMC_CMD_TYPE_LMR;
 
     ddr_dmc_sfc_cmd(base_dmc, sfc_cmd, 0x0, DMC_BANK_MR3);
@@ -70,8 +70,8 @@ static int ddr_mpr_extract(struct ddr_cfg_st *cfg,
     unsigned int data2;
     unsigned int data3;
     unsigned int data4;
-	unsigned int base_dmc = cfg->cur_dmc;
-	unsigned int byte_index = cfg->cur_byte;
+    unsigned int base_dmc = cfg->cur_dmc;
+    unsigned int byte_index = cfg->cur_byte;
 
     data1 = reg_read(base_dmc + offset0);  /* SFC read data [127:96] or [255:224] */
     data2 = reg_read(base_dmc + offset1);  /* SFC read data [95:64] or [223:192] */
@@ -99,9 +99,9 @@ static int ddr_mpr_extract(struct ddr_cfg_st *cfg,
         data3 = (data3 >> DDR_MPR_BYTE_BIT >> (byte_index << DDR_MPR_BYTE_SHIFT_BIT)) &
             DDR_MPR_BYTE_MASK;
         data4 = (data4 >> (byte_index << DDR_MPR_BYTE_SHIFT_BIT)) & DDR_MPR_BYTE_MASK;
-        if (ddr_mpr_judge(data1, data2, data3, data4, cfg->cur_dq))
+        if (ddr_mpr_judge(data1, data2, data3, data4, cfg->cur_dq)) {
             return -1;
-
+        }
         /* two byte need to swap data and check again */
         data1 = (reg_read(base_dmc + DDR_DMC_SFC_RDATA1) >>
             DDR_MPR_BYTE_BIT >> (byte_index << DDR_MPR_BYTE_SHIFT_BIT)) &
@@ -121,9 +121,9 @@ static int ddr_mpr_extract(struct ddr_cfg_st *cfg,
 /* Find RDQ via MPR */
 static int ddr_mpr_find_rdq(struct ddr_cfg_st *cfg)
 {
-	struct training_data training;
-	unsigned int dq_num;
-	unsigned int win_num;
+    struct training_data training;
+    unsigned int dq_num;
+    unsigned int win_num;
     unsigned int def_dq;
     unsigned int best_dq;
     unsigned int byte_index;
@@ -164,13 +164,13 @@ static int ddr_mpr_find_rdq(struct ddr_cfg_st *cfg)
 /* Find RDQS via MPR */
 static int ddr_mpr_find_rdqs(struct ddr_cfg_st *cfg)
 {
-	unsigned int rdqs_start = 0;
-	unsigned int rdqs_end   = PHY_RDQS_BDL_MASK;
-	unsigned int rdqs_mid;
+    unsigned int rdqs_start = 0;
+    unsigned int rdqs_end   = PHY_RDQS_BDL_MASK;
+    unsigned int rdqs_mid;
     unsigned int val;
     unsigned int delay;
-	unsigned int count = 0;
-	int found = DDR_FALSE;
+    unsigned int count = 0;
+    int found = DDR_FALSE;
 
     /* set rdq to middle value */
     reg_write(PHY_DQ_MIDDLE_VAL << PHY_BDL_DQ_BIT,
@@ -190,13 +190,14 @@ static int ddr_mpr_find_rdqs(struct ddr_cfg_st *cfg)
         ddr_phy_cfg_update(cfg->cur_phy);
         /* check ok */
         if (!ddr_mpr_check(cfg)) {
-            if (found == DDR_TRUE)
+            if (found == DDR_TRUE) {
                 continue;
-
+            }
             rdqs_start = val; /* found start value */
             count++;
-            if (count == DDR_MPR_RDQS_FIND_TIMES)
+            if (count == DDR_MPR_RDQS_FIND_TIMES) {
                 found = DDR_TRUE;
+            }
         } else {
             if (found == DDR_TRUE) {
                 rdqs_end = val;  /* found end value */
@@ -256,9 +257,9 @@ static int ddr_mpr_training(struct ddr_cfg_st *cfg)
         result += ddr_mpr_find_rdqs(cfg);
 
     /* find rdq */
-    if (!result)
+    if (!result) {
         result = ddr_mpr_find_rdq(cfg);
-
+    }
     /* disable MPR */
     ddr_mpr_switch(base_dmc, DDR_FALSE);
 
@@ -278,9 +279,9 @@ int ddr_mpr_training_func(struct ddr_cfg_st *cfg)
     int result;
 
     /* MPR training disable */
-    if (ddr_training_check_bypass(cfg, DDR_BYPASS_MPR_MASK) != DDR_FALSE)
+    if (ddr_training_check_bypass(cfg, DDR_BYPASS_MPR_MASK) != DDR_FALSE) {
         return 0;
-
+    }
     ddr_training_save_reg(cfg, &relate_reg, DDR_BYPASS_MPR_MASK);
     result = ddr_mpr_training(cfg);
     ddr_training_restore_reg(cfg, &relate_reg);

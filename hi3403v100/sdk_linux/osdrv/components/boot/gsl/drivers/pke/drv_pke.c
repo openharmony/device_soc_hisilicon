@@ -38,32 +38,36 @@ int32_t drv_rsa_verify_hash(const uint8_t *n, const uint8_t *e,
     int ret;
 
     if (sign == NULL)
+    {
         return TD_FAILURE;
-
+    }
     if (memset_s(em, RSA_KEY_LEN_4096, 0x00, RSA_KEY_LEN_4096) != EOK)
+    {
         return TD_FAILURE;
-
+    }
     if (memset_s(sign_hash, HASH_LEN_256, 0x0, HASH_LEN_256) != EOK)
+    {
         return TD_FAILURE;
-
+    }
     em[0] = 0x55; /* 55: force failure if RSA_Calc skipped in later padding check */
     em[1] = 0x00; /* 00: force failure if RSA_Calc skipped in later padding check */
     em[2] = 0x12; /* 12: force failure if RSA_Calc skipped in later padding check */
 
     /* Confirm digital signature */
     if (TD_SUCCESS != drv_ifep_rsa_exp_mod(n, e, sign, em, klen))
+    {
         return TD_FAILURE;
-    else
+    } else
         stepcount += STEP_AUTH;  /* brief: stepcount = 1 */
 
-    if (TD_SUCCESS == memcmp(sign, em, RSA_KEY_LEN_4096))
+    if (TD_SUCCESS == memcmp(sign, em, RSA_KEY_LEN_4096)) {
         return TD_FAILURE;
-    else
+    } else
         stepcount += STEP_AUTH;  /* brief: stepcount = 2 */
 
-    if (memset_s(&pad, sizeof(rsa_padding_s), 0, sizeof(rsa_padding_s)) != EOK)
+    if (memset_s(&pad, sizeof(rsa_padding_s), 0, sizeof(rsa_padding_s)) != EOK) {
         return TD_FAILURE;
-
+    }
     pad.em_bit = rsa_get_bit_num(n, klen);
     pad.klen = klen;
     pad.hlen = HASH_LEN_256;
@@ -71,8 +75,8 @@ int32_t drv_rsa_verify_hash(const uint8_t *n, const uint8_t *e,
     pad.in_len = RSA_KEY_LEN_4096;
 
     ret = rsa_padding_check_pkcs1_pss(&pad, hash);
-    if (ret != 0)
+    if (ret != 0) {
         return TD_FAILURE;
-
+    }
     return TD_SUCCESS;
 }

@@ -104,7 +104,9 @@
 
 # 概述<a name="ZH-CN_TOPIC_0000002470924880"></a>
 
+-   **[概述](#ZH-CN_TOPIC_0000002470925178)**  
 
+-   **[功能描述](#ZH-CN_TOPIC_0000002503964849)**  
 
 ## 概述<a name="ZH-CN_TOPIC_0000002470925178"></a>
 
@@ -121,10 +123,15 @@ ISP由ISP逻辑及运行在其上的Firmware组成，逻辑单元除了完成一
 
 ISP逻辑主要流程、具体概念和功能点请参见芯片手册。
 
+-   **[架构](#ZH-CN_TOPIC_0000002471084980)**  
 
+-   **[开发模式](#ZH-CN_TOPIC_0000002470924924)**  
 
+-   **[内部流程](#ZH-CN_TOPIC_0000002471085172)**  
 
+-   **[软件流程](#ZH-CN_TOPIC_0000002504084739)**  
 
+-   **[文件组织](#ZH-CN_TOPIC_0000002470925206)**  
 
 ### 架构<a name="ZH-CN_TOPIC_0000002471084980"></a>
 
@@ -255,15 +262,14 @@ return TD_SUCCESS;
 
 ISP Firmware的文件组织结构如[图1](#fig142122515335)所示，ISP库和3A库、sensor库、dehaze库、ldci库、drc库分别独立。Firmware中的drv生成的驱动程序向用户态上报ISP中断，并以该中断驱动Firmware的ISP控制单元运转。ISP控制单元从驱动程序中获取统计信息，并调度基础算法单元和3A算法库，最后通过驱动程序配置寄存器。
 
-Src文件夹中包含ISP控制单元和基础算法单元，编译后生成libss\_isp.a、libot\_isp.a，即ISP库。3a文件夹中包含AE/AWB算法库，用户也可以基于统一的接口界面开发自己的3a算法。Sensor文件夹中包含了各个sensor的驱动程序，该部分代码开源。dehaze文件夹对应去雾算法程序，ldci文件夹对应局域自动对比度增强算法程序，drc文件夹对应动态范围压缩算法程序，该部分代码不开源。
+Src文件夹中包含ISP控制单元和基础算法单元，编译后生成libss\_isp.a、libot\_isp.a，即ISP库。3a文件夹中包含AE/AWB算法库，用户也可以基于统一的接口开发自己的3a算法。Sensor文件夹中包含了各个sensor的驱动程序，该部分代码开源。dehaze文件夹对应去雾算法程序，ldci文件夹对应局域自动对比度增强算法程序，drc文件夹对应动态范围压缩算法程序，该部分代码不开源。
 
 **图 1**  ISP firmware 文件组织<a name="fig142122515335"></a>  
 ![](figures/ISP-firmware-文件组织.png "ISP-firmware-文件组织")
 
 # 系统控制<a name="ZH-CN_TOPIC_0000002503964873"></a>
 
-
-
+-   **[功能概述](#ZH-CN_TOPIC_0000002471084924)**  
 
 ## 功能概述<a name="ZH-CN_TOPIC_0000002471084924"></a>
 
@@ -273,92 +279,49 @@ Src文件夹中包含ISP控制单元和基础算法单元，编译后生成libss
 
 本文档中接口，如无特殊说明，支持多进程。
 
--   [ss\_mpi\_isp\_mem\_init](ss_mpi_isp_mem_init.md)：初始化ISP外部寄存器。
--   [ss\_mpi\_isp\_init](ss_mpi_isp_init.md)：初始化ISP firmware。
--   [ss\_mpi\_isp\_run](ss_mpi_isp_run.md)：运行ISP firmware。
--   [ss\_mpi\_isp\_run\_once](ss_mpi_isp_run_once.md)：运行ISP firmware 一次。
--   [ss\_mpi\_isp\_exit](ss_mpi_isp_exit.md)：退出ISP firmware。
--   [ss\_mpi\_isp\_set\_pub\_attr](ss_mpi_isp_set_pub_attr.md)：设置ISP公共属性。
--   [ss\_mpi\_isp\_get\_pub\_attr](ss_mpi_isp_get_pub_attr.md)：获取ISP公共属性。
--   [ss\_mpi\_isp\_set\_fmw\_state](ss_mpi_isp_set_fmw_state.md)：设置ISP firmware状态。
--   [ss\_mpi\_isp\_get\_fmw\_state](ss_mpi_isp_get_fmw_state.md)：获取 ISP firmware状态。
--   [ss\_mpi\_isp\_set\_sns\_slave\_attr](ss_mpi_isp_set_sns_slave_attr.md)：设置从模式sensor行场同步信号。
--   [ss\_mpi\_isp\_get\_sns\_slave\_attr](ss_mpi_isp_get_sns_slave_attr.md)：获取从模式sensor行场同步信号。
--   [ss\_mpi\_isp\_set\_module\_ctrl](ss_mpi_isp_set_module_ctrl.md)：设定ISP功能模块的控制。
--   [ss\_mpi\_isp\_get\_module\_ctrl](ss_mpi_isp_get_module_ctrl.md)：获取ISP功能模块的控制。
--   [ss\_mpi\_isp\_get\_vd\_time\_out](ss_mpi_isp_get_vd_time_out.md)：获取ISP中断信息。
--   [ss\_mpi\_isp\_sensor\_reg\_callback](ss_mpi_isp_sensor_reg_callback.md)：ISP提供的sensor注册的回调接口。
--   [ss\_mpi\_isp\_sensor\_unreg\_callback](ss_mpi_isp_sensor_unreg_callback.md)：ISP提供的sensor反注册的回调接口。
--   [ss\_mpi\_isp\_ae\_lib\_reg\_callback](ss_mpi_isp_ae_lib_reg_callback.md)：ISP提供的AE库注册的回调接口。
--   [ss\_mpi\_isp\_ae\_lib\_unreg\_callback](ss_mpi_isp_ae_lib_unreg_callback.md)：ISP提供的AE库反注册的回调接口。
--   [ss\_mpi\_isp\_awb\_lib\_reg\_callback](ss_mpi_isp_awb_lib_reg_callback.md)：ISP提供的AWB库注册的回调接口。
--   [ss\_mpi\_isp\_awb\_lib\_unreg\_callback](ss_mpi_isp_awb_lib_unreg_callback.md)：ISP提供的AWB库反注册的回调接口。
--   [ss\_mpi\_isp\_set\_bind\_attr](ss_mpi_isp_set_bind_attr.md)：设置ISP库与3A库、sensor的绑定关系。
--   [ss\_mpi\_isp\_get\_bind\_attr](ss_mpi_isp_get_bind_attr.md)：获取ISP库与3A库、sensor的绑定关系。
--   [ss\_mpi\_isp\_set\_dcf\_info](ss_mpi_isp_set_dcf_info.md)：设置DCF参数。
--   [ss\_mpi\_isp\_get\_dcf\_info](ss_mpi_isp_get_dcf_info.md)：获取DCF参数。
--   [ss\_mpi\_isp\_set\_pipe\_differ\_attr](ss_mpi_isp_set_pipe_differ_attr.md)：设置多路ISP Pipe差异属性。
--   [ss\_mpi\_isp\_get\_pipe\_differ\_attr](ss_mpi_isp_get_pipe_differ_attr.md)：获取多路ISP Pipe差异属性。
--   [ss\_mpi\_isp\_set\_ctrl\_param](ss_mpi_isp_set_ctrl_param.md)：设置ISP的控制参数。
--   [ss\_mpi\_isp\_get\_ctrl\_param](ss_mpi_isp_get_ctrl_param.md)：获取ISP的控制参数。
--   [ss\_mpi\_isp\_set\_mod\_param](ss_mpi_isp_set_mod_param.md)：设置ISP模块参数。
--   [ss\_mpi\_isp\_get\_mod\_param](ss_mpi_isp_get_mod_param.md)：获取ISP模块参数。
--   [ss\_mpi\_isp\_set\_smart\_info](ss_mpi_isp_set_smart_info.md)：设置ISP模块智能信息。
--   [ss\_mpi\_isp\_get\_smart\_info](ss_mpi_isp_get_smart_info.md)：获取ISP模块智能信息。
--   [ss\_mpi\_isp\_get\_lightbox\_gain](ss_mpi_isp_get_lightbox_gain.md)：获取AWB在线标定得到的增益结构体。
--   [ss\_mpi\_isp\_ir\_auto\_run\_once](ss_mpi_isp_ir_auto_run_once.md)：运行红外自动切换功能。
--   [ss\_mpi\_isp\_set\_be\_frame\_attr](ss_mpi_isp_set_be_frame_attr.md)：设置ISP BE frame属性。
--   [ss\_mpi\_isp\_get\_be\_frame\_attr](ss_mpi_isp_get_be_frame_attr.md)：获取ISP BE frame属性。
--   [ss\_mpi\_isp\_get\_noise\_calibration](ss_mpi_isp_get_noise_calibration.md)：获取噪声模型标定参数。
--   [ss\_mpi\_isp\_set\_frame\_info](ss_mpi_isp_set_frame_info.md)：设置ISP实时信息。
--   [ss\_mpi\_isp\_get\_frame\_info](ss_mpi_isp_get_frame_info.md)：获取ISP实时信息。
--   [ss\_mpi\_isp\_mem\_share](ss_mpi_isp_mem_share.md)：将ISP相关mmz buffer共享给特定的进程id。
--   [ss\_mpi\_isp\_mem\_unshare](ss_mpi_isp_mem_unshare.md)：解除ISP相关mmz buffer对进程id的共享。
--   [ss\_mpi\_isp\_mem\_share\_all](ss_mpi_isp_mem_share_all.md)：共享ISP相关mmz buffer以不限进程id的方式共享给所有进程。
--   [ss\_mpi\_isp\_mem\_unshare\_all](ss_mpi_isp_mem_unshare_all.md)：取消共享ISP相关mmz buffer对所有进程的共享。
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+-   [ss\_mpi\_isp\_mem\_init](#ZH-CN_TOPIC_0000002471084920)：初始化ISP外部寄存器。
+-   [ss\_mpi\_isp\_init](#ZH-CN_TOPIC_0000002471085190)：初始化ISP firmware。
+-   [ss\_mpi\_isp\_run](#ZH-CN_TOPIC_0000002470925164)：运行ISP firmware。
+-   [ss\_mpi\_isp\_run\_once](#ZH-CN_TOPIC_0000002470925158)：运行ISP firmware 一次。
+-   [ss\_mpi\_isp\_exit](#ZH-CN_TOPIC_0000002503964923)：退出ISP firmware。
+-   [ss\_mpi\_isp\_set\_pub\_attr](#ZH-CN_TOPIC_0000002503964829)：设置ISP公共属性。
+-   [ss\_mpi\_isp\_get\_pub\_attr](#ZH-CN_TOPIC_0000002504085055)：获取ISP公共属性。
+-   [ss\_mpi\_isp\_set\_fmw\_state](#ZH-CN_TOPIC_0000002503964889)：设置ISP firmware状态。
+-   [ss\_mpi\_isp\_get\_fmw\_state](#ZH-CN_TOPIC_0000002503965107)：获取 ISP firmware状态。
+-   [ss\_mpi\_isp\_set\_sns\_slave\_attr](#ZH-CN_TOPIC_0000002503965133)：设置从模式sensor行场同步信号。
+-   [ss\_mpi\_isp\_get\_sns\_slave\_attr](#ZH-CN_TOPIC_0000002503964929)：获取从模式sensor行场同步信号。
+-   [ss\_mpi\_isp\_set\_module\_ctrl](#ZH-CN_TOPIC_0000002504084719)：设定ISP功能模块的控制。
+-   [ss\_mpi\_isp\_get\_module\_ctrl](#ZH-CN_TOPIC_0000002503964897)：获取ISP功能模块的控制。
+-   [ss\_mpi\_isp\_get\_vd\_time\_out](#ZH-CN_TOPIC_0000002504085017)：获取ISP中断信息。
+-   [ss\_mpi\_isp\_sensor\_reg\_callback](#ZH-CN_TOPIC_0000002503964973)：ISP提供的sensor注册的回调接口。
+-   [ss\_mpi\_isp\_sensor\_unreg\_callback](#ZH-CN_TOPIC_0000002504084971)：ISP提供的sensor反注册的回调接口。
+-   [ss\_mpi\_isp\_ae\_lib\_reg\_callback](#ZH-CN_TOPIC_0000002470925170)：ISP提供的AE库注册的回调接口。
+-   [ss\_mpi\_isp\_ae\_lib\_unreg\_callback](#ZH-CN_TOPIC_0000002504085045)：ISP提供的AE库反注册的回调接口。
+-   [ss\_mpi\_isp\_awb\_lib\_reg\_callback](#ZH-CN_TOPIC_0000002471084946)：ISP提供的AWB库注册的回调接口。
+-   [ss\_mpi\_isp\_awb\_lib\_unreg\_callback](#ZH-CN_TOPIC_0000002470924890)：ISP提供的AWB库反注册的回调接口。
+-   [ss\_mpi\_isp\_set\_bind\_attr](#ZH-CN_TOPIC_0000002503964869)：设置ISP库与3A库、sensor的绑定关系。
+-   [ss\_mpi\_isp\_get\_bind\_attr](#ZH-CN_TOPIC_0000002504085091)：获取ISP库与3A库、sensor的绑定关系。
+-   [ss\_mpi\_isp\_set\_dcf\_info](#ZH-CN_TOPIC_0000002471084974)：设置DCF参数。
+-   [ss\_mpi\_isp\_get\_dcf\_info](#ZH-CN_TOPIC_0000002504085077)：获取DCF参数。
+-   [ss\_mpi\_isp\_set\_pipe\_differ\_attr](#ZH-CN_TOPIC_0000002504084755)：设置多路ISP Pipe差异属性。
+-   [ss\_mpi\_isp\_get\_pipe\_differ\_attr](#ZH-CN_TOPIC_0000002503964909)：获取多路ISP Pipe差异属性。
+-   [ss\_mpi\_isp\_set\_ctrl\_param](#ZH-CN_TOPIC_0000002504084839)：设置ISP的控制参数。
+-   [ss\_mpi\_isp\_get\_ctrl\_param](#ZH-CN_TOPIC_0000002471085186)：获取ISP的控制参数。
+-   [ss\_mpi\_isp\_set\_mod\_param](#ZH-CN_TOPIC_0000002503965069)：设置ISP模块参数。
+-   [ss\_mpi\_isp\_get\_mod\_param](#ZH-CN_TOPIC_0000002503964891)：获取ISP模块参数。
+-   [ss\_mpi\_isp\_set\_smart\_info](#ZH-CN_TOPIC_0000002470924926)：设置ISP模块智能信息。
+-   [ss\_mpi\_isp\_get\_smart\_info](#ZH-CN_TOPIC_0000002503964955)：获取ISP模块智能信息。
+-   [ss\_mpi\_isp\_get\_lightbox\_gain](#ZH-CN_TOPIC_0000002470924968)：获取AWB在线标定得到的增益结构体。
+-   [ss\_mpi\_isp\_ir\_auto\_run\_once](#ZH-CN_TOPIC_0000002470925130)：运行红外自动切换功能。
+-   [ss\_mpi\_isp\_set\_be\_frame\_attr](#ZH-CN_TOPIC_0000002470924938)：设置ISP be frame属性。
+-   [ss\_mpi\_isp\_get\_be\_frame\_attr](#ZH-CN_TOPIC_0000002470924858)：获取ISP be frame属性。
+-   [ss\_mpi\_isp\_get\_noise\_calibration](#ZH-CN_TOPIC_0000002503964825)：获取噪声模型标定参数。
+-   [ss\_mpi\_isp\_set\_frame\_info](#ZH-CN_TOPIC_0000002471085032)：设置ISP实时信息。
+-   [ss\_mpi\_isp\_get\_frame\_info](#ZH-CN_TOPIC_0000002503965017)：获取ISP实时信息。
+-   [ss\_mpi\_isp\_mem\_share](#ZH-CN_TOPIC_0000002504084749)：将ISP相关mmz buffer共享给特定的进程id。
+-   [ss\_mpi\_isp\_mem\_unshare](#ZH-CN_TOPIC_0000002470925018)：解除ISP相关mmz buffer对进程id的共享。
+-   [ss\_mpi\_isp\_mem\_share\_all](#ZH-CN_TOPIC_0000002470924996)：共享ISP相关mmz buffer以不限进程id的方式共享给所有进程。
+-   [ss\_mpi\_isp\_mem\_unshare\_all](#ZH-CN_TOPIC_0000002470924886)：取消共享ISP相关mmz buffer对所有进程的共享。
 
 ### ss\_mpi\_isp\_mem\_init<a name="ZH-CN_TOPIC_0000002471084920"></a>
 
@@ -423,13 +386,13 @@ td_s32 ss_mpi_isp_mem_init(ot_vi_pipe vi_pipe);
 【注意】
 
 -   外部寄存器初始化前需要确保ko已加载，sensor向ISP注册了回调函数。
--   调用本接口后，才能调用[ss\_mpi\_isp\_set\_pub\_attr](ss_mpi_isp_set_pub_attr.md)图像公共属性。
--   不支持多进程，必须要与sensor\_register\_callback、ss\_mpi\_ae\_register、ss\_mpi\_awb\_register、[ss\_mpi\_isp\_init](ss_mpi_isp_init.md)、[ss\_mpi\_isp\_run](ss_mpi_isp_run.md)、[ss\_mpi\_isp\_exit](ss_mpi_isp_exit.md)接口在同一个进程调用。
--   当前业务正在运行[ss\_mpi\_isp\_run](ss_mpi_isp_run.md)时，不能调用本接口。
--   推荐调用[ss\_mpi\_isp\_exit](ss_mpi_isp_exit.md)后，再调用本接口重新初始化。
+-   调用本接口后，才能调用[ss\_mpi\_isp\_set\_pub\_attr](#ZH-CN_TOPIC_0000002503964829)图像公共属性。
+-   不支持多进程，必须要与sensor\_register\_callback、ss\_mpi\_ae\_register、ss\_mpi\_awb\_register、[ss\_mpi\_isp\_init](#ZH-CN_TOPIC_0000002471085190)、[ss\_mpi\_isp\_run](#ZH-CN_TOPIC_0000002470925164)、[ss\_mpi\_isp\_exit](#ZH-CN_TOPIC_0000002503964923)接口在同一个进程调用。
+-   当前业务正在运行[ss\_mpi\_isp\_run](#ZH-CN_TOPIC_0000002470925164)时，不能调用本接口。
+-   推荐调用[ss\_mpi\_isp\_exit](#ZH-CN_TOPIC_0000002503964923)后，再调用本接口重新初始化。
 -   LiteOS没有内核模块加载概念，Linux load ko过程对应LiteOS  release/ko下sdk\_init.c中执行的相关过程。
--   不支持相同vi\_pipe时，多线程执行ISP创建和销毁（多线程同时调用sensor\_register\_callback、ss\_mpi\_ae\_register、ss\_mpi\_awb\_register、[ss\_mpi\_isp\_mem\_init](#ZH-CN_TOPIC_0000001174819160)、[ss\_mpi\_isp\_init](ss_mpi_isp_init.md)、[ss\_mpi\_isp\_exit](ss_mpi_isp_exit.md)）
--   ISP初始化后，需要一帧时间给硬件读取算法系数表。所以[ss\_mpi\_isp\_init](ss_mpi_isp_init.md)后一帧时间内，不能调用[ss\_mpi\_vi\_stop\_pipe](ss_mpi_isp_init.md#ss_mpi_vi_stop_pipe)接口停止pipe。
+-   不支持相同vi\_pipe时，多线程执行ISP创建和销毁（多线程同时调用sensor\_register\_callback、ss\_mpi\_ae\_register、ss\_mpi\_awb\_register、ss\_mpi\_isp\_mem\_init、[ss\_mpi\_isp\_init](#ZH-CN_TOPIC_0000002471085190)、[ss\_mpi\_isp\_exit](#ZH-CN_TOPIC_0000002503964923)）
+-   ISP初始化后，需要一帧时间给硬件读取算法系数表。所以[ss\_mpi\_isp\_init](#ZH-CN_TOPIC_0000002471085190)后一帧时间内，不能调用[ss\_mpi\_vi\_stop\_pipe](#ss_mpi_vi_stop_pipe)接口停止pipe。
 
     ss\_mpi\_vi\_stop\_pipe请参考《MPP媒体处理软件V5.0开发参考》的“视频输入”章节）
 
@@ -439,7 +402,7 @@ td_s32 ss_mpi_isp_mem_init(ot_vi_pipe vi_pipe);
 
 【相关主题】
 
-[ss\_mpi\_isp\_exit](#ss_mpi_isp_exit)
+[ss\_mpi\_isp\_exit](#ZH-CN_TOPIC_0000002503964923)
 
 ### ss\_mpi\_isp\_init<a name="ZH-CN_TOPIC_0000002471085190"></a>
 
@@ -504,14 +467,14 @@ td_s32 ss_mpi_isp_init(ot_vi_pipe vi_pipe);
 【注意】
 
 -   初始化前需要确保ko已加载，sensor向ISP注册了回调函数。
--   初始化前需要确保已调用[ss\_mpi\_isp\_mem\_init](ss_mpi_isp_mem_init.md)初始化ISP外部寄存器。
--   初始化前需要确保已调用[ss\_mpi\_isp\_set\_pub\_attr](ss_mpi_isp_set_pub_attr.md)图像公共属性。
--   不支持多进程，必须要与sensor\_register\_callback、ss\_mpi\_ae\_register、ss\_mpi\_awb\_register、[ss\_mpi\_isp\_mem\_init](ss_mpi_isp_mem_init.md)、[ss\_mpi\_isp\_run](ss_mpi_isp_run.md)、[ss\_mpi\_isp\_exit](ss_mpi_isp_exit.md)接口在同一个进程调用。
+-   初始化前需要确保已调用[ss\_mpi\_isp\_mem\_init](#ZH-CN_TOPIC_0000002471084920)初始化ISP外部寄存器。
+-   初始化前需要确保已调用[ss\_mpi\_isp\_set\_pub\_attr](#ZH-CN_TOPIC_0000002503964829)图像公共属性。
+-   不支持多进程，必须要与sensor\_register\_callback、ss\_mpi\_ae\_register、ss\_mpi\_awb\_register、[ss\_mpi\_isp\_mem\_init](#ZH-CN_TOPIC_0000002471084920)、[ss\_mpi\_isp\_run](#ZH-CN_TOPIC_0000002470925164)、[ss\_mpi\_isp\_exit](#ZH-CN_TOPIC_0000002503964923)接口在同一个进程调用。
 -   不支持重复调用本接口。
--   推荐调用[ss\_mpi\_isp\_exit](ss_mpi_isp_exit.md)后，再调用本接口重新初始化。
+-   推荐调用[ss\_mpi\_isp\_exit](#ZH-CN_TOPIC_0000002503964923)后，再调用本接口重新初始化。
 -   LiteOS没内核模块加载概念，Linux load ko过程对应LiteOS  release/ko下sdk\_init.c中执行的相关过程。
--   不支持相同vi\_pipe时，多线程执行ISP创建和销毁（多线程同时调用sensor\_register\_callback、ss\_mpi\_ae\_register、ss\_mpi\_awb\_register、[ss\_mpi\_isp\_mem\_init](ss_mpi_isp_mem_init.md)、[ss\_mpi\_isp\_init](ss_mpi_isp_init.md)、[ss\_mpi\_isp\_exit](ss_mpi_isp_exit.md)）
--   ISP初始化后，需要一帧时间给硬件读取算法系数表。所以[ss\_mpi\_isp\_init](ss_mpi_isp_init.md)后一帧时间内，不能调用ss\_mpi\_vi\_stop\_pipe接口停止pipe。
+-   不支持相同vi\_pipe时，多线程执行ISP创建和销毁（多线程同时调用sensor\_register\_callback、ss\_mpi\_ae\_register、ss\_mpi\_awb\_register、[ss\_mpi\_isp\_mem\_init](#ZH-CN_TOPIC_0000002471084920)、[ss\_mpi\_isp\_init](#ZH-CN_TOPIC_0000002471085190)、[ss\_mpi\_isp\_exit](#ZH-CN_TOPIC_0000002503964923)）
+-   ISP初始化后，需要一帧时间给硬件读取算法系数表。所以[ss\_mpi\_isp\_init](#ZH-CN_TOPIC_0000002471085190)后一帧时间内，不能调用ss\_mpi\_vi\_stop\_pipe接口停止pipe。
 
     ss\_mpi\_vi\_stop\_pipe请参考《MPP媒体处理软件V5.0开发参考》的“视频输入”章节。
 
@@ -521,7 +484,7 @@ td_s32 ss_mpi_isp_init(ot_vi_pipe vi_pipe);
 
 【相关主题】
 
-[ss\_mpi\_isp\_exit](#ss_mpi_isp_exit)
+[ss\_mpi\_isp\_exit](#ZH-CN_TOPIC_0000002503964923)
 
 ### ss\_mpi\_isp\_run<a name="ZH-CN_TOPIC_0000002470925164"></a>
 
@@ -586,8 +549,8 @@ td_s32 ss_mpi_isp_run(ot_vi_pipe vi_pipe);
 【注意】
 
 -   运行前需要确保sensor已经初始化，并且向ISP注册了回调函数。
--   运行前需要确保已调用[ss\_mpi\_isp\_init](ss_mpi_isp_init.md)初始化ISP。
--   不支持多进程，必须要与sensor\_register\_callback、ss\_mpi\_ae\_register、ss\_mpi\_awb\_register、[ss\_mpi\_isp\_mem\_init](ss_mpi_isp_mem_init.md)、[ss\_mpi\_isp\_init](ss_mpi_isp_init.md)、[ss\_mpi\_isp\_exit](ss_mpi_isp_exit.md)接口在同一个进程调用。
+-   运行前需要确保已调用[ss\_mpi\_isp\_init](#ZH-CN_TOPIC_0000002471085190)初始化ISP。
+-   不支持多进程，必须要与sensor\_register\_callback、ss\_mpi\_ae\_register、ss\_mpi\_awb\_register、[ss\_mpi\_isp\_mem\_init](#ZH-CN_TOPIC_0000002471084920)、[ss\_mpi\_isp\_init](#ZH-CN_TOPIC_0000002471085190)、[ss\_mpi\_isp\_exit](#ZH-CN_TOPIC_0000002503964923)接口在同一个进程调用。
 -   该接口是阻塞接口，建议用户采用实时线程处理。
 
 【举例】
@@ -596,7 +559,7 @@ td_s32 ss_mpi_isp_run(ot_vi_pipe vi_pipe);
 
 【相关主题】
 
-[ss\_mpi\_isp\_init](#ss_mpi_isp_init)
+[ss\_mpi\_isp\_init](#ZH-CN_TOPIC_0000002471085190)
 
 ### ss\_mpi\_isp\_run\_once<a name="ZH-CN_TOPIC_0000002470925158"></a>
 
@@ -661,20 +624,20 @@ td_s32 ss_mpi_isp_run_once(ot_vi_pipe vi_pipe);
 【注意】
 
 -   运行前需要确保sensor已经初始化，并且向ISP注册了回调函数。
--   运行前需要确保已调用[ss\_mpi\_isp\_init](ss_mpi_isp_init.md)初始化ISP。
--   不支持多进程，必须要与sensor\_register\_callback、ss\_mpi\_ae\_register、ss\_mpi\_awb\_register、[ss\_mpi\_isp\_mem\_init](ss_mpi_isp_mem_init.md)、[ss\_mpi\_isp\_init](ss_mpi_isp_init.md)、[ss\_mpi\_isp\_exit](ss_mpi_isp_exit.md)接口在同一个进程调用。
+-   运行前需要确保已调用[ss\_mpi\_isp\_init](#ZH-CN_TOPIC_0000002471085190)初始化ISP。
+-   不支持多进程，必须要与sensor\_register\_callback、ss\_mpi\_ae\_register、ss\_mpi\_awb\_register、[ss\_mpi\_isp\_mem\_init](#ZH-CN_TOPIC_0000002471084920)、[ss\_mpi\_isp\_init](#ZH-CN_TOPIC_0000002471085190)、[ss\_mpi\_isp\_exit](#ZH-CN_TOPIC_0000002503964923)接口在同一个进程调用。
 -   该接口是阻塞接口，建议用户采用实时线程处理。
--   该接口工作在离线时用户给BE灌RAW场景。在使用时，要等待上一次发送的RAW数据处理完成之后才能进行下一次的[ss\_mpi\_isp\_run\_once](#ZH-CN_TOPIC_0000001219938931)接口调用+发送RAW数据（可通过在ss\_mpi\_vi\_send\_pipe\_raw后调用接口ss\_mpi\_vi\_get\_chn\_frame实现，接口具体信息请参见《MPP 媒体处理软件V5.0 开发参考》的VI章节\)，具体参考【举例】中的伪代码。
--   使用[ss\_mpi\_isp\_run\_once](#ZH-CN_TOPIC_0000001219938931)模式时处理视频流时，支持模式切换及分辨率切换，切换流程与使用[ss\_mpi\_isp\_run](ss_mpi_isp_run.md)处理视频流类似：即切换过程中ISP模块无需退出，VI模块需要销毁重建。区别在于：使用[ss\_mpi\_isp\_run\_once](#ZH-CN_TOPIC_0000001219938931)处理视频流时需要用户创建一个线程，参考示例中伪代码。
--   [ss\_mpi\_isp\_run](ss_mpi_isp_run.md)和[ss\_mpi\_isp\_run\_once](#ZH-CN_TOPIC_0000001219938931)对同一个vi\_pipe不能同时使用。
+-   该接口工作在离线时用户给BE灌RAW场景。在使用时，要等待上一次发送的RAW数据处理完成之后才能进行下一次的ss\_mpi\_isp\_run\_once接口调用+发送RAW数据（可通过在ss\_mpi\_vi\_send\_pipe\_raw后调用接口ss\_mpi\_vi\_get\_chn\_frame实现，接口具体信息请参见《MPP 媒体处理软件V5.0 开发参考》的VI章节\)，具体参考【举例】中的伪代码。
+-   使用ss\_mpi\_isp\_run\_once模式时处理视频流时，支持模式切换及分辨率切换，切换流程与使用[ss\_mpi\_isp\_run](#ZH-CN_TOPIC_0000002470925164)处理视频流类似：即切换过程中ISP模块无需退出，VI模块需要销毁重建。区别在于：使用ss\_mpi\_isp\_run\_once处理视频流时需要用户创建一个线程，参考示例中伪代码。
+-   [ss\_mpi\_isp\_run](#ZH-CN_TOPIC_0000002470925164)和ss\_mpi\_isp\_run\_once对同一个vi\_pipe不能同时使用。
 -   该接口不支持帧合成wdr模式。
--   该接口配置sensor时间为调用该接口后才配置sensor。与[ss\_mpi\_isp\_run](ss_mpi_isp_run.md)接口在帧起始或者帧结束配置sensor 有差异。
--   使用该接口的pipe，使用[ss\_mpi\_isp\_get\_vd\_time\_out](ss_mpi_isp_get_vd_time_out.md)  接口时，[ot\_isp\_vd\_type](ot_isp_vd_type.md)  变量仅支持OT\_ISP\_VD\_BE\_END类型。
+-   该接口配置sensor时间为调用该接口后才配置sensor。与[ss\_mpi\_isp\_run](#ZH-CN_TOPIC_0000002470925164)接口在帧起始或者帧结束配置sensor 有差异。
+-   使用该接口的pipe，使用[ss\_mpi\_isp\_get\_vd\_time\_out](#ZH-CN_TOPIC_0000002504085017)  接口时，[ot\_isp\_vd\_type](#ZH-CN_TOPIC_0000002470925008)  变量仅支持OT\_ISP\_VD\_BE\_END类型。
 -   该接口不支持拼接模式。
 
 【举例】
 
-1. 上一次发送的raw数据处理完，才能继续调用[ss\_mpi\_isp\_run\_once](#ZH-CN_TOPIC_0000001219938931):
+1. 上一次发送的raw数据处理完，才能继续调用ss\_mpi\_isp\_run\_once。
 
 ```
 ……
@@ -703,7 +666,7 @@ ret = ss_mpi_isp_run_once(vi_pipe);
 }
 ```
 
-2. 使用[ss\_mpi\_isp\_run\_once](#ZH-CN_TOPIC_0000001219938931)处理视频流时需要用户创建一个线程：
+2. 使用ss\_mpi\_isp\_run\_once处理视频流时需要用户创建一个线程：
 
 ```
 …
@@ -792,7 +755,7 @@ EXIT5:
 
 【相关主题】
 
-[ss\_mpi\_isp\_init](#ss_mpi_isp_init)
+[ss\_mpi\_isp\_init](#ZH-CN_TOPIC_0000002471085190)
 
 ### ss\_mpi\_isp\_exit<a name="ZH-CN_TOPIC_0000002503964923"></a>
 
@@ -856,12 +819,12 @@ td_s32 ss_mpi_isp_exit(ot_vi_pipe vi_pipe);
 
 【注意】
 
--   调用[ss\_mpi\_isp\_init](ss_mpi_isp_init.md)和[ss\_mpi\_isp\_run](ss_mpi_isp_run.md)之后，再调用本接口退出ISP firmware。
--   不支持多进程，必须要与sensor\_register\_callback、ss\_mpi\_ae\_register、ss\_mpi\_awb\_register、[ss\_mpi\_isp\_mem\_init](ss_mpi_isp_mem_init.md)、[ss\_mpi\_isp\_init](ss_mpi_isp_init.md)、[ss\_mpi\_isp\_run](ss_mpi_isp_run.md)接口在同一个进程调用。
+-   调用[ss\_mpi\_isp\_init](#ZH-CN_TOPIC_0000002471085190)和[ss\_mpi\_isp\_run](#ZH-CN_TOPIC_0000002470925164)之后，再调用本接口退出ISP firmware。
+-   不支持多进程，必须要与sensor\_register\_callback、ss\_mpi\_ae\_register、ss\_mpi\_awb\_register、[ss\_mpi\_isp\_mem\_init](#ZH-CN_TOPIC_0000002471084920)、[ss\_mpi\_isp\_init](#ZH-CN_TOPIC_0000002471085190)、[ss\_mpi\_isp\_run](#ZH-CN_TOPIC_0000002470925164)接口在同一个进程调用。
 -   支持重复调用本接口。
 -   在拼接模式时，必须先退出主pipe，后退出其他pipe。
--   不支持相同vi\_pipe时，多线程执行ISP创建和销毁（多线程同时调用sensor\_register\_callback、ss\_mpi\_ae\_register、ss\_mpi\_awb\_register、[ss\_mpi\_isp\_mem\_init](ss_mpi_isp_mem_init.md)、[ss\_mpi\_isp\_init](ss_mpi_isp_init.md)、[ss\_mpi\_isp\_exit](#ZH-CN_TOPIC_0000001220218983)）
--   推荐调用[ss\_mpi\_isp\_init](ss_mpi_isp_init.md)之后，在调用本接口。
+-   不支持相同vi\_pipe时，多线程执行ISP创建和销毁（多线程同时调用sensor\_register\_callback、ss\_mpi\_ae\_register、ss\_mpi\_awb\_register、[ss\_mpi\_isp\_mem\_init](#ZH-CN_TOPIC_0000002471084920)、[ss\_mpi\_isp\_init](#ZH-CN_TOPIC_0000002471085190)、ss\_mpi\_isp\_exit）
+-   调用[ss\_mpi\_isp\_init](#ZH-CN_TOPIC_0000002471085190)之后，可以直接调用本接口。
 
 【举例】
 
@@ -869,7 +832,7 @@ td_s32 ss_mpi_isp_exit(ot_vi_pipe vi_pipe);
 
 【相关主题】
 
-[ss\_mpi\_isp\_init](#ss_mpi_isp_init)
+[ss\_mpi\_isp\_init](#ZH-CN_TOPIC_0000002471085190)
 
 ### ss\_mpi\_isp\_set\_pub\_attr<a name="ZH-CN_TOPIC_0000002503964829"></a>
 
@@ -941,7 +904,7 @@ td_s32 ss_mpi_isp_set_pub_attr(ot_vi_pipe vi_pipe, const ot_isp_pub_attr *pub_at
 【注意】
 
 -   图像属性即对应的sensor的采集属性。
--   ISP启动时，需要确保已调用[ss\_mpi\_isp\_mem\_init](ss_mpi_isp_mem_init.md)初始化ISP外部寄存器。
+-   ISP启动时，需要确保已调用[ss\_mpi\_isp\_mem\_init](#ZH-CN_TOPIC_0000002471084920)初始化ISP外部寄存器。
 -   ISP支持运行过程中动态裁剪图像的起始位置。
 -   调用本接口后ISP内的处理流程：
     -   ISP firmware判断图像WDR模式、分辨率、帧率是否变化，若都不变则直接返回；否则，ISP firmware会调用sensor cmos.c里面的cmos\_set\_wdr\_mode、cmos\_set\_image\_mode函数改变sensor模式；
@@ -949,15 +912,15 @@ td_s32 ss_mpi_isp_set_pub_attr(ot_vi_pipe vi_pipe, const ot_isp_pub_attr *pub_at
     -   若sensor模式改变（返回值为0），则ISP firmware会调用sensor\_init函数重新配置sensor；
     -   ISP firmware将帧率信息传给AE库，并决定是否更改帧率。
 
--   若调用本接口实现动态分辨率和帧率切换时sensor模式发生了改变，请参照sample提供的切换流程操作（先停掉Vi设备，再创建Vi设备，然后设置[ss\_mpi\_isp\_set\_pub\_attr](#ZH-CN_TOPIC_0000001220057509)进行切换）。当前系统不支持在VI并行模式下切换帧率。另外，动态分辨率和帧率切换时，切换的分辨率和帧率必须有一项要不同（即不能切换到自己本身），否则，sensor可能不会重新初始化而导致异常，模式切换时也不能切换到自己本身。对于ISP输入同样分辨率和帧率但需要采用不同初始化序列的情况，可以利用不同的sns\_mode来实现模式切换。
+-   若调用本接口实现动态分辨率和帧率切换时sensor模式发生了改变，请参照sample提供的切换流程操作（先停掉Vi设备，再创建Vi设备，然后设置ss\_mpi\_isp\_set\_pub\_attr进行切换）。当前系统不支持在VI并行模式下切换帧率。另外，动态分辨率和帧率切换时，切换的分辨率和帧率必须有一项要不同（即不能切换到自己本身），否则，sensor可能不会重新初始化而导致异常，模式切换时也不能切换到自己本身。对于ISP输入同样分辨率和帧率但需要采用不同初始化序列的情况，可以利用不同的sns\_mode来实现模式切换。
 -   使用ISP提供的裁剪功能时，需要注意：
 
-    动态裁剪图像的宽高时会重新初始化sensor，切换流程参照sample提供的切换流程（先停掉Vi设备，再创建Vi设备，然后设置[ss\_mpi\_isp\_set\_pub\_attr](#ZH-CN_TOPIC_0000001220057509)进行切换）。在线WDR模式下不支持ISP的裁剪功能。
+    动态裁剪图像的宽高时会重新初始化sensor，切换流程参照sample提供的切换流程（先停掉Vi设备，再创建Vi设备，然后设置ss\_mpi\_isp\_set\_pub\_attr进行切换）。在线WDR模式下不支持ISP的裁剪功能。
 
     当输入为YUV时，裁剪不生效。
 
 -   用户可以更改sensor cmos.c里面的cmos\_set\_image\_mode函数调整sensor模式切换的顺序。如只提供了5M30fps和1080P60fps初始化序列的sensor，若要运行1080P30fps，可以从5M30fps裁剪得到，也可以从1080P60fps降帧得到，修改cmos\_set\_image\_mode函数实现即可。
--   通过[ss\_mpi\_isp\_set\_pub\_attr](#ZH-CN_TOPIC_0000001220057509)接口配置超过sensor帧率范围的帧率时，该帧率值能配置到ISP中，但是sensor\_cmos.c检测该帧率值超出范围而不做改变帧率的动作。此时应用层如果做模式切换（如：线性模式切WDR模式），sensor重新初始化，并从ISP中读取帧率，由于ISP中存的是前一个模式配置的超出范围的帧率，sensor重新配置帧率失败，会造成切换后的模式出现帧率异常，画面异常的现象。所以使用该接口配置帧率时不要配置超过sensor帧率范围的帧率值。
+-   通过ss\_mpi\_isp\_set\_pub\_attr接口配置超过sensor帧率范围的帧率时，该帧率值能配置到ISP中，但是sensor\_cmos.c检测该帧率值超出范围而不做改变帧率的动作。此时应用层如果做模式切换（如：线性模式切WDR模式），sensor重新初始化，并从ISP中读取帧率，由于ISP中存的是前一个模式配置的超出范围的帧率，sensor重新配置帧率失败，会造成切换后的模式出现帧率异常，画面异常的现象。所以使用该接口配置帧率时不要配置超过sensor帧率范围的帧率值。
 -   该接口不支持的情况：在不同的工作模式下从WDR切换到线性或在不同的工作模式下的分辨率或帧率的切换\(例如不支持从OT\_VI\_ONLINE\_VPSS\_OFFLINE的WDR模式切换到OT\_VI\_PARALLEL\_VPSS\_OFFLINE 线性模式）。
 -   切换线性模式和帧WDR模式时，同样会判断cmos\_set\_image\_mode的返回值，因此线性模式和帧WDR模式应该采用不同的image\_mode，才能保证切换成功。
 -   在线模式切换线性模式和WDR模式时，会关闭bnr的时域滤波\(不需要用户手动关闭\)，模式切换后需要延迟4帧，时域滤波才能重新生效，否则会导致图像异常。用户可在模式切换后的延迟4帧内预配置时域滤波状态，若无预配置，延迟结束后会重新生效模式切换前的时域滤波状态。
@@ -968,7 +931,7 @@ td_s32 ss_mpi_isp_set_pub_attr(ot_vi_pipe vi_pipe, const ot_isp_pub_attr *pub_at
 
 【相关主题】
 
-[ss\_mpi\_isp\_get\_pub\_attr](#ss_mpi_isp_get_pub_attr)
+[ss\_mpi\_isp\_get\_pub\_attr](#ZH-CN_TOPIC_0000002504085055)
 
 ### ss\_mpi\_isp\_get\_pub\_attr<a name="ZH-CN_TOPIC_0000002504085055"></a>
 
@@ -1047,7 +1010,7 @@ td_s32 ss_mpi_isp_get_pub_attr(ot_vi_pipe vi_pipe, ot_isp_pub_attr *pub_attr);
 
 【相关主题】
 
-[ss\_mpi\_isp\_set\_pub\_attr](#ss_mpi_isp_set_pub_attr)
+[ss\_mpi\_isp\_set\_pub\_attr](#ZH-CN_TOPIC_0000002503964829)
 
 ### ss\_mpi\_isp\_set\_fmw\_state<a name="ZH-CN_TOPIC_0000002503964889"></a>
 
@@ -1126,7 +1089,7 @@ td_s32 ss_mpi_isp_set_fmw_state(ot_vi_pipe vi_pipe, const ot_isp_fmw_state state
 
 【相关主题】
 
-[ss\_mpi\_isp\_get\_fmw\_state](#ss_mpi_isp_get_fmw_state)
+[ss\_mpi\_isp\_get\_fmw\_state](#ZH-CN_TOPIC_0000002503965107)
 
 ### ss\_mpi\_isp\_get\_fmw\_state<a name="ZH-CN_TOPIC_0000002503965107"></a>
 
@@ -1205,7 +1168,7 @@ td_s32 ss_mpi_isp_get_fmw_state(ot_vi_pipe vi_pipe, ot_isp_fmw_state *state);
 
 【相关主题】
 
-[ss\_mpi\_isp\_set\_fmw\_state](#ss_mpi_isp_set_fmw_state)
+[ss\_mpi\_isp\_set\_fmw\_state](#ZH-CN_TOPIC_0000002503964889)
 
 ### ss\_mpi\_isp\_set\_sns\_slave\_attr<a name="ZH-CN_TOPIC_0000002503965133"></a>
 
@@ -1302,7 +1265,7 @@ td_u32 g_SlaveSensorModeTime[ISP_MAX_PIPE_NUM] = {0, x, 1, x, 2, x, 3, x};
 
 【相关主题】
 
-[ss\_mpi\_isp\_get\_sns\_slave\_attr](#ss_mpi_isp_get_sns_slave_attr)
+[ss\_mpi\_isp\_get\_sns\_slave\_attr](#ZH-CN_TOPIC_0000002503964929)
 
 ### ss\_mpi\_isp\_get\_sns\_slave\_attr<a name="ZH-CN_TOPIC_0000002503964929"></a>
 
@@ -1381,7 +1344,7 @@ td_s32 ss_mpi_isp_get_sns_slave_attr(ot_slave_dev slave_dev, ot_isp_slave_sns_sy
 
 【相关主题】
 
-[ss\_mpi\_isp\_set\_sns\_slave\_attr](#ss_mpi_isp_set_sns_slave_attr)
+[ss\_mpi\_isp\_set\_sns\_slave\_attr](#ZH-CN_TOPIC_0000002503965133)
 
 ### ss\_mpi\_isp\_set\_module\_ctrl<a name="ZH-CN_TOPIC_0000002504084719"></a>
 
@@ -1463,7 +1426,7 @@ td_s32 ss_mpi_isp_set_module_ctrl(ot_vi_pipe vi_pipe, const ot_isp_module_ctrl *
 
 【相关主题】
 
-[ss\_mpi\_isp\_get\_module\_ctrl](#ss_mpi_isp_get_module_ctrl)
+[ss\_mpi\_isp\_get\_module\_ctrl](#ZH-CN_TOPIC_0000002503964897)
 
 ### ss\_mpi\_isp\_get\_module\_ctrl<a name="ZH-CN_TOPIC_0000002503964897"></a>
 
@@ -1542,7 +1505,7 @@ td_s32 ss_mpi_isp_get_module_ctrl(ot_vi_pipe vi_pipe, ot_isp_module_ctrl *mod_ct
 
 【相关主题】
 
-[ss\_mpi\_isp\_set\_module\_ctrl](#ss_mpi_isp_set_module_ctrl)
+[ss\_mpi\_isp\_set\_module\_ctrl](#ZH-CN_TOPIC_0000002504084719)
 
 ### ss\_mpi\_isp\_get\_vd\_time\_out<a name="ZH-CN_TOPIC_0000002504085017"></a>
 
@@ -1622,8 +1585,8 @@ td_s32 ss_mpi_isp_get_vd_time_out(ot_vi_pipe vi_pipe, ot_isp_vd_type isp_vd_type
 
 -   该接口表示获取ISP产生中断的相关信息，包括是否产生了中断，中断产生时的当前ISP帧信息，中断是采用的帧开始中断。
 -   milli\_sec参数的单位是毫秒，指超时时间。即在milli\_sec毫秒内，如果获取不到ISP中断，则函数返回。当milli\_sec设为0时，表示阻塞模式，程序一直等待，直到获取到ISP中断才返回。
--   使用[OT\_ISP\_VD\_FE\_END](ot_isp_vd_type.md#OT_ISP_VD_FE_END)方式获取ISP中断信息并读取统计信息。在极端情况下（cpu占用率高等），会出现读取统计信息不及时情况。建议使用[OT\_ISP\_VD\_FE\_START](ot_isp_vd_type.md#OT_ISP_VD_FE_START)方式获取ISP中断来读取统计信息。
--   N个进程同时调用该接口获取同样的isp\_vd\_type时，每个进程获取到的中断信息为实际中断信息的\(1/N\)，比如在灌raw场景中会使用[OT\_ISP\_VD\_FE\_START](ot_isp_vd_type.md#OT_ISP_VD_FE_START)的方式来发送raw数据，如果此时其他进程再使用[OT\_ISP\_VD\_FE\_START](ot_isp_vd_type.md#OT_ISP_VD_FE_START)运行业务，会导致灌raw业务的帧率减半。
+-   使用[OT\_ISP\_VD\_FE\_END](#OT_ISP_VD_FE_END)方式获取ISP中断信息并读取统计信息。在极端情况下（cpu占用率高等），会出现读取统计信息不及时情况。建议使用[OT\_ISP\_VD\_FE\_START](#OT_ISP_VD_FE_START)方式获取ISP中断来读取统计信息。
+-   N个进程同时调用该接口获取同样的isp\_vd\_type时，每个进程获取到的中断信息为实际中断信息的\(1/N\)，比如在灌raw场景中会使用[OT\_ISP\_VD\_FE\_START](#OT_ISP_VD_FE_START)的方式来发送raw数据，如果此时其他进程再使用[OT\_ISP\_VD\_FE\_START](#OT_ISP_VD_FE_START)运行业务，会导致灌raw业务的帧率减半。
 
 【举例】
 
@@ -1734,7 +1697,7 @@ sensor_exp_func->pfn_cmos_get_isp_black_level = cmos_get_isp_black_level;
 sensor_exp_func->pfn_cmos_set_pixel_detect    = cmos_set_pixel_detect;
 sensor_exp_func->pfn_cmos_get_sns_reg_info    = cmos_get_sns_regs_info; 
 sns_attr_info.sensor_id= SENSOR_NAME_ID;
-ret = ss_mpi_isp_sensor_reg_callback(vi_pipe, &sensor_id, &isp_register);
+ret = ss_mpi_isp_sensor_reg_callback(vi_pipe, &sns_attr_info, &isp_register);
 if (ret) {
 printf("sensor register callback function failed!\n");
 return ret;
@@ -1743,7 +1706,7 @@ return ret;
 
 【相关主题】
 
-[ss\_mpi\_isp\_sensor\_unreg\_callback](#ss_mpi_isp_sensor_unreg_callback)
+[ss\_mpi\_isp\_sensor\_unreg\_callback](#ZH-CN_TOPIC_0000002504084971)
 
 ### ss\_mpi\_isp\_sensor\_unreg\_callback<a name="ZH-CN_TOPIC_0000002504084971"></a>
 
@@ -1831,7 +1794,7 @@ ot_vi_pipe vi_pipe = 0;
 
 【相关主题】
 
-[ss\_mpi\_isp\_sensor\_reg\_callback](#ss_mpi_isp_sensor_reg_callback)
+[ss\_mpi\_isp\_sensor\_reg\_callback](#ZH-CN_TOPIC_0000002503964973)
 
 ### ss\_mpi\_isp\_ae\_lib\_reg\_callback<a name="ZH-CN_TOPIC_0000002470925170"></a>
 
@@ -1933,7 +1896,7 @@ printf("Ot_ae register failed!\n");
 
 【相关主题】
 
-[ss\_mpi\_isp\_ae\_lib\_unreg\_callback](#ss_mpi_isp_ae_lib_unreg_callback)
+[ss\_mpi\_isp\_ae\_lib\_unreg\_callback](#ZH-CN_TOPIC_0000002504085045)
 
 ### ss\_mpi\_isp\_ae\_lib\_unreg\_callback<a name="ZH-CN_TOPIC_0000002504085045"></a>
 
@@ -2020,7 +1983,7 @@ return ret;
 
 【相关主题】
 
-[ss\_mpi\_isp\_ae\_lib\_reg\_callback](#ss_mpi_isp_ae_lib_reg_callback)
+[ss\_mpi\_isp\_ae\_lib\_reg\_callback](#ZH-CN_TOPIC_0000002470925170)
 
 ### ss\_mpi\_isp\_awb\_lib\_reg\_callback<a name="ZH-CN_TOPIC_0000002471084946"></a>
 
@@ -2111,7 +2074,7 @@ td_s32 ss_mpi_isp_awb_lib_reg_callback(ot_vi_pipe vi_pipe, ot_isp_3a_alg_lib *aw
 
 【相关主题】
 
-[ss\_mpi\_isp\_awb\_lib\_unreg\_callback](#ss_mpi_isp_awb_lib_unreg_callback)
+[ss\_mpi\_isp\_awb\_lib\_unreg\_callback](#ZH-CN_TOPIC_0000002470924890)
 
 ### ss\_mpi\_isp\_awb\_lib\_unreg\_callback<a name="ZH-CN_TOPIC_0000002470924890"></a>
 
@@ -2191,7 +2154,7 @@ td_s32 ss_mpi_isp_awb_lib_unreg_callback(ot_vi_pipe vi_pipe, ot_isp_3a_alg_lib *
 
 【相关主题】
 
-[ss\_mpi\_isp\_awb\_lib\_reg\_callback](#ss_mpi_isp_awb_lib_reg_callback)
+[ss\_mpi\_isp\_awb\_lib\_reg\_callback](#ZH-CN_TOPIC_0000002471084946)
 
 ### ss\_mpi\_isp\_set\_bind\_attr<a name="ZH-CN_TOPIC_0000002503964869"></a>
 
@@ -2271,7 +2234,7 @@ td_s32 ss_mpi_isp_set_bind_attr(ot_vi_pipe vi_pipe, const ot_isp_bind_attr *bind
 
 【相关主题】
 
-[ss\_mpi\_isp\_get\_bind\_attr](#ss_mpi_isp_get_bind_attr)
+[ss\_mpi\_isp\_get\_bind\_attr](#ZH-CN_TOPIC_0000002504085091)
 
 ### ss\_mpi\_isp\_get\_bind\_attr<a name="ZH-CN_TOPIC_0000002504085091"></a>
 
@@ -2350,7 +2313,7 @@ td_s32 ss_mpi_isp_get_bind_attr(ot_vi_pipe vi_pipe, ot_isp_bind_attr *bind_attr)
 
 【相关主题】
 
-[ss\_mpi\_isp\_set\_bind\_attr](#ss_mpi_isp_set_bind_attr)
+[ss\_mpi\_isp\_set\_bind\_attr](#ZH-CN_TOPIC_0000002503964869)
 
 ### ss\_mpi\_isp\_set\_dcf\_info<a name="ZH-CN_TOPIC_0000002471084974"></a>
 
@@ -2500,7 +2463,7 @@ ss_mpi_isp_set_dcf_info(vi_pipe,&isp_dcf);
 
 【相关主题】
 
-[ss\_mpi\_isp\_get\_dcf\_info](#ss_mpi_isp_get_dcf_info)
+[ss\_mpi\_isp\_get\_dcf\_info](#ZH-CN_TOPIC_0000002504085077)
 
 ### ss\_mpi\_isp\_get\_dcf\_info<a name="ZH-CN_TOPIC_0000002504085077"></a>
 
@@ -2579,7 +2542,7 @@ td_s32 ss_mpi_isp_get_dcf_info(ot_vi_pipe vi_pipe, ot_isp_dcf_info *isp_dcf)
 
 【相关主题】
 
-[ss\_mpi\_isp\_set\_dcf\_info](#ss_mpi_isp_set_dcf_info)
+[ss\_mpi\_isp\_set\_dcf\_info](#ZH-CN_TOPIC_0000002471084974)
 
 ### ss\_mpi\_isp\_set\_pipe\_differ\_attr<a name="ZH-CN_TOPIC_0000002504084755"></a>
 
@@ -2650,7 +2613,7 @@ td_s32 ss_mpi_isp_set_pipe_differ_attr(ot_vi_pipe vi_pipe, const ot_isp_pipe_dif
 
 【注意】
 
-该接口不是必调接口，用于多路ISP拼接模式，对拼接效果要求更高时，可以通过标定工具（PQ\_Stitching\_Tool）标定出多路ISP的亮度、颜色等差异，通过此接口配置减少多路ISP输出图像的差异。该接口必须在[ss\_mpi\_isp\_init](ss_mpi_isp_init.md)之后调用。
+该接口不是必调接口，用于多路ISP拼接模式，对拼接效果要求更高时，可以通过标定工具（PQ\_Stitching\_Tool）标定出多路ISP的亮度、颜色等差异，通过此接口配置减少多路ISP输出图像的差异。该接口必须在[ss\_mpi\_isp\_init](#ZH-CN_TOPIC_0000002471085190)之后调用。
 
 【举例】
 
@@ -2658,7 +2621,7 @@ td_s32 ss_mpi_isp_set_pipe_differ_attr(ot_vi_pipe vi_pipe, const ot_isp_pipe_dif
 
 【相关主题】
 
-[ss\_mpi\_isp\_get\_pipe\_differ\_attr](#ss_mpi_isp_get_pipe_differ_attr)
+[ss\_mpi\_isp\_get\_pipe\_differ\_attr](#ZH-CN_TOPIC_0000002503964909)
 
 ### ss\_mpi\_isp\_get\_pipe\_differ\_attr<a name="ZH-CN_TOPIC_0000002503964909"></a>
 
@@ -2729,7 +2692,7 @@ td_s32 ss_mpi_isp_get_pipe_differ_attr(ot_vi_pipe vi_pipe, ot_isp_pipe_diff_attr
 
 【注意】
 
-该接口不是必调接口，与[ss\_mpi\_isp\_set\_pipe\_differ\_attr](ss_mpi_isp_set_pipe_differ_attr.md)配套使用，可以获取对应配置的多路ISP差异参数。
+该接口不是必调接口，与[ss\_mpi\_isp\_set\_pipe\_differ\_attr](#ZH-CN_TOPIC_0000002504084755)配套使用，可以获取对应配置的多路ISP差异参数。
 
 【举例】
 
@@ -2737,7 +2700,7 @@ td_s32 ss_mpi_isp_get_pipe_differ_attr(ot_vi_pipe vi_pipe, ot_isp_pipe_diff_attr
 
 【相关主题】
 
-[ss\_mpi\_isp\_set\_pipe\_differ\_attr](#ss_mpi_isp_set_pipe_differ_attr)
+[ss\_mpi\_isp\_set\_pipe\_differ\_attr](#ZH-CN_TOPIC_0000002504084755)
 
 ### ss\_mpi\_isp\_set\_ctrl\_param<a name="ZH-CN_TOPIC_0000002504084839"></a>
 
@@ -2808,7 +2771,7 @@ td_s32 ss_mpi_isp_set_ctrl_param(ot_vi_pipe vi_pipe, const ot_isp_ctrl_param *is
 
 【注意】
 
-接口使用限制详见[ot\_isp\_ctrl\_param](ot_isp_ctrl_param.md)中的注意事项。
+接口使用限制详见[ot\_isp\_ctrl\_param](#ZH-CN_TOPIC_0000002503964837)中的注意事项。
 
 【举例】
 
@@ -2816,7 +2779,7 @@ td_s32 ss_mpi_isp_set_ctrl_param(ot_vi_pipe vi_pipe, const ot_isp_ctrl_param *is
 
 【相关主题】
 
-[ss\_mpi\_isp\_get\_ctrl\_param](#ss_mpi_isp_get_ctrl_param)
+[ss\_mpi\_isp\_get\_ctrl\_param](#ZH-CN_TOPIC_0000002471085186)
 
 ### ss\_mpi\_isp\_get\_ctrl\_param<a name="ZH-CN_TOPIC_0000002471085186"></a>
 
@@ -2895,7 +2858,7 @@ td_s32 ss_mpi_isp_get_ctrl_param(ot_vi_pipe vi_pipe, ot_isp_ctrl_param *isp_ctrl
 
 【相关主题】
 
-[ss\_mpi\_isp\_set\_ctrl\_param](#ss_mpi_isp_set_ctrl_param)
+[ss\_mpi\_isp\_set\_ctrl\_param](#ZH-CN_TOPIC_0000002504084839)
 
 ### ss\_mpi\_isp\_set\_mod\_param<a name="ZH-CN_TOPIC_0000002503965069"></a>
 
@@ -2959,7 +2922,7 @@ td_s32 ss_mpi_isp_set_mod_param(const ot_isp_mod_param *mod_param);
 
 【注意】
 
-接口使用限制详见[ot\_isp\_mod\_param](ot_isp_mod_param.md)中的注意事项。
+接口使用限制详见[ot\_isp\_mod\_param](#ZH-CN_TOPIC_0000002470925030)中的注意事项。
 
 【举例】
 
@@ -2967,7 +2930,7 @@ td_s32 ss_mpi_isp_set_mod_param(const ot_isp_mod_param *mod_param);
 
 【相关主题】
 
-[ss\_mpi\_isp\_get\_mod\_param](#ss_mpi_isp_get_mod_param)
+[ss\_mpi\_isp\_get\_mod\_param](#ZH-CN_TOPIC_0000002503964891)
 
 ### ss\_mpi\_isp\_get\_mod\_param<a name="ZH-CN_TOPIC_0000002503964891"></a>
 
@@ -3039,7 +3002,7 @@ td_s32 ss_mpi_isp_get_mod_param(ot_isp_mod_param *mod_param);
 
 【相关主题】
 
-[ss\_mpi\_isp\_set\_mod\_param](#ss_mpi_isp_set_mod_param)
+[ss\_mpi\_isp\_set\_mod\_param](#ZH-CN_TOPIC_0000002503965069)
 
 ### ss\_mpi\_isp\_set\_smart\_info<a name="ZH-CN_TOPIC_0000002470924926"></a>
 
@@ -3110,7 +3073,7 @@ td_s32 ss_mpi_isp_set_smart_info(ot_vi_pipe vi_pipe, const ot_isp_smart_info *sm
 
 【注意】
 
-接口使用详见[ot\_isp\_smart\_info](ot_isp_smart_info.md)说明。
+接口使用详见[ot\_isp\_smart\_info](#ZH-CN_TOPIC_0000002503964975)说明。
 
 【举例】
 
@@ -3118,7 +3081,7 @@ td_s32 ss_mpi_isp_set_smart_info(ot_vi_pipe vi_pipe, const ot_isp_smart_info *sm
 
 【相关主题】
 
-[ss\_mpi\_isp\_get\_smart\_info](#ss_mpi_isp_get_smart_info)
+[ss\_mpi\_isp\_get\_smart\_info](#ZH-CN_TOPIC_0000002503964955)
 
 ### ss\_mpi\_isp\_get\_smart\_info<a name="ZH-CN_TOPIC_0000002503964955"></a>
 
@@ -3197,7 +3160,7 @@ td_s32 ss_mpi_isp_get_smart_info(ot_vi_pipe vi_pipe, ot_isp_smart_info *smart_in
 
 【相关主题】
 
-[ss\_mpi\_isp\_set\_smart\_info](#ss_mpi_isp_set_smart_info)
+[ss\_mpi\_isp\_set\_smart\_info](#ZH-CN_TOPIC_0000002470924926)
 
 ### ss\_mpi\_isp\_get\_lightbox\_gain<a name="ZH-CN_TOPIC_0000002470924968"></a>
 
@@ -3389,7 +3352,7 @@ td_s32 ss_mpi_isp_set_be_frame_attr(ot_vi_pipe vi_pipe, const ot_isp_be_frame_at
 </tr>
 <tr id="row3151mcpsimp"><td class="cellrowborder" valign="top" width="32%" headers="mcps1.1.4.1.1 "><p id="p3153mcpsimp"><a name="p3153mcpsimp"></a><a name="p3153mcpsimp"></a>be_frame_attr</p>
 </td>
-<td class="cellrowborder" valign="top" width="52%" headers="mcps1.1.4.1.2 "><p id="p3155mcpsimp"><a name="p3155mcpsimp"></a><a name="p3155mcpsimp"></a>Be frame属性。</p>
+<td class="cellrowborder" valign="top" width="52%" headers="mcps1.1.4.1.2 "><p id="p3155mcpsimp"><a name="p3155mcpsimp"></a><a name="p3155mcpsimp"></a>be frame属性。</p>
 </td>
 <td class="cellrowborder" valign="top" width="16%" headers="mcps1.1.4.1.3 "><p id="p3157mcpsimp"><a name="p3157mcpsimp"></a><a name="p3157mcpsimp"></a>输入</p>
 </td>
@@ -3469,7 +3432,7 @@ ss_mpi_isp_set_be_frame_attr(vi_pipe, &be_frame_attr);
 
 【相关主题】
 
-[ss\_mpi\_isp\_get\_be\_frame\_attr](#ss_mpi_isp_get_be_frame_attr)
+[ss\_mpi\_isp\_get\_be\_frame\_attr](#ZH-CN_TOPIC_0000002470924858)
 
 ### ss\_mpi\_isp\_get\_be\_frame\_attr<a name="ZH-CN_TOPIC_0000002470924858"></a>
 
@@ -3503,7 +3466,7 @@ td_s32 ss_mpi_isp_get_be_frame_attr(ot_vi_pipe vi_pipe, ot_isp_be_frame_attr *be
 </tr>
 <tr id="row3248mcpsimp"><td class="cellrowborder" valign="top" width="32%" headers="mcps1.1.4.1.1 "><p id="p3250mcpsimp"><a name="p3250mcpsimp"></a><a name="p3250mcpsimp"></a>be_frame_attr</p>
 </td>
-<td class="cellrowborder" valign="top" width="52%" headers="mcps1.1.4.1.2 "><p id="p3252mcpsimp"><a name="p3252mcpsimp"></a><a name="p3252mcpsimp"></a>Be frame属性。</p>
+<td class="cellrowborder" valign="top" width="52%" headers="mcps1.1.4.1.2 "><p id="p3252mcpsimp"><a name="p3252mcpsimp"></a><a name="p3252mcpsimp"></a>be frame属性。</p>
 </td>
 <td class="cellrowborder" valign="top" width="16%" headers="mcps1.1.4.1.3 "><p id="p3254mcpsimp"><a name="p3254mcpsimp"></a><a name="p3254mcpsimp"></a>输出</p>
 </td>
@@ -3548,7 +3511,7 @@ td_s32 ss_mpi_isp_get_be_frame_attr(ot_vi_pipe vi_pipe, ot_isp_be_frame_attr *be
 
 【相关主题】
 
-[ss\_mpi\_isp\_set\_be\_frame\_attr](#ss_mpi_isp_set_be_frame_attr)
+[ss\_mpi\_isp\_set\_be\_frame\_attr](#ZH-CN_TOPIC_0000002470924938)
 
 ### ss\_mpi\_isp\_get\_noise\_calibration<a name="ZH-CN_TOPIC_0000002503964825"></a>
 
@@ -3861,10 +3824,10 @@ td_s32 ss_mpi_isp_mem_share(ot_vi_pipe vi_pipe, td_s32 pid)
 -   如果mmz buffer已经是全进程共享的状态，接口返回失败。
 -   1个mmz buffer最多可以允许5个进程id共享（包含分配该mmz buffer的进程id）。
 -   重复共享给同一个进程id，接口返回成功。
--   如果设置MMZ模块参数mem\_process\_isolation=0，此接口返回成功了也不会生效。
--   需要在[ss\_mpi\_isp\_init](ss_mpi_isp_init.md)之后调用，并且其他非分配mmz buffer的进程在调用相关接口前调用，否则会导致非分配mmz buffer的进程调用相关接口时mmap失败，相关接口只要涉及到读写ISP内核态分配的mmz buffer，则需要进行共享，例如访问外部寄存器、读取统计信息和获取dcf info，debug接口等。
+-   如果设置MMZ模块参数mem\_process\_isolation=0，此接口返回成功也不会生效。
+-   需要在[ss\_mpi\_isp\_init](#ZH-CN_TOPIC_0000002471085190)之后调用，并且其他非分配mmz buffer的进程在调用相关接口前调用，否则会导致非分配mmz buffer的进程调用相关接口时mmap失败，相关接口只要涉及到读写ISP内核态分配的mmz buffer，则需要进行共享，例如访问外部寄存器、读取统计信息和获取dcf info，debug接口等。
 -   ss\_mpi\_isp\_set\_debug接口访问时也需要进行共享，并且需要互相共享，共享后才允许将debug信息写出到相应进程分配的mmz buffer中。例如，进程B调用ss\_mpi\_isp\_set\_debug接口将其分配的MMZ提供给ISP主进程A写出debug信息步骤：
-    1.  ISP主进程A调用[ss\_mpi\_isp\_mem\_share](ss_mpi_isp_mem_share.md)/[ss\_mpi\_isp\_mem\_share\_all](ss_mpi_isp_mem_share_all.md), 允许ISP主进程写出debug信息到进程B；
+    1.  ISP主进程A调用[ss\_mpi\_isp\_mem\_share](#ZH-CN_TOPIC_0000002504084749)/[ss\_mpi\_isp\_mem\_share\_all](#ZH-CN_TOPIC_0000002470924996), 允许ISP主进程写出debug信息到进程B；
     2.  进程B调用ss\_mpi\_sys\_mem\_share/ss\_mpi\_sys\_mem\_share\_all，将进程B分配的debug mmz访问权限授予ISP主进程A；
     3.  进程B调用ss\_mpi\_isp\_set\_debug接口将debug mmz信息传递给ISP主进程A。
 
@@ -3949,8 +3912,8 @@ td_s32 ss_mpi_isp_mem_unshare(ot_vi_pipe vi_pipe, td_s32 pid)
 -   被共享的进程只能解除对本进程id的共享。
 -   如果mmz buffer已经是全进程共享的状态，接口返回失败。
 -   重复解除对进程id的共享，接口返回失败。
--   与[ss\_mpi\_isp\_mem\_share](ss_mpi_isp_mem_share.md)接口配对使用。
--   如果设置MMZ模块参数mem\_process\_isolation=0，此接口返回成功了也不会生效。
+-   与[ss\_mpi\_isp\_mem\_share](#ZH-CN_TOPIC_0000002504084749)接口配对使用。
+-   如果设置MMZ模块参数mem\_process\_isolation=0，此接口返回成功也不会生效。
 
 【举例】
 
@@ -4024,10 +3987,10 @@ td_s32 ss_mpi_isp_mem_share_all(ot_vi_pipe vi_pipe)
 
 -   只有分配mmz buffer的进程能注册共享，其它进程注册共享返回失败。
 -   重复共享给所有进程，接口返回成功。
--   如果设置MMZ模块参数mem\_process\_isolation=0，此接口返回成功了也不会生效。
--   需要在[ss\_mpi\_isp\_init](ss_mpi_isp_init.md)之后调用，并且其他非分配mmz buffer的进程在调用相关接口前调用，否则会导致非分配mmz buffer的进程调用相关接口时mmap失败，相关接口只要涉及到读写ISP内核态分配的mmz buffer，则需要进行共享，例如访问外部寄存器、读取统计信息和获取dcf info，debug接口等。
+-   如果设置MMZ模块参数mem\_process\_isolation=0，此接口返回成功也不会生效。
+-   需要在[ss\_mpi\_isp\_init](#ZH-CN_TOPIC_0000002471085190)之后调用，并且其他非分配mmz buffer的进程在调用相关接口前调用，否则会导致非分配mmz buffer的进程调用相关接口时mmap失败，相关接口只要涉及到读写ISP内核态分配的mmz buffer，则需要进行共享，例如访问外部寄存器、读取统计信息和获取dcf info，debug接口等。
 -   ss\_mpi\_isp\_set\_debug接口访问时也需要进行共享，并且需要互相共享，共享后才允许将debug信息写出到相应进程分配的mmz buffer中。例如，进程B调用ss\_mpi\_isp\_set\_debug接口将其分配的MMZ提供给ISP主进程A写出debug信息步骤：
-    1.  ISP主进程A调用[ss\_mpi\_isp\_mem\_share](ss_mpi_isp_mem_share.md)/[ss\_mpi\_isp\_mem\_share\_all](ss_mpi_isp_mem_share_all.md), 允许ISP主进程A写出debug信息到进程B；
+    1.  ISP主进程A调用[ss\_mpi\_isp\_mem\_share](#ZH-CN_TOPIC_0000002504084749)/[ss\_mpi\_isp\_mem\_share\_all](#ZH-CN_TOPIC_0000002470924996), 允许ISP主进程A写出debug信息到进程B；
     2.  进程B调用ss\_mpi\_sys\_mem\_share/ss\_mpi\_sys\_mem\_share\_all，将进程B分配的debug mmz访问权限授予ISP主进程A；
     3.  进程B调用ss\_mpi\_isp\_set\_debug接口将debug mmz信息传递给ISP主进程A。
 
@@ -4103,9 +4066,9 @@ td_s32 ss_mpi_isp_mem_unshare_all(ot_vi_pipe vi_pipe)
 
 -   只有分配mmz buffer的进程可以解除对所有进程的共享。
 -   重复解除对所有进程的共享，接口返回成功。
--   与[ss\_mpi\_isp\_mem\_share\_all](ss_mpi_isp_mem_share_all.md)接口配对使用。
+-   与[ss\_mpi\_isp\_mem\_share\_all](#ZH-CN_TOPIC_0000002470924996)接口配对使用。
 -   调用此接口解除对所有进程共享的状态之后，仍然保留原有对进程id的共享状态。
--   如果设置MMZ模块参数mem\_process\_isolation=0，此接口返回成功了也不会生效。
+-   如果设置MMZ模块参数mem\_process\_isolation=0，此接口返回成功也不会生效。
 
 【举例】
 
@@ -4119,239 +4082,124 @@ td_s32 ss_mpi_isp_mem_unshare_all(ot_vi_pipe vi_pipe)
 
 本文档中变量，如未明确指定取值范围，则默认是数据类型对应的取值范围。例如td\_u8数据类型的变量取值范围为\[0, 255\]。本文档中变量，如未明确指定数据精度，则默认是1。
 
--   [OT\_ISP\_BAYER\_CHN\_NUM](OT_ISP_BAYER_CHN_NUM.md)：定义bayer数据的通道数目。
--   [OT\_ISP\_MAX\_PIPE\_NUM](OT_ISP_MAX_PIPE_NUM.md)：定义ISP 支持的PIPE数目的最大值。
--   [OT\_ISP\_WDR\_MAX\_FRAME\_NUM](OT_ISP_WDR_MAX_FRAME_NUM.md)：定义WDR合成的最大帧数。
--   [OT\_ISP\_EXP\_RATIO\_NUM](OT_ISP_EXP_RATIO_NUM.md)：定义WDR曝光比的数目。
--   [OT\_ISP\_AUTO\_ISO\_NUM](OT_ISP_AUTO_ISO_NUM.md)：定义ISO档位数。
--   [OT\_ISP\_STRIPING\_MAX\_NUM](OT_ISP_STRIPING_MAX_NUM.md)：定义ISP BE离线分块数目的最大值。
--   [OT\_ISP\_MAX\_STITCH\_NUM](OT_ISP_MAX_STITCH_NUM.md)：定义ISP拼接组的最大个数。
--   [ALG\_LIB\_NAME\_SIZE\_MAX](ALG_LIB_NAME_SIZE_MAX.md)：定义3A算法库名称的最大字符数。
--   [OT\_ISP\_MAX\_SNS\_REGS](OT_ISP_MAX_SNS_REGS.md)：曝光结果写到sensor时需要配置的寄存器个数的最大值。
--   [OT\_ISP\_PEOPLE\_CLASS\_MAX](OT_ISP_PEOPLE_CLASS_MAX.md)：定义人形、人脸检测类型的最大数目。
--   [OT\_ISP\_TUNNEL\_CLASS\_MAX](OT_ISP_TUNNEL_CLASS_MAX.md)：定义隧道检测类型的最大数目。
--   [OT\_ISP\_AE\_ZONE\_ROW](OT_ISP_AE_ZONE_ROW.md)：AE水平方向的分区间数目。
--   [OT\_ISP\_AE\_ZONE\_COLUMN](OT_ISP_AE_ZONE_COLUMN.md)：AE垂直方向的分区间数目。
--   [OT\_ISP\_MG\_ZONE\_ROW](OT_ISP_MG_ZONE_ROW.md)：MG水平方向的分区间数目。
--   [OT\_ISP\_MG\_ZONE\_COLUMN](OT_ISP_MG_ZONE_COLUMN.md)：MG垂直方向的分区间数目。
--   [OT\_ISP\_AE\_ROUTE\_MAX\_NODES](OT_ISP_AE_ROUTE_MAX_NODES.md)：AE ROUTE节点的最大数目。
--   [OT\_ISP\_AE\_ROUTE\_EX\_MAX\_NODES](OT_ISP_AE_ROUTE_EX_MAX_NODES.md)：扩展AE ROUTE节点的最大数目。
--   [OT\_ISP\_BAYER\_CALIBTAION\_MAX\_NUM](OT_ISP_BAYER_CALIBTAION_MAX_NUM.md)：定义标定噪声模型参数的iso档位个数的最大值。
--   [OT\_BAYER\_CALIBRATION\_PARA\_NUM\_NEW](OT_BAYER_CALIBRATION_PARA_NUM_NEW.md)：定义标定噪声模型参数的最大个数。
--   [OT\_ISP\_CCM\_MATRIX\_SIZE](OT_ISP_CCM_MATRIX_SIZE.md)：CCM矩阵参数个数。
--   [OT\_DCF\_DRSCRIPTION\_LENGTH](OT_DCF_DRSCRIPTION_LENGTH.md)：定义DCF描述信息的深度。
--   [ISP\_SNS\_SAVE\_INFO\_MAX](ISP_SNS_SAVE_INFO_MAX.md)：定义记录sensor info的最大帧数。
--   [OT\_ISP\_LSC\_GRID\_COL](OT_ISP_LSC_GRID_COL.md)：Mesh Shading在x方向上划分的分块所需点的数量。
--   [OT\_ISP\_LSC\_GRID\_ROW](OT_ISP_LSC_GRID_ROW.md)：Mesh Shading在y方向上划分的分块所需点的数量。
--   [OT\_ISP\_LSC\_GRID\_POINTS](OT_ISP_LSC_GRID_POINTS.md)：Mesh Shading LUT表增益点的数量。
--   [OT\_ISP\_ACS\_LIGHT\_NUM](OT_ISP_ACS_LIGHT_NUM.md)：ACS划分的光源数量。
--   [OT\_ISP\_ACS\_CHN\_NUM](OT_ISP_ACS_CHN_NUM.md)：ACS标定的R和B通道分量。
--   [OT\_ISP\_PRO\_MAX\_FRAME\_NUM](OT_ISP_PRO_MAX_FRAME_NUM.md):  表示拍照pro模式下最大支持的帧数。
--   [ot\_rect](ot_rect.md)：定义裁剪窗口起始位置和图像宽高。
--   [ot\_point](ot_point.md)：定义坐标信息。
--   [ot\_isp\_bayer\_format](ot_isp_bayer_format.md)：定义输入Bayer图像数据格式。
--   [ot\_mipi\_crop\_attr](ot_mipi_crop_attr.md)：mipi裁剪参数。
--   [ot\_isp\_bayer\_raw\_bit](ot_isp_bayer_raw_bit.md)：定义输入Bayer图像数据位宽。
--   [ot\_size](ot_size.md)：定义sensor输出的宽高
--   [ot\_color\_gamut](ot_color_gamut.md)：定义通道色域属性。
--   [ot\_isp\_pub\_attr](ot_isp_pub_attr.md)：定义ISP公共属性。
--   [ot\_op\_mode](ot_op_mode.md)：定义模块运行状态。
--   [ot\_isp\_fmw\_state](ot_isp_fmw_state.md)：定义ISPfirmware状态。
--   [ot\_isp\_slave\_sns\_sync](ot_isp_slave_sns_sync.md)：定义从模式sensor同步信号配置。
--   [ot\_isp\_wdr\_mode](ot_isp_wdr_mode.md)：定义ISP宽动态模式。
--   [ot\_wdr\_mode](ot_wdr_mode.md)：定义宽动态模式。
--   [ot\_isp\_module\_ctrl](ot_isp_module_ctrl.md)：定义ISP功能模块的控制。
--   [ot\_isp\_dump\_frame\_pos](ot_isp_dump_frame_pos.md)：定义dump be frame的位置信息。
--   [ot\_isp\_be\_frame\_attr](ot_isp_be_frame_attr.md)：定义be frame的相关配置信息。
--   [ot\_isp\_vd\_type](ot_isp_vd_type.md)：定义场同步信号。
--   [ot\_isp\_sns\_attr\_info](ot_isp_sns_attr_info.md)：定义sensor属性。
--   [ot\_isp\_sensor\_register](ot_isp_sensor_register.md)：定义sensor注册结构体。
--   [ot\_isp\_sensor\_exp\_func](ot_isp_sensor_exp_func.md)：定义sensor回调函数结构体。
--   [ot\_isp\_cmos\_sensor\_image\_mode](ot_isp_cmos_sensor_image_mode.md)：定义sensor输出的宽高和帧率属性。
--   [ot\_isp\_cmos\_lsc](ot_isp_cmos_lsc.md)：定义LSC 参数。
--   [ot\_isp\_acs\_y\_shading\_lut](ot_isp_acs_y_shading_lut.md)：定义Auto Color Shading亮度分量上的校正强度表。
--   [ot\_isp\_acs\_color\_shading\_lut](ot_isp_acs_color_shading_lut.md)：定义Auto Color Shading颜色分量上的Lut表。
--   [ot\_isp\_acs\_calib\_param](ot_isp_acs_calib_param.md)：定义Auto Color Shading的标定参数，用标定工具生成。
--   [ot\_isp\_cmos\_acs](ot_isp_cmos_acs.md)：定义Auto Color Shading的CMOS参数。
--   [ot\_isp\_noise\_calibration](ot_isp_noise_calibration.md)：定义NOISE校正参数。
--   [ot\_isp\_cmos\_sensor\_max\_resolution](ot_isp_cmos_sensor_max_resolution.md)：定义sensor最大分辨率结构体。
--   [ot\_isp\_cmos\_clut](ot_isp_cmos_clut.md)：定义CLUT结构体。
--   [ot\_isp\_cmos\_sensor\_mode](ot_isp_cmos_sensor_mode.md)：定义sensor模式寄存器。
--   [ot\_isp\_cmos\_dng\_color\_param](ot_isp_cmos_dng_color_param.md)：定义DNG白平衡校正系数。
--   [ot\_isp\_cmos\_wdr\_switch\_attr](ot_isp_cmos_wdr_switch_attr.md)：定义WDR切换属性。
--   [ot\_isp\_cmos\_alg\_key](ot_isp_cmos_alg_key.md)：定义ISP的各算法是否采用cmos中的默认配置的标志位。
--   [ot\_isp\_cmos\_default](ot_isp_cmos_default.md)：定义ISP基础算法库的初始化参数结构体。
--   [ot\_isp\_sensor\_total\_size\_attr](ot_isp_sensor_total_size_attr.md)：定义sensor写出数据的实际宽高。
--   [ot\_isp\_cmos\_black\_level](ot_isp_cmos_black_level.md)：定义sensor的黑电平结构体。
--   [ot\_isp\_sns\_regs\_info](ot_isp_sns_regs_info.md)：定义sensor的寄存器信息。
--   [ot\_isp\_3a\_alg\_lib](ot_isp_3a_alg_lib.md)：定义AE/AWB算法库结构体。
--   [ot\_isp\_bind\_attr](ot_isp_bind_attr.md)：定义ISP库与Sensor、3A库之间绑定关系的结构体。
--   [ot\_isp\_ctrl\_proc\_write](ot_isp_ctrl_proc_write.md)：定义ISP的PROC信息。
--   [ot\_isp\_ctrl\_cmd](ot_isp_ctrl_cmd.md)：定义ISP对3A的控制命令。
--   [ot\_isp\_stitch\_attr](ot_isp_stitch_attr.md)：定义ISP拼接结构体。
--   [ot\_isp\_ae\_register](ot_isp_ae_register.md)：定义AE注册结构体。
--   [ot\_isp\_ae\_exp\_func](ot_isp_ae_exp_func.md)：定义AE回调函数结构体。
--   [ot\_isp\_ae\_param](ot_isp_ae_param.md)：定义ISP提供给AE的初始化参数结构体。
--   [ot\_isp\_people\_roi](ot_isp_people_roi.md)：定义ISP提供给AE的人形、人脸统计信息结构体。
--   [ot\_isp\_tunnel\_roi](ot_isp_tunnel_roi.md)：定义ISP提供给AE的隧道统计信息结构体。
--   [ot\_isp\_face\_roi](ot_isp_face_roi.md): 定义ISP提供给AE的人脸快速收敛算法的结构体。
--   [ot\_isp\_people\_type](ot_isp_people_type.md)：定义ISP提供给AE的人形、人脸统计信息枚举类型。
--   [ot\_isp\_tunnel\_type](ot_isp_tunnel_type.md)：定义ISP提供给AE的隧道统计信息枚举类型。
--   [ot\_isp\_smart\_info](ot_isp_smart_info.md)：定义ISP提供给AE的人形、人脸统计信息结构体。
--   [ot\_isp\_fe\_ae\_stat\_1](ot_isp_fe_ae_stat_1.md)：定义ISP FE中AE统计属性。
--   [ot\_isp\_be\_ae\_stat\_1](ot_isp_be_ae_stat_1.md)：定义ISP BE中AE统计属性。
--   [ot\_isp\_ae\_info](ot_isp_ae_info.md)：定义ISP提供给AE的统计信息结构体。
--   [ot\_isp\_ae\_stat\_attr](ot_isp_ae_stat_attr.md)：定义AE库返回给ISP的配置寄存器结构体。
--   [ot\_isp\_ae\_result](ot_isp_ae_result.md)：定义AE库返回给ISP的配置寄存器结构体。
--   [ot\_isp\_awb\_register](ot_isp_awb_register.md)：定义AWB注册结构体。
--   [ot\_isp\_awb\_exp\_func](ot_isp_awb_exp_func.md)：定义AWB回调函数结构体。
--   [ot\_isp\_awb\_param](ot_isp_awb_param.md)：定义ISP提供给AWB的初始化参数结构体。
--   [ot\_isp\_awb\_stat\_1](ot_isp_awb_stat_1.md)：定义AWB统计信息结构体。
--   [ot\_isp\_awb\_stat\_result](ot_isp_awb_stat_result.md)：定义AWB统计信息结构体。
--   [ot\_isp\_awb\_info](ot_isp_awb_info.md)：定义ISP提供给AWB的统计信息结构体。
--   [ot\_isp\_awb\_raw\_stat\_attr](ot_isp_awb_raw_stat_attr.md)：定义AWB Bayer域统计信息结构体。
--   [ot\_isp\_awb\_result](ot_isp_awb_result.md)：定义AWB库返回给ISP的配置寄存器结构体。
--   [ot\_isp\_awb\_calibration\_gain](ot_isp_awb_calibration_gain.md)：定义AWB在线标定输出的增益结构体。
--   [ot\_isp\_dcf\_const\_info](ot_isp_dcf_const_info.md)：定义DCF信息中用户配置参数。
--   [ot\_isp\_dcf\_update\_info](ot_isp_dcf_update_info.md)：定义DCF信息中ISP实时更新参数
--   [ot\_isp\_dcf\_info](ot_isp_dcf_info.md)：定义DCF信息参数结构体。
--   [ot\_isp\_pipe\_diff\_mode](ot_isp_pipe_diff_mode.md)：定义pipe diff的模式。
--   [ot\_isp\_pipe\_diff\_param](ot_isp_pipe_diff_param.md)：定义两路ISP差异参数结构体。
--   [ot\_isp\_pipe\_diff\_attr](ot_isp_pipe_diff_attr.md)：定义两路ISP差异属性结构体。
--   [ot\_isp\_ob\_stats\_update\_pos](ot_isp_ob_stats_update_pos.md)：定义读取ob区统计信息的位置。
--   [ot\_isp\_alg\_run\_select](ot_isp_alg_run_select.md)：定义是否屏蔽isp be中的算法模块。
--   [ot\_isp\_run\_wakeup\_select](ot_isp_run_wakeup_select.md)：定义唤醒isp的中断类型。
--   [ot\_isp\_ctrl\_param](ot_isp_ctrl_param.md)：定义ISP控制参数结构体。
--   [ot\_isp\_mod\_param](ot_isp_mod_param.md)：定义ISP模块参数结构体。
--   [ot\_isp\_init\_attr](ot_isp_init_attr.md)：定义ISP第一次启动时AE/AWB的初始化参数结构体。
--   [ot\_isp\_sns\_mirrorflip\_type](ot_isp_sns_mirrorflip_type.md)：定义sensor mirror-flip枚举。
--   [ot\_isp\_sns\_blc\_clamp](ot_isp_sns_blc_clamp.md)：定义sensor黑电平矫正开关。
--   [ot\_isp\_sns\_bus\_ex](ot_isp_sns_bus_ex.md)：定义sensor通讯协议的扩展结构体。
--   [ot\_isp\_sns\_obj](ot_isp_sns_obj.md)：定义指向sensor的对象。
--   [ot\_isp\_sns\_state](ot_isp_sns_state.md)：定义sensor相关全局变量参数结构体。
--   [ot\_isp\_awb\_alg](ot_isp_awb_alg.md)：定义AWB算法类型。
+-   [OT\_ISP\_BAYER\_CHN\_NUM](#ZH-CN_TOPIC_0000002470925096)：定义bayer数据的通道数目。
+-   [OT\_ISP\_MAX\_PIPE\_NUM](#ZH-CN_TOPIC_0000002503965125)：定义ISP 支持的PIPE数目的最大值。
+-   [OT\_ISP\_WDR\_MAX\_FRAME\_NUM](#ZH-CN_TOPIC_0000002471084934)：定义WDR合成的最大帧数。
+-   [OT\_ISP\_EXP\_RATIO\_NUM](#ZH-CN_TOPIC_0000002471085142)：定义WDR曝光比的数目。
+-   [OT\_ISP\_AUTO\_ISO\_NUM](#ZH-CN_TOPIC_0000002504084769)：定义ISO档位数。
+-   [OT\_ISP\_STRIPING\_MAX\_NUM](#ZH-CN_TOPIC_0000002471084874)：定义ISP BE离线分块数目的最大值。
+-   [OT\_ISP\_MAX\_STITCH\_NUM](#ZH-CN_TOPIC_0000002471085118)：定义ISP拼接组的最大个数。
+-   [ALG\_LIB\_NAME\_SIZE\_MAX](#ZH-CN_TOPIC_0000002503965005)：定义3A算法库名称的最大字符数。
+-   [OT\_ISP\_MAX\_SNS\_REGS](#ZH-CN_TOPIC_0000002470925146)：曝光结果写到sensor时需要配置的寄存器个数的最大值。
+-   [OT\_ISP\_PEOPLE\_CLASS\_MAX](#ZH-CN_TOPIC_0000002504084879)：定义人形、人脸检测类型的最大数目。
+-   [OT\_ISP\_TUNNEL\_CLASS\_MAX](#ZH-CN_TOPIC_0000002470924904)：定义隧道检测类型的最大数目。
+-   [OT\_ISP\_AE\_ZONE\_ROW](#ZH-CN_TOPIC_0000002504084767)：AE水平方向的分区间数目。
+-   [OT\_ISP\_AE\_ZONE\_COLUMN](#ZH-CN_TOPIC_0000002503964985)：AE垂直方向的分区间数目。
+-   [OT\_ISP\_MG\_ZONE\_ROW](#ZH-CN_TOPIC_0000002470925212)：MG水平方向的分区间数目。
+-   [OT\_ISP\_MG\_ZONE\_COLUMN](#ZH-CN_TOPIC_0000002503965087)：MG垂直方向的分区间数目。
+-   [OT\_ISP\_AE\_ROUTE\_MAX\_NODES](#ZH-CN_TOPIC_0000002504084699)：AE ROUTE节点的最大数目。
+-   [OT\_ISP\_AE\_ROUTE\_EX\_MAX\_NODES](#ZH-CN_TOPIC_0000002471085072)：扩展AE ROUTE节点的最大数目。
+-   [OT\_ISP\_BAYER\_CALIBTAION\_MAX\_NUM](#ZH-CN_TOPIC_0000002504084815)：定义标定噪声模型参数的iso档位个数的最大值。
+-   [OT\_BAYER\_CALIBRATION\_PARA\_NUM\_NEW](#ZH-CN_TOPIC_0000002471084890)：定义标定噪声模型参数的最大个数。
+-   [OT\_ISP\_CCM\_MATRIX\_SIZE](#ZH-CN_TOPIC_0000002470924922)：CCM矩阵参数个数。
+-   [OT\_DCF\_DRSCRIPTION\_LENGTH](#ZH-CN_TOPIC_0000002503965029)：定义DCF描述信息的深度。
+-   [ISP\_SNS\_SAVE\_INFO\_MAX](#ZH-CN_TOPIC_0000002503964809)：定义记录sensor info的最大帧数。
+-   [OT\_ISP\_LSC\_GRID\_COL](#ZH-CN_TOPIC_0000002471084870)：Mesh Shading在x方向上划分的分块所需点的数量。
+-   [OT\_ISP\_LSC\_GRID\_ROW](#ZH-CN_TOPIC_0000002504085075)：Mesh Shading在y方向上划分的分块所需点的数量。
+-   [OT\_ISP\_LSC\_GRID\_POINTS](#ZH-CN_TOPIC_0000002504084759)：Mesh Shading LUT表增益点的数量。
+-   [OT\_ISP\_ACS\_LIGHT\_NUM](#ZH-CN_TOPIC_0000002504084891)：ACS划分的光源数量。
+-   [OT\_ISP\_ACS\_CHN\_NUM](#ZH-CN_TOPIC_0000002504084885)：ACS标定的R和B通道分量。
+-   [OT\_ISP\_PRO\_MAX\_FRAME\_NUM](#ZH-CN_TOPIC_0000002503964967):  表示拍照pro模式下最大支持的帧数。
+-   [AE\_INT\_TIME\_NUM](#ZH-CN_TOPIC_0000002548728793)：ae支持4to1wdr，表示支持的最大曝光时间个数。
+-   [ot\_rect](#ZH-CN_TOPIC_0000002470925086)：定义裁剪窗口起始位置和图像宽高。
+-   [ot\_point](#ZH-CN_TOPIC_0000002470924882)：定义坐标信息。
+-   [ot\_isp\_bayer\_format](#ZH-CN_TOPIC_0000002503964903)：定义输入Bayer图像数据格式。
+-   [ot\_mipi\_crop\_attr](#ZH-CN_TOPIC_0000002503964885)：mipi裁剪参数。
+-   [ot\_isp\_bayer\_raw\_bit](#ZH-CN_TOPIC_0000002470925010)：定义输入Bayer图像数据位宽。
+-   [ot\_size](#ZH-CN_TOPIC_0000002504084877)：定义sensor输出的宽高
+-   [ot\_color\_gamut](#ZH-CN_TOPIC_0000002504084785)：定义通道色域属性。
+-   [ot\_isp\_pub\_attr](#ZH-CN_TOPIC_0000002471085026)：定义ISP公共属性。
+-   [ot\_op\_mode](#ZH-CN_TOPIC_0000002471084900)：定义模块运行状态。
+-   [ot\_isp\_fmw\_state](#ZH-CN_TOPIC_0000002471084930)：定义ISPfirmware状态。
+-   [ot\_isp\_slave\_sns\_sync](#ZH-CN_TOPIC_0000002471085028)：定义从模式sensor同步信号配置。
+-   [ot\_isp\_wdr\_mode](#ZH-CN_TOPIC_0000002504085073)：定义ISP宽动态模式。
+-   [ot\_wdr\_mode](#ZH-CN_TOPIC_0000002504084745)：定义宽动态模式。
+-   [ot\_isp\_module\_ctrl](#ZH-CN_TOPIC_0000002504085031)：定义ISP功能模块的控制。
+-   [ot\_isp\_dump\_frame\_pos](#ZH-CN_TOPIC_0000002504084887)：定义dump be frame的位置信息。
+-   [ot\_isp\_be\_frame\_attr](#ZH-CN_TOPIC_0000002504085027)：定义be frame的相关配置信息。
+-   [ot\_isp\_vd\_type](#ZH-CN_TOPIC_0000002470925008)：定义场同步信号。
+-   [ot\_isp\_sns\_attr\_info](#ZH-CN_TOPIC_0000002504084741)：定义sensor属性。
+-   [ot\_isp\_sensor\_register](#ZH-CN_TOPIC_0000002504084795)：定义sensor注册结构体。
+-   [ot\_isp\_sensor\_exp\_func](#ZH-CN_TOPIC_0000002503964953)：定义sensor回调函数结构体。
+-   [ot\_isp\_cmos\_sensor\_image\_mode](#ZH-CN_TOPIC_0000002503965049)：定义sensor输出的宽高和帧率属性。
+-   [ot\_isp\_cmos\_lsc](#ZH-CN_TOPIC_0000002504084813)：定义LSC 参数。
+-   [ot\_isp\_acs\_y\_shading\_lut](#ZH-CN_TOPIC_0000002503964887)：定义Auto Color Shading亮度分量上的校正强度表。
+-   [ot\_isp\_acs\_color\_shading\_lut](#ZH-CN_TOPIC_0000002504084969)：定义Auto Color Shading颜色分量上的Lut表。
+-   [ot\_isp\_acs\_calib\_param](#ZH-CN_TOPIC_0000002471085078)：定义Auto Color Shading的标定参数，用标定工具生成。
+-   [ot\_isp\_cmos\_acs](#ZH-CN_TOPIC_0000002471085168)：定义Auto Color Shading的CMOS参数。
+-   [ot\_isp\_noise\_calibration](#ZH-CN_TOPIC_0000002471085224)：定义NOISE校正参数。
+-   [ot\_isp\_cmos\_sensor\_max\_resolution](#ZH-CN_TOPIC_0000002470924998)：定义sensor最大分辨率结构体。
+-   [ot\_isp\_cmos\_clut](#ZH-CN_TOPIC_0000002470924898)：定义CLUT结构体。
+-   [ot\_isp\_cmos\_sensor\_mode](#ZH-CN_TOPIC_0000002471085226)：定义sensor模式寄存器。
+-   [ot\_isp\_cmos\_dng\_color\_param](#ZH-CN_TOPIC_0000002503964927)：定义DNG白平衡校正系数。
+-   [ot\_isp\_cmos\_wdr\_switch\_attr](#ZH-CN_TOPIC_0000002471084926)：定义WDR切换属性。
+-   [ot\_isp\_cmos\_alg\_key](#ZH-CN_TOPIC_0000002471084994)：定义ISP的各算法是否采用cmos中的默认配置的标志位。
+-   [ot\_isp\_cmos\_default](#ZH-CN_TOPIC_0000002503964879)：定义ISP基础算法库的初始化参数结构体。
+-   [ot\_isp\_sensor\_total\_size\_attr](#ZH-CN_TOPIC_0000002471085128)：定义sensor写出数据的实际宽高。
+-   [ot\_isp\_cmos\_black\_level](#ZH-CN_TOPIC_0000002503965035)：定义sensor的黑电平结构体。
+-   [ot\_isp\_sns\_regs\_info](#ZH-CN_TOPIC_0000002471085112)：定义sensor的寄存器信息。
+-   [ot\_isp\_3a\_alg\_lib](#ZH-CN_TOPIC_0000002503965039)：定义AE/AWB算法库结构体。
+-   [ot\_isp\_bind\_attr](#ZH-CN_TOPIC_0000002503965055)：定义ISP库与Sensor、3A库之间绑定关系的结构体。
+-   [ot\_isp\_ctrl\_proc\_write](#ZH-CN_TOPIC_0000002503964981)：定义ISP的PROC信息。
+-   [ot\_isp\_ctrl\_cmd](#ZH-CN_TOPIC_0000002470924852)：定义ISP对3A的控制命令。
+-   [ot\_isp\_stitch\_attr](#ZH-CN_TOPIC_0000002503964881)：定义ISP拼接结构体。
+-   [ot\_isp\_ae\_register](#ZH-CN_TOPIC_0000002471085212)：定义AE注册结构体。
+-   [ot\_isp\_ae\_exp\_func](#ZH-CN_TOPIC_0000002503964939)：定义AE回调函数结构体。
+-   [ot\_isp\_ae\_param](#ZH-CN_TOPIC_0000002471085106)：定义ISP提供给AE的初始化参数结构体。
+-   [ot\_isp\_people\_roi](#ZH-CN_TOPIC_0000002470924960)：定义ISP提供给AE的人形、人脸统计信息结构体。
+-   [ot\_isp\_tunnel\_roi](#ZH-CN_TOPIC_0000002471084876)：定义ISP提供给AE的隧道统计信息结构体。
+-   [ot\_isp\_face\_roi](#ZH-CN_TOPIC_0000002503965171): 定义ISP提供给AE的人脸快速收敛算法的结构体。
+-   [ot\_isp\_people\_type](#ZH-CN_TOPIC_0000002503965021)：定义ISP提供给AE的人形、人脸统计信息枚举类型。
+-   [ot\_isp\_tunnel\_type](#ZH-CN_TOPIC_0000002471084928)：定义ISP提供给AE的隧道统计信息枚举类型。
+-   [ot\_isp\_smart\_info](#ZH-CN_TOPIC_0000002503964975)：定义ISP提供给AE的人形、人脸统计信息结构体。
+-   [ot\_isp\_fe\_ae\_stat\_1](#ZH-CN_TOPIC_0000002471084964)：定义ISP FE中AE统计属性。
+-   [ot\_isp\_be\_ae\_stat\_1](#ZH-CN_TOPIC_0000002470925108)：定义ISP BE中AE统计属性。
+-   [ot\_isp\_ae\_info](#ZH-CN_TOPIC_0000002470925126)：定义ISP提供给AE的统计信息结构体。
+-   [ot\_isp\_ae\_stat\_attr](#ZH-CN_TOPIC_0000002504084881)：定义AE库返回给ISP的配置寄存器结构体。
+-   [ot\_isp\_ae\_result](#ZH-CN_TOPIC_0000002503965167)：定义AE库返回给ISP的配置寄存器结构体。
+-   [ot\_isp\_awb\_register](#ZH-CN_TOPIC_0000002470924932)：定义AWB注册结构体。
+-   [ot\_isp\_awb\_exp\_func](#ZH-CN_TOPIC_0000002471084978)：定义AWB回调函数结构体。
+-   [ot\_isp\_awb\_param](#ZH-CN_TOPIC_0000002503965117)：定义ISP提供给AWB的初始化参数结构体。
+-   [ot\_isp\_awb\_stat\_1](#ZH-CN_TOPIC_0000002470924906)：定义AWB统计信息结构体。
+-   [ot\_isp\_awb\_stat\_result](#ZH-CN_TOPIC_0000002503965071)：定义AWB统计信息结构体。
+-   [ot\_isp\_awb\_info](#ZH-CN_TOPIC_0000002471084884)：定义ISP提供给AWB的统计信息结构体。
+-   [ot\_isp\_awb\_raw\_stat\_attr](#ZH-CN_TOPIC_0000002503965033)：定义AWB Bayer域统计信息结构体。
+-   [ot\_isp\_awb\_result](#ZH-CN_TOPIC_0000002503964823)：定义AWB库返回给ISP的配置寄存器结构体。
+-   [ot\_isp\_awb\_calibration\_gain](#ZH-CN_TOPIC_0000002504084773)：定义AWB在线标定输出的增益结构体。
+-   [ot\_isp\_dcf\_const\_info](#ZH-CN_TOPIC_0000002470925020)：定义DCF信息中用户配置参数。
+-   [ot\_isp\_dcf\_update\_info](#ZH-CN_TOPIC_0000002503964901)：定义DCF信息中ISP实时更新参数
+-   [ot\_isp\_dcf\_info](#ZH-CN_TOPIC_0000002471085014)：定义DCF信息参数结构体。
+-   [ot\_isp\_pipe\_diff\_mode](#ZH-CN_TOPIC_0000002470925038)：定义pipe diff的模式。
+-   [ot\_isp\_pipe\_diff\_param](#ZH-CN_TOPIC_0000002470925120)：定义两路ISP差异参数结构体。
+-   [ot\_isp\_pipe\_diff\_attr](#ZH-CN_TOPIC_0000002504085003)：定义两路ISP差异属性结构体。
+-   [ot\_isp\_ob\_stats\_update\_pos](#ZH-CN_TOPIC_0000002470924884)：定义读取ob区统计信息的位置。
+-   [ot\_isp\_alg\_run\_select](#ZH-CN_TOPIC_0000002503964913)：定义是否屏蔽isp be中的算法模块。
+-   [ot\_isp\_run\_wakeup\_select](#ZH-CN_TOPIC_0000002503965109)：定义唤醒isp的中断类型。
+-   [ot\_isp\_ctrl\_param](#ZH-CN_TOPIC_0000002503964837)：定义ISP控制参数结构体。
+-   [ot\_isp\_mod\_param](#ZH-CN_TOPIC_0000002470925030)：定义ISP模块参数结构体。
+-   [ot\_isp\_init\_attr](#ZH-CN_TOPIC_0000002504084951)：定义ISP第一次启动时AE/AWB的初始化参数结构体。
+-   [ot\_isp\_sns\_mirrorflip\_type](#ZH-CN_TOPIC_0000002503964807)：定义sensor mirror-flip枚举。
+-   [ot\_isp\_sns\_blc\_clamp](#ZH-CN_TOPIC_0000002504084893)：定义sensor黑电平矫正开关。
+-   [ot\_isp\_sns\_bus\_ex](#ZH-CN_TOPIC_0000002504085065)：定义sensor通讯协议的扩展结构体。
+-   [ot\_isp\_sns\_obj](#ZH-CN_TOPIC_0000002471085122)：定义指向sensor的对象。
+-   [ot\_isp\_sns\_state](#ZH-CN_TOPIC_0000002470925066)：定义sensor相关全局变量参数结构体。
+-   [ot\_isp\_awb\_alg](#ZH-CN_TOPIC_0000002471084970)：定义AWB算法类型。
 
 以下数据类型为暂不支持的功能：
 
--   [ot\_isp\_ir\_status](ot_isp_ir_status.md)：定义设备当前的红外状态。
--   [ot\_isp\_ir\_switch\_status](ot_isp_ir_switch_status.md)：定义设备的红外切换状态。
--   [ot\_isp\_ir\_auto\_attr](ot_isp_ir_auto_attr.md)：定义红外自动切换属性。
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+-   [ot\_isp\_ir\_status](#ZH-CN_TOPIC_0000002503964999)：定义设备当前的红外状态。
+-   [ot\_isp\_ir\_switch\_status](#ZH-CN_TOPIC_0000002471085082)：定义设备的红外切换状态。
+-   [ot\_isp\_ir\_auto\_attr](#ZH-CN_TOPIC_0000002470924864)：定义红外自动切换属性。
 
 ### OT\_ISP\_BAYER\_CHN\_NUM<a name="ZH-CN_TOPIC_0000002470925096"></a>
 
@@ -4371,10 +4219,10 @@ td_s32 ss_mpi_isp_mem_unshare_all(ot_vi_pipe vi_pipe)
 
 【相关数据类型及接口】
 
--   [ot\_isp\_awb\_info](#ot_isp_awb_info)
--   [ot\_isp\_awb\_result](#ot_isp_awb_result)
+-   [ot\_isp\_awb\_info](#ZH-CN_TOPIC_0000002471084884)
+-   [ot\_isp\_awb\_result](#ZH-CN_TOPIC_0000002503964823)
 -   ot\_isp\_awb\_sensor\_default
--   [ot\_isp\_pipe\_diff\_attr](#ot_isp_pipe_diff_attr)
+-   [ot\_isp\_pipe\_diff\_attr](#ZH-CN_TOPIC_0000002504085003)
 -   ot\_isp\_nr\_snr\_auto\_attr
 -   ot\_isp\_nr\_snr\_manual\_attr
 -   ot\_isp\_black\_level\_manual\_attr
@@ -4384,7 +4232,7 @@ td_s32 ss_mpi_isp_mem_unshare_all(ot_vi_pipe vi_pipe)
 -   ot\_isp\_mg\_stats
 -   ot\_isp\_awb\_attr
 -   ot\_isp\_dng\_raw\_format
--   [ot\_isp\_sns\_state](#ot_isp_sns_state)
+-   [ot\_isp\_sns\_state](#ZH-CN_TOPIC_0000002470925066)
 
 ### OT\_ISP\_MAX\_PIPE\_NUM<a name="ZH-CN_TOPIC_0000002503965125"></a>
 
@@ -4426,7 +4274,7 @@ ot\_isp\_ae\_stitch\_stats
 
 【相关数据类型及接口】
 
--   [ot\_isp\_ae\_result](#ot_isp_ae_result)
+-   [ot\_isp\_ae\_result](#ZH-CN_TOPIC_0000002503965167)
 -   ot\_isp\_ae\_sensor\_default
 -   ot\_isp\_fusion\_attr
 -   ot\_isp\_nr\_wdr\_attr
@@ -4435,7 +4283,7 @@ ot\_isp\_ae\_stitch\_stats
 -   ot\_isp\_ae\_stats
 -   ot\_isp\_ae\_stitch\_stats
 -   ot\_isp\_fe\_focus\_stats
--   [ot\_isp\_sns\_state](#ot_isp_sns_state)
+-   [ot\_isp\_sns\_state](#ZH-CN_TOPIC_0000002470925066)
 
 ### OT\_ISP\_EXP\_RATIO\_NUM<a name="ZH-CN_TOPIC_0000002471085142"></a>
 
@@ -4457,7 +4305,7 @@ ot\_isp\_ae\_stitch\_stats
 
 -   ot\_isp\_ae\_sensor\_default
 -   ot\_isp\_wdr\_exposure\_attr
--   [ot\_isp\_cmos\_wdr\_switch\_attr](#ot_isp_cmos_wdr_switch_attr)
+-   [ot\_isp\_cmos\_wdr\_switch\_attr](#ZH-CN_TOPIC_0000002471084926)
 
 ### OT\_ISP\_AUTO\_ISO\_NUM<a name="ZH-CN_TOPIC_0000002504084769"></a>
 
@@ -4552,7 +4400,7 @@ ot\_isp\_wb\_stitch\_stats
 
 【相关数据类型及接口】
 
-[ot\_isp\_3a\_alg\_lib](#ot_isp_3a_alg_lib)
+[ot\_isp\_3a\_alg\_lib](#ZH-CN_TOPIC_0000002503965039)
 
 ### OT\_ISP\_MAX\_SNS\_REGS<a name="ZH-CN_TOPIC_0000002470925146"></a>
 
@@ -4572,7 +4420,7 @@ ot\_isp\_wb\_stitch\_stats
 
 【相关数据类型及接口】
 
-[ot\_isp\_sns\_regs\_info](#ot_isp_sns_regs_info)
+[ot\_isp\_sns\_regs\_info](#ZH-CN_TOPIC_0000002471085112)
 
 ### OT\_ISP\_PEOPLE\_CLASS\_MAX<a name="ZH-CN_TOPIC_0000002504084879"></a>
 
@@ -4592,7 +4440,7 @@ ot\_isp\_wb\_stitch\_stats
 
 【相关数据类型及接口】
 
-[ot\_isp\_smart\_info](#ot_isp_smart_info)
+[ot\_isp\_smart\_info](#ZH-CN_TOPIC_0000002503964975)
 
 ### OT\_ISP\_TUNNEL\_CLASS\_MAX<a name="ZH-CN_TOPIC_0000002470924904"></a>
 
@@ -4612,7 +4460,7 @@ ot\_isp\_wb\_stitch\_stats
 
 【相关数据类型及接口】
 
-[ot\_isp\_smart\_info](#ot_isp_smart_info)
+[ot\_isp\_smart\_info](#ZH-CN_TOPIC_0000002503964975)
 
 ### OT\_ISP\_AE\_ZONE\_ROW<a name="ZH-CN_TOPIC_0000002504084767"></a>
 
@@ -4632,7 +4480,7 @@ AE水平方向的分区间数目。
 
 【相关数据类型及接口】
 
--   [ot\_isp\_ae\_stat\_attr](#ot_isp_ae_stat_attr)
+-   [ot\_isp\_ae\_stat\_attr](#ZH-CN_TOPIC_0000002504084881)
 -   ot\_isp\_ae\_stats\_cfg
 -   ot\_isp\_ae\_grid\_info
 -   ot\_isp\_ae\_stats
@@ -4656,7 +4504,7 @@ AE垂直方向的分区间数目。
 
 【相关数据类型及接口】
 
--   [ot\_isp\_ae\_stat\_attr](#ot_isp_ae_stat_attr)
+-   [ot\_isp\_ae\_stat\_attr](#ZH-CN_TOPIC_0000002504084881)
 -   ot\_isp\_ae\_stats\_cfg
 -   ot\_isp\_ae\_grid\_info
 -   ot\_isp\_ae\_stats
@@ -4762,7 +4610,7 @@ ot\_isp\_ae\_route\_ex
 
 【相关数据类型及接口】
 
-[ot\_isp\_noise\_calibration](#ot_isp_noise_calibration)
+[ot\_isp\_noise\_calibration](#ZH-CN_TOPIC_0000002471085224)
 
 ### OT\_BAYER\_CALIBRATION\_PARA\_NUM\_NEW<a name="ZH-CN_TOPIC_0000002471084890"></a>
 
@@ -4782,7 +4630,7 @@ ot\_isp\_ae\_route\_ex
 
 【相关数据类型及接口】
 
-[ot\_isp\_noise\_calibration](#ot_isp_noise_calibration)
+[ot\_isp\_noise\_calibration](#ZH-CN_TOPIC_0000002471085224)
 
 ### OT\_ISP\_CCM\_MATRIX\_SIZE<a name="ZH-CN_TOPIC_0000002470924922"></a>
 
@@ -4802,14 +4650,14 @@ CCM矩阵参数个数。
 
 【相关数据类型及接口】
 
--   [ot\_isp\_awb\_result](#ot_isp_awb_result)
+-   [ot\_isp\_awb\_result](#ZH-CN_TOPIC_0000002503964823)
 -   ot\_isp\_awb\_ccm\_tab
 -   ot\_isp\_awb\_sensor\_default
--   [ot\_isp\_pipe\_diff\_attr](#ot_isp_pipe_diff_attr)
+-   [ot\_isp\_pipe\_diff\_attr](#ZH-CN_TOPIC_0000002504085003)
 -   ot\_isp\_color\_matrix\_manual
 -   ot\_isp\_color\_matrix\_param
 -   ot\_isp\_wb\_info
--   [ot\_isp\_init\_attr](#ot_isp_init_attr)
+-   [ot\_isp\_init\_attr](#ZH-CN_TOPIC_0000002504084951)
 -   ot\_isp\_dng\_image\_static\_info
 
 ### OT\_DCF\_DRSCRIPTION\_LENGTH<a name="ZH-CN_TOPIC_0000002503965029"></a>
@@ -4830,7 +4678,7 @@ CCM矩阵参数个数。
 
 【相关数据类型及接口】
 
-[ot\_isp\_dcf\_const\_info](#ot_isp_dcf_const_info)
+[ot\_isp\_dcf\_const\_info](#ZH-CN_TOPIC_0000002470925020)
 
 ### ISP\_SNS\_SAVE\_INFO\_MAX<a name="ZH-CN_TOPIC_0000002503964809"></a>
 
@@ -4850,7 +4698,7 @@ CCM矩阵参数个数。
 
 【相关数据类型及接口】
 
-[ot\_isp\_sns\_state](#ot_isp_sns_state)
+[ot\_isp\_sns\_state](#ZH-CN_TOPIC_0000002470925066)
 
 ### OT\_ISP\_LSC\_GRID\_COL<a name="ZH-CN_TOPIC_0000002471084870"></a>
 
@@ -4871,8 +4719,8 @@ Mesh Shading在x方向上划分的分块所需点的数量。
 【相关数据类型及接口】
 
 -   ot\_isp\_shading\_gain\_lut
--   [ot\_isp\_acs\_y\_shading\_lut](#ot_isp_acs_y_shading_lut)
--   [ot\_isp\_acs\_color\_shading\_lut](#ot_isp_acs_color_shading_lut)
+-   [ot\_isp\_acs\_y\_shading\_lut](#ZH-CN_TOPIC_0000002503964887)
+-   [ot\_isp\_acs\_color\_shading\_lut](#ZH-CN_TOPIC_0000002504084969)
 
 ### OT\_ISP\_LSC\_GRID\_ROW<a name="ZH-CN_TOPIC_0000002504085075"></a>
 
@@ -4893,8 +4741,8 @@ Mesh Shading在y方向上划分的分块所需点的数量。
 【相关数据类型及接口】
 
 -   ot\_isp\_shading\_gain\_lut
--   [ot\_isp\_acs\_y\_shading\_lut](#ot_isp_acs_y_shading_lut)
--   [ot\_isp\_acs\_color\_shading\_lut](#ot_isp_acs_color_shading_lut)
+-   [ot\_isp\_acs\_y\_shading\_lut](#ZH-CN_TOPIC_0000002503964887)
+-   [ot\_isp\_acs\_color\_shading\_lut](#ZH-CN_TOPIC_0000002504084969)
 
 ### OT\_ISP\_LSC\_GRID\_POINTS<a name="ZH-CN_TOPIC_0000002504084759"></a>
 
@@ -4915,8 +4763,8 @@ Mesh Shading LUT表增益点的数量。
 【相关数据类型及接口】
 
 -   ot\_isp\_shading\_gain\_lut
--   [ot\_isp\_acs\_y\_shading\_lut](#ot_isp_acs_y_shading_lut)
--   [ot\_isp\_acs\_color\_shading\_lut](#ot_isp_acs_color_shading_lut)
+-   [ot\_isp\_acs\_y\_shading\_lut](#ZH-CN_TOPIC_0000002503964887)
+-   [ot\_isp\_acs\_color\_shading\_lut](#ZH-CN_TOPIC_0000002504084969)
 
 ### OT\_ISP\_ACS\_LIGHT\_NUM<a name="ZH-CN_TOPIC_0000002504084891"></a>
 
@@ -4936,7 +4784,7 @@ ACS划分的光源数量。
 
 【相关数据类型及接口】
 
-[ot\_isp\_acs\_calib\_param](#ot_isp_acs_calib_param)
+[ot\_isp\_acs\_calib\_param](#ZH-CN_TOPIC_0000002471085078)
 
 ### OT\_ISP\_ACS\_CHN\_NUM<a name="ZH-CN_TOPIC_0000002504084885"></a>
 
@@ -4956,7 +4804,7 @@ ACS划分的光源数量。
 
 【相关数据类型及接口】
 
-[ot\_isp\_acs\_calib\_param](#ot_isp_acs_calib_param)
+[ot\_isp\_acs\_calib\_param](#ZH-CN_TOPIC_0000002471085078)
 
 ### OT\_ISP\_PRO\_MAX\_FRAME\_NUM<a name="ZH-CN_TOPIC_0000002503964967"></a>
 
@@ -4977,6 +4825,26 @@ ACS划分的光源数量。
 【相关数据类型及接口】
 
 ss\_mpi\_snap\_set\_pipe\_attr
+
+### AE\_INT\_TIME\_NUM<a name="ZH-CN_TOPIC_0000002548728793"></a>
+
+【说明】
+
+ae支持4to1wdr，表示支持的最大曝光时间个数。
+
+【定义】
+
+```
+#define AE_INT_TIME_NUM          4
+```
+
+【注意事项】
+
+无。
+
+【相关数据类型及接口】
+
+[ot\_isp\_ae\_result](#ZH-CN_TOPIC_0000002503965167)
 
 ### ot\_rect<a name="ZH-CN_TOPIC_0000002470925086"></a>
 
@@ -5353,7 +5221,7 @@ typedef enum  {
 
 【相关数据类型及接口】
 
-[ot\_isp\_pub\_attr](#ot_isp_pub_attr)
+[ot\_isp\_pub\_attr](#ZH-CN_TOPIC_0000002471085026)
 
 ### ot\_isp\_pub\_attr<a name="ZH-CN_TOPIC_0000002471085026"></a>
 
@@ -5367,7 +5235,7 @@ typedef enum  {
 typedef struct {
     ot_rect              wnd_rect;
     ot_size              sns_size;
-    ot_float             frame_rate;
+    td_float             frame_rate;
     ot_isp_bayer_format  bayer_format;
     ot_wdr_mode         wdr_mode;
     td_u8                sns_mode;
@@ -6103,7 +5971,7 @@ typedef enum {
 
 【相关数据类型及接口】
 
-[ot\_isp\_be\_frame\_attr](#ot_isp_be_frame_attr)
+[ot\_isp\_be\_frame\_attr](#ZH-CN_TOPIC_0000002504085027)
 
 ### ot\_isp\_be\_frame\_attr<a name="ZH-CN_TOPIC_0000002504085027"></a>
 
@@ -6142,7 +6010,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ot\_isp\_dump\_frame\_pos](#ot_isp_dump_frame_pos)
+[ot\_isp\_dump\_frame\_pos](#ZH-CN_TOPIC_0000002504084887)
 
 ### ot\_isp\_vd\_type<a name="ZH-CN_TOPIC_0000002470925008"></a>
 
@@ -6272,7 +6140,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ot\_isp\_sensor\_exp\_func](#ot_isp_sensor_exp_func)
+[ot\_isp\_sensor\_exp\_func](#ZH-CN_TOPIC_0000002503964953)
 
 ### ot\_isp\_sensor\_exp\_func<a name="ZH-CN_TOPIC_0000002503964953"></a>
 
@@ -6284,10 +6152,10 @@ typedef struct {
 
 ```
 typedef struct {
-    ot_void (*pfn_cmos_sensor_init)(ot_vi_pipe vi_pipe);
-    ot_void (*pfn_cmos_sensor_exit)(ot_vi_pipe vi_pipe);
-    ot_void (*pfn_cmos_sensor_global_init)(ot_vi_pipe vi_pipe);
-    td_s32 (*pfn_cmos_set_image_mode)(ot_vi_pipe vi_pipe, ot_isp_cmos_sensor_image_mode *sensor_image_mode);
+    td_void (*pfn_cmos_sensor_init)(ot_vi_pipe vi_pipe);
+    td_void (*pfn_cmos_sensor_exit)(ot_vi_pipe vi_pipe);
+    td_void (*pfn_cmos_sensor_global_init)(ot_vi_pipe vi_pipe);
+    td_s32 (*pfn_cmos_set_image_mode)(ot_vi_pipe vi_pipe, const ot_isp_cmos_sensor_image_mode *sensor_image_mode);
     td_s32 (*pfn_cmos_set_wdr_mode)(ot_vi_pipe vi_pipe, td_u8 mode);
  
     td_s32 (*pfn_cmos_get_isp_default)(ot_vi_pipe vi_pipe, ot_isp_cmos_default *def);
@@ -6295,7 +6163,7 @@ typedef struct {
     td_s32 (*pfn_cmos_get_blc_clamp_info)(ot_vi_pipe vi_pipe, td_bool *clamp_en);
     td_s32 (*pfn_cmos_get_sns_reg_info)(ot_vi_pipe vi_pipe, ot_isp_sns_regs_info *sns_regs_info);
  
-    ot_void (*pfn_cmos_set_pixel_detect)(ot_vi_pipe vi_pipe, td_bool enable);
+    td_void (*pfn_cmos_set_pixel_detect)(ot_vi_pipe vi_pipe, td_bool enable);
     td_s32 (*pfn_cmos_get_awb_gains)(ot_vi_pipe vi_pipe, td_u32 *sensor_awb_gain);
 } ot_isp_sensor_exp_func;
 ```
@@ -6375,9 +6243,9 @@ typedef struct {
 
 【相关数据类型及接口】
 
--   [ot\_isp\_sensor\_register](#ot_isp_sensor_register)
--   [ot\_isp\_sns\_state](#ot_isp_sns_state)
--   [ot\_isp\_cmos\_default](#ot_isp_cmos_default)
+-   [ot\_isp\_sensor\_register](#ZH-CN_TOPIC_0000002504084795)
+-   [ot\_isp\_sns\_state](#ZH-CN_TOPIC_0000002470925066)
+-   [ot\_isp\_cmos\_default](#ZH-CN_TOPIC_0000002503964879)
 
 ### ot\_isp\_cmos\_sensor\_image\_mode<a name="ZH-CN_TOPIC_0000002503965049"></a>
 
@@ -6391,7 +6259,7 @@ typedef struct {
 typedef struct {
     td_u16   width;
     td_u16   height;
-    ot_float fps;
+    td_float fps;
     td_u8    sns_mode;
 } ot_isp_cmos_sensor_image_mode;
 ```
@@ -6434,7 +6302,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ot\_isp\_sensor\_exp\_func](#ot_isp_sensor_exp_func)
+[ot\_isp\_sensor\_exp\_func](#ZH-CN_TOPIC_0000002503964953)
 
 ### ot\_isp\_cmos\_lsc<a name="ZH-CN_TOPIC_0000002504084813"></a>
 
@@ -6479,7 +6347,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ot\_isp\_cmos\_default](#ot_isp_cmos_default)
+[ot\_isp\_cmos\_default](#ZH-CN_TOPIC_0000002503964879)
 
 ### ot\_isp\_acs\_y\_shading\_lut<a name="ZH-CN_TOPIC_0000002503964887"></a>
 
@@ -6524,7 +6392,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ot\_isp\_cmos\_acs](#ot_isp_cmos_acs)
+[ot\_isp\_cmos\_acs](#ZH-CN_TOPIC_0000002471085168)
 
 ### ot\_isp\_acs\_color\_shading\_lut<a name="ZH-CN_TOPIC_0000002504084969"></a>
 
@@ -6536,10 +6404,10 @@ typedef struct {
 
 ```
 typedef struct {
-    ot_float avg_rg_map[OT_ISP_LSC_GRID_POINTS];
-    ot_float avg_bg_map[OT_ISP_LSC_GRID_POINTS];
-    ot_float prof_rg_map[OT_ISP_LSC_GRID_POINTS];
-    ot_float prof_bg_map[OT_ISP_LSC_GRID_POINTS];
+    td_float avg_rg_map[OT_ISP_LSC_GRID_POINTS];
+    td_float avg_bg_map[OT_ISP_LSC_GRID_POINTS];
+    td_float prof_rg_map[OT_ISP_LSC_GRID_POINTS];
+    td_float prof_bg_map[OT_ISP_LSC_GRID_POINTS];
 } ot_isp_acs_color_shading_lut;
 ```
 
@@ -6581,7 +6449,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ot\_isp\_cmos\_acs](#ot_isp_cmos_acs)
+[ot\_isp\_cmos\_acs](#ZH-CN_TOPIC_0000002471085168)
 
 ### ot\_isp\_acs\_calib\_param<a name="ZH-CN_TOPIC_0000002471085078"></a>
 
@@ -6594,10 +6462,10 @@ typedef struct {
 ```
 typedef struct {
     td_s16   light_index[OT_ISP_ACS_LIGHT_NUM * OT_ISP_ACS_CHN_NUM];
-    ot_float  model_ar_min;
-    ot_float  model_ar_step;
-    ot_float  model_ab_min;
-    ot_float  model_ab_step;
+    td_float  model_ar_min;
+    td_float  model_ar_step;
+    td_float  model_ab_min;
+    td_float  model_ab_step;
     td_s16   light_type_g_high;
     td_s16   light_type_g_low;
 } ot_isp_acs_calib_param;
@@ -6656,7 +6524,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ot\_isp\_cmos\_acs](#ot_isp_cmos_acs)
+[ot\_isp\_cmos\_acs](#ZH-CN_TOPIC_0000002471085168)
 
 ### ot\_isp\_cmos\_acs<a name="ZH-CN_TOPIC_0000002471085168"></a>
 
@@ -6691,17 +6559,17 @@ typedef struct {
 </tr>
 <tr id="row5681mcpsimp"><td class="cellrowborder" valign="top" width="40%" headers="mcps1.1.3.1.1 "><p id="p5683mcpsimp"><a name="p5683mcpsimp"></a><a name="p5683mcpsimp"></a>acs_calib_param</p>
 </td>
-<td class="cellrowborder" valign="top" width="60%" headers="mcps1.1.3.1.2 "><p xml:lang="sv-SE" id="p5685mcpsimp"><a name="p5685mcpsimp"></a><a name="p5685mcpsimp"></a><span xml:lang="en-US" id="ph5686mcpsimp"><a name="ph5686mcpsimp"></a><a name="ph5686mcpsimp"></a>参考</span><a href="ot_isp_acs_calib_param.md">ot_isp_acs_calib_param</a></p>
+<td class="cellrowborder" valign="top" width="60%" headers="mcps1.1.3.1.2 "><p xml:lang="sv-SE" id="p5685mcpsimp"><a name="p5685mcpsimp"></a><a name="p5685mcpsimp"></a><span xml:lang="en-US" id="ph5686mcpsimp"><a name="ph5686mcpsimp"></a><a name="ph5686mcpsimp"></a>参考</span><a href="#ZH-CN_TOPIC_0000002471085078">ot_isp_acs_calib_param</a></p>
 </td>
 </tr>
 <tr id="row5688mcpsimp"><td class="cellrowborder" valign="top" width="40%" headers="mcps1.1.3.1.1 "><p id="p5690mcpsimp"><a name="p5690mcpsimp"></a><a name="p5690mcpsimp"></a>acs_y_shading_lut</p>
 </td>
-<td class="cellrowborder" valign="top" width="60%" headers="mcps1.1.3.1.2 "><p xml:lang="sv-SE" id="p5692mcpsimp"><a name="p5692mcpsimp"></a><a name="p5692mcpsimp"></a><span xml:lang="en-US" id="ph5693mcpsimp"><a name="ph5693mcpsimp"></a><a name="ph5693mcpsimp"></a>参考</span><a href="ot_isp_acs_y_shading_lut.md">ot_isp_acs_y_shading_lut</a></p>
+<td class="cellrowborder" valign="top" width="60%" headers="mcps1.1.3.1.2 "><p xml:lang="sv-SE" id="p5692mcpsimp"><a name="p5692mcpsimp"></a><a name="p5692mcpsimp"></a><span xml:lang="en-US" id="ph5693mcpsimp"><a name="ph5693mcpsimp"></a><a name="ph5693mcpsimp"></a>参考</span><a href="#ZH-CN_TOPIC_0000002503964887">ot_isp_acs_y_shading_lut</a></p>
 </td>
 </tr>
 <tr id="row5695mcpsimp"><td class="cellrowborder" valign="top" width="40%" headers="mcps1.1.3.1.1 "><p id="p5697mcpsimp"><a name="p5697mcpsimp"></a><a name="p5697mcpsimp"></a>acs_color_shading_lut</p>
 </td>
-<td class="cellrowborder" valign="top" width="60%" headers="mcps1.1.3.1.2 "><p xml:lang="sv-SE" id="p5699mcpsimp"><a name="p5699mcpsimp"></a><a name="p5699mcpsimp"></a><span xml:lang="en-US" id="ph5700mcpsimp"><a name="ph5700mcpsimp"></a><a name="ph5700mcpsimp"></a>参考</span><a href="ot_isp_acs_color_shading_lut.md">ot_isp_acs_color_shading_lut</a></p>
+<td class="cellrowborder" valign="top" width="60%" headers="mcps1.1.3.1.2 "><p xml:lang="sv-SE" id="p5699mcpsimp"><a name="p5699mcpsimp"></a><a name="p5699mcpsimp"></a><span xml:lang="en-US" id="ph5700mcpsimp"><a name="ph5700mcpsimp"></a><a name="ph5700mcpsimp"></a>参考</span><a href="#ZH-CN_TOPIC_0000002504084969">ot_isp_acs_color_shading_lut</a></p>
 </td>
 </tr>
 </tbody>
@@ -6709,15 +6577,15 @@ typedef struct {
 
 【注意事项】
 
--   增益表的默认配置与[ot\_isp\_cmos\_alg\_key](ot_isp_cmos_alg_key.md)中的bit1\_acs标志位有关，如果bit1\_acs=1，则采用cmos\_ex.h中的配置值作为默认值；否则默认配置都为0。
--   ACS模块的otp通过[ot\_isp\_cmos\_lsc](ot_isp_cmos_lsc.md)中的lsc\_lut.lsc\_gain\_lut接口实现，其中lsc\_lut.lsc\_gain\_lut\[0\]配置为golden sample在D50下标定的表，lsc\_lut.lsc\_gain\_lut\[1\[配置为当前镜头模组在D50下标定的表，可以解决镜头的一致性问题，模组与golden之间的差异越小，校正的效果越好。也可以在ISP启动后配置接口ss\_mpi\_isp\_set\_mesh\_shading\_gain\_lut\_attr中的lsc\_gain\_lut\[0\]和lsc\_gain\_lut\[1\]，用法与上面描述一致。
+-   增益表的默认配置与[ot\_isp\_cmos\_alg\_key](#ZH-CN_TOPIC_0000002471084994)中的bit1\_acs标志位有关，如果bit1\_acs=1，则采用cmos\_ex.h中的配置值作为默认值；否则默认配置都为0。
+-   ACS模块的otp通过[ot\_isp\_cmos\_lsc](#ZH-CN_TOPIC_0000002504084813)中的lsc\_lut.lsc\_gain\_lut接口实现，其中lsc\_lut.lsc\_gain\_lut\[0\]配置为golden sample在D50下标定的表，lsc\_lut.lsc\_gain\_lut\[1\[配置为当前镜头模组在D50下标定的表，可以解决镜头的一致性问题，模组与golden之间的差异越小，校正的效果越好。也可以在ISP启动后配置接口ss\_mpi\_isp\_set\_mesh\_shading\_gain\_lut\_attr中的lsc\_gain\_lut\[0\]和lsc\_gain\_lut\[1\]，用法与上面描述一致。
 
 【相关数据类型及接口】
 
--   [ot\_isp\_cmos\_default](#ot_isp_cmos_default)
--   [ot\_isp\_acs\_y\_shading\_lut](#ot_isp_acs_y_shading_lut)
--   [ot\_isp\_acs\_color\_shading\_lut](#ot_isp_acs_color_shading_lut)
--   [ot\_isp\_acs\_calib\_param](#ot_isp_acs_calib_param)
+-   [ot\_isp\_cmos\_default](#ZH-CN_TOPIC_0000002503964879)
+-   [ot\_isp\_acs\_y\_shading\_lut](#ZH-CN_TOPIC_0000002503964887)
+-   [ot\_isp\_acs\_color\_shading\_lut](#ZH-CN_TOPIC_0000002504084969)
+-   [ot\_isp\_acs\_calib\_param](#ZH-CN_TOPIC_0000002471085078)
 
 ### ot\_isp\_noise\_calibration<a name="ZH-CN_TOPIC_0000002471085224"></a>
 
@@ -6742,7 +6610,7 @@ typedef struct {
 </th>
 </tr>
 </thead>
-<tbody><tr id="row5752mcpsimp"><td class="cellrowborder" valign="top" width="48%" headers="mcps1.1.3.1.1 "><p id="p5754mcpsimp"><a name="p5754mcpsimp"></a><a name="p5754mcpsimp"></a>calibration_coef[<a href="OT_BAYER_CALIBRATION_PARA_NUM_NEW.md">OT_BAYER_CALIBRATION_PARA_NUM_NEW</a>]</p>
+<tbody><tr id="row5752mcpsimp"><td class="cellrowborder" valign="top" width="48%" headers="mcps1.1.3.1.1 "><p id="p5754mcpsimp"><a name="p5754mcpsimp"></a><a name="p5754mcpsimp"></a>calibration_coef[<a href="#ZH-CN_TOPIC_0000002471084890">OT_BAYER_CALIBRATION_PARA_NUM_NEW</a>]</p>
 </td>
 <td class="cellrowborder" valign="top" width="52%" headers="mcps1.1.3.1.2 "><p id="p5757mcpsimp"><a name="p5757mcpsimp"></a><a name="p5757mcpsimp"></a>噪声标定表。</p>
 </td>
@@ -6756,7 +6624,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ss\_mpi\_isp\_get\_noise\_calibration](#ss_mpi_isp_get_noise_calibration)
+[ss\_mpi\_isp\_get\_noise\_calibration](#ZH-CN_TOPIC_0000002503964825)
 
 ### ot\_isp\_cmos\_sensor\_max\_resolution<a name="ZH-CN_TOPIC_0000002470924998"></a>
 
@@ -6801,7 +6669,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ot\_isp\_cmos\_default](#ot_isp_cmos_default)
+[ot\_isp\_cmos\_default](#ZH-CN_TOPIC_0000002503964879)
 
 ### ot\_isp\_cmos\_clut<a name="ZH-CN_TOPIC_0000002470924898"></a>
 
@@ -6846,7 +6714,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ot\_isp\_cmos\_default](#ot_isp_cmos_default)
+[ot\_isp\_cmos\_default](#ZH-CN_TOPIC_0000002503964879)
 
 ### ot\_isp\_cmos\_sensor\_mode<a name="ZH-CN_TOPIC_0000002471085226"></a>
 
@@ -6903,7 +6771,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ot\_isp\_cmos\_default](#ot_isp_cmos_default)
+[ot\_isp\_cmos\_default](#ZH-CN_TOPIC_0000002503964879)
 
 ### ot\_isp\_cmos\_dng\_color\_param<a name="ZH-CN_TOPIC_0000002503964927"></a>
 
@@ -6948,7 +6816,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ot\_isp\_cmos\_default](#ot_isp_cmos_default)
+[ot\_isp\_cmos\_default](#ZH-CN_TOPIC_0000002503964879)
 
 ### ot\_isp\_cmos\_wdr\_switch\_attr<a name="ZH-CN_TOPIC_0000002471084926"></a>
 
@@ -6990,7 +6858,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ot\_isp\_cmos\_default](#ot_isp_cmos_default)
+[ot\_isp\_cmos\_default](#ZH-CN_TOPIC_0000002503964879)
 
 ### ot\_isp\_cmos\_alg\_key<a name="ZH-CN_TOPIC_0000002471084994"></a>
 
@@ -7164,7 +7032,7 @@ typedef union {
 
 【相关数据类型及接口】
 
-[ot\_isp\_cmos\_default](#ot_isp_cmos_default)
+[ot\_isp\_cmos\_default](#ZH-CN_TOPIC_0000002503964879)
 
 ### ot\_isp\_cmos\_default<a name="ZH-CN_TOPIC_0000002503964879"></a>
 
@@ -7371,7 +7239,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ot\_isp\_sensor\_exp\_func](#ot_isp_sensor_exp_func)
+[ot\_isp\_sensor\_exp\_func](#ZH-CN_TOPIC_0000002503964953)
 
 ### ot\_isp\_black\_level\_auto\_attr<a name="ZH-CN_TOPIC_0000002504084889"></a>
 
@@ -7417,7 +7285,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ot\_isp\_sensor\_exp\_func](#ot_isp_sensor_exp_func)
+[ot\_isp\_sensor\_exp\_func](#ZH-CN_TOPIC_0000002503964953)
 
 ### ot\_isp\_sensor\_total\_size\_attr<a name="ZH-CN_TOPIC_0000002471085128"></a>
 
@@ -7457,7 +7325,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ot\_isp\_cmos\_black\_level](#ot_isp_cmos_black_level)
+[ot\_isp\_cmos\_black\_level](#ZH-CN_TOPIC_0000002503965035)
 
 ### ot\_isp\_cmos\_black\_level<a name="ZH-CN_TOPIC_0000002503965035"></a>
 
@@ -7528,7 +7396,7 @@ typedef struct {
 
 【注意事项】
 
--   如果black\_level\_mode配置为OT\_ISP\_BLACK\_LEVEL\_MODE\_AUTO模式：若cmos.c里面的[ot\_isp\_black\_level\_auto\_attr](ot_isp_black_level_auto_attr.md)结构体成员update设置为TD\_TRUE，则表示始终使用cmos.c内联动的黑电平配置，而update设置为TD\_FALSE，则表示使用cmos.c非联动的黑电平配置；
+-   如果black\_level\_mode配置为OT\_ISP\_BLACK\_LEVEL\_MODE\_AUTO模式：若cmos.c里面的[ot\_isp\_black\_level\_auto\_attr](#ZH-CN_TOPIC_0000002504084889)结构体成员update设置为TD\_TRUE，则表示始终使用cmos.c内联动的黑电平配置，而update设置为TD\_FALSE，则表示使用cmos.c非联动的黑电平配置；
 -   如果black\_level\_mode配置为OT\_ISP\_BLACK\_LEVEL\_MODE\_MANUAL模式：此时cmos\_ex.h文件中配置的手动黑电平配置会生效；
 -   如果black\_level\_mode配置为OT\_ISP\_BLACK\_LEVEL\_MODE\_DYNAMIC，则采用dynamic blc算法统计OB区得到的黑电平配置值。
 -   如果使用虚拟pipe，即vi\_pipe\>=4时，不支持将black\_level\_mode配置为OT\_ISP\_BLACK\_LEVEL\_MODE\_DYNAMIC。Sensor built-in模式下不支持将black\_level\_mode配置为OT\_ISP\_BLACK\_LEVEL\_MODE\_DYNAMIC。
@@ -7537,7 +7405,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ot\_isp\_sensor\_exp\_func](#ot_isp_sensor_exp_func)
+[ot\_isp\_sensor\_exp\_func](#ZH-CN_TOPIC_0000002503964953)
 
 ### ot\_isp\_sns\_regs\_info<a name="ZH-CN_TOPIC_0000002471085112"></a>
 
@@ -7552,7 +7420,10 @@ typedef struct {
     ot_isp_sns_type sns_type;
     td_u32  reg_num;
     td_u8   cfg2_valid_delay_max;
-    td_u32  exp_distance[OT_ISP_WDR_MAX_FRAME_NUM - 1];
+    struct {
+        td_u32  exp_distance[OT_ISP_WDR_MAX_FRAME_NUM - 1];
+        td_u8 delay_frame_num;
+    } distance_attr;
     ot_isp_sns_commbus  com_bus;
     union {
         ot_isp_i2c_data i2c_data[OT_ISP_MAX_SNS_REGS];
@@ -7605,11 +7476,17 @@ typedef struct {
 <td class="cellrowborder" colspan="2" valign="top" headers="mcps1.1.5.1.3 "><p id="p6607mcpsimp"><a name="p6607mcpsimp"></a><a name="p6607mcpsimp"></a>所有Sensor寄存器从配置到生效延迟的帧数的最大值，单位为帧，用于保证sensor寄存器和ISP寄存器的同步。一般情况下，cmos sensor的曝光时间寄存器的延迟最大，为1~2帧，因此配置一般为1或2。</p>
 </td>
 </tr>
-<tr id="row6608mcpsimp"><td class="cellrowborder" valign="top" headers="mcps1.1.5.1.1 "><p xml:lang="sv-SE" id="p6610mcpsimp"><a name="p6610mcpsimp"></a><a name="p6610mcpsimp"></a>exp_distance</p>
+<tr id="row6608mcpsimp"><td class="cellrowborder" rowspan="2" valign="top" headers="mcps1.1.5.1.1 "><p xml:lang="sv-SE" id="p6610mcpsimp"><a name="p6610mcpsimp"></a><a name="p6610mcpsimp"></a>distance_attr</p>
+<p id="p98771312152913"><a name="p98771312152913"></a><a name="p98771312152913"></a></p>
 </td>
-<td class="cellrowborder" valign="top" headers="mcps1.1.5.1.2 "><p id="p6612mcpsimp"><a name="p6612mcpsimp"></a><a name="p6612mcpsimp"></a>-</p>
+<td class="cellrowborder" valign="top" headers="mcps1.1.5.1.2 "><p id="p6612mcpsimp"><a name="p6612mcpsimp"></a><a name="p6612mcpsimp"></a>exp_distance</p>
 </td>
 <td class="cellrowborder" colspan="2" valign="top" headers="mcps1.1.5.1.3 "><p id="p6614mcpsimp"><a name="p6614mcpsimp"></a><a name="p6614mcpsimp"></a>Sensor在wdr模式下曝光长帧与中帧的行差，中帧与短帧的行差，短帧与短短帧的行差。</p>
+</td>
+</tr>
+<tr id="row14876121211295"><td class="cellrowborder" valign="top" headers="mcps1.1.5.1.1 "><p id="p3877101217292"><a name="p3877101217292"></a><a name="p3877101217292"></a>delay_frame_num</p>
+</td>
+<td class="cellrowborder" colspan="2" valign="top" headers="mcps1.1.5.1.3 "><p id="p6852643132918"><a name="p6852643132918"></a><a name="p6852643132918"></a>Sensor寄存器延迟帧数</p>
 </td>
 </tr>
 <tr id="row6615mcpsimp"><td class="cellrowborder" rowspan="4" valign="top" headers="mcps1.1.5.1.1 "><p id="p6617mcpsimp"><a name="p6617mcpsimp"></a><a name="p6617mcpsimp"></a>com_bus</p>
@@ -7766,7 +7643,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ot\_isp\_sensor\_exp\_func](#ot_isp_sensor_exp_func)
+[ot\_isp\_sensor\_exp\_func](#ZH-CN_TOPIC_0000002503964953)
 
 ### ot\_isp\_3a\_alg\_lib<a name="ZH-CN_TOPIC_0000002503965039"></a>
 
@@ -7779,7 +7656,7 @@ typedef struct {
 ```
 typedef struct {
     td_s32  id;
-    ot_char lib_name[ALG_LIB_NAME_SIZE_MAX];
+    td_char lib_name[ALG_LIB_NAME_SIZE_MAX];
 } ot_isp_3a_alg_lib;
 ```
 
@@ -7880,7 +7757,7 @@ typedef struct {
 
 ```
 typedef struct {
-    ot_char *proc_buff;
+    td_char *proc_buff;
     td_u32   buff_len;
     td_u32   write_len;
 } ot_isp_ctrl_proc_write;
@@ -7968,17 +7845,17 @@ typedef enum {
 </thead>
 <tbody><tr id="row6944mcpsimp"><td class="cellrowborder" valign="top" width="43%" headers="mcps1.1.3.1.1 "><p id="p6946mcpsimp"><a name="p6946mcpsimp"></a><a name="p6946mcpsimp"></a>OT_ISP_WDR_MODE_SET</p>
 </td>
-<td class="cellrowborder" valign="top" width="56.99999999999999%" headers="mcps1.1.3.1.2 "><p id="p6948mcpsimp"><a name="p6948mcpsimp"></a><a name="p6948mcpsimp"></a>设置WDR 模式，将ISP控制单元的WDR模式配置到算法模块，此命令对应的参数数据类型是<a href="ot_wdr_mode.md"><span xml:lang="sv-SE" id="ph6950mcpsimp"><a name="ph6950mcpsimp"></a><a name="ph6950mcpsimp"></a>ot_wdr_mode</span></a>。</p>
+<td class="cellrowborder" valign="top" width="56.99999999999999%" headers="mcps1.1.3.1.2 "><p id="p6948mcpsimp"><a name="p6948mcpsimp"></a><a name="p6948mcpsimp"></a>设置WDR 模式，将ISP控制单元的WDR模式配置到算法模块，此命令对应的参数数据类型是<a href="#ZH-CN_TOPIC_0000002504084745"><span xml:lang="sv-SE" id="ph6950mcpsimp"><a name="ph6950mcpsimp"></a><a name="ph6950mcpsimp"></a>ot_wdr_mode</span></a>。</p>
 </td>
 </tr>
 <tr id="row6951mcpsimp"><td class="cellrowborder" valign="top" width="43%" headers="mcps1.1.3.1.1 "><p id="p6953mcpsimp"><a name="p6953mcpsimp"></a><a name="p6953mcpsimp"></a>OT_ISP_PROC_WRITE</p>
 </td>
-<td class="cellrowborder" valign="top" width="56.99999999999999%" headers="mcps1.1.3.1.2 "><p id="p6955mcpsimp"><a name="p6955mcpsimp"></a><a name="p6955mcpsimp"></a>设置写PROC信息，将算法模块的PROC信息配置到ISP控制单元，此命令对应的参数数据类型是<a href="ot_isp_ctrl_proc_write.md"><span xml:lang="sv-SE" id="ph6957mcpsimp"><a name="ph6957mcpsimp"></a><a name="ph6957mcpsimp"></a>ot_isp_ctrl_proc_write</span></a>。</p>
+<td class="cellrowborder" valign="top" width="56.99999999999999%" headers="mcps1.1.3.1.2 "><p id="p6955mcpsimp"><a name="p6955mcpsimp"></a><a name="p6955mcpsimp"></a>设置写PROC信息，将算法模块的PROC信息配置到ISP控制单元，此命令对应的参数数据类型是<a href="#ZH-CN_TOPIC_0000002503964981"><span xml:lang="sv-SE" id="ph6957mcpsimp"><a name="ph6957mcpsimp"></a><a name="ph6957mcpsimp"></a>ot_isp_ctrl_proc_write</span></a>。</p>
 </td>
 </tr>
 <tr id="row6958mcpsimp"><td class="cellrowborder" valign="top" width="43%" headers="mcps1.1.3.1.1 "><p id="p6960mcpsimp"><a name="p6960mcpsimp"></a><a name="p6960mcpsimp"></a>OT_ISP_AE_FPS_BASE_SET</p>
 </td>
-<td class="cellrowborder" valign="top" width="56.99999999999999%" headers="mcps1.1.3.1.2 "><p id="p6962mcpsimp"><a name="p6962mcpsimp"></a><a name="p6962mcpsimp"></a>设置帧率，将ISP控制单元的帧率信息配置到AE算法模块，此命令对应的参数与<a href="ot_isp_pub_attr.md"><span xml:lang="sv-SE" id="ph6964mcpsimp"><a name="ph6964mcpsimp"></a><a name="ph6964mcpsimp"></a>ot_isp_pub_attr</span></a>里面的frame_rate一样。</p>
+<td class="cellrowborder" valign="top" width="56.99999999999999%" headers="mcps1.1.3.1.2 "><p id="p6962mcpsimp"><a name="p6962mcpsimp"></a><a name="p6962mcpsimp"></a>设置帧率，将ISP控制单元的帧率信息配置到AE算法模块，此命令对应的参数与<a href="#ZH-CN_TOPIC_0000002471085026"><span xml:lang="sv-SE" id="ph6964mcpsimp"><a name="ph6964mcpsimp"></a><a name="ph6964mcpsimp"></a>ot_isp_pub_attr</span></a>里面的frame_rate一样。</p>
 </td>
 </tr>
 <tr id="row6965mcpsimp"><td class="cellrowborder" valign="top" width="43%" headers="mcps1.1.3.1.1 "><p id="p6967mcpsimp"><a name="p6967mcpsimp"></a><a name="p6967mcpsimp"></a>OT_ISP_AE_BLC_SET</p>
@@ -7998,7 +7875,7 @@ typedef enum {
 </tr>
 <tr id="row6980mcpsimp"><td class="cellrowborder" valign="top" width="43%" headers="mcps1.1.3.1.1 "><p id="p6982mcpsimp"><a name="p6982mcpsimp"></a><a name="p6982mcpsimp"></a>OT_ISP_AWB_ISO_SET</p>
 </td>
-<td class="cellrowborder" valign="top" width="56.99999999999999%" headers="mcps1.1.3.1.2 "><p id="p6984mcpsimp"><a name="p6984mcpsimp"></a><a name="p6984mcpsimp"></a>设置ISO值，将AE当前的ISO值配置到AWB模块，用于自动调整饱和度，此命令对应的参数与<a href="ot_isp_ae_result.md"><span xml:lang="sv-SE" id="ph6986mcpsimp"><a name="ph6986mcpsimp"></a><a name="ph6986mcpsimp"></a>ot_isp_ae_result</span></a>里面的iso一样。</p>
+<td class="cellrowborder" valign="top" width="56.99999999999999%" headers="mcps1.1.3.1.2 "><p id="p6984mcpsimp"><a name="p6984mcpsimp"></a><a name="p6984mcpsimp"></a>设置ISO值，将AE当前的ISO值配置到AWB模块，用于自动调整饱和度，此命令对应的参数与<a href="#ZH-CN_TOPIC_0000002503965167"><span xml:lang="sv-SE" id="ph6986mcpsimp"><a name="ph6986mcpsimp"></a><a name="ph6986mcpsimp"></a>ot_isp_ae_result</span></a>里面的iso一样。</p>
 </td>
 </tr>
 <tr id="row6987mcpsimp"><td class="cellrowborder" valign="top" width="43%" headers="mcps1.1.3.1.1 "><p id="p6989mcpsimp"><a name="p6989mcpsimp"></a><a name="p6989mcpsimp"></a>OT_ISP_CHANGE_IMAGE_MODE_SET</p>
@@ -8028,7 +7905,7 @@ typedef enum {
 </tr>
 <tr id="row7012mcpsimp"><td class="cellrowborder" valign="top" width="43%" headers="mcps1.1.3.1.1 "><p id="p7014mcpsimp"><a name="p7014mcpsimp"></a><a name="p7014mcpsimp"></a>OT_ISP_AWB_INTTIME_SET</p>
 </td>
-<td class="cellrowborder" valign="top" width="56.99999999999999%" headers="mcps1.1.3.1.2 "><p id="p7016mcpsimp"><a name="p7016mcpsimp"></a><a name="p7016mcpsimp"></a>设置曝光量值，将AE当前的曝光量值配置到AWB模块，用于室内外检测，此命令对应的参数与<a href="ot_isp_ae_result.md"><span xml:lang="sv-SE" id="ph7018mcpsimp"><a name="ph7018mcpsimp"></a><a name="ph7018mcpsimp"></a>ot_isp_ae_result</span></a>里面的int_time一样。</p>
+<td class="cellrowborder" valign="top" width="56.99999999999999%" headers="mcps1.1.3.1.2 "><p id="p7016mcpsimp"><a name="p7016mcpsimp"></a><a name="p7016mcpsimp"></a>设置曝光量值，将AE当前的曝光量值配置到AWB模块，用于室内外检测，此命令对应的参数与<a href="#ZH-CN_TOPIC_0000002503965167"><span xml:lang="sv-SE" id="ph7018mcpsimp"><a name="ph7018mcpsimp"></a><a name="ph7018mcpsimp"></a>ot_isp_ae_result</span></a>里面的int_time一样。</p>
 </td>
 </tr>
 <tr id="row7019mcpsimp"><td class="cellrowborder" valign="top" width="43%" headers="mcps1.1.3.1.1 "><p id="p7021mcpsimp"><a name="p7021mcpsimp"></a><a name="p7021mcpsimp"></a>OT_ISP_BAS_MODE_SET</p>
@@ -8090,7 +7967,7 @@ typedef struct {
     td_bool stitch_enable;
     td_bool main_pipe;
     td_u8   stitch_pipe_num;
-    td_s8   stitch_bind_id[OT_VI_MAX_PIPE_NUM];
+    td_s8   stitch_bind_id[OT_ISP_MAX_STITCH_NUM];
 } ot_isp_stitch_attr;
 ```
 
@@ -8121,7 +7998,6 @@ typedef struct {
 <tr id="row7095mcpsimp"><td class="cellrowborder" valign="top" width="39%" headers="mcps1.1.3.1.1 "><p id="p7097mcpsimp"><a name="p7097mcpsimp"></a><a name="p7097mcpsimp"></a>stitch_bind_id</p>
 </td>
 <td class="cellrowborder" valign="top" width="61%" headers="mcps1.1.3.1.2 "><p id="p7099mcpsimp"><a name="p7099mcpsimp"></a><a name="p7099mcpsimp"></a>拼接绑定的pipe的号</p>
-<p id="p7100mcpsimp"><a name="p7100mcpsimp"></a><a name="p7100mcpsimp"></a>OT_VI_MAX_PIPE_NUM详情请见《MPP 媒体处理软件 V5.0 开发参考》“视频输入”章节。</p>
 </td>
 </tr>
 </tbody>
@@ -8189,7 +8065,7 @@ typedef struct {
                          const ot_isp_ae_info *ae_info,
                          ot_isp_ae_result *ae_result,
                          td_s32 reserved);
-    td_s32 (*pfn_ae_ctrl)(td_s32 handle, td_u32 cmd, ot_void *value);
+    td_s32 (*pfn_ae_ctrl)(td_s32 handle, td_u32 cmd, td_void *value);
     td_s32 (*pfn_ae_exit)(td_s32 handle);
 } ot_isp_ae_exp_func;
 ```
@@ -8228,8 +8104,8 @@ typedef struct {
 
 【注意事项】
 
--   调用[ss\_mpi\_isp\_init](ss_mpi_isp_init.md)时将调用pfn\_ae\_init回调函数，以初始化AE算法库。
--   调用[ss\_mpi\_isp\_run](ss_mpi_isp_run.md)时将调用pfn\_ae\_run回调函数，以运行AE算法库，计算得到sensor的曝光时间和增益、ISP的数字增益。
+-   调用[ss\_mpi\_isp\_init](#ZH-CN_TOPIC_0000002471085190)时将调用pfn\_ae\_init回调函数，以初始化AE算法库。
+-   调用[ss\_mpi\_isp\_run](#ZH-CN_TOPIC_0000002470925164)时将调用pfn\_ae\_run回调函数，以运行AE算法库，计算得到sensor的曝光时间和增益、ISP的数字增益。
 -   设计思路中，算法库实现ctrl接口用以改变内部运行状态，ctrl接口提供一个参数传输命令，提供一个VOID类型的指针传输数据。ctrl接口一方面以回调函数指针的形式注册给ISP库，ISP控制单元隐式调用一些命令控制算法库内部运行状态，另一方面，以算法库的用户接口的形式，从而用户可以改变算法库内部运行状态。示例：
 
     ```
@@ -8248,9 +8124,9 @@ typedef struct {
 
     运行时ISP控制单元会隐式调用pfn\_ae\_ctrl回调函数，通知AE算法库切换WDR和线性模式、设置FPS、通知配置sensor。
 
-    当前Firmware定义的ctrl命令详参[ot\_isp\_ctrl\_cmd](ot_isp_ctrl_cmd.md)。
+    当前Firmware定义的ctrl命令详参[ot\_isp\_ctrl\_cmd](#ZH-CN_TOPIC_0000002470924852)。
 
--   调用[ss\_mpi\_isp\_exit](ss_mpi_isp_exit.md)时将调用pfn\_ae\_exit回调函数，以销毁AE算法库。
+-   调用[ss\_mpi\_isp\_exit](#ZH-CN_TOPIC_0000002503964923)时将调用pfn\_ae\_exit回调函数，以销毁AE算法库。
 -   一个算法库支持初始化和运行多个实例，参数handle以区分不同的算法库实例。如果需要支持多个实例，可以用不同的alg\_lib. id注册多次算法库。例如：
 
     ```
@@ -8265,7 +8141,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ot\_isp\_ae\_register](#ot_isp_ae_register)
+[ot\_isp\_ae\_register](#ZH-CN_TOPIC_0000002471085212)
 
 ### ot\_isp\_ae\_param<a name="ZH-CN_TOPIC_0000002471085106"></a>
 
@@ -8281,7 +8157,7 @@ typedef struct {
     td_u8  wdr_mode;
     td_u8  hdr_mode;
     td_u16 black_level;
-    ot_float fps;
+    td_float fps;
     ot_isp_bayer_format bayer;
     ot_isp_stitch_attr stitch_attr;
     td_s32 reserved;
@@ -8342,7 +8218,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ot\_isp\_ae\_exp\_func](#ot_isp_ae_exp_func)
+[ot\_isp\_ae\_exp\_func](#ZH-CN_TOPIC_0000002503964939)
 
 ### ot\_isp\_people\_roi<a name="ZH-CN_TOPIC_0000002470924960"></a>
 
@@ -8394,7 +8270,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ot\_isp\_ae\_info](#ot_isp_ae_info)
+[ot\_isp\_ae\_info](#ZH-CN_TOPIC_0000002470925126)
 
 ### ot\_isp\_tunnel\_roi<a name="ZH-CN_TOPIC_0000002471084876"></a>
 
@@ -8452,7 +8328,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ot\_isp\_ae\_info](#ot_isp_ae_info)
+[ot\_isp\_ae\_info](#ZH-CN_TOPIC_0000002470925126)
 
 ### ot\_isp\_face\_roi<a name="ZH-CN_TOPIC_0000002503965171"></a>
 
@@ -8497,7 +8373,7 @@ typedef struct {
 </tr>
 <tr id="row107598102075"><td class="cellrowborder" valign="top" width="41.02%" headers="mcps1.1.3.1.1 "><p id="p12759171015712"><a name="p12759171015712"></a><a name="p12759171015712"></a>face_rect</p>
 </td>
-<td class="cellrowborder" valign="top" width="58.98%" headers="mcps1.1.3.1.2 "><p id="p197591110575"><a name="p197591110575"></a><a name="p197591110575"></a>人脸的坐标信息数组，最多支持5个人脸坐标，具体坐标信息参考<a href="ot_rect.md">ot_rect</a>描述。</p>
+<td class="cellrowborder" valign="top" width="58.98%" headers="mcps1.1.3.1.2 "><p id="p197591110575"><a name="p197591110575"></a><a name="p197591110575"></a>人脸的坐标信息数组，最多支持5个人脸坐标，具体坐标信息参考<a href="#ZH-CN_TOPIC_0000002470925086">ot_rect</a>描述。</p>
 </td>
 </tr>
 </tbody>
@@ -8508,11 +8384,11 @@ typedef struct {
 -   ot\_isp\_face\_roi支持人脸模型检测坐标的传入，face\_rect中的宽度和高度不要求4对齐。AE算法通过人脸坐标以及对应帧的pts进行快速收敛。需要enable和ot\_isp\_fast\_face\_ae\_attr中的enable同时使能算法才能生效。
 -   当前最多支持传入5个人脸信息，当人脸数量不足5个时，需要将face\_rect数组中其他坐标设置为0。
 
--   人脸快速收敛算法仅支持在近距离使用，要求人脸在图像中占比较大。如果人脸占比较小，可能画面导致闪烁。建议传入的人脸坐标占画面的面积以上。
+-   人脸快速收敛算法仅支持在近距离使用，要求人脸在图像中占比较大。如果人脸占比较小，可能画面导致闪烁。建议传入的人脸坐标占画面面积的10%以上。
 
 【相关数据类型及接口】
 
-[ot\_isp\_ae\_info](#ot_isp_ae_info)
+[ot\_isp\_ae\_info](#ZH-CN_TOPIC_0000002470925126)
 
 ### ot\_isp\_people\_type<a name="ZH-CN_TOPIC_0000002503965021"></a>
 
@@ -8558,7 +8434,7 @@ typedef enum {
 
 【相关数据类型及接口】
 
-[ot\_isp\_ae\_info](#ot_isp_ae_info)
+[ot\_isp\_ae\_info](#ZH-CN_TOPIC_0000002470925126)
 
 ### ot\_isp\_tunnel\_type<a name="ZH-CN_TOPIC_0000002471084928"></a>
 
@@ -8604,7 +8480,7 @@ typedef enum {
 
 【相关数据类型及接口】
 
-[ot\_isp\_ae\_info](#ot_isp_ae_info)
+[ot\_isp\_ae\_info](#ZH-CN_TOPIC_0000002470925126)
 
 ### ot\_isp\_smart\_info<a name="ZH-CN_TOPIC_0000002503964975"></a>
 
@@ -8656,7 +8532,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ot\_isp\_ae\_info](#ot_isp_ae_info)
+[ot\_isp\_ae\_info](#ZH-CN_TOPIC_0000002470925126)
 
 ### ot\_isp\_fe\_ae\_stat\_1<a name="ZH-CN_TOPIC_0000002471084964"></a>
 
@@ -8681,7 +8557,7 @@ typedef struct {
 
 【注意事项】
 
-无，详情请见[ot\_isp\_ae\_info](ot_isp_ae_info.md)。
+无，详情请见[ot\_isp\_ae\_info](#ZH-CN_TOPIC_0000002470925126)。
 
 【相关数据类型及接口】
 
@@ -8710,7 +8586,7 @@ typedef struct {
 
 【注意事项】
 
-无，详情请见[ot\_isp\_ae\_info](ot_isp_ae_info.md)。
+无，详情请见[ot\_isp\_ae\_info](#ZH-CN_TOPIC_0000002470925126)。
 
 【相关数据类型及接口】
 
@@ -9020,7 +8896,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ot\_isp\_ae\_exp\_func](#ot_isp_ae_exp_func)
+[ot\_isp\_ae\_exp\_func](#ZH-CN_TOPIC_0000002503964939)
 
 ### ot\_isp\_ae\_stat\_attr<a name="ZH-CN_TOPIC_0000002504084881"></a>
 
@@ -9045,7 +8921,7 @@ typedef struct {
     td_u8 aver_mode;
     td_u8 max_gain_mode;
     td_bool wight_table_update;
-    td_u8 weight_table[OT_ISP_MAX_PIPE_NUM][OT_ISP_AE_ZONE_ROW][OT_ISP_AE_ZONE_COLUMN];
+    td_u8 weight_table[OT_VI_MAX_PIPE_NUM][OT_ISP_AE_ZONE_ROW][OT_ISP_AE_ZONE_COLUMN];
 } ot_isp_ae_stat_attr;
 ```
 
@@ -9066,7 +8942,7 @@ typedef struct {
 <tr id="row7885mcpsimp"><td class="cellrowborder" valign="top" width="20%" headers="mcps1.1.3.1.1 "><p id="p7887mcpsimp"><a name="p7887mcpsimp"></a><a name="p7887mcpsimp"></a>hist_adjust</p>
 </td>
 <td class="cellrowborder" valign="top" width="80%" headers="mcps1.1.3.1.2 "><p id="p7889mcpsimp"><a name="p7889mcpsimp"></a><a name="p7889mcpsimp"></a>AE算法直方图调整使能，影响ae_be_sel/four_plane_mode/hist_offset_x/ hist_offset_y/hist_skip_x/hist_skip_y六个参数的配置。</p>
-<p id="p7890mcpsimp"><a name="p7890mcpsimp"></a><a name="p7890mcpsimp"></a>hist_adjust使能时，以上六个参数以<a href="ot_isp_ae_result.md"><span xml:lang="sv-SE" id="ph7892mcpsimp"><a name="ph7892mcpsimp"></a><a name="ph7892mcpsimp"></a>ot_isp_ae_result</span></a>中的值为准配置芯片寄存器；</p>
+<p id="p7890mcpsimp"><a name="p7890mcpsimp"></a><a name="p7890mcpsimp"></a>hist_adjust使能时，以上六个参数以<a href="#ZH-CN_TOPIC_0000002503965167"><span xml:lang="sv-SE" id="ph7892mcpsimp"><a name="ph7892mcpsimp"></a><a name="ph7892mcpsimp"></a>ot_isp_ae_result</span></a>中的值为准配置芯片寄存器；</p>
 <p id="p7893mcpsimp"><a name="p7893mcpsimp"></a><a name="p7893mcpsimp"></a>hist_adjust不使能时，以上六个参数以外部寄存器的值(MPI配置)为准配置芯片寄存器。</p>
 </td>
 </tr>
@@ -9115,7 +8991,7 @@ typedef struct {
 <tr id="row7936mcpsimp"><td class="cellrowborder" valign="top" width="20%" headers="mcps1.1.3.1.1 "><p id="p7938mcpsimp"><a name="p7938mcpsimp"></a><a name="p7938mcpsimp"></a>mode_update</p>
 </td>
 <td class="cellrowborder" valign="top" width="80%" headers="mcps1.1.3.1.2 "><p id="p7940mcpsimp"><a name="p7940mcpsimp"></a><a name="p7940mcpsimp"></a>AE算法开方模式配置使能，影响hist_mode/ aver_mode/ max_gain_mode三个参数的配置。</p>
-<p id="p7941mcpsimp"><a name="p7941mcpsimp"></a><a name="p7941mcpsimp"></a>mode_update不为0时，以上三个参数以<a href="ot_isp_ae_result.md"><span xml:lang="sv-SE" id="ph7943mcpsimp"><a name="ph7943mcpsimp"></a><a name="ph7943mcpsimp"></a>ot_isp_ae_result</span></a>中的值为准配置逻辑寄存器；</p>
+<p id="p7941mcpsimp"><a name="p7941mcpsimp"></a><a name="p7941mcpsimp"></a>mode_update不为0时，以上三个参数以<a href="#ZH-CN_TOPIC_0000002503965167"><span xml:lang="sv-SE" id="ph7943mcpsimp"><a name="ph7943mcpsimp"></a><a name="ph7943mcpsimp"></a>ot_isp_ae_result</span></a>中的值为准配置逻辑寄存器；</p>
 <p id="p7944mcpsimp"><a name="p7944mcpsimp"></a><a name="p7944mcpsimp"></a>mode_update为0时，以上三个参数以外部寄存器的值(MPI配置)为准配置逻辑寄存器。</p>
 </td>
 </tr>
@@ -9146,12 +9022,12 @@ typedef struct {
 <tr id="row7970mcpsimp"><td class="cellrowborder" valign="top" width="20%" headers="mcps1.1.3.1.1 "><p id="p7972mcpsimp"><a name="p7972mcpsimp"></a><a name="p7972mcpsimp"></a>wight_table_update</p>
 </td>
 <td class="cellrowborder" valign="top" width="80%" headers="mcps1.1.3.1.2 "><p id="p7974mcpsimp"><a name="p7974mcpsimp"></a><a name="p7974mcpsimp"></a>AE算法权重表配置使能，影响weight_table的配置。</p>
-<a name="ul7975mcpsimp"></a><a name="ul7975mcpsimp"></a><ul id="ul7975mcpsimp"><li>wight_table_update不为0时，权重表以<a href="ot_isp_ae_result.md"><span xml:lang="sv-SE" id="ph7978mcpsimp"><a name="ph7978mcpsimp"></a><a name="ph7978mcpsimp"></a>ot_isp_ae_result</span></a>中的值为准配置芯片寄存器；</li><li>wight_table_update为0时，权重表以外部寄存器的值(MPI配置)为准配置芯片寄存器。</li></ul>
+<a name="ul7975mcpsimp"></a><a name="ul7975mcpsimp"></a><ul id="ul7975mcpsimp"><li>wight_table_update不为0时，权重表以<a href="#ZH-CN_TOPIC_0000002503965167"><span xml:lang="sv-SE" id="ph7978mcpsimp"><a name="ph7978mcpsimp"></a><a name="ph7978mcpsimp"></a>ot_isp_ae_result</span></a>中的值为准配置芯片寄存器；</li><li>wight_table_update为0时，权重表以外部寄存器的值(MPI配置)为准配置芯片寄存器。</li></ul>
 </td>
 </tr>
 <tr id="row7980mcpsimp"><td class="cellrowborder" valign="top" width="20%" headers="mcps1.1.3.1.1 "><p id="p7982mcpsimp"><a name="p7982mcpsimp"></a><a name="p7982mcpsimp"></a>weight_table</p>
 </td>
-<td class="cellrowborder" valign="top" width="80%" headers="mcps1.1.3.1.2 "><p id="p7984mcpsimp"><a name="p7984mcpsimp"></a><a name="p7984mcpsimp"></a>15x17个区间的AE权重表。取值范围：[0, 15]</p>
+<td class="cellrowborder" valign="top" width="80%" headers="mcps1.1.3.1.2 "><p id="p7984mcpsimp"><a name="p7984mcpsimp"></a><a name="p7984mcpsimp"></a>15x17个区间的AE权重表。取值范围：[0, 15]。OT_VI_MAX_PIPE_NUM详情请见《MPP 媒体处理软件 V5.0 开发参考》“视频输入”章节。</p>
 </td>
 </tr>
 </tbody>
@@ -9164,7 +9040,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ot\_isp\_ae\_result](#ot_isp_ae_result)
+[ot\_isp\_ae\_result](#ZH-CN_TOPIC_0000002503965167)
 
 ### ot\_isp\_ae\_result<a name="ZH-CN_TOPIC_0000002503965167"></a>
 
@@ -9176,7 +9052,7 @@ typedef struct {
 
 ```
 typedef struct {
-    td_u32  int_time[4];
+    td_u32  int_time[AE_INT_TIME_NUM];
     td_u32  isp_dgain;
     td_u32  again;
     td_u32  dgain;
@@ -9335,7 +9211,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ot\_isp\_ae\_exp\_func](#ot_isp_ae_exp_func)
+[ot\_isp\_ae\_exp\_func](#ZH-CN_TOPIC_0000002503964939)
 
 ### ot\_isp\_awb\_register<a name="ZH-CN_TOPIC_0000002470924932"></a>
 
@@ -9374,7 +9250,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ot\_isp\_awb\_exp\_func](#ot_isp_awb_exp_func)
+[ot\_isp\_awb\_exp\_func](#ZH-CN_TOPIC_0000002471084978)
 
 ### ot\_isp\_awb\_exp\_func<a name="ZH-CN_TOPIC_0000002471084978"></a>
 
@@ -9391,7 +9267,7 @@ typedef struct {
     const ot_isp_awb_info *awb_info,
     ot_isp_awb_result *awb_result,
     td_s32 reserved);
-    td_s32 (*pfn_awb_ctrl)(td_s32 handle, td_u32 cmd, ot_void *value);
+    td_s32 (*pfn_awb_ctrl)(td_s32 handle, td_u32 cmd, td_void *value);
     td_s32 (*pfn_awb_exit)(td_s32 handle);
 } ot_isp_awb_exp_func;
 ```
@@ -9430,18 +9306,18 @@ typedef struct {
 
 【注意事项】
 
--   调用[ss\_mpi\_isp\_init](ss_mpi_isp_init.md)时将调用pfn\_awb\_init回调函数，以初始化AWB算法库。
--   pfn\_awb\_init回调函数的[ot\_isp\_awb\_result](ot_isp_awb_result.md)参数返回ISP启动时的初始AWB增益和初始色彩校正矩阵。
--   调用[ss\_mpi\_isp\_run](ss_mpi_isp_run.md)时将调用pfn\_awb\_run回调函数，以运行AWB算法库，计算得到白平衡增益、色彩校正矩阵。
+-   调用[ss\_mpi\_isp\_init](#ZH-CN_TOPIC_0000002471085190)时将调用pfn\_awb\_init回调函数，以初始化AWB算法库。
+-   pfn\_awb\_init回调函数的[ot\_isp\_awb\_result](#ZH-CN_TOPIC_0000002503964823)参数返回ISP启动时的初始AWB增益和初始色彩校正矩阵。
+-   调用[ss\_mpi\_isp\_run](#ZH-CN_TOPIC_0000002470925164)时将调用pfn\_awb\_run回调函数，以运行AWB算法库，计算得到白平衡增益、色彩校正矩阵。
 -   运行时ISP控制单元会隐式调用pfn\_awb\_ctrl回调函数，通知AWB算法库切换WDR和线性模式、设置ISO和曝光时间（曝光时间单位是us）。设置ISO的目的是为了实现ISO与饱和度的联动，增益大时色度噪声也会比较大，所以需要调节饱和度。设置曝光时间是为了辅助室内外判断。
 
-    当前Firmware定义的ctrl命令详细描述参见[ot\_isp\_ctrl\_cmd](ot_isp_ctrl_cmd.md)。
+    当前Firmware定义的ctrl命令详细描述参见[ot\_isp\_ctrl\_cmd](#ZH-CN_TOPIC_0000002470924852)。
 
--   调用[ss\_mpi\_isp\_exit](ss_mpi_isp_exit.md)时将调用pfn\_awb\_exit回调函数，以销毁AWB算法库。
+-   调用[ss\_mpi\_isp\_exit](#ZH-CN_TOPIC_0000002503964923)时将调用pfn\_awb\_exit回调函数，以销毁AWB算法库。
 
 【相关数据类型及接口】
 
-[ot\_isp\_awb\_register](#ot_isp_awb_register)
+[ot\_isp\_awb\_register](#ZH-CN_TOPIC_0000002470924932)
 
 ### ot\_isp\_awb\_param<a name="ZH-CN_TOPIC_0000002503965117"></a>
 
@@ -9534,7 +9410,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ot\_isp\_awb\_exp\_func](#ot_isp_awb_exp_func)
+[ot\_isp\_awb\_exp\_func](#ZH-CN_TOPIC_0000002471084978)
 
 ### ot\_isp\_awb\_stat\_1<a name="ZH-CN_TOPIC_0000002470924906"></a>
 
@@ -9595,7 +9471,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ot\_isp\_awb\_info](#ot_isp_awb_info)
+[ot\_isp\_awb\_info](#ZH-CN_TOPIC_0000002471084884)
 
 ### ot\_isp\_awb\_stat\_result<a name="ZH-CN_TOPIC_0000002503965071"></a>
 
@@ -9656,7 +9532,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ot\_isp\_awb\_info](#ot_isp_awb_info)
+[ot\_isp\_awb\_info](#ZH-CN_TOPIC_0000002471084884)
 
 ### ot\_isp\_awb\_info<a name="ZH-CN_TOPIC_0000002471084884"></a>
 
@@ -9739,13 +9615,13 @@ typedef struct {
 【注意事项】
 
 -   AWB库可以根据frame\_cnt控制运算频率，例如两帧运算一次。
--   [ot\_isp\_awb\_info](#ZH-CN_TOPIC_0000001175137694)提供了全局统计信息和分块统计信息，不同模式下水平、垂直分块个数不固定，可通过[ot\_isp\_awb\_param](ot_isp_awb_param.md)的awb\_zone\_row、awb\_zone\_col两个参数获取。AWB分块个数 = awb\_zone\_row\* awb\_zone\_col。
+-   ot\_isp\_awb\_info提供了全局统计信息和分块统计信息，不同模式下水平、垂直分块个数不固定，可通过[ot\_isp\_awb\_param](#ZH-CN_TOPIC_0000002503965117)的awb\_zone\_row、awb\_zone\_col两个参数获取。AWB分块个数 = awb\_zone\_row\* awb\_zone\_col。
 -   切换白平衡统计模块位置，会导致2帧统计信息错误，建议在启动时配置合理值，避免切换。如果必须进行位置切换，建议切换后，AWB算法冻结2帧以上，待统计信息正确后，再重新计算。
--   非拼接模式下，通过ss\_mpi\_isp\_set\_stats\_cfg接口配置白平衡统计模块位置在DRC后，通过ss\_mpi\_isp\_set\_wb\_attr接口关闭亮度对白平衡权重的影响，可以优化WDR模式下暗区偏红问题。拼接模式下不支持统计模块位置调整，建议固定统计模块位置在DG后。
+-   非拼接模式下，通过[ss\_mpi\_isp\_set\_stats\_cfg](#ZH-CN_TOPIC_0000002470925050)接口配置白平衡统计模块位置在DRC后，通过[ss\_mpi\_isp\_set\_wb\_attr](#ZH-CN_TOPIC_0000002471084842)接口关闭亮度对白平衡权重的影响，可以优化WDR模式下暗区偏红问题。拼接模式下不支持统计模块位置调整，建议固定统计模块位置在DG后。
 
 【相关数据类型及接口】
 
-[ot\_isp\_awb\_exp\_func](#ot_isp_awb_exp_func)
+[ot\_isp\_awb\_exp\_func](#ZH-CN_TOPIC_0000002471084978)
 
 ### ot\_isp\_awb\_raw\_stat\_attr<a name="ZH-CN_TOPIC_0000002503965033"></a>
 
@@ -9821,7 +9697,7 @@ typedef struct {
 
 【注意事项】
 
--   [ot\_isp\_awb\_raw\_stat\_attr](#ZH-CN_TOPIC_0000001174819192)结构体中的信息决定什么样的像素点被认为是白点，从而参与统计。用户开发新的AWB算法时可以使用默认值，也可以自定义配置，stat\_cfg\_update标识表明运行时当前帧是否需要配置stat\_attr结构体中的值到寄存器。
+-   ot\_isp\_awb\_raw\_stat\_attr结构体中的信息决定什么样的像素点被认为是白点，从而参与统计。用户开发新的AWB算法时可以使用默认值，也可以自定义配置，stat\_cfg\_update标识表明运行时当前帧是否需要配置stat\_attr结构体中的值到寄存器。
 -   只支持Bayer域统计信息。
 
 【相关数据类型及接口】
@@ -9855,13 +9731,13 @@ typedef struct {
 </th>
 </tr>
 </thead>
-<tbody><tr id="row8645mcpsimp"><td class="cellrowborder" valign="top" width="62%" headers="mcps1.1.3.1.1 "><p id="p8647mcpsimp"><a name="p8647mcpsimp"></a><a name="p8647mcpsimp"></a>white_balance_gain[<a href="OT_ISP_BAYER_CHN_NUM.md">OT_ISP_BAYER_CHN_NUM</a>]</p>
+<tbody><tr id="row8645mcpsimp"><td class="cellrowborder" valign="top" width="62%" headers="mcps1.1.3.1.1 "><p id="p8647mcpsimp"><a name="p8647mcpsimp"></a><a name="p8647mcpsimp"></a>white_balance_gain[<a href="#ZH-CN_TOPIC_0000002470925096">OT_ISP_BAYER_CHN_NUM</a>]</p>
 </td>
 <td class="cellrowborder" valign="top" width="38%" headers="mcps1.1.3.1.2 "><p id="p8650mcpsimp"><a name="p8650mcpsimp"></a><a name="p8650mcpsimp"></a>白平衡算法得出的R、Gr、Gb、B颜色通道的增益，16bit精度表示。</p>
 <p id="p19870101575516"><a name="p19870101575516"></a><a name="p19870101575516"></a>取值范围：[0x10000, 0xFFF00]</p>
 </td>
 </tr>
-<tr id="row8651mcpsimp"><td class="cellrowborder" valign="top" width="62%" headers="mcps1.1.3.1.1 "><p id="p8653mcpsimp"><a name="p8653mcpsimp"></a><a name="p8653mcpsimp"></a>color_matrix[<a href="OT_ISP_CCM_MATRIX_SIZE.md">OT_ISP_CCM_MATRIX_SIZE</a>]</p>
+<tr id="row8651mcpsimp"><td class="cellrowborder" valign="top" width="62%" headers="mcps1.1.3.1.1 "><p id="p8653mcpsimp"><a name="p8653mcpsimp"></a><a name="p8653mcpsimp"></a>color_matrix[<a href="#ZH-CN_TOPIC_0000002470924922">OT_ISP_CCM_MATRIX_SIZE</a>]</p>
 </td>
 <td class="cellrowborder" valign="top" width="38%" headers="mcps1.1.3.1.2 "><p id="p8656mcpsimp"><a name="p8656mcpsimp"></a><a name="p8656mcpsimp"></a>色彩还原矩阵，8bit精度表示。</p>
 </td>
@@ -9892,7 +9768,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ot\_isp\_awb\_exp\_func](#ot_isp_awb_exp_func)
+[ot\_isp\_awb\_exp\_func](#ZH-CN_TOPIC_0000002471084978)
 
 ### ot\_isp\_awb\_calibration\_gain<a name="ZH-CN_TOPIC_0000002504084773"></a>
 
@@ -10090,8 +9966,8 @@ typedef struct {
 
 【相关数据类型及接口】
 
--   [ss\_mpi\_isp\_set\_dcf\_info](#ss_mpi_isp_set_dcf_info)
--   [ss\_mpi\_isp\_get\_dcf\_info](#ss_mpi_isp_get_dcf_info)
+-   [ss\_mpi\_isp\_set\_dcf\_info](#ZH-CN_TOPIC_0000002471084974)
+-   [ss\_mpi\_isp\_get\_dcf\_info](#ZH-CN_TOPIC_0000002504085077)
 
 ### ot\_isp\_dcf\_update\_info<a name="ZH-CN_TOPIC_0000002503964901"></a>
 
@@ -10197,8 +10073,8 @@ typedef struct {
 
 【相关数据类型及接口】
 
--   [ss\_mpi\_isp\_set\_dcf\_info](#ss_mpi_isp_set_dcf_info)
--   [ss\_mpi\_isp\_get\_dcf\_info](#ss_mpi_isp_get_dcf_info)
+-   [ss\_mpi\_isp\_set\_dcf\_info](#ZH-CN_TOPIC_0000002471084974)
+-   [ss\_mpi\_isp\_get\_dcf\_info](#ZH-CN_TOPIC_0000002504085077)
 
 ### ot\_isp\_dcf\_info<a name="ZH-CN_TOPIC_0000002471085014"></a>
 
@@ -10243,8 +10119,8 @@ typedef struct {
 
 【相关数据类型及接口】
 
--   [ss\_mpi\_isp\_set\_dcf\_info](#ss_mpi_isp_set_dcf_info)
--   [ss\_mpi\_isp\_get\_dcf\_info](#ss_mpi_isp_get_dcf_info)
+-   [ss\_mpi\_isp\_set\_dcf\_info](#ZH-CN_TOPIC_0000002471084974)
+-   [ss\_mpi\_isp\_get\_dcf\_info](#ZH-CN_TOPIC_0000002504085077)
 
 ### ot\_isp\_pipe\_diff\_mode<a name="ZH-CN_TOPIC_0000002470925038"></a>
 
@@ -10290,7 +10166,7 @@ typedef enum {
 
 【相关数据类型及接口】
 
-[ot\_isp\_pipe\_diff\_attr](#ot_isp_pipe_diff_attr)
+[ot\_isp\_pipe\_diff\_attr](#ZH-CN_TOPIC_0000002504085003)
 
 ### ot\_isp\_pipe\_diff\_param<a name="ZH-CN_TOPIC_0000002470925120"></a>
 
@@ -10317,7 +10193,7 @@ typedef struct {
 </th>
 </tr>
 </thead>
-<tbody><tr id="row9069mcpsimp"><td class="cellrowborder" valign="top" width="54%" headers="mcps1.1.3.1.1 "><p id="p9071mcpsimp"><a name="p9071mcpsimp"></a><a name="p9071mcpsimp"></a>offset[<a href="OT_ISP_BAYER_CHN_NUM.md">OT_ISP_BAYER_CHN_NUM</a>]</p>
+<tbody><tr id="row9069mcpsimp"><td class="cellrowborder" valign="top" width="54%" headers="mcps1.1.3.1.1 "><p id="p9071mcpsimp"><a name="p9071mcpsimp"></a><a name="p9071mcpsimp"></a>offset[<a href="#ZH-CN_TOPIC_0000002470925096">OT_ISP_BAYER_CHN_NUM</a>]</p>
 </td>
 <td class="cellrowborder" valign="top" width="46%" headers="mcps1.1.3.1.2 "><p id="p9074mcpsimp"><a name="p9074mcpsimp"></a><a name="p9074mcpsimp"></a>多路黑电平差异偏移值。</p>
 <p id="p9075mcpsimp"><a name="p9075mcpsimp"></a><a name="p9075mcpsimp"></a>取值范围：[-0x3FFF, 0x3FFF]</p>
@@ -10325,14 +10201,14 @@ typedef struct {
 <p id="p9077mcpsimp"><a name="p9077mcpsimp"></a><a name="p9077mcpsimp"></a>基于14bit raw数据进行配置。</p>
 </td>
 </tr>
-<tr id="row9078mcpsimp"><td class="cellrowborder" valign="top" width="54%" headers="mcps1.1.3.1.1 "><p id="p9080mcpsimp"><a name="p9080mcpsimp"></a><a name="p9080mcpsimp"></a>gain[<a href="OT_ISP_BAYER_CHN_NUM.md">OT_ISP_BAYER_CHN_NUM</a>]</p>
+<tr id="row9078mcpsimp"><td class="cellrowborder" valign="top" width="54%" headers="mcps1.1.3.1.1 "><p id="p9080mcpsimp"><a name="p9080mcpsimp"></a><a name="p9080mcpsimp"></a>gain[<a href="#ZH-CN_TOPIC_0000002470925096">OT_ISP_BAYER_CHN_NUM</a>]</p>
 </td>
 <td class="cellrowborder" valign="top" width="46%" headers="mcps1.1.3.1.2 "><p id="p9083mcpsimp"><a name="p9083mcpsimp"></a><a name="p9083mcpsimp"></a>多路增益差异比值，8bit小数精度。</p>
 <p id="p9084mcpsimp"><a name="p9084mcpsimp"></a><a name="p9084mcpsimp"></a>取值范围：[0x80, 0x400]</p>
 <p id="p9085mcpsimp"><a name="p9085mcpsimp"></a><a name="p9085mcpsimp"></a>该数组4个值分别对应R、Gr、Gb、B四个通道。</p>
 </td>
 </tr>
-<tr id="row9086mcpsimp"><td class="cellrowborder" valign="top" width="54%" headers="mcps1.1.3.1.1 "><p id="p9088mcpsimp"><a name="p9088mcpsimp"></a><a name="p9088mcpsimp"></a>color_matrix[<a href="OT_ISP_CCM_MATRIX_SIZE.md">OT_ISP_CCM_MATRIX_SIZE</a>]</p>
+<tr id="row9086mcpsimp"><td class="cellrowborder" valign="top" width="54%" headers="mcps1.1.3.1.1 "><p id="p9088mcpsimp"><a name="p9088mcpsimp"></a><a name="p9088mcpsimp"></a>color_matrix[<a href="#ZH-CN_TOPIC_0000002470924922">OT_ISP_CCM_MATRIX_SIZE</a>]</p>
 </td>
 <td class="cellrowborder" valign="top" width="46%" headers="mcps1.1.3.1.2 "><p id="p9091mcpsimp"><a name="p9091mcpsimp"></a><a name="p9091mcpsimp"></a>多路颜色校正矩阵差异比值，8bit小数精度。</p>
 <p id="p9092mcpsimp"><a name="p9092mcpsimp"></a><a name="p9092mcpsimp"></a>bit 15是符号位，0表示正数，1表示负数，例如0x8010表示-16。</p>
@@ -10348,7 +10224,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ot\_isp\_pipe\_diff\_attr](#ot_isp_pipe_diff_attr)
+[ot\_isp\_pipe\_diff\_attr](#ZH-CN_TOPIC_0000002504085003)
 
 ### ot\_isp\_pipe\_diff\_attr<a name="ZH-CN_TOPIC_0000002504085003"></a>
 
@@ -10389,7 +10265,7 @@ typedef struct {
 
 【注意事项】
 
-[ot\_isp\_pipe\_diff\_attr](#ZH-CN_TOPIC_0000001174819194)主要用于拼接模式下，配置多路图像的亮度和颜色的差异，用于校正多路的图像的差异，从而使得拼接画面融合区域过渡平滑。
+ot\_isp\_pipe\_diff\_attr主要用于拼接模式下，配置多路图像的亮度和颜色的差异，用于校正多路的图像的差异，从而使得拼接画面融合区域过渡平滑。
 
 【相关数据类型及接口】
 
@@ -10441,7 +10317,7 @@ typedef enum {
 
 【相关数据类型及接口】
 
-[ot\_isp\_ctrl\_param](#ot_isp_ctrl_param)
+[ot\_isp\_ctrl\_param](#ZH-CN_TOPIC_0000002503964837)
 
 ### ot\_isp\_alg\_run\_select<a name="ZH-CN_TOPIC_0000002503964913"></a>
 
@@ -10530,7 +10406,7 @@ typedef enum {
 
 【注意事项】
 
-1.  只支持在调用[ss\_mpi\_isp\_mem\_init](ss_mpi_isp_mem_init.md)前修改，不支持[ss\_mpi\_isp\_mem\_init](ss_mpi_isp_mem_init.md)动态修改。
+1.  只支持在调用[ss\_mpi\_isp\_mem\_init](#ZH-CN_TOPIC_0000002471084920)前修改，不支持[ss\_mpi\_isp\_mem\_init](#ZH-CN_TOPIC_0000002471084920)动态修改。
 2.  ot\_isp\_run\_wakeup\_select默认配置为OT\_ISP\_RUN\_WAKEUP\_FE\_START，可匹配ss\_mpi\_isp\_run接口使用，推荐调用流程如[图1](#fig86541627175814)。
 
     **图 1**  接口调用流程\(1\)<a name="fig86541627175814"></a>  
@@ -10603,7 +10479,7 @@ typedef struct {
 <tr id="row9244mcpsimp"><td class="cellrowborder" valign="top" width="28.000000000000004%" headers="mcps1.1.3.1.1 "><p id="p9246mcpsimp"><a name="p9246mcpsimp"></a><a name="p9246mcpsimp"></a>update_pos</p>
 </td>
 <td class="cellrowborder" valign="top" width="72%" headers="mcps1.1.3.1.2 "><p id="p9248mcpsimp"><a name="p9248mcpsimp"></a><a name="p9248mcpsimp"></a>默认值为0。</p>
-<p id="p9249mcpsimp"><a name="p9249mcpsimp"></a><a name="p9249mcpsimp"></a>0：根据<a href="ot_isp_sns_regs_info.md"><span xml:lang="sv-SE" id="ph9251mcpsimp"><a name="ph9251mcpsimp"></a><a name="ph9251mcpsimp"></a>ot_isp_sns_regs_info</span></a>结构体中u8IntPos变量的配置值，sensor寄存器在帧起始中断或帧结束中断配置；</p>
+<p id="p9249mcpsimp"><a name="p9249mcpsimp"></a><a name="p9249mcpsimp"></a>0：根据<a href="#ZH-CN_TOPIC_0000002471085112"><span xml:lang="sv-SE" id="ph9251mcpsimp"><a name="ph9251mcpsimp"></a><a name="ph9251mcpsimp"></a>ot_isp_sns_regs_info</span></a>结构体中u8IntPos变量的配置值，sensor寄存器在帧起始中断或帧结束中断配置；</p>
 <p id="p9252mcpsimp"><a name="p9252mcpsimp"></a><a name="p9252mcpsimp"></a>其他值：sensor寄存器在帧结束中断配置。</p>
 <p id="p9253mcpsimp"><a name="p9253mcpsimp"></a><a name="p9253mcpsimp"></a>取值范围：[0,1]</p>
 </td>
@@ -10658,11 +10534,11 @@ typedef struct {
 
 【注意事项】
 
--   proc\_param的默认值为30，即每30帧更新一次ISP Proc信息，如果要关闭ISP Proc信息，则在[ss\_mpi\_isp\_mem\_init](ss_mpi_isp_mem_init.md)之前通过接口[ss\_mpi\_isp\_set\_ctrl\_param](ss_mpi_isp_set_ctrl_param.md)设置ISP控制参数proc\_param为0，不分配存储ISP Proc信息的内存，而且后续不能将proc\_param设置为非0值。
--   通过接口[ss\_mpi\_isp\_set\_ctrl\_param](ss_mpi_isp_set_ctrl_param.md)第一次设置proc\_param为非0时，必需在[ss\_mpi\_isp\_mem\_init](ss_mpi_isp_mem_init.md)接口调用之前，因为需要分配Proc信息存储的内存，后续设置只能在非0值之间动态切换。
+-   proc\_param的默认值为30，即每30帧更新一次ISP Proc信息，如果要关闭ISP Proc信息，则在[ss\_mpi\_isp\_mem\_init](#ZH-CN_TOPIC_0000002471084920)之前通过接口[ss\_mpi\_isp\_set\_ctrl\_param](#ZH-CN_TOPIC_0000002504084839)设置ISP控制参数proc\_param为0，不分配存储ISP Proc信息的内存，而且后续不能将proc\_param设置为非0值。
+-   通过接口[ss\_mpi\_isp\_set\_ctrl\_param](#ZH-CN_TOPIC_0000002504084839)第一次设置proc\_param为非0时，必需在[ss\_mpi\_isp\_mem\_init](#ZH-CN_TOPIC_0000002471084920)接口调用之前，因为需要分配Proc信息存储的内存，后续设置只能在非0值之间动态切换。
 -   ISP Proc信息频繁更新会消耗CPU资源。推荐设为30帧更新一次，或仅Debug时开启。
--   只能在[ss\_mpi\_isp\_mem\_init](ss_mpi_isp_mem_init.md)之前通过接口[ss\_mpi\_isp\_set\_ctrl\_param](ss_mpi_isp_set_ctrl_param.md)设置update\_pos、pwm\_num、port\_interrupt\_delay、ldci\_tpr\_flt\_en、be\_buf\_num、ob\_stats\_update\_pos和alg\_run\_select，在[ss\_mpi\_isp\_mem\_init](ss_mpi_isp_mem_init.md)之后不可再更改上述7个参数的配置值；而[ss\_mpi\_isp\_get\_ctrl\_param](ss_mpi_isp_get_ctrl_param.md)接口调用顺序没有限制。
--   可通过接口[ss\_mpi\_isp\_set\_ctrl\_param](ss_mpi_isp_set_ctrl_param.md)动态更改proc\_param、stat\_interval、interrupt\_time\_out的配置值。
+-   只能在[ss\_mpi\_isp\_mem\_init](#ZH-CN_TOPIC_0000002471084920)之前通过接口[ss\_mpi\_isp\_set\_ctrl\_param](#ZH-CN_TOPIC_0000002504084839)设置update\_pos、pwm\_num、port\_interrupt\_delay、ldci\_tpr\_flt\_en、be\_buf\_num、ob\_stats\_update\_pos和alg\_run\_select，在[ss\_mpi\_isp\_mem\_init](#ZH-CN_TOPIC_0000002471084920)之后不可再更改上述7个参数的配置值；而[ss\_mpi\_isp\_get\_ctrl\_param](#ZH-CN_TOPIC_0000002471085186)接口调用顺序没有限制。
+-   可通过接口[ss\_mpi\_isp\_set\_ctrl\_param](#ZH-CN_TOPIC_0000002504084839)动态更改proc\_param、stat\_interval、interrupt\_time\_out的配置值。
 -   不支持加载ko时设置ISP控制参数。
 -   离线模式下，若业务量较大时，采用默认的be\_buf\_num，有可能会出现不丢帧但是ISP中有“get FreeBeBuf is fail”错误打印的问题，此时可以增大be\_buf\_num的配置值，缓解此问题；另外对于业务量不繁重、并且对于内存占用要求较高的应用场景，可以适当的减小be\_buf\_num的配置值。
 -   只能在物理pipe配置alg\_run\_select为OT\_ISP\_ALG\_RUN\_FE\_ONLY。
@@ -10681,8 +10557,8 @@ typedef struct {
 
 【相关数据类型及接口】
 
--   [ss\_mpi\_isp\_set\_ctrl\_param](#ss_mpi_isp_set_ctrl_param)
--   [ss\_mpi\_isp\_get\_ctrl\_param](#ss_mpi_isp_get_ctrl_param)
+-   [ss\_mpi\_isp\_set\_ctrl\_param](#ZH-CN_TOPIC_0000002504084839)
+-   [ss\_mpi\_isp\_get\_ctrl\_param](#ZH-CN_TOPIC_0000002471085186)
 
 ### ot\_isp\_mod\_param<a name="ZH-CN_TOPIC_0000002470925030"></a>
 
@@ -10733,16 +10609,16 @@ typedef struct {
 
 【注意事项】
 
--   不支持设置中断底半部；而[ss\_mpi\_isp\_get\_mod\_param](ss_mpi_isp_get_mod_param.md)接口调用顺序没有限制，可查询当前状态。
--   通过接口[ss\_mpi\_isp\_set\_mod\_param](ss_mpi_isp_set_mod_param.md)设置quick\_start快速启动时，接口调用需要在ISP起主业务之前（如：起多路PIPE场景业务时，需要在将接口调用顺序放在起多路主业务之前），且ISP KO已经加载；而[ss\_mpi\_isp\_get\_mod\_param](ss_mpi_isp_get_mod_param.md)接口调用顺序没有限制，可查询当前状态。
+-   不支持设置中断底半部；而[ss\_mpi\_isp\_get\_mod\_param](#ZH-CN_TOPIC_0000002503964891)接口调用顺序没有限制，可查询当前状态。
+-   通过接口[ss\_mpi\_isp\_set\_mod\_param](#ZH-CN_TOPIC_0000002503965069)设置quick\_start快速启动时，接口调用需要在ISP起主业务之前（如：起多路PIPE场景业务时，需要在将接口调用顺序放在起多路主业务之前），且ISP KO已经加载；而[ss\_mpi\_isp\_get\_mod\_param](#ZH-CN_TOPIC_0000002503964891)接口调用顺序没有限制，可查询当前状态。
 -   不支持加载ko时设置ISP模块参数。
 -   long\_frame\_interrupt\_en设置为1时，WDR模式时，ISP响应中断次数会增加，会影响ISP中断响应时间。增加cpu负载。
 -   中断底半部开启，四路拼接模式、线性模式（1080p,120fps）、寄存器固定在消隐区配置的sensor会出现同步异常的问题。
 
 【相关数据类型及接口】
 
--   [ss\_mpi\_isp\_set\_mod\_param](#ss_mpi_isp_set_mod_param)
--   [ss\_mpi\_isp\_get\_mod\_param](#ss_mpi_isp_get_mod_param)
+-   [ss\_mpi\_isp\_set\_mod\_param](#ZH-CN_TOPIC_0000002503965069)
+-   [ss\_mpi\_isp\_get\_mod\_param](#ZH-CN_TOPIC_0000002503964891)
 
 ### ot\_isp\_quick\_start\_param<a name="ZH-CN_TOPIC_0000002504084913"></a>
 
@@ -10850,6 +10726,7 @@ typedef struct {
     ot_isp_ae_route_ex ae_route_ex;
     ot_isp_ae_route ae_route_sf;
     ot_isp_ae_route_ex ae_route_sf_ex;
+    td_u32 ae_stat_pos; 
 } ot_isp_init_attr;
 ```
 
@@ -10964,7 +10841,7 @@ typedef struct {
 </tr>
 <tr id="row9585mcpsimp"><td class="cellrowborder" valign="top" width="27%" headers="mcps1.1.3.1.1 "><p id="p9587mcpsimp"><a name="p9587mcpsimp"></a><a name="p9587mcpsimp"></a>quick_start_en</p>
 </td>
-<td class="cellrowborder" valign="top" width="73%" headers="mcps1.1.3.1.2 "><p id="p9589mcpsimp"><a name="p9589mcpsimp"></a><a name="p9589mcpsimp"></a>设置不带光敏快启相关参数。</p>
+<td class="cellrowborder" valign="top" width="73%" headers="mcps1.1.3.1.2 "><p id="p9589mcpsimp"><a name="p9589mcpsimp"></a><a name="p9589mcpsimp"></a>AE快速收敛使能</p>
 </td>
 </tr>
 <tr id="row9590mcpsimp"><td class="cellrowborder" valign="top" width="27%" headers="mcps1.1.3.1.1 "><p id="p9592mcpsimp"><a name="p9592mcpsimp"></a><a name="p9592mcpsimp"></a>ae_route</p>
@@ -10987,6 +10864,14 @@ typedef struct {
 <td class="cellrowborder" valign="top" width="73%" headers="mcps1.1.3.1.2 "><p id="p9609mcpsimp"><a name="p9609mcpsimp"></a><a name="p9609mcpsimp"></a>设置ISP第一次启动时AE短帧的扩展曝光分配路线，仅在WDR模式下使用。</p>
 </td>
 </tr>
+<tr id="row1343684601311"><td class="cellrowborder" valign="top" width="27%" headers="mcps1.1.3.1.1 "><p id="p1343734631319"><a name="p1343734631319"></a><a name="p1343734631319"></a>ae_stat_pos</p>
+</td>
+<td class="cellrowborder" valign="top" width="73%" headers="mcps1.1.3.1.2 "><p id="p19864135910134"><a name="p19864135910134"></a><a name="p19864135910134"></a>设置AE统计信息位置。仅在线性模式下使用。</p>
+<p id="p1286425941313"><a name="p1286425941313"></a><a name="p1286425941313"></a>0：FE统计信息；</p>
+<p id="p1286435912138"><a name="p1286435912138"></a><a name="p1286435912138"></a>1：BE统计信息；</p>
+<p id="p20864259111310"><a name="p20864259111310"></a><a name="p20864259111310"></a>其他：FE统计信息。</p>
+</td>
+</tr>
 </tbody>
 </table>
 
@@ -10997,8 +10882,8 @@ typedef struct {
 
 【相关数据类型及接口】
 
--   [ot\_isp\_sns\_obj](#ot_isp_sns_obj)
--   [ot\_isp\_quick\_start\_param](#ot_isp_quick_start_param)
+-   [ot\_isp\_sns\_obj](#ZH-CN_TOPIC_0000002471085122)
+-   [ot\_isp\_quick\_start\_param](#ZH-CN_TOPIC_0000002504084913)
 
 ### ot\_isp\_sns\_mirrorflip\_type<a name="ZH-CN_TOPIC_0000002503964807"></a>
 
@@ -11056,7 +10941,7 @@ typedef enum {
 
 【相关数据类型及接口】
 
-[ot\_isp\_sns\_obj](#ot_isp_sns_obj)
+[ot\_isp\_sns\_obj](#ZH-CN_TOPIC_0000002471085122)
 
 ### ot\_isp\_sns\_blc\_clamp<a name="ZH-CN_TOPIC_0000002504084893"></a>
 
@@ -11095,7 +10980,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ot\_isp\_sns\_obj](#ot_isp_sns_obj)
+[ot\_isp\_sns\_obj](#ZH-CN_TOPIC_0000002471085122)
 
 ### ot\_isp\_sns\_bus\_ex<a name="ZH-CN_TOPIC_0000002504085065"></a>
 
@@ -11134,7 +11019,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ot\_isp\_sns\_obj](#ot_isp_sns_obj)
+[ot\_isp\_sns\_obj](#ZH-CN_TOPIC_0000002471085122)
 
 ### ot\_isp\_sns\_obj<a name="ZH-CN_TOPIC_0000002471085122"></a>
 
@@ -11150,10 +11035,10 @@ typedef struct {
     td_s32  (*pfn_un_register_callback)(ot_vi_pipe vi_pipe, ot_isp_3a_alg_lib *ae_lib, ot_isp_3a_alg_lib *awb_lib);
     td_s32  (*pfn_set_bus_info)(ot_vi_pipe vi_pipe, ot_isp_sns_commbus sns_bus_info);
     td_s32  (*pfn_set_bus_ex_info)(ot_vi_pipe vi_pipe, ot_isp_sns_bus_ex *serdes_info);
-    ot_void (*pfn_standby)(ot_vi_pipe vi_pipe);
-    ot_void (*pfn_restart)(ot_vi_pipe vi_pipe);
-    ot_void (*pfn_mirror_flip)(ot_vi_pipe vi_pipe, ot_isp_sns_mirrorflip_type sns_mirror_flip);
-    ot_void (*pfn_set_blc_clamp)(ot_vi_pipe vi_pipe, ot_isp_sns_blc_clamp sns_blc_clamp);
+    td_void (*pfn_standby)(ot_vi_pipe vi_pipe);
+    td_void (*pfn_restart)(ot_vi_pipe vi_pipe);
+    td_void (*pfn_mirror_flip)(ot_vi_pipe vi_pipe, ot_isp_sns_mirrorflip_type sns_mirror_flip);
+    td_void (*pfn_set_blc_clamp)(ot_vi_pipe vi_pipe, ot_isp_sns_blc_clamp sns_blc_clamp);
     td_s32  (*pfn_write_reg)(ot_vi_pipe vi_pipe, td_u32 addr, td_u32 data);
     td_s32  (*pfn_read_reg)(ot_vi_pipe vi_pipe, td_u32 addr);
     td_s32  (*pfn_set_init)(ot_vi_pipe vi_pipe, ot_isp_init_attr *init_attr);
@@ -11306,12 +11191,12 @@ typedef struct {
 <td class="cellrowborder" valign="top" width="61%" headers="mcps1.1.3.1.2 "><p id="p9905mcpsimp"><a name="p9905mcpsimp"></a><a name="p9905mcpsimp"></a>Sensor WDR模式设置。</p>
 </td>
 </tr>
-<tr id="row9906mcpsimp"><td class="cellrowborder" valign="top" width="39%" headers="mcps1.1.3.1.1 "><p id="p9908mcpsimp"><a name="p9908mcpsimp"></a><a name="p9908mcpsimp"></a>regs_info[<a href="ISP_SNS_SAVE_INFO_MAX.md">ISP_SNS_SAVE_INFO_MAX</a>]</p>
+<tr id="row9906mcpsimp"><td class="cellrowborder" valign="top" width="39%" headers="mcps1.1.3.1.1 "><p id="p9908mcpsimp"><a name="p9908mcpsimp"></a><a name="p9908mcpsimp"></a>regs_info[<a href="#ZH-CN_TOPIC_0000002503964809">ISP_SNS_SAVE_INFO_MAX</a>]</p>
 </td>
 <td class="cellrowborder" valign="top" width="61%" headers="mcps1.1.3.1.2 "><p id="p9911mcpsimp"><a name="p9911mcpsimp"></a><a name="p9911mcpsimp"></a>Sensor寄存器状态，regs_info[0]表示当前帧sensor寄存器状态，regs_info[1]表示上一帧sensor寄存器状态。</p>
 </td>
 </tr>
-<tr id="row9912mcpsimp"><td class="cellrowborder" valign="top" width="39%" headers="mcps1.1.3.1.1 "><p id="p9914mcpsimp"><a name="p9914mcpsimp"></a><a name="p9914mcpsimp"></a>fl[<a href="ISP_SNS_SAVE_INFO_MAX.md">ISP_SNS_SAVE_INFO_MAX</a>]</p>
+<tr id="row9912mcpsimp"><td class="cellrowborder" valign="top" width="39%" headers="mcps1.1.3.1.1 "><p id="p9914mcpsimp"><a name="p9914mcpsimp"></a><a name="p9914mcpsimp"></a>fl[<a href="#ZH-CN_TOPIC_0000002503964809">ISP_SNS_SAVE_INFO_MAX</a>]</p>
 </td>
 <td class="cellrowborder" valign="top" width="61%" headers="mcps1.1.3.1.2 "><p id="p9917mcpsimp"><a name="p9917mcpsimp"></a><a name="p9917mcpsimp"></a>记录实际生效的一帧的总行数，fl[0]表示当前帧的行数，fl[1]表示上一帧的行数。</p>
 </td>
@@ -11321,7 +11206,7 @@ typedef struct {
 <td class="cellrowborder" valign="top" width="61%" headers="mcps1.1.3.1.2 "><p id="p9922mcpsimp"><a name="p9922mcpsimp"></a><a name="p9922mcpsimp"></a>基准帧率下的一帧的总行数。</p>
 </td>
 </tr>
-<tr id="row9923mcpsimp"><td class="cellrowborder" valign="top" width="39%" headers="mcps1.1.3.1.1 "><p id="p9925mcpsimp"><a name="p9925mcpsimp"></a><a name="p9925mcpsimp"></a>wdr_int_time[<a href="OT_ISP_WDR_MAX_FRAME_NUM.md">OT_ISP_WDR_MAX_FRAME_NUM</a>]</p>
+<tr id="row9923mcpsimp"><td class="cellrowborder" valign="top" width="39%" headers="mcps1.1.3.1.1 "><p id="p9925mcpsimp"><a name="p9925mcpsimp"></a><a name="p9925mcpsimp"></a>wdr_int_time[<a href="#ZH-CN_TOPIC_0000002471084934">OT_ISP_WDR_MAX_FRAME_NUM</a>]</p>
 </td>
 <td class="cellrowborder" valign="top" width="61%" headers="mcps1.1.3.1.2 "><p id="p9928mcpsimp"><a name="p9928mcpsimp"></a><a name="p9928mcpsimp"></a>WDR模式下曝光时间，wdr_int_time[0]表示VS帧曝光时间，wdr_int_time[1]表示S帧曝光时间，wdr_int_time[2]表示M帧曝光时间，wdr_int_time[3]表示L帧曝光时间。</p>
 </td>

@@ -104,11 +104,13 @@
 
 # MAU<a name="ZH-CN_TOPIC_0000002408134500"></a>
 
+-   **[概述](#ZH-CN_TOPIC_0000002441853521)**  
 
+-   **[功能描述](#ZH-CN_TOPIC_0000002408294284)**  
 
+-   **[错误码](#ZH-CN_TOPIC_0000002408294264)**  
 
-
-
+-   **[Proc调试信息](#ZH-CN_TOPIC_0000002441733621)**  
 
 ## 概述<a name="ZH-CN_TOPIC_0000002441853521"></a>
 
@@ -116,7 +118,9 @@ MAU（Matrix Arithmetic Unit）为_识别_分析系统中的矩阵算术单元�
 
 ## 功能描述<a name="ZH-CN_TOPIC_0000002408294284"></a>
 
+-   **[重要概念](#ZH-CN_TOPIC_0000002441733669)**  
 
+-   **[使用示意](#ZH-CN_TOPIC_0000002408294128)**  
 
 ### 重要概念<a name="ZH-CN_TOPIC_0000002441733669"></a>
 
@@ -130,13 +134,13 @@ MAU（Matrix Arithmetic Unit）为_识别_分析系统中的矩阵算术单元�
 
 -   查询\(query\)
 
-    用户根据系统返回的handle，调用[ss\_mpi\_svp\_mau\_query](ss_mpi_svp_mau_query.md)可以查询对应算子任务是否完成。
+    用户根据系统返回的handle，调用[ss\_mpi\_svp\_mau\_query](#ZH-CN_TOPIC_0000002408294188)可以查询对应算子任务是否完成。
 
 -   跨度（stride）
 
     一行的有效数据byte数目 + 为硬件快速跨越到下一行补齐的一些无效byte数目，如[图1](#fig4399128101817)所示。注意不同的数据结构行存储表示的有效元素数目的变量不一样，且其度量跟stride不一定是一样的。
 
-    -   [ot\_svp\_blob](ot_svp_blob.md)行存储方向表示的有效元素数目变量是width。
+    -   [ot\_svp\_blob](#ZH-CN_TOPIC_0000002441853637)行存储方向表示的有效元素数目变量是width。
     -   seq 行存储方向表示的有效元素数目变量是dim。
 
 **图 1**  跨度（stride）示意图<a name="fig4399128101817"></a>  
@@ -152,11 +156,11 @@ MAU（Matrix Arithmetic Unit）为_识别_分析系统中的矩阵算术单元�
 -   输入、输出数据类型
     -   块数据
 
-        [ot\_svp\_blob](ot_svp_blob.md)、[ot\_svp\_src\_blob](ot_svp_src_blob.md)、[ot\_svp\_dst\_blob](ot_svp_dst_blob.md)，类型参考[ot\_svp\_blob\_type](ot_svp_blob_type.md)，具体的内存分配如[图2](#fig432114356336)～[图18](#fig135371724174113)所示。
+        [ot\_svp\_blob](#ZH-CN_TOPIC_0000002441853637)、[ot\_svp\_src\_blob](#ZH-CN_TOPIC_0000002441853749)、[ot\_svp\_dst\_blob](#ZH-CN_TOPIC_0000002441853545)，类型参考[ot\_svp\_blob\_type](#ZH-CN_TOPIC_0000002408134284)，具体的内存分配如[图2](#fig432114356336)～[图18](#fig135371724174113)所示。
 
     -   一维数据
 
-        [ot\_svp\_mem\_info](ot_svp_mem_info.md)，表示一维数据，如[图19](#fig939145054114)。
+        [ot\_svp\_mem\_info](#ZH-CN_TOPIC_0000002408134312)，表示一维数据，如[图19](#fig939145054114)。
 
 -   BLOB内存排布类型
 
@@ -171,154 +175,154 @@ MAU（Matrix Arithmetic Unit）为_识别_分析系统中的矩阵算术单元�
 </thead>
 <tbody><tr id="row8460mcpsimp"><td class="cellrowborder" valign="top" width="39%" headers="mcps1.2.3.1.1 "><p id="p8462mcpsimp"><a name="p8462mcpsimp"></a><a name="p8462mcpsimp"></a>OT_SVP_BLOB_TYPE_S20Q12</p>
 </td>
-<td class="cellrowborder" valign="top" width="61%" headers="mcps1.2.3.1.2 "><p id="p8464mcpsimp"><a name="p8464mcpsimp"></a><a name="p8464mcpsimp"></a>多帧多通道S20Q12类型数据Planar格式存储顺序排布。此时<a href="ot_svp_blob.md">ot_svp_blob</a>结构体中，num表示帧数，width表示图像宽，height表示图像高，chn表示单帧图像通道数，如 OT_SVP_BLOB_TYPE_S20Q12类型ot_svp_blob（2通道2帧示意图）所示。</p>
+<td class="cellrowborder" valign="top" width="61%" headers="mcps1.2.3.1.2 "><p id="p8464mcpsimp"><a name="p8464mcpsimp"></a><a name="p8464mcpsimp"></a>多帧多通道S20Q12类型数据Planar格式存储顺序排布。此时<a href="#ZH-CN_TOPIC_0000002441853637">ot_svp_blob</a>结构体中，num表示帧数，width表示图像宽，height表示图像高，chn表示单帧图像通道数，如 OT_SVP_BLOB_TYPE_S20Q12类型ot_svp_blob（2通道2帧示意图）所示。</p>
 </td>
 </tr>
 <tr id="row8474mcpsimp"><td class="cellrowborder" valign="top" width="39%" headers="mcps1.2.3.1.1 "><p id="p8476mcpsimp"><a name="p8476mcpsimp"></a><a name="p8476mcpsimp"></a>OT_SVP_BLOB_TYPE_U8</p>
 </td>
-<td class="cellrowborder" valign="top" width="61%" headers="mcps1.2.3.1.2 "><p id="p8478mcpsimp"><a name="p8478mcpsimp"></a><a name="p8478mcpsimp"></a>多帧无符号8bit多通道数据Planar格式存储顺序排布。此时<a href="ot_svp_blob.md">ot_svp_blob</a>结构体中，num表示帧数，width表示图像宽，height表示图像高，chn表示单帧图像通道数，如 OT_SVP_BLOB_TYPE_U8类型ot_svp_blob（3通道2帧示意图）所示。</p>
+<td class="cellrowborder" valign="top" width="61%" headers="mcps1.2.3.1.2 "><p id="p8478mcpsimp"><a name="p8478mcpsimp"></a><a name="p8478mcpsimp"></a>多帧无符号8bit多通道数据Planar格式存储顺序排布。此时<a href="#ZH-CN_TOPIC_0000002441853637">ot_svp_blob</a>结构体中，num表示帧数，width表示图像宽，height表示图像高，chn表示单帧图像通道数，如 OT_SVP_BLOB_TYPE_U8类型ot_svp_blob（3通道2帧示意图）所示。</p>
 </td>
 </tr>
 <tr id="row8486mcpsimp"><td class="cellrowborder" valign="top" width="39%" headers="mcps1.2.3.1.1 "><p xml:lang="da-DK" id="p8488mcpsimp"><a name="p8488mcpsimp"></a><a name="p8488mcpsimp"></a>OT_SVP_BLOB_TYPE_YVU420SP</p>
 </td>
-<td class="cellrowborder" valign="top" width="61%" headers="mcps1.2.3.1.2 "><p id="p8490mcpsimp"><a name="p8490mcpsimp"></a><a name="p8490mcpsimp"></a>多帧YCbCr420 SemiPlannar数据格式图像顺序排布。此时<a href="ot_svp_blob.md">ot_svp_blob</a>结构体中，num表示帧数，width表示图像宽，height表示图像高，chn=3，如 OT_SVP_BLOB_TYPE_YVU420SP类型ot_svp_blob（2帧YVU420SP示意图）所示。色度部分V在前，U在后。</p>
+<td class="cellrowborder" valign="top" width="61%" headers="mcps1.2.3.1.2 "><p id="p8490mcpsimp"><a name="p8490mcpsimp"></a><a name="p8490mcpsimp"></a>多帧YCbCr420 SemiPlannar数据格式图像顺序排布。此时<a href="#ZH-CN_TOPIC_0000002441853637">ot_svp_blob</a>结构体中，num表示帧数，width表示图像宽，height表示图像高，chn=3，如 OT_SVP_BLOB_TYPE_YVU420SP类型ot_svp_blob（2帧YVU420SP示意图）所示。色度部分V在前，U在后。</p>
 <p xml:lang="da-DK" id="p8498mcpsimp"><a name="p8498mcpsimp"></a><a name="p8498mcpsimp"></a>注意此时高、宽必须为偶数。</p>
 </td>
 </tr>
 <tr id="row8499mcpsimp"><td class="cellrowborder" valign="top" width="39%" headers="mcps1.2.3.1.1 "><p id="p8501mcpsimp"><a name="p8501mcpsimp"></a><a name="p8501mcpsimp"></a>OT_SVP_BLOB_TYPE_YVU422SP</p>
 </td>
-<td class="cellrowborder" valign="top" width="61%" headers="mcps1.2.3.1.2 "><p id="p8503mcpsimp"><a name="p8503mcpsimp"></a><a name="p8503mcpsimp"></a>多帧YCbCr422 SemiPlannar数据格式图像顺序排布。此时<a href="ot_svp_blob.md">ot_svp_blob</a>结构体中，num表示帧数，width表示图像宽，height表示图像高，chn=3，如 OT_SVP_BLOB_TYPE_YVU422SP类型ot_svp_blob（2帧YVU422SP示意图）所示。色度部分V在前，U在后。</p>
+<td class="cellrowborder" valign="top" width="61%" headers="mcps1.2.3.1.2 "><p id="p8503mcpsimp"><a name="p8503mcpsimp"></a><a name="p8503mcpsimp"></a>多帧YCbCr422 SemiPlannar数据格式图像顺序排布。此时<a href="#ZH-CN_TOPIC_0000002441853637">ot_svp_blob</a>结构体中，num表示帧数，width表示图像宽，height表示图像高，chn=3，如 OT_SVP_BLOB_TYPE_YVU422SP类型ot_svp_blob（2帧YVU422SP示意图）所示。色度部分V在前，U在后。</p>
 <p xml:lang="da-DK" id="p8513mcpsimp"><a name="p8513mcpsimp"></a><a name="p8513mcpsimp"></a>注意此时宽必须为偶数。</p>
 </td>
 </tr>
 <tr id="row8514mcpsimp"><td class="cellrowborder" valign="top" width="39%" headers="mcps1.2.3.1.1 "><p id="p8516mcpsimp"><a name="p8516mcpsimp"></a><a name="p8516mcpsimp"></a>OT_SVP_BLOB_TYPE_VEC_S20Q12</p>
 </td>
-<td class="cellrowborder" valign="top" width="61%" headers="mcps1.2.3.1.2 "><p id="p8518mcpsimp"><a name="p8518mcpsimp"></a><a name="p8518mcpsimp"></a>多帧S20Q12类型向量数据顺序排布。此时<a href="ot_svp_blob.md">ot_svp_blob</a>结构体中，num表示帧数，width表示向量数据维度，height表示单帧有多少个向量（一般height=1），chn=1，如 OT_SVP_BLOB_TYPE_VEC_S20Q12类型ot_svp_blob（2帧示意图）所示。</p>
+<td class="cellrowborder" valign="top" width="61%" headers="mcps1.2.3.1.2 "><p id="p8518mcpsimp"><a name="p8518mcpsimp"></a><a name="p8518mcpsimp"></a>多帧S20Q12类型向量数据顺序排布。此时<a href="#ZH-CN_TOPIC_0000002441853637">ot_svp_blob</a>结构体中，num表示帧数，width表示向量数据维度，height表示单帧有多少个向量（一般height=1），chn=1，如 OT_SVP_BLOB_TYPE_VEC_S20Q12类型ot_svp_blob（2帧示意图）所示。</p>
 </td>
 </tr>
 <tr id="row8528mcpsimp"><td class="cellrowborder" valign="top" width="39%" headers="mcps1.2.3.1.1 "><p id="p8530mcpsimp"><a name="p8530mcpsimp"></a><a name="p8530mcpsimp"></a>OT_SVP_BLOB_TYPE_SEQ_S20Q12</p>
 </td>
-<td class="cellrowborder" valign="top" width="61%" headers="mcps1.2.3.1.2 "><p id="p8532mcpsimp"><a name="p8532mcpsimp"></a><a name="p8532mcpsimp"></a>多段S20Q12类型序列数据排布。此时<a href="ot_svp_blob.md">ot_svp_blob</a>结构体中，num表示段数，dim表示序列向量数据维度，virt_addr_step是一个num长度的数组地址，数组元素表示每段序列有多少个向量，如 OT_SVP_BLOB_TYPE_SEQ_S20Q12类型ot_svp_blob (num=N帧示意图)所示。</p>
+<td class="cellrowborder" valign="top" width="61%" headers="mcps1.2.3.1.2 "><p id="p8532mcpsimp"><a name="p8532mcpsimp"></a><a name="p8532mcpsimp"></a>多段S20Q12类型序列数据排布。此时<a href="#ZH-CN_TOPIC_0000002441853637">ot_svp_blob</a>结构体中，num表示段数，dim表示序列向量数据维度，virt_addr_step是一个num长度的数组地址，数组元素表示每段序列有多少个向量，如 OT_SVP_BLOB_TYPE_SEQ_S20Q12类型ot_svp_blob (num=N帧示意图)所示。</p>
 </td>
 </tr>
 <tr id="row8540mcpsimp"><td class="cellrowborder" valign="top" width="39%" headers="mcps1.2.3.1.1 "><p id="p8542mcpsimp"><a name="p8542mcpsimp"></a><a name="p8542mcpsimp"></a>OT_SVP_BLOB_TYPE_BBOX_S20Q12</p>
 </td>
-<td class="cellrowborder" valign="top" width="61%" headers="mcps1.2.3.1.2 "><p id="p8544mcpsimp"><a name="p8544mcpsimp"></a><a name="p8544mcpsimp"></a>多帧多通道S20Q12类型数据Planar格式存储顺序排布。此时<a href="ot_svp_blob.md">ot_svp_blob</a>结构体中，num表示帧数，width=4，height表示bbox个数，chn=1，如 OT_SVP_BLOB_TYPE_BBOX_S20Q12类型ot_svp_blob(1通道1帧示意图）所示。</p>
+<td class="cellrowborder" valign="top" width="61%" headers="mcps1.2.3.1.2 "><p id="p8544mcpsimp"><a name="p8544mcpsimp"></a><a name="p8544mcpsimp"></a>多帧多通道S20Q12类型数据Planar格式存储顺序排布。此时<a href="#ZH-CN_TOPIC_0000002441853637">ot_svp_blob</a>结构体中，num表示帧数，width=4，height表示bbox个数，chn=1，如 OT_SVP_BLOB_TYPE_BBOX_S20Q12类型ot_svp_blob(1通道1帧示意图）所示。</p>
 </td>
 </tr>
 <tr id="row8554mcpsimp"><td class="cellrowborder" valign="top" width="39%" headers="mcps1.2.3.1.1 "><p id="p8556mcpsimp"><a name="p8556mcpsimp"></a><a name="p8556mcpsimp"></a>OT_SVP_BLOB_TYPE_BSI_SQ32</p>
 </td>
-<td class="cellrowborder" valign="top" width="61%" headers="mcps1.2.3.1.2 "><p id="p8558mcpsimp"><a name="p8558mcpsimp"></a><a name="p8558mcpsimp"></a>多帧多通道32bit量化数据Planar格式存储顺序排布。此时<a href="ot_svp_blob.md">ot_svp_blob</a>结构体中，num表示帧数，width表示坐标最大个数，height=6，chn表述类别个数，如 OT_SVP_BLOB_TYPE_BSI_SQ32类型ot_svp_blob（2通道2帧示意图）所示。</p>
+<td class="cellrowborder" valign="top" width="61%" headers="mcps1.2.3.1.2 "><p id="p8558mcpsimp"><a name="p8558mcpsimp"></a><a name="p8558mcpsimp"></a>多帧多通道32bit量化数据Planar格式存储顺序排布。此时<a href="#ZH-CN_TOPIC_0000002441853637">ot_svp_blob</a>结构体中，num表示帧数，width表示坐标最大个数，height=6，chn表述类别个数，如 OT_SVP_BLOB_TYPE_BSI_SQ32类型ot_svp_blob（2通道2帧示意图）所示。</p>
 </td>
 </tr>
 <tr id="row8568mcpsimp"><td class="cellrowborder" valign="top" width="39%" headers="mcps1.2.3.1.1 "><p id="p8570mcpsimp"><a name="p8570mcpsimp"></a><a name="p8570mcpsimp"></a>OT_SVP_BLOB_TYPE_S12Q20</p>
 </td>
-<td class="cellrowborder" valign="top" width="61%" headers="mcps1.2.3.1.2 "><p id="p8572mcpsimp"><a name="p8572mcpsimp"></a><a name="p8572mcpsimp"></a>多帧多通道S12Q20类型数据Planar格式存储顺序排布。此时<a href="ot_svp_blob.md">ot_svp_blob</a>结构体中，num表示帧数，width表示图像宽，height表示图像高，chn表示单帧图像通道数，如 OT_SVP_BLOB_TYPE_S12Q20类型ot_svp_blob（2通道2帧示意图）所示。</p>
+<td class="cellrowborder" valign="top" width="61%" headers="mcps1.2.3.1.2 "><p id="p8572mcpsimp"><a name="p8572mcpsimp"></a><a name="p8572mcpsimp"></a>多帧多通道S12Q20类型数据Planar格式存储顺序排布。此时<a href="#ZH-CN_TOPIC_0000002441853637">ot_svp_blob</a>结构体中，num表示帧数，width表示图像宽，height表示图像高，chn表示单帧图像通道数，如 OT_SVP_BLOB_TYPE_S12Q20类型ot_svp_blob（2通道2帧示意图）所示。</p>
 </td>
 </tr>
 <tr id="row8582mcpsimp"><td class="cellrowborder" valign="top" width="39%" headers="mcps1.2.3.1.1 "><p id="p8584mcpsimp"><a name="p8584mcpsimp"></a><a name="p8584mcpsimp"></a>OT_SVP_BLOB_TYPE_VEC_S12Q20</p>
 </td>
-<td class="cellrowborder" valign="top" width="61%" headers="mcps1.2.3.1.2 "><p id="p8586mcpsimp"><a name="p8586mcpsimp"></a><a name="p8586mcpsimp"></a>多帧S12Q20类型向量数据顺序排布。此时<a href="ot_svp_blob.md">ot_svp_blob</a>结构体中，num表示帧数，width表示向量数据维度，height表示单帧有多少个向量（一般height=1），chn=1，如 OT_SVP_BLOB_TYPE_VEC_S12Q20类型ot_svp_blob（2帧示意图）所示。</p>
+<td class="cellrowborder" valign="top" width="61%" headers="mcps1.2.3.1.2 "><p id="p8586mcpsimp"><a name="p8586mcpsimp"></a><a name="p8586mcpsimp"></a>多帧S12Q20类型向量数据顺序排布。此时<a href="#ZH-CN_TOPIC_0000002441853637">ot_svp_blob</a>结构体中，num表示帧数，width表示向量数据维度，height表示单帧有多少个向量（一般height=1），chn=1，如 OT_SVP_BLOB_TYPE_VEC_S12Q20类型ot_svp_blob（2帧示意图）所示。</p>
 </td>
 </tr>
 <tr id="row8594mcpsimp"><td class="cellrowborder" valign="top" width="39%" headers="mcps1.2.3.1.1 "><p id="p8596mcpsimp"><a name="p8596mcpsimp"></a><a name="p8596mcpsimp"></a>OT_SVP_BLOB_TYPE_S32</p>
 </td>
-<td class="cellrowborder" valign="top" width="61%" headers="mcps1.2.3.1.2 "><p id="p8598mcpsimp"><a name="p8598mcpsimp"></a><a name="p8598mcpsimp"></a>多帧多通道有符号32bit数据Planar格式存储顺序排布。此时<a href="ot_svp_blob.md">ot_svp_blob</a>结构体中，num表示帧数，width表示图像宽，height表示图像高，chn表示单帧图像通道数，如 OT_SVP_BLOB_TYPE_S32类型ot_svp_blob（2通道2帧示意图）所示。</p>
+<td class="cellrowborder" valign="top" width="61%" headers="mcps1.2.3.1.2 "><p id="p8598mcpsimp"><a name="p8598mcpsimp"></a><a name="p8598mcpsimp"></a>多帧多通道有符号32bit数据Planar格式存储顺序排布。此时<a href="#ZH-CN_TOPIC_0000002441853637">ot_svp_blob</a>结构体中，num表示帧数，width表示图像宽，height表示图像高，chn表示单帧图像通道数，如 OT_SVP_BLOB_TYPE_S32类型ot_svp_blob（2通道2帧示意图）所示。</p>
 </td>
 </tr>
 <tr id="row8608mcpsimp"><td class="cellrowborder" valign="top" width="39%" headers="mcps1.2.3.1.1 "><p id="p8610mcpsimp"><a name="p8610mcpsimp"></a><a name="p8610mcpsimp"></a>OT_SVP_BLOB_TYPE_U32</p>
 </td>
-<td class="cellrowborder" valign="top" width="61%" headers="mcps1.2.3.1.2 "><p id="p8612mcpsimp"><a name="p8612mcpsimp"></a><a name="p8612mcpsimp"></a>多帧多通道无符号32bit数据Planar格式存储顺序排布。此时<a href="ot_svp_blob.md">ot_svp_blob</a>结构体中，num表示帧数，width表示图像宽，height表示图像高，chn表示单帧图像通道数，如 OT_SVP_BLOB_TYPE_U32类型ot_svp_blob（2通道2帧示意图）所示。</p>
+<td class="cellrowborder" valign="top" width="61%" headers="mcps1.2.3.1.2 "><p id="p8612mcpsimp"><a name="p8612mcpsimp"></a><a name="p8612mcpsimp"></a>多帧多通道无符号32bit数据Planar格式存储顺序排布。此时<a href="#ZH-CN_TOPIC_0000002441853637">ot_svp_blob</a>结构体中，num表示帧数，width表示图像宽，height表示图像高，chn表示单帧图像通道数，如 OT_SVP_BLOB_TYPE_U32类型ot_svp_blob（2通道2帧示意图）所示。</p>
 </td>
 </tr>
 <tr id="row8622mcpsimp"><td class="cellrowborder" valign="top" width="39%" headers="mcps1.2.3.1.1 "><p id="p8624mcpsimp"><a name="p8624mcpsimp"></a><a name="p8624mcpsimp"></a>OT_SVP_BLOB_TYPE_FP32</p>
 </td>
-<td class="cellrowborder" valign="top" width="61%" headers="mcps1.2.3.1.2 "><p id="p8626mcpsimp"><a name="p8626mcpsimp"></a><a name="p8626mcpsimp"></a>多帧多通道32bit浮点数据Planar格式存储顺序排布。此时<a href="ot_svp_blob.md">ot_svp_blob</a>结构体中，num表示帧数，width表示图像宽，height表示图像高，chn表示单帧图像通道数，如 OT_SVP_BLOB_TYPE_FP32类型ot_svp_blob（2通道2帧示意图）所示。</p>
+<td class="cellrowborder" valign="top" width="61%" headers="mcps1.2.3.1.2 "><p id="p8626mcpsimp"><a name="p8626mcpsimp"></a><a name="p8626mcpsimp"></a>多帧多通道32bit浮点数据Planar格式存储顺序排布。此时<a href="#ZH-CN_TOPIC_0000002441853637">ot_svp_blob</a>结构体中，num表示帧数，width表示图像宽，height表示图像高，chn表示单帧图像通道数，如 OT_SVP_BLOB_TYPE_FP32类型ot_svp_blob（2通道2帧示意图）所示。</p>
 </td>
 </tr>
 <tr id="row8636mcpsimp"><td class="cellrowborder" valign="top" width="39%" headers="mcps1.2.3.1.1 "><p id="p8638mcpsimp"><a name="p8638mcpsimp"></a><a name="p8638mcpsimp"></a>OT_SVP_BLOB_TYPE_FP16</p>
 </td>
-<td class="cellrowborder" valign="top" width="61%" headers="mcps1.2.3.1.2 "><p id="p8640mcpsimp"><a name="p8640mcpsimp"></a><a name="p8640mcpsimp"></a>多帧多通道16bit浮点数据Planar格式存储顺序排布。此时<a href="ot_svp_blob.md">ot_svp_blob</a>结构体中，num表示帧数，width表示图像宽，height表示图像高，chn表示单帧图像通道数，如 OT_SVP_BLOB_TYPE_FP16类型ot_svp_blob（2通道2帧示意图）所示。</p>
+<td class="cellrowborder" valign="top" width="61%" headers="mcps1.2.3.1.2 "><p id="p8640mcpsimp"><a name="p8640mcpsimp"></a><a name="p8640mcpsimp"></a>多帧多通道16bit浮点数据Planar格式存储顺序排布。此时<a href="#ZH-CN_TOPIC_0000002441853637">ot_svp_blob</a>结构体中，num表示帧数，width表示图像宽，height表示图像高，chn表示单帧图像通道数，如 OT_SVP_BLOB_TYPE_FP16类型ot_svp_blob（2通道2帧示意图）所示。</p>
 </td>
 </tr>
 <tr id="row8650mcpsimp"><td class="cellrowborder" valign="top" width="39%" headers="mcps1.2.3.1.1 "><p id="p8652mcpsimp"><a name="p8652mcpsimp"></a><a name="p8652mcpsimp"></a>OT_SVP_BLOB_TYPE_S8</p>
 </td>
-<td class="cellrowborder" valign="top" width="61%" headers="mcps1.2.3.1.2 "><p id="p8654mcpsimp"><a name="p8654mcpsimp"></a><a name="p8654mcpsimp"></a>多帧多通道有符号8bit数据Planar格式存储顺序排布。此时<a href="ot_svp_blob.md">ot_svp_blob</a>结构体中，num表示帧数，width表示图像宽，height表示图像高，chn表示单帧图像通道数，如 OT_SVP_BLOB_TYPE_S8类型ot_svp_blob（2通道2帧示意图）所示。</p>
+<td class="cellrowborder" valign="top" width="61%" headers="mcps1.2.3.1.2 "><p id="p8654mcpsimp"><a name="p8654mcpsimp"></a><a name="p8654mcpsimp"></a>多帧多通道有符号8bit数据Planar格式存储顺序排布。此时<a href="#ZH-CN_TOPIC_0000002441853637">ot_svp_blob</a>结构体中，num表示帧数，width表示图像宽，height表示图像高，chn表示单帧图像通道数，如 OT_SVP_BLOB_TYPE_S8类型ot_svp_blob（2通道2帧示意图）所示。</p>
 </td>
 </tr>
 <tr id="row8664mcpsimp"><td class="cellrowborder" valign="top" width="39%" headers="mcps1.2.3.1.1 "><p id="p8666mcpsimp"><a name="p8666mcpsimp"></a><a name="p8666mcpsimp"></a>OT_SVP_BLOB_TYPE_S16</p>
 </td>
-<td class="cellrowborder" valign="top" width="61%" headers="mcps1.2.3.1.2 "><p id="p8668mcpsimp"><a name="p8668mcpsimp"></a><a name="p8668mcpsimp"></a>多帧多通道有符号16bit数据Planar格式存储顺序排布。此时<a href="ot_svp_blob.md">ot_svp_blob</a>结构体中，num表示帧数，width表示图像宽，height表示图像高，chn表示单帧图像通道数，如 OT_SVP_BLOB_TYPE_S16类型ot_svp_blob（2通道2帧示意图）所示。</p>
+<td class="cellrowborder" valign="top" width="61%" headers="mcps1.2.3.1.2 "><p id="p8668mcpsimp"><a name="p8668mcpsimp"></a><a name="p8668mcpsimp"></a>多帧多通道有符号16bit数据Planar格式存储顺序排布。此时<a href="#ZH-CN_TOPIC_0000002441853637">ot_svp_blob</a>结构体中，num表示帧数，width表示图像宽，height表示图像高，chn表示单帧图像通道数，如 OT_SVP_BLOB_TYPE_S16类型ot_svp_blob（2通道2帧示意图）所示。</p>
 </td>
 </tr>
 <tr id="row8678mcpsimp"><td class="cellrowborder" valign="top" width="39%" headers="mcps1.2.3.1.1 "><p id="p8680mcpsimp"><a name="p8680mcpsimp"></a><a name="p8680mcpsimp"></a>OT_SVP_BLOB_TYPE_U16</p>
 </td>
-<td class="cellrowborder" valign="top" width="61%" headers="mcps1.2.3.1.2 "><p id="p8682mcpsimp"><a name="p8682mcpsimp"></a><a name="p8682mcpsimp"></a>多帧多通道无符号8bit数据Planar格式存储顺序排布。此时<a href="ot_svp_blob.md">ot_svp_blob</a>结构体中，num表示帧数，width表示图像宽，height表示图像高，chn表示单帧图像通道数，如 OT_SVP_BLOB_TYPE_U16类型ot_svp_blob（2通道2帧示意图）所示。</p>
+<td class="cellrowborder" valign="top" width="61%" headers="mcps1.2.3.1.2 "><p id="p8682mcpsimp"><a name="p8682mcpsimp"></a><a name="p8682mcpsimp"></a>多帧多通道无符号8bit数据Planar格式存储顺序排布。此时<a href="#ZH-CN_TOPIC_0000002441853637">ot_svp_blob</a>结构体中，num表示帧数，width表示图像宽，height表示图像高，chn表示单帧图像通道数，如 OT_SVP_BLOB_TYPE_U16类型ot_svp_blob（2通道2帧示意图）所示。</p>
 </td>
 </tr>
 </tbody>
 </table>
 
-**图 2**  OT\_SVP\_BLOB\_TYPE\_S20Q12类型[ot\_svp\_blob](ot_svp_blob.md)（2通道2帧示意图）<a name="fig432114356336"></a>  
+**图 2**  OT\_SVP\_BLOB\_TYPE\_S20Q12类型[ot\_svp\_blob](#ZH-CN_TOPIC_0000002441853637)（2通道2帧示意图）<a name="fig432114356336"></a>  
 ![](figures/OT_SVP_BLOB_TYPE_S20Q12类型ot_svp_blob（2通道2帧示意图）.png "OT_SVP_BLOB_TYPE_S20Q12类型ot_svp_blob（2通道2帧示意图）")
 
-**图 3**  OT\_SVP\_BLOB\_TYPE\_U8类型[ot\_svp\_blob](ot_svp_blob.md)（3通道2帧示意图）<a name="fig430802356"></a>  
+**图 3**  OT\_SVP\_BLOB\_TYPE\_U8类型[ot\_svp\_blob](#ZH-CN_TOPIC_0000002441853637)（3通道2帧示意图）<a name="fig430802356"></a>  
 ![](figures/OT_SVP_BLOB_TYPE_U8类型ot_svp_blob（3通道2帧示意图）.png "OT_SVP_BLOB_TYPE_U8类型ot_svp_blob（3通道2帧示意图）")
 
 注：典型的RGB\\HSV\\LAB图像Planar格式存储。
 
-**图 4**  OT\_SVP\_BLOB\_TYPE\_YVU420SP类型[ot\_svp\_blob](ot_svp_blob.md)（2帧YVU420SP示意图）<a name="fig1997712477353"></a>  
+**图 4**  OT\_SVP\_BLOB\_TYPE\_YVU420SP类型[ot\_svp\_blob](#ZH-CN_TOPIC_0000002441853637)（2帧YVU420SP示意图）<a name="fig1997712477353"></a>  
 ![](figures/OT_SVP_BLOB_TYPE_YVU420SP类型ot_svp_blob（2帧YVU420SP示意图）.png "OT_SVP_BLOB_TYPE_YVU420SP类型ot_svp_blob（2帧YVU420SP示意图）")
 
 注：这里V在前，U在后。
 
-**图 5**  OT\_SVP\_BLOB\_TYPE\_YVU422SP类型[ot\_svp\_blob](ot_svp_blob.md)（2帧YVU422SP示意图）<a name="fig157063127362"></a>  
+**图 5**  OT\_SVP\_BLOB\_TYPE\_YVU422SP类型[ot\_svp\_blob](#ZH-CN_TOPIC_0000002441853637)（2帧YVU422SP示意图）<a name="fig157063127362"></a>  
 ![](figures/OT_SVP_BLOB_TYPE_YVU422SP类型ot_svp_blob（2帧YVU422SP示意图）.png "OT_SVP_BLOB_TYPE_YVU422SP类型ot_svp_blob（2帧YVU422SP示意图）")
 
 注：这里V在前，U在后。
 
-**图 6**  OT\_SVP\_BLOB\_TYPE\_VEC\_S20Q12类型[ot\_svp\_blob](ot_svp_blob.md)（2帧示意图）<a name="fig3955234133616"></a>  
+**图 6**  OT\_SVP\_BLOB\_TYPE\_VEC\_S20Q12类型[ot\_svp\_blob](#ZH-CN_TOPIC_0000002441853637)（2帧示意图）<a name="fig3955234133616"></a>  
 ![](figures/OT_SVP_BLOB_TYPE_VEC_S20Q12类型ot_svp_blob（2帧示意图）.png "OT_SVP_BLOB_TYPE_VEC_S20Q12类型ot_svp_blob（2帧示意图）")
 
-**图 7**  OT\_SVP\_BLOB\_TYPE\_SEQ\_S20Q12类型[ot\_svp\_blob](ot_svp_blob.md)  \(num=N帧示意图\)<a name="fig92214587365"></a>  
+**图 7**  OT\_SVP\_BLOB\_TYPE\_SEQ\_S20Q12类型[ot\_svp\_blob](#ZH-CN_TOPIC_0000002441853637)  \(num=N帧示意图\)<a name="fig92214587365"></a>  
 ![](figures/OT_SVP_BLOB_TYPE_SEQ_S20Q12类型ot_svp_blob-(num-N帧示意图).png "OT_SVP_BLOB_TYPE_SEQ_S20Q12类型ot_svp_blob-(num-N帧示意图)")
 
-**图 8**  OT\_SVP\_BLOB\_TYPE\_BBOX\_S20Q12类型[ot\_svp\_blob](ot_svp_blob.md)\(1通道1帧示意图\)<a name="fig4763322123710"></a>  
+**图 8**  OT\_SVP\_BLOB\_TYPE\_BBOX\_S20Q12类型[ot\_svp\_blob](#ZH-CN_TOPIC_0000002441853637)\(1通道1帧示意图\)<a name="fig4763322123710"></a>  
 ![](figures/OT_SVP_BLOB_TYPE_BBOX_S20Q12类型ot_svp_blob(1通道1帧示意图).png "OT_SVP_BLOB_TYPE_BBOX_S20Q12类型ot_svp_blob(1通道1帧示意图)")
 
-**图 9**  OT\_SVP\_BLOB\_TYPE\_BSI\_SQ32类型[ot\_svp\_blob](ot_svp_blob.md)（2通道2帧示意图）<a name="fig16508844123710"></a>  
+**图 9**  OT\_SVP\_BLOB\_TYPE\_BSI\_SQ32类型[ot\_svp\_blob](#ZH-CN_TOPIC_0000002441853637)（2通道2帧示意图）<a name="fig16508844123710"></a>  
 ![](figures/OT_SVP_BLOB_TYPE_BSI_SQ32类型ot_svp_blob（2通道2帧示意图）.png "OT_SVP_BLOB_TYPE_BSI_SQ32类型ot_svp_blob（2通道2帧示意图）")
 
 注：align32表示32字节对齐。
 
-**图 10**  OT\_SVP\_BLOB\_TYPE\_S12Q20类型[ot\_svp\_blob](ot_svp_blob.md)（2通道2帧示意图）<a name="fig57340118385"></a>  
+**图 10**  OT\_SVP\_BLOB\_TYPE\_S12Q20类型[ot\_svp\_blob](#ZH-CN_TOPIC_0000002441853637)（2通道2帧示意图）<a name="fig57340118385"></a>  
 ![](figures/OT_SVP_BLOB_TYPE_S12Q20类型ot_svp_blob（2通道2帧示意图）.png "OT_SVP_BLOB_TYPE_S12Q20类型ot_svp_blob（2通道2帧示意图）")
 
-**图 11**  OT\_SVP\_BLOB\_TYPE\_VEC\_S12Q20类型[ot\_svp\_blob](ot_svp_blob.md)（2帧示意图）<a name="fig683243353810"></a>  
+**图 11**  OT\_SVP\_BLOB\_TYPE\_VEC\_S12Q20类型[ot\_svp\_blob](#ZH-CN_TOPIC_0000002441853637)（2帧示意图）<a name="fig683243353810"></a>  
 ![](figures/OT_SVP_BLOB_TYPE_VEC_S12Q20类型ot_svp_blob（2帧示意图）.png "OT_SVP_BLOB_TYPE_VEC_S12Q20类型ot_svp_blob（2帧示意图）")
 
-**图 12**  OT\_SVP\_BLOB\_TYPE\_S32类型[ot\_svp\_blob](ot_svp_blob.md)（2通道2帧示意图）<a name="fig6794458183818"></a>  
+**图 12**  OT\_SVP\_BLOB\_TYPE\_S32类型[ot\_svp\_blob](#ZH-CN_TOPIC_0000002441853637)（2通道2帧示意图）<a name="fig6794458183818"></a>  
 ![](figures/OT_SVP_BLOB_TYPE_S32类型ot_svp_blob（2通道2帧示意图）.png "OT_SVP_BLOB_TYPE_S32类型ot_svp_blob（2通道2帧示意图）")
 
-**图 13**  OT\_SVP\_BLOB\_TYPE\_U32类型[ot\_svp\_blob](ot_svp_blob.md)（2通道2帧示意图）<a name="fig16266122213918"></a>  
+**图 13**  OT\_SVP\_BLOB\_TYPE\_U32类型[ot\_svp\_blob](#ZH-CN_TOPIC_0000002441853637)（2通道2帧示意图）<a name="fig16266122213918"></a>  
 ![](figures/OT_SVP_BLOB_TYPE_U32类型ot_svp_blob（2通道2帧示意图）.png "OT_SVP_BLOB_TYPE_U32类型ot_svp_blob（2通道2帧示意图）")
 
-**图 14**  OT\_SVP\_BLOB\_TYPE\_FP32类型[ot\_svp\_blob](ot_svp_blob.md)（2通道2帧示意图）<a name="fig92855610398"></a>  
+**图 14**  OT\_SVP\_BLOB\_TYPE\_FP32类型[ot\_svp\_blob](#ZH-CN_TOPIC_0000002441853637)（2通道2帧示意图）<a name="fig92855610398"></a>  
 ![](figures/OT_SVP_BLOB_TYPE_FP32类型ot_svp_blob（2通道2帧示意图）.png "OT_SVP_BLOB_TYPE_FP32类型ot_svp_blob（2通道2帧示意图）")
 
-**图 15**  OT\_SVP\_BLOB\_TYPE\_FP16类型[ot\_svp\_blob](ot_svp_blob.md)（2通道2帧示意图）<a name="fig4744171674019"></a>  
+**图 15**  OT\_SVP\_BLOB\_TYPE\_FP16类型[ot\_svp\_blob](#ZH-CN_TOPIC_0000002441853637)（2通道2帧示意图）<a name="fig4744171674019"></a>  
 ![](figures/OT_SVP_BLOB_TYPE_FP16类型ot_svp_blob（2通道2帧示意图）.png "OT_SVP_BLOB_TYPE_FP16类型ot_svp_blob（2通道2帧示意图）")
 
-**图 16**  OT\_SVP\_BLOB\_TYPE\_S8类型[ot\_svp\_blob](ot_svp_blob.md)（2通道2帧示意图）<a name="fig209422420408"></a>  
+**图 16**  OT\_SVP\_BLOB\_TYPE\_S8类型[ot\_svp\_blob](#ZH-CN_TOPIC_0000002441853637)（2通道2帧示意图）<a name="fig209422420408"></a>  
 ![](figures/OT_SVP_BLOB_TYPE_S8类型ot_svp_blob（2通道2帧示意图）.png "OT_SVP_BLOB_TYPE_S8类型ot_svp_blob（2通道2帧示意图）")
 
-**图 17**  OT\_SVP\_BLOB\_TYPE\_S16类型[ot\_svp\_blob](ot_svp_blob.md)（2通道2帧示意图）<a name="fig116601749418"></a>  
+**图 17**  OT\_SVP\_BLOB\_TYPE\_S16类型[ot\_svp\_blob](#ZH-CN_TOPIC_0000002441853637)（2通道2帧示意图）<a name="fig116601749418"></a>  
 ![](figures/OT_SVP_BLOB_TYPE_S16类型ot_svp_blob（2通道2帧示意图）.png "OT_SVP_BLOB_TYPE_S16类型ot_svp_blob（2通道2帧示意图）")
 
-**图 18**  OT\_SVP\_BLOB\_TYPE\_U16类型[ot\_svp\_blob](ot_svp_blob.md)（2通道2帧示意图）<a name="fig135371724174113"></a>  
+**图 18**  OT\_SVP\_BLOB\_TYPE\_U16类型[ot\_svp\_blob](#ZH-CN_TOPIC_0000002441853637)（2通道2帧示意图）<a name="fig135371724174113"></a>  
 ![](figures/OT_SVP_BLOB_TYPE_U16类型ot_svp_blob（2通道2帧示意图）.png "OT_SVP_BLOB_TYPE_U16类型ot_svp_blob（2通道2帧示意图）")
 
-**图 19** [ot\_svp\_mem\_info](ot_svp_mem_info.md) 类型的数据内存示意<a name="fig939145054114"></a>  
+**图 19** [ot\_svp\_mem\_info](#ZH-CN_TOPIC_0000002408134312) 类型的数据内存示意<a name="fig939145054114"></a>  
 ![](figures/ot_svp_mem_info-类型的数据内存示意.png "ot_svp_mem_info-类型的数据内存示意")
 
 ### 使用示意<a name="ZH-CN_TOPIC_0000002408294128"></a>
@@ -330,34 +334,20 @@ MAU（Matrix Arithmetic Unit）为_识别_分析系统中的矩阵算术单元�
 
 MAU模块提供了创建任务和查询任务的基本接口。
 
--   [ss\_mpi\_svp\_mau\_matrix\_mul](ss_mpi_svp_mau_matrix_mul.md)：计算矩阵乘积。
--   [ss\_mpi\_svp\_mau\_cos\_dist](ss_mpi_svp_mau_cos_dist.md)：计算余弦距离。
--   [ss\_mpi\_svp\_mau\_euclid\_dist](ss_mpi_svp_mau_euclid_dist.md)：计算欧式距离。
--   [ss\_mpi\_svp\_mau\_manhattan\_dist](ss_mpi_svp_mau_manhattan_dist.md)：计算曼哈顿距离。
--   [ss\_mpi\_svp\_mau\_transpose](ss_mpi_svp_mau_transpose.md)：计算矩阵转置运算。
--   [ss\_mpi\_svp\_mau\_vector\_op](ss_mpi_svp_mau_vector_op.md)：计算向量加减及加减绝对值运算。
--   [ss\_mpi\_svp\_mau\_type\_convert](ss_mpi_svp_mau_type_convert.md)：计算矩阵数据类型FP32和FP16相互转换。
--   [ss\_mpi\_svp\_mau\_get\_sort\_tmpbuf\_size](ss_mpi_svp_mau_get_sort_tmpbuf_size.md)：获取排序运算辅助内存字节数。
--   [ss\_mpi\_svp\_mau\_sort](ss_mpi_svp_mau_sort.md)：计算矩阵每一行数据进行排序。
--   [ss\_mpi\_svp\_mau\_get\_fir\_tmpbuf\_size](ss_mpi_svp_mau_get_fir_tmpbuf_size.md)：获取快速图像检索辅助内存字节数。
--   [ss\_mpi\_svp\_mau\_fir](ss_mpi_svp_mau_fir.md)：快速图像检索。
--   [ss\_mpi\_svp\_mau\_query](ss_mpi_svp_mau_query.md)：查询任务是否完成。
--   [ss\_mpi\_svp\_mau\_add\_mem\_info](ss_mpi_svp_mau_add_mem_info.md)：记录内存地址信息。
--   [ss\_mpi\_svp\_mau\_rm\_mem\_info](ss_mpi_svp_mau_rm_mem_info.md)：移除内存地址信息。
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+-   [ss\_mpi\_svp\_mau\_matrix\_mul](#ZH-CN_TOPIC_0000002441853557)：计算矩阵乘积。
+-   [ss\_mpi\_svp\_mau\_cos\_dist](#ZH-CN_TOPIC_0000002408294444)：计算余弦距离。
+-   [ss\_mpi\_svp\_mau\_euclid\_dist](#ZH-CN_TOPIC_0000002408294448)：计算欧式距离。
+-   [ss\_mpi\_svp\_mau\_manhattan\_dist](#ZH-CN_TOPIC_0000002408294148)：计算曼哈顿距离。
+-   [ss\_mpi\_svp\_mau\_transpose](#ZH-CN_TOPIC_0000002441853525)：计算矩阵转置运算。
+-   [ss\_mpi\_svp\_mau\_vector\_op](#ZH-CN_TOPIC_0000002408294432)：计算向量加减及加减绝对值运算。
+-   [ss\_mpi\_svp\_mau\_type\_convert](#ZH-CN_TOPIC_0000002408294172)：计算矩阵数据类型FP32和FP16相互转换。
+-   [ss\_mpi\_svp\_mau\_get\_sort\_tmpbuf\_size](#ZH-CN_TOPIC_0000002408294160)：获取排序运算辅助内存字节数。
+-   [ss\_mpi\_svp\_mau\_sort](#ZH-CN_TOPIC_0000002441853597)：计算矩阵每一行数据进行排序。
+-   [ss\_mpi\_svp\_mau\_get\_fir\_tmpbuf\_size](#ZH-CN_TOPIC_0000002441853701)：获取快速图像检索辅助内存字节数。
+-   [ss\_mpi\_svp\_mau\_fir](#ZH-CN_TOPIC_0000002441853513)：快速图像检索。
+-   [ss\_mpi\_svp\_mau\_query](#ZH-CN_TOPIC_0000002408294188)：查询任务是否完成。
+-   [ss\_mpi\_svp\_mau\_add\_mem\_info](#ZH-CN_TOPIC_0000002441853565)：记录内存地址信息。
+-   [ss\_mpi\_svp\_mau\_rm\_mem\_info](#ZH-CN_TOPIC_0000002408294464)：移除内存地址信息。
 
 ### ss\_mpi\_svp\_mau\_matrix\_mul<a name="ZH-CN_TOPIC_0000002441853557"></a>
 
@@ -444,7 +434,7 @@ td_s32 ss_mpi_svp_mau_matrix_mul(ot_svp_mau_handle *handle, const ot_svp_mau_src
 </tr>
 <tr id="row952mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.3.1.1 "><p id="p954mcpsimp"><a name="p954mcpsimp"></a><a name="p954mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p956mcpsimp"><a name="p956mcpsimp"></a><a name="p956mcpsimp"></a>失败，参见<a href="错误码.md">错误码</a><span xml:lang="fr-FR" id="ph959mcpsimp"><a name="ph959mcpsimp"></a><a name="ph959mcpsimp"></a>。</span></p>
+<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p956mcpsimp"><a name="p956mcpsimp"></a><a name="p956mcpsimp"></a>失败，参见<a href="#ZH-CN_TOPIC_0000002408294264">错误码</a><span xml:lang="fr-FR" id="ph959mcpsimp"><a name="ph959mcpsimp"></a><a name="ph959mcpsimp"></a>。</span></p>
 </td>
 </tr>
 </tbody>
@@ -660,7 +650,7 @@ td_s32 ss_mpi_svp_mau_cos_dist(ot_svp_mau_handle *handle, const ot_svp_mau_src_d
 </tr>
 <tr id="row1384mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.3.1.1 "><p id="p1386mcpsimp"><a name="p1386mcpsimp"></a><a name="p1386mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p1388mcpsimp"><a name="p1388mcpsimp"></a><a name="p1388mcpsimp"></a>失败，参见<a href="错误码.md">错误码</a><span xml:lang="fr-FR" id="ph1391mcpsimp"><a name="ph1391mcpsimp"></a><a name="ph1391mcpsimp"></a>。</span></p>
+<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p1388mcpsimp"><a name="p1388mcpsimp"></a><a name="p1388mcpsimp"></a>失败，参见<a href="#ZH-CN_TOPIC_0000002408294264">错误码</a><span xml:lang="fr-FR" id="ph1391mcpsimp"><a name="ph1391mcpsimp"></a><a name="ph1391mcpsimp"></a>。</span></p>
 </td>
 </tr>
 </tbody>
@@ -926,7 +916,7 @@ td_s32 ss_mpi_svp_mau_euclid_dist(ot_svp_mau_handle *handle, const ot_svp_mau_sr
 </tr>
 <tr id="row4457mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.3.1.1 "><p id="p4459mcpsimp"><a name="p4459mcpsimp"></a><a name="p4459mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p4461mcpsimp"><a name="p4461mcpsimp"></a><a name="p4461mcpsimp"></a>失败，参见<a href="错误码.md">错误码</a><span xml:lang="fr-FR" id="ph4464mcpsimp"><a name="ph4464mcpsimp"></a><a name="ph4464mcpsimp"></a>。</span></p>
+<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p4461mcpsimp"><a name="p4461mcpsimp"></a><a name="p4461mcpsimp"></a>失败，参见<a href="#ZH-CN_TOPIC_0000002408294264">错误码</a><span xml:lang="fr-FR" id="ph4464mcpsimp"><a name="ph4464mcpsimp"></a><a name="ph4464mcpsimp"></a>。</span></p>
 </td>
 </tr>
 </tbody>
@@ -1147,7 +1137,7 @@ td_s32 ss_mpi_svp_mau_manhattan_dist(ot_svp_mau_handle *handle, const ot_svp_mau
 </tr>
 <tr id="row7834mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.3.1.1 "><p id="p7836mcpsimp"><a name="p7836mcpsimp"></a><a name="p7836mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p7838mcpsimp"><a name="p7838mcpsimp"></a><a name="p7838mcpsimp"></a>失败，参见<a href="错误码.md">错误码</a><span xml:lang="fr-FR" id="ph7841mcpsimp"><a name="ph7841mcpsimp"></a><a name="ph7841mcpsimp"></a>。</span></p>
+<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p7838mcpsimp"><a name="p7838mcpsimp"></a><a name="p7838mcpsimp"></a>失败，参见<a href="#ZH-CN_TOPIC_0000002408294264">错误码</a><span xml:lang="fr-FR" id="ph7841mcpsimp"><a name="ph7841mcpsimp"></a><a name="ph7841mcpsimp"></a>。</span></p>
 </td>
 </tr>
 </tbody>
@@ -1393,7 +1383,7 @@ td_s32 ss_mpi_svp_mau_transpose(ot_svp_mau_handle *handle, const ot_svp_blob *sr
 </tr>
 <tr id="row3351mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.3.1.1 "><p id="p3353mcpsimp"><a name="p3353mcpsimp"></a><a name="p3353mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p3355mcpsimp"><a name="p3355mcpsimp"></a><a name="p3355mcpsimp"></a>失败，参见<a href="错误码.md">错误码</a><span xml:lang="fr-FR" id="ph3358mcpsimp"><a name="ph3358mcpsimp"></a><a name="ph3358mcpsimp"></a>。</span></p>
+<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p3355mcpsimp"><a name="p3355mcpsimp"></a><a name="p3355mcpsimp"></a>失败，参见<a href="#ZH-CN_TOPIC_0000002408294264">错误码</a><span xml:lang="fr-FR" id="ph3358mcpsimp"><a name="ph3358mcpsimp"></a><a name="ph3358mcpsimp"></a>。</span></p>
 </td>
 </tr>
 </tbody>
@@ -1562,7 +1552,7 @@ td_s32 ss_mpi_svp_mau_vector_op(ot_svp_mau_handle *handle, const ot_svp_mau_src_
 </tr>
 <tr id="row2321mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.3.1.1 "><p id="p2323mcpsimp"><a name="p2323mcpsimp"></a><a name="p2323mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p2325mcpsimp"><a name="p2325mcpsimp"></a><a name="p2325mcpsimp"></a>失败，参见<a href="错误码.md">错误码</a><span xml:lang="fr-FR" id="ph2328mcpsimp"><a name="ph2328mcpsimp"></a><a name="ph2328mcpsimp"></a>。</span></p>
+<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p2325mcpsimp"><a name="p2325mcpsimp"></a><a name="p2325mcpsimp"></a>失败，参见<a href="#ZH-CN_TOPIC_0000002408294264">错误码</a><span xml:lang="fr-FR" id="ph2328mcpsimp"><a name="ph2328mcpsimp"></a><a name="ph2328mcpsimp"></a>。</span></p>
 </td>
 </tr>
 </tbody>
@@ -1840,7 +1830,7 @@ td_s32 ss_mpi_svp_mau_type_convert(ot_svp_mau_handle *handle, const ot_svp_blob 
 </tr>
 <tr id="row8997mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.3.1.1 "><p id="p8999mcpsimp"><a name="p8999mcpsimp"></a><a name="p8999mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p9001mcpsimp"><a name="p9001mcpsimp"></a><a name="p9001mcpsimp"></a>失败，参见<a href="错误码.md">错误码</a><span xml:lang="fr-FR" id="ph9004mcpsimp"><a name="ph9004mcpsimp"></a><a name="ph9004mcpsimp"></a>。</span></p>
+<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p9001mcpsimp"><a name="p9001mcpsimp"></a><a name="p9001mcpsimp"></a>失败，参见<a href="#ZH-CN_TOPIC_0000002408294264">错误码</a><span xml:lang="fr-FR" id="ph9004mcpsimp"><a name="ph9004mcpsimp"></a><a name="ph9004mcpsimp"></a>。</span></p>
 </td>
 </tr>
 </tbody>
@@ -1959,7 +1949,7 @@ td_s32 ss_mpi_svp_mau_get_sort_tmpbuf_size(ot_svp_blob_type type, td_u32 src_col
 </tr>
 <tr id="row5824mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.3.1.1 "><p id="p5826mcpsimp"><a name="p5826mcpsimp"></a><a name="p5826mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p5828mcpsimp"><a name="p5828mcpsimp"></a><a name="p5828mcpsimp"></a>失败，参见<a href="错误码.md">错误码</a><span xml:lang="fr-FR" id="ph5831mcpsimp"><a name="ph5831mcpsimp"></a><a name="ph5831mcpsimp"></a>。</span></p>
+<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p5828mcpsimp"><a name="p5828mcpsimp"></a><a name="p5828mcpsimp"></a>失败，参见<a href="#ZH-CN_TOPIC_0000002408294264">错误码</a><span xml:lang="fr-FR" id="ph5831mcpsimp"><a name="ph5831mcpsimp"></a><a name="ph5831mcpsimp"></a>。</span></p>
 </td>
 </tr>
 </tbody>
@@ -2002,7 +1992,7 @@ td_s32 ss_mpi_svp_mau_get_sort_tmpbuf_size(ot_svp_blob_type type, td_u32 src_col
 
 【相关主题】
 
-[ss\_mpi\_svp\_mau\_sort](#ss_mpi_svp_mau_sort)
+[ss\_mpi\_svp\_mau\_sort](#ZH-CN_TOPIC_0000002441853597)
 
 ### ss\_mpi\_svp\_mau\_sort<a name="ZH-CN_TOPIC_0000002441853597"></a>
 
@@ -2086,7 +2076,7 @@ td_s32 ss_mpi_svp_mau_sort(ot_svp_mau_handle *handle, const ot_svp_mau_sort_matr
 </tr>
 <tr id="row6443mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.3.1.1 "><p id="p6445mcpsimp"><a name="p6445mcpsimp"></a><a name="p6445mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p6447mcpsimp"><a name="p6447mcpsimp"></a><a name="p6447mcpsimp"></a>失败，参见<a href="错误码.md">错误码</a><span xml:lang="fr-FR" id="ph6450mcpsimp"><a name="ph6450mcpsimp"></a><a name="ph6450mcpsimp"></a>。</span></p>
+<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p6447mcpsimp"><a name="p6447mcpsimp"></a><a name="p6447mcpsimp"></a>失败，参见<a href="#ZH-CN_TOPIC_0000002408294264">错误码</a><span xml:lang="fr-FR" id="ph6450mcpsimp"><a name="ph6450mcpsimp"></a><a name="ph6450mcpsimp"></a>。</span></p>
 </td>
 </tr>
 </tbody>
@@ -2197,7 +2187,7 @@ td_s32 ss_mpi_svp_mau_get_fir_tmpbuf_size (const ot_svp_mau_fir_src *src, td_u32
 </tr>
 <tr id="row218mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.3.1.1 "><p id="p220mcpsimp"><a name="p220mcpsimp"></a><a name="p220mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p222mcpsimp"><a name="p222mcpsimp"></a><a name="p222mcpsimp"></a>失败，参见<a href="错误码.md">错误码</a><span xml:lang="fr-FR" id="ph225mcpsimp"><a name="ph225mcpsimp"></a><a name="ph225mcpsimp"></a>。</span></p>
+<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p222mcpsimp"><a name="p222mcpsimp"></a><a name="p222mcpsimp"></a>失败，参见<a href="#ZH-CN_TOPIC_0000002408294264">错误码</a><span xml:lang="fr-FR" id="ph225mcpsimp"><a name="ph225mcpsimp"></a><a name="ph225mcpsimp"></a>。</span></p>
 </td>
 </tr>
 </tbody>
@@ -2248,7 +2238,7 @@ td_s32 ss_mpi_svp_mau_get_fir_tmpbuf_size (const ot_svp_mau_fir_src *src, td_u32
 
 【相关主题】
 
-[ss\_mpi\_svp\_mau\_fir](#ss_mpi_svp_mau_fir)
+[ss\_mpi\_svp\_mau\_fir](#ZH-CN_TOPIC_0000002441853513)
 
 ### ss\_mpi\_svp\_mau\_fir<a name="ZH-CN_TOPIC_0000002441853513"></a>
 
@@ -2324,7 +2314,7 @@ ss_mpi_svp_mau_fir(ot_svp_mau_handle *handle, const ot_svp_mau_fir_src *src, con
 </tr>
 <tr id="row5364mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.3.1.1 "><p id="p5366mcpsimp"><a name="p5366mcpsimp"></a><a name="p5366mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p5368mcpsimp"><a name="p5368mcpsimp"></a><a name="p5368mcpsimp"></a>失败，参见<a href="错误码.md">错误码</a><span xml:lang="fr-FR" id="ph5371mcpsimp"><a name="ph5371mcpsimp"></a><a name="ph5371mcpsimp"></a>。</span></p>
+<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p5368mcpsimp"><a name="p5368mcpsimp"></a><a name="p5368mcpsimp"></a>失败，参见<a href="#ZH-CN_TOPIC_0000002408294264">错误码</a><span xml:lang="fr-FR" id="ph5371mcpsimp"><a name="ph5371mcpsimp"></a><a name="ph5371mcpsimp"></a>。</span></p>
 </td>
 </tr>
 </tbody>
@@ -2387,7 +2377,7 @@ ss_mpi_svp_mau_fir(ot_svp_mau_handle *handle, const ot_svp_mau_fir_src *src, con
 
 【相关主题】
 
-[ss\_mpi\_svp\_mau\_get\_fir\_tmpbuf\_size](#ss_mpi_svp_mau_get_fir_tmpbuf_size)
+[ss\_mpi\_svp\_mau\_get\_fir\_tmpbuf\_size](#ZH-CN_TOPIC_0000002441853701)
 
 ### ss\_mpi\_svp\_mau\_query<a name="ZH-CN_TOPIC_0000002408294188"></a>
 
@@ -2461,7 +2451,7 @@ td_s32 ss_mpi_svp_mau_query(ot_svp_mau_id mau_id, ot_svp_mau_handle handle, td_b
 </tr>
 <tr id="row1183mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.3.1.1 "><p id="p1185mcpsimp"><a name="p1185mcpsimp"></a><a name="p1185mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p1187mcpsimp"><a name="p1187mcpsimp"></a><a name="p1187mcpsimp"></a>失败，参见<a href="错误码.md">错误码</a><span xml:lang="fr-FR" id="ph1190mcpsimp"><a name="ph1190mcpsimp"></a><a name="ph1190mcpsimp"></a>。</span></p>
+<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p1187mcpsimp"><a name="p1187mcpsimp"></a><a name="p1187mcpsimp"></a>失败，参见<a href="#ZH-CN_TOPIC_0000002408294264">错误码</a><span xml:lang="fr-FR" id="ph1190mcpsimp"><a name="ph1190mcpsimp"></a><a name="ph1190mcpsimp"></a>。</span></p>
 </td>
 </tr>
 </tbody>
@@ -2474,7 +2464,7 @@ td_s32 ss_mpi_svp_mau_query(ot_svp_mau_id mau_id, ot_svp_mau_handle handle, td_b
 
 【注意】
 
-输入的handle必须为调用[ss\_mpi\_svp\_mau\_matrix\_mul](ss_mpi_svp_mau_matrix_mul.md)，[ss\_mpi\_svp\_mau\_cos\_dist](ss_mpi_svp_mau_cos_dist.md)或者[ss\_mpi\_svp\_mau\_euclid\_dist](ss_mpi_svp_mau_euclid_dist.md)函数返回的handle。
+输入的handle必须为调用[ss\_mpi\_svp\_mau\_matrix\_mul](#ZH-CN_TOPIC_0000002441853557)，[ss\_mpi\_svp\_mau\_cos\_dist](#ZH-CN_TOPIC_0000002408294444)或者[ss\_mpi\_svp\_mau\_euclid\_dist](#ZH-CN_TOPIC_0000002408294448)函数返回的handle。
 
 【举例】
 
@@ -2534,7 +2524,7 @@ td_s32 ss_mpi_svp_mau_add_mem_info(const ot_svp_mem_info * mem_info);
 </tr>
 <tr id="row1863mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.3.1.1 "><p id="p1865mcpsimp"><a name="p1865mcpsimp"></a><a name="p1865mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p1867mcpsimp"><a name="p1867mcpsimp"></a><a name="p1867mcpsimp"></a>失败，参见<a href="错误码.md">错误码</a><span xml:lang="fr-FR" id="ph1870mcpsimp"><a name="ph1870mcpsimp"></a><a name="ph1870mcpsimp"></a>。</span></p>
+<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p1867mcpsimp"><a name="p1867mcpsimp"></a><a name="p1867mcpsimp"></a>失败，参见<a href="#ZH-CN_TOPIC_0000002408294264">错误码</a><span xml:lang="fr-FR" id="ph1870mcpsimp"><a name="ph1870mcpsimp"></a><a name="ph1870mcpsimp"></a>。</span></p>
 </td>
 </tr>
 </tbody>
@@ -2550,12 +2540,12 @@ td_s32 ss_mpi_svp_mau_add_mem_info(const ot_svp_mem_info * mem_info);
 -   记录内存地址信息，用于减少内核态内存映射次数，提升效率。
 -   内存地址信息的记录是通过链表进行管理，链表长度默认值为32，链表长度可通过模块参数mau\_max\_mem\_info\_num进行配置。
 -   若没有调用ss\_mpi\_svp\_mau\_add\_mem\_info预先把索引矩阵地址信息记录到系统，那么在之后计算中每次都会Map/Unmap操作索引矩阵内核态的虚拟地址，效率会比较低。
--   必须与[ss\_mpi\_svp\_mau\_rm\_mem\_info](ss_mpi_svp_mau_rm_mem_info.md)成对匹配使用。
--   建议先把矩阵运算要用到的索引矩阵地址信息调用此接口记录到系统。当不再使用时调用[ss\_mpi\_svp\_mau\_rm\_mem\_info](ss_mpi_svp_mau_rm_mem_info.md)把索引矩阵地址信息移除。只需要在初始化时把索引矩阵地址信息记录，后续可以直接使用，直到不再使用时才移除。
+-   必须与[ss\_mpi\_svp\_mau\_rm\_mem\_info](#ZH-CN_TOPIC_0000002408294464)成对匹配使用。
+-   建议先把矩阵运算要用到的索引矩阵地址信息调用此接口记录到系统。当不再使用时调用[ss\_mpi\_svp\_mau\_rm\_mem\_info](#ZH-CN_TOPIC_0000002408294464)把索引矩阵地址信息移除。只需要在初始化时把索引矩阵地址信息记录，后续可以直接使用，直到不再使用时才移除。
 -   物理地址4字节对齐。
 -   mem\_info -\>virt\_addr不使用，不做参数异常检查。
 -   mem\_info -\>size不能为0。
--   mem info内存由用户释放，记录的mem info内存要在移除后才能被释放。
+-   mem\_info内存由用户释放，记录的mem info内存要在移除后才能被释放。
 
 【举例】
 
@@ -2615,7 +2605,7 @@ td_s32 ss_mpi_svp_mau_rm_mem_info (const ot_svp_mem_info* mem_info);
 </tr>
 <tr id="row1629mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.3.1.1 "><p id="p1631mcpsimp"><a name="p1631mcpsimp"></a><a name="p1631mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p1633mcpsimp"><a name="p1633mcpsimp"></a><a name="p1633mcpsimp"></a>失败，参见<a href="错误码.md">错误码</a><span xml:lang="fr-FR" id="ph1636mcpsimp"><a name="ph1636mcpsimp"></a><a name="ph1636mcpsimp"></a>。</span></p>
+<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p1633mcpsimp"><a name="p1633mcpsimp"></a><a name="p1633mcpsimp"></a>失败，参见<a href="#ZH-CN_TOPIC_0000002408294264">错误码</a><span xml:lang="fr-FR" id="ph1636mcpsimp"><a name="ph1636mcpsimp"></a><a name="ph1636mcpsimp"></a>。</span></p>
 </td>
 </tr>
 </tbody>
@@ -2629,7 +2619,7 @@ td_s32 ss_mpi_svp_mau_rm_mem_info (const ot_svp_mem_info* mem_info);
 【注意】
 
 -   如果mem info不再使用，需要将记录的mem info地址信息从链表中移除。
--   必须与[ss\_mpi\_svp\_mau\_add\_mem\_info](ss_mpi_svp_mau_add_mem_info.md)成对匹配使用。
+-   必须与[ss\_mpi\_svp\_mau\_add\_mem\_info](#ZH-CN_TOPIC_0000002441853565)成对匹配使用。
 -   物理地址4字节对齐。
 -   mem\_info -\>virt\_addr不使用，不做参数异常检查。
 -   mem\_info -\>size不能为0。
@@ -2646,33 +2636,6 @@ td_s32 ss_mpi_svp_mau_rm_mem_info (const ot_svp_mem_info* mem_info);
 ## 数据类型和数据结构<a name="ZH-CN_TOPIC_0000002408134296"></a>
 
 MAU相关数据类型、数据结构定义如下：
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 ### ot\_svp\_blob\_type<a name="ZH-CN_TOPIC_0000002408134284"></a>
 
@@ -2716,87 +2679,87 @@ typedef enum {
 </thead>
 <tbody><tr id="row759mcpsimp"><td class="cellrowborder" valign="top" width="39%" headers="mcps1.1.3.1.1 "><p id="p761mcpsimp"><a name="p761mcpsimp"></a><a name="p761mcpsimp"></a>OT_SVP_BLOB_TYPE_S20Q12</p>
 </td>
-<td class="cellrowborder" valign="top" width="61%" headers="mcps1.1.3.1.2 "><p id="p763mcpsimp"><a name="p763mcpsimp"></a><a name="p763mcpsimp"></a>Blob数据元素为S20Q12类型，参考<a href="重要概念.md#fig432114356336">图2</a></p>
+<td class="cellrowborder" valign="top" width="61%" headers="mcps1.1.3.1.2 "><p id="p763mcpsimp"><a name="p763mcpsimp"></a><a name="p763mcpsimp"></a>Blob数据元素为S20Q12类型，参考<a href="#fig432114356336">图2</a></p>
 </td>
 </tr>
 <tr id="row765mcpsimp"><td class="cellrowborder" valign="top" width="39%" headers="mcps1.1.3.1.1 "><p id="p767mcpsimp"><a name="p767mcpsimp"></a><a name="p767mcpsimp"></a>OT_SVP_BLOB_TYPE_U8</p>
 </td>
-<td class="cellrowborder" valign="top" width="61%" headers="mcps1.1.3.1.2 "><p id="p769mcpsimp"><a name="p769mcpsimp"></a><a name="p769mcpsimp"></a>Blob数据元素为U8类型，参考<a href="重要概念.md#fig430802356">图3</a></p>
+<td class="cellrowborder" valign="top" width="61%" headers="mcps1.1.3.1.2 "><p id="p769mcpsimp"><a name="p769mcpsimp"></a><a name="p769mcpsimp"></a>Blob数据元素为U8类型，参考<a href="#fig430802356">图3</a></p>
 </td>
 </tr>
 <tr id="row771mcpsimp"><td class="cellrowborder" valign="top" width="39%" headers="mcps1.1.3.1.1 "><p id="p773mcpsimp"><a name="p773mcpsimp"></a><a name="p773mcpsimp"></a>OT_SVP_BLOB_TYPE_YVU420SP</p>
 </td>
-<td class="cellrowborder" valign="top" width="61%" headers="mcps1.1.3.1.2 "><p id="p775mcpsimp"><a name="p775mcpsimp"></a><a name="p775mcpsimp"></a>Blob数据内存排布为YVU420SP，参考<a href="重要概念.md#fig1997712477353">图4</a>。</p>
+<td class="cellrowborder" valign="top" width="61%" headers="mcps1.1.3.1.2 "><p id="p775mcpsimp"><a name="p775mcpsimp"></a><a name="p775mcpsimp"></a>Blob数据内存排布为YVU420SP，参考<a href="#fig1997712477353">图4</a>。</p>
 </td>
 </tr>
 <tr id="row777mcpsimp"><td class="cellrowborder" valign="top" width="39%" headers="mcps1.1.3.1.1 "><p id="p779mcpsimp"><a name="p779mcpsimp"></a><a name="p779mcpsimp"></a>OT_SVP_BLOB_TYPE_YVU422SP</p>
 </td>
-<td class="cellrowborder" valign="top" width="61%" headers="mcps1.1.3.1.2 "><p id="p781mcpsimp"><a name="p781mcpsimp"></a><a name="p781mcpsimp"></a>Blob数据内存排布为YVU422SP，参考<a href="重要概念.md#fig157063127362">图5</a>。</p>
+<td class="cellrowborder" valign="top" width="61%" headers="mcps1.1.3.1.2 "><p id="p781mcpsimp"><a name="p781mcpsimp"></a><a name="p781mcpsimp"></a>Blob数据内存排布为YVU422SP，参考<a href="#fig157063127362">图5</a>。</p>
 </td>
 </tr>
 <tr id="row783mcpsimp"><td class="cellrowborder" valign="top" width="39%" headers="mcps1.1.3.1.1 "><p id="p785mcpsimp"><a name="p785mcpsimp"></a><a name="p785mcpsimp"></a>OT_SVP_BLOB_TYPE_VEC_S20Q12</p>
 </td>
-<td class="cellrowborder" valign="top" width="61%" headers="mcps1.1.3.1.2 "><p id="p787mcpsimp"><a name="p787mcpsimp"></a><a name="p787mcpsimp"></a>Blob中存储向量，每个元素为S20Q12类型，参考<a href="重要概念.md#fig3955234133616">图6</a>。</p>
+<td class="cellrowborder" valign="top" width="61%" headers="mcps1.1.3.1.2 "><p id="p787mcpsimp"><a name="p787mcpsimp"></a><a name="p787mcpsimp"></a>Blob中存储向量，每个元素为S20Q12类型，参考<a href="#fig3955234133616">图6</a>。</p>
 </td>
 </tr>
 <tr id="row789mcpsimp"><td class="cellrowborder" valign="top" width="39%" headers="mcps1.1.3.1.1 "><p id="p791mcpsimp"><a name="p791mcpsimp"></a><a name="p791mcpsimp"></a>OT_SVP_BLOB_TYPE_SEQ_S20Q12</p>
 </td>
-<td class="cellrowborder" valign="top" width="61%" headers="mcps1.1.3.1.2 "><p id="p793mcpsimp"><a name="p793mcpsimp"></a><a name="p793mcpsimp"></a>Blob中存储序列，数据元素为S20Q12类型，排布见<a href="重要概念.md#fig92214587365">图7</a>。</p>
+<td class="cellrowborder" valign="top" width="61%" headers="mcps1.1.3.1.2 "><p id="p793mcpsimp"><a name="p793mcpsimp"></a><a name="p793mcpsimp"></a>Blob中存储序列，数据元素为S20Q12类型，排布见<a href="#fig92214587365">图7</a>。</p>
 </td>
 </tr>
 <tr id="row795mcpsimp"><td class="cellrowborder" valign="top" width="39%" headers="mcps1.1.3.1.1 "><p id="p797mcpsimp"><a name="p797mcpsimp"></a><a name="p797mcpsimp"></a>OT_SVP_BLOB_TYPE_BBOX_S20Q12</p>
 </td>
-<td class="cellrowborder" valign="top" width="61%" headers="mcps1.1.3.1.2 "><p id="p799mcpsimp"><a name="p799mcpsimp"></a><a name="p799mcpsimp"></a>Blob中存储坐标，数据元素为S20Q12类型，排布见<a href="重要概念.md#fig4763322123710">图8</a>。</p>
+<td class="cellrowborder" valign="top" width="61%" headers="mcps1.1.3.1.2 "><p id="p799mcpsimp"><a name="p799mcpsimp"></a><a name="p799mcpsimp"></a>Blob中存储坐标，数据元素为S20Q12类型，排布见<a href="#fig4763322123710">图8</a>。</p>
 </td>
 </tr>
 <tr id="row801mcpsimp"><td class="cellrowborder" valign="top" width="39%" headers="mcps1.1.3.1.1 "><p id="p803mcpsimp"><a name="p803mcpsimp"></a><a name="p803mcpsimp"></a>OT_SVP_BLOB_TYPE_BSI_SQ32</p>
 </td>
-<td class="cellrowborder" valign="top" width="61%" headers="mcps1.1.3.1.2 "><p id="p805mcpsimp"><a name="p805mcpsimp"></a><a name="p805mcpsimp"></a>Blob中存储坐标、分值和类别，数据元素为32bit的量化数据，排布见<a href="重要概念.md#fig16508844123710">图9</a>。</p>
+<td class="cellrowborder" valign="top" width="61%" headers="mcps1.1.3.1.2 "><p id="p805mcpsimp"><a name="p805mcpsimp"></a><a name="p805mcpsimp"></a>Blob中存储坐标、分值和类别，数据元素为32bit的量化数据，排布见<a href="#fig16508844123710">图9</a>。</p>
 </td>
 </tr>
 <tr id="row807mcpsimp"><td class="cellrowborder" valign="top" width="39%" headers="mcps1.1.3.1.1 "><p id="p809mcpsimp"><a name="p809mcpsimp"></a><a name="p809mcpsimp"></a>OT_SVP_BLOB_TYPE_S12Q20</p>
 </td>
-<td class="cellrowborder" valign="top" width="61%" headers="mcps1.1.3.1.2 "><p id="p811mcpsimp"><a name="p811mcpsimp"></a><a name="p811mcpsimp"></a>Blob数据元素为S12Q20类型，参考<a href="重要概念.md#fig57340118385">图10</a></p>
+<td class="cellrowborder" valign="top" width="61%" headers="mcps1.1.3.1.2 "><p id="p811mcpsimp"><a name="p811mcpsimp"></a><a name="p811mcpsimp"></a>Blob数据元素为S12Q20类型，参考<a href="#fig57340118385">图10</a></p>
 </td>
 </tr>
 <tr id="row813mcpsimp"><td class="cellrowborder" valign="top" width="39%" headers="mcps1.1.3.1.1 "><p id="p815mcpsimp"><a name="p815mcpsimp"></a><a name="p815mcpsimp"></a>OT_SVP_BLOB_TYPE_VEC_S12Q20</p>
 </td>
-<td class="cellrowborder" valign="top" width="61%" headers="mcps1.1.3.1.2 "><p id="p817mcpsimp"><a name="p817mcpsimp"></a><a name="p817mcpsimp"></a>Blob中存储向量，每个元素为S12Q20类型，参考<a href="重要概念.md#fig683243353810">图11</a>。</p>
+<td class="cellrowborder" valign="top" width="61%" headers="mcps1.1.3.1.2 "><p id="p817mcpsimp"><a name="p817mcpsimp"></a><a name="p817mcpsimp"></a>Blob中存储向量，每个元素为S12Q20类型，参考<a href="#fig683243353810">图11</a>。</p>
 </td>
 </tr>
 <tr id="row819mcpsimp"><td class="cellrowborder" valign="top" width="39%" headers="mcps1.1.3.1.1 "><p id="p821mcpsimp"><a name="p821mcpsimp"></a><a name="p821mcpsimp"></a>OT_SVP_BLOB_TYPE_S32</p>
 </td>
-<td class="cellrowborder" valign="top" width="61%" headers="mcps1.1.3.1.2 "><p id="p823mcpsimp"><a name="p823mcpsimp"></a><a name="p823mcpsimp"></a>Blob数据元素为32bit有符号整型，参考<a href="重要概念.md#fig6794458183818">图12</a></p>
+<td class="cellrowborder" valign="top" width="61%" headers="mcps1.1.3.1.2 "><p id="p823mcpsimp"><a name="p823mcpsimp"></a><a name="p823mcpsimp"></a>Blob数据元素为32bit有符号整型，参考<a href="#fig6794458183818">图12</a></p>
 </td>
 </tr>
 <tr id="row825mcpsimp"><td class="cellrowborder" valign="top" width="39%" headers="mcps1.1.3.1.1 "><p id="p827mcpsimp"><a name="p827mcpsimp"></a><a name="p827mcpsimp"></a>OT_SVP_BLOB_TYPE_U32</p>
 </td>
-<td class="cellrowborder" valign="top" width="61%" headers="mcps1.1.3.1.2 "><p id="p829mcpsimp"><a name="p829mcpsimp"></a><a name="p829mcpsimp"></a>Blob数据元素为32bit无符号整型，参考<a href="重要概念.md#fig16266122213918">图13</a></p>
+<td class="cellrowborder" valign="top" width="61%" headers="mcps1.1.3.1.2 "><p id="p829mcpsimp"><a name="p829mcpsimp"></a><a name="p829mcpsimp"></a>Blob数据元素为32bit无符号整型，参考<a href="#fig16266122213918">图13</a></p>
 </td>
 </tr>
 <tr id="row831mcpsimp"><td class="cellrowborder" valign="top" width="39%" headers="mcps1.1.3.1.1 "><p id="p833mcpsimp"><a name="p833mcpsimp"></a><a name="p833mcpsimp"></a>OT_SVP_BLOB_TYPE_FP32</p>
 </td>
-<td class="cellrowborder" valign="top" width="61%" headers="mcps1.1.3.1.2 "><p id="p835mcpsimp"><a name="p835mcpsimp"></a><a name="p835mcpsimp"></a>Blob数据元素为32bit浮点型，参考<a href="重要概念.md#fig92855610398">图14</a></p>
+<td class="cellrowborder" valign="top" width="61%" headers="mcps1.1.3.1.2 "><p id="p835mcpsimp"><a name="p835mcpsimp"></a><a name="p835mcpsimp"></a>Blob数据元素为32bit浮点型，参考<a href="#fig92855610398">图14</a></p>
 </td>
 </tr>
 <tr id="row837mcpsimp"><td class="cellrowborder" valign="top" width="39%" headers="mcps1.1.3.1.1 "><p id="p839mcpsimp"><a name="p839mcpsimp"></a><a name="p839mcpsimp"></a>OT_SVP_BLOB_TYPE_FP16</p>
 </td>
-<td class="cellrowborder" valign="top" width="61%" headers="mcps1.1.3.1.2 "><p id="p841mcpsimp"><a name="p841mcpsimp"></a><a name="p841mcpsimp"></a>Blob数据元素为16bit浮点型，参考<a href="重要概念.md#fig4744171674019">图15</a></p>
+<td class="cellrowborder" valign="top" width="61%" headers="mcps1.1.3.1.2 "><p id="p841mcpsimp"><a name="p841mcpsimp"></a><a name="p841mcpsimp"></a>Blob数据元素为16bit浮点型，参考<a href="#fig4744171674019">图15</a></p>
 </td>
 </tr>
 <tr id="row843mcpsimp"><td class="cellrowborder" valign="top" width="39%" headers="mcps1.1.3.1.1 "><p id="p845mcpsimp"><a name="p845mcpsimp"></a><a name="p845mcpsimp"></a>OT_SVP_BLOB_TYPE_S8</p>
 </td>
-<td class="cellrowborder" valign="top" width="61%" headers="mcps1.1.3.1.2 "><p id="p847mcpsimp"><a name="p847mcpsimp"></a><a name="p847mcpsimp"></a>Blob数据元素为8bit有符号整型，参考<a href="重要概念.md#fig209422420408">图16</a></p>
+<td class="cellrowborder" valign="top" width="61%" headers="mcps1.1.3.1.2 "><p id="p847mcpsimp"><a name="p847mcpsimp"></a><a name="p847mcpsimp"></a>Blob数据元素为8bit有符号整型，参考<a href="#fig209422420408">图16</a></p>
 </td>
 </tr>
 <tr id="row849mcpsimp"><td class="cellrowborder" valign="top" width="39%" headers="mcps1.1.3.1.1 "><p id="p851mcpsimp"><a name="p851mcpsimp"></a><a name="p851mcpsimp"></a>OT_SVP_BLOB_TYPE_S16</p>
 </td>
-<td class="cellrowborder" valign="top" width="61%" headers="mcps1.1.3.1.2 "><p id="p853mcpsimp"><a name="p853mcpsimp"></a><a name="p853mcpsimp"></a>Blob数据元素为16bit有符号整型，参考<a href="重要概念.md#fig116601749418">图17</a></p>
+<td class="cellrowborder" valign="top" width="61%" headers="mcps1.1.3.1.2 "><p id="p853mcpsimp"><a name="p853mcpsimp"></a><a name="p853mcpsimp"></a>Blob数据元素为16bit有符号整型，参考<a href="#fig116601749418">图17</a></p>
 </td>
 </tr>
 <tr id="row855mcpsimp"><td class="cellrowborder" valign="top" width="39%" headers="mcps1.1.3.1.1 "><p id="p857mcpsimp"><a name="p857mcpsimp"></a><a name="p857mcpsimp"></a>OT_SVP_BLOB_TYPE_U16</p>
 </td>
-<td class="cellrowborder" valign="top" width="61%" headers="mcps1.1.3.1.2 "><p id="p859mcpsimp"><a name="p859mcpsimp"></a><a name="p859mcpsimp"></a>Blob数据元素为16bit无符号整型，参考<a href="重要概念.md#fig135371724174113">图18</a></p>
+<td class="cellrowborder" valign="top" width="61%" headers="mcps1.1.3.1.2 "><p id="p859mcpsimp"><a name="p859mcpsimp"></a><a name="p859mcpsimp"></a>Blob数据元素为16bit无符号整型，参考<a href="#fig135371724174113">图18</a></p>
 </td>
 </tr>
 </tbody>
@@ -2808,7 +2771,7 @@ typedef enum {
 
 【相关数据类型及接口】
 
-[ot\_svp\_blob](#ot_svp_blob)
+[ot\_svp\_blob](#ZH-CN_TOPIC_0000002441853637)
 
 ### ot\_svp\_blob<a name="ZH-CN_TOPIC_0000002441853637"></a>
 
@@ -2913,7 +2876,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ot\_svp\_blob\_type](#ot_svp_blob_type)
+[ot\_svp\_blob\_type](#ZH-CN_TOPIC_0000002408134284)
 
 ### ot\_svp\_src\_blob<a name="ZH-CN_TOPIC_0000002441853749"></a>
 
@@ -2937,8 +2900,8 @@ typedef ot_svp_blob  ot_svp_src_blob;
 
 【相关数据类型及接口】
 
--   [ot\_svp\_blob](#ot_svp_blob)
--   [ot\_svp\_dst\_blob](#ot_svp_dst_blob)
+-   [ot\_svp\_blob](#ZH-CN_TOPIC_0000002441853637)
+-   [ot\_svp\_dst\_blob](#ZH-CN_TOPIC_0000002441853545)
 
 ### ot\_svp\_dst\_blob<a name="ZH-CN_TOPIC_0000002441853545"></a>
 
@@ -2962,8 +2925,8 @@ typedef ot_svp_blob  ot_svp_dst_blob;
 
 【相关数据类型及接口】
 
--   [ot\_svp\_blob](#ot_svp_blob)
--   [ot\_svp\_src\_blob](#ot_svp_src_blob)
+-   [ot\_svp\_blob](#ZH-CN_TOPIC_0000002441853637)
+-   [ot\_svp\_src\_blob](#ZH-CN_TOPIC_0000002441853749)
 
 ### ot\_svp\_mem\_info<a name="ZH-CN_TOPIC_0000002408134312"></a>
 
@@ -3002,7 +2965,7 @@ typedef struct {
 </tr>
 <tr id="row5742mcpsimp"><td class="cellrowborder" valign="top" width="30%" headers="mcps1.1.3.1.1 "><p id="p5744mcpsimp"><a name="p5744mcpsimp"></a><a name="p5744mcpsimp"></a>size</p>
 </td>
-<td class="cellrowborder" valign="top" width="70%" headers="mcps1.1.3.1.2 "><p id="p5746mcpsimp"><a name="p5746mcpsimp"></a><a name="p5746mcpsimp"></a>内存块字节数。见<a href="重要概念.md#fig939145054114">图19</a>。</p>
+<td class="cellrowborder" valign="top" width="70%" headers="mcps1.1.3.1.2 "><p id="p5746mcpsimp"><a name="p5746mcpsimp"></a><a name="p5746mcpsimp"></a>内存块字节数。见<a href="#fig939145054114">图19</a>。</p>
 </td>
 </tr>
 </tbody>
@@ -3014,8 +2977,8 @@ typedef struct {
 
 【相关数据类型及接口】
 
--   [ot\_svp\_src\_mem\_info](#ot_svp_src_mem_info)
--   [ot\_svp\_dst\_mem\_info](#ot_svp_dst_mem_info)
+-   [ot\_svp\_src\_mem\_info](#ZH-CN_TOPIC_0000002408294196)
+-   [ot\_svp\_dst\_mem\_info](#ZH-CN_TOPIC_0000002441733601)
 
 ### ot\_svp\_src\_mem\_info<a name="ZH-CN_TOPIC_0000002408294196"></a>
 
@@ -3039,8 +3002,8 @@ typedef ot_svp_mem_info ot_svp_src_mem_info;
 
 【相关数据类型及接口】
 
--   [ot\_svp\_mem\_info](#ot_svp_mem_info)
--   [ot\_svp\_dst\_mem\_info](#ot_svp_dst_mem_info)
+-   [ot\_svp\_mem\_info](#ZH-CN_TOPIC_0000002408134312)
+-   [ot\_svp\_dst\_mem\_info](#ZH-CN_TOPIC_0000002441733601)
 
 ### ot\_svp\_dst\_mem\_info<a name="ZH-CN_TOPIC_0000002441733601"></a>
 
@@ -3064,8 +3027,8 @@ typedef ot_svp_mem_info ot_svp_dst_mem_info;
 
 【相关数据类型及接口】
 
--   [ot\_svp\_mem\_info](#ot_svp_mem_info)
--   [ot\_svp\_src\_mem\_info](#ot_svp_src_mem_info)
+-   [ot\_svp\_mem\_info](#ZH-CN_TOPIC_0000002408134312)
+-   [ot\_svp\_src\_mem\_info](#ZH-CN_TOPIC_0000002408294196)
 
 ### ot\_svp\_mau\_handle<a name="ZH-CN_TOPIC_0000002408134340"></a>
 
@@ -3134,7 +3097,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ot\_svp\_blob](#ot_svp_blob)
+[ot\_svp\_blob](#ZH-CN_TOPIC_0000002441853637)
 
 ### ot\_svp\_mau\_src\_double\_matrix<a name="ZH-CN_TOPIC_0000002408294276"></a>
 
@@ -3158,7 +3121,7 @@ typedef ot_svp_mau_double_matrix ot_svp_mau_src_double_matrix;
 
 【相关数据类型及接口】
 
-[ot\_svp\_mau\_double\_matrix](#ot_svp_mau_double_matrix)
+[ot\_svp\_mau\_double\_matrix](#ZH-CN_TOPIC_0000002408134336)
 
 ### ot\_svp\_mau\_out\_type<a name="ZH-CN_TOPIC_0000002408294372"></a>
 
@@ -3323,8 +3286,8 @@ typedef struct {
 
 【相关数据类型及接口】
 
--   [ot\_svp\_mau\_id](#ot_svp_mau_id)
--   [ot\_svp\_mau\_out\_type](#ot_svp_mau_out_type)
+-   [ot\_svp\_mau\_id](#ZH-CN_TOPIC_0000002441853585)
+-   [ot\_svp\_mau\_out\_type](#ZH-CN_TOPIC_0000002408294372)
 
 ### ot\_svp\_mau\_dist\_result<a name="ZH-CN_TOPIC_0000002408294236"></a>
 
@@ -3377,7 +3340,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ot\_svp\_blob](#ot_svp_blob)
+[ot\_svp\_blob](#ZH-CN_TOPIC_0000002441853637)
 
 ### ot\_svp\_mau\_mod\_param<a name="ZH-CN_TOPIC_0000002441853769"></a>
 
@@ -3489,7 +3452,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ot\_svp\_mau\_id](#ot_svp_mau_id)
+[ot\_svp\_mau\_id](#ZH-CN_TOPIC_0000002441853585)
 
 ### ot\_svp\_mau\_vector\_op\_mode<a name="ZH-CN_TOPIC_0000002408294292"></a>
 
@@ -3620,8 +3583,8 @@ typedef struct {
 
 【相关数据类型及接口】
 
--   [ot\_svp\_mau\_id](#ot_svp_mau_id)
--   [ot\_svp\_mau\_vector\_op\_mode](#ot_svp_mau_vector_op_mode)
+-   [ot\_svp\_mau\_id](#ZH-CN_TOPIC_0000002441853585)
+-   [ot\_svp\_mau\_vector\_op\_mode](#ZH-CN_TOPIC_0000002408294292)
 
 ### ot\_svp\_mau\_type\_convert\_mode<a name="ZH-CN_TOPIC_0000002408294408"></a>
 
@@ -3726,9 +3689,9 @@ typedef struct {
 
 【相关数据类型及接口】
 
--   [ot\_svp\_mau\_id](#ot_svp_mau_id)
+-   [ot\_svp\_mau\_id](#ZH-CN_TOPIC_0000002441853585)
 
--   [ot\_svp\_mau\_type\_convert\_mode](#ot_svp_mau_type_convert_mode)
+-   [ot\_svp\_mau\_type\_convert\_mode](#ZH-CN_TOPIC_0000002408294408)
 
 ### ot\_svp\_mau\_sort\_mode<a name="ZH-CN_TOPIC_0000002441853721"></a>
 
@@ -3824,7 +3787,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ot\_svp\_blob](#ot_svp_blob)
+[ot\_svp\_blob](#ZH-CN_TOPIC_0000002441853637)
 
 ### ot\_svp\_mau\_sort\_ctrl<a name="ZH-CN_TOPIC_0000002408134484"></a>
 
@@ -3891,11 +3854,11 @@ typedef struct {
 【注意事项】
 
 -   has\_idx 和has\_id\_matrix不能同时为TD\_TRUE。
--   辅助内存大小必须大于或等于由[ss\_mpi\_svp\_mau\_get\_sort\_tmpbuf\_size](ss_mpi_svp_mau_get_sort_tmpbuf_size.md)计算大小。
+-   辅助内存大小必须大于或等于由[ss\_mpi\_svp\_mau\_get\_sort\_tmpbuf\_size](#ZH-CN_TOPIC_0000002408294160)计算大小。
 
 【相关数据类型及接口】
 
-[ot\_svp\_mau\_id](#ot_svp_mau_id)
+[ot\_svp\_mau\_id](#ZH-CN_TOPIC_0000002441853585)
 
 ### ot\_svp\_mau\_sort\_result<a name="ZH-CN_TOPIC_0000002441853537"></a>
 
@@ -3941,7 +3904,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ot\_svp\_blob](#ot_svp_blob)
+[ot\_svp\_blob](#ZH-CN_TOPIC_0000002441853637)
 
 ### ot\_svp\_mau\_fir\_src<a name="ZH-CN_TOPIC_0000002408294332"></a>
 
@@ -4000,7 +3963,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ot\_svp\_blob](#ot_svp_blob)
+[ot\_svp\_blob](#ZH-CN_TOPIC_0000002441853637)
 
 ### ot\_svp\_mau\_fir\_result<a name="ZH-CN_TOPIC_0000002441733633"></a>
 
@@ -4024,7 +3987,7 @@ typedef ot_svp_mau_sort_result ot_svp_mau_fir_result;
 
 【相关数据类型及接口】
 
-[ot\_svp\_mau\_sort\_result](#ot_svp_mau_sort_result)
+[ot\_svp\_mau\_sort\_result](#ZH-CN_TOPIC_0000002441853537)
 
 ### ot\_svp\_mau\_fir\_ctrl<a name="ZH-CN_TOPIC_0000002441853849"></a>
 
@@ -4042,7 +4005,7 @@ typedef struct {
     td_u16 bucket_num;
     ot_svp_mem_info feature_db; 
     ot_svp_mem_info id_db;
-    ot_svp_mem_info tmp_buf;;
+    ot_svp_mem_info tmp_buf;
 } ot_svp_mau_fir_ctrl;
 ```
 
@@ -4103,7 +4066,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ot\_svp\_blob](#ot_svp_blob)
+[ot\_svp\_blob](#ZH-CN_TOPIC_0000002441853637)
 
 ## 错误码<a name="ZH-CN_TOPIC_0000002408294264"></a>
 
@@ -4279,7 +4242,9 @@ MAU模块API错误码如下所示。
 
 ## Proc调试信息<a name="ZH-CN_TOPIC_0000002441733621"></a>
 
+-   **[概述](#ZH-CN_TOPIC_0000002441733389)**  
 
+-   **[Proc信息说明](#ZH-CN_TOPIC_0000002441853841)**  
 
 ### 概述<a name="ZH-CN_TOPIC_0000002441733389"></a>
 
@@ -4612,11 +4577,13 @@ manhattan_dist     transpose     vector_op  type_convert     sort        fir
 
 # DPU\_RECT<a name="ZH-CN_TOPIC_0000002441853577"></a>
 
+-   **[概述](#ZH-CN_TOPIC_0000002408294364)**  
 
+-   **[功能描述](#ZH-CN_TOPIC_0000002408134476)**  
 
+-   **[错误码](#ZH-CN_TOPIC_0000002441733461)**  
 
-
-
+-   **[Proc调试信息](#ZH-CN_TOPIC_0000002408134392)**  
 
 ## 概述<a name="ZH-CN_TOPIC_0000002408294364"></a>
 
@@ -4624,7 +4591,9 @@ DPU\(Depth Process Unit\)为_识别_分析系统中的深度处理单元。用�
 
 ## 功能描述<a name="ZH-CN_TOPIC_0000002408134476"></a>
 
+-   **[重要概念](#ZH-CN_TOPIC_0000002441733577)**  
 
+-   **[调用流程](#ZH-CN_TOPIC_0000002441733381)**  
 
 ### 重要概念<a name="ZH-CN_TOPIC_0000002441733577"></a>
 
@@ -4661,36 +4630,21 @@ DPU\(Depth Process Unit\)为_识别_分析系统中的深度处理单元。用�
 
 该功能模块为用户提供以下MPI:
 
--   [ss\_mpi\_dpu\_rect\_load\_lut](ss_mpi_dpu_rect_load_lut.md)：加载查找表。
--   [ss\_mpi\_dpu\_rect\_unload\_lut](ss_mpi_dpu_rect_unload_lut.md)：卸载查找表。
--   [ss\_mpi\_dpu\_rect\_create\_grp](ss_mpi_dpu_rect_create_grp.md)：创建组。
--   [ss\_mpi\_dpu\_rect\_destroy\_grp](ss_mpi_dpu_rect_destroy_grp.md)：销毁组。
--   [ss\_mpi\_dpu\_rect\_set\_grp\_attr](ss_mpi_dpu_rect_set_grp_attr.md)：设置组属性。
--   [ss\_mpi\_dpu\_rect\_get\_grp\_attr](ss_mpi_dpu_rect_get_grp_attr.md)：获取组属性。
--   [ss\_mpi\_dpu\_rect\_start\_grp](ss_mpi_dpu_rect_start_grp.md)：启用组。
--   [ss\_mpi\_dpu\_rect\_stop\_grp](ss_mpi_dpu_rect_stop_grp.md)：禁用组。
--   [ss\_mpi\_dpu\_rect\_set\_chn\_attr](ss_mpi_dpu_rect_set_chn_attr.md)：设置通道属性。
--   [ss\_mpi\_dpu\_rect\_get\_chn\_attr](ss_mpi_dpu_rect_get_chn_attr.md)：获取通道属性。
--   [ss\_mpi\_dpu\_rect\_enable\_chn](ss_mpi_dpu_rect_enable_chn.md)：启用通道。
--   [ss\_mpi\_dpu\_rect\_disable\_chn](ss_mpi_dpu_rect_disable_chn.md)：禁用通道。
--   [ss\_mpi\_dpu\_rect\_send\_frame](ss_mpi_dpu_rect_send_frame.md)：用户发送数据。
--   [ss\_mpi\_dpu\_rect\_get\_frame](ss_mpi_dpu_rect_get_frame.md)：用户从通道获取一帧处理完成的图像。
--   [ss\_mpi\_dpu\_rect\_release\_frame](ss_mpi_dpu_rect_release_frame.md)：用户释放一帧通道图像。
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+-   [ss\_mpi\_dpu\_rect\_load\_lut](#ZH-CN_TOPIC_0000002441733429)：加载查找表。
+-   [ss\_mpi\_dpu\_rect\_unload\_lut](#ZH-CN_TOPIC_0000002441853873)：卸载查找表。
+-   [ss\_mpi\_dpu\_rect\_create\_grp](#ZH-CN_TOPIC_0000002408294208)：创建组。
+-   [ss\_mpi\_dpu\_rect\_destroy\_grp](#ZH-CN_TOPIC_0000002441853797)：销毁组。
+-   [ss\_mpi\_dpu\_rect\_set\_grp\_attr](#ZH-CN_TOPIC_0000002441853833)：设置组属性。
+-   [ss\_mpi\_dpu\_rect\_get\_grp\_attr](#ZH-CN_TOPIC_0000002441733613)：获取组属性。
+-   [ss\_mpi\_dpu\_rect\_start\_grp](#ZH-CN_TOPIC_0000002441853757)：启用组。
+-   [ss\_mpi\_dpu\_rect\_stop\_grp](#ZH-CN_TOPIC_0000002441853825)：禁用组。
+-   [ss\_mpi\_dpu\_rect\_set\_chn\_attr](#ZH-CN_TOPIC_0000002441853605)：设置通道属性。
+-   [ss\_mpi\_dpu\_rect\_get\_chn\_attr](#ZH-CN_TOPIC_0000002408134420)：获取通道属性。
+-   [ss\_mpi\_dpu\_rect\_enable\_chn](#ZH-CN_TOPIC_0000002408294252)：启用通道。
+-   [ss\_mpi\_dpu\_rect\_disable\_chn](#ZH-CN_TOPIC_0000002408134524)：禁用通道。
+-   [ss\_mpi\_dpu\_rect\_send\_frame](#ZH-CN_TOPIC_0000002441853677)：用户发送数据。
+-   [ss\_mpi\_dpu\_rect\_get\_frame](#ZH-CN_TOPIC_0000002441853777)：用户从通道获取一帧处理完成的图像。
+-   [ss\_mpi\_dpu\_rect\_release\_frame](#ZH-CN_TOPIC_0000002408134464)：用户释放一帧通道图像。
 
 ### ss\_mpi\_dpu\_rect\_load\_lut<a name="ZH-CN_TOPIC_0000002441733429"></a>
 
@@ -4773,7 +4727,7 @@ td_s32 ss_mpi_dpu_rect_load_lut(const ot_dpu_rect_mem_info *lut_mem, ot_dpu_rect
 </tr>
 <tr id="row5178mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.3.1.1 "><p id="p5180mcpsimp"><a name="p5180mcpsimp"></a><a name="p5180mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p5182mcpsimp"><a name="p5182mcpsimp"></a><a name="p5182mcpsimp"></a>失败，参见<span xml:lang="fr-FR" id="ph1536493892110"><a name="ph1536493892110"></a><a name="ph1536493892110"></a><a href="错误码-6.md">错误码</a></span><span xml:lang="fr-FR" id="ph5185mcpsimp"><a name="ph5185mcpsimp"></a><a name="ph5185mcpsimp"></a>。</span></p>
+<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p5182mcpsimp"><a name="p5182mcpsimp"></a><a name="p5182mcpsimp"></a>失败，参见<span xml:lang="fr-FR" id="ph1536493892110"><a name="ph1536493892110"></a><a name="ph1536493892110"></a><a href="#ZH-CN_TOPIC_0000002441733461">错误码</a></span><span xml:lang="fr-FR" id="ph5185mcpsimp"><a name="ph5185mcpsimp"></a><a name="ph5185mcpsimp"></a>。</span></p>
 </td>
 </tr>
 </tbody>
@@ -4794,7 +4748,7 @@ lut\_mem -\> phys\_addr / lut\_mem -\> virt\_addr必须是申请好的内存，l
 
 【相关主题】
 
-[ss\_mpi\_dpu\_rect\_unload\_lut](#ss_mpi_dpu_rect_unload_lut)
+[ss\_mpi\_dpu\_rect\_unload\_lut](#ZH-CN_TOPIC_0000002441853873)
 
 ### ss\_mpi\_dpu\_rect\_unload\_lut<a name="ZH-CN_TOPIC_0000002441853873"></a>
 
@@ -4845,7 +4799,7 @@ td_s32 ss_mpi_dpu_rect_unload_lut(ot_dpu_rect_lut_id rect_lut_id);
 </tr>
 <tr id="row1699mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.3.1.1 "><p id="p1701mcpsimp"><a name="p1701mcpsimp"></a><a name="p1701mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p1703mcpsimp"><a name="p1703mcpsimp"></a><a name="p1703mcpsimp"></a>失败，参见<span xml:lang="fr-FR" id="ph1536493892110"><a name="ph1536493892110"></a><a name="ph1536493892110"></a><a href="错误码-6.md">错误码</a></span><span xml:lang="fr-FR" id="ph1706mcpsimp"><a name="ph1706mcpsimp"></a><a name="ph1706mcpsimp"></a>。</span></p>
+<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p1703mcpsimp"><a name="p1703mcpsimp"></a><a name="p1703mcpsimp"></a>失败，参见<span xml:lang="fr-FR" id="ph1536493892110"><a name="ph1536493892110"></a><a name="ph1536493892110"></a><a href="#ZH-CN_TOPIC_0000002441733461">错误码</a></span><span xml:lang="fr-FR" id="ph1706mcpsimp"><a name="ph1706mcpsimp"></a><a name="ph1706mcpsimp"></a>。</span></p>
 </td>
 </tr>
 </tbody>
@@ -4858,7 +4812,7 @@ td_s32 ss_mpi_dpu_rect_unload_lut(ot_dpu_rect_lut_id rect_lut_id);
 
 【注意】
 
-rect\_lut\_id 由[ss\_mpi\_dpu\_rect\_load\_lut](ss_mpi_dpu_rect_load_lut.md)  获取到。
+rect\_lut\_id 由[ss\_mpi\_dpu\_rect\_load\_lut](#ZH-CN_TOPIC_0000002441733429)  获取到。
 
 【举例】
 
@@ -4866,7 +4820,7 @@ rect\_lut\_id 由[ss\_mpi\_dpu\_rect\_load\_lut](ss_mpi_dpu_rect_load_lut.md)  �
 
 【相关主题】
 
-[ss\_mpi\_dpu\_rect\_load\_lut](#ss_mpi_dpu_rect_load_lut)
+[ss\_mpi\_dpu\_rect\_load\_lut](#ZH-CN_TOPIC_0000002441733429)
 
 ### ss\_mpi\_dpu\_rect\_create\_grp<a name="ZH-CN_TOPIC_0000002408294208"></a>
 
@@ -4894,7 +4848,7 @@ td_s32 ss_mpi_dpu_rect_create_grp(ot_dpu_rect_grp  rect_grp, const ot_dpu_rect_g
 <tbody><tr id="row6675mcpsimp"><td class="cellrowborder" valign="top" width="14.140000000000002%" headers="mcps1.1.4.1.1 "><p id="p6677mcpsimp"><a name="p6677mcpsimp"></a><a name="p6677mcpsimp"></a>rect_grp</p>
 </td>
 <td class="cellrowborder" valign="top" width="70.71000000000001%" headers="mcps1.1.4.1.2 "><p id="p6679mcpsimp"><a name="p6679mcpsimp"></a><a name="p6679mcpsimp"></a>组号。</p>
-<p id="p6680mcpsimp"><a name="p6680mcpsimp"></a><a name="p6680mcpsimp"></a>取值范围：[0, <a href="OT_DPU_RECT_MAX_GRP_NUM.md">OT_DPU_RECT_MAX_GRP_NUM</a>)。</p>
+<p id="p6680mcpsimp"><a name="p6680mcpsimp"></a><a name="p6680mcpsimp"></a>取值范围：[0, <a href="#ZH-CN_TOPIC_0000002408294400">OT_DPU_RECT_MAX_GRP_NUM</a>)。</p>
 </td>
 <td class="cellrowborder" valign="top" width="15.150000000000002%" headers="mcps1.1.4.1.3 "><p id="p6683mcpsimp"><a name="p6683mcpsimp"></a><a name="p6683mcpsimp"></a>输入</p>
 </td>
@@ -4926,7 +4880,7 @@ td_s32 ss_mpi_dpu_rect_create_grp(ot_dpu_rect_grp  rect_grp, const ot_dpu_rect_g
 </tr>
 <tr id="row6709mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.3.1.1 "><p id="p6711mcpsimp"><a name="p6711mcpsimp"></a><a name="p6711mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p6713mcpsimp"><a name="p6713mcpsimp"></a><a name="p6713mcpsimp"></a>失败，参见<span xml:lang="fr-FR" id="ph1536493892110"><a name="ph1536493892110"></a><a name="ph1536493892110"></a><a href="错误码-6.md">错误码</a></span><span xml:lang="fr-FR" id="ph6716mcpsimp"><a name="ph6716mcpsimp"></a><a name="ph6716mcpsimp"></a>。</span></p>
+<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p6713mcpsimp"><a name="p6713mcpsimp"></a><a name="p6713mcpsimp"></a>失败，参见<span xml:lang="fr-FR" id="ph1536493892110"><a name="ph1536493892110"></a><a name="ph1536493892110"></a><a href="#ZH-CN_TOPIC_0000002441733461">错误码</a></span><span xml:lang="fr-FR" id="ph6716mcpsimp"><a name="ph6716mcpsimp"></a><a name="ph6716mcpsimp"></a>。</span></p>
 </td>
 </tr>
 </tbody>
@@ -4947,11 +4901,11 @@ td_s32 ss_mpi_dpu_rect_create_grp(ot_dpu_rect_grp  rect_grp, const ot_dpu_rect_g
 
 【相关主题】
 
--   [ss\_mpi\_dpu\_rect\_destroy\_grp](#ss_mpi_dpu_rect_destroy_grp)
--   [ss\_mpi\_dpu\_rect\_set\_grp\_attr](#ss_mpi_dpu_rect_set_grp_attr)
--   [ss\_mpi\_dpu\_rect\_get\_grp\_attr](#ss_mpi_dpu_rect_get_grp_attr)
--   [ss\_mpi\_dpu\_rect\_start\_grp](#ss_mpi_dpu_rect_start_grp)
--   [ss\_mpi\_dpu\_rect\_stop\_grp](#ss_mpi_dpu_rect_stop_grp)
+-   [ss\_mpi\_dpu\_rect\_destroy\_grp](#ZH-CN_TOPIC_0000002441853797)
+-   [ss\_mpi\_dpu\_rect\_set\_grp\_attr](#ZH-CN_TOPIC_0000002441853833)
+-   [ss\_mpi\_dpu\_rect\_get\_grp\_attr](#ZH-CN_TOPIC_0000002441733613)
+-   [ss\_mpi\_dpu\_rect\_start\_grp](#ZH-CN_TOPIC_0000002441853757)
+-   [ss\_mpi\_dpu\_rect\_stop\_grp](#ZH-CN_TOPIC_0000002441853825)
 
 ### ss\_mpi\_dpu\_rect\_destroy\_grp<a name="ZH-CN_TOPIC_0000002441853797"></a>
 
@@ -4979,7 +4933,7 @@ td_s32 ss_mpi_dpu_rect_destroy_grp(ot_dpu_rect_grp rect_grp);
 <tbody><tr id="row2541mcpsimp"><td class="cellrowborder" valign="top" width="14.140000000000002%" headers="mcps1.1.4.1.1 "><p id="p2543mcpsimp"><a name="p2543mcpsimp"></a><a name="p2543mcpsimp"></a>rect_grp</p>
 </td>
 <td class="cellrowborder" valign="top" width="70.71000000000001%" headers="mcps1.1.4.1.2 "><p id="p2545mcpsimp"><a name="p2545mcpsimp"></a><a name="p2545mcpsimp"></a>组号。</p>
-<p id="p2546mcpsimp"><a name="p2546mcpsimp"></a><a name="p2546mcpsimp"></a>取值范围：[0, <a href="OT_DPU_RECT_MAX_GRP_NUM.md">OT_DPU_RECT_MAX_GRP_NUM</a>)。</p>
+<p id="p2546mcpsimp"><a name="p2546mcpsimp"></a><a name="p2546mcpsimp"></a>取值范围：[0, <a href="#ZH-CN_TOPIC_0000002408294400">OT_DPU_RECT_MAX_GRP_NUM</a>)。</p>
 </td>
 <td class="cellrowborder" valign="top" width="15.150000000000002%" headers="mcps1.1.4.1.3 "><p id="p2549mcpsimp"><a name="p2549mcpsimp"></a><a name="p2549mcpsimp"></a>输入</p>
 </td>
@@ -5003,7 +4957,7 @@ td_s32 ss_mpi_dpu_rect_destroy_grp(ot_dpu_rect_grp rect_grp);
 </tr>
 <tr id="row2567mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.3.1.1 "><p id="p2569mcpsimp"><a name="p2569mcpsimp"></a><a name="p2569mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p2571mcpsimp"><a name="p2571mcpsimp"></a><a name="p2571mcpsimp"></a>失败，参见<span xml:lang="fr-FR" id="ph1536493892110"><a name="ph1536493892110"></a><a name="ph1536493892110"></a><a href="错误码-6.md">错误码</a></span><span xml:lang="fr-FR" id="ph2574mcpsimp"><a name="ph2574mcpsimp"></a><a name="ph2574mcpsimp"></a>。</span></p>
+<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p2571mcpsimp"><a name="p2571mcpsimp"></a><a name="p2571mcpsimp"></a>失败，参见<span xml:lang="fr-FR" id="ph1536493892110"><a name="ph1536493892110"></a><a name="ph1536493892110"></a><a href="#ZH-CN_TOPIC_0000002441733461">错误码</a></span><span xml:lang="fr-FR" id="ph2574mcpsimp"><a name="ph2574mcpsimp"></a><a name="ph2574mcpsimp"></a>。</span></p>
 </td>
 </tr>
 </tbody>
@@ -5017,7 +4971,7 @@ td_s32 ss_mpi_dpu_rect_destroy_grp(ot_dpu_rect_grp rect_grp);
 【注意】
 
 -   组必须已创建。
--   调用此接口之前，如果已经成功执行[ss\_mpi\_dpu\_rect\_start\_grp](ss_mpi_dpu_rect_start_grp.md)，必须先调用[ss\_mpi\_dpu\_rect\_stop\_grp](ss_mpi_dpu_rect_stop_grp.md)禁用此组。
+-   调用此接口之前，如果已经成功执行[ss\_mpi\_dpu\_rect\_start\_grp](#ZH-CN_TOPIC_0000002441853757)，必须先调用[ss\_mpi\_dpu\_rect\_stop\_grp](#ZH-CN_TOPIC_0000002441853825)禁用此组。
 -   调用此接口时，会一直等待此组当前任务处理结束才会真正销毁。
 
 【举例】
@@ -5026,11 +4980,11 @@ td_s32 ss_mpi_dpu_rect_destroy_grp(ot_dpu_rect_grp rect_grp);
 
 【相关主题】
 
--   [ss\_mpi\_dpu\_rect\_create\_grp](#ss_mpi_dpu_rect_create_grp)
--   [ss\_mpi\_dpu\_rect\_set\_grp\_attr](#ss_mpi_dpu_rect_set_grp_attr)
--   [ss\_mpi\_dpu\_rect\_get\_grp\_attr](#ss_mpi_dpu_rect_get_grp_attr)
--   [ss\_mpi\_dpu\_rect\_start\_grp](#ss_mpi_dpu_rect_start_grp)
--   [ss\_mpi\_dpu\_rect\_stop\_grp](#ss_mpi_dpu_rect_stop_grp)
+-   [ss\_mpi\_dpu\_rect\_create\_grp](#ZH-CN_TOPIC_0000002408294208)
+-   [ss\_mpi\_dpu\_rect\_set\_grp\_attr](#ZH-CN_TOPIC_0000002441853833)
+-   [ss\_mpi\_dpu\_rect\_get\_grp\_attr](#ZH-CN_TOPIC_0000002441733613)
+-   [ss\_mpi\_dpu\_rect\_start\_grp](#ZH-CN_TOPIC_0000002441853757)
+-   [ss\_mpi\_dpu\_rect\_stop\_grp](#ZH-CN_TOPIC_0000002441853825)
 
 ### ss\_mpi\_dpu\_rect\_set\_grp\_attr<a name="ZH-CN_TOPIC_0000002441853833"></a>
 
@@ -5058,7 +5012,7 @@ td_s32 ss_mpi_dpu_rect_set_grp_attr(ot_dpu_rect_grp rect_grp, const ot_dpu_rect_
 <tbody><tr id="row4751mcpsimp"><td class="cellrowborder" valign="top" width="14.140000000000002%" headers="mcps1.1.4.1.1 "><p id="p4753mcpsimp"><a name="p4753mcpsimp"></a><a name="p4753mcpsimp"></a>rect_grp</p>
 </td>
 <td class="cellrowborder" valign="top" width="70.71000000000001%" headers="mcps1.1.4.1.2 "><p id="p4755mcpsimp"><a name="p4755mcpsimp"></a><a name="p4755mcpsimp"></a>组号。</p>
-<p id="p4756mcpsimp"><a name="p4756mcpsimp"></a><a name="p4756mcpsimp"></a>取值范围：[0, <a href="OT_DPU_RECT_MAX_GRP_NUM.md">OT_DPU_RECT_MAX_GRP_NUM</a>)。</p>
+<p id="p4756mcpsimp"><a name="p4756mcpsimp"></a><a name="p4756mcpsimp"></a>取值范围：[0, <a href="#ZH-CN_TOPIC_0000002408294400">OT_DPU_RECT_MAX_GRP_NUM</a>)。</p>
 </td>
 <td class="cellrowborder" valign="top" width="15.150000000000002%" headers="mcps1.1.4.1.3 "><p id="p4759mcpsimp"><a name="p4759mcpsimp"></a><a name="p4759mcpsimp"></a>输入</p>
 </td>
@@ -5090,7 +5044,7 @@ td_s32 ss_mpi_dpu_rect_set_grp_attr(ot_dpu_rect_grp rect_grp, const ot_dpu_rect_
 </tr>
 <tr id="row4785mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.3.1.1 "><p id="p4787mcpsimp"><a name="p4787mcpsimp"></a><a name="p4787mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p4789mcpsimp"><a name="p4789mcpsimp"></a><a name="p4789mcpsimp"></a>失败，参见<span xml:lang="fr-FR" id="ph1536493892110"><a name="ph1536493892110"></a><a name="ph1536493892110"></a><a href="错误码-6.md">错误码</a></span><span xml:lang="fr-FR" id="ph4792mcpsimp"><a name="ph4792mcpsimp"></a><a name="ph4792mcpsimp"></a>。</span></p>
+<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p4789mcpsimp"><a name="p4789mcpsimp"></a><a name="p4789mcpsimp"></a>失败，参见<span xml:lang="fr-FR" id="ph1536493892110"><a name="ph1536493892110"></a><a name="ph1536493892110"></a><a href="#ZH-CN_TOPIC_0000002441733461">错误码</a></span><span xml:lang="fr-FR" id="ph4792mcpsimp"><a name="ph4792mcpsimp"></a><a name="ph4792mcpsimp"></a>。</span></p>
 </td>
 </tr>
 </tbody>
@@ -5104,7 +5058,7 @@ td_s32 ss_mpi_dpu_rect_set_grp_attr(ot_dpu_rect_grp rect_grp, const ot_dpu_rect_
 【注意】
 
 -   组必须已创建。
--   组属性必须合法，其中部分静态属性不可动态设置，具体请参见[ot\_dpu\_rect\_grp\_attr](ot_dpu_rect_grp_attr.md)。
+-   组属性必须合法，其中部分静态属性不可动态设置，具体请参见[ot\_dpu\_rect\_grp\_attr](#ZH-CN_TOPIC_0000002441853813)。
 
 【举例】
 
@@ -5112,11 +5066,11 @@ td_s32 ss_mpi_dpu_rect_set_grp_attr(ot_dpu_rect_grp rect_grp, const ot_dpu_rect_
 
 【相关主题】
 
--   [ss\_mpi\_dpu\_rect\_create\_grp](#ss_mpi_dpu_rect_create_grp)
--   [ss\_mpi\_dpu\_rect\_destroy\_grp](#ss_mpi_dpu_rect_destroy_grp)
--   [ss\_mpi\_dpu\_rect\_get\_grp\_attr](#ss_mpi_dpu_rect_get_grp_attr)
--   [ss\_mpi\_dpu\_rect\_start\_grp](#ss_mpi_dpu_rect_start_grp)
--   [ss\_mpi\_dpu\_rect\_stop\_grp](#ss_mpi_dpu_rect_stop_grp)
+-   [ss\_mpi\_dpu\_rect\_create\_grp](#ZH-CN_TOPIC_0000002408294208)
+-   [ss\_mpi\_dpu\_rect\_destroy\_grp](#ZH-CN_TOPIC_0000002441853797)
+-   [ss\_mpi\_dpu\_rect\_get\_grp\_attr](#ZH-CN_TOPIC_0000002441733613)
+-   [ss\_mpi\_dpu\_rect\_start\_grp](#ZH-CN_TOPIC_0000002441853757)
+-   [ss\_mpi\_dpu\_rect\_stop\_grp](#ZH-CN_TOPIC_0000002441853825)
 
 ### ss\_mpi\_dpu\_rect\_get\_grp\_attr<a name="ZH-CN_TOPIC_0000002441733613"></a>
 
@@ -5144,7 +5098,7 @@ td_s32 ss_mpi_dpu_rect_get_grp_attr(ot_dpu_rect_grp rect_grp, ot_dpu_rect_grp_at
 <tbody><tr id="row4003mcpsimp"><td class="cellrowborder" valign="top" width="14.140000000000002%" headers="mcps1.1.4.1.1 "><p id="p4005mcpsimp"><a name="p4005mcpsimp"></a><a name="p4005mcpsimp"></a>rect_grp</p>
 </td>
 <td class="cellrowborder" valign="top" width="70.71000000000001%" headers="mcps1.1.4.1.2 "><p id="p4007mcpsimp"><a name="p4007mcpsimp"></a><a name="p4007mcpsimp"></a>组号。</p>
-<p id="p4008mcpsimp"><a name="p4008mcpsimp"></a><a name="p4008mcpsimp"></a>取值范围：[0, <a href="OT_DPU_RECT_MAX_GRP_NUM.md">OT_DPU_RECT_MAX_GRP_NUM</a>)。</p>
+<p id="p4008mcpsimp"><a name="p4008mcpsimp"></a><a name="p4008mcpsimp"></a>取值范围：[0, <a href="#ZH-CN_TOPIC_0000002408294400">OT_DPU_RECT_MAX_GRP_NUM</a>)。</p>
 </td>
 <td class="cellrowborder" valign="top" width="15.150000000000002%" headers="mcps1.1.4.1.3 "><p id="p4011mcpsimp"><a name="p4011mcpsimp"></a><a name="p4011mcpsimp"></a>输入</p>
 </td>
@@ -5176,7 +5130,7 @@ td_s32 ss_mpi_dpu_rect_get_grp_attr(ot_dpu_rect_grp rect_grp, ot_dpu_rect_grp_at
 </tr>
 <tr id="row4037mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.3.1.1 "><p id="p4039mcpsimp"><a name="p4039mcpsimp"></a><a name="p4039mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p4041mcpsimp"><a name="p4041mcpsimp"></a><a name="p4041mcpsimp"></a>失败，参见<span xml:lang="fr-FR" id="ph1536493892110"><a name="ph1536493892110"></a><a name="ph1536493892110"></a><a href="错误码-6.md">错误码</a></span><span xml:lang="fr-FR" id="ph4044mcpsimp"><a name="ph4044mcpsimp"></a><a name="ph4044mcpsimp"></a>。</span></p>
+<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p4041mcpsimp"><a name="p4041mcpsimp"></a><a name="p4041mcpsimp"></a>失败，参见<span xml:lang="fr-FR" id="ph1536493892110"><a name="ph1536493892110"></a><a name="ph1536493892110"></a><a href="#ZH-CN_TOPIC_0000002441733461">错误码</a></span><span xml:lang="fr-FR" id="ph4044mcpsimp"><a name="ph4044mcpsimp"></a><a name="ph4044mcpsimp"></a>。</span></p>
 </td>
 </tr>
 </tbody>
@@ -5197,11 +5151,11 @@ td_s32 ss_mpi_dpu_rect_get_grp_attr(ot_dpu_rect_grp rect_grp, ot_dpu_rect_grp_at
 
 【相关主题】
 
--   [ss\_mpi\_dpu\_rect\_create\_grp](#ss_mpi_dpu_rect_create_grp)
--   [ss\_mpi\_dpu\_rect\_destroy\_grp](#ss_mpi_dpu_rect_destroy_grp)
--   [ss\_mpi\_dpu\_rect\_set\_grp\_attr](#ss_mpi_dpu_rect_set_grp_attr)
--   [ss\_mpi\_dpu\_rect\_start\_grp](#ss_mpi_dpu_rect_start_grp)
--   [ss\_mpi\_dpu\_rect\_stop\_grp](#ss_mpi_dpu_rect_stop_grp)
+-   [ss\_mpi\_dpu\_rect\_create\_grp](#ZH-CN_TOPIC_0000002408294208)
+-   [ss\_mpi\_dpu\_rect\_destroy\_grp](#ZH-CN_TOPIC_0000002441853797)
+-   [ss\_mpi\_dpu\_rect\_set\_grp\_attr](#ZH-CN_TOPIC_0000002441853833)
+-   [ss\_mpi\_dpu\_rect\_start\_grp](#ZH-CN_TOPIC_0000002441853757)
+-   [ss\_mpi\_dpu\_rect\_stop\_grp](#ZH-CN_TOPIC_0000002441853825)
 
 ### ss\_mpi\_dpu\_rect\_start\_grp<a name="ZH-CN_TOPIC_0000002441853757"></a>
 
@@ -5229,7 +5183,7 @@ td_s32 ss_mpi_dpu_rect_start_grp(ot_dpu_rect_grp rect_grp);
 <tbody><tr id="row9088mcpsimp"><td class="cellrowborder" valign="top" width="14.140000000000002%" headers="mcps1.1.4.1.1 "><p id="p9090mcpsimp"><a name="p9090mcpsimp"></a><a name="p9090mcpsimp"></a>rect_grp</p>
 </td>
 <td class="cellrowborder" valign="top" width="70.71000000000001%" headers="mcps1.1.4.1.2 "><p id="p9092mcpsimp"><a name="p9092mcpsimp"></a><a name="p9092mcpsimp"></a>组号。</p>
-<p id="p9093mcpsimp"><a name="p9093mcpsimp"></a><a name="p9093mcpsimp"></a>取值范围：[0, <a href="OT_DPU_RECT_MAX_GRP_NUM.md">OT_DPU_RECT_MAX_GRP_NUM</a>)。</p>
+<p id="p9093mcpsimp"><a name="p9093mcpsimp"></a><a name="p9093mcpsimp"></a>取值范围：[0, <a href="#ZH-CN_TOPIC_0000002408294400">OT_DPU_RECT_MAX_GRP_NUM</a>)。</p>
 </td>
 <td class="cellrowborder" valign="top" width="15.150000000000002%" headers="mcps1.1.4.1.3 "><p id="p9096mcpsimp"><a name="p9096mcpsimp"></a><a name="p9096mcpsimp"></a>输入</p>
 </td>
@@ -5253,7 +5207,7 @@ td_s32 ss_mpi_dpu_rect_start_grp(ot_dpu_rect_grp rect_grp);
 </tr>
 <tr id="row9114mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.3.1.1 "><p id="p9116mcpsimp"><a name="p9116mcpsimp"></a><a name="p9116mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p9118mcpsimp"><a name="p9118mcpsimp"></a><a name="p9118mcpsimp"></a>失败，参见<span xml:lang="fr-FR" id="ph1536493892110"><a name="ph1536493892110"></a><a name="ph1536493892110"></a><a href="错误码-6.md">错误码</a></span><span xml:lang="fr-FR" id="ph9121mcpsimp"><a name="ph9121mcpsimp"></a><a name="ph9121mcpsimp"></a>。</span></p>
+<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p9118mcpsimp"><a name="p9118mcpsimp"></a><a name="p9118mcpsimp"></a>失败，参见<span xml:lang="fr-FR" id="ph1536493892110"><a name="ph1536493892110"></a><a name="ph1536493892110"></a><a href="#ZH-CN_TOPIC_0000002441733461">错误码</a></span><span xml:lang="fr-FR" id="ph9121mcpsimp"><a name="ph9121mcpsimp"></a><a name="ph9121mcpsimp"></a>。</span></p>
 </td>
 </tr>
 </tbody>
@@ -5276,11 +5230,11 @@ td_s32 ss_mpi_dpu_rect_start_grp(ot_dpu_rect_grp rect_grp);
 
 【相关主题】
 
--   [ss\_mpi\_dpu\_rect\_create\_grp](#ss_mpi_dpu_rect_create_grp)
--   [ss\_mpi\_dpu\_rect\_destroy\_grp](#ss_mpi_dpu_rect_destroy_grp)
--   [ss\_mpi\_dpu\_rect\_set\_grp\_attr](#ss_mpi_dpu_rect_set_grp_attr)
--   [ss\_mpi\_dpu\_rect\_get\_grp\_attr](#ss_mpi_dpu_rect_get_grp_attr)
--   [ss\_mpi\_dpu\_rect\_stop\_grp](#ss_mpi_dpu_rect_stop_grp)
+-   [ss\_mpi\_dpu\_rect\_create\_grp](#ZH-CN_TOPIC_0000002408294208)
+-   [ss\_mpi\_dpu\_rect\_destroy\_grp](#ZH-CN_TOPIC_0000002441853797)
+-   [ss\_mpi\_dpu\_rect\_set\_grp\_attr](#ZH-CN_TOPIC_0000002441853833)
+-   [ss\_mpi\_dpu\_rect\_get\_grp\_attr](#ZH-CN_TOPIC_0000002441733613)
+-   [ss\_mpi\_dpu\_rect\_stop\_grp](#ZH-CN_TOPIC_0000002441853825)
 
 ### ss\_mpi\_dpu\_rect\_stop\_grp<a name="ZH-CN_TOPIC_0000002441853825"></a>
 
@@ -5308,7 +5262,7 @@ td_s32 ss_mpi_dpu_rect_stop_grp(ot_dpu_rect_grp rect_grp);
 <tbody><tr id="row290mcpsimp"><td class="cellrowborder" valign="top" width="14.140000000000002%" headers="mcps1.1.4.1.1 "><p id="p292mcpsimp"><a name="p292mcpsimp"></a><a name="p292mcpsimp"></a>rect_grp</p>
 </td>
 <td class="cellrowborder" valign="top" width="70.71000000000001%" headers="mcps1.1.4.1.2 "><p id="p294mcpsimp"><a name="p294mcpsimp"></a><a name="p294mcpsimp"></a>组号。</p>
-<p id="p295mcpsimp"><a name="p295mcpsimp"></a><a name="p295mcpsimp"></a>取值范围：[0, <a href="OT_DPU_RECT_MAX_GRP_NUM.md">OT_DPU_RECT_MAX_GRP_NUM</a>)。</p>
+<p id="p295mcpsimp"><a name="p295mcpsimp"></a><a name="p295mcpsimp"></a>取值范围：[0, <a href="#ZH-CN_TOPIC_0000002408294400">OT_DPU_RECT_MAX_GRP_NUM</a>)。</p>
 </td>
 <td class="cellrowborder" valign="top" width="15.150000000000002%" headers="mcps1.1.4.1.3 "><p id="p298mcpsimp"><a name="p298mcpsimp"></a><a name="p298mcpsimp"></a>输入</p>
 </td>
@@ -5332,7 +5286,7 @@ td_s32 ss_mpi_dpu_rect_stop_grp(ot_dpu_rect_grp rect_grp);
 </tr>
 <tr id="row316mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.3.1.1 "><p id="p318mcpsimp"><a name="p318mcpsimp"></a><a name="p318mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p320mcpsimp"><a name="p320mcpsimp"></a><a name="p320mcpsimp"></a>失败，参见<span xml:lang="fr-FR" id="ph1536493892110"><a name="ph1536493892110"></a><a name="ph1536493892110"></a><a href="错误码-6.md">错误码</a></span><span xml:lang="fr-FR" id="ph323mcpsimp"><a name="ph323mcpsimp"></a><a name="ph323mcpsimp"></a>。</span></p>
+<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p320mcpsimp"><a name="p320mcpsimp"></a><a name="p320mcpsimp"></a>失败，参见<span xml:lang="fr-FR" id="ph1536493892110"><a name="ph1536493892110"></a><a name="ph1536493892110"></a><a href="#ZH-CN_TOPIC_0000002441733461">错误码</a></span><span xml:lang="fr-FR" id="ph323mcpsimp"><a name="ph323mcpsimp"></a><a name="ph323mcpsimp"></a>。</span></p>
 </td>
 </tr>
 </tbody>
@@ -5354,11 +5308,11 @@ td_s32 ss_mpi_dpu_rect_stop_grp(ot_dpu_rect_grp rect_grp);
 
 【相关主题】
 
--   [ss\_mpi\_dpu\_rect\_create\_grp](#ss_mpi_dpu_rect_create_grp)
--   [ss\_mpi\_dpu\_rect\_destroy\_grp](#ss_mpi_dpu_rect_destroy_grp)
--   [ss\_mpi\_dpu\_rect\_set\_grp\_attr](#ss_mpi_dpu_rect_set_grp_attr)
--   [ss\_mpi\_dpu\_rect\_get\_grp\_attr](#ss_mpi_dpu_rect_get_grp_attr)
--   [ss\_mpi\_dpu\_rect\_start\_grp](#ss_mpi_dpu_rect_start_grp)
+-   [ss\_mpi\_dpu\_rect\_create\_grp](#ZH-CN_TOPIC_0000002408294208)
+-   [ss\_mpi\_dpu\_rect\_destroy\_grp](#ZH-CN_TOPIC_0000002441853797)
+-   [ss\_mpi\_dpu\_rect\_set\_grp\_attr](#ZH-CN_TOPIC_0000002441853833)
+-   [ss\_mpi\_dpu\_rect\_get\_grp\_attr](#ZH-CN_TOPIC_0000002441733613)
+-   [ss\_mpi\_dpu\_rect\_start\_grp](#ZH-CN_TOPIC_0000002441853757)
 
 ### ss\_mpi\_dpu\_rect\_set\_chn\_attr<a name="ZH-CN_TOPIC_0000002441853605"></a>
 
@@ -5386,7 +5340,7 @@ td_s32 ss_mpi_dpu_rect_set_chn_attr(ot_dpu_rect_grp rect_grp, ot_dpu_rect_chn re
 <tbody><tr id="row10397mcpsimp"><td class="cellrowborder" valign="top" width="14.140000000000002%" headers="mcps1.1.4.1.1 "><p id="p10399mcpsimp"><a name="p10399mcpsimp"></a><a name="p10399mcpsimp"></a>rect_grp</p>
 </td>
 <td class="cellrowborder" valign="top" width="70.71000000000001%" headers="mcps1.1.4.1.2 "><p id="p10401mcpsimp"><a name="p10401mcpsimp"></a><a name="p10401mcpsimp"></a>组号。</p>
-<p id="p10402mcpsimp"><a name="p10402mcpsimp"></a><a name="p10402mcpsimp"></a>取值范围：[0, <a href="OT_DPU_RECT_MAX_GRP_NUM.md">OT_DPU_RECT_MAX_GRP_NUM</a>)。</p>
+<p id="p10402mcpsimp"><a name="p10402mcpsimp"></a><a name="p10402mcpsimp"></a>取值范围：[0, <a href="#ZH-CN_TOPIC_0000002408294400">OT_DPU_RECT_MAX_GRP_NUM</a>)。</p>
 </td>
 <td class="cellrowborder" valign="top" width="15.150000000000002%" headers="mcps1.1.4.1.3 "><p id="p10405mcpsimp"><a name="p10405mcpsimp"></a><a name="p10405mcpsimp"></a>输入</p>
 </td>
@@ -5394,7 +5348,7 @@ td_s32 ss_mpi_dpu_rect_set_chn_attr(ot_dpu_rect_grp rect_grp, ot_dpu_rect_chn re
 <tr id="row10406mcpsimp"><td class="cellrowborder" valign="top" width="14.140000000000002%" headers="mcps1.1.4.1.1 "><p id="p10408mcpsimp"><a name="p10408mcpsimp"></a><a name="p10408mcpsimp"></a>rect_chn</p>
 </td>
 <td class="cellrowborder" valign="top" width="70.71000000000001%" headers="mcps1.1.4.1.2 "><p id="p10410mcpsimp"><a name="p10410mcpsimp"></a><a name="p10410mcpsimp"></a>通道号。</p>
-<p id="p10411mcpsimp"><a name="p10411mcpsimp"></a><a name="p10411mcpsimp"></a>取值范围：[0, <a href="OT_DPU_RECT_MAX_CHN_NUM.md">OT_DPU_RECT_MAX_CHN_NUM</a>)。</p>
+<p id="p10411mcpsimp"><a name="p10411mcpsimp"></a><a name="p10411mcpsimp"></a>取值范围：[0, <a href="#ZH-CN_TOPIC_0000002441853529">OT_DPU_RECT_MAX_CHN_NUM</a>)。</p>
 </td>
 <td class="cellrowborder" valign="top" width="15.150000000000002%" headers="mcps1.1.4.1.3 "><p id="p10414mcpsimp"><a name="p10414mcpsimp"></a><a name="p10414mcpsimp"></a>输入</p>
 </td>
@@ -5426,7 +5380,7 @@ td_s32 ss_mpi_dpu_rect_set_chn_attr(ot_dpu_rect_grp rect_grp, ot_dpu_rect_chn re
 </tr>
 <tr id="row10440mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.3.1.1 "><p id="p10442mcpsimp"><a name="p10442mcpsimp"></a><a name="p10442mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p10444mcpsimp"><a name="p10444mcpsimp"></a><a name="p10444mcpsimp"></a>失败，参见<span xml:lang="fr-FR" id="ph1536493892110"><a name="ph1536493892110"></a><a name="ph1536493892110"></a><a href="错误码-6.md">错误码</a></span><span xml:lang="fr-FR" id="ph10447mcpsimp"><a name="ph10447mcpsimp"></a><a name="ph10447mcpsimp"></a>。</span></p>
+<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p10444mcpsimp"><a name="p10444mcpsimp"></a><a name="p10444mcpsimp"></a>失败，参见<span xml:lang="fr-FR" id="ph1536493892110"><a name="ph1536493892110"></a><a name="ph1536493892110"></a><a href="#ZH-CN_TOPIC_0000002441733461">错误码</a></span><span xml:lang="fr-FR" id="ph10447mcpsimp"><a name="ph10447mcpsimp"></a><a name="ph10447mcpsimp"></a>。</span></p>
 </td>
 </tr>
 </tbody>
@@ -5447,9 +5401,9 @@ td_s32 ss_mpi_dpu_rect_set_chn_attr(ot_dpu_rect_grp rect_grp, ot_dpu_rect_chn re
 
 【相关主题】
 
--   [ss\_mpi\_dpu\_rect\_get\_chn\_attr](#ss_mpi_dpu_rect_get_chn_attr)
--   [ss\_mpi\_dpu\_rect\_enable\_chn](#ss_mpi_dpu_rect_enable_chn)
--   [ss\_mpi\_dpu\_rect\_disable\_chn](#ss_mpi_dpu_rect_disable_chn)
+-   [ss\_mpi\_dpu\_rect\_get\_chn\_attr](#ZH-CN_TOPIC_0000002408134420)
+-   [ss\_mpi\_dpu\_rect\_enable\_chn](#ZH-CN_TOPIC_0000002408294252)
+-   [ss\_mpi\_dpu\_rect\_disable\_chn](#ZH-CN_TOPIC_0000002408134524)
 
 ### ss\_mpi\_dpu\_rect\_get\_chn\_attr<a name="ZH-CN_TOPIC_0000002408134420"></a>
 
@@ -5477,7 +5431,7 @@ td_s32 ss_mpi_dpu_rect_get_chn_attr(ot_dpu_rect_grp rect_grp, ot_dpu_rect_chn re
 <tbody><tr id="row8343mcpsimp"><td class="cellrowborder" valign="top" width="14.140000000000002%" headers="mcps1.1.4.1.1 "><p id="p8345mcpsimp"><a name="p8345mcpsimp"></a><a name="p8345mcpsimp"></a>rect_grp</p>
 </td>
 <td class="cellrowborder" valign="top" width="70.71000000000001%" headers="mcps1.1.4.1.2 "><p id="p8347mcpsimp"><a name="p8347mcpsimp"></a><a name="p8347mcpsimp"></a>组号。</p>
-<p id="p8348mcpsimp"><a name="p8348mcpsimp"></a><a name="p8348mcpsimp"></a>取值范围：[0, <a href="OT_DPU_RECT_MAX_GRP_NUM.md">OT_DPU_RECT_MAX_GRP_NUM</a>)。</p>
+<p id="p8348mcpsimp"><a name="p8348mcpsimp"></a><a name="p8348mcpsimp"></a>取值范围：[0, <a href="#ZH-CN_TOPIC_0000002408294400">OT_DPU_RECT_MAX_GRP_NUM</a>)。</p>
 </td>
 <td class="cellrowborder" valign="top" width="15.150000000000002%" headers="mcps1.1.4.1.3 "><p id="p8351mcpsimp"><a name="p8351mcpsimp"></a><a name="p8351mcpsimp"></a>输入</p>
 </td>
@@ -5485,7 +5439,7 @@ td_s32 ss_mpi_dpu_rect_get_chn_attr(ot_dpu_rect_grp rect_grp, ot_dpu_rect_chn re
 <tr id="row8352mcpsimp"><td class="cellrowborder" valign="top" width="14.140000000000002%" headers="mcps1.1.4.1.1 "><p id="p8354mcpsimp"><a name="p8354mcpsimp"></a><a name="p8354mcpsimp"></a>rect_chn</p>
 </td>
 <td class="cellrowborder" valign="top" width="70.71000000000001%" headers="mcps1.1.4.1.2 "><p id="p8356mcpsimp"><a name="p8356mcpsimp"></a><a name="p8356mcpsimp"></a>通道号。</p>
-<p id="p8357mcpsimp"><a name="p8357mcpsimp"></a><a name="p8357mcpsimp"></a>取值范围：[0, <a href="OT_DPU_RECT_MAX_CHN_NUM.md">OT_DPU_RECT_MAX_CHN_NUM</a>)。</p>
+<p id="p8357mcpsimp"><a name="p8357mcpsimp"></a><a name="p8357mcpsimp"></a>取值范围：[0, <a href="#ZH-CN_TOPIC_0000002441853529">OT_DPU_RECT_MAX_CHN_NUM</a>)。</p>
 </td>
 <td class="cellrowborder" valign="top" width="15.150000000000002%" headers="mcps1.1.4.1.3 "><p id="p8360mcpsimp"><a name="p8360mcpsimp"></a><a name="p8360mcpsimp"></a>输入</p>
 </td>
@@ -5517,7 +5471,7 @@ td_s32 ss_mpi_dpu_rect_get_chn_attr(ot_dpu_rect_grp rect_grp, ot_dpu_rect_chn re
 </tr>
 <tr id="row8386mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.3.1.1 "><p id="p8388mcpsimp"><a name="p8388mcpsimp"></a><a name="p8388mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p8390mcpsimp"><a name="p8390mcpsimp"></a><a name="p8390mcpsimp"></a>失败，参见<span xml:lang="fr-FR" id="ph1536493892110"><a name="ph1536493892110"></a><a name="ph1536493892110"></a><a href="错误码-6.md">错误码</a></span><span xml:lang="fr-FR" id="ph8393mcpsimp"><a name="ph8393mcpsimp"></a><a name="ph8393mcpsimp"></a>。</span></p>
+<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p8390mcpsimp"><a name="p8390mcpsimp"></a><a name="p8390mcpsimp"></a>失败，参见<span xml:lang="fr-FR" id="ph1536493892110"><a name="ph1536493892110"></a><a name="ph1536493892110"></a><a href="#ZH-CN_TOPIC_0000002441733461">错误码</a></span><span xml:lang="fr-FR" id="ph8393mcpsimp"><a name="ph8393mcpsimp"></a><a name="ph8393mcpsimp"></a>。</span></p>
 </td>
 </tr>
 </tbody>
@@ -5538,9 +5492,9 @@ td_s32 ss_mpi_dpu_rect_get_chn_attr(ot_dpu_rect_grp rect_grp, ot_dpu_rect_chn re
 
 【相关主题】
 
--   [ss\_mpi\_dpu\_rect\_set\_chn\_attr](#ss_mpi_dpu_rect_set_chn_attr)
--   [ss\_mpi\_dpu\_rect\_enable\_chn](#ss_mpi_dpu_rect_enable_chn)
--   [ss\_mpi\_dpu\_rect\_disable\_chn](#ss_mpi_dpu_rect_disable_chn)
+-   [ss\_mpi\_dpu\_rect\_set\_chn\_attr](#ZH-CN_TOPIC_0000002441853605)
+-   [ss\_mpi\_dpu\_rect\_enable\_chn](#ZH-CN_TOPIC_0000002408294252)
+-   [ss\_mpi\_dpu\_rect\_disable\_chn](#ZH-CN_TOPIC_0000002408134524)
 
 ### ss\_mpi\_dpu\_rect\_enable\_chn<a name="ZH-CN_TOPIC_0000002408294252"></a>
 
@@ -5568,7 +5522,7 @@ td_s32 ss_mpi_dpu_rect_enable_chn(ot_dpu_rect_grp rect_grp, ot_dpu_rect_chn rect
 <tbody><tr id="row518mcpsimp"><td class="cellrowborder" valign="top" width="14.140000000000002%" headers="mcps1.1.4.1.1 "><p id="p520mcpsimp"><a name="p520mcpsimp"></a><a name="p520mcpsimp"></a>rect_grp</p>
 </td>
 <td class="cellrowborder" valign="top" width="70.71000000000001%" headers="mcps1.1.4.1.2 "><p id="p522mcpsimp"><a name="p522mcpsimp"></a><a name="p522mcpsimp"></a>组号。</p>
-<p id="p523mcpsimp"><a name="p523mcpsimp"></a><a name="p523mcpsimp"></a>取值范围：[0, <a href="OT_DPU_RECT_MAX_GRP_NUM.md">OT_DPU_RECT_MAX_GRP_NUM</a>)。</p>
+<p id="p523mcpsimp"><a name="p523mcpsimp"></a><a name="p523mcpsimp"></a>取值范围：[0, <a href="#ZH-CN_TOPIC_0000002408294400">OT_DPU_RECT_MAX_GRP_NUM</a>)。</p>
 </td>
 <td class="cellrowborder" valign="top" width="15.150000000000002%" headers="mcps1.1.4.1.3 "><p id="p526mcpsimp"><a name="p526mcpsimp"></a><a name="p526mcpsimp"></a>输入</p>
 </td>
@@ -5576,7 +5530,7 @@ td_s32 ss_mpi_dpu_rect_enable_chn(ot_dpu_rect_grp rect_grp, ot_dpu_rect_chn rect
 <tr id="row527mcpsimp"><td class="cellrowborder" valign="top" width="14.140000000000002%" headers="mcps1.1.4.1.1 "><p id="p529mcpsimp"><a name="p529mcpsimp"></a><a name="p529mcpsimp"></a>rect_chn</p>
 </td>
 <td class="cellrowborder" valign="top" width="70.71000000000001%" headers="mcps1.1.4.1.2 "><p id="p531mcpsimp"><a name="p531mcpsimp"></a><a name="p531mcpsimp"></a>通道号。</p>
-<p id="p532mcpsimp"><a name="p532mcpsimp"></a><a name="p532mcpsimp"></a>取值范围：[0, <a href="OT_DPU_RECT_MAX_CHN_NUM.md">OT_DPU_RECT_MAX_CHN_NUM</a>)。</p>
+<p id="p532mcpsimp"><a name="p532mcpsimp"></a><a name="p532mcpsimp"></a>取值范围：[0, <a href="#ZH-CN_TOPIC_0000002441853529">OT_DPU_RECT_MAX_CHN_NUM</a>)。</p>
 </td>
 <td class="cellrowborder" valign="top" width="15.150000000000002%" headers="mcps1.1.4.1.3 "><p id="p535mcpsimp"><a name="p535mcpsimp"></a><a name="p535mcpsimp"></a>输入</p>
 </td>
@@ -5600,7 +5554,7 @@ td_s32 ss_mpi_dpu_rect_enable_chn(ot_dpu_rect_grp rect_grp, ot_dpu_rect_chn rect
 </tr>
 <tr id="row553mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.3.1.1 "><p id="p555mcpsimp"><a name="p555mcpsimp"></a><a name="p555mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p557mcpsimp"><a name="p557mcpsimp"></a><a name="p557mcpsimp"></a>失败，参见<span xml:lang="fr-FR" id="ph1536493892110"><a name="ph1536493892110"></a><a name="ph1536493892110"></a><a href="错误码-6.md">错误码</a></span><span xml:lang="fr-FR" id="ph560mcpsimp"><a name="ph560mcpsimp"></a><a name="ph560mcpsimp"></a>。</span></p>
+<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p557mcpsimp"><a name="p557mcpsimp"></a><a name="p557mcpsimp"></a>失败，参见<span xml:lang="fr-FR" id="ph1536493892110"><a name="ph1536493892110"></a><a name="ph1536493892110"></a><a href="#ZH-CN_TOPIC_0000002441733461">错误码</a></span><span xml:lang="fr-FR" id="ph560mcpsimp"><a name="ph560mcpsimp"></a><a name="ph560mcpsimp"></a>。</span></p>
 </td>
 </tr>
 </tbody>
@@ -5623,9 +5577,9 @@ td_s32 ss_mpi_dpu_rect_enable_chn(ot_dpu_rect_grp rect_grp, ot_dpu_rect_chn rect
 
 【相关主题】
 
--   [ss\_mpi\_dpu\_rect\_set\_chn\_attr](#ss_mpi_dpu_rect_set_chn_attr)
--   [ss\_mpi\_dpu\_rect\_get\_chn\_attr](#ss_mpi_dpu_rect_get_chn_attr)
--   [ss\_mpi\_dpu\_rect\_disable\_chn](#ss_mpi_dpu_rect_disable_chn)
+-   [ss\_mpi\_dpu\_rect\_set\_chn\_attr](#ZH-CN_TOPIC_0000002441853605)
+-   [ss\_mpi\_dpu\_rect\_get\_chn\_attr](#ZH-CN_TOPIC_0000002408134420)
+-   [ss\_mpi\_dpu\_rect\_disable\_chn](#ZH-CN_TOPIC_0000002408134524)
 
 ### ss\_mpi\_dpu\_rect\_disable\_chn<a name="ZH-CN_TOPIC_0000002408134524"></a>
 
@@ -5653,7 +5607,7 @@ td_s32 ss_mpi_dpu_rect_disable_chn(ot_dpu_rect_grp rect_grp, ot_dpu_rect_chn rec
 <tbody><tr id="row9656mcpsimp"><td class="cellrowborder" valign="top" width="14.140000000000002%" headers="mcps1.1.4.1.1 "><p id="p9658mcpsimp"><a name="p9658mcpsimp"></a><a name="p9658mcpsimp"></a>rect_grp</p>
 </td>
 <td class="cellrowborder" valign="top" width="70.71000000000001%" headers="mcps1.1.4.1.2 "><p id="p9660mcpsimp"><a name="p9660mcpsimp"></a><a name="p9660mcpsimp"></a>组号。</p>
-<p id="p9661mcpsimp"><a name="p9661mcpsimp"></a><a name="p9661mcpsimp"></a>取值范围：[0, <a href="OT_DPU_RECT_MAX_GRP_NUM.md">OT_DPU_RECT_MAX_GRP_NUM</a>)。</p>
+<p id="p9661mcpsimp"><a name="p9661mcpsimp"></a><a name="p9661mcpsimp"></a>取值范围：[0, <a href="#ZH-CN_TOPIC_0000002408294400">OT_DPU_RECT_MAX_GRP_NUM</a>)。</p>
 </td>
 <td class="cellrowborder" valign="top" width="15.150000000000002%" headers="mcps1.1.4.1.3 "><p id="p9664mcpsimp"><a name="p9664mcpsimp"></a><a name="p9664mcpsimp"></a>输入</p>
 </td>
@@ -5661,7 +5615,7 @@ td_s32 ss_mpi_dpu_rect_disable_chn(ot_dpu_rect_grp rect_grp, ot_dpu_rect_chn rec
 <tr id="row9665mcpsimp"><td class="cellrowborder" valign="top" width="14.140000000000002%" headers="mcps1.1.4.1.1 "><p id="p9667mcpsimp"><a name="p9667mcpsimp"></a><a name="p9667mcpsimp"></a>rect_chn</p>
 </td>
 <td class="cellrowborder" valign="top" width="70.71000000000001%" headers="mcps1.1.4.1.2 "><p id="p9669mcpsimp"><a name="p9669mcpsimp"></a><a name="p9669mcpsimp"></a>通道号。</p>
-<p id="p9670mcpsimp"><a name="p9670mcpsimp"></a><a name="p9670mcpsimp"></a>取值范围：[0, <a href="OT_DPU_RECT_MAX_CHN_NUM.md">OT_DPU_RECT_MAX_CHN_NUM</a>)。</p>
+<p id="p9670mcpsimp"><a name="p9670mcpsimp"></a><a name="p9670mcpsimp"></a>取值范围：[0, <a href="#ZH-CN_TOPIC_0000002441853529">OT_DPU_RECT_MAX_CHN_NUM</a>)。</p>
 </td>
 <td class="cellrowborder" valign="top" width="15.150000000000002%" headers="mcps1.1.4.1.3 "><p id="p9673mcpsimp"><a name="p9673mcpsimp"></a><a name="p9673mcpsimp"></a>输入</p>
 </td>
@@ -5685,7 +5639,7 @@ td_s32 ss_mpi_dpu_rect_disable_chn(ot_dpu_rect_grp rect_grp, ot_dpu_rect_chn rec
 </tr>
 <tr id="row9691mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.3.1.1 "><p id="p9693mcpsimp"><a name="p9693mcpsimp"></a><a name="p9693mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p9695mcpsimp"><a name="p9695mcpsimp"></a><a name="p9695mcpsimp"></a>失败，参见<span xml:lang="fr-FR" id="ph1536493892110"><a name="ph1536493892110"></a><a name="ph1536493892110"></a><a href="错误码-6.md">错误码</a></span><span xml:lang="fr-FR" id="ph9698mcpsimp"><a name="ph9698mcpsimp"></a><a name="ph9698mcpsimp"></a>。</span></p>
+<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p9695mcpsimp"><a name="p9695mcpsimp"></a><a name="p9695mcpsimp"></a>失败，参见<span xml:lang="fr-FR" id="ph1536493892110"><a name="ph1536493892110"></a><a name="ph1536493892110"></a><a href="#ZH-CN_TOPIC_0000002441733461">错误码</a></span><span xml:lang="fr-FR" id="ph9698mcpsimp"><a name="ph9698mcpsimp"></a><a name="ph9698mcpsimp"></a>。</span></p>
 </td>
 </tr>
 </tbody>
@@ -5707,9 +5661,9 @@ td_s32 ss_mpi_dpu_rect_disable_chn(ot_dpu_rect_grp rect_grp, ot_dpu_rect_chn rec
 
 【相关主题】
 
--   [ss\_mpi\_dpu\_rect\_set\_chn\_attr](#ss_mpi_dpu_rect_set_chn_attr)
--   [ss\_mpi\_dpu\_rect\_get\_chn\_attr](#ss_mpi_dpu_rect_get_chn_attr)
--   [ss\_mpi\_dpu\_rect\_enable\_chn](#ss_mpi_dpu_rect_enable_chn)
+-   [ss\_mpi\_dpu\_rect\_set\_chn\_attr](#ZH-CN_TOPIC_0000002441853605)
+-   [ss\_mpi\_dpu\_rect\_get\_chn\_attr](#ZH-CN_TOPIC_0000002408134420)
+-   [ss\_mpi\_dpu\_rect\_enable\_chn](#ZH-CN_TOPIC_0000002408294252)
 
 ### ss\_mpi\_dpu\_rect\_send\_frame<a name="ZH-CN_TOPIC_0000002441853677"></a>
 
@@ -5737,7 +5691,7 @@ td_s32 ss_mpi_dpu_rect_send_frame(ot_dpu_rect_grp rect_grp, const ot_video_frame
 <tbody><tr id="row5922mcpsimp"><td class="cellrowborder" valign="top" width="17%" headers="mcps1.1.4.1.1 "><p id="p5924mcpsimp"><a name="p5924mcpsimp"></a><a name="p5924mcpsimp"></a>rect_grp</p>
 </td>
 <td class="cellrowborder" valign="top" width="72%" headers="mcps1.1.4.1.2 "><p id="p5926mcpsimp"><a name="p5926mcpsimp"></a><a name="p5926mcpsimp"></a>组号。</p>
-<p id="p5927mcpsimp"><a name="p5927mcpsimp"></a><a name="p5927mcpsimp"></a>取值范围：[0, <a href="OT_DPU_RECT_MAX_GRP_NUM.md">OT_DPU_RECT_MAX_GRP_NUM</a>)。</p>
+<p id="p5927mcpsimp"><a name="p5927mcpsimp"></a><a name="p5927mcpsimp"></a>取值范围：[0, <a href="#ZH-CN_TOPIC_0000002408294400">OT_DPU_RECT_MAX_GRP_NUM</a>)。</p>
 </td>
 <td class="cellrowborder" valign="top" width="11%" headers="mcps1.1.4.1.3 "><p id="p5930mcpsimp"><a name="p5930mcpsimp"></a><a name="p5930mcpsimp"></a>输入</p>
 </td>
@@ -5813,7 +5767,7 @@ td_s32 ss_mpi_dpu_rect_send_frame(ot_dpu_rect_grp rect_grp, const ot_video_frame
 </tr>
 <tr id="row6019mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.3.1.1 "><p id="p6021mcpsimp"><a name="p6021mcpsimp"></a><a name="p6021mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p6023mcpsimp"><a name="p6023mcpsimp"></a><a name="p6023mcpsimp"></a>失败，参见<span xml:lang="fr-FR" id="ph1536493892110"><a name="ph1536493892110"></a><a name="ph1536493892110"></a><a href="错误码-6.md">错误码</a></span><span xml:lang="fr-FR" id="ph6026mcpsimp"><a name="ph6026mcpsimp"></a><a name="ph6026mcpsimp"></a>。</span></p>
+<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p6023mcpsimp"><a name="p6023mcpsimp"></a><a name="p6023mcpsimp"></a>失败，参见<span xml:lang="fr-FR" id="ph1536493892110"><a name="ph1536493892110"></a><a name="ph1536493892110"></a><a href="#ZH-CN_TOPIC_0000002441733461">错误码</a></span><span xml:lang="fr-FR" id="ph6026mcpsimp"><a name="ph6026mcpsimp"></a><a name="ph6026mcpsimp"></a>。</span></p>
 </td>
 </tr>
 </tbody>
@@ -5836,8 +5790,8 @@ td_s32 ss_mpi_dpu_rect_send_frame(ot_dpu_rect_grp rect_grp, const ot_video_frame
 
 【相关主题】
 
--   [ss\_mpi\_dpu\_rect\_get\_frame](#ss_mpi_dpu_rect_get_frame)
--   [ss\_mpi\_dpu\_rect\_release\_frame](#ss_mpi_dpu_rect_release_frame)
+-   [ss\_mpi\_dpu\_rect\_get\_frame](#ZH-CN_TOPIC_0000002441853777)
+-   [ss\_mpi\_dpu\_rect\_release\_frame](#ZH-CN_TOPIC_0000002408134464)
 
 ### ss\_mpi\_dpu\_rect\_get\_frame<a name="ZH-CN_TOPIC_0000002441853777"></a>
 
@@ -5865,7 +5819,7 @@ td_s32 ss_mpi_dpu_rect_get_frame(ot_dpu_rect_grp rect_grp, td_s32 milli_sec, ot_
 <tbody><tr id="row4841mcpsimp"><td class="cellrowborder" valign="top" width="21.78%" headers="mcps1.1.4.1.1 "><p id="p4843mcpsimp"><a name="p4843mcpsimp"></a><a name="p4843mcpsimp"></a>rect_grp</p>
 </td>
 <td class="cellrowborder" valign="top" width="67.33%" headers="mcps1.1.4.1.2 "><p id="p4845mcpsimp"><a name="p4845mcpsimp"></a><a name="p4845mcpsimp"></a>组号。</p>
-<p id="p4846mcpsimp"><a name="p4846mcpsimp"></a><a name="p4846mcpsimp"></a>取值范围：[0, <a href="OT_DPU_RECT_MAX_GRP_NUM.md">OT_DPU_RECT_MAX_GRP_NUM</a>)。</p>
+<p id="p4846mcpsimp"><a name="p4846mcpsimp"></a><a name="p4846mcpsimp"></a>取值范围：[0, <a href="#ZH-CN_TOPIC_0000002408294400">OT_DPU_RECT_MAX_GRP_NUM</a>)。</p>
 </td>
 <td class="cellrowborder" valign="top" width="10.89%" headers="mcps1.1.4.1.3 "><p id="p4849mcpsimp"><a name="p4849mcpsimp"></a><a name="p4849mcpsimp"></a>输入</p>
 </td>
@@ -5935,7 +5889,7 @@ td_s32 ss_mpi_dpu_rect_get_frame(ot_dpu_rect_grp rect_grp, td_s32 milli_sec, ot_
 </tr>
 <tr id="row4916mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.3.1.1 "><p id="p4918mcpsimp"><a name="p4918mcpsimp"></a><a name="p4918mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p4920mcpsimp"><a name="p4920mcpsimp"></a><a name="p4920mcpsimp"></a>失败，参见<span xml:lang="fr-FR" id="ph1536493892110"><a name="ph1536493892110"></a><a name="ph1536493892110"></a><a href="错误码-6.md">错误码</a></span><span xml:lang="fr-FR" id="ph4923mcpsimp"><a name="ph4923mcpsimp"></a><a name="ph4923mcpsimp"></a>。</span></p>
+<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p4920mcpsimp"><a name="p4920mcpsimp"></a><a name="p4920mcpsimp"></a>失败，参见<span xml:lang="fr-FR" id="ph1536493892110"><a name="ph1536493892110"></a><a name="ph1536493892110"></a><a href="#ZH-CN_TOPIC_0000002441733461">错误码</a></span><span xml:lang="fr-FR" id="ph4923mcpsimp"><a name="ph4923mcpsimp"></a><a name="ph4923mcpsimp"></a>。</span></p>
 </td>
 </tr>
 </tbody>
@@ -5959,8 +5913,8 @@ td_s32 ss_mpi_dpu_rect_get_frame(ot_dpu_rect_grp rect_grp, td_s32 milli_sec, ot_
 
 【相关主题】
 
--   [ss\_mpi\_dpu\_rect\_send\_frame](#ss_mpi_dpu_rect_send_frame)
--   [ss\_mpi\_dpu\_rect\_release\_frame](#ss_mpi_dpu_rect_release_frame)
+-   [ss\_mpi\_dpu\_rect\_send\_frame](#ZH-CN_TOPIC_0000002441853677)
+-   [ss\_mpi\_dpu\_rect\_release\_frame](#ZH-CN_TOPIC_0000002408134464)
 
 ### ss\_mpi\_dpu\_rect\_release\_frame<a name="ZH-CN_TOPIC_0000002408134464"></a>
 
@@ -5988,7 +5942,7 @@ td_s32 ss_mpi_dpu_rect_release_frame(ot_dpu_rect_grp rect_grp, const ot_dpu_rect
 <tbody><tr id="row7096mcpsimp"><td class="cellrowborder" valign="top" width="21%" headers="mcps1.1.4.1.1 "><p id="p7098mcpsimp"><a name="p7098mcpsimp"></a><a name="p7098mcpsimp"></a>rect_grp</p>
 </td>
 <td class="cellrowborder" valign="top" width="65%" headers="mcps1.1.4.1.2 "><p id="p7100mcpsimp"><a name="p7100mcpsimp"></a><a name="p7100mcpsimp"></a>组号。</p>
-<p id="p7101mcpsimp"><a name="p7101mcpsimp"></a><a name="p7101mcpsimp"></a>取值范围：[0, <a href="OT_DPU_RECT_MAX_GRP_NUM.md">OT_DPU_RECT_MAX_GRP_NUM</a>)。</p>
+<p id="p7101mcpsimp"><a name="p7101mcpsimp"></a><a name="p7101mcpsimp"></a>取值范围：[0, <a href="#ZH-CN_TOPIC_0000002408294400">OT_DPU_RECT_MAX_GRP_NUM</a>)。</p>
 </td>
 <td class="cellrowborder" valign="top" width="14.000000000000002%" headers="mcps1.1.4.1.3 "><p id="p7104mcpsimp"><a name="p7104mcpsimp"></a><a name="p7104mcpsimp"></a>输入</p>
 </td>
@@ -6020,7 +5974,7 @@ td_s32 ss_mpi_dpu_rect_release_frame(ot_dpu_rect_grp rect_grp, const ot_dpu_rect
 </tr>
 <tr id="row7130mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.3.1.1 "><p id="p7132mcpsimp"><a name="p7132mcpsimp"></a><a name="p7132mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p7134mcpsimp"><a name="p7134mcpsimp"></a><a name="p7134mcpsimp"></a>失败，参见<span xml:lang="fr-FR" id="ph1536493892110"><a name="ph1536493892110"></a><a name="ph1536493892110"></a><a href="错误码-6.md">错误码</a></span><span xml:lang="fr-FR" id="ph7137mcpsimp"><a name="ph7137mcpsimp"></a><a name="ph7137mcpsimp"></a>。</span></p>
+<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p7134mcpsimp"><a name="p7134mcpsimp"></a><a name="p7134mcpsimp"></a>失败，参见<span xml:lang="fr-FR" id="ph1536493892110"><a name="ph1536493892110"></a><a name="ph1536493892110"></a><a href="#ZH-CN_TOPIC_0000002441733461">错误码</a></span><span xml:lang="fr-FR" id="ph7137mcpsimp"><a name="ph7137mcpsimp"></a><a name="ph7137mcpsimp"></a>。</span></p>
 </td>
 </tr>
 </tbody>
@@ -6034,7 +5988,7 @@ td_s32 ss_mpi_dpu_rect_release_frame(ot_dpu_rect_grp rect_grp, const ot_dpu_rect
 【注意】
 
 -   组必须已创建。
--   rect\_frame\_info由[ss\_mpi\_dpu\_rect\_get\_frame](ss_mpi_dpu_rect_get_frame.md)获取，与其配对使用。
+-   rect\_frame\_info由[ss\_mpi\_dpu\_rect\_get\_frame](#ZH-CN_TOPIC_0000002441853777)获取，与其配对使用。
 
 【举例】
 
@@ -6042,53 +5996,33 @@ td_s32 ss_mpi_dpu_rect_release_frame(ot_dpu_rect_grp rect_grp, const ot_dpu_rect
 
 【相关主题】
 
--   [ss\_mpi\_dpu\_rect\_send\_frame](#ss_mpi_dpu_rect_send_frame)
--   [ss\_mpi\_dpu\_rect\_get\_frame](#ss_mpi_dpu_rect_get_frame)
+-   [ss\_mpi\_dpu\_rect\_send\_frame](#ZH-CN_TOPIC_0000002441853677)
+-   [ss\_mpi\_dpu\_rect\_get\_frame](#ZH-CN_TOPIC_0000002441853777)
 
 ## 数据类型和数据结构<a name="ZH-CN_TOPIC_0000002441733725"></a>
 
 DPU\_RECT相关数据类型、数据结构定义如下：
 
--   [ot\_dpu\_rect\_lut\_id](ot_dpu_rect_lut_id.md)：定义查找表ID。
--   [ot\_dpu\_rect\_grp](ot_dpu_rect_grp.md)：定义组号。
--   [ot\_dpu\_rect\_pipe](ot_dpu_rect_pipe.md)：定义管道号。
--   [ot\_dpu\_rect\_chn](ot_dpu_rect_chn.md)：定义通道号。
--   [ot\_dpu\_rect\_mode](ot_dpu_rect_mode.md)：定义校正模式。
--   [ot\_dpu\_rect\_grp\_attr](ot_dpu_rect_grp_attr.md)：定义组属性。
--   [ot\_dpu\_rect\_chn\_attr](ot_dpu_rect_chn_attr.md)：定义通道属性。
--   [ot\_dpu\_rect\_mem\_info](ot_dpu_rect_mem_info.md)：定义一维内存信息。
--   [ot\_dpu\_rect\_frame\_info](ot_dpu_rect_frame_info.md)：定义校正图像帧信息。
--   [OT\_DPU\_RECT\_MAX\_GRP\_NUM](OT_DPU_RECT_MAX_GRP_NUM.md)：定义最大组数。
--   [OT\_DPU\_RECT\_MAX\_PIPE\_NUM](OT_DPU_RECT_MAX_PIPE_NUM.md)：定义最大管道数。
--   [OT\_DPU\_RECT\_MAX\_CHN\_NUM](OT_DPU_RECT_MAX_CHN_NUM.md)：定义最大通道数。
--   [OT\_DPU\_RECT\_IN\_IMAGE\_MAX\_WIDTH](OT_DPU_RECT_IN_IMAGE_MAX_WIDTH.md)：定义最大输入图像的宽度。
--   [OT\_DPU\_RECT\_IN\_IMAGE\_MAX\_HEIGHT](OT_DPU_RECT_IN_IMAGE_MAX_HEIGHT.md)：定义最大输入图像的高度。
--   [OT\_DPU\_RECT\_IN\_IMAGE\_MIN\_WIDTH](OT_DPU_RECT_IN_IMAGE_MIN_WIDTH.md)：定义最小输入图像的宽度。
--   [OT\_DPU\_RECT\_IN\_IMAGE\_MIN\_HEIGHT](OT_DPU_RECT_IN_IMAGE_MIN_HEIGHT.md)：定义最小输入图像的高度。
--   [OT\_DPU\_RECT\_OUT\_IMAGE\_MAX\_WIDTH](OT_DPU_RECT_OUT_IMAGE_MAX_WIDTH.md)：定义最大输出图像的宽度。
--   [OT\_DPU\_RECT\_OUT\_IMAGE\_MAX\_HEIGHT](OT_DPU_RECT_OUT_IMAGE_MAX_HEIGHT.md)：定义最大输出图像的高度。
--   [OT\_DPU\_RECT\_OUT\_IMAGE\_MIN\_WIDTH](OT_DPU_RECT_OUT_IMAGE_MIN_WIDTH.md)：定义最小输出图像的宽度。
--   [OT\_DPU\_RECT\_OUT\_IMAGE\_MIN\_HEIGHT](OT_DPU_RECT_OUT_IMAGE_MIN_HEIGHT.md)：定义最小输出图像的高度。
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+-   [ot\_dpu\_rect\_lut\_id](#ZH-CN_TOPIC_0000002441853645)：定义查找表ID。
+-   [ot\_dpu\_rect\_grp](#ZH-CN_TOPIC_0000002441733641)：定义组号。
+-   [ot\_dpu\_rect\_pipe](#ZH-CN_TOPIC_0000002441733373)：定义管道号。
+-   [ot\_dpu\_rect\_chn](#ZH-CN_TOPIC_0000002408134556)：定义通道号。
+-   [ot\_dpu\_rect\_mode](#ZH-CN_TOPIC_0000002441733385)：定义校正模式。
+-   [ot\_dpu\_rect\_grp\_attr](#ZH-CN_TOPIC_0000002441853813)：定义组属性。
+-   [ot\_dpu\_rect\_chn\_attr](#ZH-CN_TOPIC_0000002408294416)：定义通道属性。
+-   [ot\_dpu\_rect\_mem\_info](#ZH-CN_TOPIC_0000002441733585)：定义一维内存信息。
+-   [ot\_dpu\_rect\_frame\_info](#ZH-CN_TOPIC_0000002441733557)：定义校正图像帧信息。
+-   [OT\_DPU\_RECT\_MAX\_GRP\_NUM](#ZH-CN_TOPIC_0000002408294400)：定义最大组数。
+-   [OT\_DPU\_RECT\_MAX\_PIPE\_NUM](#ZH-CN_TOPIC_0000002441733405)：定义最大管道数。
+-   [OT\_DPU\_RECT\_MAX\_CHN\_NUM](#ZH-CN_TOPIC_0000002441853529)：定义最大通道数。
+-   [OT\_DPU\_RECT\_IN\_IMAGE\_MAX\_WIDTH](#ZH-CN_TOPIC_0000002441733425)：定义最大输入图像的宽度。
+-   [OT\_DPU\_RECT\_IN\_IMAGE\_MAX\_HEIGHT](#ZH-CN_TOPIC_0000002441733717)：定义最大输入图像的高度。
+-   [OT\_DPU\_RECT\_IN\_IMAGE\_MIN\_WIDTH](#ZH-CN_TOPIC_0000002441853857)：定义最小输入图像的宽度。
+-   [OT\_DPU\_RECT\_IN\_IMAGE\_MIN\_HEIGHT](#ZH-CN_TOPIC_0000002408134444)：定义最小输入图像的高度。
+-   [OT\_DPU\_RECT\_OUT\_IMAGE\_MAX\_WIDTH](#ZH-CN_TOPIC_0000002408134212)：定义最大输出图像的宽度。
+-   [OT\_DPU\_RECT\_OUT\_IMAGE\_MAX\_HEIGHT](#ZH-CN_TOPIC_0000002441733709)：定义最大输出图像的高度。
+-   [OT\_DPU\_RECT\_OUT\_IMAGE\_MIN\_WIDTH](#ZH-CN_TOPIC_0000002441733445)：定义最小输出图像的宽度。
+-   [OT\_DPU\_RECT\_OUT\_IMAGE\_MIN\_HEIGHT](#ZH-CN_TOPIC_0000002441853569)：定义最小输出图像的高度。
 
 ### ot\_dpu\_rect\_lut\_id<a name="ZH-CN_TOPIC_0000002441853645"></a>
 
@@ -6397,7 +6331,7 @@ typedef struct {
 </tr>
 <tr id="row6156mcpsimp"><td class="cellrowborder" valign="top" width="31%" headers="mcps1.1.3.1.1 "><p id="p6158mcpsimp"><a name="p6158mcpsimp"></a><a name="p6158mcpsimp"></a>size</p>
 </td>
-<td class="cellrowborder" valign="top" width="69%" headers="mcps1.1.3.1.2 "><p id="p6160mcpsimp"><a name="p6160mcpsimp"></a><a name="p6160mcpsimp"></a>内存块字节数，见<a href="重要概念-3.md#fig1846120121814">图1</a>。</p>
+<td class="cellrowborder" valign="top" width="69%" headers="mcps1.1.3.1.2 "><p id="p6160mcpsimp"><a name="p6160mcpsimp"></a><a name="p6160mcpsimp"></a>内存块字节数，见<a href="#fig1846120121814">图1</a>。</p>
 </td>
 </tr>
 </tbody>
@@ -6435,13 +6369,13 @@ typedef struct {
 </th>
 </tr>
 </thead>
-<tbody><tr id="row1565mcpsimp"><td class="cellrowborder" valign="top" width="39%" headers="mcps1.1.3.1.1 "><p id="p1567mcpsimp"><a name="p1567mcpsimp"></a><a name="p1567mcpsimp"></a>src_frame[<a href="OT_DPU_RECT_MAX_PIPE_NUM.md">OT_DPU_RECT_MAX_PIPE_NUM</a>]</p>
+<tbody><tr id="row1565mcpsimp"><td class="cellrowborder" valign="top" width="39%" headers="mcps1.1.3.1.1 "><p id="p1567mcpsimp"><a name="p1567mcpsimp"></a><a name="p1567mcpsimp"></a>src_frame[<a href="#ZH-CN_TOPIC_0000002441733405">OT_DPU_RECT_MAX_PIPE_NUM</a>]</p>
 </td>
 <td class="cellrowborder" valign="top" width="61%" headers="mcps1.1.3.1.2 "><p id="p1570mcpsimp"><a name="p1570mcpsimp"></a><a name="p1570mcpsimp"></a>左右原始图像帧。</p>
 <p id="p1571mcpsimp"><a name="p1571mcpsimp"></a><a name="p1571mcpsimp"></a>ot_video_frame_info请参见《MPP 媒体处理软件 V5.0 开发参考》“系统控制”章节</p>
 </td>
 </tr>
-<tr id="row1572mcpsimp"><td class="cellrowborder" valign="top" width="39%" headers="mcps1.1.3.1.1 "><p id="p1574mcpsimp"><a name="p1574mcpsimp"></a><a name="p1574mcpsimp"></a>rect_frame[<a href="OT_DPU_RECT_MAX_PIPE_NUM.md">OT_DPU_RECT_MAX_PIPE_NUM</a>]</p>
+<tr id="row1572mcpsimp"><td class="cellrowborder" valign="top" width="39%" headers="mcps1.1.3.1.1 "><p id="p1574mcpsimp"><a name="p1574mcpsimp"></a><a name="p1574mcpsimp"></a>rect_frame[<a href="#ZH-CN_TOPIC_0000002441733405">OT_DPU_RECT_MAX_PIPE_NUM</a>]</p>
 </td>
 <td class="cellrowborder" valign="top" width="61%" headers="mcps1.1.3.1.2 "><p id="p1577mcpsimp"><a name="p1577mcpsimp"></a><a name="p1577mcpsimp"></a>左右校正图像帧。</p>
 <p id="p1578mcpsimp"><a name="p1578mcpsimp"></a><a name="p1578mcpsimp"></a>ot_video_frame_info请参见《MPP 媒体处理软件 V5.0 开发参考》“系统控制”章节</p>
@@ -6868,7 +6802,9 @@ typedef struct {
 
 ## Proc调试信息<a name="ZH-CN_TOPIC_0000002408134392"></a>
 
+-   **[概述](#ZH-CN_TOPIC_0000002408134200)**  
 
+-   **[Proc信息说明](#ZH-CN_TOPIC_0000002441853789)**  
 
 ### 概述<a name="ZH-CN_TOPIC_0000002408134200"></a>
 
@@ -7303,11 +7239,13 @@ irq_cost_per_sec  max_irq_cost_per_sec  irq_time_total  proc_cost_per_frame  hw_
 
 # DPU\_MATCH<a name="ZH-CN_TOPIC_0000002408134248"></a>
 
+-   **[概述](#ZH-CN_TOPIC_0000002441733745)**  
 
+-   **[功能描述](#ZH-CN_TOPIC_0000002441853617)**  
 
+-   **[错误码](#ZH-CN_TOPIC_0000002408134232)**  
 
-
-
+-   **[Proc调试信息](#ZH-CN_TOPIC_0000002408134512)**  
 
 ## 概述<a name="ZH-CN_TOPIC_0000002441733745"></a>
 
@@ -7315,7 +7253,9 @@ DPU\(Depth Process Unit\)为_识别_分析系统中的深度处理单元。用�
 
 ## 功能描述<a name="ZH-CN_TOPIC_0000002441853617"></a>
 
+-   **[重要概念](#ZH-CN_TOPIC_0000002408294204)**  
 
+-   **[调用流程](#ZH-CN_TOPIC_0000002441733501)**  
 
 ### 重要概念<a name="ZH-CN_TOPIC_0000002408294204"></a>
 
@@ -7338,7 +7278,7 @@ DPU\(Depth Process Unit\)为_识别_分析系统中的深度处理单元。用�
 
 ### 调用流程<a name="ZH-CN_TOPIC_0000002441733501"></a>
 
-支持DPU\_RECT作为DPU\_MATCH的源。目前无目标模块可以绑定DPU\_MATCH, 接收DPU\_MATCH进行处理，必须手动的调用[ss\_mpi\_dpu\_match\_get\_frame](ss_mpi_dpu_match_get_frame.md)获取结果，再进行处理。如[图1](#fig452655285913)所示。
+支持DPU\_RECT作为DPU\_MATCH的源。目前无目标模块可以绑定DPU\_MATCH, 接收DPU\_MATCH进行处理，必须手动的调用[ss\_mpi\_dpu\_match\_get\_frame](#ZH-CN_TOPIC_0000002408134196)获取结果，再进行处理。如[图1](#fig452655285913)所示。
 
 **图 1**  DPU\_MATCH调用流程<a name="fig452655285913"></a>  
 ![](figures/DPU_MATCH调用流程.png "DPU_MATCH调用流程")
@@ -7347,42 +7287,24 @@ DPU\(Depth Process Unit\)为_识别_分析系统中的深度处理单元。用�
 
 该功能模块为用户提供以下MPI：
 
--   [ss\_mpi\_dpu\_match\_get\_assist\_buf\_size](ss_mpi_dpu_match_get_assist_buf_size.md)：获取辅助内存字节数。
--   [ss\_mpi\_dpu\_match\_create\_grp](ss_mpi_dpu_match_create_grp.md)：创建组。
--   [ss\_mpi\_dpu\_match\_destroy\_grp](ss_mpi_dpu_match_destroy_grp.md)：销毁组。
--   [ss\_mpi\_dpu\_match\_set\_grp\_attr](ss_mpi_dpu_match_set_grp_attr.md)：设置组属性。
--   [ss\_mpi\_dpu\_match\_get\_grp\_attr](ss_mpi_dpu_match_get_grp_attr.md)：获取组属性。
--   [ss\_mpi\_dpu\_match\_start\_grp](ss_mpi_dpu_match_start_grp.md)：启用组。
--   [ss\_mpi\_dpu\_match\_stop\_grp](ss_mpi_dpu_match_stop_grp.md)：禁用组。
--   [ss\_mpi\_dpu\_match\_set\_chn\_attr](ss_mpi_dpu_match_set_chn_attr.md)：设置通道属性。
--   [ss\_mpi\_dpu\_match\_get\_chn\_attr](ss_mpi_dpu_match_get_chn_attr.md)：获取通道属性。
--   [ss\_mpi\_dpu\_match\_enable\_chn](ss_mpi_dpu_match_enable_chn.md)：启用通道。
--   [ss\_mpi\_dpu\_match\_disable\_chn](ss_mpi_dpu_match_disable_chn.md)：禁用通道。
--   [ss\_mpi\_dpu\_match\_send\_frame](ss_mpi_dpu_match_send_frame.md)：用户发送数据。
--   [ss\_mpi\_dpu\_match\_get\_frame](ss_mpi_dpu_match_get_frame.md)：用户从通道获取一帧处理完成的图像。
--   [ss\_mpi\_dpu\_match\_release\_frame](ss_mpi_dpu_match_release_frame.md)：用户释放一帧通道图像。
--   [ss\_mpi\_dpu\_match\_set\_grp\_cost\_param](ss_mpi_dpu_match_set_grp_cost_param.md)：设置组的代价参数。
--   [ss\_mpi\_dpu\_match\_get\_grp\_cost\_param](ss_mpi_dpu_match_get_grp_cost_param.md)：获取组的代价参数。
--   [ss\_mpi\_dpu\_match\_set\_grp\_param](ss_mpi_dpu_match_set_grp_param.md)：设置组参数。
--   [ss\_mpi\_dpu\_match\_get\_grp\_param](ss_mpi_dpu_match_get_grp_param.md)：获取组参数。
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+-   [ss\_mpi\_dpu\_match\_get\_assist\_buf\_size](#ZH-CN_TOPIC_0000002441733413)：获取辅助内存字节数。
+-   [ss\_mpi\_dpu\_match\_create\_grp](#ZH-CN_TOPIC_0000002441733697)：创建组。
+-   [ss\_mpi\_dpu\_match\_destroy\_grp](#ZH-CN_TOPIC_0000002441733465)：销毁组。
+-   [ss\_mpi\_dpu\_match\_set\_grp\_attr](#ZH-CN_TOPIC_0000002408294340)：设置组属性。
+-   [ss\_mpi\_dpu\_match\_get\_grp\_attr](#ZH-CN_TOPIC_0000002441853661)：获取组属性。
+-   [ss\_mpi\_dpu\_match\_start\_grp](#ZH-CN_TOPIC_0000002408294244)：启用组。
+-   [ss\_mpi\_dpu\_match\_stop\_grp](#ZH-CN_TOPIC_0000002441733549)：禁用组。
+-   [ss\_mpi\_dpu\_match\_set\_chn\_attr](#ZH-CN_TOPIC_0000002441733649)：设置通道属性。
+-   [ss\_mpi\_dpu\_match\_get\_chn\_attr](#ZH-CN_TOPIC_0000002441733453)：获取通道属性。
+-   [ss\_mpi\_dpu\_match\_enable\_chn](#ZH-CN_TOPIC_0000002408134548)：启用通道。
+-   [ss\_mpi\_dpu\_match\_disable\_chn](#ZH-CN_TOPIC_0000002441733509)：禁用通道。
+-   [ss\_mpi\_dpu\_match\_send\_frame](#ZH-CN_TOPIC_0000002408134456)：用户发送数据。
+-   [ss\_mpi\_dpu\_match\_get\_frame](#ZH-CN_TOPIC_0000002408134196)：用户从通道获取一帧处理完成的图像。
+-   [ss\_mpi\_dpu\_match\_release\_frame](#ZH-CN_TOPIC_0000002441853697)：用户释放一帧通道图像。
+-   [ss\_mpi\_dpu\_match\_set\_grp\_cost\_param](#ZH-CN_TOPIC_0000002408134204)：设置组的代价参数。
+-   [ss\_mpi\_dpu\_match\_get\_grp\_cost\_param](#ZH-CN_TOPIC_0000002441733689)：获取组的代价参数。
+-   [ss\_mpi\_dpu\_match\_set\_grp\_param](#ZH-CN_TOPIC_0000002441733681)：设置组参数。
+-   [ss\_mpi\_dpu\_match\_get\_grp\_param](#ZH-CN_TOPIC_0000002441853865)：获取组参数。
 
 ### ss\_mpi\_dpu\_match\_get\_assist\_buf\_size<a name="ZH-CN_TOPIC_0000002441733413"></a>
 
@@ -7449,7 +7371,7 @@ td_s32 ss_mpi_dpu_match_get_assist_buf_size(td_u16 disparity_num, td_u32 dst_hei
 </tr>
 <tr id="row8890mcpsimp"><td class="cellrowborder" valign="top" width="25%" headers="mcps1.1.3.1.1 "><p id="p8892mcpsimp"><a name="p8892mcpsimp"></a><a name="p8892mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="75%" headers="mcps1.1.3.1.2 "><p id="p8894mcpsimp"><a name="p8894mcpsimp"></a><a name="p8894mcpsimp"></a>失败，参见<a href="错误码-16.md">错误码</a><span xml:lang="fr-FR" id="ph8898mcpsimp"><a name="ph8898mcpsimp"></a><a name="ph8898mcpsimp"></a>。</span></p>
+<td class="cellrowborder" valign="top" width="75%" headers="mcps1.1.3.1.2 "><p id="p8894mcpsimp"><a name="p8894mcpsimp"></a><a name="p8894mcpsimp"></a>失败，参见<a href="#ZH-CN_TOPIC_0000002408134232">错误码</a><span xml:lang="fr-FR" id="ph8898mcpsimp"><a name="ph8898mcpsimp"></a><a name="ph8898mcpsimp"></a>。</span></p>
 </td>
 </tr>
 </tbody>
@@ -7470,7 +7392,7 @@ td_s32 ss_mpi_dpu_match_get_assist_buf_size(td_u16 disparity_num, td_u32 dst_hei
 
 【相关主题】
 
-[ss\_mpi\_dpu\_match\_create\_grp](#ss_mpi_dpu_match_create_grp)
+[ss\_mpi\_dpu\_match\_create\_grp](#ZH-CN_TOPIC_0000002441733697)
 
 ### ss\_mpi\_dpu\_match\_create\_grp<a name="ZH-CN_TOPIC_0000002441733697"></a>
 
@@ -7498,7 +7420,7 @@ td_s32 ss_mpi_dpu_match_create_grp(ot_dpu_match_grp match_grp, const ot_dpu_matc
 <tbody><tr id="row9986mcpsimp"><td class="cellrowborder" valign="top" width="16%" headers="mcps1.1.4.1.1 "><p id="p9988mcpsimp"><a name="p9988mcpsimp"></a><a name="p9988mcpsimp"></a>match_grp</p>
 </td>
 <td class="cellrowborder" valign="top" width="69%" headers="mcps1.1.4.1.2 "><p id="p9990mcpsimp"><a name="p9990mcpsimp"></a><a name="p9990mcpsimp"></a>组号。</p>
-<p id="p9991mcpsimp"><a name="p9991mcpsimp"></a><a name="p9991mcpsimp"></a>取值范围：[0, <a href="OT_DPU_MATCH_MAX_GRP_NUM.md">OT_DPU_MATCH_MAX_GRP_NUM</a>)。</p>
+<p id="p9991mcpsimp"><a name="p9991mcpsimp"></a><a name="p9991mcpsimp"></a>取值范围：[0, <a href="#ZH-CN_TOPIC_0000002441733437">OT_DPU_MATCH_MAX_GRP_NUM</a>)。</p>
 </td>
 <td class="cellrowborder" valign="top" width="15%" headers="mcps1.1.4.1.3 "><p id="p9994mcpsimp"><a name="p9994mcpsimp"></a><a name="p9994mcpsimp"></a>输入</p>
 </td>
@@ -7530,7 +7452,7 @@ td_s32 ss_mpi_dpu_match_create_grp(ot_dpu_match_grp match_grp, const ot_dpu_matc
 </tr>
 <tr id="row10020mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.3.1.1 "><p id="p10022mcpsimp"><a name="p10022mcpsimp"></a><a name="p10022mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p10024mcpsimp"><a name="p10024mcpsimp"></a><a name="p10024mcpsimp"></a>失败，参见<a href="错误码-16.md">错误码</a><span xml:lang="fr-FR" id="ph10027mcpsimp"><a name="ph10027mcpsimp"></a><a name="ph10027mcpsimp"></a>。</span></p>
+<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p10024mcpsimp"><a name="p10024mcpsimp"></a><a name="p10024mcpsimp"></a>失败，参见<a href="#ZH-CN_TOPIC_0000002408134232">错误码</a><span xml:lang="fr-FR" id="ph10027mcpsimp"><a name="ph10027mcpsimp"></a><a name="ph10027mcpsimp"></a>。</span></p>
 </td>
 </tr>
 </tbody>
@@ -7551,11 +7473,11 @@ td_s32 ss_mpi_dpu_match_create_grp(ot_dpu_match_grp match_grp, const ot_dpu_matc
 
 【相关主题】
 
--   [ss\_mpi\_dpu\_match\_destroy\_grp](#ss_mpi_dpu_match_destroy_grp)
--   [ss\_mpi\_dpu\_match\_set\_grp\_attr](#ss_mpi_dpu_match_set_grp_attr)
--   [ss\_mpi\_dpu\_match\_get\_grp\_attr](#ss_mpi_dpu_match_get_grp_attr)
--   [ss\_mpi\_dpu\_match\_start\_grp](#ss_mpi_dpu_match_start_grp)
--   [ss\_mpi\_dpu\_match\_stop\_grp](#ss_mpi_dpu_match_stop_grp)
+-   [ss\_mpi\_dpu\_match\_destroy\_grp](#ZH-CN_TOPIC_0000002441733465)
+-   [ss\_mpi\_dpu\_match\_set\_grp\_attr](#ZH-CN_TOPIC_0000002408294340)
+-   [ss\_mpi\_dpu\_match\_get\_grp\_attr](#ZH-CN_TOPIC_0000002441853661)
+-   [ss\_mpi\_dpu\_match\_start\_grp](#ZH-CN_TOPIC_0000002408294244)
+-   [ss\_mpi\_dpu\_match\_stop\_grp](#ZH-CN_TOPIC_0000002441733549)
 
 ### ss\_mpi\_dpu\_match\_destroy\_grp<a name="ZH-CN_TOPIC_0000002441733465"></a>
 
@@ -7583,7 +7505,7 @@ td_s32 ss_mpi_dpu_match_destroy_grp(ot_dpu_match_grp match_grp);
 <tbody><tr id="row10070mcpsimp"><td class="cellrowborder" valign="top" width="16%" headers="mcps1.1.4.1.1 "><p id="p10072mcpsimp"><a name="p10072mcpsimp"></a><a name="p10072mcpsimp"></a>match_grp</p>
 </td>
 <td class="cellrowborder" valign="top" width="69%" headers="mcps1.1.4.1.2 "><p id="p10074mcpsimp"><a name="p10074mcpsimp"></a><a name="p10074mcpsimp"></a>组号。</p>
-<p id="p10075mcpsimp"><a name="p10075mcpsimp"></a><a name="p10075mcpsimp"></a>取值范围：[0, <a href="OT_DPU_MATCH_MAX_GRP_NUM.md">OT_DPU_MATCH_MAX_GRP_NUM</a>)。</p>
+<p id="p10075mcpsimp"><a name="p10075mcpsimp"></a><a name="p10075mcpsimp"></a>取值范围：[0, <a href="#ZH-CN_TOPIC_0000002441733437">OT_DPU_MATCH_MAX_GRP_NUM</a>)。</p>
 </td>
 <td class="cellrowborder" valign="top" width="15%" headers="mcps1.1.4.1.3 "><p id="p10078mcpsimp"><a name="p10078mcpsimp"></a><a name="p10078mcpsimp"></a>输入</p>
 </td>
@@ -7607,7 +7529,7 @@ td_s32 ss_mpi_dpu_match_destroy_grp(ot_dpu_match_grp match_grp);
 </tr>
 <tr id="row10096mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.3.1.1 "><p id="p10098mcpsimp"><a name="p10098mcpsimp"></a><a name="p10098mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p10100mcpsimp"><a name="p10100mcpsimp"></a><a name="p10100mcpsimp"></a>失败，参见<a href="错误码-16.md">错误码</a><span xml:lang="fr-FR" id="ph10103mcpsimp"><a name="ph10103mcpsimp"></a><a name="ph10103mcpsimp"></a>。</span></p>
+<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p10100mcpsimp"><a name="p10100mcpsimp"></a><a name="p10100mcpsimp"></a>失败，参见<a href="#ZH-CN_TOPIC_0000002408134232">错误码</a><span xml:lang="fr-FR" id="ph10103mcpsimp"><a name="ph10103mcpsimp"></a><a name="ph10103mcpsimp"></a>。</span></p>
 </td>
 </tr>
 </tbody>
@@ -7621,7 +7543,7 @@ td_s32 ss_mpi_dpu_match_destroy_grp(ot_dpu_match_grp match_grp);
 【注意】
 
 -   组必须已创建。
--   调用此接口之前，如果已经成功执行[ss\_mpi\_dpu\_match\_start\_grp](ss_mpi_dpu_match_start_grp.md)，必须先调用[ss\_mpi\_dpu\_match\_stop\_grp](ss_mpi_dpu_match_stop_grp.md)禁用此组。
+-   调用此接口之前，如果已经成功执行[ss\_mpi\_dpu\_match\_start\_grp](#ZH-CN_TOPIC_0000002408294244)，必须先调用[ss\_mpi\_dpu\_match\_stop\_grp](#ZH-CN_TOPIC_0000002441733549)禁用此组。
 -   调用此接口时，会一直等待此组当前任务处理结束才会真正销毁。
 
 【举例】
@@ -7630,11 +7552,11 @@ td_s32 ss_mpi_dpu_match_destroy_grp(ot_dpu_match_grp match_grp);
 
 【相关主题】
 
--   [ss\_mpi\_dpu\_match\_create\_grp](#ss_mpi_dpu_match_create_grp)
--   [ss\_mpi\_dpu\_match\_set\_grp\_attr](#ss_mpi_dpu_match_set_grp_attr)
--   [ss\_mpi\_dpu\_match\_get\_grp\_attr](#ss_mpi_dpu_match_get_grp_attr)
--   [ss\_mpi\_dpu\_match\_start\_grp](#ss_mpi_dpu_match_start_grp)
--   [ss\_mpi\_dpu\_match\_stop\_grp](#ss_mpi_dpu_match_stop_grp)
+-   [ss\_mpi\_dpu\_match\_create\_grp](#ZH-CN_TOPIC_0000002441733697)
+-   [ss\_mpi\_dpu\_match\_set\_grp\_attr](#ZH-CN_TOPIC_0000002408294340)
+-   [ss\_mpi\_dpu\_match\_get\_grp\_attr](#ZH-CN_TOPIC_0000002441853661)
+-   [ss\_mpi\_dpu\_match\_start\_grp](#ZH-CN_TOPIC_0000002408294244)
+-   [ss\_mpi\_dpu\_match\_stop\_grp](#ZH-CN_TOPIC_0000002441733549)
 
 ### ss\_mpi\_dpu\_match\_set\_grp\_attr<a name="ZH-CN_TOPIC_0000002408294340"></a>
 
@@ -7662,7 +7584,7 @@ td_s32 ss_mpi_dpu_match_set_grp_attr(ot_dpu_match_grp match_grp, const ot_dpu_ma
 <tbody><tr id="row420mcpsimp"><td class="cellrowborder" valign="top" width="16%" headers="mcps1.1.4.1.1 "><p id="p422mcpsimp"><a name="p422mcpsimp"></a><a name="p422mcpsimp"></a>match_grp</p>
 </td>
 <td class="cellrowborder" valign="top" width="69%" headers="mcps1.1.4.1.2 "><p id="p424mcpsimp"><a name="p424mcpsimp"></a><a name="p424mcpsimp"></a>组号。</p>
-<p id="p425mcpsimp"><a name="p425mcpsimp"></a><a name="p425mcpsimp"></a>取值范围：[0, <a href="OT_DPU_MATCH_MAX_GRP_NUM.md">OT_DPU_MATCH_MAX_GRP_NUM</a>)。</p>
+<p id="p425mcpsimp"><a name="p425mcpsimp"></a><a name="p425mcpsimp"></a>取值范围：[0, <a href="#ZH-CN_TOPIC_0000002441733437">OT_DPU_MATCH_MAX_GRP_NUM</a>)。</p>
 </td>
 <td class="cellrowborder" valign="top" width="15%" headers="mcps1.1.4.1.3 "><p id="p428mcpsimp"><a name="p428mcpsimp"></a><a name="p428mcpsimp"></a>输入</p>
 </td>
@@ -7694,7 +7616,7 @@ td_s32 ss_mpi_dpu_match_set_grp_attr(ot_dpu_match_grp match_grp, const ot_dpu_ma
 </tr>
 <tr id="row454mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.3.1.1 "><p id="p456mcpsimp"><a name="p456mcpsimp"></a><a name="p456mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p458mcpsimp"><a name="p458mcpsimp"></a><a name="p458mcpsimp"></a>失败，参见<a href="错误码-16.md">错误码</a><span xml:lang="fr-FR" id="ph461mcpsimp"><a name="ph461mcpsimp"></a><a name="ph461mcpsimp"></a>。</span></p>
+<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p458mcpsimp"><a name="p458mcpsimp"></a><a name="p458mcpsimp"></a>失败，参见<a href="#ZH-CN_TOPIC_0000002408134232">错误码</a><span xml:lang="fr-FR" id="ph461mcpsimp"><a name="ph461mcpsimp"></a><a name="ph461mcpsimp"></a>。</span></p>
 </td>
 </tr>
 </tbody>
@@ -7708,7 +7630,7 @@ td_s32 ss_mpi_dpu_match_set_grp_attr(ot_dpu_match_grp match_grp, const ot_dpu_ma
 【注意】
 
 -   组必须已创建。
--   组属性必须合法，其中部分静态属性不可动态设置，具体请参见[ot\_dpu\_match\_grp\_attr](ot_dpu_match_grp_attr.md)。
+-   组属性必须合法，其中部分静态属性不可动态设置，具体请参见[ot\_dpu\_match\_grp\_attr](#ZH-CN_TOPIC_0000002441853669)。
 
 【举例】
 
@@ -7716,11 +7638,11 @@ td_s32 ss_mpi_dpu_match_set_grp_attr(ot_dpu_match_grp match_grp, const ot_dpu_ma
 
 【相关主题】
 
--   [ss\_mpi\_dpu\_match\_create\_grp](#ss_mpi_dpu_match_create_grp)
--   [ss\_mpi\_dpu\_match\_destroy\_grp](#ss_mpi_dpu_match_destroy_grp)
--   [ss\_mpi\_dpu\_match\_get\_grp\_attr](#ss_mpi_dpu_match_get_grp_attr)
--   [ss\_mpi\_dpu\_match\_start\_grp](#ss_mpi_dpu_match_start_grp)
--   [ss\_mpi\_dpu\_match\_stop\_grp](#ss_mpi_dpu_match_stop_grp)
+-   [ss\_mpi\_dpu\_match\_create\_grp](#ZH-CN_TOPIC_0000002441733697)
+-   [ss\_mpi\_dpu\_match\_destroy\_grp](#ZH-CN_TOPIC_0000002441733465)
+-   [ss\_mpi\_dpu\_match\_get\_grp\_attr](#ZH-CN_TOPIC_0000002441853661)
+-   [ss\_mpi\_dpu\_match\_start\_grp](#ZH-CN_TOPIC_0000002408294244)
+-   [ss\_mpi\_dpu\_match\_stop\_grp](#ZH-CN_TOPIC_0000002441733549)
 
 ### ss\_mpi\_dpu\_match\_get\_grp\_attr<a name="ZH-CN_TOPIC_0000002441853661"></a>
 
@@ -7748,7 +7670,7 @@ td_s32 ss_mpi_dpu_match_get_grp_attr(ot_dpu_match_grp match_grp, ot_dpu_match_gr
 <tbody><tr id="row7965mcpsimp"><td class="cellrowborder" valign="top" width="16%" headers="mcps1.1.4.1.1 "><p id="p7967mcpsimp"><a name="p7967mcpsimp"></a><a name="p7967mcpsimp"></a>match_grp</p>
 </td>
 <td class="cellrowborder" valign="top" width="69%" headers="mcps1.1.4.1.2 "><p id="p7969mcpsimp"><a name="p7969mcpsimp"></a><a name="p7969mcpsimp"></a>组号。</p>
-<p id="p7970mcpsimp"><a name="p7970mcpsimp"></a><a name="p7970mcpsimp"></a>取值范围：[0, <a href="OT_DPU_MATCH_MAX_GRP_NUM.md">OT_DPU_MATCH_MAX_GRP_NUM</a>)。</p>
+<p id="p7970mcpsimp"><a name="p7970mcpsimp"></a><a name="p7970mcpsimp"></a>取值范围：[0, <a href="#ZH-CN_TOPIC_0000002441733437">OT_DPU_MATCH_MAX_GRP_NUM</a>)。</p>
 </td>
 <td class="cellrowborder" valign="top" width="15%" headers="mcps1.1.4.1.3 "><p id="p7973mcpsimp"><a name="p7973mcpsimp"></a><a name="p7973mcpsimp"></a>输入</p>
 </td>
@@ -7780,7 +7702,7 @@ td_s32 ss_mpi_dpu_match_get_grp_attr(ot_dpu_match_grp match_grp, ot_dpu_match_gr
 </tr>
 <tr id="row7999mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.3.1.1 "><p id="p8001mcpsimp"><a name="p8001mcpsimp"></a><a name="p8001mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p8003mcpsimp"><a name="p8003mcpsimp"></a><a name="p8003mcpsimp"></a>失败，参见<a href="错误码-16.md">错误码</a><span xml:lang="fr-FR" id="ph8006mcpsimp"><a name="ph8006mcpsimp"></a><a name="ph8006mcpsimp"></a>。</span></p>
+<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p8003mcpsimp"><a name="p8003mcpsimp"></a><a name="p8003mcpsimp"></a>失败，参见<a href="#ZH-CN_TOPIC_0000002408134232">错误码</a><span xml:lang="fr-FR" id="ph8006mcpsimp"><a name="ph8006mcpsimp"></a><a name="ph8006mcpsimp"></a>。</span></p>
 </td>
 </tr>
 </tbody>
@@ -7801,11 +7723,11 @@ td_s32 ss_mpi_dpu_match_get_grp_attr(ot_dpu_match_grp match_grp, ot_dpu_match_gr
 
 【相关主题】
 
--   [ss\_mpi\_dpu\_match\_create\_grp](#ss_mpi_dpu_match_create_grp)
--   [ss\_mpi\_dpu\_match\_destroy\_grp](#ss_mpi_dpu_match_destroy_grp)
--   [ss\_mpi\_dpu\_match\_set\_grp\_attr](#ss_mpi_dpu_match_set_grp_attr)
--   [ss\_mpi\_dpu\_match\_start\_grp](#ss_mpi_dpu_match_start_grp)
--   [ss\_mpi\_dpu\_match\_stop\_grp](#ss_mpi_dpu_match_stop_grp)
+-   [ss\_mpi\_dpu\_match\_create\_grp](#ZH-CN_TOPIC_0000002441733697)
+-   [ss\_mpi\_dpu\_match\_destroy\_grp](#ZH-CN_TOPIC_0000002441733465)
+-   [ss\_mpi\_dpu\_match\_set\_grp\_attr](#ZH-CN_TOPIC_0000002408294340)
+-   [ss\_mpi\_dpu\_match\_start\_grp](#ZH-CN_TOPIC_0000002408294244)
+-   [ss\_mpi\_dpu\_match\_stop\_grp](#ZH-CN_TOPIC_0000002441733549)
 
 ### ss\_mpi\_dpu\_match\_start\_grp<a name="ZH-CN_TOPIC_0000002408294244"></a>
 
@@ -7833,7 +7755,7 @@ td_s32 ss_mpi_dpu_match_start_grp(ot_dpu_match_grp match_grp);
 <tbody><tr id="row5230mcpsimp"><td class="cellrowborder" valign="top" width="16%" headers="mcps1.1.4.1.1 "><p id="p5232mcpsimp"><a name="p5232mcpsimp"></a><a name="p5232mcpsimp"></a>match_grp</p>
 </td>
 <td class="cellrowborder" valign="top" width="69%" headers="mcps1.1.4.1.2 "><p id="p5234mcpsimp"><a name="p5234mcpsimp"></a><a name="p5234mcpsimp"></a>组号。</p>
-<p id="p5235mcpsimp"><a name="p5235mcpsimp"></a><a name="p5235mcpsimp"></a>取值范围：[0, <a href="OT_DPU_MATCH_MAX_GRP_NUM.md">OT_DPU_MATCH_MAX_GRP_NUM</a>)。</p>
+<p id="p5235mcpsimp"><a name="p5235mcpsimp"></a><a name="p5235mcpsimp"></a>取值范围：[0, <a href="#ZH-CN_TOPIC_0000002441733437">OT_DPU_MATCH_MAX_GRP_NUM</a>)。</p>
 </td>
 <td class="cellrowborder" valign="top" width="15%" headers="mcps1.1.4.1.3 "><p id="p5238mcpsimp"><a name="p5238mcpsimp"></a><a name="p5238mcpsimp"></a>输入</p>
 </td>
@@ -7857,7 +7779,7 @@ td_s32 ss_mpi_dpu_match_start_grp(ot_dpu_match_grp match_grp);
 </tr>
 <tr id="row5256mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.3.1.1 "><p id="p5258mcpsimp"><a name="p5258mcpsimp"></a><a name="p5258mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p5260mcpsimp"><a name="p5260mcpsimp"></a><a name="p5260mcpsimp"></a>失败，参见<a href="错误码-16.md">错误码</a><span xml:lang="fr-FR" id="ph5263mcpsimp"><a name="ph5263mcpsimp"></a><a name="ph5263mcpsimp"></a>。</span></p>
+<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p5260mcpsimp"><a name="p5260mcpsimp"></a><a name="p5260mcpsimp"></a>失败，参见<a href="#ZH-CN_TOPIC_0000002408134232">错误码</a><span xml:lang="fr-FR" id="ph5263mcpsimp"><a name="ph5263mcpsimp"></a><a name="ph5263mcpsimp"></a>。</span></p>
 </td>
 </tr>
 </tbody>
@@ -7880,11 +7802,11 @@ td_s32 ss_mpi_dpu_match_start_grp(ot_dpu_match_grp match_grp);
 
 【相关主题】
 
--   [ss\_mpi\_dpu\_match\_create\_grp](#ss_mpi_dpu_match_create_grp)
--   [ss\_mpi\_dpu\_match\_destroy\_grp](#ss_mpi_dpu_match_destroy_grp)
--   [ss\_mpi\_dpu\_match\_set\_grp\_attr](#ss_mpi_dpu_match_set_grp_attr)
--   [ss\_mpi\_dpu\_match\_get\_grp\_attr](#ss_mpi_dpu_match_get_grp_attr)
--   [ss\_mpi\_dpu\_match\_stop\_grp](#ss_mpi_dpu_match_stop_grp)
+-   [ss\_mpi\_dpu\_match\_create\_grp](#ZH-CN_TOPIC_0000002441733697)
+-   [ss\_mpi\_dpu\_match\_destroy\_grp](#ZH-CN_TOPIC_0000002441733465)
+-   [ss\_mpi\_dpu\_match\_set\_grp\_attr](#ZH-CN_TOPIC_0000002408294340)
+-   [ss\_mpi\_dpu\_match\_get\_grp\_attr](#ZH-CN_TOPIC_0000002441853661)
+-   [ss\_mpi\_dpu\_match\_stop\_grp](#ZH-CN_TOPIC_0000002441733549)
 
 ### ss\_mpi\_dpu\_match\_stop\_grp<a name="ZH-CN_TOPIC_0000002441733549"></a>
 
@@ -7912,7 +7834,7 @@ td_s32 ss_mpi_dpu_match_stop_grp(ot_dpu_match_grp match_grp);
 <tbody><tr id="row2807mcpsimp"><td class="cellrowborder" valign="top" width="16%" headers="mcps1.1.4.1.1 "><p id="p2809mcpsimp"><a name="p2809mcpsimp"></a><a name="p2809mcpsimp"></a>match_grp</p>
 </td>
 <td class="cellrowborder" valign="top" width="69%" headers="mcps1.1.4.1.2 "><p id="p2811mcpsimp"><a name="p2811mcpsimp"></a><a name="p2811mcpsimp"></a>组号。</p>
-<p id="p2812mcpsimp"><a name="p2812mcpsimp"></a><a name="p2812mcpsimp"></a>取值范围：[0, <a href="OT_DPU_MATCH_MAX_GRP_NUM.md">OT_DPU_MATCH_MAX_GRP_NUM</a>)。</p>
+<p id="p2812mcpsimp"><a name="p2812mcpsimp"></a><a name="p2812mcpsimp"></a>取值范围：[0, <a href="#ZH-CN_TOPIC_0000002441733437">OT_DPU_MATCH_MAX_GRP_NUM</a>)。</p>
 </td>
 <td class="cellrowborder" valign="top" width="15%" headers="mcps1.1.4.1.3 "><p id="p2815mcpsimp"><a name="p2815mcpsimp"></a><a name="p2815mcpsimp"></a>输入</p>
 </td>
@@ -7936,7 +7858,7 @@ td_s32 ss_mpi_dpu_match_stop_grp(ot_dpu_match_grp match_grp);
 </tr>
 <tr id="row2833mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.3.1.1 "><p id="p2835mcpsimp"><a name="p2835mcpsimp"></a><a name="p2835mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p2837mcpsimp"><a name="p2837mcpsimp"></a><a name="p2837mcpsimp"></a>失败，参见<a href="错误码-16.md">错误码</a><span xml:lang="fr-FR" id="ph2840mcpsimp"><a name="ph2840mcpsimp"></a><a name="ph2840mcpsimp"></a>。</span></p>
+<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p2837mcpsimp"><a name="p2837mcpsimp"></a><a name="p2837mcpsimp"></a>失败，参见<a href="#ZH-CN_TOPIC_0000002408134232">错误码</a><span xml:lang="fr-FR" id="ph2840mcpsimp"><a name="ph2840mcpsimp"></a><a name="ph2840mcpsimp"></a>。</span></p>
 </td>
 </tr>
 </tbody>
@@ -7958,11 +7880,11 @@ td_s32 ss_mpi_dpu_match_stop_grp(ot_dpu_match_grp match_grp);
 
 【相关主题】
 
--   [ss\_mpi\_dpu\_match\_create\_grp](#ss_mpi_dpu_match_create_grp)
--   [ss\_mpi\_dpu\_match\_destroy\_grp](#ss_mpi_dpu_match_destroy_grp)
--   [ss\_mpi\_dpu\_match\_set\_grp\_attr](#ss_mpi_dpu_match_set_grp_attr)
--   [ss\_mpi\_dpu\_match\_get\_grp\_attr](#ss_mpi_dpu_match_get_grp_attr)
--   [ss\_mpi\_dpu\_match\_start\_grp](#ss_mpi_dpu_match_start_grp)
+-   [ss\_mpi\_dpu\_match\_create\_grp](#ZH-CN_TOPIC_0000002441733697)
+-   [ss\_mpi\_dpu\_match\_destroy\_grp](#ZH-CN_TOPIC_0000002441733465)
+-   [ss\_mpi\_dpu\_match\_set\_grp\_attr](#ZH-CN_TOPIC_0000002408294340)
+-   [ss\_mpi\_dpu\_match\_get\_grp\_attr](#ZH-CN_TOPIC_0000002441853661)
+-   [ss\_mpi\_dpu\_match\_start\_grp](#ZH-CN_TOPIC_0000002408294244)
 
 ### ss\_mpi\_dpu\_match\_set\_chn\_attr<a name="ZH-CN_TOPIC_0000002441733649"></a>
 
@@ -7990,7 +7912,7 @@ td_s32 ss_mpi_dpu_match_set_chn_attr(ot_dpu_match_grp match_grp, ot_dpu_match_ch
 <tbody><tr id="row10308mcpsimp"><td class="cellrowborder" valign="top" width="16%" headers="mcps1.1.4.1.1 "><p id="p10310mcpsimp"><a name="p10310mcpsimp"></a><a name="p10310mcpsimp"></a>match_grp</p>
 </td>
 <td class="cellrowborder" valign="top" width="69%" headers="mcps1.1.4.1.2 "><p id="p10312mcpsimp"><a name="p10312mcpsimp"></a><a name="p10312mcpsimp"></a>组号。</p>
-<p id="p10313mcpsimp"><a name="p10313mcpsimp"></a><a name="p10313mcpsimp"></a>取值范围：[0, <a href="OT_DPU_MATCH_MAX_GRP_NUM.md">OT_DPU_MATCH_MAX_GRP_NUM</a>)。</p>
+<p id="p10313mcpsimp"><a name="p10313mcpsimp"></a><a name="p10313mcpsimp"></a>取值范围：[0, <a href="#ZH-CN_TOPIC_0000002441733437">OT_DPU_MATCH_MAX_GRP_NUM</a>)。</p>
 </td>
 <td class="cellrowborder" valign="top" width="15%" headers="mcps1.1.4.1.3 "><p id="p10316mcpsimp"><a name="p10316mcpsimp"></a><a name="p10316mcpsimp"></a>输入</p>
 </td>
@@ -8030,7 +7952,7 @@ td_s32 ss_mpi_dpu_match_set_chn_attr(ot_dpu_match_grp match_grp, ot_dpu_match_ch
 </tr>
 <tr id="row10350mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.3.1.1 "><p id="p10352mcpsimp"><a name="p10352mcpsimp"></a><a name="p10352mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p10354mcpsimp"><a name="p10354mcpsimp"></a><a name="p10354mcpsimp"></a>失败，参见<a href="错误码-16.md">错误码</a><span xml:lang="fr-FR" id="ph10357mcpsimp"><a name="ph10357mcpsimp"></a><a name="ph10357mcpsimp"></a>。</span></p>
+<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p10354mcpsimp"><a name="p10354mcpsimp"></a><a name="p10354mcpsimp"></a>失败，参见<a href="#ZH-CN_TOPIC_0000002408134232">错误码</a><span xml:lang="fr-FR" id="ph10357mcpsimp"><a name="ph10357mcpsimp"></a><a name="ph10357mcpsimp"></a>。</span></p>
 </td>
 </tr>
 </tbody>
@@ -8051,9 +7973,9 @@ td_s32 ss_mpi_dpu_match_set_chn_attr(ot_dpu_match_grp match_grp, ot_dpu_match_ch
 
 【相关主题】
 
--   [ss\_mpi\_dpu\_match\_get\_chn\_attr](#ss_mpi_dpu_match_get_chn_attr)
--   [ss\_mpi\_dpu\_match\_enable\_chn](#ss_mpi_dpu_match_enable_chn)
--   [ss\_mpi\_dpu\_match\_disable\_chn](#ss_mpi_dpu_match_disable_chn)
+-   [ss\_mpi\_dpu\_match\_get\_chn\_attr](#ZH-CN_TOPIC_0000002441733453)
+-   [ss\_mpi\_dpu\_match\_enable\_chn](#ZH-CN_TOPIC_0000002408134548)
+-   [ss\_mpi\_dpu\_match\_disable\_chn](#ZH-CN_TOPIC_0000002441733509)
 
 ### ss\_mpi\_dpu\_match\_get\_chn\_attr<a name="ZH-CN_TOPIC_0000002441733453"></a>
 
@@ -8081,7 +8003,7 @@ td_s32 ss_mpi_dpu_match_get_chn_attr(ot_dpu_match_grp match_grp, ot_dpu_match_ch
 <tbody><tr id="row5016mcpsimp"><td class="cellrowborder" valign="top" width="16%" headers="mcps1.1.4.1.1 "><p id="p5018mcpsimp"><a name="p5018mcpsimp"></a><a name="p5018mcpsimp"></a>match_grp</p>
 </td>
 <td class="cellrowborder" valign="top" width="69%" headers="mcps1.1.4.1.2 "><p id="p5020mcpsimp"><a name="p5020mcpsimp"></a><a name="p5020mcpsimp"></a>组号。</p>
-<p id="p5021mcpsimp"><a name="p5021mcpsimp"></a><a name="p5021mcpsimp"></a>取值范围：[0, <a href="OT_DPU_MATCH_MAX_GRP_NUM.md">OT_DPU_MATCH_MAX_GRP_NUM</a>)。</p>
+<p id="p5021mcpsimp"><a name="p5021mcpsimp"></a><a name="p5021mcpsimp"></a>取值范围：[0, <a href="#ZH-CN_TOPIC_0000002441733437">OT_DPU_MATCH_MAX_GRP_NUM</a>)。</p>
 </td>
 <td class="cellrowborder" valign="top" width="15%" headers="mcps1.1.4.1.3 "><p id="p5024mcpsimp"><a name="p5024mcpsimp"></a><a name="p5024mcpsimp"></a>输入</p>
 </td>
@@ -8121,7 +8043,7 @@ td_s32 ss_mpi_dpu_match_get_chn_attr(ot_dpu_match_grp match_grp, ot_dpu_match_ch
 </tr>
 <tr id="row5058mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.3.1.1 "><p id="p5060mcpsimp"><a name="p5060mcpsimp"></a><a name="p5060mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p5062mcpsimp"><a name="p5062mcpsimp"></a><a name="p5062mcpsimp"></a>失败，参见<a href="错误码-16.md">错误码</a><span xml:lang="fr-FR" id="ph5065mcpsimp"><a name="ph5065mcpsimp"></a><a name="ph5065mcpsimp"></a>。</span></p>
+<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p5062mcpsimp"><a name="p5062mcpsimp"></a><a name="p5062mcpsimp"></a>失败，参见<a href="#ZH-CN_TOPIC_0000002408134232">错误码</a><span xml:lang="fr-FR" id="ph5065mcpsimp"><a name="ph5065mcpsimp"></a><a name="ph5065mcpsimp"></a>。</span></p>
 </td>
 </tr>
 </tbody>
@@ -8142,9 +8064,9 @@ td_s32 ss_mpi_dpu_match_get_chn_attr(ot_dpu_match_grp match_grp, ot_dpu_match_ch
 
 【相关主题】
 
--   [ss\_mpi\_dpu\_match\_set\_chn\_attr](#ss_mpi_dpu_match_set_chn_attr)
--   [ss\_mpi\_dpu\_match\_enable\_chn](#ss_mpi_dpu_match_enable_chn)
--   [ss\_mpi\_dpu\_match\_disable\_chn](#ss_mpi_dpu_match_disable_chn)
+-   [ss\_mpi\_dpu\_match\_set\_chn\_attr](#ZH-CN_TOPIC_0000002441733649)
+-   [ss\_mpi\_dpu\_match\_enable\_chn](#ZH-CN_TOPIC_0000002408134548)
+-   [ss\_mpi\_dpu\_match\_disable\_chn](#ZH-CN_TOPIC_0000002441733509)
 
 ### ss\_mpi\_dpu\_match\_enable\_chn<a name="ZH-CN_TOPIC_0000002408134548"></a>
 
@@ -8172,7 +8094,7 @@ td_s32 ss_mpi_dpu_match_enable_chn(ot_dpu_match_grp match_grp, ot_dpu_match_chn 
 <tbody><tr id="row7220mcpsimp"><td class="cellrowborder" valign="top" width="16%" headers="mcps1.1.4.1.1 "><p id="p7222mcpsimp"><a name="p7222mcpsimp"></a><a name="p7222mcpsimp"></a>match_grp</p>
 </td>
 <td class="cellrowborder" valign="top" width="69%" headers="mcps1.1.4.1.2 "><p id="p7224mcpsimp"><a name="p7224mcpsimp"></a><a name="p7224mcpsimp"></a>组号。</p>
-<p id="p7225mcpsimp"><a name="p7225mcpsimp"></a><a name="p7225mcpsimp"></a>取值范围：[0, <a href="OT_DPU_MATCH_MAX_GRP_NUM.md">OT_DPU_MATCH_MAX_GRP_NUM</a>)。</p>
+<p id="p7225mcpsimp"><a name="p7225mcpsimp"></a><a name="p7225mcpsimp"></a>取值范围：[0, <a href="#ZH-CN_TOPIC_0000002441733437">OT_DPU_MATCH_MAX_GRP_NUM</a>)。</p>
 </td>
 <td class="cellrowborder" valign="top" width="15%" headers="mcps1.1.4.1.3 "><p id="p7228mcpsimp"><a name="p7228mcpsimp"></a><a name="p7228mcpsimp"></a>输入</p>
 </td>
@@ -8204,7 +8126,7 @@ td_s32 ss_mpi_dpu_match_enable_chn(ot_dpu_match_grp match_grp, ot_dpu_match_chn 
 </tr>
 <tr id="row7254mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.3.1.1 "><p id="p7256mcpsimp"><a name="p7256mcpsimp"></a><a name="p7256mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p7258mcpsimp"><a name="p7258mcpsimp"></a><a name="p7258mcpsimp"></a>失败，参见<a href="错误码-16.md">错误码</a><span xml:lang="fr-FR" id="ph7261mcpsimp"><a name="ph7261mcpsimp"></a><a name="ph7261mcpsimp"></a>。</span></p>
+<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p7258mcpsimp"><a name="p7258mcpsimp"></a><a name="p7258mcpsimp"></a>失败，参见<a href="#ZH-CN_TOPIC_0000002408134232">错误码</a><span xml:lang="fr-FR" id="ph7261mcpsimp"><a name="ph7261mcpsimp"></a><a name="ph7261mcpsimp"></a>。</span></p>
 </td>
 </tr>
 </tbody>
@@ -8227,9 +8149,9 @@ td_s32 ss_mpi_dpu_match_enable_chn(ot_dpu_match_grp match_grp, ot_dpu_match_chn 
 
 【相关主题】
 
--   [ss\_mpi\_dpu\_match\_set\_chn\_attr](#ss_mpi_dpu_match_set_chn_attr)
--   [ss\_mpi\_dpu\_match\_get\_chn\_attr](#ss_mpi_dpu_match_get_chn_attr)
--   [ss\_mpi\_dpu\_match\_disable\_chn](#ss_mpi_dpu_match_disable_chn)
+-   [ss\_mpi\_dpu\_match\_set\_chn\_attr](#ZH-CN_TOPIC_0000002441733649)
+-   [ss\_mpi\_dpu\_match\_get\_chn\_attr](#ZH-CN_TOPIC_0000002441733453)
+-   [ss\_mpi\_dpu\_match\_disable\_chn](#ZH-CN_TOPIC_0000002441733509)
 
 ### ss\_mpi\_dpu\_match\_disable\_chn<a name="ZH-CN_TOPIC_0000002441733509"></a>
 
@@ -8257,7 +8179,7 @@ td_s32 ss_mpi_dpu_match_disable_chn(ot_dpu_match_grp match_grp, ot_dpu_match_chn
 <tbody><tr id="row10151mcpsimp"><td class="cellrowborder" valign="top" width="16%" headers="mcps1.1.4.1.1 "><p id="p10153mcpsimp"><a name="p10153mcpsimp"></a><a name="p10153mcpsimp"></a>match_grp</p>
 </td>
 <td class="cellrowborder" valign="top" width="69%" headers="mcps1.1.4.1.2 "><p id="p10155mcpsimp"><a name="p10155mcpsimp"></a><a name="p10155mcpsimp"></a>组号。</p>
-<p id="p10156mcpsimp"><a name="p10156mcpsimp"></a><a name="p10156mcpsimp"></a>取值范围：[0, <a href="OT_DPU_MATCH_MAX_GRP_NUM.md">OT_DPU_MATCH_MAX_GRP_NUM</a>)。</p>
+<p id="p10156mcpsimp"><a name="p10156mcpsimp"></a><a name="p10156mcpsimp"></a>取值范围：[0, <a href="#ZH-CN_TOPIC_0000002441733437">OT_DPU_MATCH_MAX_GRP_NUM</a>)。</p>
 </td>
 <td class="cellrowborder" valign="top" width="15%" headers="mcps1.1.4.1.3 "><p id="p10159mcpsimp"><a name="p10159mcpsimp"></a><a name="p10159mcpsimp"></a>输入</p>
 </td>
@@ -8289,7 +8211,7 @@ td_s32 ss_mpi_dpu_match_disable_chn(ot_dpu_match_grp match_grp, ot_dpu_match_chn
 </tr>
 <tr id="row10185mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.3.1.1 "><p id="p10187mcpsimp"><a name="p10187mcpsimp"></a><a name="p10187mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p10189mcpsimp"><a name="p10189mcpsimp"></a><a name="p10189mcpsimp"></a>失败，参见<a href="错误码-16.md">错误码</a><span xml:lang="fr-FR" id="ph10192mcpsimp"><a name="ph10192mcpsimp"></a><a name="ph10192mcpsimp"></a>。</span></p>
+<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p10189mcpsimp"><a name="p10189mcpsimp"></a><a name="p10189mcpsimp"></a>失败，参见<a href="#ZH-CN_TOPIC_0000002408134232">错误码</a><span xml:lang="fr-FR" id="ph10192mcpsimp"><a name="ph10192mcpsimp"></a><a name="ph10192mcpsimp"></a>。</span></p>
 </td>
 </tr>
 </tbody>
@@ -8311,9 +8233,9 @@ td_s32 ss_mpi_dpu_match_disable_chn(ot_dpu_match_grp match_grp, ot_dpu_match_chn
 
 【相关主题】
 
--   [ss\_mpi\_dpu\_match\_set\_chn\_attr](#ss_mpi_dpu_match_set_chn_attr)
--   [ss\_mpi\_dpu\_match\_get\_chn\_attr](#ss_mpi_dpu_match_get_chn_attr)
--   [ss\_mpi\_dpu\_match\_enable\_chn](#ss_mpi_dpu_match_enable_chn)
+-   [ss\_mpi\_dpu\_match\_set\_chn\_attr](#ZH-CN_TOPIC_0000002441733649)
+-   [ss\_mpi\_dpu\_match\_get\_chn\_attr](#ZH-CN_TOPIC_0000002441733453)
+-   [ss\_mpi\_dpu\_match\_enable\_chn](#ZH-CN_TOPIC_0000002408134548)
 
 ### ss\_mpi\_dpu\_match\_send\_frame<a name="ZH-CN_TOPIC_0000002408134456"></a>
 
@@ -8341,7 +8263,7 @@ td_s32 ss_mpi_dpu_match_send_frame(ot_dpu_match_grp match_grp, const ot_dpu_matc
 <tbody><tr id="row6920mcpsimp"><td class="cellrowborder" valign="top" width="20%" headers="mcps1.1.4.1.1 "><p id="p6922mcpsimp"><a name="p6922mcpsimp"></a><a name="p6922mcpsimp"></a>match_grp</p>
 </td>
 <td class="cellrowborder" valign="top" width="64%" headers="mcps1.1.4.1.2 "><p id="p6924mcpsimp"><a name="p6924mcpsimp"></a><a name="p6924mcpsimp"></a>组号。</p>
-<p id="p6925mcpsimp"><a name="p6925mcpsimp"></a><a name="p6925mcpsimp"></a>取值范围：[0, <a href="OT_DPU_MATCH_MAX_GRP_NUM.md">OT_DPU_MATCH_MAX_GRP_NUM</a>)。</p>
+<p id="p6925mcpsimp"><a name="p6925mcpsimp"></a><a name="p6925mcpsimp"></a>取值范围：[0, <a href="#ZH-CN_TOPIC_0000002441733437">OT_DPU_MATCH_MAX_GRP_NUM</a>)。</p>
 </td>
 <td class="cellrowborder" valign="top" width="16%" headers="mcps1.1.4.1.3 "><p id="p6928mcpsimp"><a name="p6928mcpsimp"></a><a name="p6928mcpsimp"></a>输入</p>
 </td>
@@ -8420,7 +8342,7 @@ td_s32 ss_mpi_dpu_match_send_frame(ot_dpu_match_grp match_grp, const ot_dpu_matc
 </tr>
 <tr id="row7004mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.3.1.1 "><p id="p7006mcpsimp"><a name="p7006mcpsimp"></a><a name="p7006mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p7008mcpsimp"><a name="p7008mcpsimp"></a><a name="p7008mcpsimp"></a>失败，参见<a href="错误码-16.md">错误码</a><span xml:lang="fr-FR" id="ph7011mcpsimp"><a name="ph7011mcpsimp"></a><a name="ph7011mcpsimp"></a>。</span></p>
+<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p7008mcpsimp"><a name="p7008mcpsimp"></a><a name="p7008mcpsimp"></a>失败，参见<a href="#ZH-CN_TOPIC_0000002408134232">错误码</a><span xml:lang="fr-FR" id="ph7011mcpsimp"><a name="ph7011mcpsimp"></a><a name="ph7011mcpsimp"></a>。</span></p>
 </td>
 </tr>
 </tbody>
@@ -8436,7 +8358,7 @@ td_s32 ss_mpi_dpu_match_send_frame(ot_dpu_match_grp match_grp, const ot_dpu_matc
 -   组必须已创建。
 -   用户使用此接口时，可以自行进行帧率控制。
 -   src\_frame\_info 里面的src\_frame, rect\_frame图像地址必须是VB申请的，宽高要求2对齐，stride要求16字节对齐。
--   匹配模块对于src\_frame\_info 里面的src\_frame只是用于保证[ss\_mpi\_dpu\_match\_get\_frame](ss_mpi_dpu_match_get_frame.md)获取到的原始图像，校正图像和匹配图像是一致的，不会对src\_frame做任何处理，因此只检查VB合法性，不检查图像参数。
+-   匹配模块对于src\_frame\_info 里面的src\_frame只是用于保证[ss\_mpi\_dpu\_match\_get\_frame](#ZH-CN_TOPIC_0000002408134196)获取到的原始图像，校正图像和匹配图像是一致的，不会对src\_frame做任何处理，因此只检查VB合法性，不检查图像参数。
 
 【举例】
 
@@ -8444,8 +8366,8 @@ td_s32 ss_mpi_dpu_match_send_frame(ot_dpu_match_grp match_grp, const ot_dpu_matc
 
 【相关主题】
 
--   [ss\_mpi\_dpu\_match\_get\_frame](#ss_mpi_dpu_match_get_frame)
--   [ss\_mpi\_dpu\_match\_release\_frame](#ss_mpi_dpu_match_release_frame)
+-   [ss\_mpi\_dpu\_match\_get\_frame](#ZH-CN_TOPIC_0000002408134196)
+-   [ss\_mpi\_dpu\_match\_release\_frame](#ZH-CN_TOPIC_0000002441853697)
 
 ### ss\_mpi\_dpu\_match\_get\_frame<a name="ZH-CN_TOPIC_0000002408134196"></a>
 
@@ -8473,7 +8395,7 @@ td_s32 ss_mpi_dpu_match_get_frame(ot_dpu_match_grp match_grp, td_s32 milli_sec, 
 <tbody><tr id="row6236mcpsimp"><td class="cellrowborder" valign="top" width="20.000000000000004%" headers="mcps1.1.4.1.1 "><p id="p6238mcpsimp"><a name="p6238mcpsimp"></a><a name="p6238mcpsimp"></a>match_grp</p>
 </td>
 <td class="cellrowborder" valign="top" width="69%" headers="mcps1.1.4.1.2 "><p id="p6240mcpsimp"><a name="p6240mcpsimp"></a><a name="p6240mcpsimp"></a>组号。</p>
-<p id="p6241mcpsimp"><a name="p6241mcpsimp"></a><a name="p6241mcpsimp"></a>取值范围：[0, <a href="OT_DPU_MATCH_MAX_GRP_NUM.md">OT_DPU_MATCH_MAX_GRP_NUM</a>)。</p>
+<p id="p6241mcpsimp"><a name="p6241mcpsimp"></a><a name="p6241mcpsimp"></a>取值范围：[0, <a href="#ZH-CN_TOPIC_0000002441733437">OT_DPU_MATCH_MAX_GRP_NUM</a>)。</p>
 </td>
 <td class="cellrowborder" valign="top" width="11.000000000000002%" headers="mcps1.1.4.1.3 "><p id="p6244mcpsimp"><a name="p6244mcpsimp"></a><a name="p6244mcpsimp"></a>输入</p>
 </td>
@@ -8561,7 +8483,7 @@ td_s32 ss_mpi_dpu_match_get_frame(ot_dpu_match_grp match_grp, td_s32 milli_sec, 
 </tr>
 <tr id="row6329mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.3.1.1 "><p id="p6331mcpsimp"><a name="p6331mcpsimp"></a><a name="p6331mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p6333mcpsimp"><a name="p6333mcpsimp"></a><a name="p6333mcpsimp"></a>失败，参见<a href="错误码-16.md">错误码</a><span xml:lang="fr-FR" id="ph6336mcpsimp"><a name="ph6336mcpsimp"></a><a name="ph6336mcpsimp"></a>。</span></p>
+<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p6333mcpsimp"><a name="p6333mcpsimp"></a><a name="p6333mcpsimp"></a>失败，参见<a href="#ZH-CN_TOPIC_0000002408134232">错误码</a><span xml:lang="fr-FR" id="ph6336mcpsimp"><a name="ph6336mcpsimp"></a><a name="ph6336mcpsimp"></a>。</span></p>
 </td>
 </tr>
 </tbody>
@@ -8587,8 +8509,8 @@ td_s32 ss_mpi_dpu_match_get_frame(ot_dpu_match_grp match_grp, td_s32 milli_sec, 
 
 【相关主题】
 
--   [ss\_mpi\_dpu\_match\_send\_frame](#ss_mpi_dpu_match_send_frame)
--   [ss\_mpi\_dpu\_match\_release\_frame](#ss_mpi_dpu_match_release_frame)
+-   [ss\_mpi\_dpu\_match\_send\_frame](#ZH-CN_TOPIC_0000002408134456)
+-   [ss\_mpi\_dpu\_match\_release\_frame](#ZH-CN_TOPIC_0000002441853697)
 
 ### ss\_mpi\_dpu\_match\_release\_frame<a name="ZH-CN_TOPIC_0000002441853697"></a>
 
@@ -8616,7 +8538,7 @@ td_s32 ss_mpi_dpu_match_release_frame(ot_dpu_match_grp match_grp, const ot_dpu_m
 <tbody><tr id="row9854mcpsimp"><td class="cellrowborder" valign="top" width="20.200000000000003%" headers="mcps1.1.4.1.1 "><p id="p9856mcpsimp"><a name="p9856mcpsimp"></a><a name="p9856mcpsimp"></a>match_grp</p>
 </td>
 <td class="cellrowborder" valign="top" width="69.69999999999999%" headers="mcps1.1.4.1.2 "><p id="p9858mcpsimp"><a name="p9858mcpsimp"></a><a name="p9858mcpsimp"></a>组号。</p>
-<p id="p9859mcpsimp"><a name="p9859mcpsimp"></a><a name="p9859mcpsimp"></a>取值范围：[0, <a href="OT_DPU_MATCH_MAX_GRP_NUM.md">OT_DPU_MATCH_MAX_GRP_NUM</a>)。</p>
+<p id="p9859mcpsimp"><a name="p9859mcpsimp"></a><a name="p9859mcpsimp"></a>取值范围：[0, <a href="#ZH-CN_TOPIC_0000002441733437">OT_DPU_MATCH_MAX_GRP_NUM</a>)。</p>
 </td>
 <td class="cellrowborder" valign="top" width="10.100000000000001%" headers="mcps1.1.4.1.3 "><p id="p9862mcpsimp"><a name="p9862mcpsimp"></a><a name="p9862mcpsimp"></a>输入</p>
 </td>
@@ -8657,7 +8579,7 @@ td_s32 ss_mpi_dpu_match_release_frame(ot_dpu_match_grp match_grp, const ot_dpu_m
 </tr>
 <tr id="row9897mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.3.1.1 "><p id="p9899mcpsimp"><a name="p9899mcpsimp"></a><a name="p9899mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p9901mcpsimp"><a name="p9901mcpsimp"></a><a name="p9901mcpsimp"></a>失败，参见<a href="错误码-16.md">错误码</a><span xml:lang="fr-FR" id="ph9904mcpsimp"><a name="ph9904mcpsimp"></a><a name="ph9904mcpsimp"></a>。</span></p>
+<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p9901mcpsimp"><a name="p9901mcpsimp"></a><a name="p9901mcpsimp"></a>失败，参见<a href="#ZH-CN_TOPIC_0000002408134232">错误码</a><span xml:lang="fr-FR" id="ph9904mcpsimp"><a name="ph9904mcpsimp"></a><a name="ph9904mcpsimp"></a>。</span></p>
 </td>
 </tr>
 </tbody>
@@ -8671,7 +8593,7 @@ td_s32 ss_mpi_dpu_match_release_frame(ot_dpu_match_grp match_grp, const ot_dpu_m
 【注意】
 
 -   组必须已创建。
--   src\_frame\_info/ dst\_frame由[ss\_mpi\_dpu\_match\_get\_frame](ss_mpi_dpu_match_get_frame.md)获取，与其配对使用。
+-   src\_frame\_info/ dst\_frame由[ss\_mpi\_dpu\_match\_get\_frame](#ZH-CN_TOPIC_0000002408134196)获取，与其配对使用。
 
 【举例】
 
@@ -8679,8 +8601,8 @@ td_s32 ss_mpi_dpu_match_release_frame(ot_dpu_match_grp match_grp, const ot_dpu_m
 
 【相关主题】
 
--   [ss\_mpi\_dpu\_match\_send\_frame](#ss_mpi_dpu_match_send_frame)
--   [ss\_mpi\_dpu\_match\_get\_frame](#ss_mpi_dpu_match_get_frame)
+-   [ss\_mpi\_dpu\_match\_send\_frame](#ZH-CN_TOPIC_0000002408134456)
+-   [ss\_mpi\_dpu\_match\_get\_frame](#ZH-CN_TOPIC_0000002408134196)
 
 ### ss\_mpi\_dpu\_match\_set\_grp\_cost\_param<a name="ZH-CN_TOPIC_0000002408134204"></a>
 
@@ -8708,7 +8630,7 @@ td_s32 ss_mpi_dpu_match_set_grp_cost_param(ot_dpu_match_grp match_grp, const ot_
 <tbody><tr id="row10662mcpsimp"><td class="cellrowborder" valign="top" width="17%" headers="mcps1.1.4.1.1 "><p id="p10664mcpsimp"><a name="p10664mcpsimp"></a><a name="p10664mcpsimp"></a>match_grp</p>
 </td>
 <td class="cellrowborder" valign="top" width="69%" headers="mcps1.1.4.1.2 "><p id="p10666mcpsimp"><a name="p10666mcpsimp"></a><a name="p10666mcpsimp"></a>组号。</p>
-<p id="p10667mcpsimp"><a name="p10667mcpsimp"></a><a name="p10667mcpsimp"></a>取值范围：[0, <a href="OT_DPU_MATCH_MAX_GRP_NUM.md">OT_DPU_MATCH_MAX_GRP_NUM</a>)。</p>
+<p id="p10667mcpsimp"><a name="p10667mcpsimp"></a><a name="p10667mcpsimp"></a>取值范围：[0, <a href="#ZH-CN_TOPIC_0000002441733437">OT_DPU_MATCH_MAX_GRP_NUM</a>)。</p>
 </td>
 <td class="cellrowborder" valign="top" width="14.000000000000002%" headers="mcps1.1.4.1.3 "><p id="p10670mcpsimp"><a name="p10670mcpsimp"></a><a name="p10670mcpsimp"></a>输入</p>
 </td>
@@ -8740,7 +8662,7 @@ td_s32 ss_mpi_dpu_match_set_grp_cost_param(ot_dpu_match_grp match_grp, const ot_
 </tr>
 <tr id="row10696mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.3.1.1 "><p id="p10698mcpsimp"><a name="p10698mcpsimp"></a><a name="p10698mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p10700mcpsimp"><a name="p10700mcpsimp"></a><a name="p10700mcpsimp"></a>失败，参见<a href="错误码-16.md">错误码</a><span xml:lang="fr-FR" id="ph10703mcpsimp"><a name="ph10703mcpsimp"></a><a name="ph10703mcpsimp"></a>。</span></p>
+<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p10700mcpsimp"><a name="p10700mcpsimp"></a><a name="p10700mcpsimp"></a>失败，参见<a href="#ZH-CN_TOPIC_0000002408134232">错误码</a><span xml:lang="fr-FR" id="ph10703mcpsimp"><a name="ph10703mcpsimp"></a><a name="ph10703mcpsimp"></a>。</span></p>
 </td>
 </tr>
 </tbody>
@@ -8761,7 +8683,7 @@ td_s32 ss_mpi_dpu_match_set_grp_cost_param(ot_dpu_match_grp match_grp, const ot_
 
 【相关主题】
 
-[ss\_mpi\_dpu\_match\_get\_grp\_cost\_param](#ss_mpi_dpu_match_get_grp_cost_param)
+[ss\_mpi\_dpu\_match\_get\_grp\_cost\_param](#ZH-CN_TOPIC_0000002441733689)
 
 ### ss\_mpi\_dpu\_match\_get\_grp\_cost\_param<a name="ZH-CN_TOPIC_0000002441733689"></a>
 
@@ -8789,7 +8711,7 @@ td_s32 ss_mpi_dpu_match_get_grp_cost_param(ot_dpu_match_grp match_grp, ot_dpu_ma
 <tbody><tr id="row8071mcpsimp"><td class="cellrowborder" valign="top" width="17%" headers="mcps1.1.4.1.1 "><p id="p8073mcpsimp"><a name="p8073mcpsimp"></a><a name="p8073mcpsimp"></a>match_grp</p>
 </td>
 <td class="cellrowborder" valign="top" width="69%" headers="mcps1.1.4.1.2 "><p id="p8075mcpsimp"><a name="p8075mcpsimp"></a><a name="p8075mcpsimp"></a>组号。</p>
-<p id="p8076mcpsimp"><a name="p8076mcpsimp"></a><a name="p8076mcpsimp"></a>取值范围：[0, <a href="OT_DPU_MATCH_MAX_GRP_NUM.md">OT_DPU_MATCH_MAX_GRP_NUM</a>)。</p>
+<p id="p8076mcpsimp"><a name="p8076mcpsimp"></a><a name="p8076mcpsimp"></a>取值范围：[0, <a href="#ZH-CN_TOPIC_0000002441733437">OT_DPU_MATCH_MAX_GRP_NUM</a>)。</p>
 </td>
 <td class="cellrowborder" valign="top" width="14.000000000000002%" headers="mcps1.1.4.1.3 "><p id="p8079mcpsimp"><a name="p8079mcpsimp"></a><a name="p8079mcpsimp"></a>输入</p>
 </td>
@@ -8821,7 +8743,7 @@ td_s32 ss_mpi_dpu_match_get_grp_cost_param(ot_dpu_match_grp match_grp, ot_dpu_ma
 </tr>
 <tr id="row8105mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.3.1.1 "><p id="p8107mcpsimp"><a name="p8107mcpsimp"></a><a name="p8107mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p8109mcpsimp"><a name="p8109mcpsimp"></a><a name="p8109mcpsimp"></a>失败，参见<a href="错误码-16.md">错误码</a><span xml:lang="fr-FR" id="ph8112mcpsimp"><a name="ph8112mcpsimp"></a><a name="ph8112mcpsimp"></a>。</span></p>
+<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p8109mcpsimp"><a name="p8109mcpsimp"></a><a name="p8109mcpsimp"></a>失败，参见<a href="#ZH-CN_TOPIC_0000002408134232">错误码</a><span xml:lang="fr-FR" id="ph8112mcpsimp"><a name="ph8112mcpsimp"></a><a name="ph8112mcpsimp"></a>。</span></p>
 </td>
 </tr>
 </tbody>
@@ -8842,7 +8764,7 @@ td_s32 ss_mpi_dpu_match_get_grp_cost_param(ot_dpu_match_grp match_grp, ot_dpu_ma
 
 【相关主题】
 
-[ss\_mpi\_dpu\_match\_set\_grp\_cost\_param](#ss_mpi_dpu_match_set_grp_cost_param)
+[ss\_mpi\_dpu\_match\_set\_grp\_cost\_param](#ZH-CN_TOPIC_0000002408134204)
 
 ### ss\_mpi\_dpu\_match\_set\_grp\_param<a name="ZH-CN_TOPIC_0000002441733681"></a>
 
@@ -8870,7 +8792,7 @@ td_s32 ss_mpi_dpu_match_set_grp_param(ot_dpu_match_grp match_grp, const ot_dpu_m
 <tbody><tr id="row10662mcpsimp"><td class="cellrowborder" valign="top" width="17%" headers="mcps1.1.4.1.1 "><p id="p10664mcpsimp"><a name="p10664mcpsimp"></a><a name="p10664mcpsimp"></a>match_grp</p>
 </td>
 <td class="cellrowborder" valign="top" width="69%" headers="mcps1.1.4.1.2 "><p id="p10666mcpsimp"><a name="p10666mcpsimp"></a><a name="p10666mcpsimp"></a>组号。</p>
-<p id="p10667mcpsimp"><a name="p10667mcpsimp"></a><a name="p10667mcpsimp"></a>取值范围：[0, <a href="OT_DPU_MATCH_MAX_GRP_NUM.md">OT_DPU_MATCH_MAX_GRP_NUM</a>)。</p>
+<p id="p10667mcpsimp"><a name="p10667mcpsimp"></a><a name="p10667mcpsimp"></a>取值范围：[0, <a href="#ZH-CN_TOPIC_0000002441733437">OT_DPU_MATCH_MAX_GRP_NUM</a>)。</p>
 </td>
 <td class="cellrowborder" valign="top" width="14.000000000000002%" headers="mcps1.1.4.1.3 "><p id="p10670mcpsimp"><a name="p10670mcpsimp"></a><a name="p10670mcpsimp"></a>输入</p>
 </td>
@@ -8902,7 +8824,7 @@ td_s32 ss_mpi_dpu_match_set_grp_param(ot_dpu_match_grp match_grp, const ot_dpu_m
 </tr>
 <tr id="row10696mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.3.1.1 "><p id="p10698mcpsimp"><a name="p10698mcpsimp"></a><a name="p10698mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p10700mcpsimp"><a name="p10700mcpsimp"></a><a name="p10700mcpsimp"></a>失败，参见<a href="错误码-16.md">错误码</a><span xml:lang="fr-FR" id="ph10703mcpsimp"><a name="ph10703mcpsimp"></a><a name="ph10703mcpsimp"></a>。</span></p>
+<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p10700mcpsimp"><a name="p10700mcpsimp"></a><a name="p10700mcpsimp"></a>失败，参见<a href="#ZH-CN_TOPIC_0000002408134232">错误码</a><span xml:lang="fr-FR" id="ph10703mcpsimp"><a name="ph10703mcpsimp"></a><a name="ph10703mcpsimp"></a>。</span></p>
 </td>
 </tr>
 </tbody>
@@ -8916,7 +8838,7 @@ td_s32 ss_mpi_dpu_match_set_grp_param(ot_dpu_match_grp match_grp, const ot_dpu_m
 【注意】
 
 -   组必须已创建。
--   此接口兼容[ss\_mpi\_dpu\_match\_set\_grp\_cost\_param](ss_mpi_dpu_match_set_grp_cost_param.md)。
+-   此接口兼容[ss\_mpi\_dpu\_match\_set\_grp\_cost\_param](#ZH-CN_TOPIC_0000002408134204)。
 
 【举例】
 
@@ -8924,9 +8846,9 @@ td_s32 ss_mpi_dpu_match_set_grp_param(ot_dpu_match_grp match_grp, const ot_dpu_m
 
 【相关主题】
 
--   [ss\_mpi\_dpu\_match\_set\_grp\_cost\_param](#ss_mpi_dpu_match_set_grp_cost_param)
--   [ss\_mpi\_dpu\_match\_get\_grp\_cost\_param](#ss_mpi_dpu_match_get_grp_cost_param)
--   [ss\_mpi\_dpu\_match\_get\_grp\_param](#ss_mpi_dpu_match_get_grp_param)
+-   [ss\_mpi\_dpu\_match\_set\_grp\_cost\_param](#ZH-CN_TOPIC_0000002408134204)
+-   [ss\_mpi\_dpu\_match\_get\_grp\_cost\_param](#ZH-CN_TOPIC_0000002441733689)
+-   [ss\_mpi\_dpu\_match\_get\_grp\_param](#ZH-CN_TOPIC_0000002441853865)
 
 ### ss\_mpi\_dpu\_match\_get\_grp\_param<a name="ZH-CN_TOPIC_0000002441853865"></a>
 
@@ -8954,7 +8876,7 @@ td_s32 ss_mpi_dpu_match_get_grp_param(ot_dpu_match_grp match_grp, ot_dpu_match_p
 <tbody><tr id="row9832183902610"><td class="cellrowborder" valign="top" width="17%" headers="mcps1.1.4.1.1 "><p id="p18832183922611"><a name="p18832183922611"></a><a name="p18832183922611"></a>match_grp</p>
 </td>
 <td class="cellrowborder" valign="top" width="69%" headers="mcps1.1.4.1.2 "><p id="p48326397261"><a name="p48326397261"></a><a name="p48326397261"></a>组号。</p>
-<p id="p3832139202612"><a name="p3832139202612"></a><a name="p3832139202612"></a>取值范围：[0, <a href="OT_DPU_MATCH_MAX_GRP_NUM.md">OT_DPU_MATCH_MAX_GRP_NUM</a>)。</p>
+<p id="p3832139202612"><a name="p3832139202612"></a><a name="p3832139202612"></a>取值范围：[0, <a href="#ZH-CN_TOPIC_0000002441733437">OT_DPU_MATCH_MAX_GRP_NUM</a>)。</p>
 </td>
 <td class="cellrowborder" valign="top" width="14.000000000000002%" headers="mcps1.1.4.1.3 "><p id="p1832113919263"><a name="p1832113919263"></a><a name="p1832113919263"></a>输入</p>
 </td>
@@ -8986,7 +8908,7 @@ td_s32 ss_mpi_dpu_match_get_grp_param(ot_dpu_match_grp match_grp, ot_dpu_match_p
 </tr>
 <tr id="row283210394266"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.3.1.1 "><p id="p11833103916267"><a name="p11833103916267"></a><a name="p11833103916267"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p14833133922614"><a name="p14833133922614"></a><a name="p14833133922614"></a>失败，参见<a href="错误码-16.md">错误码</a><span xml:lang="fr-FR" id="ph13833153942618"><a name="ph13833153942618"></a><a name="ph13833153942618"></a>。</span></p>
+<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p14833133922614"><a name="p14833133922614"></a><a name="p14833133922614"></a>失败，参见<a href="#ZH-CN_TOPIC_0000002408134232">错误码</a><span xml:lang="fr-FR" id="ph13833153942618"><a name="ph13833153942618"></a><a name="ph13833153942618"></a>。</span></p>
 </td>
 </tr>
 </tbody>
@@ -9009,68 +8931,41 @@ td_s32 ss_mpi_dpu_match_get_grp_param(ot_dpu_match_grp match_grp, ot_dpu_match_p
 
 【相关主题】
 
--   [ss\_mpi\_dpu\_match\_set\_grp\_cost\_param](#ss_mpi_dpu_match_set_grp_cost_param)
--   [ss\_mpi\_dpu\_match\_get\_grp\_cost\_param](#ss_mpi_dpu_match_get_grp_cost_param)
--   [ss\_mpi\_dpu\_match\_set\_grp\_param](#ss_mpi_dpu_match_set_grp_param)
+-   [ss\_mpi\_dpu\_match\_set\_grp\_cost\_param](#ZH-CN_TOPIC_0000002408134204)
+-   [ss\_mpi\_dpu\_match\_get\_grp\_cost\_param](#ZH-CN_TOPIC_0000002441733689)
+-   [ss\_mpi\_dpu\_match\_set\_grp\_param](#ZH-CN_TOPIC_0000002441733681)
 
 ## 数据类型和数据结构<a name="ZH-CN_TOPIC_0000002441853629"></a>
 
 DPU\_MATCH相关数据类型、数据结构定义如下：
 
--   [ot\_dpu\_match\_grp](ot_dpu_match_grp.md)：定义组号。
--   [ot\_dpu\_match\_pipe](ot_dpu_match_pipe.md)：定义管道号。
--   [ot\_dpu\_match\_chn](ot_dpu_match_chn.md)：定义通道号。
--   [ot\_dpu\_match\_mask\_mode](ot_dpu_match_mask_mode.md)：定义聚合模板模式。
--   [ot\_dpu\_match\_density\_accuracy\_mode](ot_dpu_match_density_accuracy_mode.md)：定义稠密精度模式。
--   [ot\_dpu\_match\_speed\_accuracy\_mode](ot_dpu_match_speed_accuracy_mode.md)：定义速度精度模式。
--   [ot\_dpu\_match\_disparity\_subpixel](ot_dpu_match_disparity_subpixel.md)：定义是否计算亚像素枚举值。
--   [ot\_dpu\_match\_grp\_attr](ot_dpu_match_grp_attr.md)：定义组属性。
--   [ot\_dpu\_match\_chn\_attr](ot_dpu_match_chn_attr.md)：定义通道属性。
--   [ot\_dpu\_match\_frame\_info](ot_dpu_match_frame_info.md)：定义匹配图像帧信息。
--   [ot\_dpu\_match\_mem\_info](ot_dpu_match_mem_info.md)：定义一维内存信息。
--   [ot\_dpu\_match\_cost\_param](ot_dpu_match_cost_param.md)：定义代价参数。
--   [ot\_dpu\_match\_version](ot_dpu_match_version.md)： 定义参数版本。
--   [ot\_dpu\_match\_param\_v1](ot_dpu_match_param_v1.md)： 定义版本1参数。
--   [ot\_dpu\_match\_param\_v2](ot_dpu_match_param_v2.md)： 定义版本2参数。
--   [ot\_dpu\_match\_param](ot_dpu_match_param.md)： 定义匹配参数。
--   [OT\_DPU\_MATCH\_MAX\_GRP\_NUM](OT_DPU_MATCH_MAX_GRP_NUM.md)：定义最大组数。
--   [OT\_DPU\_MATCH\_MAX\_PIPE\_NUM](OT_DPU_MATCH_MAX_PIPE_NUM.md)：定义最大管道数。
--   [OT\_DPU\_MATCH\_MAX\_CHN\_NUM](OT_DPU_MATCH_MAX_CHN_NUM.md)：定义最大通道数。
--   [OT\_DPU\_MATCH\_IN\_IMAGE\_MAX\_WIDTH](OT_DPU_MATCH_IN_IMAGE_MAX_WIDTH.md)：定义最大输入图像的宽度。
--   [OT\_DPU\_MATCH\_IN\_IMAGE\_MAX\_HEIGHT](OT_DPU_MATCH_IN_IMAGE_MAX_HEIGHT.md)：定义最大输入图像的高度。
--   [OT\_DPU\_MATCH\_IN\_IMAGE\_MIN\_WIDTH](OT_DPU_MATCH_IN_IMAGE_MIN_WIDTH.md)：定义最小输入图像的宽度。
--   [OT\_DPU\_MATCH\_IN\_IMAGE\_MIN\_HEIGHT](OT_DPU_MATCH_IN_IMAGE_MIN_HEIGHT.md)：定义最小输入图像的高度。
--   [OT\_DPU\_MATCH\_OUT\_IMAGE\_MAX\_WIDTH](OT_DPU_MATCH_OUT_IMAGE_MAX_WIDTH.md)：定义最大输出图像的宽度。
--   [OT\_DPU\_MATCH\_OUT\_IMAGE\_MAX\_HEIGHT](OT_DPU_MATCH_OUT_IMAGE_MAX_HEIGHT.md)：定义最大输出图像的高度。
--   [OT\_DPU\_MATCH\_OUT\_IMAGE\_MIN\_WIDTH](OT_DPU_MATCH_OUT_IMAGE_MIN_WIDTH.md)：定义最小输出图像的宽度。
--   [OT\_DPU\_MATCH\_OUT\_IMAGE\_MIN\_HEIGHT](OT_DPU_MATCH_OUT_IMAGE_MIN_HEIGHT.md)：定义最小输出图像的高度。
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+-   [ot\_dpu\_match\_grp](#ZH-CN_TOPIC_0000002408134404)：定义组号。
+-   [ot\_dpu\_match\_pipe](#ZH-CN_TOPIC_0000002408134376)：定义管道号。
+-   [ot\_dpu\_match\_chn](#ZH-CN_TOPIC_0000002441853801)：定义通道号。
+-   [ot\_dpu\_match\_mask\_mode](#ZH-CN_TOPIC_0000002408134228)：定义聚合模板模式。
+-   [ot\_dpu\_match\_density\_accuracy\_mode](#ZH-CN_TOPIC_0000002441733397)：定义稠密精度模式。
+-   [ot\_dpu\_match\_speed\_accuracy\_mode](#ZH-CN_TOPIC_0000002408134240)：定义速度精度模式。
+-   [ot\_dpu\_match\_disparity\_subpixel](#ZH-CN_TOPIC_0000002408134540)：定义是否计算亚像素枚举值。
+-   [ot\_dpu\_match\_grp\_attr](#ZH-CN_TOPIC_0000002441853669)：定义组属性。
+-   [ot\_dpu\_match\_chn\_attr](#ZH-CN_TOPIC_0000002408294352)：定义通道属性。
+-   [ot\_dpu\_match\_frame\_info](#ZH-CN_TOPIC_0000002441733593)：定义匹配图像帧信息。
+-   [ot\_dpu\_match\_mem\_info](#ZH-CN_TOPIC_0000002408134532)：定义一维内存信息。
+-   [ot\_dpu\_match\_cost\_param](#ZH-CN_TOPIC_0000002408134264)：定义代价参数。
+-   [ot\_dpu\_match\_version](#ZH-CN_TOPIC_0000002408294228)： 定义参数版本。
+-   [ot\_dpu\_match\_param\_v1](#ZH-CN_TOPIC_0000002408294424)： 定义版本1参数。
+-   [ot\_dpu\_match\_param\_v2](#ZH-CN_TOPIC_0000002408134492)： 定义版本2参数。
+-   [ot\_dpu\_match\_param](#ZH-CN_TOPIC_0000002408134384)： 定义匹配参数。
+-   [OT\_DPU\_MATCH\_MAX\_GRP\_NUM](#ZH-CN_TOPIC_0000002441733437)：定义最大组数。
+-   [OT\_DPU\_MATCH\_MAX\_PIPE\_NUM](#ZH-CN_TOPIC_0000002408134276)：定义最大管道数。
+-   [OT\_DPU\_MATCH\_MAX\_CHN\_NUM](#ZH-CN_TOPIC_0000002408294316)：定义最大通道数。
+-   [OT\_DPU\_MATCH\_IN\_IMAGE\_MAX\_WIDTH](#ZH-CN_TOPIC_0000002408294112)：定义最大输入图像的宽度。
+-   [OT\_DPU\_MATCH\_IN\_IMAGE\_MAX\_HEIGHT](#ZH-CN_TOPIC_0000002441733657)：定义最大输入图像的高度。
+-   [OT\_DPU\_MATCH\_IN\_IMAGE\_MIN\_WIDTH](#ZH-CN_TOPIC_0000002408134452)：定义最小输入图像的宽度。
+-   [OT\_DPU\_MATCH\_IN\_IMAGE\_MIN\_HEIGHT](#ZH-CN_TOPIC_0000002408134564)：定义最小输入图像的高度。
+-   [OT\_DPU\_MATCH\_OUT\_IMAGE\_MAX\_WIDTH](#ZH-CN_TOPIC_0000002441733485)：定义最大输出图像的宽度。
+-   [OT\_DPU\_MATCH\_OUT\_IMAGE\_MAX\_HEIGHT](#ZH-CN_TOPIC_0000002441853613)：定义最大输出图像的高度。
+-   [OT\_DPU\_MATCH\_OUT\_IMAGE\_MIN\_WIDTH](#ZH-CN_TOPIC_0000002408134324)：定义最小输出图像的宽度。
+-   [OT\_DPU\_MATCH\_OUT\_IMAGE\_MIN\_HEIGHT](#ZH-CN_TOPIC_0000002408294348)：定义最小输出图像的高度。
 
 ### ot\_dpu\_match\_grp<a name="ZH-CN_TOPIC_0000002408134404"></a>
 
@@ -9643,7 +9538,7 @@ typedef struct {
 </tr>
 <tr id="row388mcpsimp"><td class="cellrowborder" valign="top" width="32%" headers="mcps1.1.3.1.1 "><p xml:lang="fr-FR" id="p390mcpsimp"><a name="p390mcpsimp"></a><a name="p390mcpsimp"></a>size</p>
 </td>
-<td class="cellrowborder" valign="top" width="68%" headers="mcps1.1.3.1.2 "><p id="p392mcpsimp"><a name="p392mcpsimp"></a><a name="p392mcpsimp"></a>内存块字节数,见<a href="重要概念-12.md#fig12816122325914">图1</a>。</p>
+<td class="cellrowborder" valign="top" width="68%" headers="mcps1.1.3.1.2 "><p id="p392mcpsimp"><a name="p392mcpsimp"></a><a name="p392mcpsimp"></a>内存块字节数,见<a href="#fig12816122325914">图1</a>。</p>
 </td>
 </tr>
 </tbody>
@@ -9768,7 +9663,7 @@ typedef ot_dpu_match_cost_param ot_dpu_match_param_v1;
 
 【注意事项】
 
-版本1参数为代价参数，与[ot\_dpu\_match\_cost\_param](ot_dpu_match_cost_param.md)等同。
+版本1参数为代价参数，与[ot\_dpu\_match\_cost\_param](#ZH-CN_TOPIC_0000002408134264)等同。
 
 【相关数据类型及接口】
 
@@ -9892,7 +9787,7 @@ typedef struct {
 
 -   version不同值取不同的联合体变量。如OT\_DPU\_MATCH\_VERSION\_V1时，v1有效。
 -   高版本兼容低版本，如v2兼容v1版本。
--   如某些参数想使用默认参数，可以通过先调用  [ss\_mpi\_dpu\_match\_get\_grp\_param](ss_mpi_dpu_match_get_grp_param.md)获取到默认值，更改完参数，再调用[ss\_mpi\_dpu\_match\_set\_grp\_param](ss_mpi_dpu_match_set_grp_param.md)设置参数。
+-   如某些参数想使用默认参数，可以通过先调用  [ss\_mpi\_dpu\_match\_get\_grp\_param](#ZH-CN_TOPIC_0000002441853865)获取到默认值，更改完参数，再调用[ss\_mpi\_dpu\_match\_set\_grp\_param](#ZH-CN_TOPIC_0000002441733681)设置参数。
 
 【相关数据类型及接口】
 
@@ -10200,14 +10095,14 @@ typedef struct {
 </tr>
 <tr id="row5601mcpsimp"><td class="cellrowborder" valign="top" width="18%" headers="mcps1.2.4.1.1 "><p id="p5603mcpsimp"><a name="p5603mcpsimp"></a><a name="p5603mcpsimp"></a>0xa0368007</p>
 </td>
-<td class="cellrowborder" valign="top" width="50%" headers="mcps1.2.4.1.2 "><p xml:lang="it-IT" id="p5605mcpsimp"><a name="p5605mcpsimp"></a><a name="p5605mcpsimp"></a>OT_ERR_DPU<span xml:lang="en-US" id="ph5606mcpsimp"><a name="ph5606mcpsimp"></a><a name="ph5606mcpsimp"></a>_MATCH</span>_ILLEGAL_PARAM</p>
+<td class="cellrowborder" valign="top" width="50%" headers="mcps1.2.4.1.2 "><p xml:lang="it-IT" id="p5605mcpsimp"><a name="p5605mcpsimp"></a><a name="p5605mcpsimp"></a>OT_ERR_DPU_MATCH_ILLEGAL_PARAM</p>
 </td>
 <td class="cellrowborder" valign="top" width="32%" headers="mcps1.2.4.1.3 "><p id="p5608mcpsimp"><a name="p5608mcpsimp"></a><a name="p5608mcpsimp"></a>参数超出合法范围</p>
 </td>
 </tr>
 <tr id="row5609mcpsimp"><td class="cellrowborder" valign="top" width="18%" headers="mcps1.2.4.1.1 "><p id="p5611mcpsimp"><a name="p5611mcpsimp"></a><a name="p5611mcpsimp"></a>0xa0368008</p>
 </td>
-<td class="cellrowborder" valign="top" width="50%" headers="mcps1.2.4.1.2 "><p xml:lang="it-IT" id="p5613mcpsimp"><a name="p5613mcpsimp"></a><a name="p5613mcpsimp"></a>OT_ERR_DPU<span xml:lang="en-US" id="ph5614mcpsimp"><a name="ph5614mcpsimp"></a><a name="ph5614mcpsimp"></a>_MATCH</span>_EXIST</p>
+<td class="cellrowborder" valign="top" width="50%" headers="mcps1.2.4.1.2 "><p xml:lang="it-IT" id="p5613mcpsimp"><a name="p5613mcpsimp"></a><a name="p5613mcpsimp"></a>OT_ERR_DPU_MATCH_EXIST</p>
 </td>
 <td class="cellrowborder" valign="top" width="32%" headers="mcps1.2.4.1.3 "><p id="p5616mcpsimp"><a name="p5616mcpsimp"></a><a name="p5616mcpsimp"></a>重复创建已存在的设备、通道或资源</p>
 </td>
@@ -10221,7 +10116,7 @@ typedef struct {
 </tr>
 <tr id="row5624mcpsimp"><td class="cellrowborder" valign="top" width="18%" headers="mcps1.2.4.1.1 "><p id="p5626mcpsimp"><a name="p5626mcpsimp"></a><a name="p5626mcpsimp"></a>0xa036800a</p>
 </td>
-<td class="cellrowborder" valign="top" width="50%" headers="mcps1.2.4.1.2 "><p xml:lang="de-DE" id="p5628mcpsimp"><a name="p5628mcpsimp"></a><a name="p5628mcpsimp"></a>OT_ERR_DPU<span xml:lang="en-US" id="ph5629mcpsimp"><a name="ph5629mcpsimp"></a><a name="ph5629mcpsimp"></a>_MATCH</span>_NULL_PTR</p>
+<td class="cellrowborder" valign="top" width="50%" headers="mcps1.2.4.1.2 "><p xml:lang="de-DE" id="p5628mcpsimp"><a name="p5628mcpsimp"></a><a name="p5628mcpsimp"></a>OT_ERR_DPU_MATCH_NULL_PTR</p>
 </td>
 <td class="cellrowborder" valign="top" width="32%" headers="mcps1.2.4.1.3 "><p id="p5631mcpsimp"><a name="p5631mcpsimp"></a><a name="p5631mcpsimp"></a>函数参数中有空指针</p>
 </td>
@@ -10308,7 +10203,9 @@ typedef struct {
 
 ## Proc调试信息<a name="ZH-CN_TOPIC_0000002408134512"></a>
 
+-   **[概述](#ZH-CN_TOPIC_0000002408294392)**  
 
+-   **[Proc信息说明](#ZH-CN_TOPIC_0000002408134220)**  
 
 ### 概述<a name="ZH-CN_TOPIC_0000002408294392"></a>
 
@@ -10719,11 +10616,13 @@ disparity_num  disparity_start_pos  first_penalty_coef  second_penalty_coef  ass
 
 # DSP<a name="ZH-CN_TOPIC_0000002441733533"></a>
 
+-   **[概述](#ZH-CN_TOPIC_0000002441853653)**  
 
+-   **[功能描述](#ZH-CN_TOPIC_0000002408134368)**  
 
+-   **[错误码](#ZH-CN_TOPIC_0000002441733541)**  
 
-
-
+-   **[Proc调试信息](#ZH-CN_TOPIC_0000002441853761)**  
 
 ## 概述<a name="ZH-CN_TOPIC_0000002441853653"></a>
 
@@ -10734,7 +10633,9 @@ DSP（Digital Signal Process）是SVP 平台下的可编程硬件加速模块。
 
 ## 功能描述<a name="ZH-CN_TOPIC_0000002408134368"></a>
 
+-   **[重要概念](#ZH-CN_TOPIC_0000002408294180)**  
 
+-   **[模块参数](#ZH-CN_TOPIC_0000002408134272)**  
 
 ### 重要概念<a name="ZH-CN_TOPIC_0000002408294180"></a>
 
@@ -10773,20 +10674,13 @@ DSP ARM端模块API接口操作。
 
 提供以下API：
 
--   [ss\_mpi\_svp\_dsp\_power\_on](ss_mpi_svp_dsp_power_on.md)：DSP上电。
--   [ss\_mpi\_svp\_dsp\_power\_off](ss_mpi_svp_dsp_power_off.md)：DSP下电。
--   [ss\_mpi\_svp\_dsp\_load\_bin](ss_mpi_svp_dsp_load_bin.md)：加载DSP Bin。
--   [ss\_mpi\_svp\_dsp\_enable\_core](ss_mpi_svp_dsp_enable_core.md)：使能DSP核，使其工作。
--   [ss\_mpi\_svp\_dsp\_disable\_core](ss_mpi_svp_dsp_disable_core.md)：去使能DSP核，使其停止工作。
--   [ss\_mpi\_svp\_dsp\_rpc](ss_mpi_svp_dsp_rpc.md)：远程处理任务。
--   [ss\_mpi\_svp\_dsp\_query](ss_mpi_svp_dsp_query.md)：查询任务完成情况。
-
-
-
-
-
-
-
+-   [ss\_mpi\_svp\_dsp\_power\_on](#ZH-CN_TOPIC_0000002441733705)：DSP上电。
+-   [ss\_mpi\_svp\_dsp\_power\_off](#ZH-CN_TOPIC_0000002408134256)：DSP下电。
+-   [ss\_mpi\_svp\_dsp\_load\_bin](#ZH-CN_TOPIC_0000002408294108)：加载DSP Bin。
+-   [ss\_mpi\_svp\_dsp\_enable\_core](#ZH-CN_TOPIC_0000002441733565)：使能DSP核，使其工作。
+-   [ss\_mpi\_svp\_dsp\_disable\_core](#ZH-CN_TOPIC_0000002408294116)：去使能DSP核，使其停止工作。
+-   [ss\_mpi\_svp\_dsp\_rpc](#ZH-CN_TOPIC_0000002408134308)：远程处理任务。
+-   [ss\_mpi\_svp\_dsp\_query](#ZH-CN_TOPIC_0000002441733493)：查询任务完成情况。
 
 ### ss\_mpi\_svp\_dsp\_power\_on<a name="ZH-CN_TOPIC_0000002441733705"></a>
 
@@ -10837,7 +10731,7 @@ td_s32 ss_mpi_svp_dsp_power_on(ot_svp_dsp_id dsp_id);
 </tr>
 <tr id="row4177mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.3.1.1 "><p id="p4179mcpsimp"><a name="p4179mcpsimp"></a><a name="p4179mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p4181mcpsimp"><a name="p4181mcpsimp"></a><a name="p4181mcpsimp"></a>失败，参见<span xml:lang="fr-FR" id="ph1334510815261"><a name="ph1334510815261"></a><a name="ph1334510815261"></a><a href="错误码-25.md">错误码</a></span><span xml:lang="fr-FR" id="ph4184mcpsimp"><a name="ph4184mcpsimp"></a><a name="ph4184mcpsimp"></a>。</span></p>
+<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p4181mcpsimp"><a name="p4181mcpsimp"></a><a name="p4181mcpsimp"></a>失败，参见<span xml:lang="fr-FR" id="ph1334510815261"><a name="ph1334510815261"></a><a name="ph1334510815261"></a><a href="#ZH-CN_TOPIC_0000002441733541">错误码</a></span><span xml:lang="fr-FR" id="ph4184mcpsimp"><a name="ph4184mcpsimp"></a><a name="ph4184mcpsimp"></a>。</span></p>
 </td>
 </tr>
 </tbody>
@@ -10909,7 +10803,7 @@ td_s32 ss_mpi_svp_dsp_power_off(ot_svp_dsp_id dsp_id);
 </tr>
 <tr id="row6794mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.3.1.1 "><p id="p6796mcpsimp"><a name="p6796mcpsimp"></a><a name="p6796mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p6798mcpsimp"><a name="p6798mcpsimp"></a><a name="p6798mcpsimp"></a>失败，参见<span xml:lang="fr-FR" id="ph1334510815261"><a name="ph1334510815261"></a><a name="ph1334510815261"></a><a href="错误码-25.md">错误码</a></span><span xml:lang="fr-FR" id="ph6801mcpsimp"><a name="ph6801mcpsimp"></a><a name="ph6801mcpsimp"></a>。</span></p>
+<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p6798mcpsimp"><a name="p6798mcpsimp"></a><a name="p6798mcpsimp"></a>失败，参见<span xml:lang="fr-FR" id="ph1334510815261"><a name="ph1334510815261"></a><a name="ph1334510815261"></a><a href="#ZH-CN_TOPIC_0000002441733541">错误码</a></span><span xml:lang="fr-FR" id="ph6801mcpsimp"><a name="ph6801mcpsimp"></a><a name="ph6801mcpsimp"></a>。</span></p>
 </td>
 </tr>
 </tbody>
@@ -10989,7 +10883,7 @@ td_s32 ss_mpi_svp_dsp_load_bin(const td_char *bin_file_name, ot_svp_dsp_mem_type
 </tr>
 <tr id="row6550mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.3.1.1 "><p id="p6552mcpsimp"><a name="p6552mcpsimp"></a><a name="p6552mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p6554mcpsimp"><a name="p6554mcpsimp"></a><a name="p6554mcpsimp"></a>失败，参见<span xml:lang="fr-FR" id="ph1334510815261"><a name="ph1334510815261"></a><a name="ph1334510815261"></a><a href="错误码-25.md">错误码</a></span><span xml:lang="fr-FR" id="ph6557mcpsimp"><a name="ph6557mcpsimp"></a><a name="ph6557mcpsimp"></a>。</span></p>
+<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p6554mcpsimp"><a name="p6554mcpsimp"></a><a name="p6554mcpsimp"></a>失败，参见<span xml:lang="fr-FR" id="ph1334510815261"><a name="ph1334510815261"></a><a name="ph1334510815261"></a><a href="#ZH-CN_TOPIC_0000002441733541">错误码</a></span><span xml:lang="fr-FR" id="ph6557mcpsimp"><a name="ph6557mcpsimp"></a><a name="ph6557mcpsimp"></a>。</span></p>
 </td>
 </tr>
 </tbody>
@@ -11061,7 +10955,7 @@ td_s32 ss_mpi_svp_dsp_enable_core(ot_svp_dsp_id dsp_id);
 </tr>
 <tr id="row7602mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.3.1.1 "><p id="p7604mcpsimp"><a name="p7604mcpsimp"></a><a name="p7604mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p7606mcpsimp"><a name="p7606mcpsimp"></a><a name="p7606mcpsimp"></a>失败，参见<span xml:lang="fr-FR" id="ph1334510815261"><a name="ph1334510815261"></a><a name="ph1334510815261"></a><a href="错误码-25.md">错误码</a></span><span xml:lang="fr-FR" id="ph7609mcpsimp"><a name="ph7609mcpsimp"></a><a name="ph7609mcpsimp"></a>。</span></p>
+<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p7606mcpsimp"><a name="p7606mcpsimp"></a><a name="p7606mcpsimp"></a>失败，参见<span xml:lang="fr-FR" id="ph1334510815261"><a name="ph1334510815261"></a><a name="ph1334510815261"></a><a href="#ZH-CN_TOPIC_0000002441733541">错误码</a></span><span xml:lang="fr-FR" id="ph7609mcpsimp"><a name="ph7609mcpsimp"></a><a name="ph7609mcpsimp"></a>。</span></p>
 </td>
 </tr>
 </tbody>
@@ -11133,7 +11027,7 @@ td_s32 ss_mpi_svp_dsp_disable_core(ot_svp_dsp_id dsp_id);
 </tr>
 <tr id="row2491mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.3.1.1 "><p id="p2493mcpsimp"><a name="p2493mcpsimp"></a><a name="p2493mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p2495mcpsimp"><a name="p2495mcpsimp"></a><a name="p2495mcpsimp"></a>失败，参见<span xml:lang="fr-FR" id="ph1334510815261"><a name="ph1334510815261"></a><a name="ph1334510815261"></a><a href="错误码-25.md">错误码</a></span><span xml:lang="fr-FR" id="ph2498mcpsimp"><a name="ph2498mcpsimp"></a><a name="ph2498mcpsimp"></a>。</span></p>
+<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p2495mcpsimp"><a name="p2495mcpsimp"></a><a name="p2495mcpsimp"></a>失败，参见<span xml:lang="fr-FR" id="ph1334510815261"><a name="ph1334510815261"></a><a name="ph1334510815261"></a><a href="#ZH-CN_TOPIC_0000002441733541">错误码</a></span><span xml:lang="fr-FR" id="ph2498mcpsimp"><a name="ph2498mcpsimp"></a><a name="ph2498mcpsimp"></a>。</span></p>
 </td>
 </tr>
 </tbody>
@@ -11228,7 +11122,7 @@ td_s32 ss_mpi_svp_dsp_rpc(ot_svp_dsp_handle *handle, const ot_svp_dsp_msg *msg, 
 </tr>
 <tr id="row10622mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.3.1.1 "><p id="p10624mcpsimp"><a name="p10624mcpsimp"></a><a name="p10624mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p10626mcpsimp"><a name="p10626mcpsimp"></a><a name="p10626mcpsimp"></a>失败，参见<span xml:lang="fr-FR" id="ph1334510815261"><a name="ph1334510815261"></a><a name="ph1334510815261"></a><a href="错误码-25.md">错误码</a></span><span xml:lang="fr-FR" id="ph10629mcpsimp"><a name="ph10629mcpsimp"></a><a name="ph10629mcpsimp"></a>。</span></p>
+<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p10626mcpsimp"><a name="p10626mcpsimp"></a><a name="p10626mcpsimp"></a>失败，参见<span xml:lang="fr-FR" id="ph1334510815261"><a name="ph1334510815261"></a><a name="ph1334510815261"></a><a href="#ZH-CN_TOPIC_0000002441733541">错误码</a></span><span xml:lang="fr-FR" id="ph10629mcpsimp"><a name="ph10629mcpsimp"></a><a name="ph10629mcpsimp"></a>。</span></p>
 </td>
 </tr>
 </tbody>
@@ -11322,7 +11216,7 @@ td_s32 ss_mpi_svp_dsp_query(ot_svp_dsp_id dsp_id, ot_svp_dsp_handle handle, td_b
 </tr>
 <tr id="row6880mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.3.1.1 "><p id="p6882mcpsimp"><a name="p6882mcpsimp"></a><a name="p6882mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p6884mcpsimp"><a name="p6884mcpsimp"></a><a name="p6884mcpsimp"></a>失败，参见<span xml:lang="fr-FR" id="ph1334510815261"><a name="ph1334510815261"></a><a name="ph1334510815261"></a><a href="错误码-25.md">错误码</a></span><span xml:lang="fr-FR" id="ph6887mcpsimp"><a name="ph6887mcpsimp"></a><a name="ph6887mcpsimp"></a>。</span></p>
+<td class="cellrowborder" valign="top" width="71%" headers="mcps1.1.3.1.2 "><p id="p6884mcpsimp"><a name="p6884mcpsimp"></a><a name="p6884mcpsimp"></a>失败，参见<span xml:lang="fr-FR" id="ph1334510815261"><a name="ph1334510815261"></a><a name="ph1334510815261"></a><a href="#ZH-CN_TOPIC_0000002441733541">错误码</a></span><span xml:lang="fr-FR" id="ph6887mcpsimp"><a name="ph6887mcpsimp"></a><a name="ph6887mcpsimp"></a>。</span></p>
 </td>
 </tr>
 </tbody>
@@ -11349,18 +11243,12 @@ td_s32 ss_mpi_svp_dsp_query(ot_svp_dsp_id dsp_id, ot_svp_dsp_handle handle, td_b
 
 DSP相关数据类型、数据结构定义如下：
 
--   [ot\_svp\_dsp\_handle](ot_svp_dsp_handle.md)：定义DSP句柄。
--   [ot\_svp\_dsp\_id](ot_svp_dsp_id.md)：定义DSP ID。
--   [ot\_svp\_dsp\_pri](ot_svp_dsp_pri.md)：定义优先级。
--   [ot\_svp\_dsp\_mem\_type](ot_svp_dsp_mem_type.md)：定义内存类型。
--   [ot\_svp\_dsp\_cmd](ot_svp_dsp_cmd.md)：定义命令。
--   [ot\_svp\_dsp\_msg](ot_svp_dsp_msg.md)：定义消息格式。
-
-
-
-
-
-
+-   [ot\_svp\_dsp\_handle](#ZH-CN_TOPIC_0000002441733737)：定义DSP句柄。
+-   [ot\_svp\_dsp\_id](#ZH-CN_TOPIC_0000002441733473)：定义DSP ID。
+-   [ot\_svp\_dsp\_pri](#ZH-CN_TOPIC_0000002408294140)：定义优先级。
+-   [ot\_svp\_dsp\_mem\_type](#ZH-CN_TOPIC_0000002441853737)：定义内存类型。
+-   [ot\_svp\_dsp\_cmd](#ZH-CN_TOPIC_0000002408294156)：定义命令。
+-   [ot\_svp\_dsp\_msg](#ZH-CN_TOPIC_0000002408134356)：定义消息格式。
 
 ### ot\_svp\_dsp\_handle<a name="ZH-CN_TOPIC_0000002441733737"></a>
 
@@ -11856,7 +11744,9 @@ DSP模块API错误码如下所示。
 
 ## Proc调试信息<a name="ZH-CN_TOPIC_0000002441853761"></a>
 
+-   **[概述](#ZH-CN_TOPIC_0000002408134412)**  
 
+-   **[Proc信息说明](#ZH-CN_TOPIC_0000002441733521)**  
 
 ### 概述<a name="ZH-CN_TOPIC_0000002408134412"></a>
 

@@ -15,6 +15,7 @@
 
 #include "audio_manager_interface_impl.h"
 
+#include <cstring>
 #include <hdf_base.h>
 #include <sstream>
 #include <algorithm>
@@ -138,12 +139,14 @@ int32_t AudioManagerInterfaceImpl::AddAudioDevice(const std::string &adpName, co
         case AUDIO_DEVICE_TYPE_SPEAKER:
             adp->second->SetSpeakerCallback(callback);
             info.deviceType = AUDIO_DEVICE_SPEAKER_VIRTUAL;
-            info.deviceName = "virtual_speaker";
+            (void)strncpy(info.deviceName, "virtual_speaker", MAX_DEVICE_NAME_LEN - 1);
+            info.deviceName[MAX_DEVICE_NAME_LEN - 1] = '\0';
             break;
         case AUDIO_DEVICE_TYPE_MIC:
             adp->second->SetMicCallback(callback);
             info.deviceType = AUDIO_DEVICE_MIC_VIRTUAL;
-            info.deviceName = "virtual_mic";
+            (void)strncpy(info.deviceName, "virtual_mic", MAX_DEVICE_NAME_LEN - 1);
+            info.deviceName[MAX_DEVICE_NAME_LEN - 1] = '\0';
             break;
         case AUDIO_DEVICE_TYPE_UNKNOWN:
         default:
@@ -184,10 +187,12 @@ int32_t AudioManagerInterfaceImpl::RemoveAudioDevice(const std::string &adpName,
     int32_t deviceType = GetDevTypeByDHId(dhId);
     if (deviceType == AUDIO_DEVICE_TYPE_SPEAKER) {
         info.deviceType = AUDIO_DEVICE_SPEAKER_VIRTUAL;
-        info.deviceName = "virtual_speaker";
+        (void)strncpy(info.deviceName, "virtual_speaker", MAX_DEVICE_NAME_LEN - 1);
+        info.deviceName[MAX_DEVICE_NAME_LEN - 1] = '\0';
     } else if (deviceType == AUDIO_DEVICE_TYPE_MIC) {
         info.deviceType = AUDIO_DEVICE_MIC_VIRTUAL;
-        info.deviceName = "virtual_mic";
+        (void)strncpy(info.deviceName, "virtual_mic", MAX_DEVICE_NAME_LEN - 1);
+        info.deviceName[MAX_DEVICE_NAME_LEN - 1] = '\0';
     }
     info.dhId = dhId;
     info.connectStatus = DISCONNECT;

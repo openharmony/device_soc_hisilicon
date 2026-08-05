@@ -16,7 +16,7 @@
 
 #include "ddr_training_impl.h"
 
-#define DDR_LPCA_TRAINING
+#define __LPCA_TRAINING__
 #ifdef DDR_LPCA_TRAINING_CONFIG
 /* Reset address bdl training data */
 static void ddr_lpca_reset(struct ca_data_st *data)
@@ -118,7 +118,7 @@ static void ddr_lpca_set_bdl(unsigned int base_phy, unsigned int bdl)
 /* Update address bdl value with training result */
 static void ddr_lpca_update_bdl(struct ca_data_st *data)
 {
-	unsigned int index;
+    unsigned int index;
     unsigned int addr0;
     unsigned int addr1;
 
@@ -179,8 +179,9 @@ static void ddr_lpca_wait(volatile union u_phy_catconfig *ca)
     }
 
     /* generally, count is 0 */
-    if (count >= DDR_LPCA_WAIT_TIMEOUT)
+    if (count >= DDR_LPCA_WAIT_TIMEOUT) {
         ddr_error("LPCA wait timeout");
+    }
 }
 
 /* Compare dq result and pattern */
@@ -188,12 +189,12 @@ static int ddr_lpca_compare(struct ca_bit_st *ca_bit,
     unsigned int dq_result, unsigned int pattern_p,
     unsigned int pattern_n, unsigned int index)
 {
-    if (((dq_result >> ca_bit->bit_p) & 0x1) != ((pattern_p >> index) & 0x1))
+    if (((dq_result >> ca_bit->bit_p) & 0x1) != ((pattern_p >> index) & 0x1)) {
         return -1;
-
-    if (((dq_result >> ca_bit->bit_n) & 0x1) != ((pattern_n >> index) & 0x1))
+    }
+    if (((dq_result >> ca_bit->bit_n) & 0x1) != ((pattern_n >> index) & 0x1)) {
         return -1;
-
+    }
     return 0;
 }
 
@@ -203,8 +204,9 @@ static void ddr_lpca_get_data(struct ca_data_st *data, unsigned int index, unsig
     if (data->left[index] == -1) {
         data->left[index] = bdl;
         /* set min left bound */
-        if (bdl < data->min)
+        if (bdl < data->min) {
             data->min = bdl;
+        }
     }
 
     /* unstable border value or abnormal value */
@@ -217,8 +219,9 @@ static void ddr_lpca_get_data(struct ca_data_st *data, unsigned int index, unsig
     data->done |= (0x1 << index);
 
     /* set max right bound */
-    if (data->right[index] > data->max)
+    if (data->right[index] > data->max) {
         data->max = data->right[index];
+    }
 }
 
 /* Check each CA whether pass */
@@ -252,9 +255,9 @@ static void ddr_lpca_excute(struct ca_data_st *data, unsigned int bdl, unsigned 
     volatile union u_phy_catconfig *ca = (union u_phy_catconfig *)
         (data->base_phy + DDR_PHY_CATCONFIG);
 
-    if (is_ca49)
+    if (is_ca49) {
         ca->bits.sw_cat_mrw48 = 1;
-    else
+    } else
         ca->bits.sw_cat_mrw41 = 1;
 
     ddr_lpca_wait(ca);
@@ -288,9 +291,9 @@ static int ddr_lpca_find_bdl(struct ca_data_st *data)
         ddr_lpca_excute(data, bdl, DDR_TRUE);
     }
 
-    if (data->done == PHY_CAT_PATTERN_MASK)
+    if (data->done == PHY_CAT_PATTERN_MASK) {
         return 0;
-
+    }
     return -1;
 }
 
@@ -308,13 +311,13 @@ static int ddr_lpca_loop_phase(struct ca_data_st *data, int step)
         ddr_lpca_reset(data);
 
         /* find bdl */
-        if (!ddr_lpca_find_bdl(data))
+        if (!ddr_lpca_find_bdl(data)) {
             return 0;
-
+        }
         addrph += step;
-        if (addrph < 0 || addrph > PHY_ADDRPH_MASK)
+        if (addrph < 0 || addrph > PHY_ADDRPH_MASK) {
             break;
-
+        }
         ph->bits.addrph_a = addrph;
         ddr_phy_cfg_update(data->base_phy);
     }
@@ -330,13 +333,13 @@ static int ddr_lpca_loop_phase(struct ca_data_st *data, int step)
 static int ddr_lpca_find_phase(struct ca_data_st *data)
 {
     /* increase default value to find */
-    if (!ddr_lpca_loop_phase(data, 1))
+    if (!ddr_lpca_loop_phase(data, 1)) {
         return 0;
-
+    }
     /* decrease default value to find */
-    if (!ddr_lpca_loop_phase(data, -1))
+    if (!ddr_lpca_loop_phase(data, -1)) {
         return 0;
-
+    }
     return -1;
 }
 
@@ -344,9 +347,9 @@ static int ddr_lpca_find_phase(struct ca_data_st *data)
 static int ddr_lpca_set_step(struct ca_data_st *data)
 {
     /* max window, no need to found */
-    if (data->min == 0 && data->max == PHY_ACADDR_BDL_MASK)
+    if (data->min == 0 && data->max == PHY_ACADDR_BDL_MASK) {
         return 0;
-
+    }
     if (data->min == 0)
         return -1; /* window on left, move to right */
     else
@@ -369,13 +372,14 @@ static void ddr_lpca_adjust(struct ca_data_st *data)
     /* set step to increase or decrease phase */
     step = ddr_lpca_set_step(data);
     if (!step)
+    {
         return;
-
+    }
     for (phase = 0; phase <= PHY_ADDRPH_MASK; phase++) {
         addrph_cur += step;
-        if (addrph_cur < 0 || addrph_cur > PHY_ADDRPH_MASK)
+        if (addrph_cur < 0 || addrph_cur > PHY_ADDRPH_MASK) {
             return;
-
+        }
         ph->bits.addrph_a = addrph_cur;
         ddr_phy_cfg_update(data->base_phy);
 
@@ -390,9 +394,9 @@ static void ddr_lpca_adjust(struct ca_data_st *data)
         }
 
         /* max window: ------- */
-        if (data->min == 0 && data->max == PHY_ACADDR_BDL_MASK)
+        if (data->min == 0 && data->max == PHY_ACADDR_BDL_MASK) {
             return;
-
+        }
         /* last window: -----xx */
         if (data->min == 0 && step == 1) {
             /* last value is best */
@@ -405,8 +409,9 @@ static void ddr_lpca_adjust(struct ca_data_st *data)
         }
 
         /* best window: x-----x */
-        if (data->min > 0 && step == -1)
+        if (data->min > 0 && step == -1) {
             return;
+        }
     }
 }
 
@@ -461,9 +466,9 @@ int ddr_lpca_training_func(const struct ddr_cfg_st *cfg)
     struct tr_relate_reg relate_reg;
 
     /* LPCA training disable */
-    if (ddr_training_check_bypass(cfg, DDR_BYPASS_LPCA_MASK) != DDR_FALSE)
+    if (ddr_training_check_bypass(cfg, DDR_BYPASS_LPCA_MASK) != DDR_FALSE) {
         return 0;
-
+    }
     ddr_training_save_reg(cfg, &relate_reg, DDR_BYPASS_LPCA_MASK);
 
     /* only lowpower ddr3 support */

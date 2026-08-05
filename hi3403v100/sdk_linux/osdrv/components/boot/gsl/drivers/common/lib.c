@@ -36,8 +36,9 @@ int memcmp(const void *cs, const void *ct, size_t count)
     int res = 0;
 
     for (su1 = cs, su2 = ct; count > 0; ++su1, ++su2, count--)
-        if ((res = *su1 - *su2) != 0)
+        if ((res = *su1 - *su2) != 0) {
             break;
+        }
     return res;
 }
 

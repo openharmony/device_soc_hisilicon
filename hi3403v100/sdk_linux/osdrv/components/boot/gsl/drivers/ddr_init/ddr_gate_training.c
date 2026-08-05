@@ -16,7 +16,7 @@
 
 #include "ddr_training_impl.h"
 
-#define DDR_GATE_TRAINING
+#define __GATE_TRAINING__
 #ifdef DDR_GATE_TRAINING_CONFIG
 /* Find gate phase */
 static int ddr_gate_find_phase(const struct ddr_cfg_st *cfg, struct ddr_delay_st *rdqsg)
@@ -31,8 +31,9 @@ static int ddr_gate_find_phase(const struct ddr_cfg_st *cfg, struct ddr_delay_st
             reg_write(rdqsg->phase[i] << PHY_RDQSG_PHASE_BIT,
                 base_phy + ddr_phy_dxnrdqsgdly(cfg->rank_idx, i));
             ddr_phy_cfg_update(base_phy);
-            if (ddr_ddrt_test(DDRT_WR_COMPRARE_MODE, i, -1) == 0)
+            if (ddr_ddrt_test(DDRT_WR_COMPRARE_MODE, i, -1) == 0) {
                 break;
+            }
         }
         if (rdqsg->phase[i] <= PHY_GATE_PHASE_MARGIN) {
             /* find gate phase fail */
@@ -76,10 +77,10 @@ static int ddr_gate_find_bdl(const struct ddr_cfg_st *cfg, struct ddr_delay_st *
 {
     int i;
     int j;
-	unsigned int gate_result;
-	unsigned int base_phy = cfg->cur_phy;
-	unsigned int byte_num = get_byte_num(cfg);
-	unsigned int swtmode = reg_read(base_phy + DDR_PHY_SWTMODE);
+    unsigned int gate_result;
+    unsigned int base_phy = cfg->cur_phy;
+    unsigned int byte_num = get_byte_num(cfg);
+    unsigned int swtmode = reg_read(base_phy + DDR_PHY_SWTMODE);
 
     for (i = 0; i < byte_num; i++)
         rdqsg->bdl[i] = 0;
@@ -92,9 +93,9 @@ static int ddr_gate_find_bdl(const struct ddr_cfg_st *cfg, struct ddr_delay_st *
         ddr_ddrt_test(DDRT_READ_ONLY_MODE, -1, -1);
         gate_result = (reg_read(base_phy + DDR_PHY_SWTRLT) >> PHY_SWTRLT_GATE_BIT) &
             PHY_SWTRLT_GATE_MASK;
-        if (gate_result == ((1 << byte_num) - 1))
+        if (gate_result == ((1 << byte_num) - 1)) {
             break;
-
+        }
         ddr_gate_find_bdl_by_byte(cfg, rdqsg, byte_num, gate_result);
     }
 
@@ -104,8 +105,9 @@ static int ddr_gate_find_bdl(const struct ddr_cfg_st *cfg, struct ddr_delay_st *
     if (i == PHY_GATE_BDL_MAX) {  /* find gate bdl fail */
         ddr_fatal("PHY[%x] find gate bdl fail. result[%x]", base_phy, gate_result);
         for (j = 0; j < byte_num; j++) {
-            if (!(gate_result & (1 << j)))
+            if (!(gate_result & (1 << j))) {
                 ddr_training_stat(DDR_ERR_GATING, base_phy, j, -1);
+            }
         }
         return -1;
     } else {
@@ -117,11 +119,11 @@ static int ddr_gate_training(const struct ddr_cfg_st *cfg)
 {
     unsigned int i;
     unsigned int tmp;
-	unsigned int byte_num;
-	struct ddr_delay_st rdqsg;
-	unsigned int def_delay[DDR_PHY_BYTE_MAX];
-	int result;
-	unsigned int base_phy = cfg->cur_phy;
+    unsigned int byte_num;
+    struct ddr_delay_st rdqsg;
+    unsigned int def_delay[DDR_PHY_BYTE_MAX];
+    int result;
+    unsigned int base_phy = cfg->cur_phy;
 
     ddr_debug("DDR Gate training");
 
@@ -133,9 +135,9 @@ static int ddr_gate_training(const struct ddr_cfg_st *cfg)
     /* find phase first */
     result = ddr_gate_find_phase(cfg, &rdqsg);
     /* find bdl */
-    if (!result)
+    if (!result) {
         result = ddr_gate_find_bdl(cfg, &rdqsg);
-
+    }
     /* set new phase */
     if (!result) {
         for (i = 0; i < byte_num; i++) {

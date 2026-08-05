@@ -116,42 +116,6 @@ static int ddr_disable_retrain(struct tr_custom_reg *custom_reg,
     return 0;
 }
 
-int hal_ddr_boot_cmd_save(struct tr_custom_reg *custom_reg)
-{
-    if (custom_reg == NULL) {
-        return -1;
-    }
-
-    /* enable ddrt control */
-    custom_reg->ddrt_ctrl = reg_read(DDR_REG_BASE_SYSCTRL + SYSCTRL_DDRT_CTRL);
-    reg_write(custom_reg->ddrt_ctrl | (0x1 << DDR_DDRT_CTRL_DDRT0_BIT) | (0x1 << DDR_DDRT_CTRL_DDRT1_BIT),
-        DDR_REG_BASE_SYSCTRL + SYSCTRL_DDRT_CTRL);
-    /* turn on ddrt clock */
-    custom_reg->ddrt_clk_reg = reg_read(CRG_REG_BASE_ADDR + PERI_CRG_DDRT);
-    /* enable ddrt0 clock */
-    reg_write(custom_reg->ddrt_clk_reg | (0x1 << DDR_TEST0_CKEN_BIT),
-        CRG_REG_BASE_ADDR + PERI_CRG_DDRT);
-    __asm__ __volatile__("nop");
-    /* disable ddrt0 soft reset */
-    reg_write(reg_read(CRG_REG_BASE_ADDR + PERI_CRG_DDRT) & (~(0x1 << 0)),
-        CRG_REG_BASE_ADDR + PERI_CRG_DDRT);
-
-    return 0;
-}
-
-void hal_ddr_boot_cmd_restore(const struct tr_custom_reg *custom_reg)
-{
-    if (custom_reg == NULL) {
-        return;
-    }
-
-    /* restore ddrt control */
-    reg_write(custom_reg->ddrt_ctrl, DDR_REG_BASE_SYSCTRL + SYSCTRL_DDRT_CTRL);
-
-    /* restore ddrt clock */
-    reg_write(custom_reg->ddrt_clk_reg, CRG_REG_BASE_ADDR + PERI_CRG_DDRT);
-}
-
 /*
  * Save site before DDR training:include boot and command execute.
  * Keep empty when nothing to do.

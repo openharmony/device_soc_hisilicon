@@ -2,156 +2,147 @@
 
 SVP相关数据类型、数据结构定义如下：
 
--   [ot\_svp\_img\_type](ot_svp_img_type.md)：定义二维广义图像支持的图像类型。
--   [ot\_svp\_img](ot_svp_img.md)：定义二维广义图像信息。
--   [ot\_svp\_src\_img](ot_svp_src_img.md)：定义源图像。
--   [ot\_svp\_dst\_img](ot_svp_dst_img.md)：定义输出图像。
--   [OT\_SVP\_IMG\_ADDR\_NUM](OT_SVP_IMG_ADDR_NUM.md)：定义地址通道数目。
+-   [ot\_svp\_img\_type](#ZH-CN_TOPIC_0000002471091210)：定义二维广义图像支持的图像类型。
+-   [ot\_svp\_img](#ZH-CN_TOPIC_0000002504091103)：定义二维广义图像信息。
+-   [ot\_svp\_src\_img](#ZH-CN_TOPIC_0000002471091254)：定义源图像。
+-   [ot\_svp\_dst\_img](#ZH-CN_TOPIC_0000002471091286)：定义输出图像。
+-   [OT\_SVP\_IMG\_ADDR\_NUM](#ZH-CN_TOPIC_0000002470931272)：定义地址通道数目。
 
 定点数据类型：
 
--   [ot\_svp\_data](ot_svp_data.md)：定义以byte为单位的二维图像信息。
--   [ot\_svp\_src\_data](ot_svp_src_data.md)：定义以byte为单位的二维源数据信息。
--   [ot\_svp\_dst\_data](ot_svp_dst_data.md)：定义byte为单位的二维输出数据信息。
--   [ot\_svp\_8bit](ot_svp_8bit.md)：定义8bit数据联合体。
--   [ot\_svp\_point\_u16](ot_svp_point_u16.md)：定义u16bit的点信息结构体。
--   [ot\_svp\_point\_s16](ot_svp_point_s16.md)：定义s16bit的点信息结构体。
--   [ot\_svp\_point\_s25q7](ot_svp_point_s25q7.md)：定义s25q7表示的点信息结构体。
--   [ot\_svp\_point\_u14q2](ot_svp_point_u14q2.md)：定义u14q2表示的点信息结构体。
--   [ot\_svp\_rect\_u32](ot_svp_rect_u32.md)：定义u16表示的矩形信息结构体。
--   [ot\_svp\_rect\_u16](ot_svp_rect_u16.md)：定义u32表示的矩形信息结构体。
--   [ot\_svp\_rect\_s24q8](ot_svp_rect_s24q8.md)：定义s24q8表示的矩形信息结构体。
--   [ot\_svp\_lut](ot_svp_lut.md)：定义查找表结构体。
+-   [ot\_svp\_data](#ZH-CN_TOPIC_0000002470931244)：定义以byte为单位的二维图像信息。
+-   [ot\_svp\_src\_data](#ZH-CN_TOPIC_0000002503971213)：定义以byte为单位的二维源数据信息。
+-   [ot\_svp\_dst\_data](#ZH-CN_TOPIC_0000002470931290)：定义byte为单位的二维输出数据信息。
+-   [ot\_svp\_8bit](#ZH-CN_TOPIC_0000002503971231)：定义8bit数据联合体。
+-   [ot\_svp\_point\_u16](#ZH-CN_TOPIC_0000002503971259)：定义u16bit的点信息结构体。
+-   [ot\_svp\_point\_s16](#ZH-CN_TOPIC_0000002504091193)：定义s16bit的点信息结构体。
+-   [ot\_svp\_point\_s25q7](#ZH-CN_TOPIC_0000002503971257)：定义s25q7表示的点信息结构体。
+-   [ot\_svp\_point\_u14q2](#ZH-CN_TOPIC_0000002504091195)：定义u14q2表示的点信息结构体。
+-   [ot\_svp\_rect\_u32](#ZH-CN_TOPIC_0000002470931266)：定义u16表示的矩形信息结构体。
+-   [ot\_svp\_rect\_u16](#ZH-CN_TOPIC_0000002470931214)：定义u32表示的矩形信息结构体。
+-   [ot\_svp\_rect\_s24q8](#ZH-CN_TOPIC_0000002503971197)：定义s24q8表示的矩形信息结构体。
+-   [ot\_svp\_lut](#ZH-CN_TOPIC_0000002503971221)：定义查找表结构体。
 
 IVE相关数据类型、数据结构定义如下：
 
--   [ot\_ive\_handle](ot_ive_handle.md)：定义IVE句柄。
--   [OT\_IVE\_HIST\_NUM](OT_IVE_HIST_NUM.md)：定义直方图统计bin数目。
--   [OT\_IVE\_MAP\_NUM](OT_IVE_MAP_NUM.md)：定义映射查找表项数目。
--   [OT\_IVE\_MAX\_RGN\_NUM](OT_IVE_MAX_RGN_NUM.md)：定义最大连通区域数目。
--   [OT\_IVE\_ST\_MAX\_CORNER\_NUM](OT_IVE_ST_MAX_CORNER_NUM.md)：定义Shi-Tomasi-like角点最大数目。
--   [OT\_IVE\_MASK\_NUM](OT_IVE_MASK_NUM.md)：掩码mask数组长度
--   [OT\_IVE\_ARR\_RESERVED\_NUM\_TWO](OT_IVE_ARR_RESERVED_NUM_TWO.md)：保留字段数组长度2
--   [OT\_IVE\_ARR\_RESERVED\_NUM\_THREE](OT_IVE_ARR_RESERVED_NUM_THREE.md)：保留字段数组长度3
--   [OT\_IVE\_ARR\_RESERVED\_NUM\_EIGHT](OT_IVE_ARR_RESERVED_NUM_EIGHT.md)：保留字段数组长度8
--   [OT\_IVE\_ARR\_RESERVED\_NUM\_TWELVE](OT_IVE_ARR_RESERVED_NUM_TWELVE.md)：保留字段数组长度12
--   [OT\_IVE\_ARR\_RESERVED\_NUM\_FOURTEEN](OT_IVE_ARR_RESERVED_NUM_FOURTEEN.md)：保留字段数组长度14
--   [OT\_IVE\_ARR\_NUM\_THREE](OT_IVE_ARR_NUM_THREE.md)：数组长度3
--   [OT\_IVE\_ARR\_NUM\_EIGHT](OT_IVE_ARR_NUM_EIGHT.md)：数组长度8
--   [OT\_IVE\_DEV\_NAME\_LENGTH](OT_IVE_DEV_NAME_LENGTH.md)：IVE设备名字的长度。
--   [OT\_IVE\_DEV\_DEFAULT\_NODE\_NUM](OT_IVE_DEV_DEFAULT_NODE_NUM.md)：默认的IVE节点个数。
--   [ot\_ive\_mod\_param](ot_ive_mod_param.md)：IVE模块相关参数定义。
--   [ot\_ive\_err\_code](ot_ive_err_code.md)：定义错误码。
--   [ot\_ive\_dma\_mode](ot_ive_dma_mode.md)：定义DMA运算模式。
--   [ot\_ive\_dma\_ctrl](ot_ive_dma_ctrl.md)：定义DMA控制信息。
--   [ot\_ive\_filter\_ctrl](ot_ive_filter_ctrl.md)：定义模板滤波控制信息。
--   [ot\_ive\_csc\_mode](ot_ive_csc_mode.md)：定义色彩空间转换模式。
--   [ot\_ive\_csc\_ctrl](ot_ive_csc_ctrl.md)：定义色彩空间转换控制信息。
--   [ot\_ive\_filter\_and\_csc\_ctrl](ot_ive_filter_and_csc_ctrl.md)：定义模板滤波加色彩空间转换复合功能控制信息。
--   [ot\_ive\_sobel\_out\_ctrl](ot_ive_sobel_out_ctrl.md)：定义sobel输出控制信息。
--   [ot\_ive\_sobel\_ctrl](ot_ive_sobel_ctrl.md)：定义sobel边缘提取控制信息。
--   [ot\_ive\_mag\_and\_ang\_out\_ctrl](ot_ive_mag_and_ang_out_ctrl.md)：定义canny边缘幅值与角度计算的输出格式。
--   [ot\_ive\_mag\_and\_ang\_ctrl](ot_ive_mag_and_ang_ctrl.md)：定义canny边缘幅值和幅角计算的控制信息。
--   [ot\_ive\_dilate\_ctrl](ot_ive_dilate_ctrl.md)：定义膨胀控制信息。
--   [ot\_ive\_erode\_ctrl](ot_ive_erode_ctrl.md)：定义腐蚀控制信息。
--   [ot\_ive\_threshold\_mode](ot_ive_threshold_mode.md)：定义图像二值化输出格式。
--   [ot\_ive\_threshold\_ctrl](ot_ive_threshold_ctrl.md)：定义图像二值化控制信息。
--   [ot\_ive\_sub\_mode](ot_ive_sub_mode.md)：定义两图像相减输出格式。
--   [ot\_ive\_sub\_ctrl](ot_ive_sub_ctrl.md)：定义两图像相减控制参数。
--   [ot\_ive\_integ\_out\_ctrl](ot_ive_integ_out_ctrl.md)：定义积分图输出控制参数。
--   [ot\_ive\_integ\_ctrl](ot_ive_integ_ctrl.md)：定义积分图计算控制参数。
--   [ot\_ive\_threshold\_s16\_mode](ot_ive_threshold_s16_mode.md)：定义16bit有符号图像的阈值化模式。
--   [ot\_ive\_threshold\_s16\_ctrl](ot_ive_threshold_s16_ctrl.md)：定义16bit有符号图像的阈值化控制参数。
--   [ot\_ive\_threshold\_u16\_mode](ot_ive_threshold_u16_mode.md)：定义16bti无符号图像的阈值化模式。
--   [ot\_ive\_threshold\_u16\_ctrl](ot_ive_threshold_u16_ctrl.md)：定义16bit无符号图像的阈值化控制参数。
--   [ot\_ive\_16bit\_to\_8bit\_mode](ot_ive_16bit_to_8bit_mode.md)：定义16bit图像到8bit图像的转化模式。
--   [ot\_ive\_16bit\_to\_8bit\_ctrl](ot_ive_16bit_to_8bit_ctrl.md)：定义16bit图像到8bit图像的转化控制参数。
--   [ot\_ive\_order\_stats\_filter\_mode](ot_ive_order_stats_filter_mode.md)：定义顺序统计量滤波模式。
--   [ot\_ive\_order\_stats\_filter\_ctrl](ot_ive_order_stats_filter_ctrl.md)：定义顺序统计量滤波控制参数。
--   [ot\_ive\_map\_u8bit\_lut\_mem](ot_ive_map_u8bit_lut_mem.md)：定义Map U8C1→U8C1的查找表内存。
--   [ot\_ive\_map\_u16bit\_lut\_mem](ot_ive_map_u16bit_lut_mem.md)：定义Map U8C1→U16C1的查找表内存。
--   [ot\_ive\_map\_s16bit\_lut\_mem](ot_ive_map_s16bit_lut_mem.md)：定义Map U8C1→S16C1的查找表内存。
--   [ot\_ive\_map\_mode](ot_ive_map_mode.md)：定义Map的模式。
--   [ot\_ive\_map\_ctrl](ot_ive_map_ctrl.md)：定义Map控制参数。
--   [ot\_ive\_equalize\_hist\_ctrl\_mem](ot_ive_equalize_hist_ctrl_mem.md)：定义直方图均衡化辅助内存。
--   [ot\_ive\_equalize\_hist\_ctrl](ot_ive_equalize_hist_ctrl.md)：定义直方图均衡化控制参数。
--   [ot\_ive\_add\_ctrl](ot_ive_add_ctrl.md)：定义两图像的加权加控制参数。
--   [ot\_ive\_ncc\_dst\_mem](ot_ive_ncc_dst_mem.md)：定义NCC的输出内存信息。
--   [ot\_ive\_rgn](ot_ive_rgn.md)：定义连通区域信息。
--   [ot\_ive\_ccblob](ot_ive_ccblob.md)：定义连通区域标记的输出信息。
--   [ot\_ive\_ccl\_mode](ot_ive_ccl_mode.md)：定义连通区域模式。
--   [ot\_ive\_ccl\_ctrl](ot_ive_ccl_ctrl.md)：定义连通区域标记控制参数。
--   [ot\_ive\_gmm\_ctrl](ot_ive_gmm_ctrl.md)：定义GMM背景建模的控制参数。
--   [ot\_ive\_gmm2\_sns\_factor\_mode](ot_ive_gmm2_sns_factor_mode.md)：定义灵敏度系数模式。
--   [ot\_ive\_gmm2\_life\_update\_factor\_mode](ot_ive_gmm2_life_update_factor_mode.md)：定义模型时长参数更新模式。
--   [ot\_ive\_gmm2\_ctrl](ot_ive_gmm2_ctrl.md)：定义GMM2背景建模的控制参数。
--   [ot\_ive\_canny\_stack\_size](ot_ive_canny_stack_size.md)：定义Canny边缘前半部分计算时强边缘点栈大小结构体。
--   [ot\_ive\_canny\_hys\_edge\_ctrl](ot_ive_canny_hys_edge_ctrl.md)：定义Canny边缘前半部分计算任务的控制参数。
--   [ot\_ive\_lbp\_compare\_mode](ot_ive_lbp_compare_mode.md)：定义LBP纹理计算控制参数。
--   [ot\_ive\_lbp\_ctrl](ot_ive_lbp_ctrl.md)：定义LBP纹理计算控制参数。
--   [ot\_ive\_norm\_grad\_out\_ctrl](ot_ive_norm_grad_out_ctrl.md)：定义归一化梯度信息计算任务输出控制枚举类型。
--   [ot\_ive\_norm\_grad\_ctrl](ot_ive_norm_grad_ctrl.md)：定义归一化梯度信息计算控制参数。
--   [ot\_ive\_lk\_optical\_flow\_pyr\_out\_mode](ot_ive_lk_optical_flow_pyr_out_mode.md)：定义金字塔LK光流计算输出模式。
--   [ot\_ive\_lk\_optical\_flow\_pyr\_ctrl](ot_ive_lk_optical_flow_pyr_ctrl.md)：定义金字塔LK光流计算控制参数。
--   [ot\_ive\_st\_max\_eig\_val](ot_ive_st_max_eig_val.md)：定义Shi-Tomas-like角点计算时最大角点响应值结构体。
--   [ot\_ive\_st\_cand\_corner\_ctrl](ot_ive_st_cand_corner_ctrl.md)：定义Shi-Tomas-like候选角点计算控制参数。
--   [ot\_ive\_st\_corner\_info](ot_ive_st_corner_info.md)：定义Shi-Tomas-like角点计算输出的角点信息结构体。
--   [ot\_ive\_st\_corner\_ctrl](ot_ive_st_corner_ctrl.md)：定义Shi-Tomas-like角点筛选控制参数。
--   [ot\_ive\_sad\_mode](ot_ive_sad_mode.md)：定义SAD计算模式。
--   [ot\_ive\_sad\_out\_ctrl](ot_ive_sad_out_ctrl.md)：定义SAD输出控制模式。
--   [ot\_ive\_sad\_ctrl](ot_ive_sad_ctrl.md)：定义SAD控制参数。
--   [ot\_ive\_resize\_mode](ot_ive_resize_mode.md)：定义Resize的模式。
--   [ot\_ive\_resize\_ctrl](ot_ive_resize_ctrl.md)：定义Resize控制参数。
--   [ot\_ive\_grad\_fg\_mode](ot_ive_grad_fg_mode.md)：定义梯度前景计算模式。
--   [ot\_ive\_grad\_fg\_ctrl](ot_ive_grad_fg_ctrl.md)：定义计算梯度前景控制参数。
--   [ot\_ive\_cand\_bg\_pixel](ot_ive_cand_bg_pixel.md)：定义候选背景模型数据。
--   [ot\_ive\_wrok\_bg\_pixel](ot_ive_wrok_bg_pixel.md)：定义工作背景模型数据。
--   [ot\_ive\_bg\_life](ot_ive_bg_life.md)：定义背景生命力数据。
--   [ot\_ive\_bg\_model\_pixel](ot_ive_bg_model_pixel.md)：定义背景模型数据。
--   [ot\_ive\_fg\_status\_data](ot_ive_fg_status_data.md)：定义前景状态数据。
--   [ot\_ive\_bg\_status\_data](ot_ive_bg_status_data.md)：定义背景状态数据。
--   [ot\_ive\_match\_bg\_model\_ctrl](ot_ive_match_bg_model_ctrl.md)：定义背景匹配控制参数。
--   [ot\_ive\_update\_bg\_model\_ctrl](ot_ive_update_bg_model_ctrl.md)：定义背景更新控制参数。
--   [ot\_ive\_ann\_mlp\_accurate](ot_ive_ann_mlp_accurate.md)：定义ann\_mlp输入特征向量类型。
--   [ot\_ive\_ann\_mlp\_actv\_func](ot_ive_ann_mlp_actv_func.md)：定义ann\_mlp激活函数枚举类型。
--   [ot\_ive\_ann\_mlp\_model](ot_ive_ann_mlp_model.md)：定义ann\_mlp模型数据结构体。
--   [ot\_ive\_svm\_type](ot_ive_svm_type.md)：定义SVM类型。
--   [ot\_ive\_svm\_kernel\_type](ot_ive_svm_kernel_type.md)：定义SVM核函数类型。
--   [ot\_ive\_svm\_model](ot_ive_svm_model.md)：定义SVM模型数据结构体。
--   [ot\_ive\_cnn\_actv\_func](ot_ive_cnn_actv_func.md)：定义CNN激活函数枚举类型。
--   [ot\_ive\_cnn\_pooling](ot_ive_cnn_pooling.md)：定义CNN汇聚操作枚举类型。
--   [ot\_ive\_cnn\_conv\_pooling](ot_ive_cnn_conv_pooling.md)：定义CNN单层Conv-ReLU-Pooling运算包参数结构体。
--   [ot\_ive\_cnn\_fc\_info](ot_ive_cnn_fc_info.md)：定义CNN全链接网络参数结构体。
--   [ot\_ive\_cnn\_model](ot_ive_cnn_model.md)：定义CNN模型参数结构体。
--   [ot\_ive\_cnn\_ctrl](ot_ive_cnn_ctrl.md)：定义CNN预测任务的控制参数。
--   [ot\_ive\_cnn\_result](ot_ive_cnn_result.md)：定义CNN单个样本预测结果结构体。
--   [ot\_ive\_persp\_trans\_point\_pair](ot_ive_persp_trans_point_pair.md)：定义透视变换点对结构体。
--   [ot\_ive\_persp\_trans\_alg\_mode](ot_ive_persp_trans_alg_mode.md)：定义透视变换算法模式枚举。
--   [ot\_ive\_persp\_trans\_csc\_mode](ot_ive_persp_trans_csc_mode.md)：定义透视变换色彩空间转换模式。
--   [ot\_ive\_kcf\_core\_id](ot_ive_kcf_core_id.md)：定义KCF的核ID。
--   [ot\_ive\_persp\_trans\_ctrl](ot_ive_persp_trans_ctrl.md)：定义透视变换控制参数。
--   [ot\_ive\_roi\_info](ot_ive_roi_info.md)：定义目前区域信息参数。
--   [ot\_ive\_kcf\_proc\_ctrl](ot_ive_kcf_proc_ctrl.md)：定义跟踪处理控制参数。
--   [ot\_ive\_list\_head](ot_ive_list_head.md)：定义链表头结构体参数。
--   [ot\_ive\_kcf\_obj](ot_ive_kcf_obj.md)：定义目标信息结构体参数。
--   [ot\_ive\_kcf\_obj\_node](ot_ive_kcf_obj_node.md)：定义目标链表节点参数。
--   [ot\_ive\_kcf\_list\_state](ot_ive_kcf_list_state.md)：定义目标链表状态枚举类型。
--   [ot\_ive\_kcf\_obj\_list](ot_ive_kcf_obj_list.md)：定义目标链表结构参数。
--   [ot\_ive\_kcf\_bbox](ot_ive_kcf_bbox.md)：定义目标区域信息参数。
--   [ot\_ive\_kcf\_bbox\_ctrl](ot_ive_kcf_bbox_ctrl.md)：定义目标区域信息控制参数。
--   [ot\_ive\_hog\_mode](ot_ive_hog_mode.md)：定义HOG\(Histogram of Oriented Gradient\)特征存储模式枚举类型。
--   [ot\_ive\_hog\_ctrl](ot_ive_hog_ctrl.md)：定义计算HOG\(Histogram of Oriented Gradient\)特征控制参数。
-
-
-
+-   [ot\_ive\_handle](#ZH-CN_TOPIC_0000002471091250)：定义IVE句柄。
+-   [OT\_IVE\_HIST\_NUM](#ZH-CN_TOPIC_0000002470931262)：定义直方图统计bin数目。
+-   [OT\_IVE\_MAP\_NUM](#ZH-CN_TOPIC_0000002471091274)：定义映射查找表项数目。
+-   [OT\_IVE\_MAX\_RGN\_NUM](#ZH-CN_TOPIC_0000002471091214)：定义最大连通区域数目。
+-   [OT\_IVE\_ST\_MAX\_CORNER\_NUM](#ZH-CN_TOPIC_0000002503971193)：定义Shi-Tomasi-like角点最大数目。
+-   [OT\_IVE\_MASK\_NUM](#ZH-CN_TOPIC_0000002471091310)：掩码mask数组长度
+-   [OT\_IVE\_ARR\_RESERVED\_NUM\_TWO](#ZH-CN_TOPIC_0000002503971159)：保留字段数组长度2
+-   [OT\_IVE\_ARR\_RESERVED\_NUM\_THREE](#ZH-CN_TOPIC_0000002504091161)：保留字段数组长度3
+-   [OT\_IVE\_ARR\_RESERVED\_NUM\_EIGHT](#ZH-CN_TOPIC_0000002470931298)：保留字段数组长度8
+-   [OT\_IVE\_ARR\_RESERVED\_NUM\_TWELVE](#ZH-CN_TOPIC_0000002470931230)：保留字段数组长度12
+-   [OT\_IVE\_ARR\_RESERVED\_NUM\_FOURTEEN](#ZH-CN_TOPIC_0000002470931216)：保留字段数组长度14
+-   [OT\_IVE\_ARR\_NUM\_THREE](#ZH-CN_TOPIC_0000002503971175)：数组长度3
+-   [OT\_IVE\_ARR\_NUM\_EIGHT](#ZH-CN_TOPIC_0000002503971255)：数组长度8
+-   [OT\_IVE\_DEV\_NAME\_LENGTH](#ZH-CN_TOPIC_0000002503971217)：IVE设备名字的长度。
+-   [OT\_IVE\_DEV\_DEFAULT\_NODE\_NUM](#ZH-CN_TOPIC_0000002504091127)：默认的IVE节点个数。
+-   [ot\_ive\_mod\_param](#ZH-CN_TOPIC_0000002504091147)：IVE模块相关参数定义。
+-   [ot\_ive\_err\_code](#ZH-CN_TOPIC_0000002504091141)：定义错误码。
+-   [ot\_ive\_dma\_mode](#ZH-CN_TOPIC_0000002470931310)：定义DMA运算模式。
+-   [ot\_ive\_dma\_ctrl](#ZH-CN_TOPIC_0000002504091157)：定义DMA控制信息。
+-   [ot\_ive\_filter\_ctrl](#ZH-CN_TOPIC_0000002503971267)：定义模板滤波控制信息。
+-   [ot\_ive\_csc\_mode](#ZH-CN_TOPIC_0000002470931222)：定义色彩空间转换模式。
+-   [ot\_ive\_csc\_ctrl](#ZH-CN_TOPIC_0000002504091137)：定义色彩空间转换控制信息。
+-   [ot\_ive\_filter\_and\_csc\_ctrl](#ZH-CN_TOPIC_0000002471091222)：定义模板滤波加色彩空间转换复合功能控制信息。
+-   [ot\_ive\_sobel\_out\_ctrl](#ZH-CN_TOPIC_0000002503971149)：定义sobel输出控制信息。
+-   [ot\_ive\_sobel\_ctrl](#ZH-CN_TOPIC_0000002470931226)：定义sobel边缘提取控制信息。
+-   [ot\_ive\_mag\_and\_ang\_out\_ctrl](#ZH-CN_TOPIC_0000002471091234)：定义canny边缘幅值与角度计算的输出格式。
+-   [ot\_ive\_mag\_and\_ang\_ctrl](#ZH-CN_TOPIC_0000002470931264)：定义canny边缘幅值和幅角计算的控制信息。
+-   [ot\_ive\_dilate\_ctrl](#ZH-CN_TOPIC_0000002504091109)：定义膨胀控制信息。
+-   [ot\_ive\_erode\_ctrl](#ZH-CN_TOPIC_0000002470931312)：定义腐蚀控制信息。
+-   [ot\_ive\_threshold\_mode](#ZH-CN_TOPIC_0000002504091197)：定义图像二值化输出格式。
+-   [ot\_ive\_threshold\_ctrl](#ZH-CN_TOPIC_0000002504091163)：定义图像二值化控制信息。
+-   [ot\_ive\_sub\_mode](#ZH-CN_TOPIC_0000002470931336)：定义两图像相减输出格式。
+-   [ot\_ive\_sub\_ctrl](#ZH-CN_TOPIC_0000002471091290)：定义两图像相减控制参数。
+-   [ot\_ive\_integ\_out\_ctrl](#ZH-CN_TOPIC_0000002504091081)：定义积分图输出控制参数。
+-   [ot\_ive\_integ\_ctrl](#ZH-CN_TOPIC_0000002504091115)：定义积分图计算控制参数。
+-   [ot\_ive\_threshold\_s16\_mode](#ZH-CN_TOPIC_0000002504091143)：定义16bit有符号图像的阈值化模式。
+-   [ot\_ive\_threshold\_s16\_ctrl](#ZH-CN_TOPIC_0000002504091125)：定义16bit有符号图像的阈值化控制参数。
+-   [ot\_ive\_threshold\_u16\_mode](#ZH-CN_TOPIC_0000002503971223)：定义16bti无符号图像的阈值化模式。
+-   [ot\_ive\_threshold\_u16\_ctrl](#ZH-CN_TOPIC_0000002504091089)：定义16bit无符号图像的阈值化控制参数。
+-   [ot\_ive\_16bit\_to\_8bit\_mode](#ZH-CN_TOPIC_0000002471091260)：定义16bit图像到8bit图像的转化模式。
+-   [ot\_ive\_16bit\_to\_8bit\_ctrl](#ZH-CN_TOPIC_0000002470931316)：定义16bit图像到8bit图像的转化控制参数。
+-   [ot\_ive\_order\_stats\_filter\_mode](#ZH-CN_TOPIC_0000002470931238)：定义顺序统计量滤波模式。
+-   [ot\_ive\_order\_stats\_filter\_ctrl](#ZH-CN_TOPIC_0000002471091240)：定义顺序统计量滤波控制参数。
+-   [ot\_ive\_map\_u8bit\_lut\_mem](#ZH-CN_TOPIC_0000002471091206)：定义Map U8C1→U8C1的查找表内存。
+-   [ot\_ive\_map\_u16bit\_lut\_mem](#ZH-CN_TOPIC_0000002504091091)：定义Map U8C1→U16C1的查找表内存。
+-   [ot\_ive\_map\_s16bit\_lut\_mem](#ZH-CN_TOPIC_0000002504091173)：定义Map U8C1→S16C1的查找表内存。
+-   [ot\_ive\_map\_mode](#ZH-CN_TOPIC_0000002470931320)：定义Map的模式。
+-   [ot\_ive\_map\_ctrl](#ZH-CN_TOPIC_0000002471091224)：定义Map控制参数。
+-   [ot\_ive\_equalize\_hist\_ctrl\_mem](#ZH-CN_TOPIC_0000002471091324)：定义直方图均衡化辅助内存。
+-   [ot\_ive\_equalize\_hist\_ctrl](#ZH-CN_TOPIC_0000002503971189)：定义直方图均衡化控制参数。
+-   [ot\_ive\_add\_ctrl](#ZH-CN_TOPIC_0000002503971153)：定义两图像的加权加控制参数。
+-   [ot\_ive\_ncc\_dst\_mem](#ZH-CN_TOPIC_0000002503971173)：定义NCC的输出内存信息。
+-   [ot\_ive\_rgn](#ZH-CN_TOPIC_0000002471091252)：定义连通区域信息。
+-   [ot\_ive\_ccblob](#ZH-CN_TOPIC_0000002503971207)：定义连通区域标记的输出信息。
+-   [ot\_ive\_ccl\_mode](#ZH-CN_TOPIC_0000002470931332)：定义连通区域模式。
+-   [ot\_ive\_ccl\_ctrl](#ZH-CN_TOPIC_0000002471091318)：定义连通区域标记控制参数。
+-   [ot\_ive\_gmm\_ctrl](#ZH-CN_TOPIC_0000002471091236)：定义GMM背景建模的控制参数。
+-   [ot\_ive\_gmm2\_sns\_factor\_mode](#ZH-CN_TOPIC_0000002471091300)：定义灵敏度系数模式。
+-   [ot\_ive\_gmm2\_life\_update\_factor\_mode](#ZH-CN_TOPIC_0000002503971203)：定义模型时长参数更新模式。
+-   [ot\_ive\_gmm2\_ctrl](#ZH-CN_TOPIC_0000002504091119)：定义GMM2背景建模的控制参数。
+-   [ot\_ive\_canny\_stack\_size](#ZH-CN_TOPIC_0000002504091083)：定义Canny边缘前半部分计算时强边缘点栈大小结构体。
+-   [ot\_ive\_canny\_hys\_edge\_ctrl](#ZH-CN_TOPIC_0000002503971183)：定义Canny边缘前半部分计算任务的控制参数。
+-   [ot\_ive\_lbp\_compare\_mode](#ZH-CN_TOPIC_0000002470931250)：定义LBP纹理计算控制参数。
+-   [ot\_ive\_lbp\_ctrl](#ZH-CN_TOPIC_0000002471091226)：定义LBP纹理计算控制参数。
+-   [ot\_ive\_norm\_grad\_out\_ctrl](#ZH-CN_TOPIC_0000002503971179)：定义归一化梯度信息计算任务输出控制枚举类型。
+-   [ot\_ive\_norm\_grad\_ctrl](#ZH-CN_TOPIC_0000002470931288)：定义归一化梯度信息计算控制参数。
+-   [ot\_ive\_lk\_optical\_flow\_pyr\_out\_mode](#ZH-CN_TOPIC_0000002504091077)：定义金字塔LK光流计算输出模式。
+-   [ot\_ive\_lk\_optical\_flow\_pyr\_ctrl](#ZH-CN_TOPIC_0000002503971181)：定义金字塔LK光流计算控制参数。
+-   [ot\_ive\_st\_max\_eig\_val](#ZH-CN_TOPIC_0000002504091183)：定义Shi-Tomas-like角点计算时最大角点响应值结构体。
+-   [ot\_ive\_st\_cand\_corner\_ctrl](#ZH-CN_TOPIC_0000002504091117)：定义Shi-Tomas-like候选角点计算控制参数。
+-   [ot\_ive\_st\_corner\_info](#ZH-CN_TOPIC_0000002503971265)：定义Shi-Tomas-like角点计算输出的角点信息结构体。
+-   [ot\_ive\_st\_corner\_ctrl](#ZH-CN_TOPIC_0000002471091220)：定义Shi-Tomas-like角点筛选控制参数。
+-   [ot\_ive\_sad\_mode](#ZH-CN_TOPIC_0000002470931274)：定义SAD计算模式。
+-   [ot\_ive\_sad\_out\_ctrl](#ZH-CN_TOPIC_0000002471091278)：定义SAD输出控制模式。
+-   [ot\_ive\_sad\_ctrl](#ZH-CN_TOPIC_0000002471091212)：定义SAD控制参数。
+-   [ot\_ive\_resize\_mode](#ZH-CN_TOPIC_0000002503971219)：定义Resize的模式。
+-   [ot\_ive\_resize\_ctrl](#ZH-CN_TOPIC_0000002471091258)：定义Resize控制参数。
+-   [ot\_ive\_grad\_fg\_mode](#ZH-CN_TOPIC_0000002503971161)：定义梯度前景计算模式。
+-   [ot\_ive\_grad\_fg\_ctrl](#ZH-CN_TOPIC_0000002504091111)：定义计算梯度前景控制参数。
+-   [ot\_ive\_cand\_bg\_pixel](#ZH-CN_TOPIC_0000002503971261)：定义候选背景模型数据。
+-   [ot\_ive\_wrok\_bg\_pixel](#ZH-CN_TOPIC_0000002503971171)：定义工作背景模型数据。
+-   [ot\_ive\_bg\_life](#ZH-CN_TOPIC_0000002471091208)：定义背景生命力数据。
+-   [ot\_ive\_bg\_model\_pixel](#ZH-CN_TOPIC_0000002503971177)：定义背景模型数据。
+-   [ot\_ive\_fg\_status\_data](#ZH-CN_TOPIC_0000002503971239)：定义前景状态数据。
+-   [ot\_ive\_bg\_status\_data](#ZH-CN_TOPIC_0000002503971253)：定义背景状态数据。
+-   [ot\_ive\_match\_bg\_model\_ctrl](#ZH-CN_TOPIC_0000002503971249)：定义背景匹配控制参数。
+-   [ot\_ive\_update\_bg\_model\_ctrl](#ZH-CN_TOPIC_0000002471091248)：定义背景更新控制参数。
+-   [ot\_ive\_ann\_mlp\_accurate](#ZH-CN_TOPIC_0000002504091185)：定义ann\_mlp输入特征向量类型。
+-   [ot\_ive\_ann\_mlp\_actv\_func](#ZH-CN_TOPIC_0000002503971151)：定义ann\_mlp激活函数枚举类型。
+-   [ot\_ive\_ann\_mlp\_model](#ZH-CN_TOPIC_0000002503971233)：定义ann\_mlp模型数据结构体。
+-   [ot\_ive\_svm\_type](#ZH-CN_TOPIC_0000002471091314)：定义SVM类型。
+-   [ot\_ive\_svm\_kernel\_type](#ZH-CN_TOPIC_0000002471091268)：定义SVM核函数类型。
+-   [ot\_ive\_svm\_model](#ZH-CN_TOPIC_0000002470931338)：定义SVM模型数据结构体。
+-   [ot\_ive\_cnn\_actv\_func](#ZH-CN_TOPIC_0000002470931254)：定义CNN激活函数枚举类型。
+-   [ot\_ive\_cnn\_pooling](#ZH-CN_TOPIC_0000002471091230)：定义CNN汇聚操作枚举类型。
+-   [ot\_ive\_cnn\_conv\_pooling](#ZH-CN_TOPIC_0000002471091306)：定义CNN单层Conv-ReLU-Pooling运算包参数结构体。
+-   [ot\_ive\_cnn\_fc\_info](#ZH-CN_TOPIC_0000002470931296)：定义CNN全链接网络参数结构体。
+-   [ot\_ive\_cnn\_model](#ZH-CN_TOPIC_0000002504091131)：定义CNN模型参数结构体。
+-   [ot\_ive\_cnn\_ctrl](#ZH-CN_TOPIC_0000002471091238)：定义CNN预测任务的控制参数。
+-   [ot\_ive\_cnn\_result](#ZH-CN_TOPIC_0000002503971157)：定义CNN单个样本预测结果结构体。
+-   [ot\_ive\_persp\_trans\_point\_pair](#ZH-CN_TOPIC_0000002470931326)：定义透视变换点对结构体。
+-   [ot\_ive\_persp\_trans\_alg\_mode](#ZH-CN_TOPIC_0000002471091242)：定义透视变换算法模式枚举。
+-   [ot\_ive\_persp\_trans\_csc\_mode](#ZH-CN_TOPIC_0000002470931228)：定义透视变换色彩空间转换模式。
+-   [ot\_ive\_kcf\_core\_id](#ZH-CN_TOPIC_0000002504091191)：定义KCF的核ID。
+-   [ot\_ive\_persp\_trans\_ctrl](#ZH-CN_TOPIC_0000002471091262)：定义透视变换控制参数。
+-   [ot\_ive\_roi\_info](#ZH-CN_TOPIC_0000002503971155)：定义目前区域信息参数。
+-   [ot\_ive\_kcf\_proc\_ctrl](#ZH-CN_TOPIC_0000002471091264)：定义跟踪处理控制参数。
+-   [ot\_ive\_list\_head](#ZH-CN_TOPIC_0000002504091189)：定义链表头结构体参数。
+-   [ot\_ive\_kcf\_obj](#ZH-CN_TOPIC_0000002471091292)：定义目标信息结构体参数。
+-   [ot\_ive\_kcf\_obj\_node](#ZH-CN_TOPIC_0000002470931324)：定义目标链表节点参数。
+-   [ot\_ive\_kcf\_list\_state](#ZH-CN_TOPIC_0000002504091113)：定义目标链表状态枚举类型。
+-   [ot\_ive\_kcf\_obj\_list](#ZH-CN_TOPIC_0000002470931236)：定义目标链表结构参数。
+-   [ot\_ive\_kcf\_bbox](#ZH-CN_TOPIC_0000002504091101)：定义目标区域信息参数。
+-   [ot\_ive\_kcf\_bbox\_ctrl](#ZH-CN_TOPIC_0000002470931278)：定义目标区域信息控制参数。
+-   [ot\_ive\_hog\_mode](#ZH-CN_TOPIC_0000002504091097)：定义HOG\(Histogram of Oriented Gradient\)特征存储模式枚举类型。
+-   [ot\_ive\_hog\_ctrl](#ZH-CN_TOPIC_0000002470931248)：定义计算HOG\(Histogram of Oriented Gradient\)特征控制参数。
 
 ## SVP相关数据类型、数据结构<a name="ZH-CN_TOPIC_0000002471091256"></a>
-
-
-
-
-
-
 
 ### ot\_svp\_img\_type<a name="ZH-CN_TOPIC_0000002471091210"></a>
 
@@ -295,9 +286,9 @@ typedef enum {
 
 【相关数据类型及接口】
 
--   [ot\_svp\_img](#ot_svp_img)
--   [ot\_svp\_src\_img](#ot_svp_src_img)
--   [ot\_svp\_dst\_img](#ot_svp_dst_img)
+-   [ot\_svp\_img](#ZH-CN_TOPIC_0000002504091103)
+-   [ot\_svp\_src\_img](#ZH-CN_TOPIC_0000002471091254)
+-   [ot\_svp\_dst\_img](#ZH-CN_TOPIC_0000002471091286)
 
 ### ot\_svp\_img<a name="ZH-CN_TOPIC_0000002504091103"></a>
 
@@ -327,17 +318,17 @@ typedef struct {
 </th>
 </tr>
 </thead>
-<tbody><tr id="row7789mcpsimp"><td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.1 "><p id="p7791mcpsimp"><a name="p7791mcpsimp"></a><a name="p7791mcpsimp"></a><span xml:lang="da-DK" id="ph7792mcpsimp"><a name="ph7792mcpsimp"></a><a name="ph7792mcpsimp"></a>phys_addr</span>[<a href="OT_SVP_IMG_ADDR_NUM.md">OT_SVP_IMG_ADDR_NUM</a>]</p>
+<tbody><tr id="row7789mcpsimp"><td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.1 "><p id="p7791mcpsimp"><a name="p7791mcpsimp"></a><a name="p7791mcpsimp"></a><span xml:lang="da-DK" id="ph7792mcpsimp"><a name="ph7792mcpsimp"></a><a name="ph7792mcpsimp"></a>phys_addr</span>[<a href="#ZH-CN_TOPIC_0000002470931272">OT_SVP_IMG_ADDR_NUM</a>]</p>
 </td>
 <td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.2 "><p id="p7795mcpsimp"><a name="p7795mcpsimp"></a><a name="p7795mcpsimp"></a>广义图像的物理地址数组。</p>
 </td>
 </tr>
-<tr id="row7796mcpsimp"><td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.1 "><p id="p7798mcpsimp"><a name="p7798mcpsimp"></a><a name="p7798mcpsimp"></a><span xml:lang="da-DK" id="ph7799mcpsimp"><a name="ph7799mcpsimp"></a><a name="ph7799mcpsimp"></a>virt_addr</span>[<a href="OT_SVP_IMG_ADDR_NUM.md">OT_SVP_IMG_ADDR_NUM</a>]</p>
+<tr id="row7796mcpsimp"><td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.1 "><p id="p7798mcpsimp"><a name="p7798mcpsimp"></a><a name="p7798mcpsimp"></a><span xml:lang="da-DK" id="ph7799mcpsimp"><a name="ph7799mcpsimp"></a><a name="ph7799mcpsimp"></a>virt_addr</span>[<a href="#ZH-CN_TOPIC_0000002470931272">OT_SVP_IMG_ADDR_NUM</a>]</p>
 </td>
 <td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.2 "><p id="p7802mcpsimp"><a name="p7802mcpsimp"></a><a name="p7802mcpsimp"></a>广义图像的虚拟地址数组。</p>
 </td>
 </tr>
-<tr id="row7803mcpsimp"><td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.1 "><p id="p7805mcpsimp"><a name="p7805mcpsimp"></a><a name="p7805mcpsimp"></a><span xml:lang="da-DK" id="ph7806mcpsimp"><a name="ph7806mcpsimp"></a><a name="ph7806mcpsimp"></a>stride</span>[<a href="OT_SVP_IMG_STRIDE_NUM.md">OT_SVP_IMG_STRIDE_NUM</a>]</p>
+<tr id="row7803mcpsimp"><td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.1 "><p id="p7805mcpsimp"><a name="p7805mcpsimp"></a><a name="p7805mcpsimp"></a><span xml:lang="da-DK" id="ph7806mcpsimp"><a name="ph7806mcpsimp"></a><a name="ph7806mcpsimp"></a>stride</span>[<a href="#ZH-CN_TOPIC_0000002470931232">OT_SVP_IMG_STRIDE_NUM</a>]</p>
 </td>
 <td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.2 "><p id="p7809mcpsimp"><a name="p7809mcpsimp"></a><a name="p7809mcpsimp"></a>广义图像的跨度。</p>
 </td>
@@ -366,9 +357,9 @@ typedef struct {
 
 【相关数据及接口】
 
--   [ot\_svp\_img\_type](#ot_svp_img_type)
--   [ot\_svp\_src\_img](#ot_svp_src_img)
--   [ot\_svp\_dst\_img](#ot_svp_dst_img)
+-   [ot\_svp\_img\_type](#ZH-CN_TOPIC_0000002471091210)
+-   [ot\_svp\_src\_img](#ZH-CN_TOPIC_0000002471091254)
+-   [ot\_svp\_dst\_img](#ZH-CN_TOPIC_0000002471091286)
 
 ### ot\_svp\_src\_img<a name="ZH-CN_TOPIC_0000002471091254"></a>
 
@@ -392,8 +383,8 @@ typedef ot_svp_img ot_svp_src_img;
 
 【相关数据及接口】
 
--   [ot\_svp\_img\_type](#ot_svp_img_type)
--   [ot\_svp\_dst\_img](#ot_svp_dst_img)
+-   [ot\_svp\_img\_type](#ZH-CN_TOPIC_0000002471091210)
+-   [ot\_svp\_dst\_img](#ZH-CN_TOPIC_0000002471091286)
 
 ### ot\_svp\_dst\_img<a name="ZH-CN_TOPIC_0000002471091286"></a>
 
@@ -417,8 +408,8 @@ typedef ot_svp_img ot_svp_dst_img;
 
 【相关数据及接口】
 
--   [ot\_svp\_img\_type](#ot_svp_img_type)
--   [ot\_svp\_src\_img](#ot_svp_src_img)
+-   [ot\_svp\_img\_type](#ZH-CN_TOPIC_0000002471091210)
+-   [ot\_svp\_src\_img](#ZH-CN_TOPIC_0000002471091254)
 
 ### OT\_SVP\_IMG\_ADDR\_NUM<a name="ZH-CN_TOPIC_0000002470931272"></a>
 
@@ -689,18 +680,6 @@ td\_uxqyfz\\td\_sxqy：
 
 无。
 
-
-
-
-
-
-
-
-
-
-
-
-
 ### ot\_svp\_data<a name="ZH-CN_TOPIC_0000002470931244"></a>
 
 【说明】
@@ -764,7 +743,7 @@ typedef struct {
 
 【注意事项】
 
-表示以byte为单位的二维数据；可以与[ot\_svp\_img](ot_svp_img.md)图像进行转换。
+表示以byte为单位的二维数据；可以与[ot\_svp\_img](#ZH-CN_TOPIC_0000002504091103)图像进行转换。
 
 【相关数据类型及接口】
 
@@ -792,8 +771,8 @@ typedef ot_svp_data ot_svp_src_data;
 
 【相关数据类型及接口】
 
--   [ot\_svp\_img](#ot_svp_img)
--   [ot\_svp\_dst\_data](#ot_svp_dst_data)
+-   [ot\_svp\_img](#ZH-CN_TOPIC_0000002504091103)
+-   [ot\_svp\_dst\_data](#ZH-CN_TOPIC_0000002470931290)
 
 ### ot\_svp\_dst\_data<a name="ZH-CN_TOPIC_0000002470931290"></a>
 
@@ -817,8 +796,8 @@ typedef ot_svp_data ot_svp_dst_data;
 
 【相关数据类型及接口】
 
--   [ot\_svp\_img](#ot_svp_img)
--   [ot\_svp\_src\_img](#ot_svp_src_img)
+-   [ot\_svp\_img](#ZH-CN_TOPIC_0000002504091103)
+-   [ot\_svp\_src\_img](#ZH-CN_TOPIC_0000002471091254)
 
 ### ot\_svp\_8bit<a name="ZH-CN_TOPIC_0000002503971231"></a>
 
@@ -1288,123 +1267,6 @@ typedef struct {
 无
 
 ## IVE相关数据类型、数据结构<a name="ZH-CN_TOPIC_0000002503971225"></a>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 ### ot\_ive\_handle<a name="ZH-CN_TOPIC_0000002471091250"></a>
 
@@ -1891,7 +1753,7 @@ typedef enum {
 
 【相关数据类型及接口】
 
-[ot\_ive\_dma\_ctrl](#ot_ive_dma_ctrl)
+[ot\_ive\_dma\_ctrl](#ZH-CN_TOPIC_0000002504091157)
 
 ### ot\_ive\_dma\_ctrl<a name="ZH-CN_TOPIC_0000002504091157"></a>
 
@@ -1957,7 +1819,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ot\_ive\_dma\_mode](#ot_ive_dma_mode)
+[ot\_ive\_dma\_mode](#ZH-CN_TOPIC_0000002470931310)
 
 ### ot\_ive\_filter\_ctrl<a name="ZH-CN_TOPIC_0000002503971267"></a>
 
@@ -1983,7 +1845,7 @@ typedef struct {
 </th>
 </tr>
 </thead>
-<tbody><tr id="row16299mcpsimp"><td class="cellrowborder" valign="top" width="36%" headers="mcps1.1.3.1.1 "><p id="p16301mcpsimp"><a name="p16301mcpsimp"></a><a name="p16301mcpsimp"></a>mask[<a href="OT_IVE_MASK_NUM.md">OT_IVE_MASK_NUM</a>]</p>
+<tbody><tr id="row16299mcpsimp"><td class="cellrowborder" valign="top" width="36%" headers="mcps1.1.3.1.1 "><p id="p16301mcpsimp"><a name="p16301mcpsimp"></a><a name="p16301mcpsimp"></a>mask[<a href="#ZH-CN_TOPIC_0000002471091310">OT_IVE_MASK_NUM</a>]</p>
 </td>
 <td class="cellrowborder" valign="top" width="64%" headers="mcps1.1.3.1.2 "><p id="p16305mcpsimp"><a name="p16305mcpsimp"></a><a name="p16305mcpsimp"></a>5x5模板系数，外围系数设为0可实现3x3模板滤波。</p>
 </td>
@@ -2114,8 +1976,8 @@ typedef enum {
 
 【相关数据类型及接口】
 
--   [ot\_ive\_csc\_ctrl](#ot_ive_csc_ctrl)
--   [ot\_ive\_filter\_and\_csc\_ctrl](#ot_ive_filter_and_csc_ctrl)
+-   [ot\_ive\_csc\_ctrl](#ZH-CN_TOPIC_0000002504091137)
+-   [ot\_ive\_filter\_and\_csc\_ctrl](#ZH-CN_TOPIC_0000002471091222)
 
 ### ot\_ive\_csc\_ctrl<a name="ZH-CN_TOPIC_0000002504091137"></a>
 
@@ -2154,7 +2016,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ot\_ive\_csc\_mode](#ot_ive_csc_mode)
+[ot\_ive\_csc\_mode](#ZH-CN_TOPIC_0000002470931222)
 
 ### ot\_ive\_filter\_and\_csc\_ctrl<a name="ZH-CN_TOPIC_0000002471091222"></a>
 
@@ -2186,7 +2048,7 @@ typedef struct {
 <td class="cellrowborder" valign="top" width="63%" headers="mcps1.1.3.1.2 "><p id="p129mcpsimp"><a name="p129mcpsimp"></a><a name="p129mcpsimp"></a>工作模式。</p>
 </td>
 </tr>
-<tr id="row130mcpsimp"><td class="cellrowborder" valign="top" width="37%" headers="mcps1.1.3.1.1 "><p id="p132mcpsimp"><a name="p132mcpsimp"></a><a name="p132mcpsimp"></a>mask[<a href="OT_IVE_MASK_NUM.md">OT_IVE_MASK_NUM</a>]</p>
+<tr id="row130mcpsimp"><td class="cellrowborder" valign="top" width="37%" headers="mcps1.1.3.1.1 "><p id="p132mcpsimp"><a name="p132mcpsimp"></a><a name="p132mcpsimp"></a>mask[<a href="#ZH-CN_TOPIC_0000002471091310">OT_IVE_MASK_NUM</a>]</p>
 </td>
 <td class="cellrowborder" valign="top" width="63%" headers="mcps1.1.3.1.2 "><p id="p136mcpsimp"><a name="p136mcpsimp"></a><a name="p136mcpsimp"></a>5x5模板系数。</p>
 </td>
@@ -2206,7 +2068,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ot\_ive\_csc\_mode](#ot_ive_csc_mode)
+[ot\_ive\_csc\_mode](#ZH-CN_TOPIC_0000002470931222)
 
 ### ot\_ive\_sobel\_out\_ctrl<a name="ZH-CN_TOPIC_0000002503971149"></a>
 
@@ -2258,7 +2120,7 @@ typedef enum {
 
 【相关数据类型及接口】
 
-[ot\_ive\_sobel\_ctrl](#ot_ive_sobel_ctrl)
+[ot\_ive\_sobel\_ctrl](#ZH-CN_TOPIC_0000002470931226)
 
 ### ot\_ive\_sobel\_ctrl<a name="ZH-CN_TOPIC_0000002470931226"></a>
 
@@ -2289,7 +2151,7 @@ typedef struct {
 <td class="cellrowborder" valign="top" width="64%" headers="mcps1.1.3.1.2 "><p id="p3648mcpsimp"><a name="p3648mcpsimp"></a><a name="p3648mcpsimp"></a>输出控制枚举参数。</p>
 </td>
 </tr>
-<tr id="row3649mcpsimp"><td class="cellrowborder" valign="top" width="36%" headers="mcps1.1.3.1.1 "><p id="p3651mcpsimp"><a name="p3651mcpsimp"></a><a name="p3651mcpsimp"></a>mask[<a href="OT_IVE_MASK_NUM.md">OT_IVE_MASK_NUM</a>]</p>
+<tr id="row3649mcpsimp"><td class="cellrowborder" valign="top" width="36%" headers="mcps1.1.3.1.1 "><p id="p3651mcpsimp"><a name="p3651mcpsimp"></a><a name="p3651mcpsimp"></a>mask[<a href="#ZH-CN_TOPIC_0000002471091310">OT_IVE_MASK_NUM</a>]</p>
 </td>
 <td class="cellrowborder" valign="top" width="64%" headers="mcps1.1.3.1.2 "><p id="p3655mcpsimp"><a name="p3655mcpsimp"></a><a name="p3655mcpsimp"></a>5x5模板系数。</p>
 </td>
@@ -2303,7 +2165,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ot\_ive\_sobel\_out\_ctrl](#ot_ive_sobel_out_ctrl)
+[ot\_ive\_sobel\_out\_ctrl](#ZH-CN_TOPIC_0000002503971149)
 
 ### ot\_ive\_mag\_and\_ang\_out\_ctrl<a name="ZH-CN_TOPIC_0000002471091234"></a>
 
@@ -2349,7 +2211,7 @@ typedef enum {
 
 【相关数据类型及接口】
 
-[ot\_ive\_mag\_and\_ang\_ctrl](#ot_ive_mag_and_ang_ctrl)
+[ot\_ive\_mag\_and\_ang\_ctrl](#ZH-CN_TOPIC_0000002470931264)
 
 ### ot\_ive\_mag\_and\_ang\_ctrl<a name="ZH-CN_TOPIC_0000002470931264"></a>
 
@@ -2386,7 +2248,7 @@ typedef struct {
 <td class="cellrowborder" valign="top" width="52%" headers="mcps1.1.3.1.2 "><p id="p16892mcpsimp"><a name="p16892mcpsimp"></a><a name="p16892mcpsimp"></a>用于对幅值进行阈值化的阈值。</p>
 </td>
 </tr>
-<tr id="row16893mcpsimp"><td class="cellrowborder" valign="top" width="48%" headers="mcps1.1.3.1.1 "><p id="p16895mcpsimp"><a name="p16895mcpsimp"></a><a name="p16895mcpsimp"></a>mask[<a href="OT_IVE_MASK_NUM.md">OT_IVE_MASK_NUM</a>]</p>
+<tr id="row16893mcpsimp"><td class="cellrowborder" valign="top" width="48%" headers="mcps1.1.3.1.1 "><p id="p16895mcpsimp"><a name="p16895mcpsimp"></a><a name="p16895mcpsimp"></a>mask[<a href="#ZH-CN_TOPIC_0000002471091310">OT_IVE_MASK_NUM</a>]</p>
 </td>
 <td class="cellrowborder" valign="top" width="52%" headers="mcps1.1.3.1.2 "><p id="p16899mcpsimp"><a name="p16899mcpsimp"></a><a name="p16899mcpsimp"></a>5x5模板系数。</p>
 </td>
@@ -2400,7 +2262,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ot\_ive\_mag\_and\_ang\_out\_ctrl](#ot_ive_mag_and_ang_out_ctrl)
+[ot\_ive\_mag\_and\_ang\_out\_ctrl](#ZH-CN_TOPIC_0000002471091234)
 
 ### ot\_ive\_dilate\_ctrl<a name="ZH-CN_TOPIC_0000002504091109"></a>
 
@@ -2425,7 +2287,7 @@ typedef struct {
 </th>
 </tr>
 </thead>
-<tbody><tr id="row5501mcpsimp"><td class="cellrowborder" valign="top" width="47%" headers="mcps1.1.3.1.1 "><p id="p5503mcpsimp"><a name="p5503mcpsimp"></a><a name="p5503mcpsimp"></a>mask[<a href="OT_IVE_MASK_NUM.md">OT_IVE_MASK_NUM</a>]</p>
+<tbody><tr id="row5501mcpsimp"><td class="cellrowborder" valign="top" width="47%" headers="mcps1.1.3.1.1 "><p id="p5503mcpsimp"><a name="p5503mcpsimp"></a><a name="p5503mcpsimp"></a>mask[<a href="#ZH-CN_TOPIC_0000002471091310">OT_IVE_MASK_NUM</a>]</p>
 </td>
 <td class="cellrowborder" valign="top" width="53%" headers="mcps1.1.3.1.2 "><p id="p5507mcpsimp"><a name="p5507mcpsimp"></a><a name="p5507mcpsimp"></a>5x5模板系数。</p>
 <p id="p5508mcpsimp"><a name="p5508mcpsimp"></a><a name="p5508mcpsimp"></a>取值范围：0或255。</p>
@@ -2465,7 +2327,7 @@ typedef struct {
 </th>
 </tr>
 </thead>
-<tbody><tr id="row2639mcpsimp"><td class="cellrowborder" valign="top" width="47%" headers="mcps1.1.3.1.1 "><p id="p2641mcpsimp"><a name="p2641mcpsimp"></a><a name="p2641mcpsimp"></a>mask[<a href="OT_IVE_MASK_NUM.md">OT_IVE_MASK_NUM</a>]</p>
+<tbody><tr id="row2639mcpsimp"><td class="cellrowborder" valign="top" width="47%" headers="mcps1.1.3.1.1 "><p id="p2641mcpsimp"><a name="p2641mcpsimp"></a><a name="p2641mcpsimp"></a>mask[<a href="#ZH-CN_TOPIC_0000002471091310">OT_IVE_MASK_NUM</a>]</p>
 </td>
 <td class="cellrowborder" valign="top" width="53%" headers="mcps1.1.3.1.2 "><p id="p2645mcpsimp"><a name="p2645mcpsimp"></a><a name="p2645mcpsimp"></a>5x5模板系数。</p>
 <p id="p2646mcpsimp"><a name="p2646mcpsimp"></a><a name="p2646mcpsimp"></a>取值：0或255。</p>
@@ -2577,7 +2439,7 @@ typedef enum {
 
 【相关数据类型及接口】
 
-[ot\_ive\_threshold\_ctrl](#ot_ive_threshold_ctrl)
+[ot\_ive\_threshold\_ctrl](#ZH-CN_TOPIC_0000002504091163)
 
 ### ot\_ive\_threshold\_ctrl<a name="ZH-CN_TOPIC_0000002504091163"></a>
 
@@ -2652,7 +2514,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ot\_ive\_threshold\_mode](#ot_ive_threshold_mode)
+[ot\_ive\_threshold\_mode](#ZH-CN_TOPIC_0000002504091197)
 
 ### ot\_ive\_sub\_mode<a name="ZH-CN_TOPIC_0000002470931336"></a>
 
@@ -2698,7 +2560,7 @@ typedef enum {
 
 【相关数据类型及接口】
 
-[ot\_ive\_sub\_ctrl](#ot_ive_sub_ctrl)
+[ot\_ive\_sub\_ctrl](#ZH-CN_TOPIC_0000002471091290)
 
 ### ot\_ive\_sub\_ctrl<a name="ZH-CN_TOPIC_0000002471091290"></a>
 
@@ -2737,7 +2599,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ot\_ive\_sub\_mode](#ot_ive_sub_mode)
+[ot\_ive\_sub\_mode](#ZH-CN_TOPIC_0000002470931336)
 
 ### ot\_ive\_integ\_out\_ctrl<a name="ZH-CN_TOPIC_0000002504091081"></a>
 
@@ -2789,7 +2651,7 @@ typedef enum ot_ive_integ_out_ctrl {
 
 【相关数据类型及接口】
 
-[ot\_ive\_integ\_ctrl](#ot_ive_integ_ctrl)
+[ot\_ive\_integ\_ctrl](#ZH-CN_TOPIC_0000002504091115)
 
 ### ot\_ive\_integ\_ctrl<a name="ZH-CN_TOPIC_0000002504091115"></a>
 
@@ -2828,7 +2690,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ot\_ive\_integ\_out\_ctrl](#ot_ive_integ_out_ctrl)
+[ot\_ive\_integ\_out\_ctrl](#ZH-CN_TOPIC_0000002504091081)
 
 ### ot\_ive\_threshold\_s16\_mode<a name="ZH-CN_TOPIC_0000002504091143"></a>
 
@@ -2906,7 +2768,7 @@ typedef enum {
 
 【相关数据类型及接口】
 
-[ot\_ive\_threshold\_s16\_ctrl](#ot_ive_threshold_s16_ctrl)
+[ot\_ive\_threshold\_s16\_ctrl](#ZH-CN_TOPIC_0000002504091125)
 
 ### ot\_ive\_threshold\_s16\_ctrl<a name="ZH-CN_TOPIC_0000002504091125"></a>
 
@@ -2975,7 +2837,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ot\_ive\_threshold\_s16\_mode](#ot_ive_threshold_s16_mode)
+[ot\_ive\_threshold\_s16\_mode](#ZH-CN_TOPIC_0000002504091143)
 
 ### ot\_ive\_threshold\_u16\_mode<a name="ZH-CN_TOPIC_0000002503971223"></a>
 
@@ -3031,7 +2893,7 @@ typedef enum {
 
 【相关数据类型及接口】
 
-[ot\_ive\_threshold\_u16\_ctrl](#ot_ive_threshold_u16_ctrl)
+[ot\_ive\_threshold\_u16\_ctrl](#ZH-CN_TOPIC_0000002504091089)
 
 ### ot\_ive\_threshold\_u16\_ctrl<a name="ZH-CN_TOPIC_0000002504091089"></a>
 
@@ -3103,7 +2965,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ot\_ive\_threshold\_u16\_mode](#ot_ive_threshold_u16_mode)
+[ot\_ive\_threshold\_u16\_mode](#ZH-CN_TOPIC_0000002503971223)
 
 ### ot\_ive\_16bit\_to\_8bit\_mode<a name="ZH-CN_TOPIC_0000002471091260"></a>
 
@@ -3161,7 +3023,7 @@ typedef enum {
 
 【相关数据类型及接口】
 
-[ot\_ive\_16bit\_to\_8bit\_ctrl](#ot_ive_16bit_to_8bit_ctrl)
+[ot\_ive\_16bit\_to\_8bit\_ctrl](#ZH-CN_TOPIC_0000002470931316)
 
 ### ot\_ive\_16bit\_to\_8bit\_ctrl<a name="ZH-CN_TOPIC_0000002470931316"></a>
 
@@ -3222,7 +3084,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ot\_ive\_16bit\_to\_8bit\_mode](#ot_ive_16bit_to_8bit_mode)
+[ot\_ive\_16bit\_to\_8bit\_mode](#ZH-CN_TOPIC_0000002471091260)
 
 ### ot\_ive\_order\_stats\_filter\_mode<a name="ZH-CN_TOPIC_0000002470931238"></a>
 
@@ -3274,7 +3136,7 @@ typedef enum {
 
 【相关数据类型及接口】
 
-[ot\_ive\_order\_stats\_filter\_ctrl](#ot_ive_order_stats_filter_ctrl)
+[ot\_ive\_order\_stats\_filter\_ctrl](#ZH-CN_TOPIC_0000002471091240)
 
 ### ot\_ive\_order\_stats\_filter\_ctrl<a name="ZH-CN_TOPIC_0000002471091240"></a>
 
@@ -3313,7 +3175,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ot\_ive\_order\_stats\_filter\_mode](#ot_ive_order_stats_filter_mode)
+[ot\_ive\_order\_stats\_filter\_mode](#ZH-CN_TOPIC_0000002470931238)
 
 ### ot\_ive\_map\_u8bit\_lut\_mem<a name="ZH-CN_TOPIC_0000002471091206"></a>
 
@@ -3338,7 +3200,7 @@ typedef struct {
 </th>
 </tr>
 </thead>
-<tbody><tr id="row17166mcpsimp"><td class="cellrowborder" valign="top" width="48%" headers="mcps1.1.3.1.1 "><p id="p17168mcpsimp"><a name="p17168mcpsimp"></a><a name="p17168mcpsimp"></a>map[<a href="OT_IVE_MAP_NUM.md">OT_IVE_MAP_NUM</a>]</p>
+<tbody><tr id="row17166mcpsimp"><td class="cellrowborder" valign="top" width="48%" headers="mcps1.1.3.1.1 "><p id="p17168mcpsimp"><a name="p17168mcpsimp"></a><a name="p17168mcpsimp"></a>map[<a href="#ZH-CN_TOPIC_0000002471091274">OT_IVE_MAP_NUM</a>]</p>
 </td>
 <td class="cellrowborder" valign="top" width="52%" headers="mcps1.1.3.1.2 "><p id="p17171mcpsimp"><a name="p17171mcpsimp"></a><a name="p17171mcpsimp"></a>map查找表数组。</p>
 </td>
@@ -3377,7 +3239,7 @@ typedef struct {
 </th>
 </tr>
 </thead>
-<tbody><tr id="row2823mcpsimp"><td class="cellrowborder" valign="top" width="48%" headers="mcps1.1.3.1.1 "><p id="p2825mcpsimp"><a name="p2825mcpsimp"></a><a name="p2825mcpsimp"></a>map[<a href="OT_IVE_MAP_NUM.md">OT_IVE_MAP_NUM</a>]</p>
+<tbody><tr id="row2823mcpsimp"><td class="cellrowborder" valign="top" width="48%" headers="mcps1.1.3.1.1 "><p id="p2825mcpsimp"><a name="p2825mcpsimp"></a><a name="p2825mcpsimp"></a>map[<a href="#ZH-CN_TOPIC_0000002471091274">OT_IVE_MAP_NUM</a>]</p>
 </td>
 <td class="cellrowborder" valign="top" width="52%" headers="mcps1.1.3.1.2 "><p id="p2828mcpsimp"><a name="p2828mcpsimp"></a><a name="p2828mcpsimp"></a>map查找表数组。</p>
 </td>
@@ -3416,7 +3278,7 @@ typedef struct {
 </th>
 </tr>
 </thead>
-<tbody><tr id="row16107mcpsimp"><td class="cellrowborder" valign="top" width="48%" headers="mcps1.1.3.1.1 "><p id="p16109mcpsimp"><a name="p16109mcpsimp"></a><a name="p16109mcpsimp"></a>map[<a href="OT_IVE_MAP_NUM.md">OT_IVE_MAP_NUM</a>]</p>
+<tbody><tr id="row16107mcpsimp"><td class="cellrowborder" valign="top" width="48%" headers="mcps1.1.3.1.1 "><p id="p16109mcpsimp"><a name="p16109mcpsimp"></a><a name="p16109mcpsimp"></a>map[<a href="#ZH-CN_TOPIC_0000002471091274">OT_IVE_MAP_NUM</a>]</p>
 </td>
 <td class="cellrowborder" valign="top" width="52%" headers="mcps1.1.3.1.2 "><p id="p16112mcpsimp"><a name="p16112mcpsimp"></a><a name="p16112mcpsimp"></a>map查找表数组。</p>
 </td>
@@ -3547,12 +3409,12 @@ typedef struct {
 </th>
 </tr>
 </thead>
-<tbody><tr id="row2006mcpsimp"><td class="cellrowborder" valign="top" width="48%" headers="mcps1.1.3.1.1 "><p id="p2008mcpsimp"><a name="p2008mcpsimp"></a><a name="p2008mcpsimp"></a>hist[<a href="OT_IVE_HIST_NUM.md">OT_IVE_HIST_NUM</a>]</p>
+<tbody><tr id="row2006mcpsimp"><td class="cellrowborder" valign="top" width="48%" headers="mcps1.1.3.1.1 "><p id="p2008mcpsimp"><a name="p2008mcpsimp"></a><a name="p2008mcpsimp"></a>hist[<a href="#ZH-CN_TOPIC_0000002470931262">OT_IVE_HIST_NUM</a>]</p>
 </td>
 <td class="cellrowborder" valign="top" width="52%" headers="mcps1.1.3.1.2 "><p id="p2011mcpsimp"><a name="p2011mcpsimp"></a><a name="p2011mcpsimp"></a>直方图统计的输出。</p>
 </td>
 </tr>
-<tr id="row2012mcpsimp"><td class="cellrowborder" valign="top" width="48%" headers="mcps1.1.3.1.1 "><p id="p2014mcpsimp"><a name="p2014mcpsimp"></a><a name="p2014mcpsimp"></a>map[<a href="OT_IVE_MAP_NUM.md">OT_IVE_MAP_NUM</a>]</p>
+<tr id="row2012mcpsimp"><td class="cellrowborder" valign="top" width="48%" headers="mcps1.1.3.1.1 "><p id="p2014mcpsimp"><a name="p2014mcpsimp"></a><a name="p2014mcpsimp"></a>map[<a href="#ZH-CN_TOPIC_0000002471091274">OT_IVE_MAP_NUM</a>]</p>
 </td>
 <td class="cellrowborder" valign="top" width="52%" headers="mcps1.1.3.1.2 "><p id="p2017mcpsimp"><a name="p2017mcpsimp"></a><a name="p2017mcpsimp"></a>根据统计直方图计算得到的map查找表。</p>
 </td>
@@ -3566,7 +3428,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ot\_ive\_equalize\_hist\_ctrl](#ot_ive_equalize_hist_ctrl)
+[ot\_ive\_equalize\_hist\_ctrl](#ZH-CN_TOPIC_0000002503971189)
 
 ### ot\_ive\_equalize\_hist\_ctrl<a name="ZH-CN_TOPIC_0000002503971189"></a>
 
@@ -3593,7 +3455,7 @@ typedef struct {
 </thead>
 <tbody><tr id="row8133mcpsimp"><td class="cellrowborder" valign="top" width="20%" headers="mcps1.1.3.1.1 "><p id="p8135mcpsimp"><a name="p8135mcpsimp"></a><a name="p8135mcpsimp"></a>mem</p>
 </td>
-<td class="cellrowborder" valign="top" width="80%" headers="mcps1.1.3.1.2 "><p id="p8137mcpsimp"><a name="p8137mcpsimp"></a><a name="p8137mcpsimp"></a>需开辟sizeof(<a href="ot_ive_equalize_hist_ctrl_mem.md">ot_ive_equalize_hist_ctrl_mem</a>)字节大小的内存。</p>
+<td class="cellrowborder" valign="top" width="80%" headers="mcps1.1.3.1.2 "><p id="p8137mcpsimp"><a name="p8137mcpsimp"></a><a name="p8137mcpsimp"></a>需开辟sizeof(<a href="#ZH-CN_TOPIC_0000002471091324">ot_ive_equalize_hist_ctrl_mem</a>)字节大小的内存。</p>
 </td>
 </tr>
 </tbody>
@@ -3605,7 +3467,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ot\_ive\_equalize\_hist\_ctrl\_mem](#ot_ive_equalize_hist_ctrl_mem)
+[ot\_ive\_equalize\_hist\_ctrl\_mem](#ZH-CN_TOPIC_0000002471091324)
 
 ### ot\_ive\_add\_ctrl<a name="ZH-CN_TOPIC_0000002503971153"></a>
 
@@ -3695,7 +3557,7 @@ typedef struct {
 <p id="p173405772616"><a name="p173405772616"></a><a name="p173405772616"></a>NCC计算公式的分子--<a name="image20114173123411"></a><a name="image20114173123411"></a><span><img class="mathml" id="image20114173123411" src="figures/zh-cn_formulaimage_0000002471091414.png"></span></p>
 </td>
 </tr>
-<tr id="row3735mcpsimp"><td class="cellrowborder" valign="top" width="48%" headers="mcps1.1.3.1.1 "><p xml:lang="de-DE" id="p3737mcpsimp"><a name="p3737mcpsimp"></a><a name="p3737mcpsimp"></a><span xml:lang="en-US" id="ph3738mcpsimp"><a name="ph3738mcpsimp"></a><a name="ph3738mcpsimp"></a>reserved[</span><a href="OT_IVE_ARR_RESERVED_NUM_EIGHT.md">OT_IVE_ARR_RESERVED_NUM_EIGHT</a><span xml:lang="en-US" id="ph3741mcpsimp"><a name="ph3741mcpsimp"></a><a name="ph3741mcpsimp"></a>]</span></p>
+<tr id="row3735mcpsimp"><td class="cellrowborder" valign="top" width="48%" headers="mcps1.1.3.1.1 "><p xml:lang="de-DE" id="p3737mcpsimp"><a name="p3737mcpsimp"></a><a name="p3737mcpsimp"></a><span xml:lang="en-US" id="ph3738mcpsimp"><a name="ph3738mcpsimp"></a><a name="ph3738mcpsimp"></a>reserved[</span><a href="#ZH-CN_TOPIC_0000002470931298">OT_IVE_ARR_RESERVED_NUM_EIGHT</a><span xml:lang="en-US" id="ph3741mcpsimp"><a name="ph3741mcpsimp"></a><a name="ph3741mcpsimp"></a>]</span></p>
 </td>
 <td class="cellrowborder" valign="top" width="52%" headers="mcps1.1.3.1.2 "><p id="p3743mcpsimp"><a name="p3743mcpsimp"></a><a name="p3743mcpsimp"></a>保留字段</p>
 </td>
@@ -3772,7 +3634,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ot\_ive\_ccblob](#ot_ive_ccblob)
+[ot\_ive\_ccblob](#ZH-CN_TOPIC_0000002503971207)
 
 ### ot\_ive\_ccblob\_info<a name="ZH-CN_TOPIC_0000002503971211"></a>
 
@@ -3830,7 +3692,7 @@ typedef union {
 
 【相关数据类型及接口】
 
--   [ot\_ive\_ccblob](#ot_ive_ccblob)
+-   [ot\_ive\_ccblob](#ZH-CN_TOPIC_0000002503971207)
 -   ss\_mpi\_ive\_ccl
 
 ### ot\_ive\_ccblob<a name="ZH-CN_TOPIC_0000002503971207"></a>
@@ -3862,7 +3724,7 @@ typedef struct {
 <td class="cellrowborder" valign="top" width="54%" headers="mcps1.1.3.1.2 "><p id="p1494mcpsimp"><a name="p1494mcpsimp"></a><a name="p1494mcpsimp"></a>描述连通区域的相关信息。</p>
 </td>
 </tr>
-<tr id="row1495mcpsimp"><td class="cellrowborder" valign="top" width="46%" headers="mcps1.1.3.1.1 "><p id="p1497mcpsimp"><a name="p1497mcpsimp"></a><a name="p1497mcpsimp"></a>rgn[<a href="OT_IVE_MAX_RGN_NUM.md">OT_IVE_MAX_RGN_NUM</a>]</p>
+<tr id="row1495mcpsimp"><td class="cellrowborder" valign="top" width="46%" headers="mcps1.1.3.1.1 "><p id="p1497mcpsimp"><a name="p1497mcpsimp"></a><a name="p1497mcpsimp"></a>rgn[<a href="#ZH-CN_TOPIC_0000002471091214">OT_IVE_MAX_RGN_NUM</a>]</p>
 </td>
 <td class="cellrowborder" valign="top" width="54%" headers="mcps1.1.3.1.2 "><p id="p1500mcpsimp"><a name="p1500mcpsimp"></a><a name="p1500mcpsimp"></a>连通区域信息：有效的连通区域其面积大于0，对应标记为数组下标加1。</p>
 </td>
@@ -3876,7 +3738,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
--   [ot\_ive\_ccblob\_info](#ot_ive_ccblob_info)
+-   [ot\_ive\_ccblob\_info](#ZH-CN_TOPIC_0000002503971211)
 -   ss\_mpi\_ive\_ccl
 
 ### ot\_ive\_ccl\_mode<a name="ZH-CN_TOPIC_0000002470931332"></a>
@@ -3978,7 +3840,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ot\_ive\_ccblob](#ot_ive_ccblob)
+[ot\_ive\_ccblob](#ZH-CN_TOPIC_0000002503971207)
 
 ### ot\_ive\_gmm\_ctrl<a name="ZH-CN_TOPIC_0000002471091236"></a>
 
@@ -4113,7 +3975,7 @@ typedef enum {
 </thead>
 <tbody><tr id="row14311mcpsimp"><td class="cellrowborder" valign="top" width="54%" headers="mcps1.1.3.1.1 "><p id="p14313mcpsimp"><a name="p14313mcpsimp"></a><a name="p14313mcpsimp"></a>OT_IVE_GMM2_SNS_FACTOR_MODE_GLOBAL</p>
 </td>
-<td class="cellrowborder" valign="top" width="46%" headers="mcps1.1.3.1.2 "><p id="p14315mcpsimp"><a name="p14315mcpsimp"></a><a name="p14315mcpsimp"></a>全局灵敏度系数模式，每个像素在模型匹配过程中，方差灵敏度使用<a href="ot_ive_gmm2_ctrl.md">ot_ive_gmm2_ctrl</a>的global_sns_factor。</p>
+<td class="cellrowborder" valign="top" width="46%" headers="mcps1.1.3.1.2 "><p id="p14315mcpsimp"><a name="p14315mcpsimp"></a><a name="p14315mcpsimp"></a>全局灵敏度系数模式，每个像素在模型匹配过程中，方差灵敏度使用<a href="#ZH-CN_TOPIC_0000002504091119">ot_ive_gmm2_ctrl</a>的global_sns_factor。</p>
 </td>
 </tr>
 <tr id="row14317mcpsimp"><td class="cellrowborder" valign="top" width="54%" headers="mcps1.1.3.1.1 "><p id="p14319mcpsimp"><a name="p14319mcpsimp"></a><a name="p14319mcpsimp"></a>OT_IVE_GMM2_SNS_FACTOR_MODE_PIXEL</p>
@@ -4159,7 +4021,7 @@ typedef enum {
 </thead>
 <tbody><tr id="row14105mcpsimp"><td class="cellrowborder" valign="top" width="46%" headers="mcps1.1.3.1.1 "><p id="p14107mcpsimp"><a name="p14107mcpsimp"></a><a name="p14107mcpsimp"></a>OT_IVE_GMM2_LIFE_UPDATE_FACTOR_MODE_GLOBAL</p>
 </td>
-<td class="cellrowborder" valign="top" width="54%" headers="mcps1.1.3.1.2 "><p id="p14109mcpsimp"><a name="p14109mcpsimp"></a><a name="p14109mcpsimp"></a>模型时长参数全局更新模式，每个像素模型时长参数在更新时使用<a href="ot_ive_gmm2_ctrl.md">ot_ive_gmm2_ctrl</a>的global_life_update_factor。</p>
+<td class="cellrowborder" valign="top" width="54%" headers="mcps1.1.3.1.2 "><p id="p14109mcpsimp"><a name="p14109mcpsimp"></a><a name="p14109mcpsimp"></a>模型时长参数全局更新模式，每个像素模型时长参数在更新时使用<a href="#ZH-CN_TOPIC_0000002504091119">ot_ive_gmm2_ctrl</a>的global_life_update_factor。</p>
 </td>
 </tr>
 <tr id="row14111mcpsimp"><td class="cellrowborder" valign="top" width="46%" headers="mcps1.1.3.1.1 "><p id="p14113mcpsimp"><a name="p14113mcpsimp"></a><a name="p14113mcpsimp"></a>OT_IVE_GMM2_LIFE_UPDATE_FACTOR_MODE_PIXEL</p>
@@ -4318,7 +4180,7 @@ typedef struct {
 <td class="cellrowborder" valign="top" width="43%" headers="mcps1.1.3.1.2 "><p id="p8677mcpsimp"><a name="p8677mcpsimp"></a><a name="p8677mcpsimp"></a>栈大小(强边缘点的个数)。</p>
 </td>
 </tr>
-<tr id="row8678mcpsimp"><td class="cellrowborder" valign="top" width="56.99999999999999%" headers="mcps1.1.3.1.1 "><p xml:lang="de-DE" id="p8680mcpsimp"><a name="p8680mcpsimp"></a><a name="p8680mcpsimp"></a><span xml:lang="en-US" id="ph8681mcpsimp"><a name="ph8681mcpsimp"></a><a name="ph8681mcpsimp"></a>reserved</span> <span xml:lang="en-US" id="ph8682mcpsimp"><a name="ph8682mcpsimp"></a><a name="ph8682mcpsimp"></a>[</span><a href="OT_IVE_ARR_RESERVED_NUM_TWELVE.md">OT_IVE_ARR_RESERVED_NUM_TWELVE</a><span xml:lang="en-US" id="ph8685mcpsimp"><a name="ph8685mcpsimp"></a><a name="ph8685mcpsimp"></a>]</span></p>
+<tr id="row8678mcpsimp"><td class="cellrowborder" valign="top" width="56.99999999999999%" headers="mcps1.1.3.1.1 "><p xml:lang="de-DE" id="p8680mcpsimp"><a name="p8680mcpsimp"></a><a name="p8680mcpsimp"></a><span xml:lang="en-US" id="ph8681mcpsimp"><a name="ph8681mcpsimp"></a><a name="ph8681mcpsimp"></a>reserved</span> <span xml:lang="en-US" id="ph8682mcpsimp"><a name="ph8682mcpsimp"></a><a name="ph8682mcpsimp"></a>[</span><a href="#ZH-CN_TOPIC_0000002470931230">OT_IVE_ARR_RESERVED_NUM_TWELVE</a><span xml:lang="en-US" id="ph8685mcpsimp"><a name="ph8685mcpsimp"></a><a name="ph8685mcpsimp"></a>]</span></p>
 </td>
 <td class="cellrowborder" valign="top" width="43%" headers="mcps1.1.3.1.2 "><p id="p8687mcpsimp"><a name="p8687mcpsimp"></a><a name="p8687mcpsimp"></a>保留字段。</p>
 </td>
@@ -4378,7 +4240,7 @@ typedef struct {
 <p id="p3871mcpsimp"><a name="p3871mcpsimp"></a><a name="p3871mcpsimp"></a>取值范围：[low_threshold,255]</p>
 </td>
 </tr>
-<tr id="row3872mcpsimp"><td class="cellrowborder" valign="top" width="37%" headers="mcps1.1.3.1.1 "><p id="p3874mcpsimp"><a name="p3874mcpsimp"></a><a name="p3874mcpsimp"></a>mask[<a href="OT_IVE_MASK_NUM.md">OT_IVE_MASK_NUM</a>]</p>
+<tr id="row3872mcpsimp"><td class="cellrowborder" valign="top" width="37%" headers="mcps1.1.3.1.1 "><p id="p3874mcpsimp"><a name="p3874mcpsimp"></a><a name="p3874mcpsimp"></a>mask[<a href="#ZH-CN_TOPIC_0000002471091310">OT_IVE_MASK_NUM</a>]</p>
 </td>
 <td class="cellrowborder" valign="top" width="63%" headers="mcps1.1.3.1.2 "><p id="p3878mcpsimp"><a name="p3878mcpsimp"></a><a name="p3878mcpsimp"></a>用于计算梯度的参数模板。</p>
 </td>
@@ -4438,7 +4300,7 @@ typedef enum {
 
 【相关数据类型及接口】
 
-[ot\_ive\_lbp\_ctrl](#ot_ive_lbp_ctrl)
+[ot\_ive\_lbp\_ctrl](#ZH-CN_TOPIC_0000002471091226)
 
 ### ot\_ive\_lbp\_ctrl<a name="ZH-CN_TOPIC_0000002471091226"></a>
 
@@ -4485,8 +4347,8 @@ typedef struct {
 
 【相关数据类型及接口】
 
--   [ot\_ive\_lbp\_compare\_mode](#ot_ive_lbp_compare_mode)
--   [ot\_svp\_8bit](#ot_svp_8bit)
+-   [ot\_ive\_lbp\_compare\_mode](#ZH-CN_TOPIC_0000002470931250)
+-   [ot\_svp\_8bit](#ZH-CN_TOPIC_0000002503971231)
 
 ### ot\_ive\_norm\_grad\_out\_ctrl<a name="ZH-CN_TOPIC_0000002503971179"></a>
 
@@ -4544,7 +4406,7 @@ typedef enum {
 
 【相关数据类型及接口】
 
-[ot\_ive\_norm\_grad\_ctrl](#ot_ive_norm_grad_ctrl)
+[ot\_ive\_norm\_grad\_ctrl](#ZH-CN_TOPIC_0000002470931288)
 
 ### ot\_ive\_norm\_grad\_ctrl<a name="ZH-CN_TOPIC_0000002470931288"></a>
 
@@ -4576,7 +4438,7 @@ typedef struct {
 <td class="cellrowborder" valign="top" width="64%" headers="mcps1.1.3.1.2 "><p id="p8601mcpsimp"><a name="p8601mcpsimp"></a><a name="p8601mcpsimp"></a>梯度信息输出控制模式。</p>
 </td>
 </tr>
-<tr id="row8602mcpsimp"><td class="cellrowborder" valign="top" width="36%" headers="mcps1.1.3.1.1 "><p id="p8604mcpsimp"><a name="p8604mcpsimp"></a><a name="p8604mcpsimp"></a>mask[<a href="OT_IVE_MASK_NUM.md">OT_IVE_MASK_NUM</a>]</p>
+<tr id="row8602mcpsimp"><td class="cellrowborder" valign="top" width="36%" headers="mcps1.1.3.1.1 "><p id="p8604mcpsimp"><a name="p8604mcpsimp"></a><a name="p8604mcpsimp"></a>mask[<a href="#ZH-CN_TOPIC_0000002471091310">OT_IVE_MASK_NUM</a>]</p>
 </td>
 <td class="cellrowborder" valign="top" width="64%" headers="mcps1.1.3.1.2 "><p id="p8608mcpsimp"><a name="p8608mcpsimp"></a><a name="p8608mcpsimp"></a>计算梯度需要的模板。</p>
 </td>
@@ -4596,7 +4458,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ot\_ive\_norm\_grad\_out\_ctrl](#ot_ive_norm_grad_out_ctrl)
+[ot\_ive\_norm\_grad\_out\_ctrl](#ZH-CN_TOPIC_0000002503971179)
 
 ### ot\_ive\_lk\_optical\_flow\_pyr\_out\_mode<a name="ZH-CN_TOPIC_0000002504091077"></a>
 
@@ -4761,7 +4623,7 @@ typedef struct {
 <td class="cellrowborder" valign="top" width="40%" headers="mcps1.1.3.1.2 "><p id="p11238mcpsimp"><a name="p11238mcpsimp"></a><a name="p11238mcpsimp"></a>最大角点响应值。</p>
 </td>
 </tr>
-<tr id="row11239mcpsimp"><td class="cellrowborder" valign="top" width="60%" headers="mcps1.1.3.1.1 "><p xml:lang="de-DE" id="p11241mcpsimp"><a name="p11241mcpsimp"></a><a name="p11241mcpsimp"></a><span xml:lang="en-US" id="ph11242mcpsimp"><a name="ph11242mcpsimp"></a><a name="ph11242mcpsimp"></a>reserved</span> <span xml:lang="en-US" id="ph11243mcpsimp"><a name="ph11243mcpsimp"></a><a name="ph11243mcpsimp"></a>[</span><a href="OT_IVE_ARR_RESERVED_NUM_FOURTEEN.md">OT_IVE_ARR_RESERVED_NUM_FOURTEEN</a><span xml:lang="en-US" id="ph11246mcpsimp"><a name="ph11246mcpsimp"></a><a name="ph11246mcpsimp"></a>]</span></p>
+<tr id="row11239mcpsimp"><td class="cellrowborder" valign="top" width="60%" headers="mcps1.1.3.1.1 "><p xml:lang="de-DE" id="p11241mcpsimp"><a name="p11241mcpsimp"></a><a name="p11241mcpsimp"></a><span xml:lang="en-US" id="ph11242mcpsimp"><a name="ph11242mcpsimp"></a><a name="ph11242mcpsimp"></a>reserved</span> <span xml:lang="en-US" id="ph11243mcpsimp"><a name="ph11243mcpsimp"></a><a name="ph11243mcpsimp"></a>[</span><a href="#ZH-CN_TOPIC_0000002470931216">OT_IVE_ARR_RESERVED_NUM_FOURTEEN</a><span xml:lang="en-US" id="ph11246mcpsimp"><a name="ph11246mcpsimp"></a><a name="ph11246mcpsimp"></a>]</span></p>
 </td>
 <td class="cellrowborder" valign="top" width="40%" headers="mcps1.1.3.1.2 "><p id="p11248mcpsimp"><a name="p11248mcpsimp"></a><a name="p11248mcpsimp"></a>保留位。</p>
 </td>
@@ -4854,7 +4716,7 @@ typedef struct {
 <td class="cellrowborder" valign="top" width="46%" headers="mcps1.1.3.1.2 "><p id="p4656mcpsimp"><a name="p4656mcpsimp"></a><a name="p4656mcpsimp"></a>有效角点数目。</p>
 </td>
 </tr>
-<tr id="row4657mcpsimp"><td class="cellrowborder" valign="top" width="54%" headers="mcps1.1.3.1.1 "><p id="p4659mcpsimp"><a name="p4659mcpsimp"></a><a name="p4659mcpsimp"></a>corner [<a href="OT_IVE_ST_MAX_CORNER_NUM.md">OT_IVE_ST_MAX_CORNER_NUM</a>]</p>
+<tr id="row4657mcpsimp"><td class="cellrowborder" valign="top" width="54%" headers="mcps1.1.3.1.1 "><p id="p4659mcpsimp"><a name="p4659mcpsimp"></a><a name="p4659mcpsimp"></a>corner [<a href="#ZH-CN_TOPIC_0000002503971193">OT_IVE_ST_MAX_CORNER_NUM</a>]</p>
 </td>
 <td class="cellrowborder" valign="top" width="46%" headers="mcps1.1.3.1.2 "><p id="p4662mcpsimp"><a name="p4662mcpsimp"></a><a name="p4662mcpsimp"></a>角点坐标数组。</p>
 </td>
@@ -4968,7 +4830,7 @@ typedef enum {
 
 【相关数据类型及接口】
 
-[ot\_ive\_sad\_ctrl](#ot_ive_sad_ctrl)
+[ot\_ive\_sad\_ctrl](#ZH-CN_TOPIC_0000002471091212)
 
 ### ot\_ive\_sad\_out\_ctrl<a name="ZH-CN_TOPIC_0000002471091278"></a>
 
@@ -5032,7 +4894,7 @@ typedef enum {
 
 【相关数据类型及接口】
 
-[ot\_ive\_sad\_ctrl](#ot_ive_sad_ctrl)
+[ot\_ive\_sad\_ctrl](#ZH-CN_TOPIC_0000002471091212)
 
 ### ot\_ive\_sad\_ctrl<a name="ZH-CN_TOPIC_0000002471091212"></a>
 
@@ -5097,8 +4959,8 @@ typedef struct {
 
 【相关数据类型及接口】
 
--   [ot\_ive\_sad\_mode](#ot_ive_sad_mode)
--   [ot\_ive\_sad\_out\_ctrl](#ot_ive_sad_out_ctrl)
+-   [ot\_ive\_sad\_mode](#ZH-CN_TOPIC_0000002470931274)
+-   [ot\_ive\_sad\_out\_ctrl](#ZH-CN_TOPIC_0000002471091278)
 
 ### ot\_ive\_resize\_mode<a name="ZH-CN_TOPIC_0000002503971219"></a>
 
@@ -5242,7 +5104,7 @@ typedef enum {
 
 【相关数据类型及接口】
 
-[ot\_ive\_grad\_fg\_ctrl](#ot_ive_grad_fg_ctrl)
+[ot\_ive\_grad\_fg\_ctrl](#ZH-CN_TOPIC_0000002504091111)
 
 ### ot\_ive\_grad\_fg\_ctrl<a name="ZH-CN_TOPIC_0000002504091111"></a>
 
@@ -5276,7 +5138,7 @@ typedef struct {
 </thead>
 <tbody><tr id="row219mcpsimp"><td class="cellrowborder" valign="top" width="27%" headers="mcps1.1.3.1.1 "><p id="p221mcpsimp"><a name="p221mcpsimp"></a><a name="p221mcpsimp"></a>mode</p>
 </td>
-<td class="cellrowborder" valign="top" width="73%" headers="mcps1.1.3.1.2 "><p id="p223mcpsimp"><a name="p223mcpsimp"></a><a name="p223mcpsimp"></a>梯度前景计算模式。参考<a href="ot_ive_grad_fg_mode.md">ot_ive_grad_fg_mode</a>。</p>
+<td class="cellrowborder" valign="top" width="73%" headers="mcps1.1.3.1.2 "><p id="p223mcpsimp"><a name="p223mcpsimp"></a><a name="p223mcpsimp"></a>梯度前景计算模式。参考<a href="#ZH-CN_TOPIC_0000002503971161">ot_ive_grad_fg_mode</a>。</p>
 </td>
 </tr>
 <tr id="row225mcpsimp"><td class="cellrowborder" valign="top" width="27%" headers="mcps1.1.3.1.1 "><p id="p227mcpsimp"><a name="p227mcpsimp"></a><a name="p227mcpsimp"></a>edw_factor</p>
@@ -5329,7 +5191,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ot\_ive\_grad\_fg\_mode](#ot_ive_grad_fg_mode)
+[ot\_ive\_grad\_fg\_mode](#ZH-CN_TOPIC_0000002503971161)
 
 ### ot\_ive\_cand\_bg\_pixel<a name="ZH-CN_TOPIC_0000002503971261"></a>
 
@@ -5398,8 +5260,8 @@ typedef struct {
 
 【相关数据类型及接口】
 
--   [ot\_ive\_wrok\_bg\_pixel](#ot_ive_wrok_bg_pixel)
--   [ot\_ive\_bg\_model\_pixel](#ot_ive_bg_model_pixel)
+-   [ot\_ive\_wrok\_bg\_pixel](#ZH-CN_TOPIC_0000002503971171)
+-   [ot\_ive\_bg\_model\_pixel](#ZH-CN_TOPIC_0000002503971177)
 
 ### ot\_ive\_wrok\_bg\_pixel<a name="ZH-CN_TOPIC_0000002503971171"></a>
 
@@ -5454,7 +5316,7 @@ typedef struct {
 <td class="cellrowborder" valign="top" width="61%" headers="mcps1.1.3.1.2 "><p id="p1860mcpsimp"><a name="p1860mcpsimp"></a><a name="p1860mcpsimp"></a>工作背景访问标识。</p>
 </td>
 </tr>
-<tr id="row1861mcpsimp"><td class="cellrowborder" valign="top" width="39%" headers="mcps1.1.3.1.1 "><p id="p1863mcpsimp"><a name="p1863mcpsimp"></a><a name="p1863mcpsimp"></a>bg_gray [<a href="OT_IVE_ARR_NUM_THREE.md">OT_IVE_ARR_NUM_THREE</a>]</p>
+<tr id="row1861mcpsimp"><td class="cellrowborder" valign="top" width="39%" headers="mcps1.1.3.1.1 "><p id="p1863mcpsimp"><a name="p1863mcpsimp"></a><a name="p1863mcpsimp"></a>bg_gray [<a href="#ZH-CN_TOPIC_0000002503971175">OT_IVE_ARR_NUM_THREE</a>]</p>
 </td>
 <td class="cellrowborder" valign="top" width="61%" headers="mcps1.1.3.1.2 "><p id="p1867mcpsimp"><a name="p1867mcpsimp"></a><a name="p1867mcpsimp"></a>1～3号背景灰度值。</p>
 </td>
@@ -5468,8 +5330,8 @@ typedef struct {
 
 【相关数据类型及接口】
 
--   [ot\_ive\_cand\_bg\_pixel](#ot_ive_cand_bg_pixel)
--   [ot\_ive\_bg\_model\_pixel](#ot_ive_bg_model_pixel)
+-   [ot\_ive\_cand\_bg\_pixel](#ZH-CN_TOPIC_0000002503971261)
+-   [ot\_ive\_bg\_model\_pixel](#ZH-CN_TOPIC_0000002503971177)
 
 ### ot\_ive\_bg\_life<a name="ZH-CN_TOPIC_0000002471091208"></a>
 
@@ -5495,7 +5357,7 @@ typedef struct {
 </th>
 </tr>
 </thead>
-<tbody><tr id="row6529mcpsimp"><td class="cellrowborder" valign="top" width="55.00000000000001%" headers="mcps1.1.3.1.1 "><p id="p6531mcpsimp"><a name="p6531mcpsimp"></a><a name="p6531mcpsimp"></a>work_bg_life [<a href="OT_IVE_ARR_NUM_THREE.md">OT_IVE_ARR_NUM_THREE</a>]</p>
+<tbody><tr id="row6529mcpsimp"><td class="cellrowborder" valign="top" width="55.00000000000001%" headers="mcps1.1.3.1.1 "><p id="p6531mcpsimp"><a name="p6531mcpsimp"></a><a name="p6531mcpsimp"></a>work_bg_life [<a href="#ZH-CN_TOPIC_0000002503971175">OT_IVE_ARR_NUM_THREE</a>]</p>
 </td>
 <td class="cellrowborder" valign="top" width="45%" headers="mcps1.1.3.1.2 "><p id="p6535mcpsimp"><a name="p6535mcpsimp"></a><a name="p6535mcpsimp"></a>1～3号工作背景生命力。</p>
 </td>
@@ -5514,7 +5376,7 @@ typedef struct {
 
 【相关数据类型及接口】
 
-[ot\_ive\_bg\_model\_pixel](#ot_ive_bg_model_pixel)
+[ot\_ive\_bg\_model\_pixel](#ZH-CN_TOPIC_0000002503971177)
 
 ### ot\_ive\_bg\_model\_pixel<a name="ZH-CN_TOPIC_0000002503971177"></a>
 
@@ -5565,9 +5427,9 @@ typedef struct {
 
 【相关数据类型及接口】
 
--   [ot\_ive\_cand\_bg\_pixel](#ot_ive_cand_bg_pixel)
--   [ot\_ive\_wrok\_bg\_pixel](#ot_ive_wrok_bg_pixel)
--   [ot\_ive\_bg\_life](#ot_ive_bg_life)
+-   [ot\_ive\_cand\_bg\_pixel](#ZH-CN_TOPIC_0000002503971261)
+-   [ot\_ive\_wrok\_bg\_pixel](#ZH-CN_TOPIC_0000002503971171)
+-   [ot\_ive\_bg\_life](#ZH-CN_TOPIC_0000002471091208)
 
 ### ot\_ive\_fg\_status\_data<a name="ZH-CN_TOPIC_0000002503971239"></a>
 
@@ -5604,7 +5466,7 @@ typedef struct {
 <td class="cellrowborder" valign="top" width="52%" headers="mcps1.1.3.1.2 "><p id="p9170mcpsimp"><a name="p9170mcpsimp"></a><a name="p9170mcpsimp"></a>输入图像的所有像素亮度累加和。</p>
 </td>
 </tr>
-<tr id="row9171mcpsimp"><td class="cellrowborder" valign="top" width="48%" headers="mcps1.1.3.1.1 "><p id="p9173mcpsimp"><a name="p9173mcpsimp"></a><a name="p9173mcpsimp"></a>reserved[<a href="OT_IVE_ARR_NUM_EIGHT.md">OT_IVE_ARR_NUM_EIGHT</a>]</p>
+<tr id="row9171mcpsimp"><td class="cellrowborder" valign="top" width="48%" headers="mcps1.1.3.1.1 "><p id="p9173mcpsimp"><a name="p9173mcpsimp"></a><a name="p9173mcpsimp"></a>reserved[<a href="#ZH-CN_TOPIC_0000002503971255">OT_IVE_ARR_NUM_EIGHT</a>]</p>
 </td>
 <td class="cellrowborder" valign="top" width="52%" headers="mcps1.1.3.1.2 "><p id="p9177mcpsimp"><a name="p9177mcpsimp"></a><a name="p9177mcpsimp"></a>保留字段。</p>
 </td>
@@ -5655,7 +5517,7 @@ typedef struct {
 <td class="cellrowborder" valign="top" width="52%" headers="mcps1.1.3.1.2 "><p id="p15262mcpsimp"><a name="p15262mcpsimp"></a><a name="p15262mcpsimp"></a>背景图像的所有像素亮度累加和。</p>
 </td>
 </tr>
-<tr id="row15263mcpsimp"><td class="cellrowborder" valign="top" width="48%" headers="mcps1.1.3.1.1 "><p id="p15265mcpsimp"><a name="p15265mcpsimp"></a><a name="p15265mcpsimp"></a>reserved[<a href="OT_IVE_ARR_NUM_EIGHT.md">OT_IVE_ARR_NUM_EIGHT</a>]</p>
+<tr id="row15263mcpsimp"><td class="cellrowborder" valign="top" width="48%" headers="mcps1.1.3.1.1 "><p id="p15265mcpsimp"><a name="p15265mcpsimp"></a><a name="p15265mcpsimp"></a>reserved[<a href="#ZH-CN_TOPIC_0000002503971255">OT_IVE_ARR_NUM_EIGHT</a>]</p>
 </td>
 <td class="cellrowborder" valign="top" width="52%" headers="mcps1.1.3.1.2 "><p id="p15269mcpsimp"><a name="p15269mcpsimp"></a><a name="p15269mcpsimp"></a>保留字段。</p>
 </td>
@@ -6094,7 +5956,7 @@ typedef struct {
 <td class="cellrowborder" valign="top" width="52%" headers="mcps1.1.3.1.2 "><p id="p1102mcpsimp"><a name="p1102mcpsimp"></a><a name="p1102mcpsimp"></a>总的权重的大小</p>
 </td>
 </tr>
-<tr id="row1103mcpsimp"><td class="cellrowborder" valign="top" width="48%" headers="mcps1.1.3.1.1 "><p id="p1105mcpsimp"><a name="p1105mcpsimp"></a><a name="p1105mcpsimp"></a>layer_cnt[<a href="OT_IVE_ARR_NUM_EIGHT.md">OT_IVE_ARR_NUM_EIGHT</a>]</p>
+<tr id="row1103mcpsimp"><td class="cellrowborder" valign="top" width="48%" headers="mcps1.1.3.1.1 "><p id="p1105mcpsimp"><a name="p1105mcpsimp"></a><a name="p1105mcpsimp"></a>layer_cnt[<a href="#ZH-CN_TOPIC_0000002503971255">OT_IVE_ARR_NUM_EIGHT</a>]</p>
 </td>
 <td class="cellrowborder" valign="top" width="52%" headers="mcps1.1.3.1.2 "><p id="p1109mcpsimp"><a name="p1109mcpsimp"></a><a name="p1109mcpsimp"></a>输入层1层-&gt;隐含层若干层（至少1层，最多6层）-&gt;输出层1层，分别存储输入、输出层的特征维度（取值范围：[1, 256]），各隐藏层的神经元数目（取值范围：[2,256]）。</p>
 </td>
@@ -6124,8 +5986,8 @@ typedef struct {
 
 【相关数据类型及接口】
 
--   [ot\_ive\_ann\_mlp\_actv\_func](#ot_ive_ann_mlp_actv_func)
--   [ot\_ive\_ann\_mlp\_accurate](#ot_ive_ann_mlp_accurate)
+-   [ot\_ive\_ann\_mlp\_actv\_func](#ZH-CN_TOPIC_0000002503971151)
+-   [ot\_ive\_ann\_mlp\_accurate](#ZH-CN_TOPIC_0000002504091185)
 
 ### ot\_ive\_svm\_type<a name="ZH-CN_TOPIC_0000002471091314"></a>
 
@@ -6313,8 +6175,8 @@ typedef struct {
 
 【相关数据类型及接口】
 
--   [ot\_ive\_svm\_type](#ot_ive_svm_type)
--   [ot\_ive\_svm\_kernel\_type](#ot_ive_svm_kernel_type)
+-   [ot\_ive\_svm\_type](#ZH-CN_TOPIC_0000002471091314)
+-   [ot\_ive\_svm\_kernel\_type](#ZH-CN_TOPIC_0000002471091268)
 
 ### ot\_ive\_cnn\_actv\_func<a name="ZH-CN_TOPIC_0000002470931254"></a>
 
@@ -6502,8 +6364,8 @@ typedef struct {
 
 【相关数据类型及接口】
 
--   [ot\_ive\_cnn\_actv\_func](#ot_ive_cnn_actv_func)
--   [ot\_ive\_cnn\_pooling](#ot_ive_cnn_pooling)
+-   [ot\_ive\_cnn\_actv\_func](#ZH-CN_TOPIC_0000002470931254)
+-   [ot\_ive\_cnn\_pooling](#ZH-CN_TOPIC_0000002471091230)
 
 ### ot\_ive\_cnn\_fc\_info<a name="ZH-CN_TOPIC_0000002470931296"></a>
 
@@ -6531,7 +6393,7 @@ typedef struct {
 </th>
 </tr>
 </thead>
-<tbody><tr id="row14524mcpsimp"><td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.1 "><p id="p14526mcpsimp"><a name="p14526mcpsimp"></a><a name="p14526mcpsimp"></a>layer_cnt[<a href="OT_IVE_ARR_NUM_EIGHT.md">OT_IVE_ARR_NUM_EIGHT</a>]</p>
+<tbody><tr id="row14524mcpsimp"><td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.1 "><p id="p14526mcpsimp"><a name="p14526mcpsimp"></a><a name="p14526mcpsimp"></a>layer_cnt[<a href="#ZH-CN_TOPIC_0000002503971255">OT_IVE_ARR_NUM_EIGHT</a>]</p>
 </td>
 <td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.2 "><p id="p14530mcpsimp"><a name="p14530mcpsimp"></a><a name="p14530mcpsimp"></a>全连接各层神经元节点数目。输入层（即Conv-ReLU-Pooling的输出）支持范围：[1, 1024]；中间隐藏层支持范围：[2, 256]；输出层支持范围：[1, 256]。</p>
 </td>
@@ -6597,7 +6459,7 @@ typedef struct {
 </th>
 </tr>
 </thead>
-<tbody><tr id="row306mcpsimp"><td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.1 "><p id="p308mcpsimp"><a name="p308mcpsimp"></a><a name="p308mcpsimp"></a>conv_pool[<a href="OT_IVE_ARR_NUM_EIGHT.md">OT_IVE_ARR_NUM_EIGHT</a>]</p>
+<tbody><tr id="row306mcpsimp"><td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.1 "><p id="p308mcpsimp"><a name="p308mcpsimp"></a><a name="p308mcpsimp"></a>conv_pool[<a href="#ZH-CN_TOPIC_0000002503971255">OT_IVE_ARR_NUM_EIGHT</a>]</p>
 </td>
 <td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.2 "><p id="p312mcpsimp"><a name="p312mcpsimp"></a><a name="p312mcpsimp"></a>各层卷积运算包参数配置。</p>
 </td>
@@ -6672,10 +6534,10 @@ CNN网络模型结构参考ss\_mpi\_ive\_cnn\_predict中的【注意】。
 
 【相关数据类型及接口】
 
--   [ot\_ive\_cnn\_actv\_func](#ot_ive_cnn_actv_func)
--   [ot\_ive\_cnn\_pooling](#ot_ive_cnn_pooling)
--   [ot\_ive\_cnn\_conv\_pooling](#ot_ive_cnn_conv_pooling)
--   [ot\_ive\_cnn\_fc\_info](#ot_ive_cnn_fc_info)
+-   [ot\_ive\_cnn\_actv\_func](#ZH-CN_TOPIC_0000002470931254)
+-   [ot\_ive\_cnn\_pooling](#ZH-CN_TOPIC_0000002471091230)
+-   [ot\_ive\_cnn\_conv\_pooling](#ZH-CN_TOPIC_0000002471091306)
+-   [ot\_ive\_cnn\_fc\_info](#ZH-CN_TOPIC_0000002470931296)
 
 ### ot\_ive\_cnn\_ctrl<a name="ZH-CN_TOPIC_0000002471091238"></a>
 
@@ -7043,8 +6905,8 @@ typedef enum {
 
 【相关数据类型及接口】
 
--   [ot\_ive\_kcf\_proc\_ctrl](#ot_ive_kcf_proc_ctrl)
--   [ot\_ive\_hog\_ctrl](#ot_ive_hog_ctrl)
+-   [ot\_ive\_kcf\_proc\_ctrl](#ZH-CN_TOPIC_0000002471091264)
+-   [ot\_ive\_hog\_ctrl](#ZH-CN_TOPIC_0000002470931248)
 -   ss\_mpi\_ive\_kcf\_proc
 -   ss\_mpi\_ive\_hog
 
@@ -7315,7 +7177,7 @@ typedef struct {
 <td class="cellrowborder" valign="top" width="45%" headers="mcps1.1.3.1.2 "><p id="p10435mcpsimp"><a name="p10435mcpsimp"></a><a name="p10435mcpsimp"></a>目标区域放大倍数。</p>
 </td>
 </tr>
-<tr id="row10436mcpsimp"><td class="cellrowborder" valign="top" width="55.00000000000001%" headers="mcps1.1.3.1.1 "><p xml:lang="de-DE" id="p10438mcpsimp"><a name="p10438mcpsimp"></a><a name="p10438mcpsimp"></a><span xml:lang="en-US" id="ph10439mcpsimp"><a name="ph10439mcpsimp"></a><a name="ph10439mcpsimp"></a>reserved</span> <span xml:lang="en-US" id="ph10440mcpsimp"><a name="ph10440mcpsimp"></a><a name="ph10440mcpsimp"></a>[</span><a href="OT_IVE_ARR_RESERVED_NUM_THREE.md">OT_IVE_ARR_RESERVED_NUM_THREE</a><span xml:lang="en-US" id="ph10443mcpsimp"><a name="ph10443mcpsimp"></a><a name="ph10443mcpsimp"></a>]</span></p>
+<tr id="row10436mcpsimp"><td class="cellrowborder" valign="top" width="55.00000000000001%" headers="mcps1.1.3.1.1 "><p xml:lang="de-DE" id="p10438mcpsimp"><a name="p10438mcpsimp"></a><a name="p10438mcpsimp"></a><span xml:lang="en-US" id="ph10439mcpsimp"><a name="ph10439mcpsimp"></a><a name="ph10439mcpsimp"></a>reserved</span> <span xml:lang="en-US" id="ph10440mcpsimp"><a name="ph10440mcpsimp"></a><a name="ph10440mcpsimp"></a>[</span><a href="#ZH-CN_TOPIC_0000002504091161">OT_IVE_ARR_RESERVED_NUM_THREE</a><span xml:lang="en-US" id="ph10443mcpsimp"><a name="ph10443mcpsimp"></a><a name="ph10443mcpsimp"></a>]</span></p>
 </td>
 <td class="cellrowborder" valign="top" width="45%" headers="mcps1.1.3.1.2 "><p id="p10445mcpsimp"><a name="p10445mcpsimp"></a><a name="p10445mcpsimp"></a>保留字段。</p>
 </td>
@@ -7776,12 +7638,13 @@ typedef struct {
 
 # 错误码<a name="ZH-CN_TOPIC_0000002471091270"></a>
 
+-   **[IVE错误码](#ZH-CN_TOPIC_0000002503971191)**  
 
 ## IVE错误码<a name="ZH-CN_TOPIC_0000002503971191"></a>
 
-_识别_加速引擎API错误码如下所示。
+识别加速引擎API错误码如下所示。
 
-**表 1** _识别_加速引擎API错误码
+**表 1**  识别加速引擎API错误码
 
 <a name="_Ref248310770"></a>
 <table><thead align="left"><tr id="row16952mcpsimp"><th class="cellrowborder" valign="top" width="18.81188118811881%" id="mcps1.2.4.1.1"><p id="p16954mcpsimp"><a name="p16954mcpsimp"></a><a name="p16954mcpsimp"></a>错误代码</p>
@@ -7944,7 +7807,9 @@ _识别_加速引擎API错误码如下所示。
 
 # Proc调试信息<a name="ZH-CN_TOPIC_0000002470931256"></a>
 
+-   **[概述](#ZH-CN_TOPIC_0000002504091199)**  
 
+-   **[Proc信息说明](#ZH-CN_TOPIC_0000002503971199)**  
 
 ## 概述<a name="ZH-CN_TOPIC_0000002504091199"></a>
 
@@ -8312,10 +8177,15 @@ plate_char             sad       gmm2         resize         cnn  persp_trans
 
 # FAQ<a name="ZH-CN_TOPIC_0000002504091085"></a>
 
+-   **[使用PC端IVE Clib与板端IVESDK开发算法的差异](#ZH-CN_TOPIC_0000002504091167)**  
 
+-   **[使用IVE与OpenCV开发算法的区别](#ZH-CN_TOPIC_0000002503971169)**  
 
+-   **[ANN/SVM查找表的建立](#ZH-CN_TOPIC_0000002471091298)**  
 
+-   **[Cache内存的使用](#ZH-CN_TOPIC_0000002504091187)**  
 
+-   **[打开/关闭低功耗方法](#ZH-CN_TOPIC_0000002504091175)**  
 
 ## 使用PC端IVE Clib与板端IVESDK开发算法的差异<a name="ZH-CN_TOPIC_0000002504091167"></a>
 

@@ -23,7 +23,7 @@
     cache(0x200,    5) /* usb device; rsa decrypt buf for n=4096 */ \
     cache(0x400,    3) /* rsa_exp_mod (RSA_KEY_LEN_4096*2) */ \
     cache(0x50,     2) /* usb device */ \
-	cache(0xb00,    1) /* usb device */
+    cache(0xb00,    1) /* usb device */
 
 #endif /* MALLOC_SIZES_H */
 

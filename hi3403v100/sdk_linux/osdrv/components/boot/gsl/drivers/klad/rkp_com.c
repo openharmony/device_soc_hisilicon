@@ -47,8 +47,9 @@ static ALWAYS_INLINE int32_t _rkp_wait_idle(void)
 
     while (--time_out) {
         if (_rkp_read_calc_start() == 0x0)
+        {
             break;
-
+        }
         udelay(10);
     }
     if (time_out == 0) {
@@ -94,8 +95,9 @@ static ALWAYS_INLINE int32_t _rkp_check_error(void)
     uint32_t reg = 0;
     reg = _rkp_read_reg(RKP_ERROR);
     if (reg != 0)
+    {
         return TD_FAILURE;
-
+    }
     return TD_SUCCESS;
 }
 
@@ -104,26 +106,28 @@ int32_t rkp_eff_rk_start(const rkp_deob_kdf *deob_kdf, const uint32_t check_wd)
     int32_t ret;
 
     if (deob_kdf == NULL)
+    {
         return TD_FAILURE;
-
+    }
     _rkp_wait_idle();
     _rkp_sw_reg(deob_kdf->kdf.sw_reg);
     ret = _rkp_secure_config();
     if (ret != TD_SUCCESS)
+    {
         return TD_FAILURE;
-
+    }
     ret = _rkp_calc_start(&deob_kdf->kdf);
-    if (ret != TD_SUCCESS)
+    if (ret != TD_SUCCESS) {
         return TD_FAILURE;
-
+    }
     ret = _rkp_wait_idle();
-    if (ret != TD_SUCCESS)
+    if (ret != TD_SUCCESS) {
         return TD_FAILURE;
-
+    }
     ret = _rkp_check_error();
-    if (ret != TD_SUCCESS)
+    if (ret != TD_SUCCESS) {
         return TD_FAILURE;
-
+    }
     return TD_SUCCESS;
 }
 

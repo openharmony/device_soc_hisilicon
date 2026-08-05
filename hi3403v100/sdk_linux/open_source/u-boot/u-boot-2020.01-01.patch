@@ -1,0 +1,191 @@
+diff -ruN --text a/common/load_fip.c b/common/load_fip.c
+--- a/common/load_fip.c	2026-07-23 20:58:25.386158595 +0800
++++ b/common/load_fip.c	2026-07-23 21:02:29.353714315 +0800
+@@ -510,16 +510,99 @@
+ 
+ int boot_a53mp_flag = 0;
+ uint64_t boot_a53mp_addr = 0;
++static int create_entry_bl33_info(entry_point_info_t* const bl33_ep)
++{
++    int ret;
++    image_header_t *hdr;
++    char *fdt;
++    uint32_t fdt_size;
++    uint32_t fdt_magic_check;
++
++    if (!bl33_ep) {
++        return -EINVAL;
++    }
++
++    printf("Create BL33 Entry Point info ...\n");
++
++    // 1. Process BL33 (U-Boot) image header and entry point
++    // BL33_LOAD_ADDR holds uImage base address, covering the 64-byte header
++    hdr = (image_header_t *)(uintptr_t)(BL33_LOAD_ADDR);
++    
++    // Retrieve BL33 entry address (PC)
++    // image_get_data typically returns header-skipped data start address
++    bl33_ep->pc = (uint64_t)(uintptr_t)image_get_data(hdr);
++
++    if (!bl33_ep->pc) {
++        printf("Error: Invalid BL33 image, no valid entry point found at 0x%lx\n", 
++               (unsigned long)BL33_LOAD_ADDR);
++        return -EINVAL;
++    }
++
++    printf("BL33 PC: 0x%llx\n", bl33_ep->pc);
++
++    // 2. Process FDT (Device Tree)
++    // Adopt macro-defined independent load address, avoid files array and BL33 tail calculation
++	fdt = (char *)(uintptr_t)image_get_image_end(hdr);
++    fdt_size = fdt_totalsize(fdt);
++    printf("FDT loaded at 0x%pK, size: 0x%x bytes\n", fdt, fdt_size);
++	(void)memmove_s((void *)(uintptr_t)FDT_LOAD_ADDR, fdt_size, fdt, fdt_size);
++	fdt = (char *)(uintptr_t)FDT_LOAD_ADDR;
++	g_fdt_addr = fdt;
++   	memcpy(&fdt_magic_check, fdt, sizeof(uint32_t));
++ 
++    ret = fdt_check_header(fdt);
++    if (ret != 0) {
++        printf("Error: Invalid FDT header at 0x%pK, ret=%d\n", fdt, ret);
++		printf("Error: Invalid FDT header at 0x%pK, ret=%d (%s)\n", 
++               fdt, ret, 
++               (ret == -FDT_ERR_BADMAGIC) ? "BAD MAGIC" : 
++               (ret == -FDT_ERR_BADVERSION) ? "BAD VERSION" : 
++               "UNKNOWN ERROR");
++        
++        // Magic = 0 means no data flashed at this address
++        if (fdt_magic_check == 0x00000000) {
++            printf("Hint: The address 0x%pK contains zeros. Did you flash the DTB file?\n", fdt);
++        }
++        // If magic number equals uImage magic (0x27051956), incorrect file is flashed
++        else if (fdt_magic_check == 0x27051956 || fdt_magic_check == 0x56190527) {
++            printf("Hint: The address 0x%pK contains a U-Boot Image header. Did you flash uImage instead of DTB?\n", fdt);
++        }
++
++        return ret;
++    }
++
++    // Get total FDT size for debug and later memory protection verification
++
++    // 3. Set BL33 boot parameters
++    // ARM64 spec: x0 carries FDT address for kernel/Bootloader
++    bl33_ep->args.arg0 = (uint64_t)(uintptr_t)fdt;
++
++    // SPSR (Saved Program Status Register)
++    // MODE_EL1: Non-secure exception level. Change to MODE_EL2 if U-Boot runs at EL2
++    bl33_ep->spsr = spsr_64(MODE_EL1, MODE_SP_ELX, DISABLE_ALL_EXCEPTIONS);
++
++    // Set the security status to (Non-Secure)
++    set_security_state(bl33_ep->h.attr, NON_SECURE);
++
++    printf("BL33 Setup Complete:\n");
++    printf("  SPSR : 0x%x\n", bl33_ep->spsr);
++    printf("  Arg0 : 0x%llx (FDT)\n", bl33_ep->args.arg0);
++
++    return 0;
++}
+ 
+-static int create_entry_info(entry_point_info_t* const bl33_ep, uint64_t* const bl31_pc)
++static int create_entry_bl31_info(uint64_t* const bl31_pc)
+ {
+ 	unsigned int index;
+-	int ret;
++	if (!bl31_pc) {
++		printf("No ATF found!\n");
++		return -EINVAL;
++	}
++
++	printf("Create BL31 Entry Point info ...\n");
+ 
+-	printf("Create Entry Point info ...\n");
+ 	for (index = 0; index < file_info_count; index++) {
+ 		if (!files[index].entry) {
+-			printf("- Invalid entry: ");
+ 			continue;
+ 		}
+ 
+@@ -539,55 +622,16 @@
+ 				return -EINVAL;
+ 			}
+ 			*bl31_pc = BL31_BASE;
+-		}
+-
+-		if (compare_uuids(&files[index].name_uuid, &uuid_bl33) == 0) {
+-			printf("Get - %s \n", files[index].entry->name);
+-			image_header_t *hdr = (image_header_t *)(files[index].image_buffer);
+-			if (image_check_arch((image_header_t *)(files[index].image_buffer), IH_ARCH_ARM64)) {
+-				(void)memmove_s((void *)(uintptr_t)BL33_LOAD_ADDR, files[index].size,
+-						files[index].image_buffer, files[index].size);
+-				hdr = (image_header_t *)(uintptr_t)(BL33_LOAD_ADDR);
+-				char *fdt = (char *)(uintptr_t)image_get_image_end(hdr);
+-				int fdt_size = files[index].size - ((uintptr_t)fdt - (uintptr_t)hdr);
+-
+-				printf("kernel_size[0x%x] fdt_size[0x%x] fdt_addr[0x%pK]\n", files[index].size,
+-					   fdt_size, fdt);
+-				(void)memmove_s((void *)(uintptr_t)FDT_LOAD_ADDR, fdt_size, fdt, fdt_size);
+-				fdt = (char *)(uintptr_t)FDT_LOAD_ADDR;
+-				g_fdt_addr = fdt;
+-				ret = fdt_check_header(fdt);
+-				if (ret) {
+-					printf("Invalid FDT at 0x%pK, hdr at 0x%pK\n", fdt, hdr);
+-					return ret;
+-				}
+-				bl33_ep->pc = (uint64_t)image_get_data(
+-							(const image_header_t *)(uintptr_t)BL33_LOAD_ADDR);
+-				bl33_ep->args.arg0 = (uint64_t)(uintptr_t)fdt;
+-				bl33_ep->spsr = spsr_64(MODE_EL1, MODE_SP_ELX, DISABLE_ALL_EXCEPTIONS);
+-				set_security_state(bl33_ep->h.attr, NON_SECURE);
+-			} else {
+-				bl33_ep->pc = (uint64_t)image_get_data(files[index].image_buffer);
+-				bl33_ep->args.arg0 = 0; /* no dtb */
+-				bl33_ep->spsr =
+-					spsr_mode32(MODE32_SVC, 0x0, EP_EE_LITTLE, DISABLE_ALL_EXCEPTIONS);
+-			}
+-			printf("hdr[0x%pK] header_size[0x%x] image_size[0x%x]\n",
+-				   hdr, image_get_header_size(), image_get_image_size(hdr));
+-			printf("bl33_ep->spsr = 0x%x bl33_ep->pc = 0x%llx\n",
+-								 bl33_ep->spsr, bl33_ep->pc);
++			/* BL31 is unique; break if found. Preserve loop for multi-segment handling and log integrity compatibility */
++			break;
+ 		}
+ 	}
+ 
+-	if (!bl33_ep->pc) {
+-		printf("Invalid fip image, no kernel found!\n");
+-		return -EINVAL;
+-	}
+-
+ 	if (!bl31_pc) {
+ 		printf("No ATF found!\n");
+ 		return -EINVAL;
+ 	}
++
+ 	return 0;
+ }
+ 
+@@ -617,6 +661,10 @@
+ 
+ 	dump_toc();
+ 
+-	ret = create_entry_info(bl33_ep, &bl31_pc);
++	ret = create_entry_bl31_info(&bl31_pc);
++	if (ret)
++		goto exit;
++
++	ret = create_entry_bl33_info(bl33_ep);
+ 	if (ret)
+ 		goto exit;
+@@ -795,7 +840,11 @@
+ 
+ 	dump_toc();
+ 
+-	ret = create_entry_info(bl33_ep, &bl31_pc);
++	ret = create_entry_bl31_info(&bl31_pc);
++	if (ret)
++		goto error;
++
++	ret = create_entry_bl33_info(bl33_ep);
+ 	if (ret)
+ 		goto error;
+ 

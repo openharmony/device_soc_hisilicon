@@ -19,14 +19,14 @@
 #include <types.h>
 #include <barriers.h>
 
-#define arch_getl(a)      (*(volatile unsigned int *)(a))
-#define arch_putl(v, a)   (*(volatile unsigned int *)(unsigned long)(a) = (v))
+#define __arch_getl(a)      (*(volatile unsigned int *)(a))
+#define __arch_putl(v, a)   (*(volatile unsigned int *)(unsigned long)(a) = (v))
 
 #define mb()        dsb()
-#define io_read_mb()   dmb()
-#define io_write_mb()   dmb()
+#define __iormb()   dmb()
+#define __iowmb()   dmb()
 
-#define writel(v, c) ({ uint32_t __v = v; io_write_mb(); arch_putl(__v, c); __v; })
-#define readl(c)    ({ uint32_t __v = arch_getl(c); io_read_mb(); __v; })
+#define writel(v, c) ({ uint32_t __v = v; __iowmb(); __arch_putl(__v, c); __v; })
+#define readl(c)    ({ uint32_t __v = __arch_getl(c); __iormb(); __v; })
 
 #endif  /* __ASM_ARM_IO_H */

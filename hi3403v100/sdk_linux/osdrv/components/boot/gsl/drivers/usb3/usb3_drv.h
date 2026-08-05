@@ -45,8 +45,6 @@ enum usb_error_type {
 #define usb_info(format, arg...)
 #define usb_err(format, arg...)
 
-unsigned int usb2_otg_ram_clk_sel(void);
-
 typedef enum pcd_state {
     USB3_STATE_UNCONNECTED, /* no host */
     USB3_STATE_DEFAULT,
@@ -66,9 +64,9 @@ typedef enum ep0_state {
 } ep0state_e;
 
 typedef union usb_setup_pkt {
-	usb_device_request_t req;
-	uint32_t d32[2];
-    uint8_t data8[8];
+    usb_device_request_t req;
+    uint32_t d32[2];
+    uint8_t d8[8];
 } usb_setup_pkt_t;
 
 typedef struct usb3_pcd_req {
@@ -222,16 +220,9 @@ uint32_t usb3_u2_enabled(usb3_pcd_t *pcd);
 void usb3_dep_cstall(const usb3_pcd_t *pcd, usb3_dev_ep_regs_t *ep_reg);
 void usb3_dep_sstall(const usb3_pcd_t *pcd, usb3_dev_ep_regs_t *ep_reg);
 uint32_t handshake(const usb3_device_t *dev, const volatile uint32_t *ptr, uint32_t mask, uint32_t done);
-typedef struct {
-    usb3_dma_desc_t *desc;
-    uint32_t dma_addr;
-    uint32_t dma_len;
-    uint32_t stream;
-    uint32_t type;
-    uint32_t ctrlbits;
-    int own;
-} usb3_desc_param_t;
-void usb3_fill_desc(const usb3_desc_param_t *param);
+void usb3_fill_desc(usb3_dma_desc_t *desc, uint32_t dma_addr, uint32_t dma_len, uint32_t stream,
+    uint32_t type,
+    uint32_t ctrlbits, int own);
 void usb3_dep_startnewcfg(const usb3_pcd_t *pcd, usb3_dev_ep_regs_t *ep_reg, uint32_t rsrcidx);
 void usb3_dep_cfg(const usb3_pcd_t *pcd, usb3_dev_ep_regs_t *ep_reg, uint32_t depcfg0, uint32_t depcfg1,
     uint32_t depcfg2);

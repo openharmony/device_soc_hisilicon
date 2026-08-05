@@ -2,7 +2,7 @@
 
 **概述<a name="section4537382116410"></a>**
 
-本文档为使用媒体处理芯片的IVE协处理器进行_识别_分析方案开发的程序员而写，目的是供您在开发过程中查阅IVE协处理器支持的各种参考信息，包括API、头文件、错误码、Proc信息等。
+本文档为使用媒体处理芯片的IVE协处理器进行识别分析方案开发的程序员而写，目的是供您在开发过程中查阅IVE协处理器支持的各种参考信息，包括API、头文件、错误码、Proc信息等。
 
 >![](public_sys-resources/icon-note.gif) **说明：** 
 >本文未有特殊说明，SS927V100与SS928V100内容完全一致。
@@ -102,15 +102,19 @@
 
 # 概述<a name="ZH-CN_TOPIC_0000002471091246"></a>
 
+-   **[概述](#ZH-CN_TOPIC_0000002470931328)**  
 
+-   **[功能描述](#ZH-CN_TOPIC_0000002471091280)**  
 
 ## 概述<a name="ZH-CN_TOPIC_0000002470931328"></a>
 
-IVE（_Identification_  Video Engine）是媒体处理芯片_识别_分析系统中的硬件加速模块。用户基于IVE开发_识别_分析方案可以加速_识别_分析，降低CPU占用。当前IVE提供的算子可以支撑开发视频诊断、周界防范等_识别_分析方案。
+IVE（_Identification_  Video Engine）是媒体处理芯片识别分析系统中的硬件加速模块。用户基于IVE开发识别分析方案可以加速识别分析，降低CPU占用。当前IVE提供的算子可以支撑开发视频诊断、周界防范等识别分析方案。
 
 ## 功能描述<a name="ZH-CN_TOPIC_0000002471091280"></a>
 
+-   **[重要概念](#ZH-CN_TOPIC_0000002503971263)**  
 
+-   **[使用示意](#ZH-CN_TOPIC_0000002470931304)**  
 
 ### 重要概念<a name="ZH-CN_TOPIC_0000002503971263"></a>
 
@@ -406,7 +410,7 @@ IVE（_Identification_  Video Engine）是媒体处理芯片_识别_分析系统
 -   用户根据需求调用相应的算子接口创建任务，指定is\_instant类型，并记录该任务返回的handle号。
 -   根据返回的handle号，指定阻塞方式，可以查询到该任务的完成状态。
 
-    具体可参见[ss\_mpi\_ive\_query](ss_mpi_ive_query.md)中的【举例】。
+    具体可参见[ss\_mpi\_ive\_query](#ZH-CN_TOPIC_0000002470931246)中的【举例】。
 
 # API参考<a name="ZH-CN_TOPIC_0000002470931292"></a>
 
@@ -414,131 +418,70 @@ IVE模块提供了创建任务和查询任务的基本接口。
 
 该功能模块提供以下MPI：
 
--   [ss\_mpi\_ive\_dma](ss_mpi_ive_dma.md)：创建直接内存访问任务。
--   [ss\_mpi\_ive\_filter](ss_mpi_ive_filter.md)：创建5x5模板滤波任务。
--   [ss\_mpi\_ive\_csc](ss_mpi_ive_csc.md)：创建色彩空间转换任务。
--   [ss\_mpi\_ive\_filter\_and\_csc](ss_mpi_ive_filter_and_csc.md)：创建模板滤波加色彩空间转换复合任务
--   [ss\_mpi\_ive\_sobel](ss_mpi_ive_sobel.md)：创建5x5模板sobel-like梯度计算任务。
--   [ss\_mpi\_ive\_mag\_and\_ang](ss_mpi_ive_mag_and_ang.md)：创建5x5模板计算梯度幅值与幅角任务。
--   [ss\_mpi\_ive\_dilate](ss_mpi_ive_dilate.md)：创建膨胀任务。
--   [ss\_mpi\_ive\_erode](ss_mpi_ive_erode.md)：创建腐蚀任务。
--   [ss\_mpi\_ive\_threshold](ss_mpi_ive_threshold.md)：创建图像二值化任务。
--   [ss\_mpi\_ive\_and](ss_mpi_ive_and.md)：创建两二值图像相与任务。
--   [ss\_mpi\_ive\_sub](ss_mpi_ive_sub.md)：创建两灰度图像相减任务。
--   [ss\_mpi\_ive\_or](ss_mpi_ive_or.md)：创建两二值图像相或任务。
--   [ss\_mpi\_ive\_integ](ss_mpi_ive_integ.md)：创建积分图统计任务。
--   [ss\_mpi\_ive\_hist](ss_mpi_ive_hist.md)：创建直方图统计任务。
--   [ss\_mpi\_ive\_threshold\_s16](ss_mpi_ive_threshold_s16.md)：创建s16数据到8bit数据阈值化任务。
--   [ss\_mpi\_ive\_threshold\_u16](ss_mpi_ive_threshold_u16.md)：创建u16数据到u8数据阈值化任务。
--   [ss\_mpi\_ive\_16bit\_to\_8bit](ss_mpi_ive_16bit_to_8bit.md)：创建16bit数据到8bit数据线性转化任务。
--   [ss\_mpi\_ive\_order\_stats\_filter](ss_mpi_ive_order_stats_filter.md)：创建3x3模板顺序统计量滤波任务。
--   [ss\_mpi\_ive\_map](ss_mpi_ive_map.md)：创建Map（映射u8-\>u8\\u8-\>u16\\u8-\>s16赋值）任务。
--   [ss\_mpi\_ive\_equalize\_hist](ss_mpi_ive_equalize_hist.md)：创建灰度图像的直方图均衡化计算任务。
--   [ss\_mpi\_ive\_add](ss_mpi_ive_add.md)：创建两灰度图像的加权加计算任务。
--   [ss\_mpi\_ive\_xor](ss_mpi_ive_xor.md)：创建两二值图的异或计算任务。
--   [ss\_mpi\_ive\_ncc](ss_mpi_ive_ncc.md)：创建两相同分辨率图像的归一化互相关系数计算任务。
--   [ss\_mpi\_ive\_ccl](ss_mpi_ive_ccl.md)：创建二值图像的连通区域标记任务。
--   [ss\_mpi\_ive\_gmm](ss_mpi_ive_gmm.md)：创建gmm背景建模任务。
--   [ss\_mpi\_ive\_gmm2](ss_mpi_ive_gmm2.md)：创建gmm2背景建模任务。
--   [ss\_mpi\_ive\_canny\_hys\_edge](ss_mpi_ive_canny_hys_edge.md)：创建灰度图的canny强弱边缘提取任务。
--   [ss\_mpi\_ive\_canny\_edge](ss_mpi_ive_canny_edge.md)：灰度图的canny边缘提取的后半部：连接边缘点，形成canny边缘图。
--   [ss\_mpi\_ive\_lbp](ss_mpi_ive_lbp.md)：创建lbp计算任务。
--   [ss\_mpi\_ive\_norm\_grad](ss_mpi_ive_norm_grad.md)：创建归一化梯度计算任务，梯度均分量均归一化到s8。
--   [ss\_mpi\_ive\_lk\_optical\_flow\_pyr](ss_mpi_ive_lk_optical_flow_pyr.md)：创建多层金字塔LK光流计算任务。
--   [ss\_mpi\_ive\_st\_cand\_corner](ss_mpi_ive_st_cand_corner.md)：灰度图像Shi-Tomasi-like角点计算的前半部：计算候选角点。
--   [ss\_mpi\_ive\_st\_corner](ss_mpi_ive_st_corner.md)：灰度图像Shi-Tomasi-like角点计算的后半部：按规则挑选角点。
--   [ss\_mpi\_ive\_sad](ss_mpi_ive_sad.md)：计算两幅图像按4x4\\8x8\\16x16分块的16 bit\\8 bit SAD图像，以及对SAD进行阈值化输出。
--   [ss\_mpi\_ive\_resize](ss_mpi_ive_resize.md)：创建图像缩放任务。
--   [ss\_mpi\_ive\_grad\_fg](ss_mpi_ive_grad_fg.md)：根据背景图像和当前帧图像的梯度信息计算梯度前景图像。
--   [ss\_mpi\_ive\_match\_bg\_model](ss_mpi_ive_match_bg_model.md)：基于CodeBook演进的背景模型匹配。
--   [ss\_mpi\_ive\_update\_bg\_model](ss_mpi_ive_update_bg_model.md)：基于CodeBook演进的背景模型更新。
--   [ss\_mpi\_ive\_ann\_mlp\_load\_model](ss_mpi_ive_ann_mlp_load_model.md)：读取ann\_mlp模型文件，初始化模型数据。
--   [ss\_mpi\_ive\_ann\_mlp\_unload\_model](ss_mpi_ive_ann_mlp_unload_model.md)：去初始化ann模型数据。
--   [ss\_mpi\_ive\_ann\_mlp\_predict](ss_mpi_ive_ann_mlp_predict.md)：创建同一模型多个样本ann\_mlp预测任务。
--   [ss\_mpi\_ive\_svm\_load\_model](ss_mpi_ive_svm_load_model.md)：读取svm模型文件，初始化模型数据。
--   [ss\_mpi\_ive\_svm\_unload\_model](ss_mpi_ive_svm_unload_model.md)：去初始化svm模型数据。
--   [ss\_mpi\_ive\_svm\_predict](ss_mpi_ive_svm_predict.md)：创建同一模型的多个样本svm预测任务。
--   [ss\_mpi\_ive\_cnn\_load\_model](ss_mpi_ive_cnn_load_model.md)：读取cnn模型文件，生成cnn网络模型。
--   [ss\_mpi\_ive\_cnn\_unload\_model](ss_mpi_ive_cnn_unload_model.md)：卸载cnn网络模型，释放内存。
--   [ss\_mpi\_ive\_cnn\_predict](ss_mpi_ive_cnn_predict.md)：用已有模型对一个或多个输入样本进行预测，并输出预测结果。
--   [ss\_mpi\_ive\_cnn\_get\_result](ss_mpi_ive_cnn_get_result.md)：接收cnn\_predict结果，执行softmax运算来预测每个样本图像的类别，并输出置信度最高的类别\(rank-1\)以及对应的置信度。
--   [ss\_mpi\_ive\_persp\_trans](ss_mpi_ive_persp_trans.md)：根据输入源图的区域位置和点对信息做相应的透视变换。
--   [ss\_mpi\_ive\_kcf\_get\_mem\_size](ss_mpi_ive_kcf_get_mem_size.md)：获取需要创建目标对象数的内存大小。
--   [ss\_mpi\_ive\_kcf\_create\_obj\_list](ss_mpi_ive_kcf_create_obj_list.md)：创建目标链表。
--   [ss\_mpi\_ive\_kcf\_destroy\_obj\_list](ss_mpi_ive_kcf_destroy_obj_list.md)：销毁目标链表。
--   [ss\_mpi\_ive\_kcf\_create\_gauss\_peak](ss_mpi_ive_kcf_create_gauss_peak.md)：创建高斯峰值。
--   [ss\_mpi\_ive\_kcf\_create\_cos\_win](ss_mpi_ive_kcf_create_cos_win.md)：创建汉宁窗。
--   [ss\_mpi\_ive\_kcf\_get\_train\_obj](ss_mpi_ive_kcf_get_train_obj.md)：获取需要训练的目标对象。
--   [ss\_mpi\_ive\_kcf\_proc](ss_mpi_ive_kcf_proc.md)：提交目标给硬件处理。
--   [ss\_mpi\_ive\_kcf\_get\_obj\_bbox](ss_mpi_ive_kcf_get_obj_bbox.md)：获取目标区域跟踪结果信息。
--   [ss\_mpi\_ive\_kcf\_judge\_obj\_bbox\_track\_state](ss_mpi_ive_kcf_judge_obj_bbox_track_state.md)：判断目标区域跟踪状态。
--   [ss\_mpi\_ive\_kcf\_obj\_update](ss_mpi_ive_kcf_obj_update.md)：更新目标信息。
--   [ss\_mpi\_ive\_hog](ss_mpi_ive_hog.md)：计算给定区域的HOG\(Histogram of Oriented Gradient\)特征。
--   [ss\_mpi\_ive\_query](ss_mpi_ive_query.md)：查询已创建任务完成情况。
+-   [ss\_mpi\_ive\_dma](#ZH-CN_TOPIC_0000002504091099)：创建直接内存访问任务。
+-   [ss\_mpi\_ive\_filter](#ZH-CN_TOPIC_0000002470931284)：创建5x5模板滤波任务。
+-   [ss\_mpi\_ive\_csc](#ZH-CN_TOPIC_0000002470931294)：创建色彩空间转换任务。
+-   [ss\_mpi\_ive\_filter\_and\_csc](#ZH-CN_TOPIC_0000002470931218)：创建模板滤波加色彩空间转换复合任务
+-   [ss\_mpi\_ive\_sobel](#ZH-CN_TOPIC_0000002471091284)：创建5x5模板sobel-like梯度计算任务。
+-   [ss\_mpi\_ive\_mag\_and\_ang](#ZH-CN_TOPIC_0000002470931308)：创建5x5模板计算梯度幅值与幅角任务。
+-   [ss\_mpi\_ive\_dilate](#ZH-CN_TOPIC_0000002503971205)：创建膨胀任务。
+-   [ss\_mpi\_ive\_erode](#ZH-CN_TOPIC_0000002503971269)：创建腐蚀任务。
+-   [ss\_mpi\_ive\_threshold](#ZH-CN_TOPIC_0000002471091326)：创建图像二值化任务。
+-   [ss\_mpi\_ive\_and](#ZH-CN_TOPIC_0000002504091087)：创建两二值图像相与任务。
+-   [ss\_mpi\_ive\_sub](#ZH-CN_TOPIC_0000002503971163)：创建两灰度图像相减任务。
+-   [ss\_mpi\_ive\_or](#ZH-CN_TOPIC_0000002471091296)：创建两二值图像相或任务。
+-   [ss\_mpi\_ive\_integ](#ZH-CN_TOPIC_0000002470931322)：创建积分图统计任务。
+-   [ss\_mpi\_ive\_hist](#ZH-CN_TOPIC_0000002504091123)：创建直方图统计任务。
+-   [ss\_mpi\_ive\_threshold\_s16](#ZH-CN_TOPIC_0000002470931220)：创建s16数据到8bit数据阈值化任务。
+-   [ss\_mpi\_ive\_threshold\_u16](#ZH-CN_TOPIC_0000002470931242)：创建u16数据到u8数据阈值化任务。
+-   [ss\_mpi\_ive\_16bit\_to\_8bit](#ZH-CN_TOPIC_0000002471091216)：创建16bit数据到8bit数据线性转化任务。
+-   [ss\_mpi\_ive\_order\_stats\_filter](#ZH-CN_TOPIC_0000002504091093)：创建3x3模板顺序统计量滤波任务。
+-   [ss\_mpi\_ive\_map](#ZH-CN_TOPIC_0000002470931234)：创建Map（映射u8-\>u8\\u8-\>u16\\u8-\>s16赋值）任务。
+-   [ss\_mpi\_ive\_equalize\_hist](#ZH-CN_TOPIC_0000002471091322)：创建灰度图像的直方图均衡化计算任务。
+-   [ss\_mpi\_ive\_add](#ZH-CN_TOPIC_0000002504091171)：创建两灰度图像的加权加计算任务。
+-   [ss\_mpi\_ive\_xor](#ZH-CN_TOPIC_0000002504091203)：创建两二值图的异或计算任务。
+-   [ss\_mpi\_ive\_ncc](#ZH-CN_TOPIC_0000002503971167)：创建两相同分辨率图像的归一化互相关系数计算任务。
+-   [ss\_mpi\_ive\_ccl](#ZH-CN_TOPIC_0000002504091151)：创建二值图像的连通区域标记任务。
+-   [ss\_mpi\_ive\_gmm](#ZH-CN_TOPIC_0000002503971147)：创建gmm背景建模任务。
+-   [ss\_mpi\_ive\_gmm2](#ZH-CN_TOPIC_0000002504091155)：创建gmm2背景建模任务。
+-   [ss\_mpi\_ive\_canny\_hys\_edge](#ZH-CN_TOPIC_0000002503971215)：创建灰度图的canny强弱边缘提取任务。
+-   [ss\_mpi\_ive\_canny\_edge](#ZH-CN_TOPIC_0000002470931286)：灰度图的canny边缘提取的后半部：连接边缘点，形成canny边缘图。
+-   [ss\_mpi\_ive\_lbp](#ZH-CN_TOPIC_0000002503971201)：创建lbp计算任务。
+-   [ss\_mpi\_ive\_norm\_grad](#ZH-CN_TOPIC_0000002503971195)：创建归一化梯度计算任务，梯度均分量均归一化到s8。
+-   [ss\_mpi\_ive\_lk\_optical\_flow\_pyr](#ZH-CN_TOPIC_0000002504091135)：创建多层金字塔LK光流计算任务。
+-   [ss\_mpi\_ive\_st\_cand\_corner](#ZH-CN_TOPIC_0000002471091320)：灰度图像Shi-Tomasi-like角点计算的前半部：计算候选角点。
+-   [ss\_mpi\_ive\_st\_corner](#ZH-CN_TOPIC_0000002470931280)：灰度图像Shi-Tomasi-like角点计算的后半部：按规则挑选角点。
+-   [ss\_mpi\_ive\_sad](#ZH-CN_TOPIC_0000002471091328)：计算两幅图像按4x4\\8x8\\16x16分块的16 bit\\8 bit SAD图像，以及对SAD进行阈值化输出。
+-   [ss\_mpi\_ive\_resize](#ZH-CN_TOPIC_0000002503971235)：创建图像缩放任务。
+-   [ss\_mpi\_ive\_grad\_fg](#ZH-CN_TOPIC_0000002471091316)：根据背景图像和当前帧图像的梯度信息计算梯度前景图像。
+-   [ss\_mpi\_ive\_match\_bg\_model](#ZH-CN_TOPIC_0000002470931334)：基于CodeBook演进的背景模型匹配。
+-   [ss\_mpi\_ive\_update\_bg\_model](#ZH-CN_TOPIC_0000002504091095)：基于CodeBook演进的背景模型更新。
+-   [ss\_mpi\_ive\_ann\_mlp\_load\_model](#ZH-CN_TOPIC_0000002504091075)：读取ann\_mlp模型文件，初始化模型数据。
+-   [ss\_mpi\_ive\_ann\_mlp\_unload\_model](#ZH-CN_TOPIC_0000002504091139)：去初始化ann模型数据。
+-   [ss\_mpi\_ive\_ann\_mlp\_predict](#ZH-CN_TOPIC_0000002471091294)：创建同一模型多个样本ann\_mlp预测任务。
+-   [ss\_mpi\_ive\_svm\_load\_model](#ZH-CN_TOPIC_0000002471091276)：读取svm模型文件，初始化模型数据。
+-   [ss\_mpi\_ive\_svm\_unload\_model](#ZH-CN_TOPIC_0000002504091133)：去初始化svm模型数据。
+-   [ss\_mpi\_ive\_svm\_predict](#ZH-CN_TOPIC_0000002504091105)：创建同一模型的多个样本svm预测任务。
+-   [ss\_mpi\_ive\_cnn\_load\_model](#ZH-CN_TOPIC_0000002471091312)：读取cnn模型文件，生成cnn网络模型。
+-   [ss\_mpi\_ive\_cnn\_unload\_model](#ZH-CN_TOPIC_0000002470931302)：卸载cnn网络模型，释放内存。
+-   [ss\_mpi\_ive\_cnn\_predict](#ZH-CN_TOPIC_0000002470931276)：用已有模型对一个或多个输入样本进行预测，并输出预测结果。
+-   [ss\_mpi\_ive\_cnn\_get\_result](#ZH-CN_TOPIC_0000002470931258)：接收cnn\_predict结果，执行softmax运算来预测每个样本图像的类别，并输出置信度最高的类别\(rank-1\)以及对应的置信度。
+-   [ss\_mpi\_ive\_persp\_trans](#ZH-CN_TOPIC_0000002503971185)：根据输入源图的区域位置和点对信息做相应的透视变换。
+-   [ss\_mpi\_ive\_kcf\_get\_mem\_size](#ZH-CN_TOPIC_0000002470931306)：获取需要创建目标对象数的内存大小。
+-   [ss\_mpi\_ive\_kcf\_create\_obj\_list](#ZH-CN_TOPIC_0000002504091179)：创建目标链表。
+-   [ss\_mpi\_ive\_kcf\_destroy\_obj\_list](#ZH-CN_TOPIC_0000002503971237)：销毁目标链表。
+-   [ss\_mpi\_ive\_kcf\_create\_gauss\_peak](#ZH-CN_TOPIC_0000002504091153)：创建高斯峰值。
+-   [ss\_mpi\_ive\_kcf\_create\_cos\_win](#ZH-CN_TOPIC_0000002470931252)：创建汉宁窗。
+-   [ss\_mpi\_ive\_kcf\_get\_train\_obj](#ZH-CN_TOPIC_0000002471091232)：获取需要训练的目标对象。
+-   [ss\_mpi\_ive\_kcf\_proc](#ZH-CN_TOPIC_0000002503971241)：提交目标给硬件处理。
+-   [ss\_mpi\_ive\_kcf\_get\_obj\_bbox](#ZH-CN_TOPIC_0000002503971245)：获取目标区域跟踪结果信息。
+-   [ss\_mpi\_ive\_kcf\_judge\_obj\_bbox\_track\_state](#ZH-CN_TOPIC_0000002471091288)：判断目标区域跟踪状态。
+-   [ss\_mpi\_ive\_kcf\_obj\_update](#ZH-CN_TOPIC_0000002470931270)：更新目标信息。
+-   [ss\_mpi\_ive\_hog](#ZH-CN_TOPIC_0000002504091165)：计算给定区域的HOG\(Histogram of Oriented Gradient\)特征。
+-   [ss\_mpi\_ive\_query](#ZH-CN_TOPIC_0000002470931246)：查询已创建任务完成情况。
 
 >![](public_sys-resources/icon-notice.gif) **须知：** 
->用户开辟的内存需要用户保证开辟的内存的正确性，例如[ss\_mpi\_ive\_kcf\_create\_gauss\_peak](ss_mpi_ive_kcf_create_gauss_peak.md)中的gauss\_peak的内存由用户开辟，但是随意更改虚拟地址的值就会造成段错误。
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+>用户开辟的内存需要用户保证开辟的内存的正确性，例如[ss\_mpi\_ive\_kcf\_create\_gauss\_peak](#ZH-CN_TOPIC_0000002504091153)中的gauss\_peak的内存由用户开辟，但是随意更改虚拟地址的值就会造成段错误。
 
 ## ss\_mpi\_ive\_dma<a name="ZH-CN_TOPIC_0000002504091099"></a>
 
@@ -856,8 +799,8 @@ _norm =4_ _norm =8              norm =8_
 
 【相关主题】
 
--   [ss\_mpi\_ive\_filter\_and\_csc](#ss_mpi_ive_filter_and_csc)
--   [ss\_mpi\_ive\_order\_stats\_filter](#ss_mpi_ive_order_stats_filter)
+-   [ss\_mpi\_ive\_filter\_and\_csc](#ZH-CN_TOPIC_0000002470931218)
+-   [ss\_mpi\_ive\_order\_stats\_filter](#ZH-CN_TOPIC_0000002504091093)
 
 ## ss\_mpi\_ive\_csc<a name="ZH-CN_TOPIC_0000002470931294"></a>
 
@@ -999,7 +942,7 @@ td_s32 ss_mpi_ive_csc(ot_ive_handle *handle, const ot_svp_src_img *src, const ot
 
 【相关主题】
 
-[ss\_mpi\_ive\_filter\_and\_csc](#ss_mpi_ive_filter_and_csc)
+[ss\_mpi\_ive\_filter\_and\_csc](#ZH-CN_TOPIC_0000002470931218)
 
 ## ss\_mpi\_ive\_filter\_and\_csc<a name="ZH-CN_TOPIC_0000002470931218"></a>
 
@@ -1137,7 +1080,7 @@ td_s32 ss_mpi_ive_filter_and_csc(ot_ive_handle *handle, const ot_svp_src_img *sr
 
 【相关主题】
 
-[ss\_mpi\_ive\_filter](#ss_mpi_ive_filter)
+[ss\_mpi\_ive\_filter](#ZH-CN_TOPIC_0000002470931284)
 
 ## ss\_mpi\_ive\_sobel<a name="ZH-CN_TOPIC_0000002471091284"></a>
 
@@ -1314,8 +1257,8 @@ td_s32 ss_mpi_ive_sobel(ot_ive_handle *handle, const ot_svp_src_img *src, const 
 
 【相关主题】
 
--   [ss\_mpi\_ive\_mag\_and\_ang](#ss_mpi_ive_mag_and_ang)
--   [ss\_mpi\_ive\_norm\_grad](#ss_mpi_ive_norm_grad)
+-   [ss\_mpi\_ive\_mag\_and\_ang](#ZH-CN_TOPIC_0000002470931308)
+-   [ss\_mpi\_ive\_norm\_grad](#ZH-CN_TOPIC_0000002503971195)
 
 ## ss\_mpi\_ive\_mag\_and\_ang<a name="ZH-CN_TOPIC_0000002470931308"></a>
 
@@ -1485,9 +1428,9 @@ td_s32 ss_mpi_ive_mag_and_ang(ot_ive_handle *handle, const ot_svp_src_img *src, 
 
 【相关主题】
 
--   [ss\_mpi\_ive\_canny\_hys\_edge](#ss_mpi_ive_canny_hys_edge)
--   [ss\_mpi\_ive\_canny\_edge](#ss_mpi_ive_canny_edge)
--   [ss\_mpi\_ive\_sobel](#ss_mpi_ive_sobel)
+-   [ss\_mpi\_ive\_canny\_hys\_edge](#ZH-CN_TOPIC_0000002503971215)
+-   [ss\_mpi\_ive\_canny\_edge](#ZH-CN_TOPIC_0000002470931286)
+-   [ss\_mpi\_ive\_sobel](#ZH-CN_TOPIC_0000002471091284)
 
 ## ss\_mpi\_ive\_dilate<a name="ZH-CN_TOPIC_0000002503971205"></a>
 
@@ -1602,7 +1545,7 @@ td_s32 ss_mpi_ive_dilate(ot_ive_handle *handle, const ot_svp_src_img *src, const
 </tr>
 <tr id="row9820mcpsimp"><td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.1 "><p id="p9822mcpsimp"><a name="p9822mcpsimp"></a><a name="p9822mcpsimp"></a>非0</p>
 </td>
-<td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.2 "><p id="p9824mcpsimp"><a name="p9824mcpsimp"></a><a name="p9824mcpsimp"></a>失败，参见<span xml:lang="fr-FR" id="ph136311818172213"><a name="ph136311818172213"></a><a name="ph136311818172213"></a><a href="zh-cn_topic_0000002471091270.md">错误码</a></span><span xml:lang="fr-FR" id="ph5283mcpsimp"><a name="ph5283mcpsimp"></a><a name="ph5283mcpsimp"></a>。</span></p>
+<td class="cellrowborder" valign="top" width="50%" headers="mcps1.1.3.1.2 "><p id="p9824mcpsimp"><a name="p9824mcpsimp"></a><a name="p9824mcpsimp"></a>失败，参见<span xml:lang="fr-FR" id="ph136311818172213"><a name="ph136311818172213"></a><a name="ph136311818172213"></a><a href="#ZH-CN_TOPIC_0000002471091270">错误码</a></span><span xml:lang="fr-FR" id="ph5283mcpsimp"><a name="ph5283mcpsimp"></a><a name="ph5283mcpsimp"></a>。</span></p>
 </td>
 </tr>
 </tbody>
@@ -1639,8 +1582,8 @@ td_s32 ss_mpi_ive_dilate(ot_ive_handle *handle, const ot_svp_src_img *src, const
 
 【相关主题】
 
--   [ss\_mpi\_ive\_erode](#ss_mpi_ive_erode)
--   [ss\_mpi\_ive\_order\_stats\_filter](#ss_mpi_ive_order_stats_filter)
+-   [ss\_mpi\_ive\_erode](#ZH-CN_TOPIC_0000002503971269)
+-   [ss\_mpi\_ive\_order\_stats\_filter](#ZH-CN_TOPIC_0000002504091093)
 
 ## ss\_mpi\_ive\_erode<a name="ZH-CN_TOPIC_0000002503971269"></a>
 
@@ -1792,8 +1735,8 @@ td_s32 ss_mpi_ive_erode(ot_ive_handle *handle, const ot_svp_src_img *src, const 
 
 【相关主题】
 
--   [ss\_mpi\_ive\_dilate](#ss_mpi_ive_dilate)
--   [ss\_mpi\_ive\_order\_stats\_filter](#ss_mpi_ive_order_stats_filter)
+-   [ss\_mpi\_ive\_dilate](#ZH-CN_TOPIC_0000002503971205)
+-   [ss\_mpi\_ive\_order\_stats\_filter](#ZH-CN_TOPIC_0000002504091093)
 
 ## ss\_mpi\_ive\_threshold<a name="ZH-CN_TOPIC_0000002471091326"></a>
 
@@ -1983,8 +1926,8 @@ td_s32 ss_mpi_ive_threshold(ot_ive_handle *handle, const ot_svp_src_img *src, co
 
 【相关主题】
 
--   [ss\_mpi\_ive\_threshold\_s16](#ss_mpi_ive_threshold_s16)
--   [ss\_mpi\_ive\_threshold\_u16](#ss_mpi_ive_threshold_u16)
+-   [ss\_mpi\_ive\_threshold\_s16](#ZH-CN_TOPIC_0000002470931220)
+-   [ss\_mpi\_ive\_threshold\_u16](#ZH-CN_TOPIC_0000002470931242)
 
 ## ss\_mpi\_ive\_and<a name="ZH-CN_TOPIC_0000002504091087"></a>
 
@@ -2135,8 +2078,8 @@ td_s32 ss_mpi_ive_and(ot_ive_handle *handle, const ot_svp_src_img *src1, const o
 
 【相关主题】
 
--   [ss\_mpi\_ive\_or](#ss_mpi_ive_or)
--   [ss\_mpi\_ive\_xor](#ss_mpi_ive_xor)
+-   [ss\_mpi\_ive\_or](#ZH-CN_TOPIC_0000002471091296)
+-   [ss\_mpi\_ive\_xor](#ZH-CN_TOPIC_0000002504091203)
 
 ## ss\_mpi\_ive\_sub<a name="ZH-CN_TOPIC_0000002503971163"></a>
 
@@ -2300,7 +2243,7 @@ td_s32 ss_mpi_ive_sub(ot_ive_handle *handle, const ot_svp_src_img *src1, const o
 
 【相关主题】
 
-[ss\_mpi\_ive\_add](#ss_mpi_ive_add)
+[ss\_mpi\_ive\_add](#ZH-CN_TOPIC_0000002504091171)
 
 ## ss\_mpi\_ive\_or<a name="ZH-CN_TOPIC_0000002471091296"></a>
 
@@ -2451,8 +2394,8 @@ td_s32 ss_mpi_ive_or(ot_ive_handle *handle, const ot_svp_src_img *src1, const ot
 
 【相关主题】
 
--   [ss\_mpi\_ive\_and](#ss_mpi_ive_and)
--   [ss\_mpi\_ive\_xor](#ss_mpi_ive_xor)
+-   [ss\_mpi\_ive\_and](#ZH-CN_TOPIC_0000002504091087)
+-   [ss\_mpi\_ive\_xor](#ZH-CN_TOPIC_0000002504091203)
 
 ## ss\_mpi\_ive\_integ<a name="ZH-CN_TOPIC_0000002470931322"></a>
 
@@ -2581,7 +2524,7 @@ td_s32 ss_mpi_ive_integ(ot_ive_handle *handle, const ot_svp_src_img *src, const 
 
 【注意】
 
--   OT\_IVE\_INTEG\_OUT\_CTRL\_COMBINE，组合输出模式，输出图像类型必须为OT\_SVP\_IMG\_TYPE\_U64C1，参见[图13](重要概念.md#fig187188113314)，计算公式如下：
+-   OT\_IVE\_INTEG\_OUT\_CTRL\_COMBINE，组合输出模式，输出图像类型必须为OT\_SVP\_IMG\_TYPE\_U64C1，参见[图13](#fig187188113314)，计算公式如下：
 
     ![](figures/zh-cn_formulaimage_0000002504091423.png)
 
@@ -2646,7 +2589,7 @@ td_s32 ss_mpi_ive_hist(ot_ive_handle *handle, const ot_svp_src_img *src, const o
 </td>
 <td class="cellrowborder" valign="top" width="66%" headers="mcps1.1.4.1.2 "><p id="p2065mcpsimp"><a name="p2065mcpsimp"></a><a name="p2065mcpsimp"></a>输出数据指针。</p>
 <p id="p2066mcpsimp"><a name="p2066mcpsimp"></a><a name="p2066mcpsimp"></a>不能为空。</p>
-<p id="p2067mcpsimp"><a name="p2067mcpsimp"></a><a name="p2067mcpsimp"></a>内存至少配置1024字节，如<a href="重要概念.md#fig1457715441337">图14</a>；</p>
+<p id="p2067mcpsimp"><a name="p2067mcpsimp"></a><a name="p2067mcpsimp"></a>内存至少配置1024字节，如<a href="#fig1457715441337">图14</a>；</p>
 <p id="p2069mcpsimp"><a name="p2069mcpsimp"></a><a name="p2069mcpsimp"></a>具体描述请参见《SVPx.0 API 参考》</p>
 </td>
 <td class="cellrowborder" valign="top" width="16%" headers="mcps1.1.4.1.3 "><p id="p2071mcpsimp"><a name="p2071mcpsimp"></a><a name="p2071mcpsimp"></a>输出</p>
@@ -2911,8 +2854,8 @@ td_s32 ss_mpi_ive_threshold_s16(ot_ive_handle *handle, const ot_svp_src_img *src
 
 【相关主题】
 
--   [ss\_mpi\_ive\_threshold\_u16](#ss_mpi_ive_threshold_u16)
--   [ss\_mpi\_ive\_16bit\_to\_8bit](#ss_mpi_ive_16bit_to_8bit)
+-   [ss\_mpi\_ive\_threshold\_u16](#ZH-CN_TOPIC_0000002470931242)
+-   [ss\_mpi\_ive\_16bit\_to\_8bit](#ZH-CN_TOPIC_0000002471091216)
 
 ## ss\_mpi\_ive\_threshold\_u16<a name="ZH-CN_TOPIC_0000002470931242"></a>
 
@@ -3069,8 +3012,8 @@ td_s32 ss_mpi_ive_threshold_u16(ot_ive_handle *handle, const ot_svp_src_img *src
 
 【相关主题】
 
--   [ss\_mpi\_ive\_threshold\_s16](#ss_mpi_ive_threshold_s16)
--   [ss\_mpi\_ive\_16bit\_to\_8bit](#ss_mpi_ive_16bit_to_8bit)
+-   [ss\_mpi\_ive\_threshold\_s16](#ZH-CN_TOPIC_0000002470931220)
+-   [ss\_mpi\_ive\_16bit\_to\_8bit](#ZH-CN_TOPIC_0000002471091216)
 
 ## ss\_mpi\_ive\_16bit\_to\_8bit<a name="ZH-CN_TOPIC_0000002471091216"></a>
 
@@ -3231,8 +3174,8 @@ td_s32 ss_mpi_ive_16bit_to_8bit(ot_ive_handle *handle, const ot_svp_src_img *src
 
 【相关主题】
 
--   [ss\_mpi\_ive\_threshold\_s16](#ss_mpi_ive_threshold_s16)
--   [ss\_mpi\_ive\_threshold\_u16](#ss_mpi_ive_threshold_u16)
+-   [ss\_mpi\_ive\_threshold\_s16](#ZH-CN_TOPIC_0000002470931220)
+-   [ss\_mpi\_ive\_threshold\_u16](#ZH-CN_TOPIC_0000002470931242)
 
 ## ss\_mpi\_ive\_order\_stats\_filter<a name="ZH-CN_TOPIC_0000002504091093"></a>
 
@@ -3384,9 +3327,9 @@ td_s32 ss_mpi_ive_order_stats_filter(ot_ive_handle *handle, const ot_svp_src_img
 
 【相关主题】
 
--   [ss\_mpi\_ive\_filter](#ss_mpi_ive_filter)
--   [ss\_mpi\_ive\_dilate](#ss_mpi_ive_dilate)
--   [ss\_mpi\_ive\_erode](#ss_mpi_ive_erode)
+-   [ss\_mpi\_ive\_filter](#ZH-CN_TOPIC_0000002470931284)
+-   [ss\_mpi\_ive\_dilate](#ZH-CN_TOPIC_0000002503971205)
+-   [ss\_mpi\_ive\_erode](#ZH-CN_TOPIC_0000002503971269)
 
 ## ss\_mpi\_ive\_map<a name="ZH-CN_TOPIC_0000002470931234"></a>
 
@@ -3853,7 +3796,7 @@ td_s32 ss_mpi_ive_add(ot_ive_handle *handle, const ot_svp_src_img *src1, const o
 
 【相关主题】
 
-[ss\_mpi\_ive\_sub](#ss_mpi_ive_sub)
+[ss\_mpi\_ive\_sub](#ZH-CN_TOPIC_0000002503971163)
 
 ## ss\_mpi\_ive\_xor<a name="ZH-CN_TOPIC_0000002504091203"></a>
 
@@ -4004,8 +3947,8 @@ td_s32 ss_mpi_ive_xor(ot_ive_handle *handle, const ot_svp_src_img *src1, const o
 
 【相关主题】
 
--   [ss\_mpi\_ive\_and](#ss_mpi_ive_and)
--   [ss\_mpi\_ive\_or](#ss_mpi_ive_or)
+-   [ss\_mpi\_ive\_and](#ZH-CN_TOPIC_0000002504091087)
+-   [ss\_mpi\_ive\_or](#ZH-CN_TOPIC_0000002471091296)
 
 ## ss\_mpi\_ive\_ncc<a name="ZH-CN_TOPIC_0000002503971167"></a>
 
@@ -4465,9 +4408,9 @@ model-\>size = 11 \* src-\>width \* src-\>height \* ctrl-\>model\_num
 
 【相关主题】
 
--   [ss\_mpi\_ive\_match\_bg\_model](#ss_mpi_ive_match_bg_model)
--   [ss\_mpi\_ive\_update\_bg\_model](#ss_mpi_ive_update_bg_model)
--   [ss\_mpi\_ive\_gmm2](#ss_mpi_ive_gmm2)
+-   [ss\_mpi\_ive\_match\_bg\_model](#ZH-CN_TOPIC_0000002470931334)
+-   [ss\_mpi\_ive\_update\_bg\_model](#ZH-CN_TOPIC_0000002504091095)
+-   [ss\_mpi\_ive\_gmm2](#ZH-CN_TOPIC_0000002504091155)
 
 ## ss\_mpi\_ive\_gmm2<a name="ZH-CN_TOPIC_0000002504091155"></a>
 
@@ -4705,9 +4648,9 @@ model-\>size = 12 \* src-\>width\*src-\>height \* ctrl-\>model\_num
 
 【相关主题】
 
--   [ss\_mpi\_ive\_match\_bg\_model](#ss_mpi_ive_match_bg_model)
--   [ss\_mpi\_ive\_update\_bg\_model](#ss_mpi_ive_update_bg_model)
--   [ss\_mpi\_ive\_gmm](#ss_mpi_ive_gmm)
+-   [ss\_mpi\_ive\_match\_bg\_model](#ZH-CN_TOPIC_0000002470931334)
+-   [ss\_mpi\_ive\_update\_bg\_model](#ZH-CN_TOPIC_0000002504091095)
+-   [ss\_mpi\_ive\_gmm](#ZH-CN_TOPIC_0000002503971147)
 
 ## ss\_mpi\_ive\_canny\_hys\_edge<a name="ZH-CN_TOPIC_0000002503971215"></a>
 
@@ -4877,7 +4820,7 @@ ctrl-\>mem.size
 
 =（src-\>width + \(16 - src-\>width % 16\) % 16）\* 3 \* src-\>height。
 
--   该任务完成后，必须要使用[ss\_mpi\_ive\_canny\_edge](ss_mpi_ive_canny_edge.md)函数才能输出Canny边缘图像。
+-   该任务完成后，必须要使用[ss\_mpi\_ive\_canny\_edge](#ZH-CN_TOPIC_0000002470931286)函数才能输出Canny边缘图像。
 
 【举例】
 
@@ -4885,7 +4828,7 @@ ctrl-\>mem.size
 
 【相关主题】
 
-[ss\_mpi\_ive\_canny\_edge](#ss_mpi_ive_canny_edge)
+[ss\_mpi\_ive\_canny\_edge](#ZH-CN_TOPIC_0000002470931286)
 
 ## ss\_mpi\_ive\_canny\_edge<a name="ZH-CN_TOPIC_0000002470931286"></a>
 
@@ -4991,7 +4934,7 @@ td_s32 ss_mpi_ive_canny_edge(const ot_svp_img *edge, const ot_svp_mem_info *stac
 
 【注意】
 
-使用该接口前必须调用[ss\_mpi\_ive\_canny\_hys\_edge](ss_mpi_ive_canny_hys_edge.md)，在保证[ss\_mpi\_ive\_canny\_hys\_edge](ss_mpi_ive_canny_hys_edge.md)任务完成的情况下，使用[ss\_mpi\_ive\_canny\_hys\_edge](ss_mpi_ive_canny_hys_edge.md)的输出edge、stack作为该接口的参数输入。
+使用该接口前必须调用[ss\_mpi\_ive\_canny\_hys\_edge](#ZH-CN_TOPIC_0000002503971215)，在保证[ss\_mpi\_ive\_canny\_hys\_edge](#ZH-CN_TOPIC_0000002503971215)任务完成的情况下，使用[ss\_mpi\_ive\_canny\_hys\_edge](#ZH-CN_TOPIC_0000002503971215)的输出edge、stack作为该接口的参数输入。
 
 【举例】
 
@@ -4999,7 +4942,7 @@ td_s32 ss_mpi_ive_canny_edge(const ot_svp_img *edge, const ot_svp_mem_info *stac
 
 【相关主题】
 
-[ss\_mpi\_ive\_canny\_hys\_edge](#ss_mpi_ive_canny_hys_edge)
+[ss\_mpi\_ive\_canny\_hys\_edge](#ZH-CN_TOPIC_0000002503971215)
 
 ## ss\_mpi\_ive\_lbp<a name="ZH-CN_TOPIC_0000002503971201"></a>
 
@@ -5208,7 +5151,7 @@ td_s32 ss_mpi_ive_norm_grad(ot_ive_handle *handle, const ot_svp_src_img *src, co
 </tr>
 <tr id="row7131mcpsimp"><td class="cellrowborder" valign="top" width="21%" headers="mcps1.1.4.1.1 "><p id="p7133mcpsimp"><a name="p7133mcpsimp"></a><a name="p7133mcpsimp"></a>dst_hv</p>
 </td>
-<td class="cellrowborder" valign="top" width="59%" headers="mcps1.1.4.1.2 "><p id="p7135mcpsimp"><a name="p7135mcpsimp"></a><a name="p7135mcpsimp"></a>由模板和转置后的模板直接滤波，并且均归一到s8后，采用package格式存储（如<a href="重要概念.md#fig1696145375811">图7</a>）的图像指针。</p>
+<td class="cellrowborder" valign="top" width="59%" headers="mcps1.1.4.1.2 "><p id="p7135mcpsimp"><a name="p7135mcpsimp"></a><a name="p7135mcpsimp"></a>由模板和转置后的模板直接滤波，并且均归一到s8后，采用package格式存储（如<a href="#fig1696145375811">图7</a>）的图像指针。</p>
 <p id="p7137mcpsimp"><a name="p7137mcpsimp"></a><a name="p7137mcpsimp"></a>根据ctrl-&gt;out_ctrl，若需要输出则不能为空。</p>
 </td>
 <td class="cellrowborder" valign="top" width="20%" headers="mcps1.1.4.1.3 "><p id="p7139mcpsimp"><a name="p7139mcpsimp"></a><a name="p7139mcpsimp"></a>输出</p>
@@ -5329,7 +5272,7 @@ td_s32 ss_mpi_ive_norm_grad(ot_ive_handle *handle, const ot_svp_src_img *src, co
 
 【相关主题】
 
-[ss\_mpi\_ive\_sobel](#ss_mpi_ive_sobel)
+[ss\_mpi\_ive\_sobel](#ZH-CN_TOPIC_0000002471091284)
 
 ## ss\_mpi\_ive\_lk\_optical\_flow\_pyr<a name="ZH-CN_TOPIC_0000002504091135"></a>
 
@@ -5720,7 +5663,7 @@ td_s32 ss_mpi_ive_st_cand_corner(ot_ive_handle *handle, const ot_svp_src_img *sr
 
     ctrl-\>mem.size= 4 \* （src-\>width + \(16 - src-\>width % 16\) % 16） \* src-\>height+ sizeof\(ot\_ive\_st\_max\_eig\_val\)。
 
--   该任务完成后，必须要使用[ss\_mpi\_ive\_st\_corner](ss_mpi_ive_st_corner.md)函数才能得到真正的角点。
+-   该任务完成后，必须要使用[ss\_mpi\_ive\_st\_corner](#ZH-CN_TOPIC_0000002470931280)函数才能得到真正的角点。
 
 【举例】
 
@@ -5728,7 +5671,7 @@ td_s32 ss_mpi_ive_st_cand_corner(ot_ive_handle *handle, const ot_svp_src_img *sr
 
 【相关主题】
 
-[ss\_mpi\_ive\_st\_corner](#ss_mpi_ive_st_corner)
+[ss\_mpi\_ive\_st\_corner](#ZH-CN_TOPIC_0000002470931280)
 
 ## ss\_mpi\_ive\_st\_corner<a name="ZH-CN_TOPIC_0000002470931280"></a>
 
@@ -5836,7 +5779,7 @@ td_s32 ss_mpi_ive_st_corner(const ot_svp_src_img *cand_corner, const ot_svp_dst_
 
 -   与OpenCV中ShiTomas角点计算原理类似。
 -   corner-\>corner\_num表示最终得到的角点数目。
--   使用该接口前必须调用[ss\_mpi\_ive\_st\_cand\_corner](ss_mpi_ive_st_cand_corner.md)，在保证[ss\_mpi\_ive\_st\_cand\_corner](ss_mpi_ive_st_cand_corner.md)任务完成的情况下，使用[ss\_mpi\_ive\_st\_cand\_corner](ss_mpi_ive_st_cand_corner.md)的输出cand\_corner作为该接口的参数输入。
+-   使用该接口前必须调用[ss\_mpi\_ive\_st\_cand\_corner](#ZH-CN_TOPIC_0000002471091320)，在保证[ss\_mpi\_ive\_st\_cand\_corner](#ZH-CN_TOPIC_0000002471091320)任务完成的情况下，使用[ss\_mpi\_ive\_st\_cand\_corner](#ZH-CN_TOPIC_0000002471091320)的输出cand\_corner作为该接口的参数输入。
 
 【举例】
 
@@ -5844,7 +5787,7 @@ td_s32 ss_mpi_ive_st_corner(const ot_svp_src_img *cand_corner, const ot_svp_dst_
 
 【相关主题】
 
-[ss\_mpi\_ive\_st\_cand\_corner](#ss_mpi_ive_st_cand_corner)
+[ss\_mpi\_ive\_st\_cand\_corner](#ZH-CN_TOPIC_0000002471091320)
 
 ## ss\_mpi\_ive\_sad<a name="ZH-CN_TOPIC_0000002471091328"></a>
 
@@ -6310,9 +6253,9 @@ td_s32 ss_mpi_ive_grad_fg(ot_ive_handle *handle, const ot_svp_src_img *bg_diff_f
 
 【相关主题】
 
--   [ss\_mpi\_ive\_match\_bg\_model](#ss_mpi_ive_match_bg_model)
--   [ss\_mpi\_ive\_update\_bg\_model](#ss_mpi_ive_update_bg_model)
--   [ss\_mpi\_ive\_gmm](#ss_mpi_ive_gmm)
+-   [ss\_mpi\_ive\_match\_bg\_model](#ZH-CN_TOPIC_0000002470931334)
+-   [ss\_mpi\_ive\_update\_bg\_model](#ZH-CN_TOPIC_0000002504091095)
+-   [ss\_mpi\_ive\_gmm](#ZH-CN_TOPIC_0000002503971147)
 
 ## ss\_mpi\_ive\_match\_bg\_model<a name="ZH-CN_TOPIC_0000002470931334"></a>
 
@@ -6491,9 +6434,9 @@ td_s32 ss_mpi_ive_match_bg_model(ot_ive_handle *handle, const ot_svp_src_img *cu
 
 【相关主题】
 
--   [ss\_mpi\_ive\_update\_bg\_model](#ss_mpi_ive_update_bg_model)
--   [ss\_mpi\_ive\_grad\_fg](#ss_mpi_ive_grad_fg)
--   [ss\_mpi\_ive\_gmm](#ss_mpi_ive_gmm)
+-   [ss\_mpi\_ive\_update\_bg\_model](#ZH-CN_TOPIC_0000002504091095)
+-   [ss\_mpi\_ive\_grad\_fg](#ZH-CN_TOPIC_0000002471091316)
+-   [ss\_mpi\_ive\_gmm](#ZH-CN_TOPIC_0000002503971147)
 
 ## ss\_mpi\_ive\_update\_bg\_model<a name="ZH-CN_TOPIC_0000002504091095"></a>
 
@@ -6658,7 +6601,7 @@ td_s32 ss_mpi_ive_update_bg_model(ot_ive_handle *handle, const ot_svp_data *bg_m
 【注意】
 
 -   要求fg\_flag、bg\_img、chg\_status\_img（不为空时）、chg\_status\_fg（不为空时）跨度一致。
--   背景模型数据model参考[ss\_mpi\_ive\_match\_bg\_model](ss_mpi_ive_match_bg_model.md)中的说明。
+-   背景模型数据model参考[ss\_mpi\_ive\_match\_bg\_model](#ZH-CN_TOPIC_0000002470931334)中的说明。
 -   chg\_status\_fg表示变化状态前景图像，其中像素非0表示前景，否则表示背景。
 -   chg\_status\_life表示变化状态前景像素的生命时间图像，其像素值表示变化前景的持续时间。
 -   变化状态指像素值发生变化而成为前景，并且变化后的像素值较长时间都保持稳定的状态，这一般是由静止遗留物或者静止移走物在图像中产生。
@@ -6669,9 +6612,9 @@ td_s32 ss_mpi_ive_update_bg_model(ot_ive_handle *handle, const ot_svp_data *bg_m
 
 【相关主题】
 
--   [ss\_mpi\_ive\_match\_bg\_model](#ss_mpi_ive_match_bg_model)
--   [ss\_mpi\_ive\_grad\_fg](#ss_mpi_ive_grad_fg)
--   [ss\_mpi\_ive\_gmm](#ss_mpi_ive_gmm)
+-   [ss\_mpi\_ive\_match\_bg\_model](#ZH-CN_TOPIC_0000002470931334)
+-   [ss\_mpi\_ive\_grad\_fg](#ZH-CN_TOPIC_0000002471091316)
+-   [ss\_mpi\_ive\_gmm](#ZH-CN_TOPIC_0000002503971147)
 
 ## ss\_mpi\_ive\_ann\_mlp\_load\_model<a name="ZH-CN_TOPIC_0000002504091075"></a>
 
@@ -6768,12 +6711,12 @@ td_s32 ss_mpi_ive_ann_mlp_load_model(const td_char *file_name, ot_ive_ann_mlp_mo
 
 -   文件名必须以.bin为后缀；.bin文件必须用配套工具ive\_tool\_xml2bin.exe生成。
 -   用户需保证.bin文件的完整性和正确性。
--   该接口必须和[ss\_mpi\_ive\_ann\_mlp\_unload\_model](ss_mpi_ive_ann_mlp_unload_model.md)配套使用。
+-   该接口必须和[ss\_mpi\_ive\_ann\_mlp\_unload\_model](#ZH-CN_TOPIC_0000002504091139)配套使用。
 
 【相关主题】
 
--   [ss\_mpi\_ive\_ann\_mlp\_unload\_model](#ss_mpi_ive_ann_mlp_unload_model)
--   [ss\_mpi\_ive\_ann\_mlp\_predict](#ss_mpi_ive_ann_mlp_predict)
+-   [ss\_mpi\_ive\_ann\_mlp\_unload\_model](#ZH-CN_TOPIC_0000002504091139)
+-   [ss\_mpi\_ive\_ann\_mlp\_predict](#ZH-CN_TOPIC_0000002471091294)
 
 ## ss\_mpi\_ive\_ann\_mlp\_unload\_model<a name="ZH-CN_TOPIC_0000002504091139"></a>
 
@@ -6855,7 +6798,7 @@ td_void ss_mpi_ive_ann_mlp_unload_model(const ot_ive_ann_mlp_model *model)
 
 【注意】
 
-该接口必须和[ss\_mpi\_ive\_ann\_mlp\_load\_model](ss_mpi_ive_ann_mlp_load_model.md)配套使用。
+该接口必须和[ss\_mpi\_ive\_ann\_mlp\_load\_model](#ZH-CN_TOPIC_0000002504091075)配套使用。
 
 【举例】
 
@@ -6863,8 +6806,8 @@ td_void ss_mpi_ive_ann_mlp_unload_model(const ot_ive_ann_mlp_model *model)
 
 【相关主题】
 
--   [ss\_mpi\_ive\_ann\_mlp\_load\_model](#ss_mpi_ive_ann_mlp_load_model)
--   [ss\_mpi\_ive\_ann\_mlp\_predict](#ss_mpi_ive_ann_mlp_predict)
+-   [ss\_mpi\_ive\_ann\_mlp\_load\_model](#ZH-CN_TOPIC_0000002504091075)
+-   [ss\_mpi\_ive\_ann\_mlp\_predict](#ZH-CN_TOPIC_0000002471091294)
 
 ## ss\_mpi\_ive\_ann\_mlp\_predict<a name="ZH-CN_TOPIC_0000002471091294"></a>
 
@@ -7060,8 +7003,8 @@ Sigmoid对称激活函数：![](figures/zh-cn_formulaimage_0000002503971491.png)
 
 【相关主题】
 
--   [ss\_mpi\_ive\_ann\_mlp\_load\_model](#ss_mpi_ive_ann_mlp_load_model)
--   [ss\_mpi\_ive\_ann\_mlp\_unload\_model](#ss_mpi_ive_ann_mlp_unload_model)
+-   [ss\_mpi\_ive\_ann\_mlp\_load\_model](#ZH-CN_TOPIC_0000002504091075)
+-   [ss\_mpi\_ive\_ann\_mlp\_unload\_model](#ZH-CN_TOPIC_0000002504091139)
 
 ## ss\_mpi\_ive\_svm\_load\_model<a name="ZH-CN_TOPIC_0000002471091276"></a>
 
@@ -7158,7 +7101,7 @@ td_s32 ss_mpi_ive_svm_load_model(const td_char *file_name, ot_ive_svm_model *svm
 
 -   文件名必须以.bin为后缀；.bin文件必须用配套工具ive\_tool\_xml2bin.exe生成。
 -   用户必需保证.bin文件的完整性和正确性。
--   该接口必须和[ss\_mpi\_ive\_svm\_unload\_model](ss_mpi_ive_svm_unload_model.md)配套使用。
+-   该接口必须和[ss\_mpi\_ive\_svm\_unload\_model](#ZH-CN_TOPIC_0000002504091133)配套使用。
 
 【举例】
 
@@ -7166,8 +7109,8 @@ td_s32 ss_mpi_ive_svm_load_model(const td_char *file_name, ot_ive_svm_model *svm
 
 【相关主题】
 
--   [ss\_mpi\_ive\_svm\_unload\_model](#ss_mpi_ive_svm_unload_model)
--   [ss\_mpi\_ive\_svm\_predict](#ss_mpi_ive_svm_predict)
+-   [ss\_mpi\_ive\_svm\_unload\_model](#ZH-CN_TOPIC_0000002504091133)
+-   [ss\_mpi\_ive\_svm\_predict](#ZH-CN_TOPIC_0000002504091105)
 
 ## ss\_mpi\_ive\_svm\_unload\_model<a name="ZH-CN_TOPIC_0000002504091133"></a>
 
@@ -7249,7 +7192,7 @@ td_void ss_mpi_ive_svm_unload_model(const ot_ive_svm_model *svm_model);
 
 【注意】
 
-该接口必须和[ss\_mpi\_ive\_svm\_load\_model](ss_mpi_ive_svm_load_model.md)配套使用。
+该接口必须和[ss\_mpi\_ive\_svm\_load\_model](#ZH-CN_TOPIC_0000002471091276)配套使用。
 
 【举例】
 
@@ -7257,8 +7200,8 @@ td_void ss_mpi_ive_svm_unload_model(const ot_ive_svm_model *svm_model);
 
 【相关主题】
 
--   [ss\_mpi\_ive\_svm\_load\_model](#ss_mpi_ive_svm_load_model)
--   [ss\_mpi\_ive\_svm\_predict](#ss_mpi_ive_svm_predict)
+-   [ss\_mpi\_ive\_svm\_load\_model](#ZH-CN_TOPIC_0000002471091276)
+-   [ss\_mpi\_ive\_svm\_predict](#ZH-CN_TOPIC_0000002504091105)
 
 ## ss\_mpi\_ive\_svm\_predict<a name="ZH-CN_TOPIC_0000002504091105"></a>
 
@@ -7456,8 +7399,8 @@ td_s32 ss_mpi_ive_svm_predict(ot_ive_handle *handle, const ot_svp_src_data *src,
 
 【相关主题】
 
--   [ss\_mpi\_ive\_svm\_load\_model](#ss_mpi_ive_svm_load_model)
--   [ss\_mpi\_ive\_svm\_unload\_model](#ss_mpi_ive_svm_unload_model)
+-   [ss\_mpi\_ive\_svm\_load\_model](#ZH-CN_TOPIC_0000002471091276)
+-   [ss\_mpi\_ive\_svm\_unload\_model](#ZH-CN_TOPIC_0000002504091133)
 
 ## ss\_mpi\_ive\_cnn\_load\_model<a name="ZH-CN_TOPIC_0000002471091312"></a>
 
@@ -7554,7 +7497,7 @@ td_s32 ss_mpi_ive_cnn_load_model(const td_char *file_name, ot_ive_cnn_model *mod
 
 -   文件名必须以.bin为后缀；.bin文件必须用配套工具ive\_tool\_caffe（参考《IVE 工具使用指南》）生成。
 -   用户必需保证.bin文件的完整性和正确性。
--   该接口必须和[ss\_mpi\_ive\_cnn\_unload\_model](ss_mpi_ive_cnn_unload_model.md)配套使用。
+-   该接口必须和[ss\_mpi\_ive\_cnn\_unload\_model](#ZH-CN_TOPIC_0000002470931302)配套使用。
 
 【举例】
 
@@ -7562,9 +7505,9 @@ td_s32 ss_mpi_ive_cnn_load_model(const td_char *file_name, ot_ive_cnn_model *mod
 
 【相关主题】
 
--   [ss\_mpi\_ive\_cnn\_unload\_model](#ss_mpi_ive_cnn_unload_model)
--   [ss\_mpi\_ive\_cnn\_predict](#ss_mpi_ive_cnn_predict)
--   [ss\_mpi\_ive\_cnn\_get\_result](#ss_mpi_ive_cnn_get_result)
+-   [ss\_mpi\_ive\_cnn\_unload\_model](#ZH-CN_TOPIC_0000002470931302)
+-   [ss\_mpi\_ive\_cnn\_predict](#ZH-CN_TOPIC_0000002470931276)
+-   [ss\_mpi\_ive\_cnn\_get\_result](#ZH-CN_TOPIC_0000002470931258)
 
 ## ss\_mpi\_ive\_cnn\_unload\_model<a name="ZH-CN_TOPIC_0000002470931302"></a>
 
@@ -7651,7 +7594,7 @@ td_void ss_mpi_ive_cnn_unload_model(const ot_ive_cnn_model *model);
 
 【注意】
 
-该接口必须和[ss\_mpi\_ive\_cnn\_load\_model](ss_mpi_ive_cnn_load_model.md)配套使用。
+该接口必须和[ss\_mpi\_ive\_cnn\_load\_model](#ZH-CN_TOPIC_0000002471091312)配套使用。
 
 【举例】
 
@@ -7659,9 +7602,9 @@ td_void ss_mpi_ive_cnn_unload_model(const ot_ive_cnn_model *model);
 
 【相关主题】
 
--   [ss\_mpi\_ive\_cnn\_load\_model](#ss_mpi_ive_cnn_load_model)
--   [ss\_mpi\_ive\_cnn\_predict](#ss_mpi_ive_cnn_predict)
--   [ss\_mpi\_ive\_cnn\_get\_result](#ss_mpi_ive_cnn_get_result)
+-   [ss\_mpi\_ive\_cnn\_load\_model](#ZH-CN_TOPIC_0000002471091312)
+-   [ss\_mpi\_ive\_cnn\_predict](#ZH-CN_TOPIC_0000002470931276)
+-   [ss\_mpi\_ive\_cnn\_get\_result](#ZH-CN_TOPIC_0000002470931258)
 
 ## ss\_mpi\_ive\_cnn\_predict<a name="ZH-CN_TOPIC_0000002470931276"></a>
 
@@ -7856,7 +7799,7 @@ td_s32 ss_mpi_ive_cnn_predict(ot_ive_handle *handle, const ot_svp_src_img src[],
     **图 1**  cnn输出特征向量数组示意图<a name="fig97981942303"></a>  
     ![](figures/cnn输出特征向量数组示意图.png "cnn输出特征向量数组示意图")
 
--   该接口和[ss\_mpi\_ive\_cnn\_get\_result](ss_mpi_ive_cnn_get_result.md)配套使用，特征向量数组dst是[ss\_mpi\_ive\_cnn\_get\_result](ss_mpi_ive_cnn_get_result.md)的输入。
+-   该接口和[ss\_mpi\_ive\_cnn\_get\_result](#ZH-CN_TOPIC_0000002470931258)配套使用，特征向量数组dst是[ss\_mpi\_ive\_cnn\_get\_result](#ZH-CN_TOPIC_0000002470931258)的输入。
 -   CNN网络模型支持最多8层Conv-ReLU-Pooling和8层全连接层；Conv-ReLU-Pooling层的卷积核仅支持3x3，ReLU\(Rectified Linear Units\)和Pooling可配（见ot\_ive\_cnn\_actv\_func和ot\_ive\_cnn\_pooling），每层Conv-ReLU-Pooling最多输出50张feature map；全连接层仅支持ReLU激活函数，层数范围\[3, 8\]：全连接输入层（即Conv-ReLU-Pooling的最终输出）维数\[1, 1024\]，中间隐藏层神经元数目\[2,256\]，输出层维数\[1, 256\]。具体参数配置参见下列表格：
 
 **表 1**  cnn模型中单层Conv-ReLU-Pooling运算包参数配置表
@@ -7959,9 +7902,9 @@ td_s32 ss_mpi_ive_cnn_predict(ot_ive_handle *handle, const ot_svp_src_img src[],
 
 【相关主题】
 
--   [ss\_mpi\_ive\_cnn\_load\_model](#ss_mpi_ive_cnn_load_model)
--   [ss\_mpi\_ive\_cnn\_unload\_model](#ss_mpi_ive_cnn_unload_model)
--   [ss\_mpi\_ive\_cnn\_get\_result](#ss_mpi_ive_cnn_get_result)
+-   [ss\_mpi\_ive\_cnn\_load\_model](#ZH-CN_TOPIC_0000002471091312)
+-   [ss\_mpi\_ive\_cnn\_unload\_model](#ZH-CN_TOPIC_0000002470931302)
+-   [ss\_mpi\_ive\_cnn\_get\_result](#ZH-CN_TOPIC_0000002470931258)
 
 ## ss\_mpi\_ive\_cnn\_get\_result<a name="ZH-CN_TOPIC_0000002470931258"></a>
 
@@ -7988,7 +7931,7 @@ td_s32 ss_mpi_ive_cnn_get_result(const ot_svp_src_data *src, const ot_svp_dst_me
 </thead>
 <tbody><tr id="row14161mcpsimp"><td class="cellrowborder" valign="top" width="23%" headers="mcps1.1.4.1.1 "><p id="p14163mcpsimp"><a name="p14163mcpsimp"></a><a name="p14163mcpsimp"></a>src</p>
 </td>
-<td class="cellrowborder" valign="top" width="59%" headers="mcps1.1.4.1.2 "><p id="p14165mcpsimp"><a name="p14165mcpsimp"></a><a name="p14165mcpsimp"></a>源数据指针。源数据为<a href="ss_mpi_ive_cnn_predict.md">ss_mpi_ive_cnn_predict</a>的输出。不能为空。</p>
+<td class="cellrowborder" valign="top" width="59%" headers="mcps1.1.4.1.2 "><p id="p14165mcpsimp"><a name="p14165mcpsimp"></a><a name="p14165mcpsimp"></a>源数据指针。源数据为<a href="#ZH-CN_TOPIC_0000002470931276">ss_mpi_ive_cnn_predict</a>的输出。不能为空。</p>
 </td>
 <td class="cellrowborder" valign="top" width="18%" headers="mcps1.1.4.1.3 "><p id="p14168mcpsimp"><a name="p14168mcpsimp"></a><a name="p14168mcpsimp"></a>输入</p>
 </td>
@@ -8071,7 +8014,7 @@ td_s32 ss_mpi_ive_cnn_get_result(const ot_svp_src_data *src, const ot_svp_dst_me
 
 【注意】
 
--   源数据src必须为[ss\_mpi\_ive\_cnn\_predict](ss_mpi_ive_cnn_predict.md)的输出，model和ctrl必须与调用时的参数一致。
+-   源数据src必须为[ss\_mpi\_ive\_cnn\_predict](#ZH-CN_TOPIC_0000002470931276)的输出，model和ctrl必须与调用时的参数一致。
 -   预测结果dst指向ot\_ive\_cnn\_result的数组，数组元素数目n=ctrl-\>num，其内存排布如[图1](#fig174217383416)所示。
 
 **图 1**  cnn各样本预测结果示意图<a name="fig174217383416"></a>  
@@ -8088,9 +8031,9 @@ td_s32 ss_mpi_ive_cnn_get_result(const ot_svp_src_data *src, const ot_svp_dst_me
 
 【相关主题】
 
--   [ss\_mpi\_ive\_cnn\_load\_model](#ss_mpi_ive_cnn_load_model)
--   [ss\_mpi\_ive\_cnn\_unload\_model](#ss_mpi_ive_cnn_unload_model)
--   [ss\_mpi\_ive\_cnn\_predict](#ss_mpi_ive_cnn_predict)
+-   [ss\_mpi\_ive\_cnn\_load\_model](#ZH-CN_TOPIC_0000002471091312)
+-   [ss\_mpi\_ive\_cnn\_unload\_model](#ZH-CN_TOPIC_0000002470931302)
+-   [ss\_mpi\_ive\_cnn\_predict](#ZH-CN_TOPIC_0000002470931276)
 
 ## ss\_mpi\_ive\_persp\_trans<a name="ZH-CN_TOPIC_0000002503971185"></a>
 
@@ -8353,7 +8296,7 @@ td_s32 ss_mpi_ive_kcf_get_mem_size(td_u32 max_obj_num, td_u32 *size);
 
 【注意】
 
-申请通过本接口获取到的内存大小的内存，作为[ss\_mpi\_ive\_kcf\_create\_obj\_list](ss_mpi_ive_kcf_create_obj_list.md)接口输入来创建目标链表。
+申请通过本接口获取到的内存大小的内存，作为[ss\_mpi\_ive\_kcf\_create\_obj\_list](#ZH-CN_TOPIC_0000002504091179)接口输入来创建目标链表。
 
 【举例】
 
@@ -8361,7 +8304,7 @@ td_s32 ss_mpi_ive_kcf_get_mem_size(td_u32 max_obj_num, td_u32 *size);
 
 【相关主题】
 
-[ss\_mpi\_ive\_kcf\_create\_obj\_list](#ss_mpi_ive_kcf_create_obj_list)
+[ss\_mpi\_ive\_kcf\_create\_obj\_list](#ZH-CN_TOPIC_0000002504091179)
 
 ## ss\_mpi\_ive\_kcf\_create\_obj\_list<a name="ZH-CN_TOPIC_0000002504091179"></a>
 
@@ -8443,8 +8386,8 @@ td_s32 ss_mpi_ive_kcf_create_obj_list(const ot_svp_mem_info *mem, td_u32 max_obj
 -   创建的目标链表只能是单线程访问。
 -   多线程做跟踪不同目标，需要每个线程单独创建一个目标链表。
 -   obj\_list只能通过调用接口操作，不能通过其他方式操作。
--   必须使用[ss\_mpi\_ive\_kcf\_destroy\_obj\_list](ss_mpi_ive_kcf_destroy_obj_list.md)进行销毁，否则会造成内存泄露。
--   max\_obj\_num必须和[ss\_mpi\_ive\_kcf\_get\_mem\_size](ss_mpi_ive_kcf_get_mem_size.md)接口的max\_obj\_num保持一致。
+-   必须使用[ss\_mpi\_ive\_kcf\_destroy\_obj\_list](#ZH-CN_TOPIC_0000002503971237)进行销毁，否则会造成内存泄露。
+-   max\_obj\_num必须和[ss\_mpi\_ive\_kcf\_get\_mem\_size](#ZH-CN_TOPIC_0000002470931306)接口的max\_obj\_num保持一致。
 -   如果需要多线程操作obj\_list，则需要用户保证obj\_list操作的同步和正确性。
 -   mem管理的内存和obj\_list是一一对应关系，不能对应多个obj\_list，否则会出现异常。
 
@@ -8454,8 +8397,8 @@ td_s32 ss_mpi_ive_kcf_create_obj_list(const ot_svp_mem_info *mem, td_u32 max_obj
 
 【相关主题】
 
--   [ss\_mpi\_ive\_kcf\_get\_mem\_size](#ss_mpi_ive_kcf_get_mem_size)
--   [ss\_mpi\_ive\_kcf\_destroy\_obj\_list](#ss_mpi_ive_kcf_destroy_obj_list)
+-   [ss\_mpi\_ive\_kcf\_get\_mem\_size](#ZH-CN_TOPIC_0000002470931306)
+-   [ss\_mpi\_ive\_kcf\_destroy\_obj\_list](#ZH-CN_TOPIC_0000002503971237)
 
 ## ss\_mpi\_ive\_kcf\_destroy\_obj\_list<a name="ZH-CN_TOPIC_0000002503971237"></a>
 
@@ -8803,7 +8746,7 @@ td_s32 ss_mpi_ive_kcf_get_train_obj(td_u3q5 padding, const ot_ive_roi_info roi_i
 
 【注意】
 
--   本接口依赖[ss\_mpi\_ive\_kcf\_create\_obj\_list](ss_mpi_ive_kcf_create_obj_list.md)、[ss\_mpi\_ive\_kcf\_create\_gauss\_peak](ss_mpi_ive_kcf_create_gauss_peak.md)、[ss\_mpi\_ive\_kcf\_create\_cos\_win](ss_mpi_ive_kcf_create_cos_win.md)等接口创建的信息。
+-   本接口依赖[ss\_mpi\_ive\_kcf\_create\_obj\_list](#ZH-CN_TOPIC_0000002504091179)、[ss\_mpi\_ive\_kcf\_create\_gauss\_peak](#ZH-CN_TOPIC_0000002504091153)、[ss\_mpi\_ive\_kcf\_create\_cos\_win](#ZH-CN_TOPIC_0000002470931252)等接口创建的信息。
 -   roi\_info的roi区域与padding需要满足下面的约束关系：
     -   width \* padding / 32 必须小于等于1024，大于等于40；
     -   height \* padding / 32 必须小于等于1024，大于等于40。
@@ -8817,9 +8760,9 @@ td_s32 ss_mpi_ive_kcf_get_train_obj(td_u3q5 padding, const ot_ive_roi_info roi_i
 
 【相关主题】
 
--   [ss\_mpi\_ive\_kcf\_create\_obj\_list](#ss_mpi_ive_kcf_create_obj_list)
--   [ss\_mpi\_ive\_kcf\_create\_gauss\_peak](#ss_mpi_ive_kcf_create_gauss_peak)
--   [ss\_mpi\_ive\_kcf\_create\_cos\_win](#ss_mpi_ive_kcf_create_cos_win)
+-   [ss\_mpi\_ive\_kcf\_create\_obj\_list](#ZH-CN_TOPIC_0000002504091179)
+-   [ss\_mpi\_ive\_kcf\_create\_gauss\_peak](#ZH-CN_TOPIC_0000002504091153)
+-   [ss\_mpi\_ive\_kcf\_create\_cos\_win](#ZH-CN_TOPIC_0000002470931252)
 
 ## ss\_mpi\_ive\_kcf\_proc<a name="ZH-CN_TOPIC_0000002503971241"></a>
 
@@ -8935,7 +8878,7 @@ td_s32 ss_mpi_ive_kcf_proc(ot_ive_handle *handle, const ot_svp_src_img *src, ot_
 
 【注意】
 
--   调用本接口前必须确保至少调用一次[ss\_mpi\_ive\_kcf\_get\_train\_obj](ss_mpi_ive_kcf_get_train_obj.md)获取到要训练的对象。
+-   调用本接口前必须确保至少调用一次[ss\_mpi\_ive\_kcf\_get\_train\_obj](#ZH-CN_TOPIC_0000002471091232)获取到要训练的对象。
 -   软件调用流程如[图1](#fig13293144115712)所示，具体代码示例请参考sample实现。
 
     **图 1**  KCF软件调用流程<a name="fig13293144115712"></a>  
@@ -8965,10 +8908,10 @@ td_s32 ss_mpi_ive_kcf_proc(ot_ive_handle *handle, const ot_svp_src_img *src, ot_
 
 【相关主题】
 
--   [ss\_mpi\_ive\_kcf\_create\_obj\_list](#ss_mpi_ive_kcf_create_obj_list)
--   [ss\_mpi\_ive\_kcf\_create\_gauss\_peak](#ss_mpi_ive_kcf_create_gauss_peak)
--   [ss\_mpi\_ive\_kcf\_create\_cos\_win](#ss_mpi_ive_kcf_create_cos_win)
--   [ss\_mpi\_ive\_kcf\_get\_train\_obj](#ss_mpi_ive_kcf_get_train_obj)
+-   [ss\_mpi\_ive\_kcf\_create\_obj\_list](#ZH-CN_TOPIC_0000002504091179)
+-   [ss\_mpi\_ive\_kcf\_create\_gauss\_peak](#ZH-CN_TOPIC_0000002504091153)
+-   [ss\_mpi\_ive\_kcf\_create\_cos\_win](#ZH-CN_TOPIC_0000002470931252)
+-   [ss\_mpi\_ive\_kcf\_get\_train\_obj](#ZH-CN_TOPIC_0000002471091232)
 
 ## ss\_mpi\_ive\_kcf\_get\_obj\_bbox<a name="ZH-CN_TOPIC_0000002503971245"></a>
 

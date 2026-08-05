@@ -38,10 +38,6 @@ shared_library("libdaudio_manager_daudio_ext_service_1.0") {
     "${hdf_service_path}/hdi_service/common:libdaudio_hdf_utils",
   ]
 
-  deps = [
-     "//commonlibrary/c_utils/base:utils",
-  ]
-
   defines = [
     "HI_LOG_ENABLE",
     "LOG_DOMAIN=0xD004100",

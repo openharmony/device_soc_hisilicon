@@ -71,7 +71,9 @@
 
 # 新手指引<a name="ZH-CN_TOPIC_0000002442020717"></a>
 
+-   **[文档结构总览](#ZH-CN_TOPIC_0000002408581518)**  
 
+-   **[表达约定](#ZH-CN_TOPIC_0000002408581726)**  
 
 ## 文档结构总览<a name="ZH-CN_TOPIC_0000002408581518"></a>
 
@@ -91,7 +93,9 @@
 
 ## 表达约定<a name="ZH-CN_TOPIC_0000002408581726"></a>
 
+-   **[接口命名规则](#ZH-CN_TOPIC_0000002408581482)**  
 
+-   **[接口类别](#ZH-CN_TOPIC_0000002441980845)**  
 
 ### 接口命名规则<a name="ZH-CN_TOPIC_0000002408581482"></a>
 
@@ -140,12 +144,19 @@
 
 本文用于指导开发人员基于现有模型、使用SVP ACL（Smart Vision Processing Advanced Computing Language）提供的C语言API库开发图像分析工具应用，用于实现目标识别、图像分类等功能。
 
+-   **[什么是SVP ACL](#ZH-CN_TOPIC_0000002442020901)**  
 
+-   **[基本概念](#ZH-CN_TOPIC_0000002441980857)**  
 
+-   **[进程、线程、Device、Context、Stream之间的关系](#ZH-CN_TOPIC_0000002408421614)**  
 
+-   **[SVP ACL内存申请使用说明](#ZH-CN_TOPIC_0000002408421814)**  
 
+-   **[如何获取Sample](#ZH-CN_TOPIC_0000002441980885)**  
 
+-   **[如何查看日志](#ZH-CN_TOPIC_0000002442020801)**  
 
+-   **[如何查看Proc信息](#ZH-CN_TOPIC_0000002408581614)**  
 
 ## 什么是SVP ACL<a name="ZH-CN_TOPIC_0000002442020901"></a>
 
@@ -222,10 +233,15 @@ SVP ACL（Smart Vision Processing Advanced Computing Language）提供Device管�
 
 各基本概念的介绍请参见[基本概念](#ZH-CN_TOPIC_0000002441980857)。
 
+-   **[Device、Context、Stream之间的关系](#ZH-CN_TOPIC_0000002442020749)**  
 
+-   **[线程、Context、Stream之间的关系](#ZH-CN_TOPIC_0000002408421850)**  
 
+-   **[一个进程内多个线程间的Context迁移](#ZH-CN_TOPIC_0000002408581506)**  
 
+-   **[默认Context和默认Stream的使用场景](#ZH-CN_TOPIC_0000002441980869)**  
 
+-   **[多线程、多stream的性能说明](#ZH-CN_TOPIC_0000002408581758)**  
 
 ### Device、Context、Stream之间的关系<a name="ZH-CN_TOPIC_0000002442020749"></a>
 
@@ -321,11 +337,11 @@ svp_acl_rt_reset_device(0);  //释放计算设备0，对应的default ctx及defa
     <td class="cellrowborder" valign="top" width="55.00000000000001%" headers="mcps1.1.4.1.3 "><a name="ul4603mcpsimp"></a><a name="ul4603mcpsimp"></a><ul id="ul4603mcpsimp"><li>使用<a href="#ZH-CN_TOPIC_0000002408581654">svp_acl_rt_malloc</a>接口申请的内存，需要通过<a href="#ZH-CN_TOPIC_0000002408581838">svp_acl_rt_free</a>接口释放内存。</li><li>频繁调用<a href="#ZH-CN_TOPIC_0000002408581654">svp_acl_rt_malloc</a>接口申请内存、调用<a href="#ZH-CN_TOPIC_0000002408581838">svp_acl_rt_free</a>接口释放内存，会损耗性能，建议用户提前做内存预先分配或二次管理，避免频繁申请/释放内存。</li></ul>
     </td>
     </tr>
-    <tr id="row4612mcpsimp"><td class="cellrowborder" valign="top" width="25%" headers="mcps1.1.4.1.1 "><p id="p4614mcpsimp"><a name="p4614mcpsimp"></a><a name="p4614mcpsimp"></a><a href="#ZH-CN_TOPIC_0000002408581790">svp_acl_rt_malloc_host</a></p>
+    <tr id="row4612mcpsimp"><td class="cellrowborder" valign="top" width="25%" headers="mcps1.1.4.1.1 "><p id="p4614mcpsimp"><a name="p4614mcpsimp"></a><a name="p4614mcpsimp"></a><a href="#ZH-CN_TOPIC_0000002408421714">svp_acl_rt_malloc_host</a></p>
     </td>
     <td class="cellrowborder" valign="top" width="20%" headers="mcps1.1.4.1.2 "><p id="p4618mcpsimp"><a name="p4618mcpsimp"></a><a name="p4618mcpsimp"></a>申请Host或Device上的内存，Device上的内存按普通页申请。同步接口。</p>
     </td>
-    <td class="cellrowborder" valign="top" width="55.00000000000001%" headers="mcps1.1.4.1.3 "><a name="ul4620mcpsimp"></a><a name="ul4620mcpsimp"></a><ul id="ul4620mcpsimp"><li>使用<a href="#ZH-CN_TOPIC_0000002408581790">svp_acl_rt_malloc_host</a>接口申请的内存，需要通过<a href="#ZH-CN_TOPIC_0000002408581844">svp_acl_rt_free_host</a>接口释放内存。</li><li>如果没有Host端，调用该接口会获取Device侧内存，也可调用<a href="#ZH-CN_TOPIC_0000002408581838">svp_acl_rt_free</a>释放。</li><li>频繁调用<a href="#ZH-CN_TOPIC_0000002408581790">svp_acl_rt_malloc_host</a>接口申请内存、调用<a href="#ZH-CN_TOPIC_0000002408581844">svp_acl_rt_free_host</a>接口释放内存，会损耗性能，建议用户提前做内存预先分配或二次管理，避免频繁申请/释放内存。</li></ul>
+    <td class="cellrowborder" valign="top" width="55.00000000000001%" headers="mcps1.1.4.1.3 "><a name="ul4620mcpsimp"></a><a name="ul4620mcpsimp"></a><ul id="ul4620mcpsimp"><li>使用<a href="#ZH-CN_TOPIC_0000002408421714">svp_acl_rt_malloc_host</a>接口申请的内存，需要通过<a href="#ZH-CN_TOPIC_0000002408421954">svp_acl_rt_free_host</a>接口释放内存。</li><li>如果没有Host端，调用该接口会获取Device侧内存，也可调用<a href="#ZH-CN_TOPIC_0000002408581838">svp_acl_rt_free</a>释放。</li><li>频繁调用<a href="#ZH-CN_TOPIC_0000002408421714">svp_acl_rt_malloc_host</a>接口申请内存、调用<a href="#ZH-CN_TOPIC_0000002408421954">svp_acl_rt_free_host</a>接口释放内存，会损耗性能，建议用户提前做内存预先分配或二次管理，避免频繁申请/释放内存。</li></ul>
     </td>
     </tr>
     </tbody>
@@ -375,7 +391,9 @@ tar -zxvf samples.tar.gz
 
 ## 如何查看Proc信息<a name="ZH-CN_TOPIC_0000002408581614"></a>
 
+-   **[概述](#ZH-CN_TOPIC_0000002408422038)**  
 
+-   **[Proc信息说明](#ZH-CN_TOPIC_0000002408581534)**  
 
 ### 概述<a name="ZH-CN_TOPIC_0000002408422038"></a>
 
@@ -748,11 +766,17 @@ last_hw_task_time   hw_utilization   total_running_time
 
 # 接口调用流程介绍<a name="ZH-CN_TOPIC_0000002441980889"></a>
 
+-   **[主要接口调用流程](#ZH-CN_TOPIC_0000002442021025)**  
 
+-   **[运行管理资源申请](#ZH-CN_TOPIC_0000002441981173)**  
 
+-   **[模型加载](#ZH-CN_TOPIC_0000002408581558)**  
 
+-   **[模型执行](#ZH-CN_TOPIC_0000002408421538)**  
 
+-   **[同步等待](#ZH-CN_TOPIC_0000002442020793)**  
 
+-   **[运行管理资源释放](#ZH-CN_TOPIC_0000002441980865)**  
 
 ## 主要接口调用流程<a name="ZH-CN_TOPIC_0000002442021025"></a>
 
@@ -811,9 +835,13 @@ last_hw_task_time   hw_utilization   total_running_time
 
 ## 模型执行<a name="ZH-CN_TOPIC_0000002408421538"></a>
 
+-   **[基本的模型执行流程](#ZH-CN_TOPIC_0000002408421550)**  
 
+-   **[设置动态Batch和Total\_t](#ZH-CN_TOPIC_0000002408581646)**  
 
+-   **[设置动态分辨率](#ZH-CN_TOPIC_0000002442021097)**  
 
+-   **[准备模型执行的输入/输出数据](#ZH-CN_TOPIC_0000002408421658)**  
 
 ### 基本的模型执行流程<a name="ZH-CN_TOPIC_0000002408421550"></a>
 
@@ -958,8 +986,11 @@ SVP\_ACL支持检测网阈值通过data层传入，阈值输入固定长度为4�
 
 ## 同步等待<a name="ZH-CN_TOPIC_0000002442020793"></a>
 
+-   **[多Device场景](#ZH-CN_TOPIC_0000002408581638)**  
 
+-   **[多Stream场景](#ZH-CN_TOPIC_0000002408581866)**  
 
+-   **[Callback场景](#ZH-CN_TOPIC_0000002408581622)**  
 
 ### 多Device场景<a name="ZH-CN_TOPIC_0000002408581638"></a>
 
@@ -1021,18 +1052,20 @@ Callback流程中关键流程说明如下：
         使用SVP ACL接口开发应用时，必须先调用[svp\_acl\_init](#ZH-CN_TOPIC_0000002442020877)接口进行SVP ACL初始化，否则可能会导致后续系统内部资源初始化出错，进而导致其它业务异常。
 
     2.  数据传输，请参见“[读入图片数据](#ZH-CN_TOPIC_0000002441980873)”。
-    3.  执行模型推理。请参见“[模型推理](#ZH-CN_TOPIC_0000002408421526)”。
+    3.  执行模型推理。请参见“[模型推理](#ZH-CN_TOPIC_0000002408421798)”。
 
         模型推理结束后，需及时释放相关资源。
 
     4.  若需要处理模型推理的结果，还需要进行数据后处理，例如对于图片分类应用，通过数据后处理从推理结果中查找最大置信度的类别标识。
     5.  所有数据处理结束后，需及时释放运行管理资源。
 
-5.  编译运行应用，包括模型转换、编译代码、运行应用，请参见“[编译及运行应用](#ZH-CN_TOPIC_0000002408422014)”。
+5.  编译运行应用，包括模型转换、编译代码、运行应用，请参见“[编译及运行应用](#ZH-CN_TOPIC_0000002408421606)”。
 
 # 准备环境<a name="ZH-CN_TOPIC_0000002442020869"></a>
 
+-   **[准备开发环境](#ZH-CN_TOPIC_0000002442020677)**  
 
+-   **[准备运行环境](#ZH-CN_TOPIC_0000002408581510)**  
 
 ## 准备开发环境<a name="ZH-CN_TOPIC_0000002442020677"></a>
 
@@ -1074,13 +1107,19 @@ Callback流程中关键流程说明如下：
 
 # 开发首个应用<a name="ZH-CN_TOPIC_0000002441980881"></a>
 
+-   **[开发场景分析](#ZH-CN_TOPIC_0000002441981093)**  
 
+-   **[创建代码目录](#ZH-CN_TOPIC_0000002442020921)**  
 
+-   **[开发应用](#ZH-CN_TOPIC_0000002408581698)**  
 
+-   **[编译及运行应用](#ZH-CN_TOPIC_0000002408421606)**  
 
 ## 开发场景分析<a name="ZH-CN_TOPIC_0000002441981093"></a>
 
+-   **[开发场景](#ZH-CN_TOPIC_0000002441980849)**  
 
+-   **[场景分析](#ZH-CN_TOPIC_0000002442020885)**  
 
 ### 开发场景<a name="ZH-CN_TOPIC_0000002441980849"></a>
 
@@ -1139,14 +1178,21 @@ Callback流程中关键流程说明如下：
 
 ## 开发应用<a name="ZH-CN_TOPIC_0000002408581698"></a>
 
+-   **[资源初始化](#ZH-CN_TOPIC_0000002408421578)**  
 
+-   **[读入图片数据](#ZH-CN_TOPIC_0000002441980873)**  
 
+-   **[模型推理](#ZH-CN_TOPIC_0000002408421798)**  
 
+-   **[运行管理资源释放与SVP ACL去初始化](#ZH-CN_TOPIC_0000002442020953)**  
 
 ### 资源初始化<a name="ZH-CN_TOPIC_0000002408421578"></a>
 
+-   **[SVP ACL初始化](#ZH-CN_TOPIC_0000002442020737)**  
 
+-   **[运行管理资源申请（单进程+单线程+单Stream）](#ZH-CN_TOPIC_0000002408581550)**  
 
+-   **[模型推理资源申请](#ZH-CN_TOPIC_0000002442020989)**  
 
 #### SVP ACL初始化<a name="ZH-CN_TOPIC_0000002442020737"></a>
 
@@ -1176,7 +1222,7 @@ svp_acl_error ret = svp_acl_init(acl_config_path);
 
 #### 运行管理资源申请（单进程+单线程+单Stream）<a name="ZH-CN_TOPIC_0000002408581550"></a>
 
-多线程、多Stream的场景请参见[Stream管理](#ZH-CN_TOPIC_0000002442020933)。
+多线程、多Stream的场景请参见[Stream管理](#ZH-CN_TOPIC_0000002441980973)。
 
 **基本原理**：需要按顺序依次申请如下资源：[Device](#ZH-CN_TOPIC_0000002441980857)、[Context](#ZH-CN_TOPIC_0000002441980857)、[Stream](#ZH-CN_TOPIC_0000002441980857)，确保可以使用这些资源执行运算、管理任务。
 
@@ -1341,6 +1387,7 @@ for (size_t index = 0; index < sizeof(testFile) / sizeof(testFile[0]); ++index) 
     -   [svp\_acl\_mdl\_dataset](#ZH-CN_TOPIC_0000002441981101)主要用于描述模型推理时的输入数据、输出数据，模型可能存在多个输入、多个输出，每个输入/输出的内存地址、内存大小用[svp\_acl\_data\_buffer](#ZH-CN_TOPIC_0000002408581490)类型的数据来描述。在模型推理结束后，需及时调用[svp\_acl\_destroy\_data\_buffer](#ZH-CN_TOPIC_0000002408421986)接口和[svp\_acl\_mdl\_destroy\_dataset](#ZH-CN_TOPIC_0000002408421806)接口释放描述模型输入的数据，且先调用[svp\_acl\_destroy\_data\_buffer](#ZH-CN_TOPIC_0000002408421986)接口，再调用[svp\_acl\_mdl\_destroy\_dataset](#ZH-CN_TOPIC_0000002408421806)接口。如果存在多个输入，需调用多次[svp\_acl\_destroy\_data\_buffer](#ZH-CN_TOPIC_0000002408421986)接口。
     -   在模型推理结束后，还需要通过[svp\_acl\_mdl\_unload](#ZH-CN_TOPIC_0000002408421730)接口卸载模型。
 
+-   **[示例代码](#ZH-CN_TOPIC_0000002441981121)**  
 
 #### 示例代码<a name="ZH-CN_TOPIC_0000002441981121"></a>
 
@@ -1556,17 +1603,27 @@ ret = svp_acl_finalize();
 
 # 开发典型功能点的介绍<a name="ZH-CN_TOPIC_0000002408581594"></a>
 
+-   **[Stream管理](#ZH-CN_TOPIC_0000002441980973)**  
 
+-   **[同步等待](#ZH-CN_TOPIC_0000002408421882)**  
 
+-   **[模型推理](#ZH-CN_TOPIC_0000002408421526)**  
 
+-   **[带cache属性的内存管理](#ZH-CN_TOPIC_0000002441981237)**  
 
+-   **[推理使用模式识别CPU算子](#ZH-CN_TOPIC_0000002441980981)**  
 
+-   **[Profiling性能数据采集](#ZH-CN_TOPIC_0000002442020697)**  
 
 ## Stream管理<a name="ZH-CN_TOPIC_0000002441980973"></a>
 
+-   **[原理介绍](#ZH-CN_TOPIC_0000002441981205)**  
 
+-   **[单线程单Stream](#ZH-CN_TOPIC_0000002408421862)**  
 
+-   **[单线程多Stream](#ZH-CN_TOPIC_0000002408581770)**  
 
+-   **[多线程多Stream](#ZH-CN_TOPIC_0000002408581826)**  
 
 ### 原理介绍<a name="ZH-CN_TOPIC_0000002441981205"></a>
 
@@ -1677,8 +1734,11 @@ t2.join();
 
 ## 同步等待<a name="ZH-CN_TOPIC_0000002408421882"></a>
 
+-   **[原理介绍](#ZH-CN_TOPIC_0000002441980925)**  
 
+-   **[关于Stream内任务的同步等待](#ZH-CN_TOPIC_0000002442020669)**  
 
+-   **[关于Device的同步等待](#ZH-CN_TOPIC_0000002442020673)**  
 
 ### 原理介绍<a name="ZH-CN_TOPIC_0000002441980925"></a>
 
@@ -1743,14 +1803,17 @@ svp_acl_rt_reset_device(0);
 
 ## 模型推理<a name="ZH-CN_TOPIC_0000002408421526"></a>
 
+-   **[单Batch+固定shape+单模型同步推理](#ZH-CN_TOPIC_0000002442021053)**  
 
+-   **[异步推理+callback回调处理](#ZH-CN_TOPIC_0000002442021037)**  
 
+-   **[多模型推理](#ZH-CN_TOPIC_0000002441980989)**  
 
 ### 单Batch+固定shape+单模型同步推理<a name="ZH-CN_TOPIC_0000002442021053"></a>
 
 1.  若涉及色域转换（转换图像格式）、图像归一化（减均值/乘系数）等，在模型加载前，需要先参见《ATC工具使用指南》转换模型。
 2.  在模型推理前，需要从离线模型文件（适配SoC的离线模型）中加载模型数据到内存中，并创建[svp\_acl\_mdl\_dataset](#ZH-CN_TOPIC_0000002441981101)类型的数据描述模型的输出。请参见[模型推理资源申请](#ZH-CN_TOPIC_0000002442020989)。
-3.  加载模型后，再同步执行模型推理。请参见[模型推理](#ZH-CN_TOPIC_0000002408421526)。
+3.  加载模型后，再同步执行模型推理。请参见[模型推理](#ZH-CN_TOPIC_0000002408421798)。
 
 ### 异步推理+callback回调处理<a name="ZH-CN_TOPIC_0000002442021037"></a>
 
@@ -2022,8 +2085,7 @@ read_file(file_name, input_dev_buffer, input_size);
 //3.2 申请支持cache缓存的内存：output_dev_buffer用于存放模型推理的输出数据 
 ret = svp_acl_rt_malloc_cached(&output_dev_buffer, output_size, SVP_ACL_MEM_MALLOC_NORMAL_ONLY); 
 svp_acl_mdl_dataset *output = svp_acl_mdl_create_dataset(); 
-svp_acl_data_buffer* output_data = svp_acl_create_data_buffer(output_dev_buffer,
-size); 
+svp_acl_data_buffer* output_data = svp_acl_create_data_buffer(output_dev_buffer, output_size); 
 ret = svp_acl_mdl_add_dataset_buffer(output, output_data); 
         
 //4.把对应cache中的数据刷新到ddr 
@@ -2283,17 +2345,29 @@ profiler参数配置说明：
 
 # SVP ACL API参考<a name="ZH-CN_TOPIC_0000002408421574"></a>
 
+-   **[接口列表](#ZH-CN_TOPIC_0000002408421566)**  
 
+-   **[系统配置](#ZH-CN_TOPIC_0000002408581662)**  
 
+-   **[Device管理](#ZH-CN_TOPIC_0000002408421602)**  
 
+-   **[Context管理](#ZH-CN_TOPIC_0000002408581706)**  
 
+-   **[Stream管理](#ZH-CN_TOPIC_0000002442020933)**  
 
+-   **[同步等待](#ZH-CN_TOPIC_0000002441981109)**  
 
+-   **[内存管理](#ZH-CN_TOPIC_0000002441981181)**  
 
+-   **[模型加载与执行](#ZH-CN_TOPIC_0000002408581878)**  
 
+-   **[Profiling配置](#ZH-CN_TOPIC_0000002442020725)**  
 
+-   **[获取数据大小](#ZH-CN_TOPIC_0000002408581798)**  
 
+-   **[SoC扩展接口](#ZH-CN_TOPIC_0000002408421906)**  
 
+-   **[数据类型及其操作接口](#ZH-CN_TOPIC_0000002441981013)**  
 
 ## 接口列表<a name="ZH-CN_TOPIC_0000002408421566"></a>
 
@@ -3026,7 +3100,9 @@ profiler参数配置说明：
 
 ## 系统配置<a name="ZH-CN_TOPIC_0000002408581662"></a>
 
+-   **[svp\_acl\_init](#ZH-CN_TOPIC_0000002442020877)**  
 
+-   **[svp\_acl\_finalize](#ZH-CN_TOPIC_0000002441980877)**  
 
 ### svp\_acl\_init<a name="ZH-CN_TOPIC_0000002442020877"></a>
 
@@ -3059,9 +3135,9 @@ svp_acl_error svp_acl_init(const char *config_path)
 </td>
 <td class="cellrowborder" valign="top" width="17.2%" headers="mcps1.1.4.1.2 "><p id="p5750mcpsimp"><a name="p5750mcpsimp"></a><a name="p5750mcpsimp"></a>输入</p>
 </td>
-<td class="cellrowborder" valign="top" width="62.260000000000005%" headers="mcps1.1.4.1.3 "><p id="p5752mcpsimp"><a name="p5752mcpsimp"></a><a name="p5752mcpsimp"></a>配置文件所在的路径，包含文件名，配置文件内容为json格式（json文件内的“{”的层级最多为10，“[”的层级最多为10）。如果以下的默认配置已满足需求，无需修改，可向aclInit接口中传入NULL，或者可将配置文件配置为空json串（即配置文件中只有{}）。</p>
+<td class="cellrowborder" valign="top" width="62.260000000000005%" headers="mcps1.1.4.1.3 "><p id="p5752mcpsimp"><a name="p5752mcpsimp"></a><a name="p5752mcpsimp"></a>配置文件所在的路径，包含文件名，配置文件内容为json格式（json文件内的“{”的层级最多为10，“[”的层级最多为10）。如果以下的默认配置已满足需求，无需修改，可向svp_acl_init接口中传入NULL，或者可将配置文件配置为空json串（即配置文件中只有{}）。</p>
 <p id="p5753mcpsimp"><a name="p5753mcpsimp"></a><a name="p5753mcpsimp"></a>配置文件格式为json格式，当前支持以下配置：</p>
-<a name="ul5754mcpsimp"></a><a name="ul5754mcpsimp"></a><ul id="ul5754mcpsimp"><li>dump信息配置，示例、配置说明及约束请参见《ATC工具使用指南》“online_model_type”章节。默认不启动dump配置。dump功能开启除了配置json文件外，OM需要选择开启dump模式，如果OM开启dump后，json未配置dump，运行会报错，开启dump模式请参考《ATC工具使用指南》。</li><li>profiling信息配置，配置说明请参见<a href="#ZH-CN_TOPIC_0000002408581520">Profiling性能数据采集</a>。默认不启动Profiling配置。</li></ul>
+<a name="ul5754mcpsimp"></a><a name="ul5754mcpsimp"></a><ul id="ul5754mcpsimp"><li>dump信息配置，示例、配置说明及约束请参见<a href="#ZH-CN_TOPIC_0000002408581674">svp_acl_mdl_set_dump</a> 中的“配置文件示例”。默认不启动dump配置。dump功能开启除了配置json文件外，OM需要选择开启dump模式，如果OM开启dump后，json未配置dump，运行会报错，开启dump模式请参考《ATC工具使用指南》。</li><li>profiling信息配置，配置说明请参见<a href="#ZH-CN_TOPIC_0000002442020697">Profiling性能数据采集</a>。默认不启动Profiling配置。</li></ul>
 </td>
 </tr>
 </tbody>
@@ -3091,10 +3167,15 @@ svp_acl_error svp_acl_finalize()
 
 ## Device管理<a name="ZH-CN_TOPIC_0000002408421602"></a>
 
+-   **[svp\_acl\_rt\_set\_device](#ZH-CN_TOPIC_0000002408421586)**  
 
+-   **[svp\_acl\_rt\_reset\_device](#ZH-CN_TOPIC_0000002408581690)**  
 
+-   **[svp\_acl\_rt\_get\_device](#ZH-CN_TOPIC_0000002408581686)**  
 
+-   **[svp\_acl\_rt\_get\_run\_mode](#ZH-CN_TOPIC_0000002408581714)**  
 
+-   **[svp\_acl\_rt\_get\_device\_count](#ZH-CN_TOPIC_0000002441981065)**  
 
 ### svp\_acl\_rt\_set\_device<a name="ZH-CN_TOPIC_0000002408421586"></a>
 
@@ -3131,7 +3212,7 @@ svp_acl_error svp_acl_rt_set_device(int32_t device_id)
 <td class="cellrowborder" valign="top" width="17%" headers="mcps1.1.4.1.2 "><p id="p2413mcpsimp"><a name="p2413mcpsimp"></a><a name="p2413mcpsimp"></a>输入</p>
 </td>
 <td class="cellrowborder" valign="top" width="54%" headers="mcps1.1.4.1.3 "><p id="p2415mcpsimp"><a name="p2415mcpsimp"></a><a name="p2415mcpsimp"></a>Device ID。</p>
-<p id="p2416mcpsimp"><a name="p2416mcpsimp"></a><a name="p2416mcpsimp"></a>用户调用<a href="#ZH-CN_TOPIC_0000002408581648">svp_acl_rt_get_device_count</a>接口获取可用的Device数量后，这个Device ID的取值范围：[0, (可用的Device数量-1)]</p>
+<p id="p2416mcpsimp"><a name="p2416mcpsimp"></a><a name="p2416mcpsimp"></a>用户调用<a href="#ZH-CN_TOPIC_0000002441981065">svp_acl_rt_get_device_count</a>接口获取可用的Device数量后，这个Device ID的取值范围：[0, (可用的Device数量-1)]</p>
 </td>
 </tr>
 </tbody>
@@ -3286,9 +3367,13 @@ svp_acl_error svp_acl_rt_get_device_count(uint32_t *count)
 
 ## Context管理<a name="ZH-CN_TOPIC_0000002408581706"></a>
 
+-   **[svp\_acl\_rt\_create\_context](#ZH-CN_TOPIC_0000002408581542)**  
 
+-   **[svp\_acl\_rt\_destroy\_context](#ZH-CN_TOPIC_0000002441980909)**  
 
+-   **[svp\_acl\_rt\_set\_current\_context](#ZH-CN_TOPIC_0000002408421610)**  
 
+-   **[svp\_acl\_rt\_get\_current\_context](#ZH-CN_TOPIC_0000002442020945)**  
 
 ### svp\_acl\_rt\_create\_context<a name="ZH-CN_TOPIC_0000002408581542"></a>
 
@@ -3453,7 +3538,9 @@ svp_acl_error svp_acl_rt_get_current_context(svp_acl_rt_context *context)
 
 ## Stream管理<a name="ZH-CN_TOPIC_0000002442020933"></a>
 
+-   **[svp\_acl\_rt\_create\_stream](#ZH-CN_TOPIC_0000002408421842)**  
 
+-   **[svp\_acl\_rt\_destroy\_stream](#ZH-CN_TOPIC_0000002408581750)**  
 
 ### svp\_acl\_rt\_create\_stream<a name="ZH-CN_TOPIC_0000002408421842"></a>
 
@@ -3536,12 +3623,19 @@ svp_acl_error svp_acl_rt_destroy_stream(svp_acl_rt_stream stream)
 
 ## 同步等待<a name="ZH-CN_TOPIC_0000002441981109"></a>
 
+-   **[svp\_acl\_rt\_synchronize\_device](#ZH-CN_TOPIC_0000002441980957)**  
 
+-   **[svp\_acl\_rt\_synchronize\_stream](#ZH-CN_TOPIC_0000002408421694)**  
 
+-   **[svp\_acl\_rt\_subscribe\_report](#ZH-CN_TOPIC_0000002408581574)**  
 
+-   **[svp\_acl\_rt\_launch\_callback](#ZH-CN_TOPIC_0000002442020997)**  
 
+-   **[svp\_acl\_rt\_process\_report](#ZH-CN_TOPIC_0000002441981129)**  
 
+-   **[svp\_acl\_rt\_unsubscribe\_report](#ZH-CN_TOPIC_0000002441981193)**  
 
+-   **[svp\_acl\_rt\_set\_op\_wait\_timeout](#ZH-CN_TOPIC_0000002442021017)**  
 
 ### svp\_acl\_rt\_synchronize\_device<a name="ZH-CN_TOPIC_0000002441980957"></a>
 
@@ -3823,12 +3917,19 @@ svp_acl_error svp_acl_rt_set_op_wait_timeout(uint32_t timeout)
 
 ## 内存管理<a name="ZH-CN_TOPIC_0000002441981181"></a>
 
+-   **[svp\_acl\_rt\_malloc](#ZH-CN_TOPIC_0000002408581654)**  
 
+-   **[svp\_acl\_rt\_malloc\_cached](#ZH-CN_TOPIC_0000002408581470)**  
 
+-   **[svp\_acl\_rt\_mem\_flush](#ZH-CN_TOPIC_0000002442020653)**  
 
+-   **[svp\_acl\_rt\_mem\_invalidate](#ZH-CN_TOPIC_0000002408581854)**  
 
+-   **[svp\_acl\_rt\_free](#ZH-CN_TOPIC_0000002408581838)**  
 
+-   **[svp\_acl\_rt\_malloc\_host](#ZH-CN_TOPIC_0000002408421714)**  
 
+-   **[svp\_acl\_rt\_free\_host](#ZH-CN_TOPIC_0000002408421954)**  
 
 ### svp\_acl\_rt\_malloc<a name="ZH-CN_TOPIC_0000002408581654"></a>
 
@@ -4162,19 +4263,33 @@ svp_acl_error svp_acl_rt_free_host(const void *host_ptr)
 
 ## 模型加载与执行<a name="ZH-CN_TOPIC_0000002408581878"></a>
 
+-   **[svp\_acl\_mdl\_load\_from\_mem](#ZH-CN_TOPIC_0000002408422002)**  
 
+-   **[svp\_acl\_mdl\_execute](#ZH-CN_TOPIC_0000002442020701)**  
 
+-   **[svp\_acl\_mdl\_execute\_async](#ZH-CN_TOPIC_0000002442020689)**  
 
+-   **[svp\_acl\_mdl\_unload](#ZH-CN_TOPIC_0000002408421730)**  
 
+-   **[svp\_acl\_mdl\_set\_dynamic\_batch\_size](#ZH-CN_TOPIC_0000002442020845)**  
 
+-   **[svp\_acl\_mdl\_set\_total\_t](#ZH-CN_TOPIC_0000002408421754)**  
 
+-   **[svp\_acl\_mdl\_init\_dump](#ZH-CN_TOPIC_0000002408581466)**  
 
+-   **[svp\_acl\_mdl\_set\_dump](#ZH-CN_TOPIC_0000002408581674)**  
 
+-   **[svp\_acl\_mdl\_finalize\_dump](#ZH-CN_TOPIC_0000002442021141)**  
 
+-   **[svp\_acl\_mdl\_set\_config\_opt](#ZH-CN_TOPIC_0000002408421582)**  
 
+-   **[svp\_acl\_mdl\_load\_with\_config](#ZH-CN_TOPIC_0000002441980893)**  
 
+-   **[svp\_acl\_mdl\_get\_first\_aapp\_info](#ZH-CN_TOPIC_0000002441980933)**  
 
+-   **[svp\_acl\_mdl\_get\_dynamic\_batch](#ZH-CN_TOPIC_0000002441981217)**  
 
+-   **[svp\_acl\_mdl\_set\_dynamic\_hw\_size](#ZH-CN_TOPIC_0000002408581890)**  
 
 ### svp\_acl\_mdl\_load\_from\_mem<a name="ZH-CN_TOPIC_0000002408422002"></a>
 
@@ -4216,7 +4331,7 @@ svp_acl_error svp_acl_mdl_load_from_mem(const void* model,size_t model_size, uin
 </td>
 <td class="cellrowborder" valign="top" width="25%" headers="mcps1.1.4.1.2 "><p id="p1464mcpsimp"><a name="p1464mcpsimp"></a><a name="p1464mcpsimp"></a>输入</p>
 </td>
-<td class="cellrowborder" valign="top" width="46%" headers="mcps1.1.4.1.3 "><p id="p1466mcpsimp"><a name="p1466mcpsimp"></a><a name="p1466mcpsimp"></a>模型数据的内存地址。用户要保证内存中存储的模型数据的完整性和正确性，在调用<a href="#ZH-CN_TOPIC_0000002408581818">svp_acl_mdl_unload</a>接口卸载模型之前内存不能被释放且内存中的模型数据不能被修改。</p>
+<td class="cellrowborder" valign="top" width="46%" headers="mcps1.1.4.1.3 "><p id="p1466mcpsimp"><a name="p1466mcpsimp"></a><a name="p1466mcpsimp"></a>模型数据的内存地址。用户要保证内存中存储的模型数据的完整性和正确性，在调用<a href="#ZH-CN_TOPIC_0000002408421730">svp_acl_mdl_unload</a>接口卸载模型之前内存不能被释放且内存中的模型数据不能被修改。</p>
 </td>
 </tr>
 <tr id="row1468mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.4.1.1 "><p id="p1470mcpsimp"><a name="p1470mcpsimp"></a><a name="p1470mcpsimp"></a>model_size</p>
@@ -4270,7 +4385,7 @@ svp_acl_error svp_acl_mdl_execute(uint32_t model_id, const svp_acl_mdl_dataset *
 <td class="cellrowborder" valign="top" width="25%" headers="mcps1.1.4.1.2 "><p id="p6215mcpsimp"><a name="p6215mcpsimp"></a><a name="p6215mcpsimp"></a>输入</p>
 </td>
 <td class="cellrowborder" valign="top" width="46%" headers="mcps1.1.4.1.3 "><p id="p6217mcpsimp"><a name="p6217mcpsimp"></a><a name="p6217mcpsimp"></a>指定需要执行推理的模型的ID。</p>
-<p id="p6218mcpsimp"><a name="p6218mcpsimp"></a><a name="p6218mcpsimp"></a>调用<a href="#ZH-CN_TOPIC_0000002408581744">svp_acl_mdl_load_from_mem</a>接口加载模型成功后，会返回模型ID。</p>
+<p id="p6218mcpsimp"><a name="p6218mcpsimp"></a><a name="p6218mcpsimp"></a>调用<a href="#ZH-CN_TOPIC_0000002408422002">svp_acl_mdl_load_from_mem</a>接口加载模型成功后，会返回模型ID。</p>
 </td>
 </tr>
 <tr id="row6221mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.4.1.1 "><p id="p6223mcpsimp"><a name="p6223mcpsimp"></a><a name="p6223mcpsimp"></a>input</p>
@@ -4278,7 +4393,7 @@ svp_acl_error svp_acl_mdl_execute(uint32_t model_id, const svp_acl_mdl_dataset *
 <td class="cellrowborder" valign="top" width="25%" headers="mcps1.1.4.1.2 "><p id="p6225mcpsimp"><a name="p6225mcpsimp"></a><a name="p6225mcpsimp"></a>输入</p>
 </td>
 <td class="cellrowborder" valign="top" width="46%" headers="mcps1.1.4.1.3 "><p id="p6227mcpsimp"><a name="p6227mcpsimp"></a><a name="p6227mcpsimp"></a>模型推理的输入数据。</p>
-<p id="p6228mcpsimp"><a name="p6228mcpsimp"></a><a name="p6228mcpsimp"></a>若用户使用<a href="#ZH-CN_TOPIC_0000002408581654">svp_acl_rt_malloc</a>或<a href="#ZH-CN_TOPIC_0000002408581790">svp_acl_rt_malloc_host</a>接口申请大块内存并自行划分、管理内存时，用户在管理内存时，模型输入数据的内存有对齐和补齐要求，首地址和stride需要16字节对齐。</p>
+<p id="p6228mcpsimp"><a name="p6228mcpsimp"></a><a name="p6228mcpsimp"></a>若用户使用<a href="#ZH-CN_TOPIC_0000002408581654">svp_acl_rt_malloc</a>或<a href="#ZH-CN_TOPIC_0000002408421714">svp_acl_rt_malloc_host</a>接口申请大块内存并自行划分、管理内存时，用户在管理内存时，模型输入数据的内存有对齐和补齐要求，首地址和stride需要16字节对齐。</p>
 </td>
 </tr>
 <tr id="row6233mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.4.1.1 "><p id="p6235mcpsimp"><a name="p6235mcpsimp"></a><a name="p6235mcpsimp"></a>output</p>
@@ -4326,7 +4441,7 @@ svp_acl_error svp_acl_mdl_execute_async(uint32_t model_id, const svp_acl_mdl_dat
 <td class="cellrowborder" valign="top" width="18.9%" headers="mcps1.1.4.1.2 "><p id="p7346mcpsimp"><a name="p7346mcpsimp"></a><a name="p7346mcpsimp"></a>输入</p>
 </td>
 <td class="cellrowborder" valign="top" width="52.1%" headers="mcps1.1.4.1.3 "><p id="p7348mcpsimp"><a name="p7348mcpsimp"></a><a name="p7348mcpsimp"></a>指定需要执行推理的模型的ID。</p>
-<p id="p7349mcpsimp"><a name="p7349mcpsimp"></a><a name="p7349mcpsimp"></a>调用<a href="#ZH-CN_TOPIC_0000002408581744">svp_acl_mdl_load_from_mem</a>接口加载模型成功后，会返回模型ID。</p>
+<p id="p7349mcpsimp"><a name="p7349mcpsimp"></a><a name="p7349mcpsimp"></a>调用<a href="#ZH-CN_TOPIC_0000002408422002">svp_acl_mdl_load_from_mem</a>接口加载模型成功后，会返回模型ID。</p>
 </td>
 </tr>
 <tr id="row7352mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.4.1.1 "><p id="p7354mcpsimp"><a name="p7354mcpsimp"></a><a name="p7354mcpsimp"></a>input</p>
@@ -4334,7 +4449,7 @@ svp_acl_error svp_acl_mdl_execute_async(uint32_t model_id, const svp_acl_mdl_dat
 <td class="cellrowborder" valign="top" width="18.9%" headers="mcps1.1.4.1.2 "><p id="p7356mcpsimp"><a name="p7356mcpsimp"></a><a name="p7356mcpsimp"></a>输入</p>
 </td>
 <td class="cellrowborder" valign="top" width="52.1%" headers="mcps1.1.4.1.3 "><p id="p7358mcpsimp"><a name="p7358mcpsimp"></a><a name="p7358mcpsimp"></a>模型推理的输入数据。</p>
-<p id="p7359mcpsimp"><a name="p7359mcpsimp"></a><a name="p7359mcpsimp"></a>若用户使用<a href="#ZH-CN_TOPIC_0000002408581654">svp_acl_rt_malloc</a>或<a href="#ZH-CN_TOPIC_0000002408581790">svp_acl_rt_malloc_host</a>接口申请大块内存并自行划分、管理内存时，用户在管理内存时，模型输入数据的内存有对齐和补齐要求，首地址和stride需要16字节对齐。</p>
+<p id="p7359mcpsimp"><a name="p7359mcpsimp"></a><a name="p7359mcpsimp"></a>若用户使用<a href="#ZH-CN_TOPIC_0000002408581654">svp_acl_rt_malloc</a>或<a href="#ZH-CN_TOPIC_0000002408421714">svp_acl_rt_malloc_host</a>接口申请大块内存并自行划分、管理内存时，用户在管理内存时，模型输入数据的内存有对齐和补齐要求，首地址和stride需要16字节对齐。</p>
 </td>
 </tr>
 <tr id="row7364mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.4.1.1 "><p id="p7366mcpsimp"><a name="p7366mcpsimp"></a><a name="p7366mcpsimp"></a>output</p>
@@ -4426,22 +4541,22 @@ svp_acl_error svp_acl_mdl_set_dynamic_batch_size(uint32_t model_id, svp_acl_mdl_
 <td class="cellrowborder" valign="top" width="24%" headers="mcps1.1.4.1.2 "><p id="p2481mcpsimp"><a name="p2481mcpsimp"></a><a name="p2481mcpsimp"></a>输入</p>
 </td>
 <td class="cellrowborder" valign="top" width="47%" headers="mcps1.1.4.1.3 "><p id="p2483mcpsimp"><a name="p2483mcpsimp"></a><a name="p2483mcpsimp"></a>模型ID。</p>
-<p id="p2484mcpsimp"><a name="p2484mcpsimp"></a><a name="p2484mcpsimp"></a>调用<a href="#ZH-CN_TOPIC_0000002408581744">svp_acl_mdl_load_from_mem</a>接口加载模型成功后，会返回模型ID。</p>
+<p id="p2484mcpsimp"><a name="p2484mcpsimp"></a><a name="p2484mcpsimp"></a>调用<a href="#ZH-CN_TOPIC_0000002408422002">svp_acl_mdl_load_from_mem</a>接口加载模型成功后，会返回模型ID。</p>
 </td>
 </tr>
 <tr id="row2487mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.4.1.1 "><p id="p2489mcpsimp"><a name="p2489mcpsimp"></a><a name="p2489mcpsimp"></a>dataset</p>
 </td>
-<td class="cellrowborder" valign="top" width="24%" headers="mcps1.1.4.1.2 "><p id="p2491mcpsimp"><a name="p2491mcpsimp"></a><a name="p2491mcpsimp"></a>输入&amp;输出</p>
+<td class="cellrowborder" valign="top" width="24%" headers="mcps1.1.4.1.2 "><p id="p2491mcpsimp"><a name="p2491mcpsimp"></a><a name="p2491mcpsimp"></a>输入&输出</p>
 </td>
 <td class="cellrowborder" valign="top" width="47%" headers="mcps1.1.4.1.3 "><p id="p2493mcpsimp"><a name="p2493mcpsimp"></a><a name="p2493mcpsimp"></a>表示模型的输入数据。</p>
-<p id="p2494mcpsimp"><a name="p2494mcpsimp"></a><a name="p2494mcpsimp"></a>使用<a href="#ZH-CN_TOPIC_0000002408581778">svp_acl_mdl_dataset</a>类型的数据描述模型推理时的输入数据，输入的内存地址、内存大小用<a href="#ZH-CN_TOPIC_0000002408581572">svp_acl_data_buffer</a>类型的数据来描述。</p>
+<p id="p2494mcpsimp"><a name="p2494mcpsimp"></a><a name="p2494mcpsimp"></a>使用<a href="#ZH-CN_TOPIC_0000002441981101">svp_acl_mdl_dataset</a>类型的数据描述模型推理时的输入数据，输入的内存地址、内存大小用<a href="#ZH-CN_TOPIC_0000002408581490">svp_acl_data_buffer</a>类型的数据来描述。</p>
 </td>
 </tr>
 <tr id="row2497mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.4.1.1 "><p id="p2499mcpsimp"><a name="p2499mcpsimp"></a><a name="p2499mcpsimp"></a>index</p>
 </td>
 <td class="cellrowborder" valign="top" width="24%" headers="mcps1.1.4.1.2 "><p id="p2501mcpsimp"><a name="p2501mcpsimp"></a><a name="p2501mcpsimp"></a>输入</p>
 </td>
-<td class="cellrowborder" valign="top" width="47%" headers="mcps1.1.4.1.3 "><p id="p2503mcpsimp"><a name="p2503mcpsimp"></a><a name="p2503mcpsimp"></a>标识动态Batch输入的输入index，需调用<a href="#ZH-CN_TOPIC_0000002408581726">svp_acl_mdl_get_input_index_by_name</a>接口获取，输入名称固定为SVP_ACL_DYNAMIC_TENSOR_NAME。</p>
+<td class="cellrowborder" valign="top" width="47%" headers="mcps1.1.4.1.3 "><p id="p2503mcpsimp"><a name="p2503mcpsimp"></a><a name="p2503mcpsimp"></a>标识动态Batch输入的输入index，需调用<a href="#ZH-CN_TOPIC_0000002408421626">svp_acl_mdl_get_input_index_by_name</a>接口获取，输入名称固定为SVP_ACL_DYNAMIC_TENSOR_NAME。</p>
 </td>
 </tr>
 <tr id="row2506mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.4.1.1 "><p id="p2508mcpsimp"><a name="p2508mcpsimp"></a><a name="p2508mcpsimp"></a>batch_size</p>
@@ -4484,15 +4599,15 @@ svp_acl_error svp_acl_mdl_set_total_t(uint32_t model_id, svp_acl_mdl_dataset *da
 <td class="cellrowborder" valign="top" width="24%" headers="mcps1.1.4.1.2 "><p id="p2630mcpsimp"><a name="p2630mcpsimp"></a><a name="p2630mcpsimp"></a>输入</p>
 </td>
 <td class="cellrowborder" valign="top" width="47%" headers="mcps1.1.4.1.3 "><p id="p2632mcpsimp"><a name="p2632mcpsimp"></a><a name="p2632mcpsimp"></a>模型ID。</p>
-<p id="p2633mcpsimp"><a name="p2633mcpsimp"></a><a name="p2633mcpsimp"></a>调用<a href="#ZH-CN_TOPIC_0000002408581744">svp_acl_mdl_load_from_mem</a>接口加载模型成功后，会返回模型ID。</p>
+<p id="p2633mcpsimp"><a name="p2633mcpsimp"></a><a name="p2633mcpsimp"></a>调用<a href="#ZH-CN_TOPIC_0000002408422002">svp_acl_mdl_load_from_mem</a>接口加载模型成功后，会返回模型ID。</p>
 </td>
 </tr>
 <tr id="row2636mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.4.1.1 "><p id="p2638mcpsimp"><a name="p2638mcpsimp"></a><a name="p2638mcpsimp"></a>dataset</p>
 </td>
-<td class="cellrowborder" valign="top" width="24%" headers="mcps1.1.4.1.2 "><p id="p2640mcpsimp"><a name="p2640mcpsimp"></a><a name="p2640mcpsimp"></a>输入&amp;输出</p>
+<td class="cellrowborder" valign="top" width="24%" headers="mcps1.1.4.1.2 "><p id="p2640mcpsimp"><a name="p2640mcpsimp"></a><a name="p2640mcpsimp"></a>输入&输出</p>
 </td>
 <td class="cellrowborder" valign="top" width="47%" headers="mcps1.1.4.1.3 "><p id="p2642mcpsimp"><a name="p2642mcpsimp"></a><a name="p2642mcpsimp"></a>表示模型的输入数据。</p>
-<p id="p2643mcpsimp"><a name="p2643mcpsimp"></a><a name="p2643mcpsimp"></a>使用svp_acl_mdl_dataset类型的数据描述模型推理时的输入数据，输入的内存地址、内存大小用<a href="#ZH-CN_TOPIC_0000002408581572">svp_acl_data_buffer</a>类型的数据来描述。</p>
+<p id="p2643mcpsimp"><a name="p2643mcpsimp"></a><a name="p2643mcpsimp"></a>使用svp_acl_mdl_dataset类型的数据描述模型推理时的输入数据，输入的内存地址、内存大小用<a href="#ZH-CN_TOPIC_0000002408581490">svp_acl_data_buffer</a>类型的数据来描述。</p>
 </td>
 </tr>
 <tr id="row2646mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.4.1.1 "><p id="p2648mcpsimp"><a name="p2648mcpsimp"></a><a name="p2648mcpsimp"></a>total_t</p>
@@ -4789,7 +4904,7 @@ svp_acl_error svp_acl_mdl_get_first_aapp_info(uint32_t model_id, size_t index, s
 </td>
 <td class="cellrowborder" valign="top" width="12.331233123312332%" headers="mcps1.1.4.1.2 "><p id="p198311734125911"><a name="p198311734125911"></a><a name="p198311734125911"></a>输出</p>
 </td>
-<td class="cellrowborder" valign="top" width="65.85658565856586%" headers="mcps1.1.4.1.3 "><p id="p18314345597"><a name="p18314345597"></a><a name="p18314345597"></a>获取指定输入上AAPP的配置信息。当前只能获取输入的foramt类型。</p>
+<td class="cellrowborder" valign="top" width="65.85658565856586%" headers="mcps1.1.4.1.3 "><p id="p18314345597"><a name="p18314345597"></a><a name="p18314345597"></a>获取指定输入上AAPP的配置信息。当前只能获取输入的format类型。</p>
 </td>
 </tr>
 </tbody>
@@ -4824,7 +4939,7 @@ svp_acl_error svp_acl_mdl_get_dynamic_batch(const svp_acl_mdl_desc *model_desc, 
 </td>
 <td class="cellrowborder" valign="top" width="12.331233123312332%" headers="mcps1.1.4.1.2 "><p id="p1183163405919"><a name="p1183163405919"></a><a name="p1183163405919"></a>输入</p>
 </td>
-<td class="cellrowborder" valign="top" width="65.85658565856586%" headers="mcps1.1.4.1.3 "><p id="p3831534105919"><a name="p3831534105919"></a><a name="p3831534105919"></a><a href="#ZH-CN_TOPIC_0000002408581772">svp_acl_mdl_desc</a>类型数据的指针。</p>
+<td class="cellrowborder" valign="top" width="65.85658565856586%" headers="mcps1.1.4.1.3 "><p id="p3831534105919"><a name="p3831534105919"></a><a name="p3831534105919"></a><a href="#ZH-CN_TOPIC_0000002441980853">svp_acl_mdl_desc</a>类型数据的指针。</p>
 </td>
 </tr>
 <tr id="row1585175421311"><td class="cellrowborder" valign="top" width="21.81218121812181%" headers="mcps1.1.4.1.1 "><p id="p1413993016378"><a name="p1413993016378"></a><a name="p1413993016378"></a>batch</p>
@@ -4876,17 +4991,17 @@ svp_acl_error svp_acl_mdl_set_dynamic_hw_size(uint32_t model_id, svp_acl_mdl_dat
 </tr>
 <tr id="row1585175421311"><td class="cellrowborder" valign="top" width="21.81218121812181%" headers="mcps1.1.4.1.1 "><p id="p2638mcpsimp"><a name="p2638mcpsimp"></a><a name="p2638mcpsimp"></a>dataset</p>
 </td>
-<td class="cellrowborder" valign="top" width="12.331233123312332%" headers="mcps1.1.4.1.2 "><p id="p2640mcpsimp"><a name="p2640mcpsimp"></a><a name="p2640mcpsimp"></a>输入&amp;输出</p>
+<td class="cellrowborder" valign="top" width="12.331233123312332%" headers="mcps1.1.4.1.2 "><p id="p2640mcpsimp"><a name="p2640mcpsimp"></a><a name="p2640mcpsimp"></a>输入&输出</p>
 </td>
 <td class="cellrowborder" valign="top" width="65.85658565856586%" headers="mcps1.1.4.1.3 "><p id="p2642mcpsimp"><a name="p2642mcpsimp"></a><a name="p2642mcpsimp"></a>表示模型的输入数据。</p>
-<p id="p2643mcpsimp"><a name="p2643mcpsimp"></a><a name="p2643mcpsimp"></a>使用svp_acl_mdl_dataset类型的数据描述模型推理时的输入数据，输入的内存地址、内存大小用<a href="#ZH-CN_TOPIC_0000002408581572">svp_acl_data_buffer</a>类型的数据来描述。</p>
+<p id="p2643mcpsimp"><a name="p2643mcpsimp"></a><a name="p2643mcpsimp"></a>使用svp_acl_mdl_dataset类型的数据描述模型推理时的输入数据，输入的内存地址、内存大小用<a href="#ZH-CN_TOPIC_0000002408581490">svp_acl_data_buffer</a>类型的数据来描述。</p>
 </td>
 </tr>
 <tr id="row688619541416"><td class="cellrowborder" valign="top" width="21.81218121812181%" headers="mcps1.1.4.1.1 "><p id="p2499mcpsimp"><a name="p2499mcpsimp"></a><a name="p2499mcpsimp"></a>index</p>
 </td>
 <td class="cellrowborder" valign="top" width="12.331233123312332%" headers="mcps1.1.4.1.2 "><p id="p2501mcpsimp"><a name="p2501mcpsimp"></a><a name="p2501mcpsimp"></a>输入</p>
 </td>
-<td class="cellrowborder" valign="top" width="65.85658565856586%" headers="mcps1.1.4.1.3 "><p id="p2503mcpsimp"><a name="p2503mcpsimp"></a><a name="p2503mcpsimp"></a>标识动态HW输入的输入index，需调用<a href="#ZH-CN_TOPIC_0000002408581726">svp_acl_mdl_get_input_index_by_name</a>接口获取，输入名称固定为SVP_ACL_DYNAMIC_TENSOR_NAME。</p>
+<td class="cellrowborder" valign="top" width="65.85658565856586%" headers="mcps1.1.4.1.3 "><p id="p2503mcpsimp"><a name="p2503mcpsimp"></a><a name="p2503mcpsimp"></a>标识动态HW输入的输入index，需调用<a href="#ZH-CN_TOPIC_0000002408421626">svp_acl_mdl_get_input_index_by_name</a>接口获取，输入名称固定为SVP_ACL_DYNAMIC_TENSOR_NAME。</p>
 </td>
 </tr>
 <tr id="row162213919436"><td class="cellrowborder" valign="top" width="21.81218121812181%" headers="mcps1.1.4.1.1 "><p id="p1262313934315"><a name="p1262313934315"></a><a name="p1262313934315"></a>height</p>
@@ -4895,7 +5010,7 @@ svp_acl_error svp_acl_mdl_set_dynamic_hw_size(uint32_t model_id, svp_acl_mdl_dat
 </td>
 <td class="cellrowborder" valign="top" width="65.85658565856586%" headers="mcps1.1.4.1.3 "><p id="p567761718478"><a name="p567761718478"></a><a name="p567761718478"></a>需设置的H值。</p>
 <p id="p56082200471"><a name="p56082200471"></a><a name="p56082200471"></a>此处设置的分辨率只能是模型构建时设置的分辨率档位中的某一档，模型构建的详细说明请参见《ATC工具使用指南》--dynamic_image_size参数。</p>
-<p id="p862315919430"><a name="p862315919430"></a><a name="p862315919430"></a>可以调用<a href="#ZH-CN_TOPIC_0000002408581514">svp_acl_mdl_get_dynamic_hw</a>接口获取指定模型支持的分辨率档位数以及每一档中的宽、高。</p>
+<p id="p862315919430"><a name="p862315919430"></a><a name="p862315919430"></a>可以调用<a href="#ZH-CN_TOPIC_0000002442021005">svp_acl_mdl_get_dynamic_hw</a>接口获取指定模型支持的分辨率档位数以及每一档中的宽、高。</p>
 </td>
 </tr>
 <tr id="row18324148134619"><td class="cellrowborder" valign="top" width="21.81218121812181%" headers="mcps1.1.4.1.1 "><p id="p173241948184613"><a name="p173241948184613"></a><a name="p173241948184613"></a>width</p>
@@ -4904,7 +5019,7 @@ svp_acl_error svp_acl_mdl_set_dynamic_hw_size(uint32_t model_id, svp_acl_mdl_dat
 </td>
 <td class="cellrowborder" valign="top" width="65.85658565856586%" headers="mcps1.1.4.1.3 "><p id="p12399112319472"><a name="p12399112319472"></a><a name="p12399112319472"></a>需设置的W值。</p>
 <p id="p19361426194711"><a name="p19361426194711"></a><a name="p19361426194711"></a>此处设置的分辨率只能是模型构建时设置的分辨率档位中的某一档，模型构建的详细说明请参见《ATC工具使用指南》--dynamic_image_size参数。</p>
-<p id="p11324174884611"><a name="p11324174884611"></a><a name="p11324174884611"></a>可以调用<a href="#ZH-CN_TOPIC_0000002408581514">svp_acl_mdl_get_dynamic_hw</a>接口获取指定模型支持的分辨率档位数以及每一档中的宽、高。</p>
+<p id="p11324174884611"><a name="p11324174884611"></a><a name="p11324174884611"></a>可以调用<a href="#ZH-CN_TOPIC_0000002442021005">svp_acl_mdl_get_dynamic_hw</a>接口获取指定模型支持的分辨率档位数以及每一档中的宽、高。</p>
 </td>
 </tr>
 </tbody>
@@ -4914,22 +5029,39 @@ svp_acl_error svp_acl_mdl_set_dynamic_hw_size(uint32_t model_id, svp_acl_mdl_dat
 
 ## Profiling配置<a name="ZH-CN_TOPIC_0000002442020725"></a>
 
+-   **[功能及约束说明](#ZH-CN_TOPIC_0000002442020713)**  
 
+-   **[svp\_acl\_prof\_init](#ZH-CN_TOPIC_0000002441981049)**  
 
+-   **[svp\_acl\_prof\_start](#ZH-CN_TOPIC_0000002441981041)**  
 
+-   **[svp\_acl\_prof\_stop](#ZH-CN_TOPIC_0000002441981081)**  
 
+-   **[svp\_acl\_prof\_finalize](#ZH-CN_TOPIC_0000002408581486)**  
 
+-   **[svp\_acl\_prof\_model\_subscribe](#ZH-CN_TOPIC_0000002441981073)**  
 
+-   **[svp\_acl\_prof\_model\_unsubscribe](#ZH-CN_TOPIC_0000002442021153)**  
 
+-   **[svp\_acl\_prof\_get\_op\_desc\_size](#ZH-CN_TOPIC_0000002408421634)**  
 
+-   **[svp\_acl\_prof\_get\_op\_num](#ZH-CN_TOPIC_0000002442020733)**  
 
+-   **[svp\_acl\_prof\_get\_op\_type\_len](#ZH-CN_TOPIC_0000002408581742)**  
 
+-   **[svp\_acl\_prof\_get\_op\_type](#ZH-CN_TOPIC_0000002442021133)**  
 
+-   **[svp\_acl\_prof\_get\_op\_name\_len](#ZH-CN_TOPIC_0000002442020977)**  
 
+-   **[svp\_acl\_prof\_get\_op\_name](#ZH-CN_TOPIC_0000002408421598)**  
 
+-   **[svp\_acl\_prof\_get\_op\_start](#ZH-CN_TOPIC_0000002408421826)**  
 
+-   **[svp\_acl\_prof\_get\_op\_end](#ZH-CN_TOPIC_0000002441981329)**  
 
+-   **[svp\_acl\_prof\_get\_op\_duration](#ZH-CN_TOPIC_0000002442020825)**  
 
+-   **[svp\_acl\_prof\_get\_model\_id](#ZH-CN_TOPIC_0000002441980941)**  
 
 ### 功能及约束说明<a name="ZH-CN_TOPIC_0000002442020713"></a>
 
@@ -5055,7 +5187,7 @@ svp_acl_error svp_acl_prof_init(const char *result_path, size_t length)
 函数功能：
 
 -   下发Profiling请求，使能对应数据的采集。同步接口。
--   用户可根据需要，在模型执行过程中按需调用svp\_acl\_prof\_start接口，Profling采集到的数据为调用该接口之后的数据，且只会获取一次模型Profiling数据。
+-   用户可根据需要，在模型执行过程中按需调用svp\_acl\_prof\_start接口，Profiling采集到的数据为调用该接口之后的数据，且只会获取一次模型Profiling数据。
 
 函数原型：
 
@@ -5079,7 +5211,7 @@ svp_acl_error svp_acl_prof_start (const svp_acl_prof_config *profiler_config)
 <td class="cellrowborder" valign="top" width="10.89%" headers="mcps1.1.4.1.2 "><p id="p553mcpsimp"><a name="p553mcpsimp"></a><a name="p553mcpsimp"></a>输入</p>
 </td>
 <td class="cellrowborder" valign="top" width="68.32000000000001%" headers="mcps1.1.4.1.3 "><p id="p555mcpsimp"><a name="p555mcpsimp"></a><a name="p555mcpsimp"></a>指定Profiling配置数据。</p>
-<p id="p556mcpsimp"><a name="p556mcpsimp"></a><a name="p556mcpsimp"></a>需提前调用<a href="#ZH-CN_TOPIC_0000002408581532">svp_acl_prof_create_config</a>接口创建svp_acl_prof_config类型的数据。</p>
+<p id="p556mcpsimp"><a name="p556mcpsimp"></a><a name="p556mcpsimp"></a>需提前调用<a href="#ZH-CN_TOPIC_0000002408581966">svp_acl_prof_create_config</a>接口创建svp_acl_prof_config类型的数据。</p>
 </td>
 </tr>
 </tbody>
@@ -5115,7 +5247,7 @@ svp_acl_error svp_acl_prof_stop(const svp_acl_prof_config *profiler_config)
 <td class="cellrowborder" valign="top" width="10.89%" headers="mcps1.1.4.1.2 "><p id="p1774mcpsimp"><a name="p1774mcpsimp"></a><a name="p1774mcpsimp"></a>输入</p>
 </td>
 <td class="cellrowborder" valign="top" width="68.32000000000001%" headers="mcps1.1.4.1.3 "><p id="p1776mcpsimp"><a name="p1776mcpsimp"></a><a name="p1776mcpsimp"></a>指定停止Profiling数据采集的配置。</p>
-<p id="p1777mcpsimp"><a name="p1777mcpsimp"></a><a name="p1777mcpsimp"></a>与<a href="#ZH-CN_TOPIC_0000002408581488">svp_acl_prof_start</a>接口中的<a href="#ZH-CN_TOPIC_0000002408581538">svp_acl_prof_config</a>类型数据保持一致。</p>
+<p id="p1777mcpsimp"><a name="p1777mcpsimp"></a><a name="p1777mcpsimp"></a>与<a href="#ZH-CN_TOPIC_0000002441981041">svp_acl_prof_start</a>接口中的<a href="#ZH-CN_TOPIC_0000002441981005">svp_acl_prof_config</a>类型数据保持一致。</p>
 </td>
 </tr>
 </tbody>
@@ -5167,7 +5299,7 @@ svp_acl_error svp_acl_prof_model_subscribe(uint32_t model_id, const svp_acl_prof
 <td class="cellrowborder" valign="top" width="10%" headers="mcps1.1.4.1.2 "><p id="p7500mcpsimp"><a name="p7500mcpsimp"></a><a name="p7500mcpsimp"></a>输入</p>
 </td>
 <td class="cellrowborder" valign="top" width="69%" headers="mcps1.1.4.1.3 "><p id="p7502mcpsimp"><a name="p7502mcpsimp"></a><a name="p7502mcpsimp"></a>待订阅的网络模型的ID。</p>
-<p id="p7503mcpsimp"><a name="p7503mcpsimp"></a><a name="p7503mcpsimp"></a>调用<a href="#ZH-CN_TOPIC_0000002408581744">svp_acl_mdl_load_from_mem</a>接口加载模型成功后，会返回模型ID。</p>
+<p id="p7503mcpsimp"><a name="p7503mcpsimp"></a><a name="p7503mcpsimp"></a>调用<a href="#ZH-CN_TOPIC_0000002408422002">svp_acl_mdl_load_from_mem</a>接口加载模型成功后，会返回模型ID。</p>
 </td>
 </tr>
 <tr id="row7505mcpsimp"><td class="cellrowborder" valign="top" width="21%" headers="mcps1.1.4.1.1 "><p id="p7507mcpsimp"><a name="p7507mcpsimp"></a><a name="p7507mcpsimp"></a>prof_subscribe_config</p>
@@ -5175,7 +5307,7 @@ svp_acl_error svp_acl_prof_model_subscribe(uint32_t model_id, const svp_acl_prof
 <td class="cellrowborder" valign="top" width="10%" headers="mcps1.1.4.1.2 "><p id="p7509mcpsimp"><a name="p7509mcpsimp"></a><a name="p7509mcpsimp"></a>输入</p>
 </td>
 <td class="cellrowborder" valign="top" width="69%" headers="mcps1.1.4.1.3 "><p id="p7511mcpsimp"><a name="p7511mcpsimp"></a><a name="p7511mcpsimp"></a>待订阅的配置信息。</p>
-<p id="p7512mcpsimp"><a name="p7512mcpsimp"></a><a name="p7512mcpsimp"></a>需提前调用<a href="#ZH-CN_TOPIC_0000002408581526">svp_acl_prof_create_subscribe_config</a>接口创建<a href="#ZH-CN_TOPIC_0000002408581538">svp_acl_prof_subscribe_config</a>类型的数据。</p>
+<p id="p7512mcpsimp"><a name="p7512mcpsimp"></a><a name="p7512mcpsimp"></a>需提前调用<a href="#ZH-CN_TOPIC_0000002442020813">svp_acl_prof_create_subscribe_config</a>接口创建<a href="#ZH-CN_TOPIC_0000002441980805">svp_acl_prof_subscribe_config</a>类型的数据。</p>
 </td>
 </tr>
 </tbody>
@@ -5287,7 +5419,7 @@ svp_acl_error svp_acl_prof_get_op_num(const void *op_info, size_t op_info_len, u
 <td class="cellrowborder" valign="top" width="10.89%" headers="mcps1.1.4.1.2 "><p id="p1397mcpsimp"><a name="p1397mcpsimp"></a><a name="p1397mcpsimp"></a>输入</p>
 </td>
 <td class="cellrowborder" valign="top" width="68.32000000000001%" headers="mcps1.1.4.1.3 "><p id="p1399mcpsimp"><a name="p1399mcpsimp"></a><a name="p1399mcpsimp"></a>指定算子信息的内存地址。</p>
-<p id="p1400mcpsimp"><a name="p1400mcpsimp"></a><a name="p1400mcpsimp"></a>调用<a href="#ZH-CN_TOPIC_0000002408581464">svp_acl_prof_get_op_desc_size</a>接口获取到单个算子数据结构的大小后，用户需按照“单个算子数据结构的大小*整数系数”得到的数值申请内存，用于存放Profiling采集到的算子信息数据，作为本接口的输入。</p>
+<p id="p1400mcpsimp"><a name="p1400mcpsimp"></a><a name="p1400mcpsimp"></a>调用<a href="#ZH-CN_TOPIC_0000002408421634">svp_acl_prof_get_op_desc_size</a>接口获取到单个算子数据结构的大小后，用户需按照“单个算子数据结构的大小*整数系数”得到的数值申请内存，用于存放Profiling采集到的算子信息数据，作为本接口的输入。</p>
 </td>
 </tr>
 <tr id="row1402mcpsimp"><td class="cellrowborder" valign="top" width="20.79%" headers="mcps1.1.4.1.1 "><p id="p1404mcpsimp"><a name="p1404mcpsimp"></a><a name="p1404mcpsimp"></a>op_info_len</p>
@@ -5354,7 +5486,7 @@ svp_acl_error svp_acl_prof_get_op_type_len(const void *op_info, size_t op_info_l
 <td class="cellrowborder" valign="top" width="10%" headers="mcps1.1.4.1.2 "><p id="p6369mcpsimp"><a name="p6369mcpsimp"></a><a name="p6369mcpsimp"></a>输入</p>
 </td>
 <td class="cellrowborder" valign="top" width="69%" headers="mcps1.1.4.1.3 "><p id="p6371mcpsimp"><a name="p6371mcpsimp"></a><a name="p6371mcpsimp"></a>指定获取第几个算子的算子类型名称。</p>
-<p id="p6372mcpsimp"><a name="p6372mcpsimp"></a><a name="p6372mcpsimp"></a>用户调用<a href="#ZH-CN_TOPIC_0000002408581494">svp_acl_prof_get_op_num</a>接口获取算子数量后，这个index的取值范围：[0, (算子数量-1)]</p>
+<p id="p6372mcpsimp"><a name="p6372mcpsimp"></a><a name="p6372mcpsimp"></a>用户调用<a href="#ZH-CN_TOPIC_0000002442020733">svp_acl_prof_get_op_num</a>接口获取算子数量后，这个index的取值范围：[0, (算子数量-1)]</p>
 </td>
 </tr>
 <tr id="row6374mcpsimp"><td class="cellrowborder" valign="top" width="21%" headers="mcps1.1.4.1.1 "><p id="p6376mcpsimp"><a name="p6376mcpsimp"></a><a name="p6376mcpsimp"></a>op_type_len</p>
@@ -5414,7 +5546,7 @@ svp_acl_error svp_acl_prof_get_op_type(const void *op_info, size_t op_info_len, 
 <td class="cellrowborder" valign="top" width="10.89%" headers="mcps1.1.4.1.2 "><p id="p5630mcpsimp"><a name="p5630mcpsimp"></a><a name="p5630mcpsimp"></a>输入</p>
 </td>
 <td class="cellrowborder" valign="top" width="68.32000000000001%" headers="mcps1.1.4.1.3 "><p id="p5632mcpsimp"><a name="p5632mcpsimp"></a><a name="p5632mcpsimp"></a>指定获取第几个算子的算子类型名称。</p>
-<p id="p5633mcpsimp"><a name="p5633mcpsimp"></a><a name="p5633mcpsimp"></a>用户调用<a href="#ZH-CN_TOPIC_0000002408581494">svp_acl_prof_get_op_num</a>接口获取算子数量后，这个index的取值范围：[0, (算子数量-1)]</p>
+<p id="p5633mcpsimp"><a name="p5633mcpsimp"></a><a name="p5633mcpsimp"></a>用户调用<a href="#ZH-CN_TOPIC_0000002442020733">svp_acl_prof_get_op_num</a>接口获取算子数量后，这个index的取值范围：[0, (算子数量-1)]</p>
 </td>
 </tr>
 <tr id="row5635mcpsimp"><td class="cellrowborder" valign="top" width="20.79%" headers="mcps1.1.4.1.1 "><p id="p5637mcpsimp"><a name="p5637mcpsimp"></a><a name="p5637mcpsimp"></a>op_type</p>
@@ -5481,7 +5613,7 @@ svp_acl_error svp_acl_prof_get_op_name_len(const void *op_info, size_t op_info_l
 <td class="cellrowborder" valign="top" width="10.89%" headers="mcps1.1.4.1.2 "><p id="p4230mcpsimp"><a name="p4230mcpsimp"></a><a name="p4230mcpsimp"></a>输入</p>
 </td>
 <td class="cellrowborder" valign="top" width="68.32000000000001%" headers="mcps1.1.4.1.3 "><p id="p4232mcpsimp"><a name="p4232mcpsimp"></a><a name="p4232mcpsimp"></a>指定获取第几个算子的算子名称长度。</p>
-<p id="p4233mcpsimp"><a name="p4233mcpsimp"></a><a name="p4233mcpsimp"></a>用户调用<a href="#ZH-CN_TOPIC_0000002408581494">svp_acl_prof_get_op_num</a>接口获取算子数量后，这个index的取值范围：[0, (算子数量-1)]</p>
+<p id="p4233mcpsimp"><a name="p4233mcpsimp"></a><a name="p4233mcpsimp"></a>用户调用<a href="#ZH-CN_TOPIC_0000002442020733">svp_acl_prof_get_op_num</a>接口获取算子数量后，这个index的取值范围：[0, (算子数量-1)]</p>
 </td>
 </tr>
 <tr id="row4235mcpsimp"><td class="cellrowborder" valign="top" width="20.79%" headers="mcps1.1.4.1.1 "><p id="p4237mcpsimp"><a name="p4237mcpsimp"></a><a name="p4237mcpsimp"></a>op_name_len</p>
@@ -5541,7 +5673,7 @@ svp_acl_error svp_acl_prof_get_op_name(const void *op_info, size_t op_info_len, 
 <td class="cellrowborder" valign="top" width="10.89%" headers="mcps1.1.4.1.2 "><p id="p4864mcpsimp"><a name="p4864mcpsimp"></a><a name="p4864mcpsimp"></a>输入</p>
 </td>
 <td class="cellrowborder" valign="top" width="68.32000000000001%" headers="mcps1.1.4.1.3 "><p id="p4866mcpsimp"><a name="p4866mcpsimp"></a><a name="p4866mcpsimp"></a>指定获取第几个算子的算子名称。</p>
-<p id="p4867mcpsimp"><a name="p4867mcpsimp"></a><a name="p4867mcpsimp"></a>用户调用<a href="#ZH-CN_TOPIC_0000002408581494">svp_acl_prof_get_op_num</a>接口获取算子数量后，这个index的取值范围：[0, (算子数量-1)]</p>
+<p id="p4867mcpsimp"><a name="p4867mcpsimp"></a><a name="p4867mcpsimp"></a>用户调用<a href="#ZH-CN_TOPIC_0000002442020733">svp_acl_prof_get_op_num</a>接口获取算子数量后，这个index的取值范围：[0, (算子数量-1)]</p>
 </td>
 </tr>
 <tr id="row4869mcpsimp"><td class="cellrowborder" valign="top" width="20.79%" headers="mcps1.1.4.1.1 "><p id="p4871mcpsimp"><a name="p4871mcpsimp"></a><a name="p4871mcpsimp"></a>op_name</p>
@@ -5555,7 +5687,7 @@ svp_acl_error svp_acl_prof_get_op_name(const void *op_info, size_t op_info_len, 
 </td>
 <td class="cellrowborder" valign="top" width="10.89%" headers="mcps1.1.4.1.2 "><p id="p4880mcpsimp"><a name="p4880mcpsimp"></a><a name="p4880mcpsimp"></a>输入</p>
 </td>
-<td class="cellrowborder" valign="top" width="68.32000000000001%" headers="mcps1.1.4.1.3 "><p id="p4882mcpsimp"><a name="p4882mcpsimp"></a><a name="p4882mcpsimp"></a>op_name的实际内存申请长度。取值范围建议不小于<a href="#ZH-CN_TOPIC_0000002408581476">svp_acl_prof_get_op_name_len</a>。</p>
+<td class="cellrowborder" valign="top" width="68.32000000000001%" headers="mcps1.1.4.1.3 "><p id="p4882mcpsimp"><a name="p4882mcpsimp"></a><a name="p4882mcpsimp"></a>op_name的实际内存申请长度。取值范围建议不小于<a href="#ZH-CN_TOPIC_0000002442020977">svp_acl_prof_get_op_name_len</a>。</p>
 </td>
 </tr>
 </tbody>
@@ -5608,7 +5740,7 @@ uint64_t svp_acl_prof_get_op_start(const void *op_info, size_t op_info_len, uint
 <td class="cellrowborder" valign="top" width="10.89%" headers="mcps1.1.4.1.2 "><p id="p2189mcpsimp"><a name="p2189mcpsimp"></a><a name="p2189mcpsimp"></a>输入</p>
 </td>
 <td class="cellrowborder" valign="top" width="68.32000000000001%" headers="mcps1.1.4.1.3 "><p id="p2191mcpsimp"><a name="p2191mcpsimp"></a><a name="p2191mcpsimp"></a>指定获取第几个算子执行的开始时间。</p>
-<p id="p2192mcpsimp"><a name="p2192mcpsimp"></a><a name="p2192mcpsimp"></a>用户调用<a href="#ZH-CN_TOPIC_0000002408581494">svp_acl_prof_get_op_num</a>接口获取算子数量后，这个index的取值范围：[0, (算子数量-1)]</p>
+<p id="p2192mcpsimp"><a name="p2192mcpsimp"></a><a name="p2192mcpsimp"></a>用户调用<a href="#ZH-CN_TOPIC_0000002442020733">svp_acl_prof_get_op_num</a>接口获取算子数量后，这个index的取值范围：[0, (算子数量-1)]</p>
 </td>
 </tr>
 </tbody>
@@ -5661,7 +5793,7 @@ uint64_t svp_acl_prof_get_op_end(const void *op_info, size_t op_info_len, uint32
 <td class="cellrowborder" valign="top" width="10.89%" headers="mcps1.1.4.1.2 "><p id="p6832mcpsimp"><a name="p6832mcpsimp"></a><a name="p6832mcpsimp"></a>输入</p>
 </td>
 <td class="cellrowborder" valign="top" width="68.32000000000001%" headers="mcps1.1.4.1.3 "><p id="p6834mcpsimp"><a name="p6834mcpsimp"></a><a name="p6834mcpsimp"></a>指定获取第几个算子执行的结束时间。</p>
-<p id="p6835mcpsimp"><a name="p6835mcpsimp"></a><a name="p6835mcpsimp"></a>用户调用<a href="#ZH-CN_TOPIC_0000002408581494">svp_acl_prof_get_op_num</a>接口获取算子数量后，这个index的取值范围：[0, (算子数量-1)]</p>
+<p id="p6835mcpsimp"><a name="p6835mcpsimp"></a><a name="p6835mcpsimp"></a>用户调用<a href="#ZH-CN_TOPIC_0000002442020733">svp_acl_prof_get_op_num</a>接口获取算子数量后，这个index的取值范围：[0, (算子数量-1)]</p>
 </td>
 </tr>
 </tbody>
@@ -5714,7 +5846,7 @@ uint64_t svp_acl_prof_get_op_duration(const void *op_info, size_t op_info_len, u
 <td class="cellrowborder" valign="top" width="10.89%" headers="mcps1.1.4.1.2 "><p id="p4180mcpsimp"><a name="p4180mcpsimp"></a><a name="p4180mcpsimp"></a>输入</p>
 </td>
 <td class="cellrowborder" valign="top" width="68.32000000000001%" headers="mcps1.1.4.1.3 "><p id="p4182mcpsimp"><a name="p4182mcpsimp"></a><a name="p4182mcpsimp"></a>指定获取第几个算子执行的耗时时间。</p>
-<p id="p4183mcpsimp"><a name="p4183mcpsimp"></a><a name="p4183mcpsimp"></a>用户调用<a href="#ZH-CN_TOPIC_0000002408581494">svp_acl_prof_get_op_num</a>接口获取算子数量后，这个index的取值范围：[0, (算子数量-1)]</p>
+<p id="p4183mcpsimp"><a name="p4183mcpsimp"></a><a name="p4183mcpsimp"></a>用户调用<a href="#ZH-CN_TOPIC_0000002442020733">svp_acl_prof_get_op_num</a>接口获取算子数量后，这个index的取值范围：[0, (算子数量-1)]</p>
 </td>
 </tr>
 </tbody>
@@ -5767,7 +5899,7 @@ size_t svp_acl_prof_get_model_id(const void *op_info, size_t op_info_len, uint32
 <td class="cellrowborder" valign="top" width="10.89%" headers="mcps1.1.4.1.2 "><p id="p6320mcpsimp"><a name="p6320mcpsimp"></a><a name="p6320mcpsimp"></a>输入</p>
 </td>
 <td class="cellrowborder" valign="top" width="68.32000000000001%" headers="mcps1.1.4.1.3 "><p id="p6322mcpsimp"><a name="p6322mcpsimp"></a><a name="p6322mcpsimp"></a>指定获取第几个算子所在模型的ID。</p>
-<p id="p6323mcpsimp"><a name="p6323mcpsimp"></a><a name="p6323mcpsimp"></a>用户调用<a href="#ZH-CN_TOPIC_0000002408581494">svp_acl_prof_get_op_num</a>接口获取算子数量后，这个index的取值范围：[0, (算子数量-1)]</p>
+<p id="p6323mcpsimp"><a name="p6323mcpsimp"></a><a name="p6323mcpsimp"></a>用户调用<a href="#ZH-CN_TOPIC_0000002442020733">svp_acl_prof_get_op_num</a>接口获取算子数量后，这个index的取值范围：[0, (算子数量-1)]</p>
 </td>
 </tr>
 </tbody>
@@ -5779,6 +5911,7 @@ size_t svp_acl_prof_get_model_id(const void *op_info, size_t op_info_len, uint32
 
 ## 获取数据大小<a name="ZH-CN_TOPIC_0000002408581798"></a>
 
+-   **[svp\_acl\_data\_type\_size](#ZH-CN_TOPIC_0000002408581938)**  
 
 ### svp\_acl\_data\_type\_size<a name="ZH-CN_TOPIC_0000002408581938"></a>
 
@@ -5815,8 +5948,11 @@ size_t svp_acl_data_type_size(svp_acl_data_type data_type)
 
 ## SoC扩展接口<a name="ZH-CN_TOPIC_0000002408421906"></a>
 
+-   **[svp\_acl\_ext\_process\_aacpu\_task](#ZH-CN_TOPIC_0000002441980901)**  
 
+-   **[svp\_acl\_ext\_get\_mdl\_aacpu\_task\_num](#ZH-CN_TOPIC_0000002408421890)**  
 
+-   **[svp\_acl\_ext\_get\_mdl\_net\_type](#ZH-CN_TOPIC_0000002408421870)**  
 
 ### svp\_acl\_ext\_process\_aacpu\_task<a name="ZH-CN_TOPIC_0000002441980901"></a>
 
@@ -5884,7 +6020,7 @@ svp_acl_error svp_acl_ext_get_mdl_aacpu_task_num(uint32_t model_id, uint32_t *nu
 <td class="cellrowborder" valign="top" width="17%" headers="mcps1.1.4.1.2 "><p id="p2353mcpsimp"><a name="p2353mcpsimp"></a><a name="p2353mcpsimp"></a>输入</p>
 </td>
 <td class="cellrowborder" valign="top" width="54%" headers="mcps1.1.4.1.3 "><p id="p2355mcpsimp"><a name="p2355mcpsimp"></a><a name="p2355mcpsimp"></a>指定需要执行推理的模型的ID。</p>
-<p id="p4769327393"><a name="p4769327393"></a><a name="p4769327393"></a>调用<a href="#ZH-CN_TOPIC_0000002408581744">svp_acl_mdl_load_from_mem</a>接口加载模型成功后，会返回模型ID。</p>
+<p id="p4769327393"><a name="p4769327393"></a><a name="p4769327393"></a>调用<a href="#ZH-CN_TOPIC_0000002408422002">svp_acl_mdl_load_from_mem</a>接口加载模型成功后，会返回模型ID。</p>
 </td>
 </tr>
 <tr id="row2360mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.4.1.1 "><p id="p2362mcpsimp"><a name="p2362mcpsimp"></a><a name="p2362mcpsimp"></a>num</p>
@@ -5925,7 +6061,7 @@ svp_acl_error svp_acl_ext_get_mdl_net_type(uint32_t model_id, uint32_t *net_type
 <td class="cellrowborder" valign="top" width="17.5%" headers="mcps1.1.4.1.2 "><p id="p2353mcpsimp"><a name="p2353mcpsimp"></a><a name="p2353mcpsimp"></a>输入</p>
 </td>
 <td class="cellrowborder" valign="top" width="58.050000000000004%" headers="mcps1.1.4.1.3 "><p id="p2355mcpsimp"><a name="p2355mcpsimp"></a><a name="p2355mcpsimp"></a>指定需要执行推理的模型的ID。</p>
-<p id="p4769327393"><a name="p4769327393"></a><a name="p4769327393"></a>调用<a href="#ZH-CN_TOPIC_0000002408581744">svp_acl_mdl_load_from_mem</a>接口加载模型成功后，会返回模型ID。</p>
+<p id="p4769327393"><a name="p4769327393"></a><a name="p4769327393"></a>调用<a href="#ZH-CN_TOPIC_0000002408422002">svp_acl_mdl_load_from_mem</a>接口加载模型成功后，会返回模型ID。</p>
 </td>
 </tr>
 <tr id="row2360mcpsimp"><td class="cellrowborder" valign="top" width="24.45%" headers="mcps1.1.4.1.1 "><p id="p2362mcpsimp"><a name="p2362mcpsimp"></a><a name="p2362mcpsimp"></a>net_type</p>
@@ -5944,22 +6080,39 @@ svp_acl_error svp_acl_ext_get_mdl_net_type(uint32_t model_id, uint32_t *net_type
 
 ## 数据类型及其操作接口<a name="ZH-CN_TOPIC_0000002441981013"></a>
 
+-   **[svp\_acl\_error](#ZH-CN_TOPIC_0000002441980837)**  
 
+-   **[svp\_acl\_data\_type](#ZH-CN_TOPIC_0000002408581454)**  
 
+-   **[svp\_acl\_float16](#ZH-CN_TOPIC_0000002442021165)**  
 
+-   **[svp\_acl\_format](#ZH-CN_TOPIC_0000002408581950)**  
 
+-   **[svp\_acl\_rt\_context](#ZH-CN_TOPIC_0000002408581446)**  
 
+-   **[svp\_acl\_rt\_stream](#ZH-CN_TOPIC_0000002408421670)**  
 
+-   **[svp\_acl\_rt\_run\_mode](#ZH-CN_TOPIC_0000002441981249)**  
 
+-   **[svp\_acl\_mdl\_io\_dims](#ZH-CN_TOPIC_0000002408421766)**  
 
+-   **[svp\_acl\_data\_buffer](#ZH-CN_TOPIC_0000002408581490)**  
 
+-   **[svp\_acl\_mdl\_dataset](#ZH-CN_TOPIC_0000002441981101)**  
 
+-   **[svp\_acl\_mdl\_desc](#ZH-CN_TOPIC_0000002441980853)**  
 
+-   **[svp\_acl\_prof\_config](#ZH-CN_TOPIC_0000002441981005)**  
 
+-   **[svp\_acl\_prof\_subscribe\_config](#ZH-CN_TOPIC_0000002441980805)**  
 
+-   **[svp\_acl\_mdl\_config\_attr](#ZH-CN_TOPIC_0000002441980813)**  
 
+-   **[svp\_acl\_mdl\_config\_handle](#ZH-CN_TOPIC_0000002408421558)**  
 
+-   **[svp\_acl\_aapp\_input\_format](#ZH-CN_TOPIC_0000002408581566)**  
 
+-   **[svp\_acl\_aapp\_info](#ZH-CN_TOPIC_0000002441981153)**  
 
 ### svp\_acl\_error<a name="ZH-CN_TOPIC_0000002441980837"></a>
 
@@ -6003,7 +6156,7 @@ typedef int svp_acl_error;
 </td>
 <td class="cellrowborder" valign="top" width="28.162816281628167%" headers="mcps1.2.4.1.2 "><p id="p4940mcpsimp"><a name="p4940mcpsimp"></a><a name="p4940mcpsimp"></a>未初始化。</p>
 </td>
-<td class="cellrowborder" valign="top" width="33.33333333333333%" headers="mcps1.2.4.1.3 "><p id="p4942mcpsimp"><a name="p4942mcpsimp"></a><a name="p4942mcpsimp"></a>请检查是否已调用<a href="#ZH-CN_TOPIC_0000002408581446">svp_acl_init</a>接口进行初始化，请确保已调用接口，且在其它SVP ACL接口之前调用。</p>
+<td class="cellrowborder" valign="top" width="33.33333333333333%" headers="mcps1.2.4.1.3 "><p id="p4942mcpsimp"><a name="p4942mcpsimp"></a><a name="p4942mcpsimp"></a>请检查是否已调用<a href="#ZH-CN_TOPIC_0000002442020877">svp_acl_init</a>接口进行初始化，请确保已调用接口，且在其它SVP ACL接口之前调用。</p>
 </td>
 </tr>
 <tr id="row4947mcpsimp"><td class="cellrowborder" valign="top" width="38.503850385038504%" headers="mcps1.2.4.1.1 "><p id="p4949mcpsimp"><a name="p4949mcpsimp"></a><a name="p4949mcpsimp"></a>#define SVP_ACL_ERROR_REPEAT_INITIALIZE  100002</p>
@@ -6227,37 +6380,37 @@ typedef int svp_acl_error;
 </td>
 <td class="cellrowborder" valign="top" width="28.162816281628167%" headers="mcps1.2.4.1.2 "><p id="p5168mcpsimp"><a name="p5168mcpsimp"></a><a name="p5168mcpsimp"></a>重复订阅。</p>
 </td>
-<td class="cellrowborder" valign="top" width="33.33333333333333%" headers="mcps1.2.4.1.3 "><p id="p5170mcpsimp"><a name="p5170mcpsimp"></a><a name="p5170mcpsimp"></a>请检查针对同一个Stream，是否重复调用<a href="#ZH-CN_TOPIC_0000002408581490">svp_acl_rt_unsubscribe_report</a>接口。</p>
+<td class="cellrowborder" valign="top" width="33.33333333333333%" headers="mcps1.2.4.1.3 "><p id="p5170mcpsimp"><a name="p5170mcpsimp"></a><a name="p5170mcpsimp"></a>请检查针对同一个Stream，是否重复调用<a href="#ZH-CN_TOPIC_0000002441981193">svp_acl_rt_unsubscribe_report</a>接口。</p>
 </td>
 </tr>
 <tr id="row5173mcpsimp"><td class="cellrowborder" valign="top" width="38.503850385038504%" headers="mcps1.2.4.1.1 "><p id="p5175mcpsimp"><a name="p5175mcpsimp"></a><a name="p5175mcpsimp"></a>#define SVP_ACL_ERROR_STREAM_NOT_SUBSCRIBE  100034</p>
 </td>
 <td class="cellrowborder" valign="top" width="28.162816281628167%" headers="mcps1.2.4.1.2 "><p id="p5177mcpsimp"><a name="p5177mcpsimp"></a><a name="p5177mcpsimp"></a>Stream未订阅。</p>
 </td>
-<td class="cellrowborder" valign="top" width="33.33333333333333%" headers="mcps1.2.4.1.3 "><p id="p5179mcpsimp"><a name="p5179mcpsimp"></a><a name="p5179mcpsimp"></a>请检查是否已调用<a href="#ZH-CN_TOPIC_0000002408581548">svp_acl_rt_subscribe_report</a>接口。</p>
+<td class="cellrowborder" valign="top" width="33.33333333333333%" headers="mcps1.2.4.1.3 "><p id="p5179mcpsimp"><a name="p5179mcpsimp"></a><a name="p5179mcpsimp"></a>请检查是否已调用<a href="#ZH-CN_TOPIC_0000002408581574">svp_acl_rt_subscribe_report</a>接口。</p>
 </td>
 </tr>
 <tr id="row5182mcpsimp"><td class="cellrowborder" valign="top" width="38.503850385038504%" headers="mcps1.2.4.1.1 "><p id="p5184mcpsimp"><a name="p5184mcpsimp"></a><a name="p5184mcpsimp"></a>#define SVP_ACL_ERROR_THREAD_NOT_SUBSCRIBE  100035</p>
 </td>
 <td class="cellrowborder" valign="top" width="28.162816281628167%" headers="mcps1.2.4.1.2 "><p id="p5186mcpsimp"><a name="p5186mcpsimp"></a><a name="p5186mcpsimp"></a>线程未订阅。</p>
 </td>
-<td class="cellrowborder" valign="top" width="33.33333333333333%" headers="mcps1.2.4.1.3 "><p id="p5188mcpsimp"><a name="p5188mcpsimp"></a><a name="p5188mcpsimp"></a>请检查是否已调用<a href="#ZH-CN_TOPIC_0000002408581548">svp_acl_rt_subscribe_report</a>接口。</p>
+<td class="cellrowborder" valign="top" width="33.33333333333333%" headers="mcps1.2.4.1.3 "><p id="p5188mcpsimp"><a name="p5188mcpsimp"></a><a name="p5188mcpsimp"></a>请检查是否已调用<a href="#ZH-CN_TOPIC_0000002408581574">svp_acl_rt_subscribe_report</a>接口。</p>
 </td>
 </tr>
 <tr id="row5191mcpsimp"><td class="cellrowborder" valign="top" width="38.503850385038504%" headers="mcps1.2.4.1.1 "><p id="p5193mcpsimp"><a name="p5193mcpsimp"></a><a name="p5193mcpsimp"></a>#define SVP_ACL_ERROR_WAIT_CALLBACK_TIMEOUT  100036</p>
 </td>
 <td class="cellrowborder" valign="top" width="28.162816281628167%" headers="mcps1.2.4.1.2 "><p id="p5195mcpsimp"><a name="p5195mcpsimp"></a><a name="p5195mcpsimp"></a>等待callback超时。</p>
 </td>
-<td class="cellrowborder" valign="top" width="33.33333333333333%" headers="mcps1.2.4.1.3 "><p id="p5197mcpsimp"><a name="p5197mcpsimp"></a><a name="p5197mcpsimp"></a>请检查是否已调用<a href="#ZH-CN_TOPIC_0000002408581554">svp_acl_rt_launch_callback</a>接口下发callback任务；</p>
-<p id="p5200mcpsimp"><a name="p5200mcpsimp"></a><a name="p5200mcpsimp"></a>请检查<a href="#ZH-CN_TOPIC_0000002408581560">svp_acl_rt_process_report</a>接口中超时时间是否合理；</p>
-<p id="p5203mcpsimp"><a name="p5203mcpsimp"></a><a name="p5203mcpsimp"></a>请检查callback任务是否已经处理完成，如果已处理完成，但还调用<a href="#ZH-CN_TOPIC_0000002408581560">svp_acl_rt_process_report</a>接口，则需优化代码逻辑。</p>
+<td class="cellrowborder" valign="top" width="33.33333333333333%" headers="mcps1.2.4.1.3 "><p id="p5197mcpsimp"><a name="p5197mcpsimp"></a><a name="p5197mcpsimp"></a>请检查是否已调用<a href="#ZH-CN_TOPIC_0000002442020997">svp_acl_rt_launch_callback</a>接口下发callback任务；</p>
+<p id="p5200mcpsimp"><a name="p5200mcpsimp"></a><a name="p5200mcpsimp"></a>请检查<a href="#ZH-CN_TOPIC_0000002441981129">svp_acl_rt_process_report</a>接口中超时时间是否合理；</p>
+<p id="p5203mcpsimp"><a name="p5203mcpsimp"></a><a name="p5203mcpsimp"></a>请检查callback任务是否已经处理完成，如果已处理完成，但还调用<a href="#ZH-CN_TOPIC_0000002441981129">svp_acl_rt_process_report</a>接口，则需优化代码逻辑。</p>
 </td>
 </tr>
 <tr id="row5206mcpsimp"><td class="cellrowborder" valign="top" width="38.503850385038504%" headers="mcps1.2.4.1.1 "><p id="p5208mcpsimp"><a name="p5208mcpsimp"></a><a name="p5208mcpsimp"></a>#define SVP_ACL_ERROR_REPEAT_FINALIZE  100037</p>
 </td>
 <td class="cellrowborder" valign="top" width="28.162816281628167%" headers="mcps1.2.4.1.2 "><p id="p5210mcpsimp"><a name="p5210mcpsimp"></a><a name="p5210mcpsimp"></a>重复去初始化。</p>
 </td>
-<td class="cellrowborder" valign="top" width="33.33333333333333%" headers="mcps1.2.4.1.3 "><p id="p5212mcpsimp"><a name="p5212mcpsimp"></a><a name="p5212mcpsimp"></a>请检查是否重复调用<a href="#ZH-CN_TOPIC_0000002408581440">svp_acl_finalize</a>接口进行去初始化。</p>
+<td class="cellrowborder" valign="top" width="33.33333333333333%" headers="mcps1.2.4.1.3 "><p id="p5212mcpsimp"><a name="p5212mcpsimp"></a><a name="p5212mcpsimp"></a>请检查是否重复调用<a href="#ZH-CN_TOPIC_0000002441980877">svp_acl_finalize</a>接口进行去初始化。</p>
 </td>
 </tr>
 <tr id="row5215mcpsimp"><td class="cellrowborder" valign="top" width="38.503850385038504%" headers="mcps1.2.4.1.1 "><p id="p5217mcpsimp"><a name="p5217mcpsimp"></a><a name="p5217mcpsimp"></a>#define SVP_ACL_ERROR_NOT_STATIC_<em id="i5218mcpsimp"><a name="i5218mcpsimp"></a><a name="i5218mcpsimp"></a>AA</em>PP  100038</p>
@@ -6292,7 +6445,7 @@ typedef int svp_acl_error;
 </td>
 <td class="cellrowborder" valign="top" width="28.162816281628167%" headers="mcps1.2.4.1.2 "><p id="p5249mcpsimp"><a name="p5249mcpsimp"></a><a name="p5249mcpsimp"></a>已存在采集Profiling数据的任务。</p>
 </td>
-<td class="cellrowborder" valign="top" width="33.33333333333333%" headers="mcps1.2.4.1.3 "><a name="ul5251mcpsimp"></a><a name="ul5251mcpsimp"></a><ul id="ul5251mcpsimp"><li>请检查在调用prof接口配置Profiling性能数据采集信息前，是否已调用<a href="#ZH-CN_TOPIC_0000002408581446">svp_acl_init</a>接口配置Profiling信息，如是，请调整代码逻辑，保留一种方式配置Profiling信息即可。</li><li>请检查是否对同一个Device重复下发了多次Profiling配置。</li></ul>
+<td class="cellrowborder" valign="top" width="33.33333333333333%" headers="mcps1.2.4.1.3 "><a name="ul5251mcpsimp"></a><a name="ul5251mcpsimp"></a><ul id="ul5251mcpsimp"><li>请检查在调用prof接口配置Profiling性能数据采集信息前，是否已调用<a href="#ZH-CN_TOPIC_0000002442020877">svp_acl_init</a>接口配置Profiling信息，如是，请调整代码逻辑，保留一种方式配置Profiling信息即可。</li><li>请检查是否对同一个Device重复下发了多次Profiling配置。</li></ul>
 </td>
 </tr>
 <tr id="row5256mcpsimp"><td class="cellrowborder" valign="top" width="38.503850385038504%" headers="mcps1.2.4.1.1 "><p id="p5258mcpsimp"><a name="p5258mcpsimp"></a><a name="p5258mcpsimp"></a>#define SVP_ACL_ERROR_PROF_NOT_RUN  100043</p>
@@ -6306,7 +6459,7 @@ typedef int svp_acl_error;
 </td>
 <td class="cellrowborder" valign="top" width="28.162816281628167%" headers="mcps1.2.4.1.2 "><p id="p5267mcpsimp"><a name="p5267mcpsimp"></a><a name="p5267mcpsimp"></a>已存在获取Dump数据的任务。</p>
 </td>
-<td class="cellrowborder" valign="top" width="33.33333333333333%" headers="mcps1.2.4.1.3 "><p id="p5269mcpsimp"><a name="p5269mcpsimp"></a><a name="p5269mcpsimp"></a>请检查在调用Dump接口配置Dump信息前，是否已调用<a href="#ZH-CN_TOPIC_0000002408581446">svp_acl_init</a>接口配置Dump信息，如是，请调整代码逻辑，保留一种方式配置Dump信息即可。</p>
+<td class="cellrowborder" valign="top" width="33.33333333333333%" headers="mcps1.2.4.1.3 "><p id="p5269mcpsimp"><a name="p5269mcpsimp"></a><a name="p5269mcpsimp"></a>请检查在调用Dump接口配置Dump信息前，是否已调用<a href="#ZH-CN_TOPIC_0000002442020877">svp_acl_init</a>接口配置Dump信息，如是，请调整代码逻辑，保留一种方式配置Dump信息即可。</p>
 </td>
 </tr>
 <tr id="row5272mcpsimp"><td class="cellrowborder" valign="top" width="38.503850385038504%" headers="mcps1.2.4.1.1 "><p id="p5274mcpsimp"><a name="p5274mcpsimp"></a><a name="p5274mcpsimp"></a>#define SVP_ACL_ERROR_DUMP_NOT_RUN  100045</p>
@@ -6334,7 +6487,7 @@ typedef int svp_acl_error;
 </td>
 <td class="cellrowborder" valign="top" width="28.162816281628167%" headers="mcps1.2.4.1.2 "><p id="p5297mcpsimp"><a name="p5297mcpsimp"></a><a name="p5297mcpsimp"></a>无效的算子缓存信息老化配置。</p>
 </td>
-<td class="cellrowborder" valign="top" width="33.33333333333333%" headers="mcps1.2.4.1.3 "><p id="p5299mcpsimp"><a name="p5299mcpsimp"></a><a name="p5299mcpsimp"></a>请检查算子缓存信息老化配置，参考<a href="#ZH-CN_TOPIC_0000002408581446">svp_acl_init</a>处的配置说明及示例。</p>
+<td class="cellrowborder" valign="top" width="33.33333333333333%" headers="mcps1.2.4.1.3 "><p id="p5299mcpsimp"><a name="p5299mcpsimp"></a><a name="p5299mcpsimp"></a>请检查算子缓存信息老化配置，参考<a href="#ZH-CN_TOPIC_0000002442020877">svp_acl_init</a>处的配置说明及示例。</p>
 </td>
 </tr>
 <tr id="row5302mcpsimp"><td class="cellrowborder" valign="top" width="38.503850385038504%" headers="mcps1.2.4.1.1 "><p id="p5304mcpsimp"><a name="p5304mcpsimp"></a><a name="p5304mcpsimp"></a>#define SVP_ACL_ERROR_BAD_ALLOC  200000</p>
@@ -6455,7 +6608,7 @@ typedef int svp_acl_error;
 >![](public_sys-resources/icon-note.gif) **说明：** 
 >返回码定义规则：
 >-   规则1：开发人员的环境异常或者代码逻辑错误，可以通过优化环境或代码逻辑的方式解决问题，此时返回码定义为：1XXXXX。
->-   规则2：资源不足（Stream、内存等）、开发人员编程时使用的的接口或参数与当前硬件不匹配，可以通过在编程时合理使用资源的方式解决，此时返回码定义为：2XXXXX。
+>-   规则2：资源不足（Stream、内存等）、开发人员编程时使用的接口或参数与当前硬件不匹配，可以通过在编程时合理使用资源的方式解决，此时返回码定义为：2XXXXX。
 >-   规则3：业务功能异常，比如队列满、队列空等，此时返回码定义为3XXXXX。
 >-   规则4：软硬件内部异常，包括软件内部错误、Device执行失败等，用户无法解决问题，需要将问题反馈给软件工程师的，此时返回码定义为：5XXXXX。
 >-   规则5：无法识别的错误，当前都映射为500000。
@@ -6556,11 +6709,17 @@ typedef struct svp_acl_mdl_io_dims {
 
 ### svp\_acl\_data\_buffer<a name="ZH-CN_TOPIC_0000002408581490"></a>
 
+-   **[svp\_acl\_create\_data\_buffer](#ZH-CN_TOPIC_0000002408421762)**  
 
+-   **[svp\_acl\_destroy\_data\_buffer](#ZH-CN_TOPIC_0000002408421986)**  
 
+-   **[svp\_acl\_get\_data\_buffer\_addr](#ZH-CN_TOPIC_0000002408581906)**  
 
+-   **[svp\_acl\_get\_data\_buffer\_size](#ZH-CN_TOPIC_0000002442020681)**  
 
+-   **[svp\_acl\_get\_data\_buffer\_stride](#ZH-CN_TOPIC_0000002441980833)**  
 
+-   **[svp\_acl\_update\_data\_buffer](#ZH-CN_TOPIC_0000002441981029)**  
 
 #### svp\_acl\_create\_data\_buffer<a name="ZH-CN_TOPIC_0000002408421762"></a>
 
@@ -6588,7 +6747,7 @@ svp_acl_data_buffer *svp_acl_create_data_buffer(void *data, size_t size, size_t 
 <td class="cellrowborder" valign="top" width="10.89%" headers="mcps1.1.4.1.2 "><p id="p6866mcpsimp"><a name="p6866mcpsimp"></a><a name="p6866mcpsimp"></a>输入</p>
 </td>
 <td class="cellrowborder" valign="top" width="68.32000000000001%" headers="mcps1.1.4.1.3 "><p id="p6868mcpsimp"><a name="p6868mcpsimp"></a><a name="p6868mcpsimp"></a>存放数据的内存地址。</p>
-<p id="p6869mcpsimp"><a name="p6869mcpsimp"></a><a name="p6869mcpsimp"></a>该内存需由用户自行管理，调用<a href="#ZH-CN_TOPIC_0000002408581654">svp_acl_rt_malloc</a>接口/<a href="#ZH-CN_TOPIC_0000002408581482">svp_acl_rt_free</a>接口申请/释放内存，或调用<a href="#ZH-CN_TOPIC_0000002408581660">svp_acl_rt_malloc_host</a>接口/<a href="#ZH-CN_TOPIC_0000002408581470">svp_acl_rt_free_host</a>接口申请/释放内存。</p>
+<p id="p6869mcpsimp"><a name="p6869mcpsimp"></a><a name="p6869mcpsimp"></a>该内存需由用户自行管理，调用<a href="#ZH-CN_TOPIC_0000002408581654">svp_acl_rt_malloc</a>接口/<a href="#ZH-CN_TOPIC_0000002408581838">svp_acl_rt_free</a>接口申请/释放内存，或调用<a href="#ZH-CN_TOPIC_0000002408421714">svp_acl_rt_malloc_host</a>接口/<a href="#ZH-CN_TOPIC_0000002408421954">svp_acl_rt_free_host</a>接口申请/释放内存。</p>
 </td>
 </tr>
 <tr id="row6878mcpsimp"><td class="cellrowborder" valign="top" width="20.79%" headers="mcps1.1.4.1.1 "><p id="p6880mcpsimp"><a name="p6880mcpsimp"></a><a name="p6880mcpsimp"></a>size</p>
@@ -6597,7 +6756,7 @@ svp_acl_data_buffer *svp_acl_create_data_buffer(void *data, size_t size, size_t 
 </td>
 <td class="cellrowborder" valign="top" width="68.32000000000001%" headers="mcps1.1.4.1.3 "><p id="p6884mcpsimp"><a name="p6884mcpsimp"></a><a name="p6884mcpsimp"></a>内存大小，单位Byte。</p>
 <p id="p6885mcpsimp"><a name="p6885mcpsimp"></a><a name="p6885mcpsimp"></a>size大小：(0, 0xFFFFFFFF]。</p>
-<p id="p6886mcpsimp"><a name="p6886mcpsimp"></a><a name="p6886mcpsimp"></a>可参照<a href="#ZH-CN_TOPIC_0000002408581678">svp_acl_mdl_get_input_size_by_index</a>或<a href="#ZH-CN_TOPIC_0000002408581684">svp_acl_mdl_get_output_size_by_index</a>中描述的计算方法计算获取。</p>
+<p id="p6886mcpsimp"><a name="p6886mcpsimp"></a><a name="p6886mcpsimp"></a>可参照<a href="#ZH-CN_TOPIC_0000002408581926">svp_acl_mdl_get_input_size_by_index</a>或<a href="#ZH-CN_TOPIC_0000002408581530">svp_acl_mdl_get_output_size_by_index</a>中描述的计算方法计算获取。</p>
 </td>
 </tr>
 <tr id="row6889mcpsimp"><td class="cellrowborder" valign="top" width="20.79%" headers="mcps1.1.4.1.1 "><p id="p6891mcpsimp"><a name="p6891mcpsimp"></a><a name="p6891mcpsimp"></a>stride</p>
@@ -6606,7 +6765,7 @@ svp_acl_data_buffer *svp_acl_create_data_buffer(void *data, size_t size, size_t 
 </td>
 <td class="cellrowborder" valign="top" width="68.32000000000001%" headers="mcps1.1.4.1.3 "><p id="p6895mcpsimp"><a name="p6895mcpsimp"></a><a name="p6895mcpsimp"></a>跨度大小，用于逻辑快速跳转到下一行，要求16字节对齐，单位Byte。</p>
 <p id="p6896mcpsimp"><a name="p6896mcpsimp"></a><a name="p6896mcpsimp"></a>stride大小：(0, 0xFFFFFFFF)。</p>
-<p id="p6897mcpsimp"><a name="p6897mcpsimp"></a><a name="p6897mcpsimp"></a>可参照<a href="#ZH-CN_TOPIC_0000002408581690">svp_acl_mdl_get_input_default_stride</a>或<a href="#ZH-CN_TOPIC_0000002408581696">svp_acl_mdl_get_output_default_stride</a>中的计算方法计算获得。</p>
+<p id="p6897mcpsimp"><a name="p6897mcpsimp"></a><a name="p6897mcpsimp"></a>可参照<a href="#ZH-CN_TOPIC_0000002408421738">svp_acl_mdl_get_input_default_stride</a>或<a href="#ZH-CN_TOPIC_0000002408421746">svp_acl_mdl_get_output_default_stride</a>中的计算方法计算获得。</p>
 </td>
 </tr>
 </tbody>
@@ -6785,7 +6944,7 @@ svp_acl_error svp_acl_update_data_buffer(svp_acl_data_buffer *data_buffer, void 
 <td class="cellrowborder" valign="top" width="25%" headers="mcps1.1.4.1.2 "><p id="p7435mcpsimp"><a name="p7435mcpsimp"></a><a name="p7435mcpsimp"></a>输入</p>
 </td>
 <td class="cellrowborder" valign="top" width="46%" headers="mcps1.1.4.1.3 "><p id="p7437mcpsimp"><a name="p7437mcpsimp"></a><a name="p7437mcpsimp"></a>存放数据的内存地址。</p>
-<p id="p7438mcpsimp"><a name="p7438mcpsimp"></a><a name="p7438mcpsimp"></a>该内存需由用户自行管理，调用<a href="#ZH-CN_TOPIC_0000002408581654">svp_acl_rt_malloc</a>接口/<a href="#ZH-CN_TOPIC_0000002408581482">svp_acl_rt_free</a>接口申请/释放内存，或调用<a href="#ZH-CN_TOPIC_0000002408581660">svp_acl_rt_malloc_host</a>接口/<a href="#ZH-CN_TOPIC_0000002408581470">svp_acl_rt_free_host</a>接口申请/释放内存。</p>
+<p id="p7438mcpsimp"><a name="p7438mcpsimp"></a><a name="p7438mcpsimp"></a>该内存需由用户自行管理，调用<a href="#ZH-CN_TOPIC_0000002408581654">svp_acl_rt_malloc</a>接口/<a href="#ZH-CN_TOPIC_0000002408581838">svp_acl_rt_free</a>接口申请/释放内存，或调用<a href="#ZH-CN_TOPIC_0000002408421714">svp_acl_rt_malloc_host</a>接口/<a href="#ZH-CN_TOPIC_0000002408421954">svp_acl_rt_free_host</a>接口申请/释放内存。</p>
 </td>
 </tr>
 <tr id="row7447mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.4.1.1 "><p id="p7449mcpsimp"><a name="p7449mcpsimp"></a><a name="p7449mcpsimp"></a>size</p>
@@ -6801,8 +6960,8 @@ svp_acl_error svp_acl_update_data_buffer(svp_acl_data_buffer *data_buffer, void 
 <td class="cellrowborder" valign="top" width="25%" headers="mcps1.1.4.1.2 "><p id="p7459mcpsimp"><a name="p7459mcpsimp"></a><a name="p7459mcpsimp"></a>输入</p>
 </td>
 <td class="cellrowborder" valign="top" width="46%" headers="mcps1.1.4.1.3 "><p id="p7461mcpsimp"><a name="p7461mcpsimp"></a><a name="p7461mcpsimp"></a>跨度大小，用于逻辑快速跳转到下一行，需要16字节对齐，单位Byte。</p>
-<p id="p7462mcpsimp"><a name="p7462mcpsimp"></a><a name="p7462mcpsimp"></a>stirde大小：(0, 0xFFFFFFFF)。</p>
-<p id="p7463mcpsimp"><a name="p7463mcpsimp"></a><a name="p7463mcpsimp"></a>可参照<a href="#ZH-CN_TOPIC_0000002408581690">svp_acl_mdl_get_input_default_stride</a>或<a href="#ZH-CN_TOPIC_0000002408581696">svp_acl_mdl_get_output_default_stride</a>参照中的计算方法计算获得。</p>
+<p id="p7462mcpsimp"><a name="p7462mcpsimp"></a><a name="p7462mcpsimp"></a>stride大小：(0, 0xFFFFFFFF)。</p>
+<p id="p7463mcpsimp"><a name="p7463mcpsimp"></a><a name="p7463mcpsimp"></a>可参照<a href="#ZH-CN_TOPIC_0000002408421738">svp_acl_mdl_get_input_default_stride</a>或<a href="#ZH-CN_TOPIC_0000002408421746">svp_acl_mdl_get_output_default_stride</a>参照中的计算方法计算获得。</p>
 </td>
 </tr>
 </tbody>
@@ -6812,10 +6971,15 @@ svp_acl_error svp_acl_update_data_buffer(svp_acl_data_buffer *data_buffer, void 
 
 ### svp\_acl\_mdl\_dataset<a name="ZH-CN_TOPIC_0000002441981101"></a>
 
+-   **[svp\_acl\_mdl\_create\_dataset](#ZH-CN_TOPIC_0000002408581522)**  
 
+-   **[svp\_acl\_mdl\_destroy\_dataset](#ZH-CN_TOPIC_0000002408421806)**  
 
+-   **[svp\_acl\_mdl\_add\_dataset\_buffer](#ZH-CN_TOPIC_0000002441981285)**  
 
+-   **[svp\_acl\_mdl\_get\_dataset\_num\_buffers](#ZH-CN_TOPIC_0000002408581914)**  
 
+-   **[svp\_acl\_mdl\_get\_dataset\_buffer](#ZH-CN_TOPIC_0000002442020709)**  
 
 #### svp\_acl\_mdl\_create\_dataset<a name="ZH-CN_TOPIC_0000002408581522"></a>
 
@@ -6964,14 +7128,14 @@ svp_acl_data_buffer *svp_acl_mdl_get_dataset_buffer(const svp_acl_mdl_dataset *d
 </td>
 <td class="cellrowborder" valign="top" width="25%" headers="mcps1.1.4.1.2 "><p id="p3903mcpsimp"><a name="p3903mcpsimp"></a><a name="p3903mcpsimp"></a>输入</p>
 </td>
-<td class="cellrowborder" valign="top" width="46%" headers="mcps1.1.4.1.3 "><p id="p3905mcpsimp"><a name="p3905mcpsimp"></a><a name="p3905mcpsimp"></a><a href="#ZH-CN_TOPIC_0000002408581566">svp_acl_mdl_dataset</a>地址。</p>
+<td class="cellrowborder" valign="top" width="46%" headers="mcps1.1.4.1.3 "><p id="p3905mcpsimp"><a name="p3905mcpsimp"></a><a name="p3905mcpsimp"></a><a href="#ZH-CN_TOPIC_0000002441981101">svp_acl_mdl_dataset</a>地址。</p>
 </td>
 </tr>
 <tr id="row3906mcpsimp"><td class="cellrowborder" valign="top" width="28.999999999999996%" headers="mcps1.1.4.1.1 "><p id="p3908mcpsimp"><a name="p3908mcpsimp"></a><a name="p3908mcpsimp"></a>index</p>
 </td>
 <td class="cellrowborder" valign="top" width="25%" headers="mcps1.1.4.1.2 "><p id="p3910mcpsimp"><a name="p3910mcpsimp"></a><a name="p3910mcpsimp"></a>输入</p>
 </td>
-<td class="cellrowborder" valign="top" width="46%" headers="mcps1.1.4.1.3 "><p id="p3912mcpsimp"><a name="p3912mcpsimp"></a><a name="p3912mcpsimp"></a>表明获取的是第几个<a href="#ZH-CN_TOPIC_0000002408581572">svp_acl_data_buffer</a>。</p>
+<td class="cellrowborder" valign="top" width="46%" headers="mcps1.1.4.1.3 "><p id="p3912mcpsimp"><a name="p3912mcpsimp"></a><a name="p3912mcpsimp"></a>表明获取的是第几个<a href="#ZH-CN_TOPIC_0000002408581490">svp_acl_data_buffer</a>。</p>
 </td>
 </tr>
 </tbody>
@@ -6984,25 +7148,45 @@ svp_acl_data_buffer *svp_acl_mdl_get_dataset_buffer(const svp_acl_mdl_dataset *d
 
 ### svp\_acl\_mdl\_desc<a name="ZH-CN_TOPIC_0000002441980853"></a>
 
+-   **[svp\_acl\_mdl\_create\_desc](#ZH-CN_TOPIC_0000002442020705)**  
 
+-   **[svp\_acl\_mdl\_destroy\_desc](#ZH-CN_TOPIC_0000002408581806)**  
 
+-   **[svp\_acl\_mdl\_get\_desc](#ZH-CN_TOPIC_0000002442020761)**  
 
+-   **[svp\_acl\_mdl\_get\_num\_inputs](#ZH-CN_TOPIC_0000002408581782)**  
 
+-   **[svp\_acl\_mdl\_get\_num\_outputs](#ZH-CN_TOPIC_0000002441981297)**  
 
+-   **[svp\_acl\_mdl\_get\_input\_size\_by\_index](#ZH-CN_TOPIC_0000002408581926)**  
 
+-   **[svp\_acl\_mdl\_get\_output\_size\_by\_index](#ZH-CN_TOPIC_0000002408581530)**  
 
+-   **[svp\_acl\_mdl\_get\_input\_dims](#ZH-CN_TOPIC_0000002442020721)**  
 
+-   **[svp\_acl\_mdl\_get\_output\_dims](#ZH-CN_TOPIC_0000002442020729)**  
 
+-   **[svp\_acl\_mdl\_get\_input\_name\_by\_index](#ZH-CN_TOPIC_0000002442021069)**  
 
+-   **[svp\_acl\_mdl\_get\_output\_name\_by\_index](#ZH-CN_TOPIC_0000002442021089)**  
 
+-   **[svp\_acl\_mdl\_get\_input\_format](#ZH-CN_TOPIC_0000002408421922)**  
 
+-   **[svp\_acl\_mdl\_get\_output\_format](#ZH-CN_TOPIC_0000002408422026)**  
 
+-   **[svp\_acl\_mdl\_get\_input\_data\_type](#ZH-CN_TOPIC_0000002441981305)**  
 
+-   **[svp\_acl\_mdl\_get\_output\_data\_type](#ZH-CN_TOPIC_0000002408421654)**  
 
+-   **[svp\_acl\_mdl\_get\_input\_index\_by\_name](#ZH-CN_TOPIC_0000002408421626)**  
 
+-   **[svp\_acl\_mdl\_get\_output\_index\_by\_name](#ZH-CN_TOPIC_0000002408421642)**  
 
+-   **[svp\_acl\_mdl\_get\_input\_default\_stride](#ZH-CN_TOPIC_0000002408421738)**  
 
+-   **[svp\_acl\_mdl\_get\_output\_default\_stride](#ZH-CN_TOPIC_0000002408421746)**  
 
+-   **[svp\_acl\_mdl\_get\_dynamic\_hw](#ZH-CN_TOPIC_0000002442021005)**  
 
 #### svp\_acl\_mdl\_create\_desc<a name="ZH-CN_TOPIC_0000002442020705"></a>
 
@@ -7084,7 +7268,7 @@ svp_acl_error svp_acl_mdl_get_desc(svp_acl_mdl_desc *model_desc, uint32_t model_
 <td class="cellrowborder" valign="top" width="10.89%" headers="mcps1.1.4.1.2 "><p id="p6105mcpsimp"><a name="p6105mcpsimp"></a><a name="p6105mcpsimp"></a>输入</p>
 </td>
 <td class="cellrowborder" valign="top" width="68.32000000000001%" headers="mcps1.1.4.1.3 "><p id="p6107mcpsimp"><a name="p6107mcpsimp"></a><a name="p6107mcpsimp"></a>模型ID。</p>
-<p id="p6108mcpsimp"><a name="p6108mcpsimp"></a><a name="p6108mcpsimp"></a><a href="#ZH-CN_TOPIC_0000002408581744">svp_acl_mdl_load_from_mem</a>接口加载模型成功后，会返回模型ID。</p>
+<p id="p6108mcpsimp"><a name="p6108mcpsimp"></a><a name="p6108mcpsimp"></a><a href="#ZH-CN_TOPIC_0000002408422002">svp_acl_mdl_load_from_mem</a>接口加载模型成功后，会返回模型ID。</p>
 </td>
 </tr>
 </tbody>
@@ -7105,7 +7289,6 @@ size_t svp_acl_mdl_get_num_inputs(const svp_acl_mdl_desc *model_desc)
 参数说明：
 
 <a name="table5439mcpsimp"></a>
-
 <table><thead align="left"><tr id="row5445mcpsimp"><th class="cellrowborder" valign="top" width="28.999999999999996%" id="mcps1.1.4.1.1"><p id="p5447mcpsimp"><a name="p5447mcpsimp"></a><a name="p5447mcpsimp"></a>参数名</p>
 </th>
 <th class="cellrowborder" valign="top" width="25%" id="mcps1.1.4.1.2"><p id="p5449mcpsimp"><a name="p5449mcpsimp"></a><a name="p5449mcpsimp"></a>输入/输出</p>
@@ -7133,13 +7316,12 @@ size_t svp_acl_mdl_get_num_inputs(const svp_acl_mdl_desc *model_desc)
 函数原型：
 
 ```
-size_t svp_acl_mdl_get_num_outputs(const svp_acl_mdl_desc *modelDesc)
+size_t svp_acl_mdl_get_num_outputs(const svp_acl_mdl_desc *model_desc)
 ```
 
 参数说明：
 
 <a name="table4047mcpsimp"></a>
-
 <table><thead align="left"><tr id="row4053mcpsimp"><th class="cellrowborder" valign="top" width="28.999999999999996%" id="mcps1.1.4.1.1"><p id="p4055mcpsimp"><a name="p4055mcpsimp"></a><a name="p4055mcpsimp"></a>参数名</p>
 </th>
 <th class="cellrowborder" valign="top" width="25%" id="mcps1.1.4.1.2"><p id="p4057mcpsimp"><a name="p4057mcpsimp"></a><a name="p4057mcpsimp"></a>输入/输出</p>
@@ -7938,7 +8120,9 @@ typedef struct {
 
 ### svp\_acl\_prof\_config<a name="ZH-CN_TOPIC_0000002441981005"></a>
 
+-   **[svp\_acl\_prof\_create\_config](#ZH-CN_TOPIC_0000002408581966)**  
 
+-   **[svp\_acl\_prof\_destroy\_config](#ZH-CN_TOPIC_0000002441981317)**  
 
 #### svp\_acl\_prof\_create\_config<a name="ZH-CN_TOPIC_0000002408581966"></a>
 
@@ -8044,7 +8228,9 @@ svp_acl_error svp_acl_prof_destroy_config(const svp_acl_prof_config *profiler_co
 
 ### svp\_acl\_prof\_subscribe\_config<a name="ZH-CN_TOPIC_0000002441980805"></a>
 
+-   **[svp\_acl\_prof\_create\_subscribe\_config](#ZH-CN_TOPIC_0000002442020813)**  
 
+-   **[svp\_acl\_prof\_destroy\_subscribe\_config](#ZH-CN_TOPIC_0000002408421702)**  
 
 #### svp\_acl\_prof\_create\_subscribe\_config<a name="ZH-CN_TOPIC_0000002442020813"></a>
 
@@ -8126,7 +8312,7 @@ svp_acl_error svp_acl_prof_destroy_subscribe_config(const svp_acl_prof_subscribe
 </td>
 <td class="cellrowborder" valign="top" width="19%" headers="mcps1.1.4.1.2 "><p id="p594mcpsimp"><a name="p594mcpsimp"></a><a name="p594mcpsimp"></a>输入</p>
 </td>
-<td class="cellrowborder" valign="top" width="52%" headers="mcps1.1.4.1.3 "><p id="p596mcpsimp"><a name="p596mcpsimp"></a><a name="p596mcpsimp"></a>待销毁的<a href="#ZH-CN_TOPIC_0000002408581538">svp_acl_prof_subscribe_config</a>类型的指针。</p>
+<td class="cellrowborder" valign="top" width="52%" headers="mcps1.1.4.1.3 "><p id="p596mcpsimp"><a name="p596mcpsimp"></a><a name="p596mcpsimp"></a>待销毁的<a href="#ZH-CN_TOPIC_0000002441980805">svp_acl_prof_subscribe_config</a>类型的指针。</p>
 </td>
 </tr>
 </tbody>
@@ -8188,7 +8374,9 @@ SVP\_ACL\_MDL\_LOAD\_TYPE\_SIZET（表示模型加载方式）的取值使用如
 
 ### svp\_acl\_mdl\_config\_handle<a name="ZH-CN_TOPIC_0000002408421558"></a>
 
+-   **[svp\_acl\_mdl\_create\_config\_handle](#ZH-CN_TOPIC_0000002441980841)**  
 
+-   **[svp\_acl\_mdl\_destroy\_config\_handle](#ZH-CN_TOPIC_0000002442020777)**  
 
 #### svp\_acl\_mdl\_create\_config\_handle<a name="ZH-CN_TOPIC_0000002441980841"></a>
 
@@ -8292,8 +8480,11 @@ typedef struct svp_acl_aapp_info {
 
 # SVP ACL样例使用指导<a name="ZH-CN_TOPIC_0000002441981261"></a>
 
+-   **[总体说明](#ZH-CN_TOPIC_0000002442020909)**  
 
+-   **[基于Caffe ResNet-50网络实现图片分类（同步推理）](#ZH-CN_TOPIC_0000002442020893)**  
 
+-   **[基于Caffe ResNet-50网络实现图片分类（异步推理）](#ZH-CN_TOPIC_0000002408581502)**  
 
 ## 总体说明<a name="ZH-CN_TOPIC_0000002442020909"></a>
 
@@ -8301,13 +8492,19 @@ typedef struct svp_acl_aapp_info {
 
 ## 基于Caffe ResNet-50网络实现图片分类（同步推理）<a name="ZH-CN_TOPIC_0000002442020893"></a>
 
+-   **[样例介绍](#ZH-CN_TOPIC_0000002442021121)**  
 
+-   **[编译及运行应用](#ZH-CN_TOPIC_0000002442021109)**  
 
 ### 样例介绍<a name="ZH-CN_TOPIC_0000002442021121"></a>
 
+-   **[获取样例](#ZH-CN_TOPIC_0000002441981273)**  
 
+-   **[功能描述](#ZH-CN_TOPIC_0000002408581478)**  
 
+-   **[原理介绍](#ZH-CN_TOPIC_0000002441981025)**  
 
+-   **[目录结构](#ZH-CN_TOPIC_0000002408581474)**  
 
 #### 获取样例<a name="ZH-CN_TOPIC_0000002441981273"></a>
 
@@ -8419,12 +8616,12 @@ processModel.DumpModelOutputResult();</pre>
     2.  参考《ATC工具使用指南》中的“使用入门”，执行“准备动作”，包括获取工具、设置环境变量。
     3.  准备数据。
 
-        从https://gitee.com/ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/resnet50/ATC\_resnet50\_caffe\_AE 链接中获取ResNet-50网络的模型文件（\*.prototxt）、预训练模型文件（\*.caffemodel），并以运行用户将获取的文件上传至开发环境的“样例目录/caffe\_model”目录下，也可查看README.md。如果目录不存在，需要自行创建。
+        从https://gitee.com/ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/resnet50/ATC_resnet50_caffe_AE 链接中获取ResNet-50网络的模型文件（*.prototxt）、预训练模型文件（*.caffemodel），并以运行用户将获取的文件上传至开发环境的“样例目录/caffe_model”目录下，也可查看README.md。如果目录不存在，需要自行创建。
 
         请从以下链接获取该样例的输入图片，并以运行用户将获取的文件上传至开发环境的“样例目录/data”目录下。如果目录不存在，需自行创建。
 
-        -   [https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/dog1\_1024\_683.jpg](https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/dog1_1024_683.jpg)
-        -   [https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/dog2\_1024\_683.jpg](https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/dog2_1024_683.jpg)
+        -   [https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/dog1_1024_683.jpg](https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/dog1_1024_683.jpg)
+        -   [https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/dog2_1024_683.jpg](https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/dog2_1024_683.jpg)
 
             在“样例目录/data”目录下，创建参考图片列表文件（image\_ref\_list.txt）并在其中填写图片路径data/ dog1\_1024\_683.jpg及data/ dog2\_1024\_683.jpg，各路径换行填写。
 
@@ -8564,13 +8761,19 @@ processModel.DumpModelOutputResult();</pre>
 
 ## 基于Caffe ResNet-50网络实现图片分类（异步推理）<a name="ZH-CN_TOPIC_0000002408581502"></a>
 
+-   **[样例介绍](#ZH-CN_TOPIC_0000002408421782)**  
 
+-   **[编译及运行应用](#ZH-CN_TOPIC_0000002408422014)**  
 
 ### 样例介绍<a name="ZH-CN_TOPIC_0000002408421782"></a>
 
+-   **[获取样例](#ZH-CN_TOPIC_0000002408581498)**  
 
+-   **[功能描述](#ZH-CN_TOPIC_0000002408421978)**  
 
+-   **[原理介绍](#ZH-CN_TOPIC_0000002408581814)**  
 
+-   **[目录结构](#ZH-CN_TOPIC_0000002441981141)**  
 
 #### 获取样例<a name="ZH-CN_TOPIC_0000002408581498"></a>
 
@@ -8685,12 +8888,12 @@ processModel.DumpModelOutputResult();</pre>
     2.  参考《ATC工具使用指南》中的“使用入门”，执行“准备动作”，包括获取工具、设置环境变量。
     3.  准备数据。
 
-        从https://gitee.com/ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/resnet50/ATC\_resnet50\_caffe\_AE 链接中获取ResNet-50网络的模型文件（\*.prototxt）、预训练模型文件（\*.caffemodel），并以运行用户将获取的文件上传至开发环境的“样例目录/caffe\_model”目录下，也可查看README.md。如果目录不存在，需要自行创建。
+        从https://gitee.com/ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/resnet50/ATC_resnet50_caffe_AE 链接中获取ResNet-50网络的模型文件（*.prototxt）、预训练模型文件（*.caffemodel），并以运行用户将获取的文件上传至开发环境的“样例目录/caffe_model”目录下，也可查看README.md。如果目录不存在，需要自行创建。
 
     请从以下链接获取该样例的输入图片，并以运行用户将获取的文件上传至开发环境的“样例目录/data”目录下。如果目录不存在，需自行创建。
 
-    -   [https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/dog1\_1024\_683.jpg](https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/dog1_1024_683.jpg)
-    -   [https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/dog2\_1024\_683.jpg](https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/dog2_1024_683.jpg)
+    -   [https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/dog1_1024_683.jpg](https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/dog1_1024_683.jpg)
+    -   [https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/dog2_1024_683.jpg](https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/dog2_1024_683.jpg)
 
         在“样例目录/data”目录下，创建参考图片列表文件（image\_ref\_list.txt）并在其中填写图片路径data/ dog1\_1024\_683.jpg及data/ dog2\_1024\_683.jpg，各路径换行填写。
 
@@ -8849,8 +9052,11 @@ processModel.DumpModelOutputResult();</pre>
 
 # FAQ<a name="ZH-CN_TOPIC_0000002442020965"></a>
 
+-   **[SS928V100解决方案使用SVP\_NNN模块注意事项](#ZH-CN_TOPIC_0000002408421590)**  
 
+-   **[SVP\_NNN离线模型保护](#ZH-CN_TOPIC_0000002408421966)**  
 
+-   **[第一次推理耗时长的问题](#ZH-CN_TOPIC_0000002408421934)**  
 
 ## SS928V100解决方案使用SVP\__NNN_模块注意事项<a name="ZH-CN_TOPIC_0000002408421590"></a>
 

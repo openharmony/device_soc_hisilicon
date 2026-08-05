@@ -76,19 +76,19 @@ int serial_init(void)
      */
     io_write(uart_port[CONSOLE_PORT] + UART_PL011_CR, 0x0);
 
-	/*
-	 ** Set baud rate
-	 **
-	 ** IBRD = UART_CLK / (16 * BAUD_RATE)
-	 ** FBRD = ROUND((64 * MOD(UART_CLK,(16 * BAUD_RATE))) / (16 * BAUD_RATE))
-	 */
-	temp = 16 * BAUDRATE;
-	divider = CONFIG_PL011_CLOCK / temp;
-	remainder = CONFIG_PL011_CLOCK % temp;
+    /*
+     ** Set baud rate
+     **
+     ** IBRD = UART_CLK / (16 * BAUD_RATE)
+     ** FBRD = ROUND((64 * MOD(UART_CLK,(16 * BAUD_RATE))) / (16 * BAUD_RATE))
+     */
+    temp = 16 * BAUDRATE;
+    divider = CONFIG_PL011_CLOCK / temp;
+    remainder = CONFIG_PL011_CLOCK % temp;
     temp = (SERIAL_PL011_VALUE_8 * remainder) / BAUDRATE;
-	fraction = (temp >> 1) + (temp & 1);
-	io_write(uart_port[CONSOLE_PORT] + UART_PL011_IBRD, divider);
-	io_write(uart_port[CONSOLE_PORT] + UART_PL011_FBRD, fraction);
+    fraction = (temp >> 1) + (temp & 1);
+    io_write(uart_port[CONSOLE_PORT] + UART_PL011_IBRD, divider);
+    io_write(uart_port[CONSOLE_PORT] + UART_PL011_FBRD, fraction);
 
     /*
      ** Set the UART to be 8 bits, 1 stop bit, no parity, fifo enabled.
@@ -121,9 +121,9 @@ void serial_putc(const char c)
 
 void serial_puts(const char *s)
 {
-       while (*s) {
-               (void)serial_putc(*s++);
-       }
+    while (*s) {
+        (void)serial_putc(*s++);
+    }
 }
 
 void log_serial_puts(const char *s)
@@ -133,17 +133,19 @@ void log_serial_puts(const char *s)
 
 void serial_put_hex(unsigned int hex)
 {
-        unsigned int i;
-        char c;
-        for (i = 0; i <= 28; i += 4) { /* u32 value output per 4 bits, 28 is offset of the last 4 bits */
-                c = (hex >> (28 - i)) & 0x0F; /* 28 is offset of the last 4 bits */
-                /* transform the 4 bits data to ascii */
-                if (c < 0xA)
-                        c += '0';
-                else
-                        c += 'A' - 0xA;
-                (void)serial_putc(c);
+    unsigned int i;
+    char c;
+
+    for (i = 0; i <= 28; i += 4) { /* u32 value output per 4 bits, 28 is offset of the last 4 bits */
+        c = (hex >> (28 - i)) & 0x0F; /* 28 is offset of the last 4 bits */
+        /* transform the 4 bits data to ascii */
+        if (c < 0xA) {
+            c += '0';
+        } else {
+            c += 'A' - 0xA;
         }
+        (void)serial_putc(c);
+    }
 }
 
 int serial_getc(void)
@@ -158,9 +160,9 @@ int serial_tstc(void)
 
 static void pl011_putc(int portnum, char c)
 {
-    if (portnum >= MAX_PORT_NUM)
+    if (portnum >= MAX_PORT_NUM) {
         return;
-
+    }
     /* Wait until there is space in the FIFO */
     while (io_read(uart_port[portnum] + UART_PL01_FR) & UART_PL01_FR_TXFF);
 
@@ -172,9 +174,9 @@ static int pl011_getc(int portnum)
 {
     unsigned int data;
 
-    if (portnum >= MAX_PORT_NUM)
+    if (portnum >= MAX_PORT_NUM) {
         return -1;
-
+    }
     /* Wait until there is data in the FIFO */
     while (io_read(uart_port[portnum] + UART_PL01_FR) & UART_PL01_FR_RXFE);
 

@@ -16,7 +16,7 @@
 
 #include "ddr_training_impl.h"
 
-#define DDR_AC_TRAINING
+#define __AC_TRAINING__
 #ifdef DDR_AC_TRAINING_CONFIG
 /*
  * Get clk value.
@@ -108,9 +108,9 @@ static int ddr_ac_ddrt_test(unsigned int mask, unsigned int base_phy)
     }
 
     /* DDRT_WRITE_ONLY_MODE */
-    if ((mask & DDRT_TEST_MODE_MASK) == DDRT_WRITE_ONLY_MODE)
+    if ((mask & DDRT_TEST_MODE_MASK) == DDRT_WRITE_ONLY_MODE) {
         return 0;
-
+    }
     /* DDRT_READ_ONLY_MODE */
     if (regval & DDRT_TEST_PASS_MASK) /* No error occurred, test pass. */
         return 0;
@@ -136,12 +136,12 @@ static int ddr_ac_check_cs(unsigned int base_phy, unsigned int def_cs, unsigned 
 static int ddr_ac_check_clk(const struct ddr_cfg_st *cfg, unsigned int def_clk,
     struct ddr_delay_st *def_phase, unsigned int step)
 {
-	int i;
+    int i;
     unsigned int wdqs_phase_range;
     unsigned int wdq_phase_range;
     unsigned int phase_range;
-	unsigned int base_phy = cfg->cur_phy;
-	unsigned int byte_num = get_byte_num(cfg);
+    unsigned int base_phy = cfg->cur_phy;
+    unsigned int byte_num = get_byte_num(cfg);
 
     /* set new value */
     ddr_ac_set_clk(base_phy, def_clk + step);
@@ -196,12 +196,12 @@ static int ddr_ac_find_cs(unsigned int base_phy)
 /* Find CLK difference */
 static int ddr_ac_find_clk(const struct ddr_cfg_st *cfg)
 {
-	int i;
+    int i;
     unsigned int def_clk;
     unsigned int step;
-	struct ddr_delay_st def_phase;
-	unsigned int base_phy = cfg->cur_phy;
-	unsigned int byte_num = get_byte_num(cfg);
+    struct ddr_delay_st def_phase;
+    unsigned int base_phy = cfg->cur_phy;
+    unsigned int byte_num = get_byte_num(cfg);
 
     def_clk = ddr_ac_get_clk(base_phy);
     for (i = 0; i < byte_num; i++) {
@@ -224,8 +224,8 @@ static int ddr_ac_find_clk(const struct ddr_cfg_st *cfg)
 static void ddr_ac_set_phase_range(unsigned int base_phy, unsigned int def_clk,
     unsigned int diff_clk, unsigned int phase_tmp, const struct ddr_cfg_st *cfg)
 {
-	unsigned int i;
-	unsigned int clk_phase;
+    unsigned int i;
+    unsigned int clk_phase;
     unsigned int wdqs_phase;
     unsigned int wdq_phase;
     unsigned int wdqs_phase_range;
@@ -263,7 +263,7 @@ static int ddr_ac_training(const struct ddr_cfg_st *cfg)
     unsigned int phase_tmp;
     unsigned int def_clk;
     unsigned int def_cs;
-	unsigned int base_phy = cfg->cur_phy;
+    unsigned int base_phy = cfg->cur_phy;
 
     ddr_debug("DDR AC training");
     def_clk = ddr_ac_get_clk(base_phy);
@@ -277,9 +277,9 @@ static int ddr_ac_training(const struct ddr_cfg_st *cfg)
     } else {
         def_cs = ddr_ac_get_cs(base_phy);
         cs_bdl = 0;
-        if (diff_cs > (diff_clk << DDR_BDL_PHASE_REL))
+        if (diff_cs > (diff_clk << DDR_BDL_PHASE_REL)) {
             cs_bdl = diff_cs - (diff_clk << DDR_BDL_PHASE_REL);
-
+        }
         ddr_ac_set_cs(base_phy, def_cs + cs_bdl);
         ddr_debug("PHY[%x] def cs[%x] add bdl[%x]", base_phy, def_cs, cs_bdl);
     }
@@ -294,9 +294,9 @@ int ddr_ac_training_func(const struct ddr_cfg_st *cfg)
     struct tr_relate_reg relate_reg;
 
     /* AC training disable */
-    if (ddr_training_check_bypass(cfg, DDR_BYPASS_AC_MASK) != DDR_FALSE)
+    if (ddr_training_check_bypass(cfg, DDR_BYPASS_AC_MASK) != DDR_FALSE) {
         return 0;
-
+    }
     ddr_training_save_reg(cfg, &relate_reg, DDR_BYPASS_AC_MASK);
 
     ddr_training_switch_axi(cfg);

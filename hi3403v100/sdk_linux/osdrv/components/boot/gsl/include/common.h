@@ -21,7 +21,9 @@ void call_reset(void);
 
 #define STEP_AUTH                   0x5A3C
 
-#define random_delay()
+static inline void random_delay(void)
+{
+}
 
 #define RSA_4096_LEN      0x200
 
@@ -40,7 +42,6 @@ void uart_init();
 void uart_deinit();
 void uart_reset();
 void uart_port_init();
-void serial_puts(const char *s);
 void log_serial_puts(const char *s);
 void serial_put_hex(unsigned int hex);
 /*-----------------------------------------------------------------

@@ -30,10 +30,8 @@
 #include "../drivers/uart/uart.h"
 #include "../drivers/sdio/sdhci.h"
 #include "../drivers/sdio/fat.h"
-#include "../drivers/ddr_init/ddr_hal_context.h"
 #include "../drivers/usb3/usb3.h"
 #include "../drivers/emmc/emmc.h"
-#include "../secure_failure.h"
 
 /* Constants for reported magic-number values. */
 #define SS928_BOOT_ARRAY_INDEX_2               2
@@ -137,27 +135,27 @@ __attribute__((no_stack_protector)) void stack_chk_guard_setup()
 
 void call_reset(void)
 {
-    mdelay(500); /* delay 500 ms */
+    mdelay(500);
     timer_deinit();
     reg_set((uint32_t *)(REG_BASE_SCTL + REG_SC_SYSRES), 0x1);
 }
 
 void err_print(uint8_t err_type, uint8_t err_idx)
 {
-    if (is_scs_dbg_enable() != AUTH_SUCCESS)
+    if (is_scs_dbg_enable() != AUTH_SUCCESS) {
         return;
-
+    }
     if (uart_inited == 0) {
         uart_init();
         uart_reset();
-        mdelay(10); /* delay 10 ms */
+        mdelay(10);
     }
     serial_putc('\n');
     serial_putc('G');
     serial_putc(err_type);
     serial_putc('S');
     serial_putc(err_idx);
-    mdelay(10); /* delay 10 ms */
+    mdelay(10);
 }
 
 static void check_and_set_backup_image_flag(uint32_t offset_times)
@@ -165,9 +163,9 @@ static void check_and_set_backup_image_flag(uint32_t offset_times)
     uint32_t val;
     uint32_t backup_image_enable_flag;
 
-    if (is_backup_image_enable() != AUTH_SUCCESS)
+    if (is_backup_image_enable() != AUTH_SUCCESS) {
         return;
-
+    }
     val = reg_get(REG_BASE_SCTL + BACKUP_IMAGE_FLG_REG);
     backup_image_enable_flag = get_backup_image_flag(val);
     if (backup_image_enable_flag == BACKUP_IMAGE_ENABLE) {
@@ -196,6 +194,7 @@ void failure_process(void)
         ((is_backup_image_enable() == AUTH_SUCCESS)))
         call_reset();
 
+    extern void _secure_failure_process(void);
     _secure_failure_process();
 
     return;
@@ -307,10 +306,12 @@ static unsigned int calc_volt_regval(unsigned int volt_val, unsigned int volt_ma
 {
     unsigned int duty;
 
-    if (volt_val >= volt_max)
+    if (volt_val >= volt_max) {
         volt_val = volt_max - 1;
-    if (volt_val <= volt_min)
+    }
+    if (volt_val <= volt_min) {
         volt_val = volt_min + 1;
+    }
     duty =  duty_formula(volt_max, volt_min, volt_val);
 
     return duty;
@@ -512,7 +513,7 @@ static void svb_voltage_change(void)
     /* init temperature and hpm*/
     init_temperature();
     init_hpm();
-    mdelay(20); /* delay 20 ms */
+    mdelay(20);
     start_hpm(&hpm_core, &hpm_npu, &hpm_mda);
 
     /*get temperature */
@@ -561,13 +562,6 @@ static void set_qosbuf_cfg(void)
 
 static void ddr_training(void)
 {
-    struct ddr_hal_context ctx;
-    struct ddr_hal_phy_all phy_all;
-
-    /* ddr ctx cfg */
-    ddr_hal_set_cfg_addr((uintptr_t)&ctx, (uintptr_t)&phy_all);
-    ddr_hal_cfg_init();
-
     set_qosbuf_cfg();
 
     ddr_set_rdqbdl_def_val();
@@ -602,13 +596,13 @@ unsigned int get_random_num(void)
 
 void ddr_scramb_start(const unsigned int *random, int size)
 {
-    if ((size < RANDOM_SIZE) || (random == NULL))
+    if ((size < RANDOM_SIZE) || (random == NULL)) {
         return;
-
+    }
     reg_set((unsigned int *)(REG_SYSCTRL_BASE + DDRCA_REE_RANDOM_L), random[0]);
     reg_set((unsigned int *)(REG_SYSCTRL_BASE + DDRCA_REE_RANDOM_H), random[1]);
-    reg_set((unsigned int *)(REG_SYSCTRL_BASE + DDRCA_TEE_RANDOM_L), random[2]); /* random arr index 2 */
-    reg_set((unsigned int *)(REG_SYSCTRL_BASE + DDRCA_TEE_RANDOM_H), random[3]); /* random arr index 3 */
+    reg_set((unsigned int *)(REG_SYSCTRL_BASE + DDRCA_TEE_RANDOM_L), random[2]);
+    reg_set((unsigned int *)(REG_SYSCTRL_BASE + DDRCA_TEE_RANDOM_H), random[3]);
 
     reg_set((unsigned int *)(REG_SYSCTRL_BASE + DDRCA_EN), SS928_BOOT_DDRCA_ENABLE);
     reg_set((unsigned int *)(REG_SYSCTRL_BASE + DDRCA_REE_UPDATE), 1);
@@ -616,82 +610,77 @@ void ddr_scramb_start(const unsigned int *random, int size)
     reg_set((unsigned int *)(REG_SYSCTRL_BASE + DDR_CA_LOCK), 1);
 }
 
-static void ddr_get_valid_channels(unsigned int *ddrc_isvalid)
-{
-    static const unsigned int mode_ofst[SS928_BOOT_DDRC_CHANNEL_NUM] = {
-        DDRC_CFG_DDRMODE_OFST, DDRC1_CFG_DDRMODE_OFST, DDRC2_CFG_DDRMODE_OFST, DDRC3_CFG_DDRMODE_OFST
-    };
-    unsigned int i;
-
-    for (i = 0; i < SS928_BOOT_DDRC_CHANNEL_NUM; i++) {
-        ddrc_isvalid[i] = (reg_get(REG_BASE_DDRC + mode_ofst[i]) & SS928_BOOT_DDRC_VALID_MASK) ?
-            SS928_BOOT_DDRC_ENABLE : SS928_BOOT_DDRC_DISABLE;
-    }
-}
-
-static void ddr_set_self_refresh(const unsigned int *ddrc_isvalid, unsigned int val)
-{
-    static const unsigned int sref_ofst[SS928_BOOT_DDRC_CHANNEL_NUM] = {
-        DDRC_CTRL_SREF_OFST, DDRC1_CTRL_SREF_OFST, DDRC2_CTRL_SREF_OFST, DDRC3_CTRL_SREF_OFST
-    };
-    unsigned int i;
-
-    for (i = 0; i < SS928_BOOT_DDRC_CHANNEL_NUM; i++) {
-        if (ddrc_isvalid[i]) {
-            reg_set(REG_BASE_DDRC + sref_ofst[i], val);
-        }
-    }
-}
-
-static void ddr_wait_self_refresh(const unsigned int *ddrc_isvalid, unsigned int wait_enter)
-{
-    static const unsigned int curr_func_ofst[SS928_BOOT_DDRC_CHANNEL_NUM] = {
-        DDRC_CURR_FUNC_OFST, DDRC1_CURR_FUNC_OFST, DDRC2_CURR_FUNC_OFST, DDRC3_CURR_FUNC_OFST
-    };
-    unsigned int i;
-    unsigned int reg_val[SS928_BOOT_DDRC_CHANNEL_NUM];
-
-    do {
-        for (i = 0; i < SS928_BOOT_DDRC_CHANNEL_NUM; i++) {
-            reg_val[i] = ddrc_isvalid[i] ?
-                (reg_get(REG_BASE_DDRC + curr_func_ofst[i]) & SS928_BOOT_DDRC_ENABLE) : !wait_enter;
-        }
-    } while (wait_enter ? !(reg_val[0] & reg_val[1] & reg_val[SS928_BOOT_ARRAY_INDEX_2] &
-        reg_val[SS928_BOOT_ARRAY_INDEX_3]) : (reg_val[0] | reg_val[1] | reg_val[SS928_BOOT_ARRAY_INDEX_2] |
-        reg_val[SS928_BOOT_ARRAY_INDEX_3]));
-}
-
 static void ddr_scrambling(void)
 {
-	unsigned int i;
-	unsigned int random_num[RANDOM_SIZE];
-	unsigned int ddrc_isvalid[SS928_BOOT_DDRC_CHANNEL_NUM] = {0, 0, 0, 0};
+    unsigned int i;
+    unsigned int random_num[RANDOM_SIZE];
+    unsigned int reg_val[SS928_BOOT_DDRC_CHANNEL_NUM] = {0, 0, 0, 0};
+    unsigned int ddrc_isvalid[SS928_BOOT_DDRC_CHANNEL_NUM] = {0, 0, 0, 0};
 
-	/* read ddrc_cfg_ddrmode register,
-	 * if value[3:0] is not 0x0 ,the channel is valid.
-	 */
-    ddr_get_valid_channels(ddrc_isvalid);
+    /* read ddrc_cfg_ddrmode register,
+     * if value[3:0] is not 0x0 ,the channel is valid.
+     */
+    ddrc_isvalid[0] = (reg_get(REG_BASE_DDRC + DDRC_CFG_DDRMODE_OFST) & 0xf) ? 1 : 0;
+    ddrc_isvalid[1] = (reg_get(REG_BASE_DDRC + DDRC1_CFG_DDRMODE_OFST) & 0xf) ? 1 : 0;
+    ddrc_isvalid[2] = (reg_get(REG_BASE_DDRC + DDRC2_CFG_DDRMODE_OFST) & 0xf) ? 1 : 0;
+    ddrc_isvalid[3] = (reg_get(REG_BASE_DDRC + DDRC3_CFG_DDRMODE_OFST) & 0xf) ? 1 : 0;
 
-	/* set ddrc to do self-refurbish */
-    ddr_set_self_refresh(ddrc_isvalid, SS928_BOOT_DDRC_ENABLE);
-    ddr_wait_self_refresh(ddrc_isvalid, SS928_BOOT_DDRC_ENABLE);
+    /* set ddrc to do self-refurbish */
+    if (ddrc_isvalid[0])
+    {
+        reg_set(REG_BASE_DDRC + DDRC_CTRL_SREF_OFST, 0x1);
+    }
+    if (ddrc_isvalid[1])
+    {
+        reg_set(REG_BASE_DDRC + DDRC1_CTRL_SREF_OFST, 0x1);
+    }
+    if (ddrc_isvalid[2])
+    {
+        reg_set(REG_BASE_DDRC + DDRC2_CTRL_SREF_OFST, 0x1);
+    }
+    if (ddrc_isvalid[3])
+    {
+        reg_set(REG_BASE_DDRC + DDRC3_CTRL_SREF_OFST, 0x1);
+    }
+    do {
+        reg_val[0] = ddrc_isvalid[0] ? (reg_get(REG_BASE_DDRC + DDRC_CURR_FUNC_OFST) & 0x1) : 1;
+        reg_val[1] = ddrc_isvalid[1] ? (reg_get(REG_BASE_DDRC + DDRC1_CURR_FUNC_OFST) & 0x1) : 1;
+        reg_val[2] = ddrc_isvalid[2] ? (reg_get(REG_BASE_DDRC + DDRC2_CURR_FUNC_OFST) & 0x1) : 1;
+        reg_val[3] = ddrc_isvalid[3] ? (reg_get(REG_BASE_DDRC + DDRC3_CURR_FUNC_OFST) & 0x1) : 1;
+    } while (!(reg_val[0] & reg_val[1] & reg_val[2] & reg_val[3]));
 
-	/* get random number */
-	for (i = 0; i < RANDOM_SIZE; i++)
-		random_num[i] = get_random_num();
+    /* get random number */
+    for (i = 0; i < RANDOM_SIZE; i++)
+        random_num[i] = get_random_num();
 
     /* start ddr scrambling */
     ddr_scramb_start(random_num, RANDOM_SIZE);
 
-	/* clear random number */
-	for (i = 0; i < SS928_BOOT_DDRC_CHANNEL_NUM; i++)
-		random_num[i] = get_random_num();
+    /* clear random number */
+    for (i = 0; i < SS928_BOOT_DDRC_CHANNEL_NUM; i++)
+        random_num[i] = get_random_num();
 
-	/* set ddrc to exit self-refurbish */
-    ddr_set_self_refresh(ddrc_isvalid, (SS928_BOOT_DDRC_ENABLE << SS928_BOOT_SHIFT_1));
-
-	/* wait the status of ddrc to be normal */
-    ddr_wait_self_refresh(ddrc_isvalid, SS928_BOOT_DDRC_DISABLE);
+    /* set ddrc to exit self-refurbish */
+    if (ddrc_isvalid[0])
+    {
+        reg_set(REG_BASE_DDRC + DDRC_CTRL_SREF_OFST, (0x1 << 1));
+    }
+    if (ddrc_isvalid[1]) {
+        reg_set(REG_BASE_DDRC + DDRC1_CTRL_SREF_OFST, (0x1 << 1));
+    }
+    if (ddrc_isvalid[2]) {
+        reg_set(REG_BASE_DDRC + DDRC2_CTRL_SREF_OFST, (0x1 << 1));
+    }
+    if (ddrc_isvalid[3]) {
+        reg_set(REG_BASE_DDRC + DDRC3_CTRL_SREF_OFST, (0x1 << 1));
+    }
+    /* wait the status of ddrc to be normal */
+    do {
+        reg_val[0] = ddrc_isvalid[0] ? (reg_get(REG_BASE_DDRC + DDRC_CURR_FUNC_OFST) & 0x1) : 0;
+        reg_val[1] = ddrc_isvalid[1] ? (reg_get(REG_BASE_DDRC + DDRC1_CURR_FUNC_OFST) & 0x1) : 0;
+        reg_val[2] = ddrc_isvalid[2] ? (reg_get(REG_BASE_DDRC + DDRC2_CURR_FUNC_OFST) & 0x1) : 0;
+        reg_val[3] = ddrc_isvalid[3] ? (reg_get(REG_BASE_DDRC + DDRC3_CURR_FUNC_OFST) & 0x1) : 0;
+    } while (reg_val[0] | reg_val[1] | reg_val[2] | reg_val[3]);
 
     return;
 }
@@ -704,8 +693,9 @@ static void wait_pcie_slave_flag(int print_enable, uint32_t flag_val)
 
     do {
         if (cnt % PCIE_SLAVE_PRINT_INTERVAL == 0) {
-            if (print_enable)
+            if (print_enable) {
                 serial_putc('.');
+            }
         }
 
         cnt++;
@@ -800,8 +790,9 @@ static void clear_backup_image_flag_and_offset_times(void)
     reg_set(REG_BASE_SCTL + BACKUP_IMAGE_OFF_REG, val);
 
     err = memset_s(&g_backup_params, sizeof(backup_image_params_s), 0, sizeof(backup_image_params_s));
-    if (err != EOK)
+    if (err != EOK) {
         return;
+    }
 }
 
 static int system_init()
@@ -810,7 +801,6 @@ static int system_init()
     svb_voltage_change();
     ddr_training();
     ddr_debug();
-    ddr_capat_adapt_start();
 #ifdef DDR_SCRAMB_ENABLE
     ddr_scrambling();
 #endif
@@ -924,9 +914,9 @@ static int get_head_area_data_form_pcie()
     int ret;
     int print_enable = 0;
 
-    if (is_boot_info_lv_debug_enable() == AUTH_SUCCESS)
+    if (is_boot_info_lv_debug_enable() == AUTH_SUCCESS) {
         print_enable = uart_boot_flag(reg_get(REG_BASE_SCTL + REG_SC_SYSSTAT));
-
+    }
     pcie_slave_ready_for_head_area_flag(print_enable);
     ret = wait_pcie_slave_get_head_area_ok(print_enable);
 
@@ -940,16 +930,16 @@ static int get_head_area_data_form_sdio()
 
     enable_sdio_dma();
     sdio_deinit();
-    if (!self_sdio_check())
+    if (!self_sdio_check()) {
         return TD_FAILURE;
-
+    }
     /* Read the data from 64K to 79K(lenght is 15K) in the image */
     set_sdio_pos(SECURE_IMAGE_STEP1_SIZE);
     ret = copy_from_sdio((void *)(VENDOR_ROOT_PUBLIC_KEY_ADDR +
         SECURE_IMAGE_STEP1_SIZE), SECURE_IMAGE_STEP2_SIZE);
-    if (ret != TD_SUCCESS)
+    if (ret != TD_SUCCESS) {
         return TD_FAILURE;
-
+    }
     set_sdio_pos(0);
 #endif
 
@@ -962,13 +952,14 @@ static int get_head_area_data_form_usb()
     int ret;
 
     ret = self_usb_check();
-    if (ret != TRUE)
+    if (ret != TRUE) {
         return TD_FAILURE;
-
+    }
     ret = copy_from_usb((void *)(uintptr_t)(VENDOR_ROOT_PUBLIC_KEY_ADDR +
                         SECURE_IMAGE_STEP1_SIZE), SECURE_IMAGE_STEP2_SIZE);
-    if (ret != TD_SUCCESS)
+    if (ret != TD_SUCCESS) {
         return TD_FAILURE;
+    }
 #endif
 
     return TD_SUCCESS;
@@ -1147,9 +1138,9 @@ static int get_bootloader_code_area_from_pcie()
     int ret;
     int print_enable = 0;
 
-    if (is_boot_info_lv_debug_enable() == AUTH_SUCCESS)
+    if (is_boot_info_lv_debug_enable() == AUTH_SUCCESS) {
         print_enable = uart_boot_flag(reg_get(REG_BASE_SCTL + REG_SC_SYSSTAT));
-
+    }
     pcie_slave_set_ddr_init_done_flag(print_enable);
     ret = wait_pcie_slave_bootloader_download_ok(print_enable);
 
@@ -1166,9 +1157,9 @@ static int get_bootloader_code_area_from_uart()
     image_total_len = get_boot_image_total_len();
 
     ret = copy_from_uart((void *)(uintptr_t)image_int_ddr_addr, image_total_len);
-    if (ret != TD_SUCCESS)
+    if (ret != TD_SUCCESS) {
         return TD_FAILURE;
-
+    }
     return TD_SUCCESS;
 }
 
@@ -1182,13 +1173,13 @@ static int get_bootloader_code_area_from_sdio()
     image_int_ddr_addr = get_boot_image_int_ddr_addr();
     image_total_len = get_boot_image_total_len();
     sdio_deinit();
-    if (!self_sdio_check())
+    if (!self_sdio_check()) {
         return TD_FAILURE;
-
+    }
     ret = copy_from_sdio((void *)(uintptr_t)image_int_ddr_addr, image_total_len);
-    if (ret != TD_SUCCESS)
+    if (ret != TD_SUCCESS) {
         return TD_FAILURE;
-
+    }
 #endif
     return TD_SUCCESS;
 }
@@ -1204,9 +1195,9 @@ static int get_bootloader_code_area_from_usb()
     image_total_len = get_boot_image_total_len();
 
     ret = copy_from_usb((void *)(uintptr_t)image_int_ddr_addr, image_total_len);
-    if (ret != TD_SUCCESS)
+    if (ret != TD_SUCCESS) {
         return TD_FAILURE;
-
+    }
 #endif
 
     return TD_SUCCESS;
@@ -1346,8 +1337,9 @@ static ALWAYS_INLINE void store_booting_param()
     uint32_t unchecked_area_len;
 
     if (g_backup_params.enable)
+    {
         clear_backup_image_flag_and_offset_times();
-
+    }
     gsl_code_area_len = get_gsl_code_area_len();
     unchecked_area_len = get_bootloader_unchecked_area_len();
     decrypt_bootloader_addr = get_ddr_decrypt_bootloader_addr();
@@ -1398,36 +1390,41 @@ void main_entry(void)
 
     ret = sec_module_init('2');
     if (ret != TD_SUCCESS)
+    {
         failure_process();
-
+    }
     channel_type = get_data_channel_type();
     if (channel_type == BOOT_SEL_UNKNOW)
+    {
         failure_process();
-
+    }
     ret = get_head_area_data(channel_type, &g_backup_params);
     if (ret != TD_SUCCESS)
+    {
         failure_process();
-
+    }
     ret = handle_bootloader_key_area();
     if (ret != TD_SUCCESS)
+    {
         failure_process();
-
+    }
     ret = handle_bootloader_params_area();
     if (ret != TD_SUCCESS)
+    {
         failure_process();
-
+    }
     ret = system_init();
-    if (ret != TD_SUCCESS)
+    if (ret != TD_SUCCESS) {
         failure_process();
-
+    }
     ret = get_bootloader_code_area_data(channel_type, &g_backup_params);
-    if (ret != TD_SUCCESS)
+    if (ret != TD_SUCCESS) {
         failure_process();
-
+    }
     ret = handle_bootloader_code_area();
-    if (ret != TD_SUCCESS)
+    if (ret != TD_SUCCESS) {
         failure_process();
-
+    }
     store_booting_param();
 
     sec_module_deinit();
@@ -1443,13 +1440,13 @@ static int load_secure_os_fip(void)
 
     /* to do: add  return value judgment  */
     err = memset_s(bl32_ep, sizeof(entry_point_info_t), 0, sizeof(entry_point_info_t));
-    if (err != EOK)
+    if (err != EOK) {
         return -1;
-
+    }
     err = memset_s(bl31_p, sizeof(bl31_params_t), 0, sizeof(bl31_params_t));
-    if (err != EOK)
+    if (err != EOK) {
         return -1;
-
+    }
     bl31_p->bl32_ep_info = (uint64_t)(uintptr_t)bl32_ep;
     bl31_p->bl33_ep_info = (uint64_t)(uintptr_t)bl33_ep;
 
@@ -1472,8 +1469,9 @@ void secure_os_entry(void)
 
     ret = sec_module_init('i');
     if (ret != TD_SUCCESS)
+    {
         tee_img_verify_failure();
-
+    }
     /* configure ree DDR for tee image */
     config_tee_img_non_sec_ddr();
     /* configure secure DDR for tee key area */
@@ -1483,20 +1481,20 @@ void secure_os_entry(void)
     disable_sec_ddr_bypass();
 
     ret = handle_tee_key_area();
-    if (ret != TD_SUCCESS)
+    if (ret != TD_SUCCESS) {
         tee_img_verify_failure();
-
+    }
     /* configure secure DDR for tee image */
     config_tee_img_sec_ddr();
 
     ret = handle_atf_area();
-    if (ret != TD_SUCCESS)
+    if (ret != TD_SUCCESS) {
         tee_img_verify_failure();
-
+    }
     ret = handle_tee_code_area();
-    if (ret != TD_SUCCESS)
+    if (ret != TD_SUCCESS) {
         tee_img_verify_failure();
-
+    }
     sec_module_deinit();
 
     config_non_sec_ddr();

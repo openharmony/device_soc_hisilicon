@@ -960,9 +960,9 @@ static int get_head_area_data_form_pcie()
     int ret;
     int print_enable = 0;
 
-    if (is_boot_info_lv_debug_enable() == AUTH_SUCCESS)
+    if (is_boot_info_lv_debug_enable() == AUTH_SUCCESS) {
         print_enable = uart_boot_flag(reg_get(REG_BASE_SCTL + REG_SC_SYSSTAT));
-
+    }
     pcie_slave_ready_for_head_area_flag(print_enable);
     ret = wait_pcie_slave_get_head_area_ok(print_enable);
 
@@ -977,15 +977,16 @@ static int get_head_area_data_form_sdio()
     enable_sdio_dma();
     sdio_deinit();
     if (!self_sdio_check())
+    {
         return TD_FAILURE;
-
+    }
     /* Read the data from 64K to 79K(lenght is 15K) in the image */
     set_sdio_pos(SECURE_IMAGE_STEP1_SIZE);
     ret = copy_from_sdio((void *)(VENDOR_ROOT_PUBLIC_KEY_ADDR +
         SECURE_IMAGE_STEP1_SIZE), SECURE_IMAGE_STEP2_SIZE);
-    if (ret != TD_SUCCESS)
+    if (ret != TD_SUCCESS) {
         return TD_FAILURE;
-
+    }
     set_sdio_pos(0);
 #endif
 
@@ -999,12 +1000,14 @@ static int get_head_area_data_form_usb()
 
     ret = self_usb_check();
     if (ret != TRUE)
+    {
         return TD_FAILURE;
-
+    }
     ret = copy_from_usb((void *)(uintptr_t)(VENDOR_ROOT_PUBLIC_KEY_ADDR +
                         SECURE_IMAGE_STEP1_SIZE), SECURE_IMAGE_STEP2_SIZE);
-    if (ret != TD_SUCCESS)
+    if (ret != TD_SUCCESS) {
         return TD_FAILURE;
+    }
 #endif
 
     return TD_SUCCESS;
@@ -1066,9 +1069,9 @@ static int get_head_area_data_from_emmc(backup_image_params_s *backup_params)
     get_image_backup_params(BOOT_SEL_EMMC, backup_params);
     /* The eMMC read data must be 512-byte aligned. */
     align_addr = (backup_params->offset_addr + BOOTLOADER_KEY_AREA_ADDR_OFFSET +
-              gsl_code_area_len) / EMMC_BLOCK_SIZE * EMMC_BLOCK_SIZE;
+        gsl_code_area_len) / EMMC_BLOCK_SIZE * EMMC_BLOCK_SIZE;
     align_len = backup_params->offset_addr + BOOTLOADER_KEY_AREA_ADDR_OFFSET +
-            gsl_code_area_len - align_addr;
+        gsl_code_area_len - align_addr;
     align_params_size = align_len + BOOTLOADER_KEY_PARAMS_AREA_SIZE;
 
     /* Here tmp_addr is used as the temporary storage address. */
@@ -1183,9 +1186,9 @@ static int get_bootloader_code_area_from_pcie()
     int ret;
     int print_enable = 0;
 
-    if (is_boot_info_lv_debug_enable() == AUTH_SUCCESS)
+    if (is_boot_info_lv_debug_enable() == AUTH_SUCCESS) {
         print_enable = uart_boot_flag(reg_get(REG_BASE_SCTL + REG_SC_SYSSTAT));
-
+    }
     pcie_slave_set_ddr_init_done_flag(print_enable);
     ret = wait_pcie_slave_bootloader_download_ok(print_enable);
 
@@ -1202,9 +1205,9 @@ static int get_bootloader_code_area_from_uart()
     image_total_len = get_boot_image_total_len();
 
     ret = copy_from_uart((void *)(uintptr_t)image_int_ddr_addr, image_total_len);
-    if (ret != TD_SUCCESS)
+    if (ret != TD_SUCCESS) {
         return TD_FAILURE;
-
+    }
     return TD_SUCCESS;
 }
 
@@ -1218,9 +1221,9 @@ static int get_bootloader_code_area_from_sdio()
     image_int_ddr_addr = get_boot_image_int_ddr_addr();
     image_total_len = get_boot_image_total_len();
     sdio_deinit();
-    if (!self_sdio_check())
+    if (!self_sdio_check()) {
         return TD_FAILURE;
-
+    }
     ret = copy_from_sdio((void *)(uintptr_t)image_int_ddr_addr, image_total_len);
     if (ret != TD_SUCCESS) {
         return TD_FAILURE;
@@ -1278,7 +1281,7 @@ static int get_bootloader_code_area_from_emmc(const backup_image_params_s *backu
     uint32_t image_int_ddr_addr;
     uint32_t image_total_len;
     uint32_t tmp_addr;
-    int 	 ret;
+    int ret;
 
     image_int_ddr_addr = get_boot_image_int_ddr_addr();
     image_total_len = get_boot_image_total_len();

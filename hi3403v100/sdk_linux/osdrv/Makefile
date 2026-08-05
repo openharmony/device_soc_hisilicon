@@ -41,7 +41,7 @@ endif
 ifeq ($(BOOT_MEDIA), emmc)
 MEDIUM_FLAG = _emmc_
 ifeq ($(CHIP),ss928v100)
-REGBIN_XLSM ?= SS928V100_demo_8L_LPDDR4x_3733M-8GB_32bitx2-A55_1400M-emmc.xlsm
+REGBIN_XLSM ?= SS928V100_demo_8L_LPDDR4x_3733M-4GB_32bitx1-A55_1400M-emmc.xlsm
 endif
 ifeq ($(CHIP),ss927v100)
 REGBIN_XLSM ?= SS927V100_demo_8L_LPDDR4x_2666M-8GB_32bitx2-A55_1400M-eMMC.xlsm
