@@ -104,7 +104,7 @@ component_set = {
     'gpu': ['gfx_rm', 'gpu'],
     'gpu_test': ['test_gpu'],
     'graphic_uikit': ['cjson_static', 'display_gfx', 'display_gralloc', 'display_layer', 'graphic_input', 'graphic_service',
-                'freetype_static', 'graphic_ui', 'graphic_utils', 'qrcodegen', 'icu4c', 'harfbuzz', 'uikit_ext'],
+                'freetype_static', 'graphic_ui', 'graphic_utils', 'icu4c', 'harfbuzz', 'uikit_ext'],
     'graphic_lvgl': ['display_gfx', 'display_gralloc', 'display_layer', 'graphic_input', 'freetype_static',
                 'lvgl', 'lvgl_sample', 'lvgl_demos', 'lvgl_proprietary', 'lvgl_service'],
     'graphic_lvgl_mini': ['display_gfx', 'display_gralloc', 'display_layer', 'graphic_input', 'freetype_static',

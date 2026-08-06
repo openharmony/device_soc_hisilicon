@@ -24,7 +24,6 @@ add_subdirectory_with_alias_if_exist(openharmony/third_party/freetype ${PROJECT_
 if (DEFINES MATCHES "ENABLE_UIKIT")
     set(ROOTDIR ${ROOT_DIR})
     add_subdirectory_with_alias_if_exist(openharmony/third_party/cJSON ${PROJECT_BINARY_DIR}/cJSON)
-    add_subdirectory_with_alias_if_exist(openharmony/third_party/qrcodegen ${PROJECT_BINARY_DIR}/qrcodegen)
     add_subdirectory_with_alias_if_exist(openharmony/third_party/icu ${PROJECT_BINARY_DIR}/icu)
     add_subdirectory_with_alias_if_exist(openharmony/third_party/harfbuzz ${PROJECT_BINARY_DIR}/harfbuzz)
 endif()
