@@ -1072,19 +1072,28 @@ static int32_t EnablePreview(ot_vpss_chn vpssChn, uint32_t cameraId, PosInfo *po
 {
     const int ycrcb420Bpp = 8;
     IRect displayRect;
-    displayRect.x = pos->x;
-    displayRect.y = pos->y;
-    displayRect.w = streamAttr->width;
-    displayRect.h = streamAttr->height;
+    DisplayInfo dispInfo = {0};
+    uint32_t layerW = streamAttr->width;
+    uint32_t layerH = streamAttr->height;
     CameraInfo* cameraInfo = &g_cameraInfo[cameraId];
     LayerInfo layerInfo = {0};
-    layerInfo.width = streamAttr->width;
-    layerInfo.height = streamAttr->height;
+    LOG_CHK_RETURN_ERR(g_layerInterface == NULL, TD_FAILURE);
+    if (g_layerInterface->GetDisplayInfo != NULL &&
+        g_layerInterface->GetDisplayInfo(DISPLAY_DEVID, &dispInfo) == DISPLAY_SUCCESS &&
+        dispInfo.width > 0 && dispInfo.height > 0) {
+        layerW = (uint32_t)dispInfo.width;
+        layerH = (uint32_t)dispInfo.height;
+    }
+    displayRect.x = pos->x;
+    displayRect.y = pos->y;
+    displayRect.w = layerW;
+    displayRect.h = layerH;
+    layerInfo.width = layerW;
+    layerInfo.height = layerH;
     layerInfo.type = LAYER_TYPE_OVERLAY;
     layerInfo.bpp = ycrcb420Bpp;
     layerInfo.pixFormat = PIXEL_FMT_YCRCB_420_SP;
     layerInfo.fps = streamAttr->fps;
-    LOG_CHK_RETURN_ERR(g_layerInterface == NULL, TD_FAILURE);
     HAL_LOG_DOFUNC_RETURN(g_layerInterface->CreateLayer(DISPLAY_DEVID, &layerInfo, &cameraInfo->layerId));
     HAL_LOG_DOFUNC_RETURN(g_layerInterface->SetLayerSize(DISPLAY_DEVID, cameraInfo->layerId, &displayRect));
 
