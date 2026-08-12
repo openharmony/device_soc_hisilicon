@@ -1065,30 +1065,10 @@ static void *PreviewFlushThread(void *arg)
 
     return NULL;
 }
-#endif
 
-static int32_t EnablePreview(ot_vpss_chn vpssChn, uint32_t cameraId, PosInfo *pos,
-    const StreamAttr *streamAttr, uint32_t streamId)
+static int32_t StartPreviewFlushThread(uint32_t cameraId, uint32_t streamId)
 {
-    const int ycrcb420Bpp = 8;
-    IRect displayRect;
-    displayRect.x = pos->x;
-    displayRect.y = pos->y;
-    displayRect.w = streamAttr->width;
-    displayRect.h = streamAttr->height;
     CameraInfo* cameraInfo = &g_cameraInfo[cameraId];
-    LayerInfo layerInfo = {0};
-    layerInfo.width = streamAttr->width;
-    layerInfo.height = streamAttr->height;
-    layerInfo.type = LAYER_TYPE_OVERLAY;
-    layerInfo.bpp = ycrcb420Bpp;
-    layerInfo.pixFormat = PIXEL_FMT_YCRCB_420_SP;
-    layerInfo.fps = streamAttr->fps;
-    LOG_CHK_RETURN_ERR(g_layerInterface == NULL, TD_FAILURE);
-    HAL_LOG_DOFUNC_RETURN(g_layerInterface->CreateLayer(DISPLAY_DEVID, &layerInfo, &cameraInfo->layerId));
-    HAL_LOG_DOFUNC_RETURN(g_layerInterface->SetLayerSize(DISPLAY_DEVID, cameraInfo->layerId, &displayRect));
-
-#ifdef GRAPHIC_UTILS_LITE_ENABLE_DRM_DISPLAY_HAL
     cameraInfo->previewStreamId = streamId;
     cameraInfo->previewThreadRunning = true;
     uint32_t *threadArg = (uint32_t *)malloc(sizeof(uint32_t));
@@ -1105,6 +1085,49 @@ static int32_t EnablePreview(ot_vpss_chn vpssChn, uint32_t cameraId, PosInfo *po
         cameraInfo->previewThreadRunning = false;
         return TD_FAILURE;
     }
+    return TD_SUCCESS;
+}
+#endif
+
+static void FillDisplayLayerInfo(const PosInfo *pos, const StreamAttr *streamAttr,
+    IRect *displayRect, LayerInfo *layerInfo)
+{
+    const int ycrcb420Bpp = 8;
+    DisplayInfo dispInfo = {0};
+    uint32_t layerW = streamAttr->width;
+    uint32_t layerH = streamAttr->height;
+
+    if (g_layerInterface->GetDisplayInfo != NULL &&
+        g_layerInterface->GetDisplayInfo(DISPLAY_DEVID, &dispInfo) == DISPLAY_SUCCESS &&
+        dispInfo.width > 0 && dispInfo.height > 0) {
+        layerW = (uint32_t)dispInfo.width;
+        layerH = (uint32_t)dispInfo.height;
+    }
+    displayRect->x = pos->x;
+    displayRect->y = pos->y;
+    displayRect->w = layerW;
+    displayRect->h = layerH;
+    layerInfo->width = layerW;
+    layerInfo->height = layerH;
+    layerInfo->type = LAYER_TYPE_OVERLAY;
+    layerInfo->bpp = ycrcb420Bpp;
+    layerInfo->pixFormat = PIXEL_FMT_YCRCB_420_SP;
+    layerInfo->fps = streamAttr->fps;
+}
+
+static int32_t EnablePreview(ot_vpss_chn vpssChn, uint32_t cameraId, PosInfo *pos,
+    const StreamAttr *streamAttr, uint32_t streamId)
+{
+    IRect displayRect;
+    CameraInfo* cameraInfo = &g_cameraInfo[cameraId];
+    LayerInfo layerInfo = {0};
+    LOG_CHK_RETURN_ERR(g_layerInterface == NULL, TD_FAILURE);
+    FillDisplayLayerInfo(pos, streamAttr, &displayRect, &layerInfo);
+    HAL_LOG_DOFUNC_RETURN(g_layerInterface->CreateLayer(DISPLAY_DEVID, &layerInfo, &cameraInfo->layerId));
+    HAL_LOG_DOFUNC_RETURN(g_layerInterface->SetLayerSize(DISPLAY_DEVID, cameraInfo->layerId, &displayRect));
+
+#ifdef GRAPHIC_UTILS_LITE_ENABLE_DRM_DISPLAY_HAL
+    return StartPreviewFlushThread(cameraId, streamId);
 #else
     (void)streamId;
     HAL_LOG_DOFUNC_RETURN(g_layerInterface->InvokeLayerCmd(DISPLAY_DEVID, cameraInfo->layerId,

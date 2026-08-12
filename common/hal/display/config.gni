@@ -11,5 +11,8 @@
 
 declare_args() {
   graphic_utils_lite_enable_drm_display_hal = false
+}
+# declared in board config.gni, keep default for other boards
+if (!defined(device_hispark_aifly_display_type)) {
   device_hispark_aifly_display_type = "hdmi"
 }

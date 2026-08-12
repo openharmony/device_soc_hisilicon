@@ -295,8 +295,13 @@ static int32_t SetVoLayerParam(uint32_t devId, VO_VIDEO_LAYER_ATTR_S *attr)
     CHECK_CALL_MPI_RET(ret, ss_mpi_vo_get_pub_attr);
     attr->display_rect.x = 0;
     attr->display_rect.y = 0;
-    attr->display_rect.width = DEFAULT_WIDTH_FOR_HDMI;
-    attr->display_rect.height = DEFAULT_HEIGHT_FOR_HDMI;
+    if (stPubAttr.sync_info.hact > 0 && stPubAttr.sync_info.vact > 0) {
+        attr->display_rect.width = stPubAttr.sync_info.hact;
+        attr->display_rect.height = stPubAttr.sync_info.vact;
+    } else {
+        attr->display_rect.width = DEFAULT_WIDTH_FOR_HDMI;
+        attr->display_rect.height = DEFAULT_HEIGHT_FOR_HDMI;
+    }
     attr->display_frame_rate = DEFAULT_DISPLAY_FPS;
     attr->cluster_mode_en = TD_FALSE;
     attr->double_frame_en = TD_FALSE;
