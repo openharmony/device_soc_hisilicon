@@ -40,6 +40,7 @@ mmz_start=0x70000000;         # mmz start addr
 mmz_size=3328M;               # 3328M, mmz size
 
 reserve_mem_size=0            # 0M, reserve mmz size
+WIFI_LOAD_RETRY_MAX=3         # maximum wifi_soc.ko load attempts
 ##################################################################
 
 function report_error()
@@ -92,6 +93,53 @@ function remove_drm()
     rmmod smart_drm.ko
 }
 
+function insert_wifi_soc()
+{
+    local retry=1
+
+    if [ -d /sys/module/wifi_soc ]; then
+        echo "wifi_soc already loaded"
+        return 0
+    fi
+
+    while [ "${retry}" -le "${WIFI_LOAD_RETRY_MAX}" ]; do
+        echo "loading wifi_soc: attempt ${retry}/${WIFI_LOAD_RETRY_MAX}"
+
+        if insmod wifi_soc.ko; then
+            echo "wifi_soc loaded successfully"
+            return 0
+        fi
+
+        echo "wifi_soc load failed"
+        if [ -d /sys/module/wifi_soc ]; then
+            rmmod wifi_soc
+        fi
+
+        if [ "${retry}" -lt "${WIFI_LOAD_RETRY_MAX}" ]; then
+            sleep 1
+        fi
+        retry=$((retry + 1))
+    done
+
+    report_error "failed to load wifi_soc.ko after ${WIFI_LOAD_RETRY_MAX} attempts"
+}
+
+function insert_ws73()
+{
+    insmod plat_soc.ko
+    insert_wifi_soc
+    insmod sle_soc.ko
+    insmod ble_soc.ko
+}
+
+function remove_ws73()
+{
+    rmmod ble_soc
+    rmmod sle_soc
+    rmmod wifi_soc
+    rmmod plat_soc
+}
+
 function insert_ko()
 {
     # sys config
@@ -115,10 +163,14 @@ function insert_ko()
     else
         insert_fb
     fi
+
+    insert_ws73
 }
 
 function remove_ko()
 {
+    remove_ws73
+
     if [ "$DISPLAY_MODE" = "drm" ]; then
         remove_drm
     else
