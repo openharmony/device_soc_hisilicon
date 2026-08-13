@@ -246,7 +246,7 @@ target = {
             "bootstrap", "hal_update_static"  ,  "hilog_static"  ,      "inithook"   ,       "module_ActsDeviceAttestTest"   ,  "module_ActsUpdaterFuncTest"  ,"samgr_source",
             "broadcast","hal_file_static" ,  "hctest"    ,           "hiview_lite_static",  "init_log"   ,       "module_ActsDfxFuncTest"    ,      "native_file"      ,           "udidcomm",
             "cjson_static"  ,  "hal_sys_param"   ,  "hichainsdk"     ,      "hota"      ,          "init_utils" ,       "module_ActsHieventLiteTest"   ,   "param_client_lite",
-            "devattest_core" , "hal_sysparam"  ,    "hievent_lite_static" , "huks_3.0_sdk"   ,       "module_ActsHuksHalFunctionTest" , "samgr",
+            "devattest_core", "hal_sysparam", "hievent_lite_static", "huks_3.0_sdk", "module_ActsHuksHalFunctionTest", "samgr", "module_ActsParameterTest",
             "blackbox_lite",
             "hidumper_mini",
             'xo_trim_port',

@@ -45,8 +45,107 @@ if [ "$build_ws63_sdk_open" = "true" ]; then
     echo "export build_ws63_sdk_open=true "
 fi
 
+# XTS test module list
+ALL_XTS_MODULES=(
+    "ActsBootstrapTest"
+    "ActsHuksHalFunctionTest"
+    "ActsDfxFuncTest"
+    "ActsHieventLiteTest"
+    "ActsSamgrTest"
+    "ActsUpdaterFuncTest"
+    "ActsDeviceAttestTest"
+    "ActsParameterTest"
+)
+
+# Per-module re-link: replace other modules' .a with empty ones, let CMake re-link+sign
+relink_and_copy_bin() {
+    local module_name="$1"
+    local build_dir="$CROOT/output/ws63/acore/ws63-liteos-xts"
+    local testcases_dir="$OUTPUT_DST_DIR/suites/acts/testcases"
+    local libs_dir="$CROOT/interim_binary/ws63/libs/ohos/ws63-liteos-xts"
+    local backup_dir=$(mktemp -d)
+
+    # Backup and replace other modules' .a files with empty ones
+    for other_module in "${ALL_XTS_MODULES[@]}"; do
+        if [ "$other_module" != "$module_name" ]; then
+            local a_file="$libs_dir/libmodule_${other_module}.a"
+            if [ -f "$a_file" ]; then
+                cp "$a_file" "$backup_dir/"
+                rm -f "$a_file"
+                ar rcs "$a_file"
+            fi
+        fi
+    done
+
+    # Force re-link by deleting .elf and .bin (CMake will detect missing files)
+    cd "$build_dir"
+    rm -f ws63-liteos-xts.elf ws63-liteos-xts.bin ws63-liteos-xts-sign.bin ws63-liteos-xts_rom.bin
+
+    # Use CMake's own build system to re-link, objcopy, and sign
+    make WS63_GENERAT_SIGNBIN 2>&1
+    local make_ret=$?
+
+    # Restore original .a files
+    for other_module in "${ALL_XTS_MODULES[@]}"; do
+        if [ "$other_module" != "$module_name" ]; then
+            local a_file="$libs_dir/libmodule_${other_module}.a"
+            if [ -f "$backup_dir/libmodule_${other_module}.a" ]; then
+                cp "$backup_dir/libmodule_${other_module}.a" "$a_file"
+            fi
+        fi
+    done
+    rm -rf "$backup_dir"
+
+    if [ $make_ret -ne 0 ]; then
+        echo "Error: make failed for $module_name (ret=$make_ret)"
+        cd "$CROOT"
+        return 1
+    fi
+
+    # Generate .fwpkg (full firmware package with updated app partition)
+    cd "$CROOT"
+    local fwpkg_dir="$CROOT/output/ws63/fwpkg/ws63-liteos-xts"
+    rm -rf "$fwpkg_dir"
+    python3 tools/pkg/packet.py ws63 ws63-liteos-xts ''
+    local pkt_ret=$?
+    if [ $pkt_ret -ne 0 ]; then
+        echo "Error: packet.py failed for $module_name (ret=$pkt_ret)"
+        return 1
+    fi
+
+    # Copy .fwpkg to testcases directory and update .json config
+    local fwpkg_file="$fwpkg_dir/ws63-liteos-xts_all.fwpkg"
+    if [ -f "$fwpkg_file" ]; then
+        echo "  [$module_name] Generated .fwpkg: $(ls -la "$fwpkg_file" | awk '{print $5}') bytes"
+        find "$testcases_dir" -name "${module_name}.json" | while read json_file; do
+            local dir=$(dirname "$json_file")
+            # Copy .fwpkg
+            cp "$fwpkg_file" "$dir/${module_name}.fwpkg"
+            echo "  Copied .fwpkg to $dir/${module_name}.fwpkg"
+            # Update .json: change burn_file from .bin to .fwpkg
+            sed -i "s/${module_name}.bin/${module_name}.fwpkg/g" "$json_file"
+            echo "  Updated $json_file to reference .fwpkg"
+        done
+    else
+        echo "Error: .fwpkg not found for $module_name"
+        return 1
+    fi
+
+    cd "$CROOT"
+}
+
 if [[ "$product_out_dir" == *xts* ]]; then
+    # Step 1: Single full build with all test modules
     python3 build.py -c ws63-liteos-xts
+
+    # Step 2: Per-module re-link (a few seconds per module)
+    for module_name in "${ALL_XTS_MODULES[@]}"; do
+        echo "============================================"
+        echo "Re-linking module: $module_name"
+        echo "============================================"
+        relink_and_copy_bin "$module_name"
+    done
+    echo "All per-module .fwpkg files generated successfully."
 else
     python3 build.py -c ws63-liteos-app
 fi
