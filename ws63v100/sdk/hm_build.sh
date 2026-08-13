@@ -54,7 +54,6 @@ ALL_XTS_MODULES=(
     "ActsSamgrTest"
     "ActsUpdaterFuncTest"
     "ActsDeviceAttestTest"
-    "ActsParameterTest"
 )
 
 # Per-module re-link: replace other modules' .a with empty ones, let CMake re-link+sign
@@ -145,6 +144,23 @@ if [[ "$product_out_dir" == *xts* ]]; then
         echo "============================================"
         relink_and_copy_bin "$module_name"
     done
+    # Step 3: Restore full build (all modules) and generate complete fwpkg
+    echo "============================================"
+    echo "Restoring full build with all test modules"
+    echo "============================================"
+    cd "$CROOT/output/ws63/acore/ws63-liteos-xts"
+    rm -f ws63-liteos-xts.elf ws63-liteos-xts.bin ws63-liteos-xts-sign.bin ws63-liteos-xts_rom.bin
+    make WS63_GENERAT_SIGNBIN 2>&1
+    full_make_ret=$?
+    cd "$CROOT"
+    if [ $full_make_ret -ne 0 ]; then
+        echo "Warning: Full rebuild failed, keeping last module's fwpkg"
+    else
+        rm -rf "$CROOT/output/ws63/fwpkg/ws63-liteos-xts"
+        python3 tools/pkg/packet.py ws63 ws63-liteos-xts ''
+        echo "Full XTS fwpkg restored successfully."
+    fi
+
     echo "All per-module .fwpkg files generated successfully."
 else
     python3 build.py -c ws63-liteos-app
