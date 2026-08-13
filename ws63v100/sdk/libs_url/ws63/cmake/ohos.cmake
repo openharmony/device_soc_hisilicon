@@ -8,7 +8,7 @@ if(${TARGET_COMMAND} MATCHES "ws63-liteos-xts")
             "broadcast" "hal_file_static" "hctest" "hiview_lite_static" "init_log" "module_ActsDfxFuncTest" "native_file" "udidcomm"
             "cjson_static" "hal_sys_param" "hichainsdk" "hota" "init_utils" "module_ActsHieventLiteTest" "param_client_lite"
             "devattest_core" "hal_sysparam" "hievent_lite_static" "huks_3.0_sdk"  "module_ActsHuksHalFunctionTest" "samgr"
-            "blackbox_lite"  "hidumper_mini" "product" "module_ActsParameterTest")
+            "blackbox_lite"  "hidumper_mini" "product")
 elseif(${TARGET_COMMAND} MATCHES "ws63-liteos-app")
 set(COMPONENT_LIST
 
