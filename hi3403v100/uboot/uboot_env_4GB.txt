@@ -29,5 +29,3 @@ vobuf=0x138000000
 fip_addr=0x50000000
 fip_size=0x400
 fip_start=0x800
-autoload=no
-serverip=192.168.1.160
