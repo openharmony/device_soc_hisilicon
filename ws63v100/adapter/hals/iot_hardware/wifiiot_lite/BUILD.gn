@@ -19,6 +19,7 @@ static_library("hal_iothardware") {
     "hal_iot_sfc.c",
     "hal_iot_uart.c",
     "hal_iot_watchdog.c",
+    "hal_lowpower.c",
     "hal_reset.c",
   ]
 

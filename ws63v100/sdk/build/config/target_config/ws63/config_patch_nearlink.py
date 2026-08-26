@@ -242,16 +242,19 @@ def patch_target(target):
         "samgr",
         "broadcast",
 
-        "native_file",           
-        "cjson_static",  
+        "native_file",
+        "cjson_static",
+        "hal_iothardware",
+        "kv_store",
     ]
     ram_component_ohos_xts = [
         "module_ActsDfxFuncTest",
         "module_ActsHieventLiteTest",
         "module_ActsBootstrapTest",
         "module_ActsParameterTest",
-        "module_ActsSamgrTest", 
-        "hctest", 
+        "module_ActsSamgrTest",
+        "module_ActsWifiIotTest",
+        "hctest",
     ]
 
     # ========== 根据环境变量动态调整配置 ==========

@@ -54,6 +54,11 @@ ALL_XTS_MODULES=(
     "ActsSamgrTest"
     "ActsUpdaterFuncTest"
     "ActsDeviceAttestTest"
+    "ActsParameterTest"
+    "ActsUtilsFileTest"
+    "ActsLwipTest"
+    "ActsWifiIotTest"
+    "ActsKvStoreTest"
 )
 
 # Per-module re-link: replace other modules' .a with empty ones, let CMake re-link+sign
