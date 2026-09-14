@@ -1,0 +1,9 @@
+choice
+    prompt "WS63 series SoC"
+    depends on SOC_SERIES_WS63
+
+config SOC_WS63V100
+    bool "SoC WS63V100"
+    default y
+
+endchoice
