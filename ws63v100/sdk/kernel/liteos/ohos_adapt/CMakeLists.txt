@@ -6,6 +6,7 @@ set(COMPONENT_NAME "ohos_adapt")
 
 set(SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/cmsis_adapt.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/lwip_select_bridge.S
 )
 
 set(PUBLIC_HEADER
