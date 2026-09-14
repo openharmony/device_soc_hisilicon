@@ -274,7 +274,9 @@ int fs_adapt_open(const char* path, int oflag)
     }
     ret = lfs_file_open(&g_lfs, fp, name, real_flag);
     if (ret < LFS_ERR_OK) {
-        lfs_debug_print_error("lfs_file_open failed, ret = %d, name = %s\r\n", ret, name);
+        if (ret != LFS_ERR_NOENT) {
+            lfs_debug_print_error("lfs_file_open failed, ret = %d, name = %s\r\n", ret, name);
+        }
         free(fp);
         return -1;
     }
@@ -341,7 +343,9 @@ int fs_adapt_delete(const char *path)
     }
     int ret = lfs_remove(&g_lfs, path);
     if  (ret < 0) {
-        lfs_debug_print_error("lfs_remove failed, ret = %d\r\n", ret);
+        if (ret != LFS_ERR_NOENT) {
+            lfs_debug_print_error("lfs_remove failed, ret = %d\r\n", ret);
+        }
         return -1;
     }
     lfs_debug_print_info("fs_adapt_delete done\r\n");
@@ -357,7 +361,9 @@ int fs_adapt_stat(const char *path, unsigned int *file_size)
     struct lfs_info info = {0};
     int ret = lfs_stat(&g_lfs, path, &info);
     if (ret < 0) {
-        lfs_debug_print_error("lfs_stat failed, ret = %d\r\n", ret);
+        if (ret != LFS_ERR_NOENT) {
+            lfs_debug_print_error("lfs_stat failed, ret = %d\r\n", ret);
+        }
         return -1;
     }
     *file_size = info.size;
