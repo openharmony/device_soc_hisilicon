@@ -1,0 +1,5 @@
+if SOC_SERIES_WS63
+config SOC_SERIES
+    string
+    default "ws63"
+endif

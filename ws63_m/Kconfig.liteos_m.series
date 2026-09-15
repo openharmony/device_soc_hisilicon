@@ -1,0 +1,11 @@
+config SOC_SERIES_WS63
+    bool "HiSilicon WS63 Series"
+    depends on PLATFORM_WS63_M
+    select ARCH_RISCV32
+    select SOC_COMPANY_HISILICON
+    help
+        Enable support for HiSilicon WS63 Series
+
+config SOC_COMPANY
+    string
+    default "hisilicon" if PLATFORM_WS63_M
