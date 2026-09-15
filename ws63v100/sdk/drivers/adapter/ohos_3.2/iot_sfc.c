@@ -35,7 +35,6 @@ unsigned int IoTFlashInit(void)
 
 unsigned int IoTFlashDeinit(void)
 {
-    uapi_sfc_deinit();
     return IOT_SUCCESS;
 }
 

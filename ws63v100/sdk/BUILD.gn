@@ -62,6 +62,7 @@ lite_component("sdk") {
     "//device/soc/hisilicon/ws63v100/adapter/hals/communication/ble_lite",
     "//device/soc/hisilicon/ws63v100/adapter/hals/communication/sle_lite",
     "//device/soc/hisilicon/ws63v100/adapter/hals/communication/wifi_lite/wifiservice",
+    "//device/soc/hisilicon/ws63v100/adapter/hals/utils/kv_store:kv_store",
 
     #   "//device/soc/hisilicon/ws63v100/adapter/kal",
   ]
